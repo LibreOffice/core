@@ -360,9 +360,9 @@ struct WW8LFO   // nur DIE Eintraege, die WIR benoetigen!
 
 struct WW8LVL   // nur DIE Eintraege, die WIR benoetigen!
 {
-    long    nStartAt;       // start at value for this value
-    long    nV6DxaSpace;// Ver6-Compatible: min Space between Num anf text::Paragraph
-    long    nV6Indent;  // Ver6-Compatible: Breite des Prefix Textes; ggfs. zur
+    sal_Int32 nStartAt;       // start at value for this value
+    sal_Int32 nV6DxaSpace;// Ver6-Compatible: min Space between Num anf text::Paragraph
+    sal_Int32 nV6Indent;  // Ver6-Compatible: Breite des Prefix Textes; ggfs. zur
                         // Definition d. Erstzl.einzug nutzen!
     // Absatzattribute aus GrpprlPapx
     sal_uInt16  nDxaLeft;               // linker Einzug
@@ -385,7 +385,7 @@ struct WW8LVL   // nur DIE Eintraege, die WIR benoetigen!
 
 struct WW8LFOLVL
 {
-    long nStartAt;          // start-at value if bFormat==false and bStartAt == true
+    sal_Int32 nStartAt;          // start-at value if bFormat==false and bStartAt == true
                                             // (if bFormat==true, the start-at is stored in the LVL)
     sal_uInt8 nLevel;               // the level to be overridden
     // dieses Byte ist _absichtlich_ nicht in das folgende Byte hineingepackt   !!
