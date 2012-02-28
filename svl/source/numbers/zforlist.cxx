@@ -367,7 +367,7 @@ void SvNumberFormatter::ImpChangeSysCL( LanguageType eLnge, bool bLoadingSO5 )
     {   // delete additional standard formats
         sal_uInt32 nKey;
         SvNumberFormatTable::iterator it = aFTable.find( SV_MAX_ANZ_STANDARD_FORMATE + 1 );
-        while ( (nKey = it->first) > SV_MAX_ANZ_STANDARD_FORMATE &&
+        while ( it != aFTable.end() && (nKey = it->first) > SV_MAX_ANZ_STANDARD_FORMATE &&
                 nKey < SV_COUNTRY_LANGUAGE_OFFSET )
         {
             delete it->second;
@@ -1293,7 +1293,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultFormat( short nType )
         sal_uInt32 nStopKey = CLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
         sal_uInt32 nKey;
         SvNumberFormatTable::iterator it2 = aFTable.find( CLOffset );
-        while ( (nKey = it2->first ) >= CLOffset && nKey < nStopKey )
+        while ( it2 != aFTable.end() && (nKey = it2->first ) >= CLOffset && nKey < nStopKey )
         {
             const SvNumberformat* pEntry = it2->second;
             if ( pEntry->IsStandard() && ((pEntry->GetType() &
@@ -3263,7 +3263,7 @@ sal_uInt32 SvNumberFormatter::ImpGetDefaultCurrencyFormat()
         sal_uInt32 nStopKey = CLOffset + SV_COUNTRY_LANGUAGE_OFFSET;
         sal_uInt32 nKey;
         SvNumberFormatTable::iterator it2 = aFTable.lower_bound( CLOffset );
-        while ( (nKey = it2->first) >= CLOffset && nKey < nStopKey )
+        while ( it2 != aFTable.end() && (nKey = it2->first) >= CLOffset && nKey < nStopKey )
         {
             const SvNumberformat* pEntry = it2->second;
             if ( pEntry->IsStandard() && (pEntry->GetType() & NUMBERFORMAT_CURRENCY) )
