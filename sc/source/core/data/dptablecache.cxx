@@ -654,8 +654,7 @@ void ScDPCache::AddLabel(ScDPItemData *pData)
             if (maLabelNames[i].maString.equals(strNewName))
             {
                 strNewName = pData->maString;
-                strNewName += String::CreateFromInt32( nIndex );
-                ++nIndex;
+                strNewName += String::CreateFromInt32( ++nIndex );
                 bFound = true;
             }
         }
