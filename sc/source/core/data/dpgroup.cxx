@@ -73,202 +73,202 @@ const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calc
 const sal_Int32 SC_DP_DATE_FIRST = -1;
 const sal_Int32 SC_DP_DATE_LAST = 10000;
 
-// ============================================================================
-namespace
+namespace {
+
+sal_Bool lcl_Search( SCCOL nSourceDim, const ScDPCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
 {
-    sal_Bool lcl_Search( SCCOL nSourceDim, const ScDPCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
+    rIndex = vIdx.size();
+    sal_Bool bFound = false;
+    SCROW nLo = 0;
+    SCROW nHi = vIdx.size() - 1;
+    SCROW nIndex;
+    long nCompare;
+    while (nLo <= nHi)
     {
-        rIndex = vIdx.size();
-        sal_Bool bFound = false;
-        SCROW nLo = 0;
-        SCROW nHi = vIdx.size() - 1;
-        SCROW nIndex;
-        long nCompare;
-        while (nLo <= nHi)
+        nIndex = (nLo + nHi) / 2;
+
+        const ScDPItemData* pData  = pCache->GetItemDataById( nSourceDim, vIdx[nIndex] );
+        const ScDPItemData* pDataInsert = pCache->GetItemDataById( nSourceDim, nNew );
+
+        nCompare = ScDPItemData::Compare( *pData, *pDataInsert );
+        if (nCompare < 0)
+            nLo = nIndex + 1;
+        else
         {
-            nIndex = (nLo + nHi) / 2;
-
-            const ScDPItemData* pData  = pCache->GetItemDataById( nSourceDim, vIdx[nIndex] );
-            const ScDPItemData* pDataInsert = pCache->GetItemDataById( nSourceDim, nNew );
-
-            nCompare = ScDPItemData::Compare( *pData, *pDataInsert );
-            if (nCompare < 0)
-                nLo = nIndex + 1;
-            else
+            nHi = nIndex - 1;
+            if (nCompare == 0)
             {
-                nHi = nIndex - 1;
-                if (nCompare == 0)
-                {
-                    bFound = sal_True;
-                    nLo = nIndex;
-                }
+                bFound = sal_True;
+                nLo = nIndex;
             }
         }
-        rIndex = nLo;
-        return bFound;
+    }
+    rIndex = nLo;
+    return bFound;
+}
+
+void  lcl_Insert( SCCOL nSourceDim, const ScDPCache* pCache ,  std::vector< SCROW >& vIdx, SCROW nNew )
+{
+    SCROW nIndex = 0;
+    if ( !lcl_Search( nSourceDim, pCache, vIdx, nNew ,nIndex ) )
+        vIdx.insert( vIdx.begin()+nIndex, nNew  );
+}
+
+template<bool bUpdateData>
+SCROW lcl_InsertValue(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData);
+
+template<>
+SCROW lcl_InsertValue<false>(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
+{
+    SCROW nNewID = pCache->GetAdditionalItemID(rData);
+    lcl_Insert(nSourceDim, pCache, vIdx, nNewID);
+    return nNewID;
+}
+
+template<>
+SCROW lcl_InsertValue<true>(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
+{
+    SCROW nItemId = lcl_InsertValue<false>( nSourceDim, pCache, vIdx, rData );
+
+    if( const ScDPItemData *pData = pCache->GetItemDataById( nSourceDim, nItemId ) )
+        const_cast<ScDPItemData&>(*pData) = rData;
+
+    return nItemId;
+}
+
+template<bool bUpdateData>
+void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue )
+{
+    lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( rString, fValue, sal_True ) );
+}
+
+template<bool bUpdateData>
+void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache, std::vector< SCROW >& vIdx, const String&  rString, const double& fValue, sal_Int32 nDatePart )
+{
+    lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( nDatePart, rString, fValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL|ScDPItemData::MK_DATEPART ) );
+}
+
+void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
+{
+    sal_uLong nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
+    String aString;
+    pFormatter->GetInputLineString( fValue, nFormat, aString );
+    rBuffer.append( aString );
+}
+
+String lcl_GetNumGroupName( double fStartValue, const ScDPNumGroupInfo& rInfo,
+    bool bHasNonInteger, sal_Unicode cDecSeparator, SvNumberFormatter* pFormatter )
+{
+    OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
+
+    double fStep = rInfo.Step;
+    double fEndValue = fStartValue + fStep;
+    if ( !bHasNonInteger && ( rInfo.DateValues || !rtl::math::approxEqual( fEndValue, rInfo.End ) ) )
+    {
+        //  The second number of the group label is
+        //  (first number + size - 1) if there are only integer numbers,
+        //  (first number + size) if any non-integer numbers are involved.
+        //  Exception: The last group (containing the end value) is always
+        //  shown as including the end value (but not for dates).
+
+        fEndValue -= 1.0;
     }
 
-    void  lcl_Insert( SCCOL nSourceDim, const ScDPCache* pCache ,  std::vector< SCROW >& vIdx, SCROW nNew )
+    if ( fEndValue > rInfo.End && !rInfo.AutoEnd )
     {
-        SCROW nIndex = 0;
-        if ( !lcl_Search( nSourceDim, pCache, vIdx, nNew ,nIndex ) )
-            vIdx.insert( vIdx.begin()+nIndex, nNew  );
+        // limit the last group to the end value
+
+        fEndValue = rInfo.End;
     }
 
-    template<bool bUpdateData>
-    SCROW lcl_InsertValue(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData);
-
-    template<>
-    SCROW lcl_InsertValue<false>(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
+    rtl::OUStringBuffer aBuffer;
+    if ( rInfo.DateValues )
     {
-        SCROW nNewID = pCache->GetAdditionalItemID(rData);
-        lcl_Insert(nSourceDim, pCache, vIdx, nNewID);
-        return nNewID;
+        lcl_AppendDateStr( aBuffer, fStartValue, pFormatter );
+        aBuffer.appendAscii( " - " );   // with spaces
+        lcl_AppendDateStr( aBuffer, fEndValue, pFormatter );
     }
-
-    template<>
-    SCROW lcl_InsertValue<true>(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
+    else
     {
-        SCROW nItemId = lcl_InsertValue<false>( nSourceDim, pCache, vIdx, rData );
-
-        if( const ScDPItemData *pData = pCache->GetItemDataById( nSourceDim, nItemId ) )
-            const_cast<ScDPItemData&>(*pData) = rData;
-
-        return nItemId;
-    }
-
-    template<bool bUpdateData>
-    void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue )
-    {
-        lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( rString, fValue, sal_True ) );
-    }
-
-    template<bool bUpdateData>
-    void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache, std::vector< SCROW >& vIdx, const String&  rString, const double& fValue, sal_Int32 nDatePart )
-    {
-        lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( nDatePart, rString, fValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL|ScDPItemData::MK_DATEPART ) );
-    }
-
-    void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
-    {
-        sal_uLong nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
-        String aString;
-        pFormatter->GetInputLineString( fValue, nFormat, aString );
-        rBuffer.append( aString );
-    }
-
-    String lcl_GetNumGroupName( double fStartValue, const ScDPNumGroupInfo& rInfo,
-        bool bHasNonInteger, sal_Unicode cDecSeparator, SvNumberFormatter* pFormatter )
-    {
-        OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
-
-        double fStep = rInfo.Step;
-        double fEndValue = fStartValue + fStep;
-        if ( !bHasNonInteger && ( rInfo.DateValues || !rtl::math::approxEqual( fEndValue, rInfo.End ) ) )
-        {
-            //  The second number of the group label is
-            //  (first number + size - 1) if there are only integer numbers,
-            //  (first number + size) if any non-integer numbers are involved.
-            //  Exception: The last group (containing the end value) is always
-            //  shown as including the end value (but not for dates).
-
-            fEndValue -= 1.0;
-        }
-
-        if ( fEndValue > rInfo.End && !rInfo.AutoEnd )
-        {
-            // limit the last group to the end value
-
-            fEndValue = rInfo.End;
-        }
-
-        rtl::OUStringBuffer aBuffer;
-        if ( rInfo.DateValues )
-        {
-            lcl_AppendDateStr( aBuffer, fStartValue, pFormatter );
-            aBuffer.appendAscii( " - " );   // with spaces
-            lcl_AppendDateStr( aBuffer, fEndValue, pFormatter );
-        }
-        else
-        {
-            rtl::math::doubleToUStringBuffer( aBuffer, fStartValue, rtl_math_StringFormat_Automatic,
-                rtl_math_DecimalPlaces_Max, cDecSeparator, true );
-            aBuffer.append( (sal_Unicode) '-' );
-            rtl::math::doubleToUStringBuffer( aBuffer, fEndValue, rtl_math_StringFormat_Automatic,
-                rtl_math_DecimalPlaces_Max, cDecSeparator, true );
-        }
-
-        return aBuffer.makeStringAndClear();
-    }
-
-    String lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicode cDecSeparator,
-        bool bDateValues, SvNumberFormatter* pFormatter )
-    {
-        OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
-
-        rtl::OUStringBuffer aBuffer;
-        aBuffer.append((sal_Unicode)( bFirst ? '<' : '>' ));
-        if ( bDateValues )
-            lcl_AppendDateStr( aBuffer, fValue, pFormatter );
-        else
-            rtl::math::doubleToUStringBuffer( aBuffer, fValue, rtl_math_StringFormat_Automatic,
+        rtl::math::doubleToUStringBuffer( aBuffer, fStartValue, rtl_math_StringFormat_Automatic,
             rtl_math_DecimalPlaces_Max, cDecSeparator, true );
-        return aBuffer.makeStringAndClear();
+        aBuffer.append( (sal_Unicode) '-' );
+        rtl::math::doubleToUStringBuffer( aBuffer, fEndValue, rtl_math_StringFormat_Automatic,
+            rtl_math_DecimalPlaces_Max, cDecSeparator, true );
     }
 
-    inline bool IsInteger( double fValue )
+    return aBuffer.makeStringAndClear();
+}
+
+String lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicode cDecSeparator,
+    bool bDateValues, SvNumberFormatter* pFormatter )
+{
+    OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
+
+    rtl::OUStringBuffer aBuffer;
+    aBuffer.append((sal_Unicode)( bFirst ? '<' : '>' ));
+    if ( bDateValues )
+        lcl_AppendDateStr( aBuffer, fValue, pFormatter );
+    else
+        rtl::math::doubleToUStringBuffer( aBuffer, fValue, rtl_math_StringFormat_Automatic,
+        rtl_math_DecimalPlaces_Max, cDecSeparator, true );
+    return aBuffer.makeStringAndClear();
+}
+
+inline bool IsInteger( double fValue )
+{
+    return rtl::math::approxEqual( fValue, rtl::math::approxFloor(fValue) );
+}
+
+String lcl_GetNumGroupForValue( double fValue, const ScDPNumGroupInfo& rInfo, bool bHasNonInteger,
+    sal_Unicode cDecSeparator, double& rGroupValue, ScDocument* pDoc )
+{
+    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+
+    if ( fValue < rInfo.Start && !rtl::math::approxEqual( fValue, rInfo.Start ) )
     {
-        return rtl::math::approxEqual( fValue, rtl::math::approxFloor(fValue) );
+        rGroupValue = rInfo.Start - rInfo.Step;
+        return lcl_GetSpecialNumGroupName( rInfo.Start, true, cDecSeparator, rInfo.DateValues, pFormatter );
     }
 
-    String lcl_GetNumGroupForValue( double fValue, const ScDPNumGroupInfo& rInfo, bool bHasNonInteger,
-        sal_Unicode cDecSeparator, double& rGroupValue, ScDocument* pDoc )
+    if ( fValue > rInfo.End && !rtl::math::approxEqual( fValue, rInfo.End ) )
     {
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+        rGroupValue = rInfo.End + rInfo.Step;
+        return lcl_GetSpecialNumGroupName( rInfo.End, false, cDecSeparator, rInfo.DateValues, pFormatter );
+    }
 
-        if ( fValue < rInfo.Start && !rtl::math::approxEqual( fValue, rInfo.Start ) )
+    double fDiff = fValue - rInfo.Start;
+    double fDiv = rtl::math::approxFloor( fDiff / rInfo.Step );
+    double fGroupStart = rInfo.Start + fDiv * rInfo.Step;
+
+    if ( rtl::math::approxEqual( fGroupStart, rInfo.End ) &&
+        !rtl::math::approxEqual( fGroupStart, rInfo.Start ) )
+    {
+        if ( !rInfo.DateValues )
         {
-            rGroupValue = rInfo.Start - rInfo.Step;
-            return lcl_GetSpecialNumGroupName( rInfo.Start, true, cDecSeparator, rInfo.DateValues, pFormatter );
+            //  A group that would consist only of the end value is not created,
+            //  instead the value is included in the last group before. So the
+            //  previous group is used if the calculated group start value is the
+            //  selected end value.
+
+            fDiv -= 1.0;
+            fGroupStart = rInfo.Start + fDiv * rInfo.Step;
         }
-
-        if ( fValue > rInfo.End && !rtl::math::approxEqual( fValue, rInfo.End ) )
+        else
         {
+            //  For date values, the end value is instead treated as above the limit
+            //  if it would be a group of its own.
+
             rGroupValue = rInfo.End + rInfo.Step;
             return lcl_GetSpecialNumGroupName( rInfo.End, false, cDecSeparator, rInfo.DateValues, pFormatter );
         }
-
-        double fDiff = fValue - rInfo.Start;
-        double fDiv = rtl::math::approxFloor( fDiff / rInfo.Step );
-        double fGroupStart = rInfo.Start + fDiv * rInfo.Step;
-
-        if ( rtl::math::approxEqual( fGroupStart, rInfo.End ) &&
-            !rtl::math::approxEqual( fGroupStart, rInfo.Start ) )
-        {
-            if ( !rInfo.DateValues )
-            {
-                //  A group that would consist only of the end value is not created,
-                //  instead the value is included in the last group before. So the
-                //  previous group is used if the calculated group start value is the
-                //  selected end value.
-
-                fDiv -= 1.0;
-                fGroupStart = rInfo.Start + fDiv * rInfo.Step;
-            }
-            else
-            {
-                //  For date values, the end value is instead treated as above the limit
-                //  if it would be a group of its own.
-
-                rGroupValue = rInfo.End + rInfo.Step;
-                return lcl_GetSpecialNumGroupName( rInfo.End, false, cDecSeparator, rInfo.DateValues, pFormatter );
-            }
-        }
-
-        rGroupValue = fGroupStart;
-
-        return lcl_GetNumGroupName( fGroupStart, rInfo, bHasNonInteger, cDecSeparator, pFormatter );
     }
+
+    rGroupValue = fGroupStart;
+
+    return lcl_GetNumGroupName( fGroupStart, rInfo, bHasNonInteger, cDecSeparator, pFormatter );
+}
+
 }
 
 class ScDPGroupDateFilter : public ScDPCacheTable::FilterBase
