@@ -920,8 +920,7 @@ ScDPSaveDimension* ScDPSaveData::DuplicateDimension(const ::rtl::OUString& rName
         return NULL;
 
     ScDPSaveDimension* pNew = new ScDPSaveDimension( *pOld );
-    CheckDuplicateName(*pNew);
-    aDimList.push_back(pNew);
+    AddDimension(pNew);
     return pNew;
 }
 
@@ -942,8 +941,7 @@ void ScDPSaveData::RemoveDimensionByName(const ::rtl::OUString& rName)
 ScDPSaveDimension& ScDPSaveData::DuplicateDimension( const ScDPSaveDimension& rDim )
 {
     ScDPSaveDimension* pNew = new ScDPSaveDimension( rDim );
-    CheckDuplicateName(*pNew);
-    aDimList.push_back(pNew);
+    AddDimension(pNew);
     return *pNew;
 }
 
