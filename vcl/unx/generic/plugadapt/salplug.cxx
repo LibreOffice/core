@@ -96,8 +96,10 @@ static SalInstance* tryInstance( const OUString& rModuleBase )
                 /*
                  * #i109007# KDE3 seems to have the same problem; an atexit cleanup
                  * handler, which cannot be resolved anymore if the plugin is already unloaded.
+		 * Same applies for kde4.
                  */
-                else if( rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")) )
+                else if( rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("kde")) ||
+                    rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("kde4")) )
                 {
                     pCloseModule = NULL;
                 }
