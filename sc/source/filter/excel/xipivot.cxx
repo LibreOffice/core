@@ -1403,7 +1403,7 @@ void XclImpPivotTable::Convert()
     // hidden fields
     for( sal_uInt16 nField = 0, nCount = GetFieldCount(); nField < nCount; ++nField )
         if( const XclImpPTField* pField = GetField( nField ) )
-            if( (pField->GetAxes() & EXC_SXVD_AXIS_ROWCOLPAGE) == 0 )
+            if (!pField->GetAxes())
                 pField->ConvertHiddenField( aSaveData );
 
     // data fields
