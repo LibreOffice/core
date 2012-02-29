@@ -27,6 +27,7 @@ $(eval $(call gb_Module_Module,tail_end))
 $(eval $(call gb_Module_add_moduledirs,tail_end,\
     accessibility \
     animations \
+    apple_remote \
     avmedia \
     basctl \
     basebmp \
