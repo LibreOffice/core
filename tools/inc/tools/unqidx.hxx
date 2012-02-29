@@ -46,6 +46,8 @@ private:
     sal_uIntPtr           nUniqIndex;
     sal_uIntPtr           nCount;
 
+    void*           Seek( sal_uIntPtr nIndex ); //not implemented
+
 public:
                     using Container::GetCurObject;
 
@@ -66,7 +68,6 @@ public:
     sal_uIntPtr           GetIndex( const void* p ) const;
     sal_Bool            IsIndexValid( sal_uIntPtr nIndex ) const;
 
-    void*           Seek( sal_uIntPtr nIndex );
     void*           Seek( void* p );
     void*           First();
     void*           Last();
@@ -98,6 +99,7 @@ inline void UniqueIndex::Clear()
 #define DECLARE_UNIQUEINDEX( ClassName, Type )                          \
 class ClassName : private UniqueIndex                                   \
 {                                                                       \
+    Type        Seek( sal_uIntPtr nKey );                               \
 public:                                                                 \
                 using UniqueIndex::Clear;                                       \
                 using UniqueIndex::Count;                                       \
@@ -126,8 +128,6 @@ public:                                                                 \
     sal_uIntPtr       GetIndex( const Type p ) const                          \
                     { return UniqueIndex::GetIndex( (const void*)p ); } \
                                                                         \
-    Type        Seek( sal_uIntPtr nKey )                                      \
-                    { return (Type)UniqueIndex::Seek( nKey ); }         \
     Type        Seek( Type p )                                          \
                     { return (Type)UniqueIndex::Seek( (void*)p ); }     \
     Type        First()  { return (Type)UniqueIndex::First(); }         \

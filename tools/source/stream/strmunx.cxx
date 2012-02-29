@@ -605,48 +605,6 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 
 /*************************************************************************
 |*
-|*    SvFileStream::UnlockRange()
-|*
-*************************************************************************/
-
-sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
-{
-
-    struct flock aflock;
-    aflock.l_type = F_UNLCK;
-    aflock.l_start = nByteOffset;
-    aflock.l_whence = SEEK_SET;
-    aflock.l_len = nBytes;
-
-    if ( ! IsOpen() )
-        return sal_False;
-
-    InternalStreamLock::UnlockFile( nByteOffset, nByteOffset+nBytes, this );
-
-    if ( ! (eStreamMode &
-        (STREAM_SHARE_DENYALL | STREAM_SHARE_DENYREAD | STREAM_SHARE_DENYWRITE)))
-        return sal_True;
-
-    // wenn File Locking ausgeschaltet, siehe SvFileStream::LockRange
-    if ( ! pFileLockEnvVar )
-        return sal_True;
-
-    sal_IntPtr iFileHandle;
-    oslFileError rc = osl_getFileOSHandle(pInstanceData->rHandle, &iFileHandle);
-    if (rc != osl_File_E_None)
-    {
-        SetError( ::GetSvError( rc ));
-        return sal_False;
-    }
-    if (fcntl((int)iFileHandle, F_SETLK, &aflock) != -1)
-        return sal_True;
-
-    SetError( ::GetSvError( errno ));
-    return sal_False;
-}
-
-/*************************************************************************
-|*
 |*    SvFileStream::LockFile()
 |*
 *************************************************************************/

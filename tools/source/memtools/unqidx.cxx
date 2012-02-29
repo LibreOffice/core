@@ -221,21 +221,6 @@ sal_Bool UniqueIndex::IsIndexValid( sal_uIntPtr nIndex ) const
 |*
 *************************************************************************/
 
-void* UniqueIndex::Seek( sal_uIntPtr nIndex )
-{
-    // Index-Eintrag als aktuellen setzten, wenn er gueltig ist
-    if ( IsIndexValid( nIndex ) )
-        return Container::Seek( nIndex-nStartIndex );
-    else
-        return NULL;
-}
-
-/*************************************************************************
-|*
-|*    UniqueIndex::Seek()
-|*
-*************************************************************************/
-
 void* UniqueIndex::Seek( void* p )
 {
     // Wird ein NULL-Pointer uebergeben, dann wurde Pointer nicht gefunden
