@@ -59,6 +59,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     MathMLDTD \
     Mesa \
     np_sdk \
+    oovbaapi \
     oox \
     package \
     padmin \
