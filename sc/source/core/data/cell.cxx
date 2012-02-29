@@ -240,7 +240,7 @@ ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, const ScAddress&
     return lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
 }
 
-ScBaseCell* ScBaseCell::CloneWithNote( const ScAddress& rOwnPos, ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
+ScBaseCell* ScBaseCell::CloneWithNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
 {
     ScBaseCell* pNewCell = lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
     return pNewCell;

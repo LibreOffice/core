@@ -1026,7 +1026,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
                     if (pUndoDoc)
                     {
                         ScAddress aCellPos(nCol, nRow, nTab);
-                        pUndoDoc->PutCell(nCol, nRow, nTab, pCell->CloneWithNote(aCellPos, *pUndoDoc, aCellPos));
+                        pUndoDoc->PutCell(nCol, nRow, nTab, pCell->CloneWithNote(*pUndoDoc, aCellPos));
                     }
                     aCol[nCol].SetString(nRow, nTab, rSearchItem.GetReplaceString(), pDocument->GetAddressConvention());
                 }

@@ -2178,7 +2178,6 @@ void ScOutputData::AddPDFNotes()
             for (SCCOL nX=nX1; nX<=nX2; nX++)
             {
                 CellInfo* pInfo = &pThisRowInfo->pCellInfo[nX+1];
-                ScBaseCell* pCell = pInfo->pCell;
                 sal_Bool bIsMerged = false;
                 SCROW nY = pRowInfo[nArrY].nRowNo;
                 SCCOL nMergeX = nX;
@@ -2189,13 +2188,10 @@ void ScOutputData::AddPDFNotes()
                     // find start of merged cell
                     bIsMerged = sal_True;
                     pDoc->ExtendOverlapped( nMergeX, nMergeY, nX, nY, nTab );
-                    pCell = pDoc->GetCell( ScAddress(nMergeX,nMergeY,nTab) );
                     // use origin's pCell for NotePtr test below
                 }
 
-                //TODO: moggi search for a better way with new note handling
-                /*
-                if ( pCell && pCell->HasNote() && ( bIsMerged ||
+                if ( pDoc->GetNotes(nTab)->findByAddress(nMergeX, nMergeY) && ( bIsMerged ||
                         ( !pInfo->bHOverlapped && !pInfo->bVOverlapped ) ) )
                 {
                     long nNoteWidth = (long)( SC_CLIPMARK_SIZE * nPPTX );
@@ -2215,7 +2211,7 @@ void ScOutputData::AddPDFNotes()
                     if ( bLayoutRTL ? ( nMarkX >= 0 ) : ( nMarkX < nScrX+nScrW ) )
                     {
                         Rectangle aNoteRect( nMarkX, nPosY, nMarkX+nNoteWidth*nLayoutSign, nPosY+nNoteHeight );
-                        const ScPostIt* pNote = pCell->GetNote();
+                        const ScPostIt* pNote = pDoc->GetNotes(nTab)->findByAddress(nMergeX, nMergeY);
 
                         // Note title is the cell address (as on printed note pages)
                         String aTitle;
@@ -2234,7 +2230,6 @@ void ScOutputData::AddPDFNotes()
                         pPDFData->CreateNote( aNoteRect, aNote );
                     }
                 }
-                */
 
                 nPosX += pRowInfo[0].pCellInfo[nX+1].nWidth * nLayoutSign;
             }

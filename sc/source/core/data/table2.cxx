@@ -488,6 +488,9 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
         }
     }
 
+    if (nDelFlag & IDF_CONTENTS)
+        maNotes.erase( nCol1, nRow1, nCol2, nRow2);
+
     if (IsStreamValid())
         // TODO: In the future we may want to check if the table has been
         // really modified before setting the stream invalid.
@@ -501,6 +504,16 @@ void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
         ScBulkBroadcast aBulkBroadcast( pDocument->GetBASM());
         for (SCCOL i=0; i<=MAXCOL; i++)
             aCol[i].DeleteSelection( nDelFlag, rMark );
+    }
+
+    ScRangeList aRangeList;
+    rMark.FillRangeListWithMarks(&aRangeList, false);
+
+    for (size_t i = 0; i < aRangeList.size(); ++i)
+    {
+        ScRange* pRange = aRangeList[i];
+        if (nDelFlag & IDF_CONTENTS && pRange)
+            maNotes.erase(pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row());
     }
 
         //
@@ -714,7 +727,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     ScAddress aOwnPos( nCol, nRow, nTab );
                     if (pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
-                        pNew = pCell->CloneWithNote( aOwnPos, *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
+                        pNew = pCell->CloneWithNote( *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
 
                         //  Referenzen drehen
                         //  bei Cut werden Referenzen spaeter per UpdateTranspose angepasst
@@ -724,7 +737,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     }
                     else
                     {
-                        pNew = pCell->CloneWithNote( aOwnPos, *pDestDoc, aDestPos );
+                        pNew = pCell->CloneWithNote( *pDestDoc, aDestPos );
                     }
                 }
                 pTransClip->PutCell( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pNew );
@@ -853,6 +866,17 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (!bColRowFlags)      // Spaltenbreiten/Zeilenhoehen/Flags
         return;
 
+    //remove old notes
+    if (nFlags & IDF_CONTENTS)
+        pDestTab->maNotes.erase(nCol1, nRow1, nCol2, nRow2);
+
+    bool bAddNotes = nFlags & (IDF_NOTE | IDF_ADDNOTES);
+    if (bAddNotes)
+    {
+        bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
+        pDestTab->maNotes.CopyFromClip(maNotes, pDocument, nCol1, nRow1, nCol2, nRow2, 0, 0, pDestTab->nTab, bCloneCaption);
+    }
+
     if (pDBDataNoName)
     {
         ScDBData* pNewDBData = new ScDBData(*pDBDataNoName);
@@ -968,6 +992,17 @@ void ScTable::UndoToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                         pMarkData);
             else
                 aCol[i].CopyToColumn(0, MAXROW, IDF_FORMULA, false, pDestTab->aCol[i]);
+        }
+
+        //remove old notes
+        if (nFlags & IDF_CONTENTS)
+            pDestTab->maNotes.erase(nCol1, nRow1, nCol2, nRow2);
+
+        bool bAddNotes = nFlags & (IDF_NOTE | IDF_ADDNOTES);
+        if (bAddNotes)
+        {
+            bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
+            pDestTab->maNotes.CopyFromClip(maNotes, pDocument, nCol1, nRow1, nCol2, nRow2, 0, 0, pDestTab->nTab, bCloneCaption);
         }
 
         if (bWidth||bHeight)
@@ -1473,8 +1508,18 @@ bool ScTable::IsBlockEmpty( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, 
     bool bEmpty = true;
     for (SCCOL i=nCol1; i<=nCol2 && bEmpty; i++)
     {
-        //TODO:moggi
         bEmpty = aCol[i].IsEmptyBlock( nRow1, nRow2 );
+        if (!bIgnoreNotes)
+        {
+            for (ScNotes::const_iterator itr = maNotes.begin(); itr != maNotes.end() && bEmpty; ++itr)
+            {
+                SCCOL nCol = itr->first.first;
+                SCROW nRow = itr->first.second;
+
+                if (nCol >= nCol1 && nCol <= nCol2 && nRow >= nRow1 && nRow <= nRow2)
+                    bEmpty = false;
+            }
+        }
     }
     return bEmpty;
 }

@@ -1219,7 +1219,7 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKee
         {
             aOwnPos.SetRow( maItems[i].nRow );
             aDestPos.SetRow( maItems[i].nRow );
-            ScBaseCell* pNewCell = maItems[i].pCell->CloneWithNote( aOwnPos, *rColumn.pDocument, aDestPos, nCloneFlags );
+            ScBaseCell* pNewCell = maItems[i].pCell->CloneWithNote( *rColumn.pDocument, aDestPos, nCloneFlags );
             rColumn.Append( aDestPos.Row(), pNewCell );
         }
     }
@@ -1347,7 +1347,7 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
         SCSIZE nThisIndex;
         if ( Search( aDestPos.Row(), nThisIndex ) )
         {
-            ScBaseCell* pNew = maItems[nThisIndex].pCell->CloneWithNote( aOwnPos, rDestDoc, aDestPos );
+            ScBaseCell* pNew = maItems[nThisIndex].pCell->CloneWithNote( rDestDoc, aDestPos );
             rDestCol.Insert( aDestPos.Row(), pNew );
         }
     }
