@@ -685,9 +685,12 @@ AC_ARG_ENABLE(cairo-canvas,
 ],,enable_cairo_canvas=yes)
 
 AC_ARG_ENABLE(librsvg,
-    AS_HELP_STRING([--enable-librsvg=<no/auto/system/internal>],
+    AS_HELP_STRING([--enable-librsvg=<no/auto/system/internal/fully-internal>],
         [Enables or disables use of librsvg to render SVG at run-time.
-         Also specificed what librsvg to use. 'auto' is the default.]))
+         Also specificed what librsvg to use. 'auto' is the default.
+         'fully-internal' also forces internal versions of libraries (only)
+         librsvg depends on (currently GLib, gdk-pixbuf, libcroco, libgsf,
+         pango).]))
 
 AC_ARG_ENABLE(opengl,
     AS_HELP_STRING([--disable-opengl],
@@ -9740,6 +9743,10 @@ internal)
     AC_MSG_RESULT([internal])
     ;;
 
+fully-internal)
+    AC_MSG_RESULT([fully internal])
+    ;;
+
 system)
     if test $_os = WINNT -a "$WITH_MINGW" != yes; then
         AC_MSG_ERROR([Must use internal librsvg when building with MSVC])
@@ -9753,14 +9760,15 @@ system)
     ;;
 esac
 
-dnl By now enable_librsvg should be "system", "internal" or "no"
+dnl By now enable_librsvg should be "system", "internal", "fully-internal", or
+dnl "no":
 case $enable_librsvg in
 system)
     ENABLE_LIBRSVG=SYSTEM
     SYSTEM_LIBRSVG=YES
     ;;
 
-internal)
+internal|fully-internal)
     ENABLE_LIBRSVG=INTERNAL
     SYSTEM_LIBRSVG=NO
     BUILD_TYPE="$BUILD_TYPE LIBRSVG"
@@ -9845,6 +9853,9 @@ dnl by --with-system-libs) to override this.
 if test "$SYSTEM_LIBRSVG" = YES; then
     SYSTEM_GDKPIXBUF=YES
     AC_MSG_RESULT([yes])
+elif test "$enable_librsvg" = fully-internal; then
+    SYSTEM_GDKPIXBUF=NO
+    AC_MSG_RESULT([no])
 else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
@@ -9872,6 +9883,9 @@ dnl by --with-system-libs) to override this.
 if test "$SYSTEM_LIBRSVG" = YES; then
     SYSTEM_GLIB=YES
     AC_MSG_RESULT([yes])
+elif test "$enable_librsvg" = fully-internal; then
+    SYSTEM_GLIB=NO
+    AC_MSG_RESULT([no])
 else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
@@ -9893,20 +9907,24 @@ dnl ===================================================================
 
 AC_MSG_CHECKING([whether to use the system gettext runtime])
 
+if test -z "$with_system_gettext"; then
+    case "$_os" in
+    WINNT|Darwin|iOS|Android)
+        with_system_gettext=no
+        ;;
+    *)
+        with_system_gettext=yes
+        ;;
+    esac
+fi
 if test "$with_system_gettext" = yes; then
     SYSTEM_GETTEXT=YES
     AC_MSG_RESULT([yes])
+elif test "$with_system_gettext" = no; then
+    SYSTEM_GETTEXT=NO
+    AC_MSG_RESULT([yes])
 else
-    case "$_os" in
-    WINNT|Darwin|iOS|Android)
-        SYSTEM_GETTEXT=NO
-        AC_MSG_RESULT([no])
-        ;;
-    *)
-        SYSTEM_GETTEXT=YES
-        AC_MSG_RESULT([yes])
-        ;;
-    esac
+    AC_MSG_ERROR([bad --with-system-gettext=$with_system_gettext])
 fi
 AC_SUBST(SYSTEM_GETTEXT)
 
@@ -9923,6 +9941,9 @@ dnl by --with-system-libs) to override this.
 if test "$SYSTEM_LIBRSVG" = YES; then
     SYSTEM_LIBCROCO=YES
     AC_MSG_RESULT([yes])
+elif test "$enable_librsvg" = fully-internal; then
+    SYSTEM_LIBCROCO=NO
+    AC_MSG_RESULT([no])
 else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
@@ -9950,6 +9971,9 @@ dnl by --with-system-libs) to override this.
 if test "$SYSTEM_LIBRSVG" = YES; then
     SYSTEM_PANGO=YES
     AC_MSG_RESULT([yes])
+elif test "$enable_librsvg" = fully-internal; then
+    SYSTEM_PANGO=NO
+    AC_MSG_RESULT([no])
 else
     case "$_os" in
     WINNT|Darwin|iOS|Android)
@@ -9977,6 +10001,9 @@ dnl --with-system-libs) to override this.
 if test "$SYSTEM_LIBRSVG" = YES; then
     SYSTEM_LIBGSF=YES
     AC_MSG_RESULT([yes])
+elif test "$enable_librsvg" = fully-internal; then
+    SYSTEM_LIBGSF=NO
+    AC_MSG_RESULT([no])
 else
     case "$_os" in
     WINNT|Darwin|iOS|Android)

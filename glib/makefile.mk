@@ -48,7 +48,7 @@ TARFILE_NAME=$(PRJNAME)-$(GLIBVERSION)
 TARFILE_MD5=9f6e85e1e38490c3956f4415bcd33e6e
 
 
-.IF "$(OS)"=="MACOSX" || "$(OS)"=="IOS"
+.IF "$(OS)"!="WNT"
 PATCH_FILES=glib-2.28.1.patch glib-2.28.1.noise.patch
 
 .IF "$(OS)"=="IOS"
@@ -91,21 +91,27 @@ VFLAG=V=1
 
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) $(VFLAG) -j$(MAXPROCESS)
 
-.IF "$(OS)"=="MACOSX"
+.IF "$(OS)"!="IOS"
 
 EXTRPATH=LOADER
 
-OUT2LIB+=gio/.libs/libgio-2.0.0.dylib
-OUT2LIB+=glib/.libs/libglib-2.0.0.dylib
-OUT2LIB+=gmodule/.libs/libgmodule-2.0.0.dylib
-OUT2LIB+=gobject/.libs/libgobject-2.0.0.dylib
-OUT2LIB+=gthread/.libs/libgthread-2.0.0.dylib
+.IF "$(OS)" == "MACOSX"
+my_ext = .0$(DLLPOST)
+.ELSE
+my_ext = $(DLLPOST).0
+.END
+
+OUT2LIB+=gio/.libs/libgio-2.0$(my_ext)
+OUT2LIB+=glib/.libs/libglib-2.0$(my_ext)
+OUT2LIB+=gmodule/.libs/libgmodule-2.0$(my_ext)
+OUT2LIB+=gobject/.libs/libgobject-2.0$(my_ext)
+OUT2LIB+=gthread/.libs/libgthread-2.0$(my_ext)
 
 OUT2BIN+=gobject/glib-mkenums
 OUT2BIN+=gobject/.libs/glib-genmarshal
 OUT2BIN+=gio/.libs/glib-compile-schemas
 
-.ELIF "$(OS)"=="IOS"
+.ELSE
 
 OUT2LIB+=gio/.libs/libgio-2.0.a
 OUT2LIB+=glib/.libs/libglib-2.0.a
@@ -115,7 +121,7 @@ OUT2LIB+=gthread/.libs/libgthread-2.0.a
 
 .ENDIF
 
-.ELIF "$(OS)"=="WNT"
+.ELSE
 
 CONVERTFILES=gobject/gmarshal.c
 
