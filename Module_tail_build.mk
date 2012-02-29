@@ -29,6 +29,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     animations \
     avmedia \
     basctl \
+    basebmp \
     basic \
     bean \
     canvas \
