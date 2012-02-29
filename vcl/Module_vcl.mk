@@ -75,7 +75,7 @@ endif
 
 ifeq ($(GUIBASE),aqua)
 $(eval $(call gb_Module_add_targets,vcl,\
-    Package_osx \
+    Zip_osxres \
 ))
 endif
 
