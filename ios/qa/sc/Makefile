@@ -19,7 +19,7 @@ SRCS = filters-test.m
 
 CFLAGS = $(SOLARINC)
 
-LIBS = -Wl,$(OUTDIR)/bin/cppunit/cppunittester.a -Wl,$(WORKDIR)/LinkTarget/CppunitTest/libtest_sc_filters_test.a -Wl,$(OUTDIR)/lib/unoexceptionprotector.a $(SOLARLIB) -lavmedialo -lbasegfxlo -lcomphelpgcc3 -leditenglo -lfwelo -lfwilo -lfwklo -li18nisolang1gcc3 -li18npaperlo -licuuc -ljpeg -llnglo -lsalcpprt -lsfxlo -lsvllo -lsvtlo -lutllo -lvcllo -lsaxlo -lsclo -lsotlo -ltest -ltklo -ltllo -lucbhelper4gcc3 -lxolo -lcppunit -lunotest -luno_cppuhelpergcc3 -luno_cppu -luno_salhelpergcc3 -luno_sal -lsal_textenc $(addprefix -framework , $(gb_Library__FRAMEWORKS)) -lobjc
+LIBS = -Wl,$(OUTDIR)/bin/cppunit/cppunittester.a -Wl,$(WORKDIR)/LinkTarget/CppunitTest/libtest_sc_filters_test.a -Wl,$(OUTDIR)/lib/bootstrap.uno.a -Wl,$(OUTDIR)/lib/unoexceptionprotector.a $(SOLARLIB) -lavmedialo -lbasegfxlo -lcomphelpgcc3 -lcppunit -ldrawinglayerlo -leditenglo -lforlo -lforuilo -lfwelo -lfwilo -lfwklo -li18nisolang1gcc3 -li18npaperlo -licuuc -ljpeg -ljvmfwk -llnglo -lreg -lsal_textenc -lsalcpprt -lsaxlo -lsblo -lsclo -lsfxlo -lstore -lsvllo -lsvtlo -lsvxlo -lsvxcorelo -lsotlo -ltest -ltklo -ltllo -lucbhelper4gcc3 -luno_cppuhelpergcc3 -luno_cppu -luno_sal -luno_salhelpergcc3 -lunotest -lutllo -lvcllo -lxml2 -lxmlreader -lxolo -lz $(addprefix -framework , $(gb_Library__FRAMEWORKS)) -liconv -lobjc
 
 all: $(APPDIR)/$(APP)
 
