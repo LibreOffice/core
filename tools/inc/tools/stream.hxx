@@ -639,11 +639,9 @@ private:
     SvFileStream & operator= (const SvFileStream&);
 
     sal_Bool LockRange( sal_Size nByteOffset, sal_Size nBytes );
-    sal_Bool LockFile();
-#ifdef WNT
     sal_Bool UnlockRange( sal_Size nByteOffset, sal_Size nBytes );
+    sal_Bool LockFile();
     sal_Bool UnlockFile();
-#endif
 protected:
 
     virtual sal_Size    GetData( void* pData, sal_Size nSize );

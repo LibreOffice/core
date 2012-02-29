@@ -556,6 +556,22 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 
 /*************************************************************************
 |*
+|*    SvFileStream::UnlockRange()
+|*
+*************************************************************************/
+
+sal_Bool SvFileStream::UnlockRange( sal_Size nByteOffset, sal_Size nBytes )
+{
+    if ( ! IsOpen() )
+        return sal_False;
+
+    InternalStreamLock::UnlockFile( nByteOffset, nByteOffset+nBytes, this );
+
+    return sal_True;
+}
+
+/*************************************************************************
+|*
 |*    SvFileStream::LockFile()
 |*
 *************************************************************************/
@@ -563,6 +579,17 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 sal_Bool SvFileStream::LockFile()
 {
   return LockRange( 0UL, 0UL );
+}
+
+/*************************************************************************
+|*
+|*    SvFileStream::UnlockFile()
+|*
+*************************************************************************/
+
+sal_Bool SvFileStream::UnlockFile()
+{
+    return UnlockRange( 0UL, 0UL );
 }
 
 /*************************************************************************
@@ -688,7 +715,7 @@ void SvFileStream::Open( const String& rFilename, StreamMode nOpenMode )
 
 void SvFileStream::Close()
 {
-    InternalStreamLock::UnlockFile( 0, 0, this );
+    UnlockFile();
 
     if ( IsOpen() )
     {
