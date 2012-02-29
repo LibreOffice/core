@@ -760,7 +760,7 @@ int RTFDocumentImpl::resolveChars(char ch)
     if (m_aStates.top().nInternalState != INTERNAL_HEX && !Strm().IsEof())
         Strm().SeekRel(-1);
 
-    if (m_aStates.top().nInternalState == INTERNAL_HEX)
+    if (m_aStates.top().nInternalState == INTERNAL_HEX && m_aStates.top().nDestinationState != DESTINATION_LEVELNUMBERS)
     {
         if (!bSkipped)
             m_aHexBuffer.append(ch);
