@@ -174,8 +174,9 @@ $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) : $(PRJ)/$(ROUT)/misc/$(TARFILE_MD5)-$(TARFILE
     @-cd $(PACKAGE_DIR) && chmod -R +rw $(TARFILE_ROOTDIR) && $(TOUCH) $(UNTAR_FLAG_FILE)
     @-cd $(PACKAGE_DIR) && find $(TARFILE_ROOTDIR) -type d -print0 | xargs -0 chmod a+x
 
-#add new files to patch
+#add new files to patch and remove files from patch
 $(PACKAGE_DIR)/$(ADD_FILES_FLAG_FILE) : $(PACKAGE_DIR)/$(UNTAR_FLAG_FILE) $(T_ADDITIONAL_FILES:+".dummy")
+    $(RM) $(foreach,i,$(REMOVE_FILES) $(PACKAGE_DIR)/$(TARFILE_ROOTDIR)/$i)
 .IF "$(GUI)"=="WNT"
     @$(TOUCH) $@
 .ELSE			# "$(GUI)"=="WNT"
