@@ -29,9 +29,8 @@
 
 $(eval $(call gb_Library_Library,AppleRemote))
 
-$(eval $(call gb_Library_set_include,AppleRemote,\
-    -I$(SRCDIR)/apple_remote/inc \
-    $$(INCLUDE) \
+$(eval $(call gb_Library_add_package_headers,AppleRemote,\
+    apple_remote_inc \
 ))
 
 $(eval $(call gb_Library_use_externals,AppleRemote,\
