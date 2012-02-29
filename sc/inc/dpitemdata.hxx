@@ -44,13 +44,13 @@ class ScDocument;
 
 class SC_DLLPUBLIC ScDPItemData
 {
+    friend class ScDPCache;
 public:
     enum {
         MK_VAL      = 0x01,
         MK_DATA     = 0x02,
         MK_ERR      = 0x04,
-        MK_DATE     = 0x08,
-        MK_DATEPART = 0x10
+        MK_DATE     = 0x08
     };
 
     static bool isDate( sal_uLong nNumType );
@@ -61,7 +61,6 @@ private:
     double mfValue;
     sal_uInt8 mbFlag;
 
-    friend class ScDPCache;
 public:
     ScDPItemData();
     ScDPItemData(sal_uLong nNF, const rtl::OUString & rS, double fV, sal_uInt8 bF);
@@ -87,7 +86,6 @@ public:
     double GetValue() const ;
     bool HasStringData() const ;
     bool IsDate() const;
-    bool HasDatePart() const;
     void SetDate( bool b ) ;
 
     sal_uInt8 GetType() const;

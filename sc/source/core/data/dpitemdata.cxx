@@ -115,9 +115,6 @@ bool ScDPItemData::operator==( const ScDPItemData& r ) const
 {
     if ( IsValue() )
     {
-        if (HasDatePart() != r.HasDatePart())
-            return false;
-
         if ( IsDate() != r.IsDate() )
             return false;
         else if ( r.IsValue() )
@@ -205,11 +202,6 @@ bool ScDPItemData::HasStringData() const
 bool ScDPItemData::IsDate() const
 {
     return !!(mbFlag&MK_DATE);
-}
-
-bool ScDPItemData::HasDatePart() const
-{
-    return !!(mbFlag&MK_DATEPART);
 }
 
 void ScDPItemData::SetDate( bool b )

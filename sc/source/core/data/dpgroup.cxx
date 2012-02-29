@@ -149,7 +149,7 @@ void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache,  std::vector< 
 template<bool bUpdateData>
 void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache, std::vector< SCROW >& vIdx, const String&  rString, const double& fValue, sal_Int32 nDatePart )
 {
-    lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( nDatePart, rString, fValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL|ScDPItemData::MK_DATEPART ) );
+    lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData(nDatePart, rString, fValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL) );
 }
 
 void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
@@ -1388,7 +1388,7 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
                 sal_Int32 nPartValue = lcl_GetDatePartValue(
                     pData->GetValue(), pDateHelper->GetDatePart(), pDoc->GetFormatTable(),
                     &pDateHelper->GetNumInfo() );
-                ScDPItemData  aItemData( pDateHelper->GetDatePart(), String(), nPartValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL|ScDPItemData::MK_DATEPART );
+                ScDPItemData aItemData(pDateHelper->GetDatePart(), String(), nPartValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL);
                 pItemDataIndex[nDim] = GetCacheTable().getCache()->GetAdditionalItemID( aItemData );
             }
         }
