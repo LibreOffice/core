@@ -54,6 +54,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     dtrans \
     editeng \
     embeddedobj \
+    embedserv \
     eventattacher \
     extensions \
     fileaccess \

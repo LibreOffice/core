@@ -30,6 +30,9 @@
 #include <inprocembobj.h>
 #ifdef __MINGW32__
 #define INITGUID
+#define INPROC_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#else
+#define INPROC_DLLPUBLIC
 #endif
 #include <embservconst.h>
 
@@ -167,7 +170,7 @@ protected:
 // ===========================
 
 // -------------------------------------------------------------------------------
-extern "C" BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/ )
+extern "C" INPROC_DLLPUBLIC BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID /*lpReserved*/ )
 {
     if (dwReason == DLL_PROCESS_ATTACH)
     {
@@ -181,7 +184,7 @@ extern "C" BOOL WINAPI DllMain( HINSTANCE hInstance, DWORD dwReason, LPVOID /*lp
 }
 
 // -------------------------------------------------------------------------------
-extern "C" STDAPI DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID* ppv )
+extern "C" STDAPI INPROC_DLLPUBLIC DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID* ppv )
 {
     for( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
          if ( *guidList[nInd] == rclsid )
@@ -201,7 +204,7 @@ extern "C" STDAPI DllGetClassObject( REFCLSID rclsid, REFIID riid, LPVOID* ppv )
 }
 
 // -------------------------------------------------------------------------------
-extern "C" STDAPI DllCanUnloadNow()
+extern "C" STDAPI INPROC_DLLPUBLIC DllCanUnloadNow()
 {
     if ( !g_nObj && !g_nLock )
         return S_OK;
@@ -210,7 +213,7 @@ extern "C" STDAPI DllCanUnloadNow()
 }
 
 // -------------------------------------------------------------------------------
-STDAPI DllRegisterServer( void )
+STDAPI INPROC_DLLPUBLIC DllRegisterServer( void )
 {
     char aLibPath[1024];
     HMODULE aCurModule = GetModuleHandleA( "inprocserv.dll" );
@@ -228,7 +231,7 @@ STDAPI DllRegisterServer( void )
 }
 
 // -------------------------------------------------------------------------------
-STDAPI DllUnregisterServer( void )
+STDAPI INPROC_DLLPUBLIC DllUnregisterServer( void )
 {
     return WriteLibraryToRegistry( "ole32.dll", 10 );
 }

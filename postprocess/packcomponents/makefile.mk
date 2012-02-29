@@ -356,7 +356,7 @@ my_components += \
 
 .IF "$(OS)" == "WNT" && "$(DISABLE_ATL)" == ""
 my_components += \
-    emser \
+    component/embedserv/util/emser \
     component/extensions/source/ole/oleautobridge
 .END
 
