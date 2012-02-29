@@ -34,7 +34,6 @@
 #include <errno.h>
 #include <unistd.h>
 #include <limits.h>
-#include <stdlib.h> // fuer getenv()
 
 #include <tools/debug.hxx>
 #include <tools/fsys.hxx>
@@ -500,8 +499,6 @@ void SvFileStream::FlushData()
 // lokal gibt es nicht
 }
 
-static char *pFileLockEnvVar = (char*)1;
-
 /*************************************************************************
 |*
 |*    SvFileStream::LockRange()
@@ -510,11 +507,6 @@ static char *pFileLockEnvVar = (char*)1;
 
 sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
 {
-    struct flock aflock;
-    aflock.l_start = nByteOffset;
-    aflock.l_whence = SEEK_SET;
-    aflock.l_len = nBytes;
-
     int nLockMode = 0;
 
     if ( ! IsOpen() )
@@ -559,47 +551,6 @@ sal_Bool SvFileStream::LockRange( sal_Size nByteOffset, sal_Size nBytes )
         return sal_False;
     }
 
-    // HACK: File-Locking nur via Environmentvariable einschalten
-    // um einen Haenger im Zusammenspiel mit einem Linux
-    // NFS-2-Server (kein Lockdaemon) zu verhindern.
-    // File-Locking ?ber NFS ist generell ein Performancekiller.
-    //                      HR, 22.10.1997 fuer SOLARIS
-    //                      HR, 18.05.1998 Environmentvariable
-
-    if ( pFileLockEnvVar == (char*)1 )
-        pFileLockEnvVar = getenv("STAR_ENABLE_FILE_LOCKING");
-    if ( ! pFileLockEnvVar )
-        return sal_True;
-
-    aflock.l_type = nLockMode;
-    sal_IntPtr iFileHandle;
-    oslFileError rc = osl_getFileOSHandle(pInstanceData->rHandle, &iFileHandle);
-    if (rc != osl_File_E_None)
-    {
-        SetError( ::GetSvError( rc ));
-        return sal_False;
-    }
-    if (fcntl((int)iFileHandle, F_GETLK, &aflock) == -1)
-    {
-    #if defined SOLARIS
-        if (errno == ENOSYS)
-            return sal_True;
-    #endif
-        SetError( ::GetSvError( errno ));
-        return sal_False;
-    }
-    if (aflock.l_type != F_UNLCK)
-    {
-        SetError(SVSTREAM_LOCKING_VIOLATION);
-        return sal_False;
-    }
-
-    aflock.l_type = nLockMode;
-    if (fcntl((int)iFileHandle, F_SETLK, &aflock) == -1)
-    {
-        SetError( ::GetSvError( errno ));
-        return sal_False;
-    }
     return sal_True;
 }
 

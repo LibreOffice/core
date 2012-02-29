@@ -837,7 +837,7 @@ struct Locking_Impl
     Locking_Impl() : m_enabled(0)
     {
 #ifndef HAVE_O_EXLOCK
-        m_enabled = ((getenv("SAL_ENABLE_FILE_LOCKING") != 0) || (getenv("STAR_ENABLE_FILE_LOCKING") != 0));
+        m_enabled = (getenv("SAL_ENABLE_FILE_LOCKING") != 0);
 #endif /* HAVE_O_EXLOCK */
     }
 };
