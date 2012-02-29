@@ -69,7 +69,6 @@ $(WORKDIR)/CustomTarget/basegfx/source/%.cxx : $(SRCDIR)/basegfx/source/%.cxx
 
 # copied sources are generated cxx sources
 $(eval $(call gb_StaticLibrary_add_generated_exception_objects,basegfx_s,\
-	CustomTarget/basegfx/source/tools/liangbarsky \
 	CustomTarget/basegfx/source/tools/canvastools \
 	CustomTarget/basegfx/source/tools/zoomtools \
 	CustomTarget/basegfx/source/tools/gradienttools \
