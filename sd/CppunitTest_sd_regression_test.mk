@@ -91,6 +91,7 @@ $(eval $(call gb_CppunitTest_add_components,sd_regression_test,\
     configmgr/source/configmgr \
     dbaccess/util/dba \
     desktop/source/deployment/deployment \
+    embeddedobj/util/embobj \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
     filter/source/svg/svgfilter \
@@ -119,10 +120,6 @@ $(eval $(call gb_CppunitTest_add_components,sd_regression_test,\
     unoxml/source/service/unoxml \
     xmlsecurity/util/xsec_fw \
     xmlsecurity/util/xmlsecurity \
-))
-
-$(eval $(call gb_CppunitTest_add_old_components,sd_regression_test,\
-    embobj \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sd_regression_test,\

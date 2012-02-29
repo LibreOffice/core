@@ -51,6 +51,7 @@ desktop\
 drawinglayer\
 dtrans\
 editeng\
+embeddedobj\
 eventattacher\
 extensions\
 fileaccess\
@@ -152,7 +153,6 @@ crashrep\
 ct2n\
 curl\
 dictionaries \
-embeddedobj\
 embedserv\
 epm\
 expat\

@@ -94,6 +94,7 @@ $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
     comphelper/util/comphelp \
     configmgr/source/configmgr \
     dbaccess/util/dba \
+    embeddedobj/util/embobj \
     eventattacher/source/evtatt \
     fileaccess/source/fileacc \
     filter/source/config/cache/filterconfig1 \
@@ -119,10 +120,6 @@ $(eval $(call gb_CppunitTest_add_components,sc_filters_test,\
     unotools/util/utl \
     unoxml/source/rdf/unordf \
     unoxml/source/service/unoxml \
-))
-
-$(eval $(call gb_CppunitTest_add_old_components,sc_filters_test,\
-	embobj \
 ))
 
 $(eval $(call gb_CppunitTest_set_args,sc_filters_test,\

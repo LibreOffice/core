@@ -354,6 +354,8 @@ $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     deploymentgui \
     dict_ja \
     dict_zh \
+    embobj \
+    emboleobj \
     fileacc \
     index_data \
     java_uno_accessbridge \

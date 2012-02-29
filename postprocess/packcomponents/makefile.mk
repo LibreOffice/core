@@ -52,6 +52,7 @@ my_components = \
     component/dbaccess/util/dbu \
     component/dbaccess/util/sdbt \
     component/dtrans/util/mcnttype \
+    component/embeddedobj/util/embobj \
     component/eventattacher/source/evtatt \
     component/fileaccess/source/fileacc \
     component/filter/source/config/cache/filterconfig1 \
@@ -144,7 +145,6 @@ my_components = \
     dbase \
     dbpool2 \
     dbtools \
-    embobj \
     flat \
     localebe1 \
     mysql \
@@ -204,7 +204,11 @@ my_components += component/desktop/unx/splash/splash
 .ENDIF
 
 .IF "$(DISABLE_ATL)" == ""
-my_components += emboleobj
+.IF "$(OS)" == "WNT"
+my_components += component/embeddedobj/source/msole/emboleobj.windows
+.ELSE
+my_components += component/embeddedobj/source/msole/emboleobj
+.ENDIF
 .END
 
 .IF "$(DISABLE_NEON)" != "TRUE"

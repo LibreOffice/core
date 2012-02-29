@@ -53,6 +53,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     drawinglayer \
     dtrans \
     editeng \
+    embeddedobj \
     eventattacher \
     extensions \
     fileaccess \
