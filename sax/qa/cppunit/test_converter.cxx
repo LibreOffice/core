@@ -212,6 +212,10 @@ void ConverterTest::testDateTime()
     doTest( util::DateTime(99, 59, 59, 23, 31, 12, 9999),
             "9999-12-31T23:59:59.9999999999999999999999999999999999999Z",
             "9999-12-31T23:59:59.99" );
+    doTest( util::DateTime(0, 0, 0, 0, 29, 2, 2000), // leap year
+            "2000-02-29T00:00:00-00:00", "2000-02-29T00:00:00" );
+    doTest( util::DateTime(0, 0, 0, 0, 29, 2, 1600), // leap year
+            "1600-02-29T00:00:00-00:00", "1600-02-29T00:00:00" );
     doTest( util::DateTime(0, 0, 0, 24, 1, 1, 333)
                 /*(0, 0, 0, 0, 2, 1, 333)*/,
             "0333-01-01T24:00:00"/*, "0333-01-02T00:00:00"*/ );
@@ -240,6 +244,8 @@ void ConverterTest::testDateTime()
     doTestDateTimeF( "0001-01-02T00:00:00+14:01" ); // invalid: TZ > +14:00
     doTestDateTimeF( "0001-01-02T00:00:00-15:00" ); // invalid: TZ < -14:00
     doTestDateTimeF( "0001-01-02T00:00:00-14:01" ); // invalid: TZ < -14:00
+    doTestDateTimeF( "2100-02-29T00:00:00-00:00" ); // invalid: no leap year
+    doTestDateTimeF( "1900-02-29T00:00:00-00:00" ); // invalid: no leap year
     OSL_TRACE("\nSAX CONVERTER TEST END");
 }
 
