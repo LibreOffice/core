@@ -136,6 +136,29 @@
       </prop>
     </node>
 
+    <node oor:name="am" oor:op="replace">
+     <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
+        <value>Nyala;Abyssinica SIL</value>
+     </prop>
+      <prop oor:name="SANS_UNICODE" oor:type="xs:string" oor:op="replace">
+        <value>Nyala;Abyssinica SIL</value>
+      </prop>
+     <prop oor:name="CTL_DISPLAY" oor:type="xs:string" oor:op="replace">
+        <value>Nyala;Abyssinica SIL</value>
+     </prop>
+     <prop oor:name="CTL_HEADING" oor:type="xs:string" oor:op="replace">
+        <value>Nyala;Abyssinica SIL</value>
+     </prop>
+     <prop oor:name="CTL_PRESENTATION" oor:type="xs:string" oor:op="replace">
+        <value>Nyala;Abyssinica SIL</value>
+     </prop>
+     <prop oor:name="CTL_SPREADSHEET" oor:type="xs:string" oor:op="replace">
+        <value>Nyala;Abyssinica SIL</value>
+     </prop>
+     <prop oor:name="CTL_TEXT" oor:type="xs:string" oor:op="replace">
+        <value>Nyala;Abyssinica SIL</value>
+     </prop>
+    </node>
     <node oor:name="ar" oor:op="replace">
      <prop oor:name="UI_SANS" oor:op="replace" oor:type="xs:string">
         <value>Tahoma;Traditional Arabic;Simplified Arabic;Lucidasans;Lucida Sans;Supplement;Arial Unicode MS;Lucida Sans Unicode;clearlyU;Interface User;Geneva;Dialog;Albany AMT;Albany;Lucida;Arial;Nimbus Sans L;Helvetica;Helmet;Interface System;Sans Serif</value>

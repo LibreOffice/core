@@ -27,6 +27,7 @@
 
 # Complete list of all supported localizations (ISO codes)
 completelangiso=af \
+am \
 ar \
 as \
 ast \
