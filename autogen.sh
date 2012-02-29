@@ -144,6 +144,10 @@ if (defined $ENV{NOCONFIGURE}) {
     # Save autogen.lastrun only if we did get some arguments on the command-line
     if (@ARGV) {
         if (scalar(@cmdline_args) > 0) {
+            # if there's already an autogen.lastrun, make a backup first
+            if (-e "autogen.lastrun") {
+                system("cp autogen.lastrun autogen.lastrun.bak");
+            }
             # print "writing args to autogen.lastrun\n";
             my $fh;
             open ($fh, ">autogen.lastrun") || die "can't open autogen.lastrun: $!";
