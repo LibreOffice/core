@@ -64,11 +64,15 @@ gb_CXXFLAGS := \
 	-Wno-ctor-dtor-privacy \
 	-Wno-non-virtual-dtor \
 	-fno-strict-aliasing \
-	-fsigned-char \
-	-malign-natural \
-	#-Wshadow \ break in compiler headers already
-	#-fsigned-char \ might be removed?
-	#-malign-natural \ might be removed?
+	-fsigned-char
+
+# No idea if -malign-natural is needed, but macosx.mk uses it...
+# Why it isn't used in gb_CFLAGS I have no idea.
+# Anyway, Clang doesn't have this option.
+ifeq (,$(findstring /clang,$(CXX)))
+gb_CXXFLAGS += \
+	-malign-natural
+endif
 
 # these are to get gcc to switch to Objective-C++ or Objective-C mode
 gb_OBJC_OBJCXX_COMMON_FLAGS := -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
@@ -203,6 +207,7 @@ gb_Library__FRAMEWORKS := \
     Foundation \
     CoreFoundation \
     CoreGraphics \
+	CoreText \
 
 gb_Library_PLAINLIBS_NONE += \
     objc \

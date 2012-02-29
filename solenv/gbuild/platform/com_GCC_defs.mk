@@ -118,8 +118,13 @@ endif
 
 gb_LinkTarget_EXCEPTIONFLAGS := \
 	-DEXCEPTIONS_ON \
-	-fexceptions \
-	-fno-enforce-eh-specs \
+	-fexceptions
+
+# Clang doesn't have this option
+ifeq (,$(findstring /clang,$(CXX)))
+gb_LinkTarget_EXCEPTIONFLAGS += \
+	-fno-enforce-eh-specs
+endif
 
 gb_LinkTarget_NOEXCEPTIONFLAGS := \
 	-DEXCEPTIONS_OFF \
