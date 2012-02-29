@@ -1744,7 +1744,7 @@ else
     # different
     # This test _should_ work because the one accepts -V (ours) and one
     # (the other) not...
-    $DMAKE -V 2>/dev/null | grep 'dmake .* Version .*' >/dev/null
+    $DMAKE -V 2>/dev/null | grep -E 'dmake(.exe)? .* Version .*' >/dev/null
     if test $? -eq 0; then 
        BUILD_DMAKE=NO
        AC_MSG_RESULT([yes])
@@ -4906,10 +4906,14 @@ if test -n "$with_system_icu" -o -n "$with_system_libs" && \
 
    AC_PATH_PROG( ICUCONFIG, icu-config)
    AC_MSG_CHECKING([ICU version])
-   ICU_VERSION=`$ICUCONFIG --version`
-   ICU_MAJOR=`$ICUCONFIG --version | cut -d"." -f1`
-   ICU_MINOR=`$ICUCONFIG --version | cut -d"." -f2`
-   ICU_MICRO=`$ICUCONFIG --version | cut -d"." -f3`
+   if test "$_os" = "OS2"; then
+      ICU_MAJOR=4
+   else
+      ICU_VERSION=`$ICUCONFIG --version`
+      ICU_MAJOR=`$ICUCONFIG --version | cut -d"." -f1`
+      ICU_MINOR=`$ICUCONFIG --version | cut -d"." -f2`
+      ICU_MICRO=`$ICUCONFIG --version | cut -d"." -f3`
+   fi
 
    if test "$ICU_MAJOR" -ge "4"; then
       AC_MSG_RESULT([OK])
@@ -6865,7 +6869,7 @@ ANT_HOME=; export ANT_HOME
 WITH_ANT_HOME=; export WITH_ANT_HOME
 if test -z "$with_ant_home"; then
    if test "$_os" = "OS2"; then
-     AC_PATH_PROGS(ANT, [jakarta-ant ant.cmd ant ant.sh ant.bat])
+     AC_PATH_PROGS(ANT, ant.cmd)
    else
      AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd])
    fi
@@ -6874,7 +6878,7 @@ else
       with_ant_home=`cygpath -u "$with_ant_home"`
    fi
    if test "$_os" = "OS2"; then
-     AC_PATH_PROGS(ANT, [jakarta-ant ant.cmd ant ant.sh ant.bat],,$with_ant_home/bin:$PATH)
+     AC_PATH_PROGS(ANT, ant.cmd,,$with_ant_home/bin:$PATH)
    else
      AC_PATH_PROGS(ANT, [jakarta-ant ant ant.sh ant.bat ant.cmd],,$with_ant_home/bin:$PATH)
    fi
