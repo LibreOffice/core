@@ -85,24 +85,6 @@ namespace drawinglayer
 } // end of namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
-
-namespace drawinglayer
-{
-    namespace processor3d
-    {
-        CollectingProcessor3D::~CollectingProcessor3D()
-        {
-        }
-
-        void CollectingProcessor3D::process(const primitive3d::Primitive3DSequence& rSource)
-        {
-            // accept everything
-            primitive3d::appendPrimitive3DSequenceToPrimitive3DSequence(maPrimitive3DSequence, rSource);
-        }
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
 // eof
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

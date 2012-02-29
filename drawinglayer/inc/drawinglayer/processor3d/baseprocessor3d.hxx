@@ -79,43 +79,6 @@ namespace drawinglayer
 
 //////////////////////////////////////////////////////////////////////////////
 
-namespace drawinglayer
-{
-    namespace processor3d
-    {
-        /** CollectingProcessor3D class
-
-            A processor which just collects all primitives given to it in
-            process(..) calls to maPrimitive3DSequence. This can e.g. be used to
-            hand around as instance over various methods where every called
-            method can add graphic content to it.
-         */
-        class DRAWINGLAYER_DLLPUBLIC CollectingProcessor3D : public BaseProcessor3D
-        {
-        private:
-            primitive3d::Primitive3DSequence                        maPrimitive3DSequence;
-
-        public:
-            virtual ~CollectingProcessor3D();
-
-            /// the central processing method
-            virtual void process(const primitive3d::Primitive3DSequence& rSource);
-
-            /// helpers for adding to local sequence
-            void appendPrimitive3DReference(const primitive3d::Primitive3DReference& rSource)
-            {
-                primitive3d::appendPrimitive3DReferenceToPrimitive3DSequence(maPrimitive3DSequence, rSource);
-            }
-
-            /// data access and reset
-            const primitive3d::Primitive3DSequence& getPrimitive3DSequence() const { return maPrimitive3DSequence; }
-            void reset() { maPrimitive3DSequence = primitive3d::Primitive3DSequence(); }
-        };
-    } // end of namespace processor3d
-} // end of namespace drawinglayer
-
-//////////////////////////////////////////////////////////////////////////////
-
 #endif //_DRAWINGLAYER_PROCESSOR3D_BASEPROCESSOR3D_HXX
 
 // eof
