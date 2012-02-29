@@ -2878,6 +2878,11 @@ bool ScCompiler::IsReference( const String& rName )
 
 bool ScCompiler::IsMacro( const String& rName )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) rName;
+
+    return false;
+#else
     String aName( rName);
     StarBASIC* pObj = 0;
     SfxObjectShell* pDocSh = pDoc->GetDocumentShell();
@@ -2913,6 +2918,7 @@ bool ScCompiler::IsMacro( const String& rName )
     aToken.eOp = ocMacro;
     pRawToken = aToken.Clone();
     return true;
+#endif
 }
 
 bool ScCompiler::IsNamedRange( const String& rUpperName )

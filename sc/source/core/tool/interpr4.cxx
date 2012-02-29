@@ -3045,6 +3045,8 @@ void ScInterpreter::ScMissing()
     PushTempToken( new FormulaMissingToken );
 }
 
+#ifndef DISABLE_SCRIPTING
+
 uno::Any lcl_getSheetModule( const uno::Reference<table::XCellRange>& xCellRange, ScDocument* pDok )
 {
     uno::Reference< sheet::XSheetCellRange > xSheetRange( xCellRange, uno::UNO_QUERY_THROW );
@@ -3101,11 +3103,17 @@ lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPar )
     return bOk;
 }
 
+#endif
+
 void ScInterpreter::ScMacro()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMacro" );
     SbxBase::ResetError();
 
+#ifdef DISABLE_SCRIPTING
+    PushNoValue();      // ohne DocShell kein CallBasic
+    return;
+#else
     sal_uInt8 nParamCount = GetByte();
     String aMacro( pCur->GetExternal() );
 
@@ -3348,8 +3356,10 @@ void ScInterpreter::ScMacro()
 
     if (bVolatileMacro && meVolatileType == NOT_VOLATILE)
         meVolatileType = VOLATILE_MACRO;
+#endif
 }
 
+#ifndef DISABLE_SCRIPTING
 
 bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
 {
@@ -3404,6 +3414,8 @@ bool ScInterpreter::SetSbxVariable( SbxVariable* pVar, const ScAddress& rPos )
         pVar->PutDouble( 0.0 );
     return bOk;
 }
+
+#endif
 
 namespace {
 

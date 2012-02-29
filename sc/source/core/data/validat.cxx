@@ -292,6 +292,7 @@ sal_Bool ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
     //  ist das Sbx-Objekt evtl. nicht angelegt (?)
 //  pDocSh->GetSbxObject();
 
+#ifndef DISABLE_SCRIPTING
     //  keine Sicherheitsabfrage mehr vorneweg (nur CheckMacroWarn), das passiert im CallBasic
 
     //  Funktion ueber den einfachen Namen suchen,
@@ -367,7 +368,7 @@ sal_Bool ScValidationData::DoMacro( const ScAddress& rPos, const String& rInput,
             bRet = sal_True;
         bDone = sal_True;
     }
-
+#endif
     if ( !bDone && !pCell )         // Makro nicht gefunden (nur bei Eingabe)
     {
         //! andere Fehlermeldung, wenn gefunden, aber nicht bAllowed ??
