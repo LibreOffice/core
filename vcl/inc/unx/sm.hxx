@@ -64,7 +64,6 @@ class SessionManagerClient
     DECL_STATIC_LINK( SessionManagerClient, SaveYourselfHdl, void* );
     DECL_STATIC_LINK( SessionManagerClient, InteractionHdl, void* );
 public:
-    SessionManagerClient();
     static VCLPLUG_GEN_PUBLIC void open(); // needed by other plugins, so export
     static void close();
 
