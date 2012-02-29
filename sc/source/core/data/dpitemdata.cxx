@@ -115,7 +115,7 @@ bool ScDPItemData::operator==( const ScDPItemData& r ) const
 {
     if ( IsValue() )
     {
-        if( (HasDatePart() != r.HasDatePart())  || (HasDatePart() && mnDatePart != r.mnDatePart) )
+        if (HasDatePart() != r.HasDatePart())
             return false;
 
         if ( IsDate() != r.IsDate() )

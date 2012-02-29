@@ -56,12 +56,7 @@ public:
     static bool isDate( sal_uLong nNumType );
 
 private:
-    union
-    {
-        sal_uLong mnNumFormat;
-        sal_Int32 mnDatePart;
-    };
-
+    sal_uLong mnNumFormat;
     rtl::OUString maString;
     double mfValue;
     sal_uInt8 mbFlag;
