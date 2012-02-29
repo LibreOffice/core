@@ -825,6 +825,17 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
                 return;
             }
 
+            if (pUpper)
+            {
+                StgDirEntry *pUpperUpper = pUpper->pUp;
+                if (pUpperUpper && pUpperUpper->aEntry.GetLeaf(STG_CHILD) == nLeaf)
+                {
+                    OSL_FAIL("Leaf node of upper-upper StgDirEntry is same as current StgDirEntry's leaf node. Circular entry chain, discarding link");
+                    delete pCur;
+                    return;
+                }
+             }
+
             if( StgAvlNode::Insert
                 ( (StgAvlNode**) ( pUpper ? &pUpper->pDown : &pRoot ), pCur ) )
             {
