@@ -818,15 +818,15 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
         if( nLeaf != 0 && nLeft != 0 && nRight != 0 )
         {
             //fdo#41642 Do we need to check full chain upwards for loops ?
-            if (pUpper && pUpper->aEntry.GetLeaf(STG_CHILD) == nLeaf)
-            {
-                OSL_FAIL("Leaf node of upper StgDirEntry is same as current StgDirEntry's leaf node. Circular entry chain, discarding link");
-                delete pCur;
-                return;
-            }
-
             if (pUpper)
             {
+                if (pUpper->aEntry.GetLeaf(STG_CHILD) == nLeaf)
+                {
+                    OSL_FAIL("Leaf node of upper StgDirEntry is same as current StgDirEntry's leaf node. Circular entry chain, discarding link");
+                    delete pCur;
+                    return;
+                }
+
                 StgDirEntry *pUpperUpper = pUpper->pUp;
                 if (pUpperUpper && pUpperUpper->aEntry.GetLeaf(STG_CHILD) == nLeaf)
                 {
@@ -834,7 +834,7 @@ void StgDirStrm::SetupEntry( sal_Int32 n, StgDirEntry* pUpper )
                     delete pCur;
                     return;
                 }
-             }
+            }
 
             if( StgAvlNode::Insert
                 ( (StgAvlNode**) ( pUpper ? &pUpper->pDown : &pRoot ), pCur ) )
