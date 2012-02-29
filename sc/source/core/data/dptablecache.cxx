@@ -62,7 +62,6 @@ using ::std::auto_ptr;
 
 namespace {
 
-
 /**
  * Search for an item in the data array.  If it's in the array, return its
  * index to the caller.
@@ -74,7 +73,7 @@ namespace {
  *
  * @return true if the item is found, or false otherwise.
  */
-bool hasItemInDimension(const ScDPCache::DataListType& rArray, const ::std::vector<SCROW>& rOrder, const ScDPItemData& item, SCROW& rIndex)
+bool hasItemInDimension(const ScDPCache::DataListType& rArray, const ScDPCache::IndexArrayType& rOrder, const ScDPItemData& item, SCROW& rIndex)
 {
     rIndex = rArray.size();
     bool bFound = false;
@@ -251,7 +250,7 @@ ScDPCache::~ScDPCache()
 
 bool ScDPCache::IsValid() const
 {
-    return !maTableDataValues.empty() && !maSourceData.empty() && mnColumnCount > 0;
+    return !maFields.empty() && mnColumnCount > 0;
 }
 
 namespace {
@@ -312,26 +311,14 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     sal_uInt16 nDocTab = rRange.aStart.Tab();
 
     mnColumnCount = nEndCol - nStartCol + 1;
-    if ( IsValid() )
-    {
-        maTableDataValues.clear();
-        maSourceData.clear();
-        maGlobalOrder.clear();
-        maIndexOrder.clear();
-        maLabelNames.clear();
-    }
 
-    maTableDataValues.reserve(mnColumnCount);
-    maSourceData.reserve(mnColumnCount);
-    maGlobalOrder.reserve(mnColumnCount);
-    maIndexOrder.reserve(mnColumnCount);
-    for (long i = 0; i < mnColumnCount; ++i)
-    {
-        maTableDataValues.push_back(new DataListType);
-        maSourceData.push_back(new vector<SCROW>());
-        maGlobalOrder.push_back(new vector<SCROW>());
-        maIndexOrder.push_back(new vector<SCROW>());
-    }
+    maFields.clear();
+    maFields.reserve(mnColumnCount);
+    for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
+        maFields.push_back(new Field);
+
+    maLabelNames.clear();
+    maLabelNames.reserve(mnColumnCount);
 
     for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
@@ -355,28 +342,13 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
             return false;
 
         mnColumnCount = xMeta->getColumnCount();
-        if (IsValid())
-        {
-            maTableDataValues.clear();
-            maSourceData.clear();
-            maGlobalOrder.clear();
-            maIndexOrder.clear();
-            maLabelNames.clear();
-        }
+        maFields.clear();
+        maFields.reserve(mnColumnCount);
+        for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
+            maFields.push_back(new Field);
+
         // Get column titles and types.
         maLabelNames.reserve(mnColumnCount);
-
-        maTableDataValues.reserve(mnColumnCount);
-        maSourceData.reserve(mnColumnCount);
-        maGlobalOrder.reserve(mnColumnCount);
-        maIndexOrder.reserve(mnColumnCount);
-        for (long i = 0; i < mnColumnCount; ++i)
-        {
-            maTableDataValues.push_back(new DataListType);
-            maSourceData.push_back(new vector<SCROW>());
-            maGlobalOrder.push_back(new vector<SCROW>());
-            maIndexOrder.push_back(new vector<SCROW>());
-        }
 
         std::vector<sal_Int32> aColTypes(mnColumnCount);
 
@@ -619,18 +591,20 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData)
     pData->SetDate(ScDPItemData::isDate(GetNumType(pData->mnNumFormat)));
 
     SCROW nIndex = 0;
-    if (!hasItemInDimension(maTableDataValues[nDim], maGlobalOrder[nDim], *pData, nIndex))
+    Field& rField = maFields[nDim];
+    if (!hasItemInDimension(rField.maItems, rField.maGlobalOrder, *pData, nIndex))
     {
         // This item doesn't exist in the dimension array yet.
-        maTableDataValues[nDim].push_back(p);
-        maGlobalOrder[nDim].insert( maGlobalOrder[nDim].begin()+nIndex, maTableDataValues[nDim].size()-1  );
-        OSL_ENSURE( (size_t) maGlobalOrder[nDim][nIndex] == maTableDataValues[nDim].size()-1 ,"ScDPTableDataCache::AddData ");
-        maSourceData[nDim].push_back( maTableDataValues[nDim].size()-1 );
+        rField.maItems.push_back(p);
+        rField.maGlobalOrder.insert(
+            rField.maGlobalOrder.begin()+nIndex, rField.maItems.size()-1);
+        OSL_ENSURE(rField.maGlobalOrder[nIndex] == rField.maItems.size()-1, "ScDPTableDataCache::AddData ");
+        rField.maData.push_back(rField.maItems.size()-1);
     }
     else
-        maSourceData[nDim].push_back( maGlobalOrder[nDim][nIndex] );
+        rField.maData.push_back(rField.maGlobalOrder[nIndex]);
 //init empty row tag
-    size_t nCurRow = maSourceData[nDim].size() - 1;
+    size_t nCurRow = maFields[nDim].maData.size() - 1;
 
     while ( mbEmptyRow.size() <= nCurRow )
         mbEmptyRow.push_back( true );
@@ -703,15 +677,16 @@ void ScDPCache::AddLabel(const rtl::OUString& rLabel)
 SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty) const
 {
     OSL_ENSURE( IsValid(), "  IsValid() == false " );
-    OSL_ENSURE( /* nDim >= 0 && */ nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId " );
+    OSL_ENSURE(nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId ");
 
-    if ( bRepeatIfEmpty )
+    const Field& rField = maFields[nDim];
+    if (bRepeatIfEmpty)
     {
-        while ( nRow >0 && !maTableDataValues[nDim][ maSourceData[nDim][nRow] ].IsHasData() )
+        while (nRow > 0 && !rField.maItems[rField.maData[nRow]].IsHasData())
             --nRow;
     }
 
-    return maSourceData[nDim][nRow];
+    return rField.maData[nRow];
 }
 
 const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
@@ -719,24 +694,25 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
     if ( nId >= GetRowCount()  )
         return mpAdditionalData->getData(nId - GetRowCount());
 
-    if (  (size_t)nId >= maTableDataValues[nDim].size() || nDim >= mnColumnCount  || nId < 0  )
+    const Field& rField = maFields[nDim];
+    if (static_cast<size_t>(nId) >= rField.maItems.size() || nDim >= mnColumnCount  || nId < 0)
         return NULL;
     else
-        return &maTableDataValues[nDim][nId];
+        return &rField.maItems[nId];
 }
 
 SCROW ScDPCache::GetRowCount() const
 {
-    if ( IsValid() )
-        return maSourceData[0].size();
-    else
+    if (maFields.empty() || maFields[0].maData.empty())
         return 0;
+
+    return maFields[0].maData.size();
 }
 
 const ScDPCache::DataListType& ScDPCache::GetDimMemberValues(SCCOL nDim) const
 {
     OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," nDim < mnColumnCount ");
-    return maTableDataValues[nDim];
+    return maFields[nDim].maItems;
 }
 
 sal_uLong ScDPCache::GetNumType(sal_uLong nFormat) const
@@ -753,7 +729,7 @@ sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
     if ( nDim >= mnColumnCount )
         return 0;
 
-    if (maTableDataValues[nDim].empty())
+    if (maFields[nDim].maItems.empty())
         return 0;
 
     // TODO: This is very ugly, but the best we can do right now.  Check the
@@ -762,12 +738,13 @@ sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
     // need to redo this cache structure to properly indicate empty cells, and
     // skip them when trying to determine the representative number format for
     // a dimension.
-    size_t nCount = maTableDataValues[nDim].size();
+    const DataListType& rItems = maFields[nDim].maItems;
+    size_t nCount = rItems.size();
     if (nCount > 10)
         nCount = 10;
     for (size_t i = 0; i < nCount; ++i)
     {
-        sal_uLong n = maTableDataValues[nDim][i].mnNumFormat;
+        sal_uLong n = rItems[i].mnNumFormat;
         if (n)
             return n;
     }
@@ -776,19 +753,20 @@ sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
 
 bool ScDPCache::IsDateDimension( long nDim ) const
 {
-    if ( nDim >= mnColumnCount )
+    if (nDim >= mnColumnCount)
         return false;
-    else if ( maTableDataValues[nDim].size()==0 )
-        return false;
-    else
-        return maTableDataValues[nDim][0].IsDate();
 
+    const DataListType& rItems = maFields[nDim].maItems;
+    if (rItems.empty())
+        return false;
+
+    return rItems[0].IsDate();
 }
 
 SCROW ScDPCache::GetDimMemberCount( SCCOL nDim ) const
 {
     OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," ScDPTableDataCache::GetDimMemberCount : out of bound ");
-    return maTableDataValues[nDim].size();
+    return maFields[nDim].maItems.size();
 }
 
 SCCOL ScDPCache::GetDimensionIndex(const rtl::OUString& sName) const
@@ -826,24 +804,27 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const rtl::OUString& sItemData) cons
 {
     if ( nDim < mnColumnCount && nDim >=0 )
     {
-        for (size_t i = 0; i < maTableDataValues[nDim].size(); ++i)
+        const DataListType& rItems = maFields[nDim].maItems;
+        for (size_t i = 0, n = rItems.size(); i < n; ++i)
         {
-            if ( maTableDataValues[nDim][i].GetString() == sItemData )
+            if (rItems[i].GetString() == sItemData)
                 return i;
         }
     }
 
     ScDPItemData rData ( sItemData );
     return GetRowCount() + mpAdditionalData->getDataId(rData);
+
 }
 
 SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rData) const
 {
     if ( nDim < mnColumnCount && nDim >=0 )
     {
-        for (size_t i = 0; i < maTableDataValues[nDim].size(); ++i)
+        const DataListType& rItems = maFields[nDim].maItems;
+        for (size_t i = 0, n = rItems.size(); i < n; ++i)
         {
-            if ( maTableDataValues[nDim][i] == rData )
+            if (rItems[i] == rData)
                 return i;
         }
     }
@@ -861,19 +842,20 @@ SCROW ScDPCache::GetOrder(long nDim, SCROW nIndex) const
     OSL_ENSURE( IsValid(), "  IsValid() == false " );
     OSL_ENSURE( nDim >=0 && nDim < mnColumnCount, "ScDPTableDataCache::GetOrder : out of bound" );
 
-    if ( maIndexOrder[nDim].size() !=  maGlobalOrder[nDim].size() )
+    const Field& rField = maFields[nDim];
+    if (rField.maIndexOrder.size() !=  rField.maGlobalOrder.size())
     { //not inited
         SCROW nRow  = 0;
-        maIndexOrder[nDim].resize(maGlobalOrder[nDim].size(), 0);
-        for (size_t i = 0 ; i < maGlobalOrder[nDim].size(); ++i)
+        rField.maIndexOrder.resize(rField.maGlobalOrder.size(), 0);
+        for (size_t i = 0, n = rField.maGlobalOrder.size(); i < n; ++i)
         {
-            nRow = maGlobalOrder[nDim][i];
-            maIndexOrder[nDim][nRow] = i;
+            nRow = rField.maGlobalOrder[i];
+            rField.maIndexOrder[nRow] = i;
         }
     }
 
-    OSL_ENSURE( nIndex>=0 && (size_t)nIndex < maIndexOrder[nDim].size() , "ScDPTableDataCache::GetOrder");
-    return maIndexOrder[nDim][nIndex];
+    OSL_ENSURE(nIndex >= 0 && nIndex < rField.maIndexOrder.size() , "ScDPTableDataCache::GetOrder");
+    return rField.maIndexOrder[nIndex];
 }
 
 ScDocument* ScDPCache::GetDoc() const

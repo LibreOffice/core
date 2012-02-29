@@ -55,12 +55,12 @@ class ScDPItemData;
 class SC_DLLPUBLIC ScDPCache : boost::noncopyable
 {
 public:
-    typedef ::boost::ptr_vector<ScDPItemData>           DataListType;
+    typedef boost::ptr_vector<ScDPItemData> DataListType;
     typedef std::set<ScDPObject*> ObjectSetType;
     typedef std::vector<rtl::OUString> LabelsType;
+    typedef std::vector<SCROW> IndexArrayType;
+
 private:
-    typedef ::boost::ptr_vector<DataListType>           DataGridType;
-    typedef ::boost::ptr_vector< ::std::vector<SCROW> > RowGridType;
 
     ScDocument* mpDoc;
     long mnColumnCount;
@@ -70,30 +70,31 @@ private:
      */
     mutable ObjectSetType maRefObjects;
 
-    /**
-     * This container stores only the unique instances of item data in each
-     * column. Duplicates are not allowed.
-     */
-    DataGridType maTableDataValues;
+    struct Field : boost::noncopyable
+    {
+        DataListType maItems; /// Unique values in the field.
 
-    /**
-     * This container stores indices within maTableDataValues pointing to the
-     * data.  The order of data are exactly as they appear in the original
-     * data source.
-     */
-    RowGridType maSourceData;
+        /**
+         * Original source data represented as indices to the unique value
+         * list.  The order of the data is as they appear in the original
+         * data source.
+         */
+        IndexArrayType maData;
 
-    /**
-     * This container stores indices within maTableDataValues.  The order of
-     * indices in each column represents ascending order of the actual data.
-     */
-    RowGridType maGlobalOrder;
+        /**
+         * Ascending order of field items.
+         */
+        IndexArrayType maGlobalOrder;
 
-    /**
-     * This container stores the ranks of each unique data represented by
-     * their index.
-     */
-    mutable RowGridType maIndexOrder;
+        /**
+         * Ranks of each unique data represented by their index.  It's a
+         * reverse mapping of item index to global order index.
+         */
+        mutable IndexArrayType maIndexOrder;
+    };
+
+    typedef boost::ptr_vector<Field> FieldsType;
+    FieldsType maFields;
 
     LabelsType maLabelNames;    // Stores dimension names.
     std::vector<bool> mbEmptyRow; // Keeps track of empty rows.
