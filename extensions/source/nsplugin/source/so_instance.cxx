@@ -239,7 +239,7 @@ sal_Bool SoPluginInstance::LoadDocument(NSP_HWND hParent)
 
         //create stream for the document
         Reference< ::com::sun::star::ucb::XSimpleFileAccess > xSimpleFileAccess(
-            mxRemoteMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccessw")) ),
+            mxRemoteMSF->createInstance( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ),
             uno::UNO_QUERY );
         if(!xSimpleFileAccess.is())
         {
