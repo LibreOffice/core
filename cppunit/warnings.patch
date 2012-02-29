@@ -20,3 +20,14 @@
    {                                                   \
      return 0;                                         \
    }                                                   \
+--- misc/cppunit-1.12.1/include/cppunit/extensions/ExceptionTestCaseDecorator.h
++++ misc/build/cppunit-1.12.1/include/cppunit/extensions/ExceptionTestCaseDecorator.h
+@@ -92,7 +92,7 @@
+    *
+    * Should be overriden to check the exception.
+    */
+-  virtual void checkException( ExpectedExceptionType &e )
++  virtual void checkException( ExpectedExceptionType & )
+   {
+   }
+ };
