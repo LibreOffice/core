@@ -2385,18 +2385,38 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         }
     }
 
+    ImplFontData* pFontData = NULL;
+
+    if (!pEntry && pFontFamily)// no cache hit => find the best matching physical font face
+    {
+        bool bOrigWasSymbol = aFontSelData.mpFontData && aFontSelData.mpFontData->IsSymbolFont();
+        pFontData = pFontFamily->FindBestFontFace( aFontSelData );
+        aFontSelData.mpFontData = pFontData;
+        bool bNewIsSymbol = aFontSelData.mpFontData && aFontSelData.mpFontData->IsSymbolFont();
+
+        if (bNewIsSymbol || bOrigWasSymbol)
+        {
+            // it is possible, though generally unlikely, that at this point we
+            // will attempt to use a symbol font as a last-ditch fallback for a
+            // non-symbol font request or vice versa, and by changing
+            // aFontSelData.mpFontData to/from a symbol font we may now find
+            // something in the cache that can be reused which previously
+            // wasn't a candidate
+            FontInstanceList::iterator it = maFontInstanceList.find( aFontSelData );
+            if( it != maFontInstanceList.end() )
+                pEntry = (*it).second;
+        }
+    }
+
     if( pEntry ) // cache hit => use existing font instance
     {
         // increase the font instance's reference count
         if( !pEntry->mnRefCount++ )
             --mnRef0Count;
     }
-    else if (pFontFamily)// no cache hit => create a new font instance
-    {
-        // find the best matching physical font face
-        ImplFontData* pFontData = pFontFamily->FindBestFontFace( aFontSelData );
-        aFontSelData.mpFontData = pFontData;
 
+    if (!pEntry && pFontData)// still no cache hit => create a new font instance
+    {
         // create a new logical font instance from this physical font face
         pEntry = pFontData->CreateFontInstance( aFontSelData );
 
