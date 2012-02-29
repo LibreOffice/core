@@ -137,6 +137,10 @@ CONFIGURE_FLAGS+= --disable-static
 .IF "$(OS)"!="ANDROID"
 CONFIGURE_FLAGS+= --with-threads
 .ENDIF
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF

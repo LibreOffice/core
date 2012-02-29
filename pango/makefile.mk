@@ -56,7 +56,7 @@ PATCH_FILES=pango-1.28.3.patch
 CONFIGURE_LDFLAGS="-L$(SOLARLIBDIR)"
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
-                 ./configure --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) --disable-dependency-tracking --disable-doc-cross-references \
+                 ./configure --prefix=/@.__________________________________________________$(EXTRPATH) --disable-dependency-tracking --disable-doc-cross-references \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
                  CXXFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
                  LDFLAGS="$(CONFIGURE_LDFLAGS)" \
@@ -78,12 +78,10 @@ VFLAG=V=1
 BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) $(VFLAG)
 BUILD_DIR=$(CONFIGURE_DIR)
 
-EXTRPATH=LOADER
-
 OUT2LIB+=pango/.libs/libpango-1.0.0.dylib
 OUT2LIB+=pango/.libs/libpangocairo-1.0.0.dylib
 
-OUT2BIN+=pango/.libs/pango-querymodules
+OUT2BIN_NONE+=pango/.libs/pango-querymodules
 
 OUT2INC+=pango/pango-attributes.h
 OUT2INC+=pango/pango-enum-types.h

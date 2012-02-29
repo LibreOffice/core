@@ -42,9 +42,13 @@ PATCH_FILES=epm-3.7.patch
 
 .IF "$(GUI)"=="UNX" && "$(BUILD_EPM)" != "NO"
 
+EXTRPATH = NONE
+
 CONFIGURE_ACTION=.$/configure
 CONFIGURE_FLAGS=--disable-fltk
 .IF "$(OS)"=="MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
 .IF "$(EXTRA_CFLAGS)"!=""
 CONFIGURE_FLAGS+=CFLAGS="$(EXTRA_CFLAGS)" LDFLAGS="$(EXTRA_LINKFLAGS)" CPP="gcc -E $(EXTRA_CFLAGS)"
 .ENDIF # "$(EXTRA_CFLAGS)"!=""

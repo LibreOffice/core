@@ -66,7 +66,7 @@ PATCH_FILES=libgsf-1.14.19.patch
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  ./configure \
-                 --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) \
+                 --prefix=/@.__________________________________________________$(EXTRPATH) \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(LIBXML_CFLAGS) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
                  LDFLAGS="-L$(SOLARLIBDIR) $(eq,$(OS),MACOSX $(EXTRA_LINKFLAGS) $(NULL))" \
                  --without-python \
@@ -85,7 +85,7 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  
                  
 CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
-                
+
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
@@ -97,7 +97,6 @@ BUILD_DIR=$(CONFIGURE_DIR)
 .ENDIF
 
 .IF "$(OS)"=="MACOSX"
-EXTRPATH=LOADER
 OUT2LIB+=gsf/.libs/libgsf-1.114.dylib
 .ENDIF
 

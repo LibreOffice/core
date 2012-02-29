@@ -60,7 +60,7 @@ LIBXML_LIBS=-lxml2
 CONFIGURE_LDFLAGS=-L$(SOLARLIBDIR) $(eq,$(OS),MACOSX $(EXTRA_LINKFLAGS) $(NULL))
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) ./configure \
-                 --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC)
+                 --prefix=/@.__________________________________________________$(EXTRPATH)
 CONFIGURE_FLAGS=--disable-gtk-theme --disable-tools --with-croco --with-svgz \
                  --disable-pixbuf-loader --disable-dependency-tracking $(eq,$(VERBOSE),$(NULL) --enable-silent-rules --disable-silent-rules) \
                  LIBRSVG_CFLAGS="-I$(SOLARINCDIR)/external/glib-2.0 -I$(SOLARINCDIR)/external/gdk-pixbuf-2.0 -I$(SOLARINCDIR)/external/pango-1.0 -I$(SOLARINCDIR)/cairo $(LIBXML_CFLAGS)" \
@@ -84,7 +84,6 @@ BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
              $(GNUMAKE) $(!eq,$(VERBOSE),$(NULL) V=1) -j$(MAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
 
-EXTRPATH=LOADER
 OUT2LIB+=.libs/librsvg-2.2.dylib
 
 OUT2INC+=librsvg-enum-types.h

@@ -189,6 +189,8 @@ OUT2BIN = ooo-install/bin/DllPlugInTester
 .IF "$(OS)" == "MACOSX"
 OUT2LIB = ooo-install/lib/libcppunit-1.12.1.dylib
 EXTRPATH = NONE
+PACKAGE_DIR = \
+    $(MISC)/@.__________________________________________________$(EXTRPATH)
 .ELIF "$(OS)" == "AIX"
 OUT2LIB = ooo-install/lib/libcppunit-1.12.a
 .ELIF "$(OS)" == "OPENBSD"

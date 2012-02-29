@@ -83,12 +83,19 @@ all:
         # stl/_epilog.h.)
 .ENDIF
 
+EXTRPATH=URELIB
+
 ADDITIONAL_FILES=src$/gcc-3.0.mak src$/gcc-3.0-freebsd.mak src$/sunpro8.mak src$/sunpro11.mak src$/gcc-3.0-mingw.mak \
     src$/gcc-3.0-os2.mak src$/gcc-3.0-os2.def src$/common_macros_os2.mak
 
 
 CONFIGURE_ACTION=none
 CONFIGURE_FLAGS=
+
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
 
 BUILD_DIR=src
 

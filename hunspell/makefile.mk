@@ -58,7 +58,10 @@ CONFIGURE_FLAGS+= CFLAGS=-xc99=none
 
 .IF "$(OS)"=="AIX"
 CONFIGURE_FLAGS+= CFLAGS=-D_LINUX_SOURCE_COMPAT
-.ENDIF
+.ELIF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
 
 .IF "$(SYSBASE)"!=""
 .IF "$(EXTRA_CFLAGS)"!=""

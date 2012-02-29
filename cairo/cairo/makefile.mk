@@ -241,6 +241,10 @@ CONFIGURE_FLAGS+=CFLAGS="-I$(SRC_ROOT)$/$(PRJNAME)$/$(INPATH)$/inc $(cairo_CFLAG
 CONFIGURE_FLAGS+=png_CFLAGS="-I$(SOLARINCDIR)$/external$/libpng" png_LIBS="-L$(SOLARLIBDIR) -lpng"
 .ENDIF
 
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
 
 OUT2INC+=cairo-version.h \
      src$/cairo-deprecated.h \
@@ -250,7 +254,6 @@ OUT2INC+=cairo-version.h \
      src$/cairo.h
 
 .IF "$(OS)"=="MACOSX"
-EXTRPATH=LOADER
 OUT2LIB+=src$/.libs$/libcairo*.dylib
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"

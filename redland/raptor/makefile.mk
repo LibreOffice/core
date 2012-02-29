@@ -164,6 +164,11 @@ CONFIGURE_FLAGS+=--with-xml2-config=$(SOLARVER)/$(INPATH)/bin/xml2-config
 CONFIGURE_FLAGS+=--with-xslt-config=$(SOLARVER)/$(INPATH)/bin/xslt-config
 .ENDIF
 
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
+
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+= --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF

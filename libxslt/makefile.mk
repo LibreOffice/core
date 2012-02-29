@@ -151,6 +151,11 @@ CONFIGURE_FLAGS+=--enable-ipv6=no --without-crypto --without-python --with-sax1=
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
+
 BUILD_ACTION=chmod 777 xslt-config && $(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
@@ -161,7 +166,7 @@ OUT2INC=libxslt$/*.h
 .IF "$(OS)"=="MACOSX"
 OUT2LIB+=libxslt$/.libs$/libxslt.*.dylib
 OUT2LIB+=libexslt$/.libs$/libexslt.*.dylib
-OUT2BIN+=xsltproc$/.libs$/xsltproc
+OUT2BIN_NONE+=xsltproc$/.libs$/xsltproc
 OUT2BIN+=xslt-config
 .ELIF "$(OS)"=="IOS"
 OUT2LIB+=libxslt$/.libs$/libxslt.a

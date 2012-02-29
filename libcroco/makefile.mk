@@ -58,7 +58,7 @@ my_libxml2_libs=$(LIBXML_LIBS)
 my_libxml2_cflags=-I$(SOLARINCDIR)/external/libxml
 my_libxml2_libs=-L$(SOLARLIBDIR) -lxml2
 .ENDIF
-CONFIGURE_ACTION=./configure --prefix=$(SRC_ROOT)/$(PRJNAME)/$(MISC) \
+CONFIGURE_ACTION=./configure --prefix=/@.__________________________________________________$(EXTRPATH) \
                  CPPFLAGS="$(EXTRA_CDEFS)" \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
                  LDFLAGS="-L$(SOLARLIBDIR) $(EXTRA_LINKFLAGS) -Wl,-dylib_file,@loader_path/libgmodule-2.0.0.dylib:$(SOLARLIBDIR)/libgmodule-2.0.0.dylib" \
@@ -75,7 +75,6 @@ BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
              $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 
-EXTRPATH=LOADER
 OUT2LIB+=src/.libs/libcroco-0.6.3.0.1.dylib
 
 OUT2INC+=src/cr-additional-sel.h

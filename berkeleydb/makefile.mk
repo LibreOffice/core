@@ -101,7 +101,9 @@ CONFIGURE_FLAGS+= --disable-shared
 CONFIGURE_FLAGS+= --enable-shared
 .ENDIF
 .IF "$(OS)"=="MACOSX"
-CONFIGURE_FLAGS+=CPPFLAGS="$(EXTRA_CDEFS)"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH) \
+    CPPFLAGS="$(EXTRA_CDEFS)"
 .ENDIF
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)

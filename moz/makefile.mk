@@ -162,7 +162,8 @@ MOZILLA_CONFIGURE_FLAGS+= \
     --with-macos-sdk=$(MACOSX_SDK_PATH) \
     --disable-glibtest \
     --enable-macos-target=$(MACOSX_DEPLOYMENT_TARGET) \
-    --disable-libxul
+    --disable-libxul \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
 DEFAULT_MOZILLA_TOOLKIT=mac
 
 .ELSE

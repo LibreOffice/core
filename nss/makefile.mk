@@ -60,7 +60,13 @@ BUILD_OPT=1
 .EXPORT: BUILD_OPT
 .ENDIF
 
-CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(OUTDIR) --includedir=$(OUTDIR)/inc/mozilla/nspr ; \
+.IF "$(OS)" == "MACOSX"
+my_prefix=/@.__________________________________________________$(EXTRPATH)
+.ELSE
+my_prefix=$(OUTDIR)
+.END
+
+CONFIGURE_ACTION=mozilla/nsprpub/configure --prefix=$(my_prefix) --includedir=$(OUTDIR)/inc/mozilla/nspr ; \
     sed -e 's\#@prefix@\#$(OUTDIR)\#' -e 's\#@includedir@\#$(OUTDIR)/inc/mozilla/nss\#' -e 's\#@MOD_MAJOR_VERSION@\#$(VER_MAJOR)\#' -e 's\#@MOD_MINOR_VERSION@\#$(VER_MINOR)\#' -e 's\#@MOD_PATCH_VERSION@\#$(VER_PATCH)\#' mozilla/security/nss/nss-config.in > mozilla/security/nss/nss-config ; \
     chmod a+x mozilla/security/nss/nss-config
 

@@ -73,7 +73,13 @@ CONFIGURE_FLAGS+= \
     ac_cv_func__NSGetEnviron=yes
 .ENDIF
 
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.ELSE
 CONFIGURE_FLAGS+=--prefix=$(SRC_ROOT)$/$(PRJNAME)$/$(MISC)
+.END
+
 CONFIGURE_FLAGS+=--disable-fam
 CONFIGURE_FLAGS+=CPPFLAGS="$(ARCH_FLAGS) $(EXTRA_CDEFS) -DBUILD_OS_APPLEOSX"
 CONFIGURE_FLAGS+=CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) -I$(SOLARINCDIR)$/external"
@@ -93,8 +99,6 @@ BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) $(GNUMAKE) $(VFLAG) -j$(MAXPROCESS)
 
 .IF "$(OS)"!="IOS"
 
-EXTRPATH=LOADER
-
 .IF "$(OS)" == "MACOSX"
 my_ext = .0$(DLLPOST)
 .ELSE
@@ -107,9 +111,9 @@ OUT2LIB+=gmodule/.libs/libgmodule-2.0$(my_ext)
 OUT2LIB+=gobject/.libs/libgobject-2.0$(my_ext)
 OUT2LIB+=gthread/.libs/libgthread-2.0$(my_ext)
 
-OUT2BIN+=gobject/glib-mkenums
-OUT2BIN+=gobject/.libs/glib-genmarshal
-OUT2BIN+=gio/.libs/glib-compile-schemas
+OUT2BIN_NONE+=gobject/glib-mkenums
+OUT2BIN_NONE+=gobject/.libs/glib-genmarshal
+OUT2BIN_NONE+=gio/.libs/glib-compile-schemas
 
 .ELSE
 

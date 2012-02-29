@@ -60,6 +60,11 @@ CONFIGURE_FLAGS=shared no-idea
 CONFIGURE_FLAGS=-I$(SYSBASE)$/usr$/include -L$(SYSBASE)$/usr$/lib shared no-idea
 .ENDIF
 
+.IF "$(OS)" == "MACOSX"
+CONFIGURE_FLAGS += \
+    --prefix=/@.__________________________________________________$(EXTRPATH)
+.END
+
 BUILD_DIR=.
 
 COMPILER_AND_FLAGS=$(CC)
