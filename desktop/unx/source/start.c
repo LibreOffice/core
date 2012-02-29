@@ -858,7 +858,7 @@ SAL_IMPLEMENT_MAIN_WITH_ARGS( argc, argv )
         }
 
         /* pagein */
-        if (!args->bInhibitJavaLdx)
+        if (!args->bInhibitPagein)
             exec_pagein (args);
 
         /* javaldx */
