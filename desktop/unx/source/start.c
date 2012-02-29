@@ -450,7 +450,6 @@ send_args( int fd, rtl_uString *pCwdPath )
     sal_Bool bResult;
     size_t nLen;
     rtl_uString *pEscapedCwdPath = escape_path( pCwdPath );
-    sal_Bool bDontConvertNext = sal_False;
     sal_uInt32 nArg = 0;
     sal_uInt32 nArgCount = osl_getCommandArgCount();
 
@@ -484,44 +483,6 @@ send_args( int fd, rtl_uString *pCwdPath )
                 ",", 1 );
 
         osl_getCommandArg( nArg, &pTmp );
-
-        // this is not a param, we have to prepend filenames with file://
-        // FIXME: improve the check
-        if ( ( pTmp->buffer[0] != (sal_Unicode)'-' ) )
-        {
-            sal_Int32 nFirstColon = rtl_ustr_indexOfChar_WithLength( pTmp->buffer, pTmp->length, ':' );
-            sal_Int32 nFirstSlash = rtl_ustr_indexOfChar_WithLength( pTmp->buffer, pTmp->length, '/' );
-
-            // check that pTmp is not an URI yet
-            // note ".uno" ".slot" & "vnd.sun.star.script" are special urls that
-            // don't expect a following '/'
-
-             const char* schemes[] = { "slot:",  ".uno:", "vnd.sun.star.script:" };
-             sal_Bool bIsSpecialURL = sal_False;
-             int i = 0;
-             int len =  SAL_N_ELEMENTS(schemes);
-             for ( ; i < len; ++i )
-             {
-                 if ( rtl_ustr_indexOfAscii_WithLength( pTmp->buffer
-                     , pTmp->length , schemes[ i ], strlen(schemes[ i ] ))  == 0  )
-                 {
-                     bIsSpecialURL = sal_True;
-                     break;
-                 }
-             }
-
-            if ( !bIsSpecialURL && ( nFirstColon < 1 || ( nFirstSlash != nFirstColon + 1 ) ) )
-            {
-                // some of the switches (currently just -pt) don't want to
-                // have the filenames as URIs
-                if ( !bDontConvertNext )
-                    osl_getAbsoluteFileURL( pCwdPath, pTmp, &pTmp );
-            }
-        }
-
-        // don't convert filenames with some of the switches
-        // (currently just -pt)
-        bDontConvertNext = !rtl_ustr_ascii_compareIgnoreAsciiCase( pTmp->buffer, "-pt" );
 
         pEscapedTmp = escape_path( pTmp );
 
