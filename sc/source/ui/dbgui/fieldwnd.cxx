@@ -614,7 +614,7 @@ void ScDPFieldControlBase::DrawField(
         do
         {
             sal_Int32 nCurrLen = (nMinLen + nMaxLen) / 2;
-            rtl::OUStringBuffer aBuf(aText.copy(0, nCurrLen));
+            rtl::OUStringBuffer aBuf(rText.maText.copy(0, nCurrLen));
             aBuf.appendAscii("...");
             aText = aBuf.makeStringAndClear();
             nLabelWidth = rDev.GetTextWidth( aText );
