@@ -2887,6 +2887,7 @@ int RTFDocumentImpl::popState()
     bool bListLevelEnd = false;
     bool bListOverrideEntryEnd = false;
     bool bLevelTextEnd = false;
+    bool bLevelNumbersEnd = false;
     RTFShape aShape;
     RTFPicture aPicture;
     bool bPopShapeProperties = false;
@@ -3027,6 +3028,8 @@ int RTFDocumentImpl::popState()
                 aBuf.append(aOrig.copy(i, 1));
         }
         pValue->setString(aBuf.makeStringAndClear());
+        aSprms = m_aStates.top().aTableSprms;
+        bLevelNumbersEnd = true;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME
             || m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE
@@ -3303,6 +3306,8 @@ int RTFDocumentImpl::popState()
         RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
         m_aStates.top().aTableSprms->push_back(make_pair(NS_ooxml::LN_CT_Lvl_lvlText, pValue));
     }
+    else if (bLevelNumbersEnd)
+        m_aStates.top().aTableSprms = aSprms;
     else if (bPopShapeProperties)
     {
         m_aStates.top().aShape = aShape;
