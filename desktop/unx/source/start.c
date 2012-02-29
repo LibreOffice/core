@@ -496,7 +496,15 @@ send_args( int fd, rtl_uString *pCwdPath )
 
     ustr_debug( "Pass args", pBuffer );
 
-    pOut = ustr_to_str( pBuffer );
+    if ( !rtl_convertUStringToString(
+             &pOut, rtl_uString_getStr( pBuffer ),
+             rtl_uString_getLength( pBuffer ), RTL_TEXTENCODING_UTF8,
+             ( RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR
+               | RTL_UNICODETOTEXT_FLAGS_INVALID_ERROR ) ) )
+    {
+        fprintf( stderr, "ERROR: cannot convert arguments to UTF-8" );
+        exit( 1 );
+    }
 
     nLen = rtl_string_getLength( pOut ) + 1;
     bResult = ( write( fd, rtl_string_getStr( pOut ), nLen ) == (ssize_t) nLen );
