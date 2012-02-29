@@ -1382,7 +1382,7 @@ void ScGridWindow::GetSelectionRects( ::std::vector< Rectangle >& rPixelRects )
     PutInOrder( nY1, nY2 );
 
     sal_Bool bTestMerge = sal_True;
-    sal_Bool bRepeat = sal_True;
+    bool bRepeat = true;
 
     SCCOL nTestX2 = nX2;
     SCROW nTestY2 = nY2;
