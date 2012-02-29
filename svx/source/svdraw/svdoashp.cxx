@@ -1369,7 +1369,7 @@ void SdrObjCustomShape::TakeObjInfo(SdrObjTransformInfoRec& rInfo) const
 
                 // set path and poly conversion if one is possible since
                 // this object will first be broken
-                const sal_Bool bCanConvToPathOrPoly(aInfo.bCanConvToPath || aInfo.bCanConvToPoly);
+                const bool bCanConvToPathOrPoly(aInfo.bCanConvToPath || aInfo.bCanConvToPoly);
                 if(rInfo.bCanConvToPath != bCanConvToPathOrPoly)
                 {
                     rInfo.bCanConvToPath = bCanConvToPathOrPoly;
