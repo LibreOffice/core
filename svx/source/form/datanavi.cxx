@@ -304,7 +304,8 @@ namespace svxform
         m_pNaviWin      ( _pNaviWin ),
         m_bHasModel     ( false ),
         m_eGroup        ( _eGroup ),
-        m_TbxImageList  ( SVX_RES( IL_TBX_BMPS ) )
+        m_TbxImageList  ( SVX_RES( IL_TBX_BMPS ) ),
+        m_bLinkOnce     ( false )
 
     {
         FreeResource();
@@ -1881,7 +1882,6 @@ namespace svxform
                             m_aTabCtrl.SetPageText( nId, sNewName );
                             bIsDocModified = true;
                         }
-                        delete(pPage);
                     }
                     break;
                 }
