@@ -135,17 +135,17 @@ class IosSalPrinter : public SalPrinter
     IosSalPrinter( IosSalInfoPrinter* i_pInfoPrinter );
     virtual ~IosSalPrinter();
 
-    virtual sal_Bool                    StartJob( const XubString* i_pFileName,
-                                              const XubString& i_rJobName,
-                                              const XubString& i_rAppName,
+    virtual sal_Bool                    StartJob( const rtl::OUString* pFileName,
+                                              const rtl::OUString& rJobName,
+                                              const rtl::OUString& rAppName,
                                               sal_uLong i_nCopies,
                                               bool i_bCollate,
                                               bool i_bDirect,
                                               ImplJobSetup* i_pSetupData );
     // implement pull model print system
-    virtual sal_Bool                    StartJob( const String* i_pFileName,
-                                              const String& rJobName,
-                                              const String& i_rAppName,
+    virtual sal_Bool                    StartJob( const const rtl::OUString* pFileName,
+                                              const rtl::OUString& rJobName,
+                                              const rtl::OUString& rAppName,
                                               ImplJobSetup* i_pSetupData,
                                               vcl::PrinterController& i_rListener );
 
