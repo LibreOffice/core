@@ -181,7 +181,7 @@ ModalDialog DLG_ADDRESSBOOKSOURCE
         Size = MAP_APPFONT ( 50 , 14 ) ;
     };
 
-    String STR_LOCAGICAL_FIELD_NAMES
+    String STR_LOGICAL_FIELD_NAMES
     {
         Text = "FirstName;LastName;Company;Department;Street;Zip;City;State;Country;PhonePriv;PhoneComp;PhoneOffice;PhoneCell;PhoneOther;Pager;Fax;EMail;URL;Title;Position;Code;AddrForm;AddrFormMail;Id;CalendarURL;InviteParticipant;Note;Altfield1;Altfield2;Altfield3;Altfield4";
         // no need to translate this

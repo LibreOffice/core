@@ -81,7 +81,7 @@
 #define STR_FIELD_CALENDAR          31
 #define STR_FIELD_INVITE            32
 
-#define STR_LOCAGICAL_FIELD_NAMES   33
+#define STR_LOGICAL_FIELD_NAMES     33
 
 
 #endif // _SVT_ADDRESSTEMPLATE_HRC_

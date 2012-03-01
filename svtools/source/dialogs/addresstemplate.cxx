@@ -181,7 +181,7 @@ public:
         // first collect all known programmatic names
         StringBag aKnownNames;
 
-        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOCAGICAL_FIELD_NAMES)));
+        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOGICAL_FIELD_NAMES)));
         sal_Int32 nIndex = 0;
         do
         {
@@ -690,7 +690,7 @@ void AssignmentPersistentData::Commit()
         implScrollFields(0, sal_False, sal_False);
 
         // the logical names
-        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOCAGICAL_FIELD_NAMES)));
+        rtl::OUString sLogicalFieldNames(ResId::toString(SvtResId(STR_LOGICAL_FIELD_NAMES)));
         sal_Int32 nAdjustedTokenCount = comphelper::string::getTokenCount(sLogicalFieldNames, ';') + (m_pImpl->bOddFieldNumber ? 1 : 0);
         DBG_ASSERT(nAdjustedTokenCount == (sal_Int32)m_pImpl->aFieldLabels.size(),
             "AddressBookSourceDialog::AddressBookSourceDialog: inconsistence between logical and UI field names!");
