@@ -106,7 +106,7 @@ private:
     ::std::auto_ptr<FormulaDlg_Impl> m_pImpl;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
-    DECL_LINK( UpdateFocusHdl, Timer*);
+    DECL_LINK( UpdateFocusHdl, void*);
 protected:
     void            disableOk();
 

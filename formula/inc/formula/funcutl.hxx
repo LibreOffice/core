@@ -44,7 +44,7 @@ private:
     Timer               aTimer;
     IControlReferenceHandler*      pAnyRefDlg;         // parent dialog
 
-    DECL_LINK( UpdateHdl, Timer* );
+    DECL_LINK( UpdateHdl, void* );
 
 protected:
     virtual void        KeyInput( const KeyEvent& rKEvt );
