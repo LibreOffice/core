@@ -79,9 +79,9 @@ struct FrameHash : public boost::hash<sal_IntPtr>
 
 #define INVALID_CURSOR_PTR (NSCursor*)0xdeadbeef
 
-struct SalData
+class SalData
 {
-
+public:
     SALTIMERPROC                                  mpTimerProc;      // timer callback proc
     AquaSalInstance                              *mpFirstInstance;  // pointer of first instance
     std::list<AquaSalFrame*>                      maFrames;         // list of all frames
