@@ -105,6 +105,8 @@ class WW8TableDataHandler : public TableDataHandler<string,
                             TablePropsRef_t>
 {
 public:
+    virtual ~WW8TableDataHandler() {}
+
     typedef boost::shared_ptr<WW8TableDataHandler> Pointer_t;
     virtual void startTable(unsigned int nRows, unsigned int nDepth,
                             TablePropsRef_t pProps);

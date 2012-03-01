@@ -61,6 +61,10 @@ public:
     {
     }
 
+    virtual ~PageNumber()
+    {
+    }
+
     /// Return the page number
     sal_uInt32 get() const { return mnPageNumber; }
 
