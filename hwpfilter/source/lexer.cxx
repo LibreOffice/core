@@ -1064,14 +1064,6 @@ static void yy_flex_strncpy YY_PROTO(( char *, yyconst char *, int ));
 static int yy_flex_strlen YY_PROTO(( yyconst char * ));
 #endif
 
-#ifndef YY_NO_INPUT
-#ifdef __cplusplus
-static int yyinput YY_PROTO(( void ));
-#else
-static int input YY_PROTO(( void ));
-#endif
-#endif
-
 #if YY_STACK_USED
 static int yy_start_stack_ptr = 0;
 static int yy_start_stack_depth = 0;
@@ -1835,79 +1827,6 @@ yy_state_type yy_current_state;
 
     return yy_is_jam ? 0 : yy_current_state;
     }
-
-#ifdef __cplusplus
-static int yyinput()
-#else
-static int input()
-#endif
-    {
-    int c;
-
-    *yy_c_buf_p = yy_hold_char;
-
-    if ( *yy_c_buf_p == YY_END_OF_BUFFER_CHAR )
-        {
-        /* yy_c_buf_p now points to the character we want to return.
-         * If this occurs *before* the EOB characters, then it's a
-         * valid NUL; if not, then we've hit the end of the buffer.
-         */
-        if ( yy_c_buf_p < &yy_current_buffer->yy_ch_buf[yy_n_chars] )
-            /* This was really a NUL. */
-            *yy_c_buf_p = '\0';
-
-        else
-            { /* need more input */
-            int offset = yy_c_buf_p - yytext_ptr;
-            ++yy_c_buf_p;
-
-            switch ( yy_get_next_buffer() )
-                {
-                case EOB_ACT_LAST_MATCH:
-                    /* This happens because yy_g_n_b()
-                     * sees that we've accumulated a
-                     * token and flags that we need to
-                     * try matching the token before
-                     * proceeding.  But for input(),
-                     * there's no matching to consider.
-                     * So convert the EOB_ACT_LAST_MATCH
-                     * to EOB_ACT_END_OF_FILE.
-                     */
-
-                    /* Reset buffer status. */
-                    yyrestart( yyin );
-
-                    /* fall through */
-
-                case EOB_ACT_END_OF_FILE:
-                    {
-                    if ( yywrap() )
-                        return EOF;
-
-                    if ( ! yy_did_buffer_switch_on_eof )
-                        YY_NEW_FILE;
-#ifdef __cplusplus
-                    return yyinput();
-#else
-                    return input();
-#endif
-                    }
-
-                case EOB_ACT_CONTINUE_SCAN:
-                    yy_c_buf_p = yytext_ptr + offset;
-                    break;
-                }
-            }
-        }
-
-    c = *(unsigned char *) yy_c_buf_p;  /* cast for 8-bit char's */
-    *yy_c_buf_p = '\0'; /* preserve yytext */
-    yy_hold_char = *++yy_c_buf_p;
-
-
-    return c;
-    }
-
 
 #ifdef YY_USE_PROTOS
 void yyrestart( FILE *input_file )
