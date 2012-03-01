@@ -991,80 +991,6 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
         if ( !bResultsOnly )
         {
-            bool bNamesLost = false;
-            // array containing range names which might need update of indices.
-            // The instances inserted into this vector are managed by the
-            // range name container of this document, so no need to delete
-            // them afterward.
-            ::std::vector<ScRangeData*> aSrcRangeNames;
-
-            // the index mapping thereof
-            ScRangeData::IndexMap aSrcRangeMap;
-            bool bRangeNameReplace = false;
-
-            // find named ranges that are used in the source sheet
-            std::set<sal_uInt16> aUsedNames;
-            pSrcDoc->maTabs[nSrcPos]->FindRangeNamesInUse( 0, 0, MAXCOL, MAXROW, aUsedNames );
-
-            if (pSrcDoc->pRangeName)
-            {
-                ScRangeName::const_iterator itr = pSrcDoc->pRangeName->begin(), itrEnd = pSrcDoc->pRangeName->end();
-                for (; itr != itrEnd; ++itr)        //! DB-Bereiche Pivot-Bereiche auch !!!
-                {
-                    sal_uInt16 nOldIndex = itr->second->GetIndex();
-                    bool bInUse = ( aUsedNames.find(nOldIndex) != aUsedNames.end() );
-                    if (bInUse)
-                    {
-                        const ScRangeData* pExistingData = GetRangeName()->findByUpperName(itr->second->GetUpperName());
-                        if (pExistingData)
-                        {
-                            // the name exists already in the destination document
-                            // -> use the existing name, but show a warning
-                            // (when refreshing links, the existing name is used and the warning not shown)
-
-                            sal_uInt16 nExistingIndex = pExistingData->GetIndex();
-
-                            // don't modify the named range
-                            aSrcRangeMap.insert(
-                                ScRangeData::IndexMap::value_type(nOldIndex, nExistingIndex));
-                            bRangeNameReplace = true;
-                            bNamesLost = true;
-                        }
-                        else
-                        {
-                            ScRangeData* pData = new ScRangeData( *itr->second );
-                            pData->SetDocument(this);
-                            if ( pRangeName->findByIndex( pData->GetIndex() ) )
-                                pData->SetIndex(0);     // need new index, done in Insert
-                            if (!pRangeName->insert(pData))
-                            {
-                                OSL_FAIL("can't insert name");     // shouldn't happen
-                                pData = NULL;
-                            }
-                            else
-                            {
-                                pData->TransferTabRef( nSrcPos, nDestPos );
-                                aSrcRangeNames.push_back(pData);
-                                sal_uInt16 nNewIndex = pData->GetIndex();
-                                aSrcRangeMap.insert(
-                                    ScRangeData::IndexMap::value_type(nOldIndex, nNewIndex));
-                                if ( !bRangeNameReplace )
-                                    bRangeNameReplace = ( nOldIndex != nNewIndex );
-                            }
-                        }
-                    }
-                }
-            }
-            if ( bRangeNameReplace )
-            {
-                // first update all inserted named formulas if they contain other
-                // range names and used indices changed
-                for (size_t i = 0, n = aSrcRangeNames.size(); i < n; ++i)       //! DB-Bereiche Pivot-Bereiche auch
-                    aSrcRangeNames[i]->ReplaceRangeNamesInUse( aSrcRangeMap );
-
-                // then update the formulas, they might need the just updated range names
-                maTabs[nDestPos]->ReplaceRangeNamesInUse( 0, 0, MAXCOL, MAXROW, aSrcRangeMap );
-            }
 
             SCsTAB nDz = ((SCsTAB)nDestPos) - (SCsTAB)nSrcPos;
             maTabs[nDestPos]->UpdateReference(URM_COPY, 0, 0, nDestPos,
@@ -1072,11 +998,6 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
                                                      0, 0, nDz, NULL);
             // Readjust self-contained absolute references to this sheet
             maTabs[nDestPos]->TestTabRefAbs(nSrcPos);
-            if (bNamesLost)
-            {
-                nRetVal += 2;
-                // message: duplicate names
-            }
             maTabs[nDestPos]->CompileAll();
         }
 
