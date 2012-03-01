@@ -218,7 +218,7 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
     ScDBData* pNewDBData = aNewNamedDBs.findByName(aDBName);
     if (!pNewDBData)
     {
-        pNewDBData = new ScDBData(*pNewDBData);
+        pNewDBData = new ScDBData(*pDBData);
         aNewNamedDBs.insert(pNewDBData);
     }
     pToken->SetIndex(pNewDBData->GetIndex());
