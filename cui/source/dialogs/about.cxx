@@ -72,20 +72,9 @@ static void layoutText( FixedInfo &rText, long &nY, long nTextWidth, Size a6Size
 
 String InitDevVersionStr()
 {
-    const String sCWSSchema( String::CreateFromAscii( "[CWS:" ) );
-    rtl::OUString sDefault;
+    String sDefault;
     String sBuildId( utl::Bootstrap::getBuildIdData( sDefault ) );
     OSL_ENSURE( sBuildId.Len() > 0, "No BUILDID in bootstrap file" );
-    if ( sBuildId.Len() > 0 && sBuildId.Search( sCWSSchema ) == STRING_NOTFOUND )
-    {
-        // no cws part in brand buildid -> try basis buildid
-        rtl::OUString sBasisBuildId( DEFINE_CONST_OUSTRING(
-            "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":buildid}" ) );
-        rtl::Bootstrap::expandMacros( sBasisBuildId );
-        sal_Int32 nIndex = sBasisBuildId.indexOf( sCWSSchema );
-        if ( nIndex != -1 )
-            sBuildId += String( sBasisBuildId.copy( nIndex ) );
-    }
 
     String sProductSource( utl::Bootstrap::getProductSource( sDefault ) );
     OSL_ENSURE( sProductSource.Len() > 0, "No ProductSource in bootstrap file" );
@@ -107,33 +96,6 @@ String InitDevVersionStr()
         sBuildId.Insert( sProductSource, 0 );
     }
 
-    // --> PB 2008-10-30 #i94693#
-    // if the build ids of the basis or ure layer are different from the build id
-    // of the brand layer then show them
-    rtl::OUString aBasisProductBuildId( DEFINE_CONST_OUSTRING(
-        "${$OOO_BASE_DIR/program/" SAL_CONFIGFILE("version") ":ProductBuildid}" ) );
-    rtl::Bootstrap::expandMacros( aBasisProductBuildId );
-    rtl::OUString aUREProductBuildId( DEFINE_CONST_OUSTRING(
-        "${$URE_BIN_DIR/" SAL_CONFIGFILE("version") ":ProductBuildid}" ) );
-    rtl::Bootstrap::expandMacros( aUREProductBuildId );
-    if ( sBuildId.Search( String( aBasisProductBuildId ) ) == STRING_NOTFOUND
-        || sBuildId.Search( String( aUREProductBuildId ) ) == STRING_NOTFOUND )
-    {
-        String sTemp( '-' );
-        sTemp += String( aBasisProductBuildId );
-        sTemp += '-';
-        sTemp += String( aUREProductBuildId );
-        sBuildId.Insert( sTemp, sBuildId.Search( ')' ) );
-    }
-    // <--
-
-    // the build id format is "milestone(build)[cwsname]". For readability, it would
-    // be nice to have some more spaces in there.
-    xub_StrLen nPos = 0;
-    if ( ( nPos = sBuildId.Search( sal_Unicode( '(' ) ) ) != STRING_NOTFOUND )
-        sBuildId.Insert( sal_Unicode( ' ' ), nPos );
-    if ( ( nPos = sBuildId.Search( sal_Unicode( '[' ) ) ) != STRING_NOTFOUND )
-        sBuildId.Insert( sal_Unicode( ' ' ), nPos );
     return sBuildId;
 }
 
@@ -178,8 +140,6 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
     // if necessary more info
     String sVersion = aVersionText.GetText();
     sVersion.SearchAndReplaceAscii( "$(VER)", Application::GetDisplayName() );
-    sVersion += '\n';
-    sVersion += aDevVersionStr;
     aVersionText.SetText( sVersion );
 
     // Initialisierung fuer Aufruf Entwickler
@@ -221,7 +181,7 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
     Color aTextColor( rSettings.GetWindowTextColor() );
     aVersionText.SetControlForeground( aTextColor );
     aCopyrightText.SetControlForeground( aTextColor );
-    aBuildData.SetBackground( aWall );
+    aBuildData.SetBackground( );
 
     Font aSmallFont = rSettings.GetInfoFont();
     Size aSmaller = aNewFont.GetSize();
@@ -229,13 +189,18 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId ) :
     aSmaller.Height() = (long) (aSmaller.Height() * 0.75);
     aNewFont.SetSize( aSmaller );
     aBuildData.SetFont( aNewFont );
-    aBuildData.SetBackground( aWall );
+
+    String sRevision( utl::Bootstrap::getRevisionInfo() );
+
+    String aBuildString(aDevVersionStr);
+    aBuildString += (DEFINE_CONST_UNICODE("  -  Rev. "));
+    aBuildString += sRevision;
+
 #ifdef BUILD_VER_STRING
 #define _STRINGIFY(x) #x
 #define STRINGIFY(x) _STRINGIFY(x)
-    String aBuildString( DEFINE_CONST_UNICODE( STRINGIFY( BUILD_VER_STRING ) ) );
-#else
-    String aBuildString;
+    aBuildString += '\n';
+    aBuildString += ( DEFINE_CONST_UNICODE( STRINGIFY( BUILD_VER_STRING ) ) );
 #endif
     aBuildData.SetText( aBuildString );
     aBuildData.Show();

@@ -33,6 +33,9 @@ use installer::pathanalyzer;
 use installer::remover;
 use installer::systemactions;
 
+use File::Spec;
+use SvnRevision;
+
 ################################################################
 # Resolving the GID for the directories defined in setup script
 ################################################################
@@ -803,6 +806,8 @@ sub replace_setup_variables
     if ( $hashref->{'USERDIRPRODUCTVERSION'} ) { $userdirproductversion = $hashref->{'USERDIRPRODUCTVERSION'}; }
     my $productkey = $productname . " " . $productversion;
 
+    my $scsrevision = SvnRevision::DetectRevisionId(File::Spec->catfile($ENV{'SRC_ROOT'}, File::Spec->updir()));
+
     # string $buildid, which is used to replace the setup variable <buildid>
 
     my $localminor = "flat";
@@ -830,6 +835,7 @@ sub replace_setup_variables
         my $value = $oneitem->{'Value'};
 
         $value =~ s/\<buildid\>/$buildidstring/;
+        $value =~ s/\<scsrevision\>/$scsrevision/;
         $value =~ s/\<sequence_languages\>/$languagesstring/;
         $value =~ s/\<productkey\>/$productkey/;
         $value =~ s/\<productcode\>/$installer::globals::productcode/;

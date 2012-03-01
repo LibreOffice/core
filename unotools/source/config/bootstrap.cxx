@@ -63,6 +63,7 @@
 #define BOOTSTRAP_DIRNAME_USERDIR           "user"
 
 #define VERSIONFILE_SECTION                 "Versions"
+#define VERSIONFILE_ITEM_SCSREVISION        "Revision"
 
 #define SETUP_DATA_NAME                     SAL_CONFIGFILE("setup")
 #define SETUP_ITEM_ALLUSERS                 "ALLUSERS"
@@ -670,6 +671,22 @@ OUString Bootstrap::getBuildIdData(OUString const& _sDefault)
         sBuildId = data().getBootstrapValue( csBuildIdItem, _sDefault );
     return sBuildId;
 }
+// ---------------------------------------------------------------------------------------
+
+OUString Bootstrap::getRevisionInfo()
+{
+    OUString const _sDefault;
+    OUString const csRevisionItem(RTL_CONSTASCII_USTRINGPARAM(VERSIONFILE_ITEM_SCSREVISION));
+
+    OUString sRevisionNumber;
+    // read buildid from version.ini (versionrc), if it doesn't exist or buildid is empty
+    if ( data().getVersionValue( csRevisionItem, sRevisionNumber, _sDefault ) != sal_True ||
+         sRevisionNumber.getLength() == 0 )
+         // read buildid from bootstrap.ini (bootstraprc)
+        sRevisionNumber = data().getBootstrapValue( csRevisionItem, _sDefault );
+    return sRevisionNumber;
+}
+
 // ---------------------------------------------------------------------------------------
 
 OUString Bootstrap::getAllUsersValue(OUString const& _sDefault)

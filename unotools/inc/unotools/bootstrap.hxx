@@ -56,6 +56,9 @@ namespace utl
         /// retrieve the BUILDID information item; uses the given default, if not found
         static rtl::OUString getBuildIdData(rtl::OUString const& _sDefault);
 
+        /// retrieve the SCS Revision information item
+        static rtl::OUString getRevisionInfo();
+
         /// retrieve the ALLUSERS information item from setup.ini file; uses the given default, if not found
         static rtl::OUString getAllUsersValue(rtl::OUString const& _sDefault);
 
