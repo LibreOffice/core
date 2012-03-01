@@ -70,7 +70,7 @@ namespace connectivity
             struct DBFHeader {                       /* Header struct */
                                 DBFType      db_typ;                        /* File type                    */
                                 sal_uInt8    db_aedat[3];                   /* Date of last change          */
-                                                                            /* JJ MM DD                     */
+                                                                            /* YY MM DD                     */
                                 sal_uInt32  db_anz;                         /* Data set count               */
                                 sal_uInt16  db_kopf;                        /* Header length                */
                                 sal_uInt16  db_slng;                        /* Data set length              */
