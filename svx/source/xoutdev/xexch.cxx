@@ -78,16 +78,6 @@ XFillExchangeData::~XFillExchangeData()
     delete pXFillAttrSetItem;
 }
 
-/*************************************************************************
-|*
-|*
-|*
-*************************************************************************/
-sal_uIntPtr XFillExchangeData::RegisterClipboardFormatName()
-{
-    return( SOT_FORMATSTR_ID_XFA );
-}
-
 /******************************************************************************
 |*
 |*  Binaer-Export (z.Z. ohne Versionsverwaltung, da nicht persistent!)

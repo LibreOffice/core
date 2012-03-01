@@ -3203,23 +3203,6 @@ sal_Bool UCBStorage::Equals( const BaseStorage& rStorage ) const
     return ((BaseStorage*)this) == &rStorage;
 }
 
-sal_Bool UCBStorage::IsStorageFile( const String& rFileName )
-{
-    rtl::OUString aFileURL = rFileName;
-    INetURLObject aObj( aFileURL );
-    if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
-    {
-        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( rFileName, aFileURL );
-        aObj.SetURL( aFileURL );
-        aFileURL = aObj.GetMainURL( INetURLObject::NO_DECODE );
-    }
-
-    SvStream * pStm = ::utl::UcbStreamHelper::CreateStream( aFileURL, STREAM_STD_READ );
-    sal_Bool bRet = UCBStorage::IsStorageFile( pStm );
-    delete pStm;
-    return bRet;
-}
-
 sal_Bool UCBStorage::IsStorageFile( SvStream* pFile )
 {
     if ( !pFile )

@@ -1297,18 +1297,6 @@ TextObj::~TextObj()
         delete mpImplTextObj;
 }
 
-void TextObj::Write( SvStream* pStrm )
-{
-    sal_uInt32 nSize, nPos = pStrm->Tell();
-    *pStrm << (sal_uInt32)( EPP_TextCharsAtom << 16 ) << (sal_uInt32)0;
-    for ( void* pPtr = First(); pPtr; pPtr = Next() )
-        ((ParagraphObj*)pPtr)->Write( pStrm );
-    nSize = pStrm->Tell() - nPos;
-    pStrm->SeekRel( - ( (sal_Int32)nSize - 4 ) );
-    *pStrm << (sal_uInt32)( nSize - 8 );
-    pStrm->SeekRel( nSize - 8 );
-}
-
 void TextObj::ImplCalculateTextPositions()
 {
     mpImplTextObj->mnTextSize = 0;

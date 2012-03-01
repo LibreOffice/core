@@ -252,8 +252,6 @@ class TextObj
                         TextObj( const TextObj& rTextObj );
                         ~TextObj();
 
-        void            Write( SvStream* pStrm );
-
         ParagraphObj*   First(){ return (ParagraphObj*)mpImplTextObj->mpList->First(); };
         ParagraphObj*   Next(){ return(ParagraphObj*)mpImplTextObj->mpList->Next(); };
         sal_uInt32      Count() const { return mpImplTextObj->mnTextSize; };

@@ -296,7 +296,6 @@ protected:
                                 ~UCBStorage();
 public:
     static sal_Bool                 IsStorageFile( SvStream* );
-    static sal_Bool                 IsStorageFile( const String& rName );
     static sal_Bool                 IsDiskSpannedFile( SvStream* );
     static String               GetLinkedFile( SvStream& );
     static String               CreateLinkFile( const String& rName );

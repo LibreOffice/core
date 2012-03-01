@@ -66,7 +66,6 @@ public:
 
     sal_uIntPtr           GetCurIndex() const;
     sal_uIntPtr           GetIndex( const void* p ) const;
-    sal_Bool            IsIndexValid( sal_uIntPtr nIndex ) const;
 
     void*           Seek( void* p );
     void*           First();
@@ -104,7 +103,6 @@ public:                                                                 \
                 using UniqueIndex::Clear;                                       \
                 using UniqueIndex::Count;                                       \
                 using UniqueIndex::GetCurIndex;                             \
-                using UniqueIndex::IsIndexValid;                                \
                 using UniqueIndex::GetStartIndex;                               \
                 using UniqueIndex::GetCurMaxIndex;                          \
                                                                         \

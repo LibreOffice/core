@@ -467,6 +467,12 @@ findunusedcode:
               | grep -v ^libwpg:: \
               | grep -v ^lucene:: \
               | grep -v ^salhelper:: \
+              | grep -v ^WP1 \
+              | grep -v ^WP3 \
+              | grep -v ^WP42 \
+              | grep -v ^WP6 \
+              | grep -v ^WPG \
+              | grep -v ^WPS \
               > unusedcode.easy
 
 check: subsequentcheck
