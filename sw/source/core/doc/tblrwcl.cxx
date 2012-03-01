@@ -135,7 +135,7 @@ struct CR_SetBoxWidth
         nDiff( rCpy.nDiff ), nSide( rCpy.nSide ),
         nMaxSize( rCpy.nMaxSize ), nLowerDiff( 0 ),
         nMode( rCpy.nMode ), nTblWidth( rCpy.nTblWidth ),
-        nRemainWidth( rCpy.nRemainWidth ), nBoxWidth( nBoxWidth ),
+        nRemainWidth( rCpy.nRemainWidth ), nBoxWidth( rCpy.nBoxWidth ),
         bBigger( rCpy.bBigger ), bLeft( rCpy.bLeft ),
         bSplittBox( rCpy.bSplittBox ), bAnyBoxFnd( rCpy.bAnyBoxFnd )
     {
