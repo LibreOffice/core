@@ -96,11 +96,6 @@ CONFIGURE_FLAGS=--disable-static --enable-shared --disable-gtk-doc --with-openss
 BUILD_ACTION=$(GNUMAKE)
 BUILD_FLAGS+= -j$(EXTMAXPROCESS)
 BUILD_DIR=$(CONFIGURE_DIR)
-.ELSE
-# there is no wntmsci build environment in the tarball; we use custom dmakefile
-BUILD_ACTION=dmake
-BUILD_DIR=$(CONFIGURE_DIR)$/src
-.ENDIF
 
 # Hack to get librdf.dll linked on mingw. I am already wearied of
 # fighting libtool's pseudo-intelligence, so I am just going to go with
@@ -109,6 +104,14 @@ ALL : $(OUT)/lib/libraptor.la
 
 $(OUT)/lib/libraptor.la : $(MISC)/build/so_built_so_raptor
 	$(SED) "/^dlname/s@='@='../bin/@" $(MISC)/build/$(TARFILE_NAME)/src/libraptor.la > $@
+
+.ELSE
+
+# there is no wntmsci build environment in the tarball; we use custom dmakefile
+BUILD_ACTION=dmake
+BUILD_DIR=$(CONFIGURE_DIR)$/src
+
+.ENDIF
 
 .ELSE # "WNT"
 
