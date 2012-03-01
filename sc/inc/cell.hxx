@@ -92,17 +92,13 @@ public:
     /** Base copy constructor. Does NOT clone cell note or broadcaster! */
                     ScBaseCell( const ScBaseCell& rCell );
 
-    /** Returns a clone of this cell at the same position, cell note and
+    /** Returns a clone of this cell at the same position,
         broadcaster will not be cloned. */
-    ScBaseCell*     CloneWithoutNote( ScDocument& rDestDoc, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+    ScBaseCell*     Clone( ScDocument& rDestDoc, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
 
-    /** Returns a clone of this cell for the passed document position, cell
-        note and broadcaster will not be cloned. */
-    ScBaseCell*     CloneWithoutNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
-
-    /** Returns a clone of this cell, clones cell note and caption object too
-        (unless SC_CLONECELL_NOCAPTION flag is set). Broadcaster will not be cloned. */
-    ScBaseCell*     CloneWithNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
+    /** Returns a clone of this cell for the passed document position,
+        broadcaster will not be cloned. */
+    ScBaseCell*     Clone( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags = SC_CLONECELL_DEFAULT ) const;
 
     /** Due to the fact that ScBaseCell does not have a vtable, this function
         deletes the cell by calling the appropriate d'tor of the derived class. */

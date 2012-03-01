@@ -787,13 +787,13 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rD
         case CELLTYPE_EDIT:
             // note will be cloned below
             if (bCloneString)
-                pNew = rSource.CloneWithoutNote( rDestDoc, rDestPos );
+                pNew = rSource.Clone( rDestDoc, rDestPos );
         break;
 
         case CELLTYPE_VALUE:
             // note will be cloned below
             if (lclCanCloneValue( *pDocument, *this, maItems[nIndex].nRow, bCloneValue, bCloneDateTime ))
-                pNew = rSource.CloneWithoutNote( rDestDoc, rDestPos );
+                pNew = rSource.Clone( rDestDoc, rDestPos );
         break;
 
         case CELLTYPE_FORMULA:
@@ -811,7 +811,7 @@ ScBaseCell* ScColumn::CloneCell(SCSIZE nIndex, sal_uInt16 nFlags, ScDocument& rD
             if (bForceFormula || bCloneFormula)
             {
                 // note will be cloned below
-                pNew = rSource.CloneWithoutNote( rDestDoc, rDestPos );
+                pNew = rSource.Clone( rDestDoc, rDestPos );
             }
             else if ( (bCloneValue || bCloneDateTime || bCloneString) && !rDestDoc.IsUndo() )
             {
@@ -968,7 +968,7 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
         {
             if ( pSrc )                     // war da eine Zelle?
             {
-                pNew = pSrc->CloneWithoutNote( *pDocument );
+                pNew = pSrc->Clone( *pDocument );
             }
         }
         else if ( nFunction )               // wirklich Rechenfunktion angegeben
@@ -1024,7 +1024,7 @@ void ScColumn::MixData( SCROW nRow1, SCROW nRow2,
                 //  mit Texten wird nicht gerechnet - immer "alte" Zelle, also pSrc
 
                 if (pSrc)
-                    pNew = pSrc->CloneWithoutNote( *pDocument );
+                    pNew = pSrc->Clone( *pDocument );
                 else if (pDest)
                     bDelete = sal_True;
             }

@@ -82,7 +82,7 @@ ScBaseCell* ScMyCellInfo::CreateCell(ScDocument* pDoc)
         pDoc->GetFormatTable()->GetInputLineString(fValue, nFormat, sInputString);
     }
 
-    return pCell ? pCell->CloneWithoutNote( *pDoc ) : 0;
+    return pCell ? pCell->Clone( *pDoc ) : 0;
 }
 
 ScMyDeleted::ScMyDeleted()
@@ -656,7 +656,7 @@ void ScXMLChangeTrackingImportHelper::SetContentDependencies(ScMyContentAction* 
                 const ScBaseCell* pOldCell = pActContent->GetOldCell();
                 if (pOldCell)
                 {
-                    ScBaseCell* pNewCell = pOldCell->CloneWithoutNote( *pDoc );
+                    ScBaseCell* pNewCell = pOldCell->Clone( *pDoc );
                     if (pNewCell)
                     {
                         pPrevActContent->SetNewCell(pNewCell, pDoc, EMPTY_STRING);
@@ -748,7 +748,7 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                     {
                         ScBaseCell* pNewCell = NULL;
                         if (pCell->GetCellType() != CELLTYPE_FORMULA)
-                            pNewCell = pCell->CloneWithoutNote( *pDoc );
+                            pNewCell = pCell->Clone( *pDoc );
                         else
                         {
                             sal_uInt8 nMatrixFlag = static_cast<ScFormulaCell*>(pCell)->GetMatrixFlag();

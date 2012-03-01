@@ -154,7 +154,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             else if (pUndoDoc)
             {
                 ScAddress aAdr( nCol, nRow, nTab );
-                ScBaseCell* pUndoCell = pCell->CloneWithoutNote( *pUndoDoc );
+                ScBaseCell* pUndoCell = pCell->Clone( *pUndoDoc );
                 pUndoDoc->PutCell( aAdr, pUndoCell);
             }
             bool bRepeat = !rSearchItem.GetWordOnly();
@@ -1026,7 +1026,7 @@ bool ScTable::SearchRangeForAllEmptyCells(
                     if (pUndoDoc)
                     {
                         ScAddress aCellPos(nCol, nRow, nTab);
-                        pUndoDoc->PutCell(nCol, nRow, nTab, pCell->CloneWithNote(*pUndoDoc, aCellPos));
+                        pUndoDoc->PutCell(nCol, nRow, nTab, pCell->Clone(*pUndoDoc, aCellPos));
                     }
                     aCol[nCol].SetString(nRow, nTab, rSearchItem.GetReplaceString(), pDocument->GetAddressConvention());
                 }

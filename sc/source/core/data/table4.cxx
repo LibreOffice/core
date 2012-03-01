@@ -812,7 +812,7 @@ void ScTable::FillAuto( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                                 {
                                     case CELLTYPE_STRING:
                                     case CELLTYPE_EDIT:
-                                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->CloneWithoutNote( *pDocument ) );
+                                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->Clone( *pDocument ) );
                                     break;
                                     default:
                                     {
@@ -1368,7 +1368,7 @@ void ScTable::FillSeries( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                         if (pDocument->RowFiltered( rInner, nTab))
                             continue;
                         ScAddress aDestPos( static_cast<SCCOL>(nCol), static_cast<SCROW>(nRow), nTab );
-                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->CloneWithoutNote( *pDocument ) );
+                        aCol[nCol].Insert( aDestPos.Row(), pSrcCell->Clone( *pDocument ) );
                     }
                     nProgress += nIMax - nIMin + 1;
                     rProgress.SetStateOnPercent( nProgress );

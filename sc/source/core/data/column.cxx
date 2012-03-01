@@ -943,14 +943,14 @@ void ScColumn::SwapRow(SCROW nRow1, SCROW nRow2)
     /*  Create clone of pCell1 at position of pCell2 (pCell1 exists always, see
         variable swapping above). Do not clone the note, but move pointer of
         old note to new cell. */
-    ScBaseCell* pNew2 = pCell1->CloneWithoutNote( *pDocument, aPos2, SC_CLONECELL_ADJUST3DREL );
+    ScBaseCell* pNew2 = pCell1->Clone( *pDocument, aPos2, SC_CLONECELL_ADJUST3DREL );
 
     /*  Create clone of pCell2 at position of pCell1. Do not clone the note,
         but move pointer of old note to new cell. */
     ScBaseCell* pNew1 = 0;
     if ( pCell2 )
     {
-        pNew1 = pCell2->CloneWithoutNote( *pDocument, aPos1, SC_CLONECELL_ADJUST3DREL );
+        pNew1 = pCell2->Clone( *pDocument, aPos1, SC_CLONECELL_ADJUST3DREL );
     }
 
     // move old broadcasters new cells at the same old position
@@ -1219,7 +1219,7 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKee
         {
             aOwnPos.SetRow( maItems[i].nRow );
             aDestPos.SetRow( maItems[i].nRow );
-            ScBaseCell* pNewCell = maItems[i].pCell->CloneWithNote( *rColumn.pDocument, aDestPos, nCloneFlags );
+            ScBaseCell* pNewCell = maItems[i].pCell->Clone( *rColumn.pDocument, aDestPos, nCloneFlags );
             rColumn.Append( aDestPos.Row(), pNewCell );
         }
     }
@@ -1347,7 +1347,7 @@ void ScColumn::CopyUpdated( const ScColumn& rPosCol, ScColumn& rDestCol ) const
         SCSIZE nThisIndex;
         if ( Search( aDestPos.Row(), nThisIndex ) )
         {
-            ScBaseCell* pNew = maItems[nThisIndex].pCell->CloneWithNote( rDestDoc, aDestPos );
+            ScBaseCell* pNew = maItems[nThisIndex].pCell->Clone( rDestDoc, aDestPos );
             rDestCol.Insert( aDestPos.Row(), pNew );
         }
     }
@@ -1732,7 +1732,7 @@ void ScColumn::UpdateDeleteTab( SCTAB nTable, bool bIsMove, ScColumn* pRefUndo, 
 
                 /*  Do not copy cell note to the undo document. Undo will copy
                     back the formula cell while keeping the original note. */
-                ScBaseCell* pSave = pRefUndo ? pOld->CloneWithoutNote( *pDocument ) : 0;
+                ScBaseCell* pSave = pRefUndo ? pOld->Clone( *pDocument ) : 0;
 
                 bool bChanged = pOld->UpdateDeleteTab(nTable, bIsMove, nSheets);
                 if ( nRow != maItems[i].nRow )

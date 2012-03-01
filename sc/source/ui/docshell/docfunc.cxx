@@ -790,7 +790,7 @@ sal_Bool ScDocFunc::SetNormalString( const ScAddress& rPos, const String& rText,
         pTabs = new SCTAB[1];
         pTabs[0] = rPos.Tab();
         ppOldCells  = new ScBaseCell*[1];
-        ppOldCells[0] = pDocCell ? pDocCell->CloneWithoutNote( *pDoc ) : 0;
+        ppOldCells[0] = pDocCell ? pDocCell->Clone( *pDoc ) : 0;
 
         pHasFormat = new sal_Bool[1];
         pOldFormats = new sal_uLong[1];
@@ -854,8 +854,8 @@ sal_Bool ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bo
     sal_Bool bHeight = ( bEditDeleted || bEditCell ||
                     pDoc->HasAttrib( ScRange(rPos), HASATTR_NEEDHEIGHT ) );
 
-    ScBaseCell* pUndoCell = (bUndo && pDocCell) ? pDocCell->CloneWithoutNote( *pDoc, rPos ) : 0;
-    ScBaseCell* pRedoCell = (bUndo && pNewCell) ? pNewCell->CloneWithoutNote( *pDoc, rPos ) : 0;
+    ScBaseCell* pUndoCell = (bUndo && pDocCell) ? pDocCell->Clone( *pDoc, rPos ) : 0;
+    ScBaseCell* pRedoCell = (bUndo && pNewCell) ? pNewCell->Clone( *pDoc, rPos ) : 0;
 
     pDoc->PutCell( rPos, pNewCell );
 

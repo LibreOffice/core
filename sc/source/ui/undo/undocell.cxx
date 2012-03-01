@@ -276,7 +276,7 @@ void ScUndoEnterData::Undo()
     ScDocument* pDoc = pDocShell->GetDocument();
     for (sal_uInt16 i=0; i<nCount; i++)
     {
-        ScBaseCell* pNewCell = ppOldCells[i] ? ppOldCells[i]->CloneWithoutNote( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
+        ScBaseCell* pNewCell = ppOldCells[i] ? ppOldCells[i]->Clone( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
         pDoc->PutCell( nCol, nRow, pTabs[i], pNewCell );
 
         if (pHasFormat && pOldFormats)
@@ -409,7 +409,7 @@ void ScUndoEnterValue::Undo()
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScBaseCell* pNewCell = pOldCell ? pOldCell->CloneWithoutNote( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
+    ScBaseCell* pNewCell = pOldCell ? pOldCell->Clone( *pDoc, SC_CLONECELL_STARTLISTENING ) : 0;
 
     pDoc->PutCell( aPos, pNewCell );
 
@@ -495,7 +495,7 @@ void ScUndoPutCell::Undo()
     BeginUndo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScBaseCell* pNewCell = pOldCell ? pOldCell->CloneWithoutNote( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
+    ScBaseCell* pNewCell = pOldCell ? pOldCell->Clone( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
 
     pDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pNewCell );
 
@@ -513,7 +513,7 @@ void ScUndoPutCell::Redo()
     BeginRedo();
 
     ScDocument* pDoc = pDocShell->GetDocument();
-    ScBaseCell* pNewCell = pEnteredCell ? pEnteredCell->CloneWithoutNote( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
+    ScBaseCell* pNewCell = pEnteredCell ? pEnteredCell->Clone( *pDoc, aPos, SC_CLONECELL_STARTLISTENING ) : 0;
 
     pDoc->PutCell( aPos.Col(), aPos.Row(), aPos.Tab(), pNewCell );
 

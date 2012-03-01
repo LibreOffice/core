@@ -226,7 +226,7 @@ void adjustDBRange(ScToken* pToken, ScDocument& rNewDoc, const ScDocument* pOldD
 
 } // namespace
 
-ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, int nCloneFlags ) const
+ScBaseCell* ScBaseCell::Clone( ScDocument& rDestDoc, int nCloneFlags ) const
 {
     // notes will not be cloned -> cell address only needed for formula cells
     ScAddress aDestPos;
@@ -235,15 +235,9 @@ ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, int nCloneFlags 
     return lclCloneCell( *this, rDestDoc, aDestPos, nCloneFlags );
 }
 
-ScBaseCell* ScBaseCell::CloneWithoutNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
+ScBaseCell* ScBaseCell::Clone( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
 {
     return lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
-}
-
-ScBaseCell* ScBaseCell::CloneWithNote( ScDocument& rDestDoc, const ScAddress& rDestPos, int nCloneFlags ) const
-{
-    ScBaseCell* pNewCell = lclCloneCell( *this, rDestDoc, rDestPos, nCloneFlags );
-    return pNewCell;
 }
 
 void ScBaseCell::Delete()

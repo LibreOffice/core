@@ -775,7 +775,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     ScAddress aOwnPos( nCol, nRow, nTab );
                     if (pCell->GetCellType() == CELLTYPE_FORMULA)
                     {
-                        pNew = pCell->CloneWithNote( *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
+                        pNew = pCell->Clone( *pDestDoc, aDestPos, SC_CLONECELL_STARTLISTENING );
 
                         //  Referenzen drehen
                         //  bei Cut werden Referenzen spaeter per UpdateTranspose angepasst
@@ -785,7 +785,7 @@ void ScTable::TransposeClip( SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
                     }
                     else
                     {
-                        pNew = pCell->CloneWithNote( *pDestDoc, aDestPos );
+                        pNew = pCell->Clone( *pDestDoc, aDestPos );
                     }
                 }
                 pTransClip->PutCell( static_cast<SCCOL>(nRow-nRow1), static_cast<SCROW>(nCol-nCol1), pNew );
@@ -3106,7 +3106,7 @@ void ScTable::CopyData( SCCOL nStartCol, SCROW nStartRow, SCCOL nEndCol, SCROW n
             ScBaseCell* pCell = GetCell( nCol, nRow );
             if (pCell)
             {
-                pCell = pCell->CloneWithoutNote( *pDocument );
+                pCell = pCell->Clone( *pDocument );
                 if (pCell->GetCellType() == CELLTYPE_FORMULA)
                 {
                     ((ScFormulaCell*)pCell)->UpdateReference( URM_COPY, aRange,
