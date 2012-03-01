@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
@@ -60,6 +61,7 @@ public:
     void testN695479();
     void testFdo42465();
     void testFdo45187();
+    void testFdo46662();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -69,6 +71,7 @@ public:
     CPPUNIT_TEST(testN695479);
     CPPUNIT_TEST(testFdo42465);
     CPPUNIT_TEST(testFdo45187);
+    CPPUNIT_TEST(testFdo46662);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -264,6 +267,38 @@ void RtfModelTest::testFdo45187()
     awt::Point aSecondPoint;
     aValue >>= aSecondPoint;
     CPPUNIT_ASSERT(aFirstPoint.Y != aSecondPoint.Y);
+}
+
+void RtfModelTest::testFdo46662()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo46662.rtf")));
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xNumberingStyles(xStyles->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingStyles"))), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xNumberingStyles->getByName(OUString(RTL_CONSTASCII_USTRINGPARAM("WWNum3"))), uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xLevels(xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NumberingRules"))), uno::UNO_QUERY);
+    uno::Any aValue = xLevels->getByIndex(1); // 2nd level
+    uno::Sequence<beans::PropertyValue> aProps;
+    aValue >>= aProps;
+
+    for (int i = 0; i < aProps.getLength(); ++i)
+    {
+        const beans::PropertyValue& rProp = aProps[i];
+
+        if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("ParentNumbering")))
+        {
+            sal_Int16 nValue;
+            rProp.Value >>= nValue;
+            CPPUNIT_ASSERT_EQUAL(sal_Int16(2), nValue);
+        }
+        else if (rProp.Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Suffix")))
+        {
+            rtl::OUString sValue;
+            rProp.Value >>= sValue;
+            CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sValue.getLength());
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
