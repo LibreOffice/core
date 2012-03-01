@@ -53,6 +53,7 @@
 using namespace com::sun::star;
 using namespace http_dav_ucp;
 
+
 // -------------------------------------------------------------------
 // static members!
 bool SerfSession::m_bGlobalsInited = false;
@@ -269,9 +270,13 @@ apr_status_t SerfSession::setupSerfConnection( apr_socket_t * inAprSocket,
         tmpInputBkt = serf_bucket_ssl_decrypt_create( tmpInputBkt,
                                                       0,
                                                       getSerfBktAlloc() );
-        serf_ssl_server_cert_callback_set( serf_bucket_ssl_decrypt_context_get( tmpInputBkt ),
-                                           Serf_CertificationValidation,
-                                           this );
+        /** Set the callback that is called to authenticate the
+            certifcate (chain).
+        */
+        serf_ssl_server_cert_chain_callback_set(
+            serf_bucket_ssl_decrypt_context_get(tmpInputBkt),
+            Serf_CertificateChainValidation,
+            this);
         serf_ssl_set_hostname( serf_bucket_ssl_decrypt_context_get( tmpInputBkt ),
                                getHostinfo() );
 
@@ -365,131 +370,152 @@ namespace {
     }
 } // namespace
 
-apr_status_t SerfSession::verifySerfCertificate( int inFailures,
-                                                 const serf_ssl_certificate_t * inCert )
-{
-    OSL_ASSERT( inCert );
 
+apr_status_t SerfSession::verifySerfCertificateChain (
+    int,
+    const char** pCertificateChainBase64Encoded,
+    const int nCertificateChainLength)
+{
+    // Check arguments.
+    if (pCertificateChainBase64Encoded == NULL || nCertificateChainLength<=0)
+    {
+        OSL_ASSERT(pCertificateChainBase64Encoded != NULL);
+        OSL_ASSERT(nCertificateChainLength>0);
+        return SERF_SSL_CERT_UNKNOWN_FAILURE;
+    }
+
+    // Create some crypto objects to decode and handle the base64
+    // encoded certificate chain.
+    uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
     uno::Reference< security::XCertificateContainer > xCertificateContainer;
+    uno::Reference< xml::crypto::XXMLSecurityContext > xSecurityContext;
+    uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnv;
     try
     {
-        xCertificateContainer
-            = uno::Reference< security::XCertificateContainer >(
-                getMSF()->createInstance(
-                    rtl::OUString::createFromAscii(
-                        "com.sun.star.security.CertificateContainer" ) ),
-                uno::UNO_QUERY );
+        // Create a certificate container.
+        xCertificateContainer = uno::Reference< security::XCertificateContainer >(
+            getMSF()->createInstance(
+                rtl::OUString::createFromAscii(
+                    "com.sun.star.security.CertificateContainer" ) ),
+            uno::UNO_QUERY_THROW);
+
+        xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
+            getMSF()->createInstance(
+                rtl::OUString::createFromAscii( "com.sun.star.xml.crypto.SEInitializer" ) ),
+            uno::UNO_QUERY_THROW);
+
+        xSecurityContext = xSEInitializer->createSecurityContext( rtl::OUString() );
+        if (xSecurityContext.is())
+            xSecurityEnv = xSecurityContext->getSecurityEnvironment();
+
+        if ( ! xSecurityContext.is() || ! xSecurityEnv.is())
+        {
+            // Do we have to dispose xSEInitializer or xCertificateContainer?
+            return SERF_SSL_CERT_UNKNOWN_FAILURE;
+        }
     }
-    catch ( uno::Exception const & )
+    catch ( uno::Exception const &)
     {
+        return SERF_SSL_CERT_UNKNOWN_FAILURE;
     }
 
-    if ( !xCertificateContainer.is() )
+    // Decode the server certificate.
+    uno::Reference< security::XCertificate > xServerCertificate(
+        xSecurityEnv->createCertificateFromAscii(
+            rtl::OUString::createFromAscii(pCertificateChainBase64Encoded[0])));
+    if ( ! xServerCertificate.is())
         return SERF_SSL_CERT_UNKNOWN_FAILURE;
 
-    inFailures = 0;
+    // Get the subject from the server certificate.
+    ::rtl::OUString sServerCertificateSubject (xServerCertificate->getSubjectName());
+    sal_Int32 nIndex = 0;
+    while (nIndex >= 0)
+    {
+        const ::rtl::OUString sToken (sServerCertificateSubject.getToken(0, ',', nIndex));
+        if (sToken.compareToAscii("CN=", 3) == 0)
+        {
+            sServerCertificateSubject = sToken.copy(3);
+            break;
+        }
+        else if (sToken.compareToAscii(" CN=", 4) == 0)
+        {
+            sServerCertificateSubject = sToken.copy(4);
+            break;
+        }
+    }
 
-    const char * subjectItem = static_cast<char*>(apr_hash_get( serf_ssl_cert_subject( inCert, getAprPool() ),
-                                                                "CN", APR_HASH_KEY_STRING ));
-    if ( subjectItem == 0 )
-    {
-        subjectItem = static_cast<char*>(apr_hash_get( serf_ssl_cert_subject( inCert, getAprPool() ),
-                                                       "OU", APR_HASH_KEY_STRING ));
-    }
-    rtl::OUString cert_subject;
-    if ( subjectItem != 0 )
-    {
-        cert_subject = rtl::OUString( subjectItem, strlen( subjectItem ), RTL_TEXTENCODING_UTF8, 0 );
-    }
-    else
-    {
-        rtl::OUString::createFromAscii( "unknown subject" );
-    }
-
-    security::CertificateContainerStatus certificateContainer(
+    // When the certificate container already contains a (trusted)
+    // entry for the server then we do not have to authenticate any
+    // certificate.
+    const security::CertificateContainerStatus eStatus (
         xCertificateContainer->hasCertificate(
-            getHostName(), cert_subject ) );
-
-    if ( certificateContainer != security::CertificateContainerStatus_NOCERT )
+            getHostName(), sServerCertificateSubject ) );
+    if (eStatus != security::CertificateContainerStatus_NOCERT)
     {
-        return certificateContainer == security::CertificateContainerStatus_TRUSTED
+        return eStatus == security::CertificateContainerStatus_TRUSTED
                ? APR_SUCCESS
                : SERF_SSL_CERT_UNKNOWN_FAILURE;
     }
 
-    uno::Reference< xml::crypto::XSEInitializer > xSEInitializer;
-    try
+    // The shortcut failed, so try to verify the whole chain.  This is
+    // done outside the isDomainMatch() block because the result is
+    // used by the interaction handler.
+    std::vector< uno::Reference< security::XCertificate > > aChain;
+    for (int nIndex=1; nIndex<nCertificateChainLength; ++nIndex)
     {
-        xSEInitializer = uno::Reference< xml::crypto::XSEInitializer >(
-            getMSF()->createInstance(
-                rtl::OUString::createFromAscii( "com.sun.star.xml.crypto.SEInitializer" ) ),
-            uno::UNO_QUERY );
-    }
-    catch ( uno::Exception const & )
-    {
-    }
-
-    if ( !xSEInitializer.is() )
-        return SERF_SSL_CERT_UNKNOWN_FAILURE;
-
-    uno::Reference< xml::crypto::XXMLSecurityContext > xSecurityContext(
-        xSEInitializer->createSecurityContext( rtl::OUString() ) );
-
-    uno::Reference< xml::crypto::XSecurityEnvironment > xSecurityEnv(
-        xSecurityContext->getSecurityEnvironment() );
-
-    //The end entity certificate
-    const char * eeCertB64 = serf_ssl_cert_export( inCert, getAprPool() );
-
-    rtl::OString sEECertB64( eeCertB64 );
-
-    uno::Reference< security::XCertificate > xEECert(
-        xSecurityEnv->createCertificateFromAscii(
-            rtl::OStringToOUString( sEECertB64, RTL_TEXTENCODING_ASCII_US ) ) );
-
-    std::vector< uno::Reference< security::XCertificate > > vecCerts;
-    const serf_ssl_certificate_t * issuerCert = inCert;
-    do
-    {
-        //get the intermediate certificate
-        issuerCert = NULL; // TODO - figure out how to retrieve certificate chain - ssl_cert_signedby( issuerCert );
-        if ( NULL == issuerCert )
-            break;
-
-        const char * imCertB64 = serf_ssl_cert_export( issuerCert, getAprPool() );
-        rtl::OString sInterMediateCertB64( imCertB64 );
-
-        uno::Reference< security::XCertificate> xImCert(
+        uno::Reference< security::XCertificate > xCertificate(
             xSecurityEnv->createCertificateFromAscii(
-                rtl::OStringToOUString(
-                    sInterMediateCertB64, RTL_TEXTENCODING_ASCII_US ) ) );
-        if ( xImCert.is() )
-            vecCerts.push_back( xImCert );
+                rtl::OUString::createFromAscii(pCertificateChainBase64Encoded[nIndex])));
+        if ( ! xCertificate.is())
+            return SERF_SSL_CERT_UNKNOWN_FAILURE;
+        aChain.push_back(xCertificate);
     }
-    while ( 1 );
+    const sal_Int64 nVerificationResult (xSecurityEnv->verifyCertificate(
+            xServerCertificate,
+            ::comphelper::containerToSequence(aChain)));
 
-    sal_Int64 certValidity = xSecurityEnv->verifyCertificate( xEECert,
-        ::comphelper::containerToSequence( vecCerts ) );
-
-    if ( isDomainMatch( GetHostnamePart( xEECert.get()->getSubjectName() ) ) )
+    // When the certificate matches the host name then we can use the
+    // result of the verification.
+    if (isDomainMatch(sServerCertificateSubject))
     {
-        // if host name matched with certificate then look if the
-        // certificate was ok
-        if( certValidity == security::CertificateValidity::VALID )
+
+        if (nVerificationResult == 0)
+        {
+            // Certificate (chain) is valid.
+            xCertificateContainer->addCertificate(getHostName(), sServerCertificateSubject,  sal_True);
             return APR_SUCCESS;
+        }
+        else if ((nVerificationResult & security::CertificateValidity::CHAIN_INCOMPLETE) != 0)
+        {
+            // We do not have enough information for verification,
+            // neither automatically (as we just discovered) nor
+            // manually (so there is no point in showing any dialog.)
+            return SERF_SSL_CERT_UNKNOWN_FAILURE;
+        }
+        else if ((nVerificationResult &
+                (security::CertificateValidity::INVALID | security::CertificateValidity::REVOKED)) != 0)
+        {
+            // Certificate (chain) is invalid.
+            xCertificateContainer->addCertificate(getHostName(), sServerCertificateSubject,  sal_False);
+            return SERF_SSL_CERT_UNKNOWN_FAILURE;
+        }
+        else
+        {
+            // For all other we have to ask the user.
+        }
     }
 
+    // We have not been able to automatically verify (or falsify) the
+    // certificate chain.  To resolve this we have to ask the user.
     const uno::Reference< ucb::XCommandEnvironment > xEnv( getRequestEnvironment().m_xEnv );
     if ( xEnv.is() )
     {
-        inFailures = static_cast< int >( certValidity );
-
         uno::Reference< task::XInteractionHandler > xIH( xEnv->getInteractionHandler() );
         if ( xIH.is() )
         {
             rtl::Reference< ucbhelper::SimpleCertificateValidationRequest >
                 xRequest( new ucbhelper::SimpleCertificateValidationRequest(
-                    (sal_Int32)inFailures, xEECert, getHostName() ) );
+                        static_cast<sal_Int32>(nVerificationResult), xServerCertificate, getHostName() ) );
             xIH->handle( xRequest.get() );
 
             rtl::Reference< ucbhelper::InteractionContinuation > xSelection
@@ -501,13 +527,13 @@ apr_status_t SerfSession::verifySerfCertificate( int inFailures,
                     xSelection.get(), uno::UNO_QUERY );
                 if ( xApprove.is() )
                 {
-                    xCertificateContainer->addCertificate( getHostName(), cert_subject,  sal_True );
+                    xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject,  sal_True );
                     return APR_SUCCESS;
                 }
                 else
                 {
                     // Don't trust cert
-                    xCertificateContainer->addCertificate( getHostName(), cert_subject, sal_False );
+                    xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject, sal_False );
                     return SERF_SSL_CERT_UNKNOWN_FAILURE;
                 }
             }
@@ -515,10 +541,11 @@ apr_status_t SerfSession::verifySerfCertificate( int inFailures,
         else
         {
             // Don't trust cert
-            xCertificateContainer->addCertificate( getHostName(), cert_subject, sal_False );
+            xCertificateContainer->addCertificate( getHostName(), sServerCertificateSubject, sal_False );
             return SERF_SSL_CERT_UNKNOWN_FAILURE;
         }
     }
+
     return SERF_SSL_CERT_UNKNOWN_FAILURE;
 }
 

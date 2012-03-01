@@ -94,8 +94,10 @@ public:
                                          const char *inRealm,
                                          apr_pool_t *inAprPool );
 
-    apr_status_t verifySerfCertificate( int inFailures,
-                                        const serf_ssl_certificate_t * inCert );
+    apr_status_t verifySerfCertificateChain (
+        int nFailures,
+        const char** pCertificateChainBase64Encoded,
+        int nCertificateChainLength);
 
     serf_bucket_t* acceptSerfResponse( serf_request_t * inSerfRequest,
                                        serf_bucket_t * inSerfStreamBucket,

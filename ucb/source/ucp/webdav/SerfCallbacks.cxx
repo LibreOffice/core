@@ -61,13 +61,14 @@ extern "C" apr_status_t Serf_Credentials( char **username,
                                              pool );
 }
 
-extern "C" apr_status_t Serf_CertificationValidation( void *data,
-                                                      int failures,
-                                                      const serf_ssl_certificate_t *cert )
+extern "C" apr_status_t Serf_CertificateChainValidation(
+    void* pSerfSession,
+    int nFailures,
+    const char** pCertificateChainBase64Encoded,
+    int nCertificateChainLength)
 {
-    SerfSession* pSerfSession = static_cast< SerfSession* >( data );
-    return pSerfSession->verifySerfCertificate( failures,
-                                                cert );
+    return static_cast<SerfSession*>(pSerfSession)
+        ->verifySerfCertificateChain(nFailures, pCertificateChainBase64Encoded, nCertificateChainLength);
 }
 
 extern "C" apr_status_t Serf_SetupRequest( serf_request_t *request,

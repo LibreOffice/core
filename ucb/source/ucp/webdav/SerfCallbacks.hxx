@@ -40,9 +40,11 @@ extern "C" apr_status_t Serf_Credentials( char **username,
                                           const char *realm,
                                           apr_pool_t *pool );
 
-extern "C" apr_status_t Serf_CertificationValidation( void *data,
-                                                      int failures,
-                                                      const serf_ssl_certificate_t *cert );
+extern "C" apr_status_t Serf_CertificateChainValidation(
+    void* pSerfSession,
+    int nFailures,
+    const char** pCertificateChainBase64Encoded,
+    int nCertificateChainLength);
 
 extern "C" apr_status_t Serf_SetupRequest( serf_request_t *request,
                                            void *setup_baton,
