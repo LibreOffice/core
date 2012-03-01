@@ -27,6 +27,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <cstring>
+
 #include "rtfattributeoutput.hxx"
 #include "rtfsdrexport.hxx"
 #include "writerwordglue.hxx"
@@ -3211,7 +3215,7 @@ static OString ExportPICT( const SwFlyFrmFmt* pFlyFrmFmt, const Size &rOrig, con
     unsigned long nSize, const RtfExport& rExport )
 {
     OStringBuffer aRet;
-    bool bIsWMF = (const char *)pBLIPType == (const char *)OOO_STRING_SVTOOLS_RTF_WMETAFILE ? true : false;
+    bool bIsWMF = std::strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE) == 0;
     if (pBLIPType && nSize && pGraphicAry)
     {
         aRet.append("{" OOO_STRING_SVTOOLS_RTF_PICT);
@@ -3431,7 +3435,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
        the wmf format wrapped in nonshppict, so as to keep wordpad happy. If its
        a wmf already then we don't need any such wrapping
        */
-    bool bIsWMF = (const sal_Char*)pBLIPType == (const sal_Char*)OOO_STRING_SVTOOLS_RTF_WMETAFILE ? true : false;
+    bool bIsWMF = std::strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE) == 0;
     if (!bIsWMF)
         m_aRunText.append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
 
