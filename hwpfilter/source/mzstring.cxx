@@ -30,10 +30,6 @@
  *   supposed to be used instead of std::string
  */
 
-#ifdef __GNUG__
-#pragma implementation "mzstring.h"
-#endif
-
 #include "mzstring.h"
 
 #ifndef WIN32

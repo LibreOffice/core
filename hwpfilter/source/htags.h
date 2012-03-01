@@ -29,10 +29,6 @@
 #ifndef _HTAGS_H_
 #define _HTAGS_H_
 
-#ifdef __GNUG__
-#pragma interface
-#endif
-
 class HWPFile;
 /**
  * @short Embeded image
