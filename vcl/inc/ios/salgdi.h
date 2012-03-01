@@ -43,7 +43,7 @@ class IosSalFrame;
 class IosSalBitmap;
 class ImplDevFontAttributes;
 
-class CGRect;
+struct CGRect;
 
 // mac specific physically available font face
 class ImplIosFontData : public ImplFontData

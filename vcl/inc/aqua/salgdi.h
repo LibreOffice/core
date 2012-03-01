@@ -47,7 +47,7 @@ class AquaSalFrame;
 class AquaSalBitmap;
 class ImplDevFontAttributes;
 
-class CGRect;
+struct CGRect;
 
 // mac specific physically available font face
 class ImplMacFontData : public ImplFontData
