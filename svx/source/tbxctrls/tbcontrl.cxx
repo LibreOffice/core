@@ -2319,8 +2319,6 @@ void SvxColorExtToolBoxControl::StateChanged(
     sal_uInt16 nSID, SfxItemState eState, const SfxPoolItem* pState )
 
 {
-    sal_uInt16 nId = GetId();
-    ToolBox& rTbx = GetToolBox();
     const SvxColorItem* pItem = 0;
     if ( bChoiceFromPalette )
     {
