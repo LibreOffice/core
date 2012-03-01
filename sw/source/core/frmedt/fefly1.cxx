@@ -1943,7 +1943,7 @@ void SwFEShell::GetConnectableFrmFmts(SwFrmFmt & rFmt,
     /* potential successors resp. predecessors */
     ::std::vector< const SwFrmFmt * > aTmpSpzArray;
 
-    (SwFrmFmt *) pDoc->FindFlyByName(rReference);
+    pDoc->FindFlyByName(rReference);
 
     for (sal_uInt16 n = 0; n < nCnt; n++)
     {
