@@ -952,7 +952,7 @@ sal_uLong ScDocument::TransferTab( ScDocument* pSrcDoc, SCTAB nSrcPos,
 
         // Copy the RTL settings
         maTabs[nDestPos]->SetLayoutRTL(pSrcDoc->maTabs[nSrcPos]->IsLayoutRTL());
-        maTabs[nDestPos]->SetLoadingRTL(pSrcDoc->maTabs[nDestPos]->IsLoadingRTL());
+        maTabs[nDestPos]->SetLoadingRTL(pSrcDoc->maTabs[nSrcPos]->IsLoadingRTL());
     }
     else                        // bestehende Tabelle ersetzen
     {
