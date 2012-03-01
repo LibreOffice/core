@@ -502,8 +502,8 @@ sal_Bool IosSalFrame::GetWindowState( SalFrameState* pState )
                      SAL_FRAMESTATE_MASK_HEIGHT            |
                      SAL_FRAMESTATE_MASK_STATE;
 
-    CGRect aStateRect = [mpWindow frame];
 #if 0 // ???
+    CGRect aStateRect = [mpWindow frame];
     aStateRect = [UIWindow contentRectForFrameRect: aStateRect styleMask: mnStyleMask];
     CocoaTouchToVCL( aStateRect );
     pState->mnX         = long(aStateRect.origin.x);
@@ -805,8 +805,8 @@ void IosSalFrame::SetPosSize(long /*nX*/, long /*nY*/, long /*nWidth*/, long /*n
         nEvent = (nEvent == SALEVENT_MOVE) ? SALEVENT_MOVERESIZE : SALEVENT_RESIZE;
     }
 
-    CGRect aFrameRect = [mpWindow frame];
 #if 0 // ???
+    CGRect aFrameRect = [mpWindow frame];
     CGRect aContentRect = [NSWindow contentRectForFrameRect: aFrameRect styleMask: mnStyleMask];
 
     // position is always relative to parent frame
