@@ -34,6 +34,7 @@
 #include <brdwin.hxx>
 #include <window.h>
 
+#include <vcl/edit.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/wrkwin.hxx>
@@ -399,6 +400,10 @@ void MessBox::ImplPosControls()
         mpCheckBox->Show();
     }
 
+    AddButton( String( ResId( SV_BUTTONTEXT_COPY, *ImplGetResMgr() ) ), BUTTON_COPY, 0 );
+    Button* pCopyBtn = GetPushButton( BUTTON_COPY );
+    pCopyBtn->SetClickHdl( LINK( this, MessBox, ClickHdl ) );
+
     mpFixedText = new FixedText( this, nWinStyle );
     if( mpFixedText->GetStyle() & WB_EXTRAOFFSET ) // TODO: use CalcMinimumSize() instead
         aFixedSize.Width() += 2;
@@ -406,6 +411,15 @@ void MessBox::ImplPosControls()
     mpFixedText->SetText( aMessText );
     mpFixedText->Show();
     SetPageSizePixel( aPageSize );
+}
+
+IMPL_LINK( MessBox, ClickHdl, Button*, pBtn )
+{
+    Edit aCopyHelper( this );
+    aCopyHelper.SetText( maMessText, Selection( 0, maMessText.Len() ) );
+    aCopyHelper.Copy();
+
+    return 0;
 }
 
 // -----------------------------------------------------------------------

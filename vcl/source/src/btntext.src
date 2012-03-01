@@ -69,6 +69,11 @@ String SV_BUTTONTEXT_LESS
     Text [ en-US ] = "~Less";
 };
 
+String SV_BUTTONTEXT_COPY
+{
+    Text [ en-US ] = "Copy to Clipboard";
+};
+
 String SV_BUTTONTEXT_IGNORE
 {
     Text [ en-US ] = "~Ignore";

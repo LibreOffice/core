@@ -34,6 +34,8 @@
 #include <vcl/btndlg.hxx>
 #include <vcl/image.hxx>
 #include <vcl/bitmap.hxx>
+#include <vcl/button.hxx>
+
 class FixedText;
 class FixedImage;
 class CheckBox;
@@ -104,6 +106,8 @@ public:
     sal_Bool                GetCheckBoxState() const;
 
     virtual Size        GetOptimalSize(WindowSizeType eType) const;
+
+    DECL_LINK( ClickHdl, Button* );
 };
 
 // -----------
