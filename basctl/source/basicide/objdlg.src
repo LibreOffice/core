@@ -36,7 +36,7 @@ FloatingWindow RID_BASICIDE_OBJCAT
     OutputSize = TRUE ;
     SVLook = TRUE ;
     Size = MAP_APPFONT ( 191 , 179 ) ;
-    Text [ en-US ] = "Objects" ;
+    Text [ en-US ] = "Object Catalog" ;
     Closeable = TRUE ;
     Moveable = TRUE ;
     Sizeable = TRUE ;
