@@ -2161,32 +2161,6 @@ bool CharAttribList::DbgCheckAttribs() const
 }
 #endif
 
-SvxFontTable::SvxFontTable()
-{
-}
-
-SvxFontTable::~SvxFontTable()
-{
-    SvxFontItem* pItem = First();
-    while( pItem )
-    {
-        delete pItem;
-        pItem = Next();
-    }
-}
-
-sal_uLong SvxFontTable::GetId( const SvxFontItem& rFontItem )
-{
-    SvxFontItem* pItem = First();
-    while ( pItem )
-    {
-        if ( *pItem == rFontItem )
-            return GetCurKey();
-        pItem = Next();
-    }
-    DBG_WARNING( "Font not found: GetId()" );
-    return 0;
-}
 
 SvxColorList::SvxColorList()
 {

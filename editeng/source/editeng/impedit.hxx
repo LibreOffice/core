@@ -80,7 +80,6 @@ DBG_NAMEEX( EditEngine )
 
 class EditView;
 class EditEngine;
-class SvxFontTable;
 class SvxColorList;
 
 class SvxSearchItem;
@@ -640,9 +639,9 @@ private:
     sal_uInt32          WriteBin( SvStream& rOutput, EditSelection aSel, sal_Bool bStoreUnicode = sal_False ) const;
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
-                        SvxFontTable& rFontTable, SvxColorList& rColorList );
+                        std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList );
     sal_Bool            WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
-                        SvxFontTable& rFontTable, SvxColorList& rColorList );
+                        std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList );
     sal_Int32               LogicToTwips( sal_Int32 n );
 
     inline short        GetXValue( short nXValue ) const;

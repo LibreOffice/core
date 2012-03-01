@@ -277,7 +277,7 @@ sal_uInt32 ImpEditEngine::WriteText( SvStream& rOutput, EditSelection aSel )
 }
 
 sal_Bool ImpEditEngine::WriteItemListAsRTF( ItemList& rLst, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
-                        SvxFontTable& rFontTable, SvxColorList& rColorList )
+                        std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList )
 {
     const SfxPoolItem* pAttrItem = rLst.First();
     while ( pAttrItem )
@@ -358,11 +358,11 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     rtl_TextEncoding eDestEnc = RTL_TEXTENCODING_MS_1252;
 
     // Generate and write out Font table  ...
-    SvxFontTable aFontTable;
+    std::vector<SvxFontItem*> aFontTable;
     // default font must be up front, so DEF font in RTF
-    aFontTable.Insert( 0, new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO ) ) );
-    aFontTable.Insert( 1, new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CJK ) ) );
-    aFontTable.Insert( 2, new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CTL ) ) );
+    aFontTable.push_back( new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO ) ) );
+    aFontTable.push_back( new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CJK ) ) );
+    aFontTable.push_back( new SvxFontItem( (const SvxFontItem&)aEditDoc.GetItemPool().GetDefaultItem( EE_CHAR_FONTINFO_CTL ) ) );
     for ( sal_uInt16 nScriptType = 0; nScriptType < 3; nScriptType++ )
     {
         sal_uInt16 nWhich = EE_CHAR_FONTINFO;
@@ -376,14 +376,14 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
         while ( pFontItem )
         {
             bool bAlreadyExist = false;
-            sal_uLong nTestMax = nScriptType ? aFontTable.Count() : 1;
+            sal_uLong nTestMax = nScriptType ? aFontTable.size() : 1;
             for ( sal_uLong nTest = 0; !bAlreadyExist && ( nTest < nTestMax ); nTest++ )
             {
-                bAlreadyExist = *aFontTable.Get( nTest ) == *pFontItem;
+                bAlreadyExist = *aFontTable[ nTest ] == *pFontItem;
             }
 
             if ( !bAlreadyExist )
-                aFontTable.Insert( aFontTable.Count(), new SvxFontItem( *pFontItem ) );
+                aFontTable.push_back( new SvxFontItem( *pFontItem ) );
 
             pFontItem = (SvxFontItem*)aEditDoc.GetItemPool().GetItem2( nWhich, ++i );
         }
@@ -391,9 +391,9 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
     rOutput << endl << '{' << OOO_STRING_SVTOOLS_RTF_FONTTBL;
     sal_uInt16 j;
-    for ( j = 0; j < aFontTable.Count(); j++ )
+    for ( j = 0; j < aFontTable.size(); j++ )
     {
-        SvxFontItem* pFontItem = aFontTable.Get( j );
+        SvxFontItem* pFontItem = aFontTable[ j ];
         rOutput << '{';
         rOutput << OOO_STRING_SVTOOLS_RTF_F;
         rOutput.WriteNumber( static_cast<sal_uInt32>( j ) );
@@ -703,7 +703,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
 
 
 void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
-                            SvxFontTable& rFontTable, SvxColorList& rColorList )
+                            std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList )
 {
     sal_uInt16 nWhich = rItem.Which();
     switch ( nWhich )
@@ -810,7 +810,7 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
         {
-            sal_uInt32 n = rFontTable.GetId( (const SvxFontItem&)rItem );
+            sal_uInt32 n = std::find(rFontTable.begin(), rFontTable.end(), (SvxFontItem*)&rItem ) - rFontTable.begin();
             rOutput << OOO_STRING_SVTOOLS_RTF_F;
             rOutput.WriteNumber( n );
         }
