@@ -3245,7 +3245,7 @@ int RTFDocumentImpl::popState()
         aFrame = m_aStates.top().aFrame;
         bPopFrame = true;
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_DRAWINGOBJECT)
+    else if (m_aStates.top().nDestinationState == DESTINATION_DRAWINGOBJECT && m_aStates.top().aDrawingObject.xShape.is())
     {
         RTFDrawingObject& rDrawing = m_aStates.top().aDrawingObject;
         uno::Reference<drawing::XShape> xShape(rDrawing.xShape);
