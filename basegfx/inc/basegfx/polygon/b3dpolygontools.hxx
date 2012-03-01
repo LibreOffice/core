@@ -76,9 +76,6 @@ namespace basegfx
         // get area of polygon
         BASEGFX_DLLPUBLIC double getArea(const ::basegfx::B3DPolygon& rCandidate);
 
-        // get length of polygon edge from point nIndex to nIndex + 1
-        BASEGFX_DLLPUBLIC double getEdgeLength(const B3DPolygon& rCandidate, sal_uInt32 nIndex);
-
         // get length of polygon
         BASEGFX_DLLPUBLIC double getLength(const B3DPolygon& rCandidate);
 

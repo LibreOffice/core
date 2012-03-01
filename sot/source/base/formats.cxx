@@ -1548,63 +1548,6 @@ sal_uInt16 SotExchange::GetExchangeAction( const DataFlavorExVector& rDataFlavor
 
 // -----------------------------------------------------------------------------
 
-sal_uInt16 SotExchange::GetExchangeAction(
-                        const Reference< XTransferable >& rxTransferable,
-                        sal_uInt16 nDestination, sal_uInt16 nSourceOptions,
-                        sal_uInt16 nUserAction, sal_uLong& rFormat,
-                        sal_uInt16& rDefaultAction, sal_uLong nOnlyTestFormat )
-{
-    DataFlavorExVector aVector;
-
-    if( rxTransferable.is() )
-    {
-        try
-        {
-            const Sequence< DataFlavor > aFlavors( rxTransferable->getTransferDataFlavors() );
-
-            for( sal_Int32 i = 0; i < aFlavors.getLength(); i++ )
-            {
-                DataFlavorEx        aFlavorEx;
-                const DataFlavor&   rFlavor = aFlavors[ i ];
-
-                aFlavorEx.MimeType = rFlavor.MimeType;
-                aFlavorEx.HumanPresentableName = rFlavor.HumanPresentableName;
-                aFlavorEx.DataType = rFlavor.DataType;
-                aFlavorEx.mnSotId = SotExchange::RegisterFormat( rFlavor );
-
-                aVector.push_back( aFlavorEx );
-
-                if( ( SOT_FORMATSTR_ID_BMP == aFlavorEx.mnSotId ) &&
-                    !IsFormatSupported( aVector, SOT_FORMAT_BITMAP ) )
-                {
-                    if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_BITMAP, aFlavorEx ) )
-                    {
-                        aFlavorEx.mnSotId = SOT_FORMAT_BITMAP;
-                        aVector.push_back( aFlavorEx );
-                    }
-                }
-                else if( ( ( SOT_FORMATSTR_ID_WMF == aFlavorEx.mnSotId ) ||
-                           ( SOT_FORMATSTR_ID_EMF == aFlavorEx.mnSotId ) ) &&
-                         !IsFormatSupported( aVector, SOT_FORMAT_GDIMETAFILE ) )
-                {
-                    if( SotExchange::GetFormatDataFlavor( SOT_FORMAT_GDIMETAFILE, aFlavorEx ) )
-                    {
-                        aFlavorEx.mnSotId = SOT_FORMAT_GDIMETAFILE;
-                        aVector.push_back( aFlavorEx );
-                    }
-                }
-            }
-        }
-        catch( const ::com::sun::star::uno::Exception& )
-        {
-        }
-    }
-
-    return( SotExchange::GetExchangeAction( aVector, nDestination, nSourceOptions,
-                                            nUserAction, rFormat, rDefaultAction,
-                                            nOnlyTestFormat, &rxTransferable ) );
-}
-
 sal_uInt16 SotExchange::IsChart(  const SvGlobalName& rName )
 {
     sal_uInt16 nRet=0;

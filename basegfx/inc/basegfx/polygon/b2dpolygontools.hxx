@@ -316,9 +316,6 @@ namespace basegfx
         // distort polygon. rOriginal describes the original range, where the given points describe the distorted corresponding points.
         BASEGFX_DLLPUBLIC B2DPolygon distort(const B2DPolygon& rCandidate, const B2DRange& rOriginal, const B2DPoint& rTopLeft, const B2DPoint& rTopRight, const B2DPoint& rBottomLeft, const B2DPoint& rBottomRight);
 
-        // rotate polygon around given point with given angle.
-        BASEGFX_DLLPUBLIC B2DPolygon rotateAroundPoint(const B2DPolygon& rCandidate, const B2DPoint& rCenter, double fAngle);
-
         // expand all segments (which are not yet) to curve segments. This is done with setting the control
         // vectors on the 1/3 resp. 2/3 distances on each segment.
         BASEGFX_DLLPUBLIC B2DPolygon expandToCurve(const B2DPolygon& rCandidate);
@@ -326,9 +323,6 @@ namespace basegfx
         // expand given segment to curve segment. This is done with setting the control
         // vectors on the 1/3 resp. 2/3 distances. The return value describes if a change took place.
         BASEGFX_DLLPUBLIC bool expandToCurveInPoint(B2DPolygon& rCandidate, sal_uInt32 nIndex);
-
-        // set continuity for the whole curve. If not a curve, nothing will change. Non-curve points are not changed, too.
-        B2DPolygon setContinuity(const B2DPolygon& rCandidate, B2VectorContinuity eContinuity);
 
         // set continuity for given index. If not a curve, nothing will change. Non-curve points are not changed, too.
         // The return value describes if a change took place.

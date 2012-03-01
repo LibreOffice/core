@@ -2549,21 +2549,6 @@ namespace basegfx
             }
         }
 
-        B2DPolygon rotateAroundPoint(const B2DPolygon& rCandidate, const B2DPoint& rCenter, double fAngle)
-        {
-            const sal_uInt32 nPointCount(rCandidate.count());
-            B2DPolygon aRetval(rCandidate);
-
-            if(nPointCount)
-            {
-                const B2DHomMatrix aMatrix(basegfx::tools::createRotateAroundPoint(rCenter, fAngle));
-
-                aRetval.transform(aMatrix);
-            }
-
-            return aRetval;
-        }
-
         B2DPolygon expandToCurve(const B2DPolygon& rCandidate)
         {
             B2DPolygon aRetval(rCandidate);
@@ -2616,18 +2601,6 @@ namespace basegfx
             }
 
             return bRetval;
-        }
-
-        B2DPolygon setContinuity(const B2DPolygon& rCandidate, B2VectorContinuity eContinuity)
-        {
-            B2DPolygon aRetval(rCandidate);
-
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-            {
-                setContinuityInPoint(aRetval, a, eContinuity);
-            }
-
-            return aRetval;
         }
 
         bool setContinuityInPoint(B2DPolygon& rCandidate, sal_uInt32 nIndex, B2VectorContinuity eContinuity)

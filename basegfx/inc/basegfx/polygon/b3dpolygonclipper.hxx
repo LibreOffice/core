@@ -52,13 +52,6 @@ namespace basegfx
             B3DORIENTATION_Z        // Z-Axis
         };
 
-        // Clip given 3D polygon against a plane orthogonal to X,Y or Z axis. The plane is defined using the
-        // enum ePlaneOrthogonal which names the vector orthogonal to the plane, the fPlaneOffset gives the distance
-        // of the plane from the center (0.0).
-        // The value bClipPositive defines on which side the return value will be (true -> on positive side of plane).
-        // The switch bStroke decides if the polygon is interpreted as area (false) or strokes (true).
-        BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolyPolygonOnOrthogonalPlane(const B3DPolyPolygon& rCandidate, B3DOrientation ePlaneOrthogonal, bool bClipPositive, double fPlaneOffset, bool bStroke);
-
         // version for Polygons
         BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolygonOnOrthogonalPlane(const B3DPolygon& rCandidate, B3DOrientation ePlaneOrthogonal, bool bClipPositive, double fPlaneOffset, bool bStroke);
 

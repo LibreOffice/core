@@ -294,18 +294,6 @@ namespace basegfx
             return aRetval;
         }
 
-        B3DPolyPolygon clipPolyPolygonOnOrthogonalPlane(const B3DPolyPolygon& rCandidate, B3DOrientation ePlaneOrthogonal, bool bClipPositive, double fPlaneOffset, bool bStroke)
-        {
-            B3DPolyPolygon aRetval;
-
-            for(sal_uInt32 a(0L); a < rCandidate.count(); a++)
-            {
-                aRetval.append(clipPolygonOnOrthogonalPlane(rCandidate.getB3DPolygon(a), ePlaneOrthogonal, bClipPositive, fPlaneOffset, bStroke));
-            }
-
-            return aRetval;
-        }
-
     } // end of namespace tools
 } // end of namespace basegfx
 

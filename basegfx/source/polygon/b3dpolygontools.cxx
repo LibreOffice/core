@@ -153,27 +153,6 @@ namespace basegfx
             return fRetval;
         }
 
-        double getEdgeLength(const B3DPolygon& rCandidate, sal_uInt32 nIndex)
-        {
-            OSL_ENSURE(nIndex < rCandidate.count(), "getEdgeLength: Access to polygon out of range (!)");
-            double fRetval(0.0);
-            const sal_uInt32 nPointCount(rCandidate.count());
-
-            if(nIndex < nPointCount)
-            {
-                if(rCandidate.isClosed() || ((nIndex + 1L) != nPointCount))
-                {
-                    const sal_uInt32 nNextIndex(getIndexOfSuccessor(nIndex, rCandidate));
-                    const B3DPoint aCurrentPoint(rCandidate.getB3DPoint(nIndex));
-                    const B3DPoint aNextPoint(rCandidate.getB3DPoint(nNextIndex));
-                    const B3DVector aVector(aNextPoint - aCurrentPoint);
-                    fRetval = aVector.getLength();
-                }
-            }
-
-            return fRetval;
-        }
-
         double getLength(const B3DPolygon& rCandidate)
         {
             double fRetval(0.0);
