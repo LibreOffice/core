@@ -49,7 +49,7 @@
  int raptor_sax2_init(void);
 --- misc/raptor-1.4.18/src/raptor_libxml.c.old	2008-06-14 05:35:27.000000000 +0200
 +++ misc/build/raptor-1.4.18/src/raptor_libxml.c	2012-02-15 16:52:08.000000000 +0100
-@@ -142,18 +142,115 @@ raptor_libxml_hasExternalSubset (void* u
+@@ -142,18 +142,126 @@ raptor_libxml_hasExternalSubset (void* u
  
  static xmlParserInputPtr
  raptor_libxml_resolveEntity(void* user_data, 
@@ -161,9 +161,20 @@
 +    
 +    ret->owner = 1;
 +
++/* ret->checked was added with commit a37a6ad91a61d168ecc4b29263def3363fff4da6
++   in libxml2 before 2.6.27 it does not exist and ret->children != 0 will be
++   tested instead, which is true due to xmlAddChildList above */
++#if LIBXML_VERSION >= 20627 || !defined(__APPLE__)
 +    /* Mark this entity as having been checked - never do this again */
 +    if(!ret->checked)
 +      ret->checked = 1;
++#else
++    if (atoi(xmlParserVersion) >= 20627) {
++        int *const pChecked = (&ret->owner) + 1;
++        if (!*pChecked) /* owner precedes checked and is also of type int */
++          *pChecked = 1;
++    }
++#endif
 +  }
 +
 +  return ret;
