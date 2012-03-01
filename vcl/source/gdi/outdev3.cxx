@@ -2394,7 +2394,7 @@ ImplFontEntry* ImplFontCache::GetFontEntry( ImplDevFontList* pFontList,
         aFontSelData.mpFontData = pFontData;
         bool bNewIsSymbol = aFontSelData.mpFontData && aFontSelData.mpFontData->IsSymbolFont();
 
-        if (bNewIsSymbol || bOrigWasSymbol)
+        if (bNewIsSymbol != bOrigWasSymbol)
         {
             // it is possible, though generally unlikely, that at this point we
             // will attempt to use a symbol font as a last-ditch fallback for a
