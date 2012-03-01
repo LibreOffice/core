@@ -66,19 +66,17 @@ namespace connectivity
         };
         //////////////////////////////////////////////////////////////////////////
         //
-        // Template-Klasse WpOLEBase<class T>
+        // Template class WpOLEBase<class T>
         // ==================================
         //
-        // Objekte dieser Klasse haelt einen Zeiger auf ein Interface vom Typ T.
-        // Es gibt Konstruktoren und Zuweisungsoperator die sicherstellen, dass
-        // AddRef() und Release() entsprechend den COM-Konventionen gerufen werden.
-        // Ein Objekt kann auch keinen Zeiger halten (Nullzeiger), dann ergibt
-        // der Aufruf von IsValid() FALSE.
+        // Objects of this class contain a pointer to an interface of the type T.
+        // The ctors and operator= make sure, that AddRef() and Release() are being
+        // called adhering to COM conventions.
+        // An object can also hold no pointer (null pointer), calling IsValid() then
+        // returns false.
         //
-        // Um effizientes pass-by-value machen zu koennen, ist diese (ebenso wie die
-        // abgeleiteten Klassen) eine ganz schmale Wrapper-Klasse unter Vermeidung
-        // virtueller Methoden und mit Inlining.
-
+        // In order to do efficient pass-by-value, this class (as all derived classes)
+        // is a thin wrapper class, avoiding virtual methods and inlining.
         //------------------------------------------------------------------------
         template<class T> class WpOLEBase : public WpBase
         {
@@ -124,29 +122,28 @@ namespace connectivity
 
         //////////////////////////////////////////////////////////////////////////
         //
-        // Template-Klasse WpOLECollection<class Ts, class T, class WrapT>
+        // Template class WpOLECollection<class Ts, class T, class WrapT>
         // ===============================================================
         //
-        // Diese Klasse, welche sich von WpOLEBase<Ts> ableitet, abstrahiert die
-        // den DAO-Collections gemeinsamen Eigenschaften:
+        // This class (derived from WpOLEBase<Ts>), abstracts away the properties
+        // common to DAO collections:
         //
-        // Sie werden ueber ein Interface Ts (etwa: DAOFields) angesprochen
-        // und koennen ueber get_Item (hier:GetItem) Items des Typs T (genauer:
-        // mit Interface T, etwa DAOField) herausgeben.
+        // They are accessed via an interface Ts (e.g. DAOFields) and can return
+        // Items of the Type T (actually: with the interface T, e.g. DAOField)
+        // via get_Item (here GetItem).
         //
-        // Diese Wrapperklasse gibt aber nicht ein Interface T heraus,
-        // sondern ein Objekt der Klasse WrapT. Dieses muss eine Konstruktion
-        // durch T zulassen, vorzugsweise ist es von WpOLEBase<T> abgeleitet.
+        // This wrapper class does not expose an interface T, however,
+        // it exposes an object of the class WrapT. This must allow a construction
+        // by T, preferably it is derived from WpOLEBase<T>.
         //
-
         //------------------------------------------------------------------------
         template<class Ts, class T, class WrapT> class WpOLECollection : public WpOLEBase<Ts>
         {
         public:
             using WpOLEBase<Ts>::pInterface;
             using WpOLEBase<Ts>::IsValid;
-            // Konstruktoren, operator=
-            // diese rufen nur die Oberklasse
+            // Ctors, operator=
+            // They only call the superclass
             WpOLECollection(Ts* pInt=NULL):WpOLEBase<Ts>(pInt){}
             WpOLECollection(const WpOLECollection& rhs){operator=(rhs);}
             inline WpOLECollection& operator=(const WpOLECollection& rhs)
@@ -219,8 +216,8 @@ namespace connectivity
         {
 
         public:
-            // Konstruktoren, operator=
-            // diese rufen nur die Oberklasse
+            // Ctors, operator=
+            // They only call the superclass
             using WpOLEBase<Ts>::pInterface;
             WpOLEAppendCollection(Ts* pInt=NULL):WpOLECollection<Ts,T,WrapT>(pInt){}
             WpOLEAppendCollection(const WpOLEAppendCollection& rhs){ operator=(rhs); }

@@ -42,12 +42,12 @@ namespace connectivity
     class java_util_Date : public java_lang_Object
     {
     protected:
-    // statische Daten fuer die Klasse
+    // Static data for the class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
         virtual ~java_util_Date();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_util_Date( JNIEnv * pEnv, jobject myObj ) : java_lang_Object( pEnv, myObj ){}
     };
 }

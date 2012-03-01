@@ -47,7 +47,7 @@ namespace connectivity
     public:
         virtual jclass getMyClass() const;
         virtual ~java_sql_Date();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_Date( JNIEnv * pEnv, jobject myObj ) : java_util_Date(pEnv,myObj){}
         java_sql_Date( const ::com::sun::star::util::Date& _rOut );
 
@@ -68,7 +68,7 @@ namespace connectivity
     public:
         virtual jclass getMyClass() const;
         virtual ~java_sql_Time();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_Time( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}
         java_sql_Time( const ::com::sun::star::util::Time& _rOut );
         operator ::com::sun::star::util::Time();
@@ -86,7 +86,7 @@ namespace connectivity
     public:
         virtual jclass getMyClass() const;
         virtual ~java_sql_Timestamp();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_Timestamp( JNIEnv * pEnv, jobject myObj ) : java_util_Date( pEnv, myObj ){}
         java_sql_Timestamp( const ::com::sun::star::util::DateTime& _rOut);
         operator ::com::sun::star::util::DateTime();

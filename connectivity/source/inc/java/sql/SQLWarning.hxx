@@ -41,12 +41,12 @@ namespace connectivity
     class java_sql_SQLWarning_BASE : public java_sql_SQLException_BASE
     {
     protected:
-    // statische Daten fuer die Klasse
+    // Static data for the class
         static jclass theClass;
     public:
         virtual jclass getMyClass() const;
         virtual ~java_sql_SQLWarning_BASE();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_SQLWarning_BASE( JNIEnv * pEnv, jobject myObj ) : java_sql_SQLException_BASE( pEnv, myObj ){}
 
     };

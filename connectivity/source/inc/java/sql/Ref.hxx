@@ -42,13 +42,13 @@ namespace connectivity
                             public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XRef>
     {
     protected:
-    // statische Daten fuer die Klasse
+    // Static data for the class
         static jclass theClass;
         virtual ~java_sql_Ref();
     public:
         virtual jclass getMyClass() const;
 
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_Ref( JNIEnv * pEnv, jobject myObj );
 
         // XRef

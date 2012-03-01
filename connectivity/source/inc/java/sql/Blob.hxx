@@ -43,13 +43,13 @@ namespace connectivity
                             public ::cppu::WeakImplHelper1< ::com::sun::star::sdbc::XBlob>
     {
     protected:
-    // statische Daten fuer die Klasse
+    // Static data for the class
         static jclass theClass;
         virtual ~java_sql_Blob();
     public:
         virtual jclass getMyClass() const;
 
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_Blob( JNIEnv * pEnv, jobject myObj );
 
         // XBlob

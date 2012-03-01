@@ -85,7 +85,7 @@ namespace connectivity
         ::rtl::OUString impl_getJavaDriverClassPath_nothrow(const ::rtl::OUString& _sDriverClass);
 
     protected:
-    // statische Daten fuer die Klasse
+    // Static data for the class
         static jclass theClass;
 
         virtual ~java_sql_Connection();
@@ -94,7 +94,7 @@ namespace connectivity
         virtual jclass getMyClass() const;
 
         DECLARE_SERVICE_INFO();
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_Connection( const java_sql_Driver& _rDriver );
         sal_Bool construct( const ::rtl::OUString& url,
                         const ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& info);

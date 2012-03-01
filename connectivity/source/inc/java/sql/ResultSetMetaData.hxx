@@ -47,13 +47,13 @@ namespace connectivity
         java_sql_Connection*        m_pConnection;
         sal_Int32                   m_nColumnCount;
 
-        // statische Daten fuer die Klasse
+        // Static data for the class
         static jclass theClass;
         virtual ~java_sql_ResultSetMetaData();
     public:
         virtual jclass getMyClass() const;
 
-        // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+        // A ctor that is needed for returning the object
         java_sql_ResultSetMetaData( JNIEnv * pEnv, jobject myObj, const java::sql::ConnectionLog& _rResultSetLogger, java_sql_Connection& _rCon  );
 
         virtual sal_Int32 SAL_CALL getColumnCount(  ) throw(::com::sun::star::sdbc::SQLException, ::com::sun::star::uno::RuntimeException);

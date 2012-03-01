@@ -30,7 +30,7 @@
 
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 
-// Includes fuer ADO
+// Includes for ADO
 #include "ado_pre_sys_include.h"
 #include <oledb.h>
 #include <ocidl.h>
@@ -152,8 +152,8 @@ namespace connectivity
         {
         public:
             WpADOCommand(){}
-            // Konstruktoren, operator=
-            // diese rufen nur die Oberklasse
+            // Ctors, operator=
+            // They only call the superclass
             WpADOCommand(ADOCommand* pInt)  :   WpOLEBase<ADOCommand>(pInt){}
 
             WpADOCommand(const WpADOCommand& rhs){operator=(rhs);}
@@ -181,7 +181,7 @@ namespace connectivity
              ADOParameters* get_Parameters() const;
              sal_Bool put_CommandType( /* [in] */ CommandTypeEnum lCmdType);
              CommandTypeEnum get_CommandType( ) const ;
-            // gibt den Namen des Feldes zur"ueck
+             // Returns the field's name
              ::rtl::OUString GetName() const ;
              sal_Bool put_Name(const ::rtl::OUString& _Name);
              sal_Bool Cancel();
@@ -191,9 +191,8 @@ namespace connectivity
         {
         public:
 
-            // Konstruktoren, operator=
-            // diese rufen nur die Oberklasse
-
+            // Ctors, operator=
+            // They only call the superclass
             WpADOError(ADOError* pInt):WpOLEBase<ADOError>(pInt){}
 
             WpADOError(const WpADOError& rhs){operator=(rhs);}
@@ -218,8 +217,8 @@ namespace connectivity
             //  friend class WpADOFields;
         public:
 
-            // Konstruktoren, operator=
-            // diese rufen nur die Oberklasse
+            // Ctors, operator=
+            // They only call the superclass
             WpADOField(ADOField* pInt=NULL):WpOLEBase<ADOField>(pInt){}
             WpADOField(const WpADOField& rhs){operator=(rhs);}
 
@@ -232,7 +231,7 @@ namespace connectivity
              sal_Int32 GetAttributes() const ;
              sal_Int32 GetStatus() const      ;
              sal_Int32 GetDefinedSize() const ;
-            // gibt den Namen des Feldes zur"ueck
+             // Returns the field's name
              ::rtl::OUString GetName() const ;
              DataTypeEnum GetADOType() const  ;
              void get_Value(OLEVariant& aValVar) const ;
@@ -266,8 +265,8 @@ namespace connectivity
         class WpADOProperty: public WpOLEBase<ADOProperty>
         {
         public:
-            // Konstruktoren, operator=
-            // diese rufen nur die Oberklasse
+            // Ctors, operator=
+            // They only call the superclass
             WpADOProperty(ADOProperty* pInt=NULL):WpOLEBase<ADOProperty>(pInt){}
             WpADOProperty(const WpADOProperty& rhs){operator=(rhs);}
              WpADOProperty& operator=(const WpADOProperty& rhs)
@@ -288,8 +287,8 @@ namespace connectivity
         {
 
         public:
-            // Konstruktoren, operator=
-            // diese rufen nur die Oberklasse
+            // Ctors, operator=
+            // They only call the superclass
             WpADORecordset(ADORecordset* pInt=NULL):WpOLEBase<ADORecordset>(pInt){}
             WpADORecordset(const WpADORecordset& rhs){operator=(rhs);}
              WpADORecordset& operator=(const WpADORecordset& rhs)
@@ -353,8 +352,8 @@ namespace connectivity
         class WpADOParameter:public WpOLEBase<ADOParameter>
         {
         public:
-            // Konstruktoren, operator=
-            // diese rufen nur die Oberklasse
+            // Ctors, operator=
+            // They only call the superclass
             WpADOParameter(ADOParameter* pInt):WpOLEBase<ADOParameter>(pInt){}
             WpADOParameter(const WpADOParameter& rhs):WpOLEBase<ADOParameter>(rhs){}
              WpADOParameter& operator=(const WpADOParameter& rhs)
