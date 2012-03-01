@@ -274,7 +274,7 @@ IMPLIBFLAGS=-o
 MAPSYM=mapsym
 MAPSYMFLAGS=
 
-RC=wrc -bt=os2 -i$(PATH_EMXPGCC)\include
+RC=wrc -q -bt=os2 -i$(PATH_EMXPGCC)\include
 RCFLAGS=-r $(RCFILES) -fo=$@
 RCLINK=wrc -bt=os2
 RCLINKFLAGS=

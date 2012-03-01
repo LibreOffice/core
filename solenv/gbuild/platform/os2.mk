@@ -19,8 +19,6 @@
 #
 #*************************************************************************
 
-include $(GBUILDDIR)/gmsl
-
 GUI := OS2
 COM := GCC
 
@@ -104,12 +102,7 @@ gb_CXXFLAGS := \
 	-I$(JAVA_HOME)/include \
 	-I$(JAVA_HOME)/include/os2
 
-#	-fvisibility-inlines-hidden \
-#	-fvisibility=hidden \
-#
-
 gb_STDLIBS = \
-	icule \
 	z \
 	stdc++ \
 
@@ -305,17 +298,16 @@ gb_LinkTarget_INCLUDE_STL := $(filter %/stl, $(subst -I. , ,$(SOLARINC)))
 
 gb_LinkTarget_get_pdbfile = $(call gb_LinkTarget_get_target,)pdb/$(1).pdb
 
-DLLBASE8 = $(call substr,$(notdir $(DLLTARGET:.dll=)),1,8)
-DLLTARGET8 = $(dir $(DLLTARGET))$(DLLBASE8)$(gb_Library_DLLEXT)
-DLLDEF8 = $(dir $(DLLTARGET))$(DLLBASE8).def
+DLLBASE = $(notdir $(DLLTARGET:.dll=))
+DLLDEF = $(dir $(DLLTARGET))$(DLLBASE).def
 
 define gb_LinkTarget__command_dynamiclinkexecutable
 $(call gb_Output_announce,$(2),$(true),LNK,4)
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	rm -f $(1) && \
-	$(if $(DLLTARGET), echo LIBRARY	  $(DLLBASE8) INITINSTANCE TERMINSTANCE	 > $(DLLDEF8) &&) \
-	$(if $(DLLTARGET), echo DATA MULTIPLE	>> $(DLLDEF8) &&) \
+	$(if $(DLLTARGET), echo LIBRARY	$(DLLBASE) INITINSTANCE TERMINSTANCE > $(DLLDEF) &&) \
+	$(if $(DLLTARGET), echo DATA MULTIPLE >> $(DLLDEF) &&) \
 	RESPONSEFILE=$(call var2filecr,$(shell $(gb_MKTEMP)),1, \
 	    $(call gb_Helper_convert_native,$(foreach object,$(CXXOBJECTS),$(call gb_CxxObject_get_target,$(object))) \
 		$(foreach object,$(GENCXXOBJECTS),$(call gb_GenCxxObject_get_target,$(object))) \
@@ -327,15 +319,14 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(filter Executable,$(TARGETTYPE)),$(gb_Executable_TARGETTYPEFLAGS)) \
 		$(LDFLAGS) \
 		@$${RESPONSEFILE} \
-		$(if $(DLLTARGET), $(DLLDEF8)) \
+		$(if $(DLLTARGET), $(DLLDEF)) \
 		$(NATIVERES) \
 		$(patsubst %.lib,-l%,$(foreach lib,$(LINKED_LIBS),$(call gb_Library_get_filename,$(lib)))) \
 		$(patsubst %,-l%,$(EXTERNAL_LIBS)) \
 		$(foreach lib,$(LINKED_STATIC_LIBS),$(call gb_StaticLibrary_get_target,$(lib))) \
-		$(if $(DLLTARGET),-o $(DLLTARGET8), -o $(1) ); \
+		$(if $(DLLTARGET),-o $(DLLTARGET), -o $(1) ); \
 		RC=$$?; rm $${RESPONSEFILE} \
-	$(if $(DLLTARGET),; emximp -p2048 -o $(1) $(DLLTARGET8) ) \
-	$(if $(DLLTARGET),; cp -p $(DLLTARGET8) $(DLLTARGET)) \
+	$(if $(DLLTARGET),; emximp -p2048 -o $(1) $(DLLTARGET) ) \
 	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) ; exit $$RC)
 endef
 
@@ -370,8 +361,7 @@ gb_Library_SYSPRE :=
 gb_Library_PLAINEXT := .lib
 
 gb_Library_PLAINLIBS_NONE += \
-	$(gb_STDLIBS) \
-	icule \
+	stdc++ \
 	ft2lib \
 	dl \
 	freetype \
@@ -394,7 +384,8 @@ gb_Library_LAYER := \
 	$(foreach lib,$(gb_Library_UNOVERLIBS),$(lib):OOO) \
 
 gb_Library_FILENAMES :=\
-	$(foreach lib,$(gb_Library_TARGETS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT)) \
+	$(foreach lib,$(gb_Library_TARGETS),$(lib):$(gb_Library_SYSPRE)$(lib)$(gb_Library_PLAINEXT))
+
 
 gb_Library_DLLEXT := .dll
 gb_Library_MAJORVER :=
@@ -467,10 +458,8 @@ $(call gb_Library_get_clean_target,$(1)) : $(call gb_WinResTarget_get_clean_targ
 endef
 
 define gb_Library_add_nativeres
-$(info info $(1)/$(2))
 $(call gb_LinkTarget_get_target,$(call gb_Library__get_linktargetname,$(1))) : $(call gb_WinResTarget_get_target,$(1)/$(2))
 $(call gb_LinkTarget_get_target,$(call gb_Library__get_linktargetname,$(1))) : NATIVERES += $(call gb_WinResTarget_get_target,$(1)/$(2))
-$(info NATIVERES $(NATIVERES))
 
 endef
 

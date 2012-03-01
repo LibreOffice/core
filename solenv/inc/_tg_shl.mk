@@ -244,13 +244,6 @@ $(MISC)/%linkinc.ls:
 SHL1TARGET8=$(shell @fix_shl.cmd $(SHL1TARGET))
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-_SHL1IMP_ORD = $(SHL1STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL1STDLIBS:^"$(LB)/") 
-SHL1IMP_ORD = $(foreach,i,$(_SHL1IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL1IMP_ORD = 
-.ENDIF
-
 
 $(SHL1TARGETN) : \
                     $(SHL1OBJS)\
@@ -260,7 +253,6 @@ $(SHL1TARGETN) : \
                     $(USE_SHL1VERSIONMAP)\
                     $(SHL1RES)\
                     $(SHL1DEPN) \
-                    $(SHL1IMP_ORD) \
                     $(SHL1LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -517,7 +509,7 @@ $(SHL1TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)$(SHL1LINKER) -v 	$(SHL1LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL1LINKER) $(SHL1LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL1BASEX)		\
         $(SHL1STACK) -o $(SHL1TARGETN)	\
         $(SHL1DEF) \
@@ -789,13 +781,6 @@ $(MISC)/%linkinc.ls:
 SHL2TARGET8=$(shell @fix_shl.cmd $(SHL2TARGET))
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-_SHL2IMP_ORD = $(SHL2STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL2STDLIBS:^"$(LB)/") 
-SHL2IMP_ORD = $(foreach,i,$(_SHL2IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL2IMP_ORD = 
-.ENDIF
-
 
 $(SHL2TARGETN) : \
                     $(SHL2OBJS)\
@@ -805,7 +790,6 @@ $(SHL2TARGETN) : \
                     $(USE_SHL2VERSIONMAP)\
                     $(SHL2RES)\
                     $(SHL2DEPN) \
-                    $(SHL2IMP_ORD) \
                     $(SHL2LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -1062,7 +1046,7 @@ $(SHL2TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)$(SHL2LINKER) -v 	$(SHL2LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL2LINKER) $(SHL2LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL2BASEX)		\
         $(SHL2STACK) -o $(SHL2TARGETN)	\
         $(SHL2DEF) \
@@ -1334,13 +1318,6 @@ $(MISC)/%linkinc.ls:
 SHL3TARGET8=$(shell @fix_shl.cmd $(SHL3TARGET))
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-_SHL3IMP_ORD = $(SHL3STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL3STDLIBS:^"$(LB)/") 
-SHL3IMP_ORD = $(foreach,i,$(_SHL3IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL3IMP_ORD = 
-.ENDIF
-
 
 $(SHL3TARGETN) : \
                     $(SHL3OBJS)\
@@ -1350,7 +1327,6 @@ $(SHL3TARGETN) : \
                     $(USE_SHL3VERSIONMAP)\
                     $(SHL3RES)\
                     $(SHL3DEPN) \
-                    $(SHL3IMP_ORD) \
                     $(SHL3LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -1607,7 +1583,7 @@ $(SHL3TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)$(SHL3LINKER) -v 	$(SHL3LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL3LINKER) $(SHL3LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL3BASEX)		\
         $(SHL3STACK) -o $(SHL3TARGETN)	\
         $(SHL3DEF) \
@@ -1879,13 +1855,6 @@ $(MISC)/%linkinc.ls:
 SHL4TARGET8=$(shell @fix_shl.cmd $(SHL4TARGET))
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-_SHL4IMP_ORD = $(SHL4STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL4STDLIBS:^"$(LB)/") 
-SHL4IMP_ORD = $(foreach,i,$(_SHL4IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL4IMP_ORD = 
-.ENDIF
-
 
 $(SHL4TARGETN) : \
                     $(SHL4OBJS)\
@@ -1895,7 +1864,6 @@ $(SHL4TARGETN) : \
                     $(USE_SHL4VERSIONMAP)\
                     $(SHL4RES)\
                     $(SHL4DEPN) \
-                    $(SHL4IMP_ORD) \
                     $(SHL4LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -2152,7 +2120,7 @@ $(SHL4TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)$(SHL4LINKER) -v 	$(SHL4LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL4LINKER) $(SHL4LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL4BASEX)		\
         $(SHL4STACK) -o $(SHL4TARGETN)	\
         $(SHL4DEF) \
@@ -2424,13 +2392,6 @@ $(MISC)/%linkinc.ls:
 SHL5TARGET8=$(shell @fix_shl.cmd $(SHL5TARGET))
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-_SHL5IMP_ORD = $(SHL5STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL5STDLIBS:^"$(LB)/") 
-SHL5IMP_ORD = $(foreach,i,$(_SHL5IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL5IMP_ORD = 
-.ENDIF
-
 
 $(SHL5TARGETN) : \
                     $(SHL5OBJS)\
@@ -2440,7 +2401,6 @@ $(SHL5TARGETN) : \
                     $(USE_SHL5VERSIONMAP)\
                     $(SHL5RES)\
                     $(SHL5DEPN) \
-                    $(SHL5IMP_ORD) \
                     $(SHL5LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -2697,7 +2657,7 @@ $(SHL5TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)$(SHL5LINKER) -v 	$(SHL5LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL5LINKER) $(SHL5LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL5BASEX)		\
         $(SHL5STACK) -o $(SHL5TARGETN)	\
         $(SHL5DEF) \
@@ -2969,13 +2929,6 @@ $(MISC)/%linkinc.ls:
 SHL6TARGET8=$(shell @fix_shl.cmd $(SHL6TARGET))
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-_SHL6IMP_ORD = $(SHL6STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL6STDLIBS:^"$(LB)/") 
-SHL6IMP_ORD = $(foreach,i,$(_SHL6IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL6IMP_ORD = 
-.ENDIF
-
 
 $(SHL6TARGETN) : \
                     $(SHL6OBJS)\
@@ -2985,7 +2938,6 @@ $(SHL6TARGETN) : \
                     $(USE_SHL6VERSIONMAP)\
                     $(SHL6RES)\
                     $(SHL6DEPN) \
-                    $(SHL6IMP_ORD) \
                     $(SHL6LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -3242,7 +3194,7 @@ $(SHL6TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)$(SHL6LINKER) -v 	$(SHL6LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL6LINKER) $(SHL6LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL6BASEX)		\
         $(SHL6STACK) -o $(SHL6TARGETN)	\
         $(SHL6DEF) \
@@ -3514,13 +3466,6 @@ $(MISC)/%linkinc.ls:
 SHL7TARGET8=$(shell @fix_shl.cmd $(SHL7TARGET))
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-_SHL7IMP_ORD = $(SHL7STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL7STDLIBS:^"$(LB)/") 
-SHL7IMP_ORD = $(foreach,i,$(_SHL7IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL7IMP_ORD = 
-.ENDIF
-
 
 $(SHL7TARGETN) : \
                     $(SHL7OBJS)\
@@ -3530,7 +3475,6 @@ $(SHL7TARGETN) : \
                     $(USE_SHL7VERSIONMAP)\
                     $(SHL7RES)\
                     $(SHL7DEPN) \
-                    $(SHL7IMP_ORD) \
                     $(SHL7LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -3787,7 +3731,7 @@ $(SHL7TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)$(SHL7LINKER) -v 	$(SHL7LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL7LINKER) $(SHL7LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL7BASEX)		\
         $(SHL7STACK) -o $(SHL7TARGETN)	\
         $(SHL7DEF) \
@@ -4059,13 +4003,6 @@ $(MISC)/%linkinc.ls:
 SHL8TARGET8=$(shell @fix_shl.cmd $(SHL8TARGET))
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-_SHL8IMP_ORD = $(SHL8STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL8STDLIBS:^"$(LB)/") 
-SHL8IMP_ORD = $(foreach,i,$(_SHL8IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL8IMP_ORD = 
-.ENDIF
-
 
 $(SHL8TARGETN) : \
                     $(SHL8OBJS)\
@@ -4075,7 +4012,6 @@ $(SHL8TARGETN) : \
                     $(USE_SHL8VERSIONMAP)\
                     $(SHL8RES)\
                     $(SHL8DEPN) \
-                    $(SHL8IMP_ORD) \
                     $(SHL8LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -4332,7 +4268,7 @@ $(SHL8TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)$(SHL8LINKER) -v 	$(SHL8LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL8LINKER) $(SHL8LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL8BASEX)		\
         $(SHL8STACK) -o $(SHL8TARGETN)	\
         $(SHL8DEF) \
@@ -4604,13 +4540,6 @@ $(MISC)/%linkinc.ls:
 SHL9TARGET8=$(shell @fix_shl.cmd $(SHL9TARGET))
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-_SHL9IMP_ORD = $(SHL9STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL9STDLIBS:^"$(LB)/") 
-SHL9IMP_ORD = $(foreach,i,$(_SHL9IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL9IMP_ORD = 
-.ENDIF
-
 
 $(SHL9TARGETN) : \
                     $(SHL9OBJS)\
@@ -4620,7 +4549,6 @@ $(SHL9TARGETN) : \
                     $(USE_SHL9VERSIONMAP)\
                     $(SHL9RES)\
                     $(SHL9DEPN) \
-                    $(SHL9IMP_ORD) \
                     $(SHL9LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -4877,7 +4805,7 @@ $(SHL9TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)$(SHL9LINKER) -v 	$(SHL9LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL9LINKER) $(SHL9LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL9BASEX)		\
         $(SHL9STACK) -o $(SHL9TARGETN)	\
         $(SHL9DEF) \
@@ -5149,13 +5077,6 @@ $(MISC)/%linkinc.ls:
 SHL10TARGET8=$(shell @fix_shl.cmd $(SHL10TARGET))
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-_SHL10IMP_ORD = $(SHL10STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL10STDLIBS:^"$(LB)/") 
-SHL10IMP_ORD = $(foreach,i,$(_SHL10IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL10IMP_ORD = 
-.ENDIF
-
 
 $(SHL10TARGETN) : \
                     $(SHL10OBJS)\
@@ -5165,7 +5086,6 @@ $(SHL10TARGETN) : \
                     $(USE_SHL10VERSIONMAP)\
                     $(SHL10RES)\
                     $(SHL10DEPN) \
-                    $(SHL10IMP_ORD) \
                     $(SHL10LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -5422,7 +5342,7 @@ $(SHL10TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)$(SHL10LINKER) -v 	$(SHL10LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL10LINKER) $(SHL10LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL10BASEX)		\
         $(SHL10STACK) -o $(SHL10TARGETN)	\
         $(SHL10DEF) \

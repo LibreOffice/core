@@ -269,13 +269,6 @@ $(MISC)/%linkinc.ls:
 SHL$(TNR)TARGET8=$(shell @fix_shl.cmd $(SHL$(TNR)TARGET))
 .ENDIF
 
-.IF "$(GUI)" == "OS2"
-_SHL$(TNR)IMP_ORD = $(SHL$(TNR)STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(SHL$(TNR)STDLIBS:^"$(LB)/") 
-SHL$(TNR)IMP_ORD = $(foreach,i,$(_SHL$(TNR)IMP_ORD) $(shell @-ls $i))
-.ELSE
-SHL$(TNR)IMP_ORD = 
-.ENDIF
-
 
 $(SHL$(TNR)TARGETN) : \
                     $(SHL$(TNR)OBJS)\
@@ -285,7 +278,6 @@ $(SHL$(TNR)TARGETN) : \
                     $(USE_SHL$(TNR)VERSIONMAP)\
                     $(SHL$(TNR)RES)\
                     $(SHL$(TNR)DEPN) \
-                    $(SHL$(TNR)IMP_ORD) \
                     $(SHL$(TNR)LINKLIST)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)" == "WNT"
@@ -542,7 +534,7 @@ $(SHL$(TNR)TARGETN) : \
 
 .ELSE			# "$(USE_DEFFILE)"!=""
 
-    $(COMMAND_ECHO)$(SHL$(TNR)LINKER) -v 	$(SHL$(TNR)LINKFLAGS)			\
+    $(COMMAND_ECHO)$(SHL$(TNR)LINKER) $(SHL$(TNR)LINKFLAGS)			\
         $(LINKFLAGSSHL) $(SHL$(TNR)BASEX)		\
         $(SHL$(TNR)STACK) -o $(SHL$(TNR)TARGETN)	\
         $(SHL$(TNR)DEF) \
