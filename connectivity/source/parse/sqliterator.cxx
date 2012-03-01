@@ -72,8 +72,8 @@ namespace connectivity
         Reference< XNameAccess >        m_xTableContainer;
         Reference< XNameAccess >        m_xQueryContainer;
 
-        ::boost::shared_ptr< OSQLTables >   m_pTables;      /// all tables which participate in the SQL statement
-        ::boost::shared_ptr< OSQLTables >   m_pSubTables;   /// all tables from sub queries not the tables from the select tables
+        ::boost::shared_ptr< OSQLTables >   m_pTables;      // all tables which participate in the SQL statement
+        ::boost::shared_ptr< OSQLTables >   m_pSubTables;   // all tables from sub queries not the tables from the select tables
         ::boost::shared_ptr< QueryNameSet > m_pForbiddenQueryNames;
 
         sal_uInt32                      m_nIncludeMask;
@@ -216,14 +216,14 @@ void OSQLParseTreeIterator::setParseTree(const OSQLParseNode * pNewParseTree)
         return;
     }
 
-    // falls m_pParseTree aber keine Connection, dann Fehler
+    // If m_pParseTree, but no connection then return
     if ( !m_pImpl->m_xTableContainer.is() )
         return;
 
     m_aErrors = SQLException();
 
 
-    // Statement-Typ ermitteln ...
+    // Determine statement type ...
     if (SQL_ISRULE(m_pParseTree,select_statement) || SQL_ISRULE(m_pParseTree,union_statement) )
     {
         m_eStatementType = SQL_STATEMENT_SELECT;
@@ -456,7 +456,7 @@ void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQ
     ::rtl::OUString aSchema,aTableName,aComposedName;
     ::rtl::OUString aTableRange(rTableRange);
 
-    // Tabellenname abholen
+    // Get table name
     OSQLParseNode::getTableComponents(pTableName,aCatalog,aSchema,aTableName,m_pImpl->m_xDatabaseMetaData);
 
     // create the composed name like DOMAIN.USER.TABLE1
@@ -479,16 +479,16 @@ void OSQLParseTreeIterator::traverseOneTableName( OSQLTables& _rTables,const OSQ
 //-----------------------------------------------------------------------------
 void OSQLParseTreeIterator::impl_fillJoinConditions(const OSQLParseNode* i_pJoinCondition)
 {
-    if (i_pJoinCondition->count() == 3 &&   // Ausdruck is geklammert
+    if (i_pJoinCondition->count() == 3 &&   // Expression with brackets
         SQL_ISPUNCTUATION(i_pJoinCondition->getChild(0),"(") &&
         SQL_ISPUNCTUATION(i_pJoinCondition->getChild(2),")"))
     {
         impl_fillJoinConditions(i_pJoinCondition->getChild(1));
     }
-    else if (SQL_ISRULEOR2(i_pJoinCondition,search_condition,boolean_term)  &&          // AND/OR-Verknuepfung:
+    else if (SQL_ISRULEOR2(i_pJoinCondition,search_condition,boolean_term)  &&  // AND/OR logic operation:
              i_pJoinCondition->count() == 3)
     {
-        // nur AND Verkn�pfung zulassen
+        // Only allow AND logic operation
         if ( SQL_ISTOKEN(i_pJoinCondition->getChild(1),AND) )
         {
             impl_fillJoinConditions(i_pJoinCondition->getChild(0));
@@ -498,7 +498,7 @@ void OSQLParseTreeIterator::impl_fillJoinConditions(const OSQLParseNode* i_pJoin
     else if (SQL_ISRULE(i_pJoinCondition,comparison_predicate))
     {
         // only the comparison of columns is allowed
-        OSL_ENSURE(i_pJoinCondition->count() == 3,"OQueryDesignView::InsertJoinConnection: Fehler im Parse Tree");
+        OSL_ENSURE(i_pJoinCondition->count() == 3,"OQueryDesignView::InsertJoinConnection: error in the parse tree");
         if (SQL_ISRULE(i_pJoinCondition->getChild(0),column_ref) &&
               SQL_ISRULE(i_pJoinCondition->getChild(2),column_ref) &&
                i_pJoinCondition->getChild(1)->getNodeType() == SQL_NODE_EQUAL)
@@ -540,7 +540,7 @@ void OSQLParseTreeIterator::getQualified_join( OSQLTables& _rTables, const OSQLP
             else
             {
                 const OSQLParseNode* pColumnCommalist = pJoin_spec->getChild(2);
-                // Alle Columns in der column_commalist ...
+                // All columns in the column_commalist ...
                 for (sal_uInt32 i = 0; i < pColumnCommalist->count(); i++)
                 {
                     const OSQLParseNode * pCol = pColumnCommalist->getChild(i);
@@ -631,7 +631,7 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLP
     const OSQLParseNode* pTableName = NULL;
     ::rtl::OUString aTableRange;
     for (sal_uInt32 i = 0; i < pTableRefCommalist->count(); i++)
-    { // from clause durchlaufen
+    {   // Process FROM clause
         aTableRange = ::rtl::OUString();
 
         const OSQLParseNode* pTableListElement = pTableRefCommalist->getChild(i);
@@ -641,10 +641,10 @@ void OSQLParseTreeIterator::getSelect_statement(OSQLTables& _rTables,const OSQLP
         }
         else if ( SQL_ISRULE( pTableListElement, table_ref ) )
         {
-            // Tabellenreferenz kann aus Tabellennamen, Tabellennamen (+),'('joined_table')'(+) bestehen
+            // Table refereneces can be made up of table names, table names (+),'('joined_table')'(+)
             pTableName = pTableListElement->getChild(0);
             if( isTableNode( pTableName ) )
-            {   // Tabellennamen gefunden
+            {   // Found table names
                 aTableRange = OSQLParseNode::getTableRange(pTableListElement);
                 traverseOneTableName( _rTables, pTableName, aTableRange );
             }
@@ -762,7 +762,7 @@ namespace
             }
         }
         else if(SQL_ISRULE(_pColumnRef,general_set_fct) || SQL_ISRULE(_pColumnRef,set_fct_spec))
-        { // Funktion
+        { // Function
             _pColumnRef->parseNodeToStr( _out_rColumnName, _rxConnection );
         }
         else  if(_pColumnRef->getNodeType() == SQL_NODE_NAME)
@@ -803,14 +803,14 @@ void OSQLParseTreeIterator::getColumnRange( const OSQLParseNode* _pColumnRef,
 sal_Bool OSQLParseTreeIterator::getColumnTableRange(const OSQLParseNode* pNode, ::rtl::OUString &rTableRange) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseTreeIterator::getColumnTableRange" );
-    // Ermitteln ob alle Spalten zu einer Tabelle gehoeren
+    // See if all columns belong to one table
     if (SQL_ISRULE(pNode,column_ref))
     {
         ::rtl::OUString aColName, aTableRange;
         getColumnRange(pNode, aColName, aTableRange);
         if (aTableRange.isEmpty())   // keinen gefunden
         {
-            // dann die Spalte in den Tabellen suchen
+            // Look for the columns in the tables
             for (ConstOSQLTablesIterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter)
             {
                 if (aIter->second.is())
@@ -936,7 +936,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
     }
 
     static ::rtl::OUString aEmptyString;
-    // nyi: mehr Pruefung auf korrekte Struktur!
+    // nyi: more checks for correct structure!
     if (pSelectNode->getChild(2)->isRule() && SQL_ISPUNCTUATION(pSelectNode->getChild(2)->getChild(0),"*"))
     {
         // SELECT * ...
@@ -957,7 +957,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 pColumnRef->getChild(0)->count() == 3 &&
                 SQL_ISPUNCTUATION(pColumnRef->getChild(0)->getChild(2),"*"))
             {
-                // alle Spalten der Tabelle
+                // All the table's columns
                 ::rtl::OUString aTableRange;
                 pColumnRef->getChild(0)->parseNodeToStr( aTableRange, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
                 setSelectColumnName(m_aSelectColumns,::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("*")), aEmptyString,aTableRange);
@@ -965,7 +965,7 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
             }
             else if (SQL_ISRULE(pColumnRef,derived_column))
             {
-                ::rtl::OUString aColumnAlias(getColumnAlias(pColumnRef)); // kann leer sein
+                ::rtl::OUString aColumnAlias(getColumnAlias(pColumnRef)); // can be empty
                 ::rtl::OUString sColumnName;
                 ::rtl::OUString aTableRange;
                 sal_Int32 nType = DataType::VARCHAR;
@@ -981,20 +981,20 @@ bool OSQLParseTreeIterator::traverseSelectColumnNames(const OSQLParseNode* pSele
                 if (SQL_ISRULE(pColumnRef,column_ref))
                 {
                     getColumnRange(pColumnRef,sColumnName,aTableRange);
-                    OSL_ENSURE(!sColumnName.isEmpty(),"Columnname darf nicht leer sein");
+                    OSL_ENSURE(!sColumnName.isEmpty(),"Column name must not be empty!");
                 }
                 else /*if (SQL_ISRULE(pColumnRef,general_set_fct) || SQL_ISRULE(pColumnRef,set_fct_spec)    ||
                          SQL_ISRULE(pColumnRef,position_exp)    || SQL_ISRULE(pColumnRef,extract_exp)   ||
                          SQL_ISRULE(pColumnRef,length_exp)      || SQL_ISRULE(pColumnRef,char_value_fct)||
                          SQL_ISRULE(pColumnRef,num_value_exp)   || SQL_ISRULE(pColumnRef,term))*/
                 {
-                    /* Funktionsaufruf vorhanden */
+                    // Function call present
                     pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_True );
                     ::rtl::OUString sTableRange;
                     // check if the column is also a parameter
                     traverseORCriteria(pColumnRef); // num_value_exp
 
-                    // gehoeren alle beteiligten Spalten der Funktion zu einer Tabelle
+                    // Do all involved columns of the function belong to one table?
                     if (m_pImpl->m_pTables->size() == 1)
                     {
                         aTableRange = m_pImpl->m_pTables->begin()->first;
@@ -1097,13 +1097,13 @@ void OSQLParseTreeIterator::traverseByColumnNames(const OSQLParseNode* pSelectNo
         sColumnName = ::rtl::OUString();
         if ( SQL_ISRULE(pColumnRef,column_ref) )
         {
-            // Column-Name (und TableRange):
+            // Column name (and TableRange):
             if(SQL_ISRULE(pColumnRef,column_ref))
                 getColumnRange(pColumnRef,sColumnName,aTableRange);
-            else // eine Expression
+            else // an expression
                 pColumnRef->parseNodeToStr( sColumnName, m_pImpl->m_xConnection, NULL, sal_False, sal_False );
 
-            OSL_ENSURE(!sColumnName.isEmpty(),"sColumnName darf nicht leer sein");
+            OSL_ENSURE(!sColumnName.isEmpty(),"sColumnName must not be empty!");
         }
         else
         {   // here I found a predicate
@@ -1212,8 +1212,8 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
         return false;
 
 
-    // Parse Tree analysieren (je nach Statement-Typ)
-    // und Zeiger auf WHERE-Klausel setzen:
+    // Analyse parse tree (depending on statement type)
+    // and set pointer to WHERE clause:
     OSQLParseNode * pWhereClause = NULL;
 
     if (m_eStatementType == SQL_STATEMENT_SELECT)
@@ -1241,25 +1241,24 @@ bool OSQLParseTreeIterator::traverseSelectionCriteria(const OSQLParseNode* pSele
         // nyi
         OSL_FAIL("OSQLParseTreeIterator::getSelectionCriteria: positioned nyi");
     } else {
-        // Anderes Statement. Keine Selektionskriterien.
+        // Other statement, no selection criteria
         return false;
     }
 
     if (! SQL_ISRULE(pWhereClause,where_clause)) {
-        // Die Where Clause ist meistens optional, d. h. es koennte sich auch
-        // um "optional_where_clause" handeln.
+        // The WHERE clause is optional most of the time; which means it could be a "optional_where_clause".
         OSL_ENSURE(SQL_ISRULE(pWhereClause,opt_where_clause),"OSQLParseTreeIterator: error in parse tree!");
         return false;
     }
 
-    // Wenn es aber eine where_clause ist, dann darf sie nicht leer sein:
+    // But if it's a where_clause, then it must not be empty
     OSL_ENSURE(pWhereClause->count() == 2,"OSQLParseTreeIterator: error in parse tree!");
 
     OSQLParseNode * pComparisonPredicate = pWhereClause->getChild(1);
     OSL_ENSURE(pComparisonPredicate != NULL,"OSQLParseTreeIterator: error in parse tree!");
 
     //
-    // Und nun die Vergleichskriterien abarbeiten (rekursiv, alles ist erstmal ein OR-Kriterium):
+    // Process the comparison criteria now (recursively, for a start everything is an OR criterion)
     //
 
     traverseORCriteria(pComparisonPredicate);
@@ -1279,28 +1278,27 @@ void OSQLParseTreeIterator::traverseORCriteria(OSQLParseNode * pSearchCondition)
             SQL_ISPUNCTUATION(pSearchCondition->getChild(2),")")
         )
     {
-        // Runde Klammern um den Ausdruck
+        // Round brackets around the expression
         traverseORCriteria(pSearchCondition->getChild(1));
     } else if (SQL_ISRULE(pSearchCondition,search_condition) &&
         pSearchCondition->count() == 3 &&
         SQL_ISTOKEN(pSearchCondition->getChild(1),OR))
     {
-        // OR-Verknuepfung:
-
+        // OR logic operation
         for (int i = 0; i < 3; i++) {
-            if (i == 1) continue;       // Schluesselwort OR ueberspringen
+            if (i == 1) continue;       // Skip OR keyword
 
-            // Ist das erste Element wieder eine OR-Verknuepfung?
+            // Is the first element an OR again?
             if (i == 0 &&
                 SQL_ISRULE(pSearchCondition->getChild(0),search_condition) &&
                 pSearchCondition->getChild(0)->count() == 3 &&
                 SQL_ISTOKEN(pSearchCondition->getChild(0)->getChild(1),OR))
             {
-                // Dann rekursiv absteigen ...
+                // Then process recursively
                 traverseORCriteria(pSearchCondition->getChild(0));
 
             } else {
-                // AND-Kriterien ...
+                // AND criteria
                 traverseANDCriteria(pSearchCondition->getChild(i));
                 //  if (! aIteratorStatus.IsSuccessful()) break;
             }
@@ -1308,13 +1306,13 @@ void OSQLParseTreeIterator::traverseORCriteria(OSQLParseNode * pSearchCondition)
             //  if (! aIteratorStatus.IsSuccessful()) break;
         }
     } else {
-        // Nur *ein* Kriterium oder eine AND-Verknuepfung von Kriterien.
-        // Direkt die AND-Kriterien behandeln.
+        // Only *one* criterion or one AND logical operation of criteria
+        // Process the AND criteria directly
         traverseANDCriteria(pSearchCondition);
         //  if (! aIteratorStatus.IsSuccessful()) return;
     }
 
-    // Fehler einfach weiterreichen.
+    // Just pass on the error
 }
 
 //-----------------------------------------------------------------------------
@@ -1330,32 +1328,32 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
             SQL_ISPUNCTUATION(pSearchCondition->getChild(2),")")
         )
     {
-        // Runde Klammern
+        // Round brackets
         traverseANDCriteria(pSearchCondition->getChild(1));
     }
-    // Das erste Element ist eine OR-Verknuepfung
+    // The first element is an OR logical operation
     else  if ( SQL_ISRULE(pSearchCondition,search_condition) && pSearchCondition->count() == 3 )
     {
-        // Dann rekursiv absteigen (dieselbe Row benutzen) ...
+        // Then process recursively (use the same row) ...
         traverseORCriteria(pSearchCondition->getChild(0));
 //      if (! aIteratorStatus.IsSuccessful())
 //          return;
 
-        // Und mit dem rechten Child weitermachen:
+        // Continue with the right child
         traverseANDCriteria(pSearchCondition->getChild(2));
     }
-    // Das erste Element ist (wieder) eine AND-Verknuepfung
+    // The first element is an AND logical operation (again)
     else if ( SQL_ISRULE(pSearchCondition,boolean_term) && pSearchCondition->count() == 3 )
     {
-        // Dann rekursiv absteigen (dieselbe Row benutzen) ...
+        // Then process recursively (use the same row)
         traverseANDCriteria(pSearchCondition->getChild(0));
 //      if (! aIteratorStatus.IsSuccessful())
 //          return;
 
-        // Und mit dem rechten Child weitermachen:
+        // Continue with the right child
         traverseANDCriteria(pSearchCondition->getChild(2));
     }
-     // Sonst einzelne Suchkriterien wie =, !=, ..., LIKE, IS NULL usw. behandeln:
+    // Else, process single search criteria (like =, !=, ..., LIKE, IS NULL etc.)
     else if (SQL_ISRULE(pSearchCondition,comparison_predicate) )
     {
         ::rtl::OUString aValue;
@@ -1389,7 +1387,7 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
         if (SQL_ISRULE(pNum_value_exp,parameter))
             pParam = pNum_value_exp;
         else if(pNum_value_exp->isToken())
-            // Normaler Wert
+            // Normal value
             aValue = pNum_value_exp->getTokenValue();
         else
         {
@@ -1442,7 +1440,7 @@ void OSQLParseTreeIterator::traverseANDCriteria(OSQLParseNode * pSearchCondition
         traverseOnePredicate(pSearchCondition->getChild(0),aString,pSearchCondition->getChild(0));
         traverseOnePredicate(pSearchCondition->getChild(2),aString,pSearchCondition->getChild(2));
     }
-    // Fehler einfach weiterreichen.
+    // Just pass on the error
 }
 //-----------------------------------------------------------------------------
 void OSQLParseTreeIterator::traverseParameter(const OSQLParseNode* _pParseNode
@@ -1589,7 +1587,7 @@ void OSQLParseTreeIterator::traverseOnePredicate(
     if ( !pParseNode )
         return;
 
-    // Column-Name (und TableRange):
+    // Column name (and TableRange):
     ::rtl::OUString aColumnName, aTableRange, sColumnAlias;
     getColumnRange( pColumnRef, aColumnName, aTableRange, sColumnAlias);
 
@@ -1659,7 +1657,7 @@ void OSQLParseTreeIterator::impl_traverse( sal_uInt32 _nIncludeMask )
     }
 }
 
-// Dummy-Implementationen:
+// Dummy implementations
 
 //-----------------------------------------------------------------------------
 OSQLTable OSQLParseTreeIterator::impl_createTableObject( const ::rtl::OUString& rTableName,
@@ -1816,7 +1814,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
             _rColumns->get().push_back(xCol);
         }
     }
-    else    // ColumnName und Tablename vorhanden
+    else    // ColumnName and TableName exist
     {
         ConstOSQLTablesIterator aFind = m_pImpl->m_pTables->find(rTableRange);
 
@@ -1859,7 +1857,7 @@ void OSQLParseTreeIterator::setSelectColumnName(::rtl::Reference<OSQLColumns>& _
         else
             bError = sal_True;
 
-        // Tabelle existiert nicht oder Feld nicht vorhanden
+        // Table does not exist or lacking field
         if (bError)
         {
             ::rtl::OUString aNewColName(getUniqueColumnName(rColumnAlias));
@@ -1953,8 +1951,8 @@ const OSQLParseNode* OSQLParseTreeIterator::getWhereTree() const
     if (!m_pParseTree)
         return NULL;
 
-    // Parse Tree analysieren (je nach Statement-Typ)
-    // und Zeiger auf WHERE-Klausel setzen:
+    // Analyse parse tree (depending on statement type)
+    // and set pointer to WHERE clause:
     OSQLParseNode * pWhereClause = NULL;
     if(getStatementType() == SQL_STATEMENT_SELECT)
     {
@@ -1985,8 +1983,8 @@ const OSQLParseNode* OSQLParseTreeIterator::getOrderTree() const
     if (!m_pParseTree || getStatementType() != SQL_STATEMENT_SELECT)
         return NULL;
 
-    // Parse Tree analysieren (je nach Statement-Typ)
-    // und Zeiger auf ORDER-Klausel setzen:
+    // Analyse parse tree (depending on statement type)
+    // and set pointer to ORDER clause:
     OSQLParseNode * pOrderClause = NULL;
     OSL_ENSURE(m_pParseTree->count() >= 4,"ParseTreeIterator: error in parse tree!");
     OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
@@ -2007,8 +2005,8 @@ const OSQLParseNode* OSQLParseTreeIterator::getGroupByTree() const
     if (!m_pParseTree || getStatementType() != SQL_STATEMENT_SELECT)
         return NULL;
 
-    // Parse Tree analysieren (je nach Statement-Typ)
-    // und Zeiger auf ORDER-Klausel setzen:
+    // Analyse parse tree (depending on statement type)
+    // and set pointer to ORDER clause:
     OSQLParseNode * pGroupClause = NULL;
     OSL_ENSURE(m_pParseTree->count() >= 4,"ParseTreeIterator: error in parse tree!");
     OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
@@ -2028,8 +2026,8 @@ const OSQLParseNode* OSQLParseTreeIterator::getHavingTree() const
     if (!m_pParseTree || getStatementType() != SQL_STATEMENT_SELECT)
         return NULL;
 
-    // Parse Tree analysieren (je nach Statement-Typ)
-    // und Zeiger auf ORDER-Klausel setzen:
+    // Analyse parse tree (depending on statement type)
+    // and set pointer to ORDER clause:
     OSQLParseNode * pHavingClause = NULL;
     OSL_ENSURE(m_pParseTree->count() >= 4,"ParseTreeIterator: error in parse tree!");
     OSQLParseNode * pTableExp = m_pParseTree->getChild(3);
@@ -2038,7 +2036,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getHavingTree() const
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
     pHavingClause = pTableExp->getChild(3);
-    // Wenn es aber eine order_by ist, dann darf sie nicht leer sein:
+    // If it is an order_by, then it must not be empty
     if(pHavingClause->count() < 1)
         pHavingClause = NULL;
     return pHavingClause;
@@ -2116,7 +2114,7 @@ Reference< XPropertySet > OSQLParseTreeIterator::findColumn(const OSQLTables& _r
                 if( xColumns.is() && xColumns->hasByName(rColumnName) && (xColumns->getByName(rColumnName) >>= xColumn) )
                 {
                     OSL_ENSURE(xColumn.is(),"Column isn't a propertyset!");
-                    break; // diese Column darf nur einmal vorkommen
+                    break; // This column must only exits once
                 }
             }
         }
@@ -2186,7 +2184,7 @@ sal_Int32 OSQLParseTreeIterator::getFunctionReturnType(const OSQLParseNode* _pNo
                 ::rtl::OUString sColumnName;
                 ::rtl::OUString aTableRange;
                 getColumnRange(pValueExp,sColumnName,aTableRange);
-                OSL_ENSURE(!sColumnName.isEmpty(),"Columnname darf nicht leer sein");
+                OSL_ENSURE(!sColumnName.isEmpty(),"Columnname must not be empty!");
                 Reference<XPropertySet> xColumn = findColumn( sColumnName, aTableRange, true );
 
                 if ( xColumn.is() )
