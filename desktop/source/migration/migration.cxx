@@ -44,7 +44,6 @@
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <osl/mutex.hxx>
-#include <ucbhelper/content.hxx>
 #include <osl/security.hxx>
 #include <unotools/configmgr.hxx>
 
@@ -576,16 +575,16 @@ install_info MigrationImpl::findInstallation(const strings_v& rVersions)
             aUserInst += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
 #endif
             aUserInst += aProfileName;
-            try
+            rtl::OUString url(
+                INetURLObject(aUserInst).GetMainURL(INetURLObject::NO_DECODE));
+            osl::DirectoryItem item;
+            osl::FileStatus stat(osl_FileStatus_Mask_Type);
+            if (osl::DirectoryItem::get(url, item) == osl::FileBase::E_None
+                && item.getFileStatus(stat) == osl::FileBase::E_None
+                && stat.getFileType() == osl::FileStatus::Directory)
             {
-                INetURLObject aObj(aUserInst);
-                ::ucbhelper::Content aCnt( aObj.GetMainURL( INetURLObject::NO_DECODE ), uno::Reference< ucb::XCommandEnvironment > () );
-                aCnt.isDocument();
-                aInfo.userdata = aObj.GetMainURL( INetURLObject::NO_DECODE );
+                aInfo.userdata = url;
                 aInfo.productname = aVersion;
-            }
-            catch (const uno::Exception&)
-            {
             }
         }
         ++i_ver;

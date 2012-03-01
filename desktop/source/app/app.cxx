@@ -36,7 +36,6 @@
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
 #include "exithelper.hxx"
-#include "migration.hxx"
 
 #include <svtools/javacontext.hxx>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
@@ -1624,8 +1623,6 @@ int Desktop::Main()
 
         // check whether the shutdown is caused by restart
         pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
-
-        Migration::migrateSettingsIfNecessary();
 #endif
 
         // keep a language options instance...

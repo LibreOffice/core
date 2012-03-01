@@ -26,8 +26,9 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
-
+#include "migration.hxx"
 #include "userinstall.hxx"
 #include "langselect.hxx"
 
@@ -261,6 +262,8 @@ namespace desktop {
                     return UserInstall::E_Creation;
             }
         }
+
+        Migration::migrateSettingsIfNecessary();
 #endif
         try
         {
