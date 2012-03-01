@@ -109,7 +109,6 @@ using namespace com::sun::star;
 sal_uInt16 ScTabViewShell::nInsertCtrlState = SID_INSERT_GRAPHIC;
 sal_uInt16 ScTabViewShell::nInsCellsCtrlState = 0;
 sal_uInt16 ScTabViewShell::nInsObjCtrlState = SID_INSERT_DIAGRAM;
-Color      ScTabViewShell::aBackgroundColor = COL_TRANSPARENT;
 
 // -----------------------------------------------------------------------
 

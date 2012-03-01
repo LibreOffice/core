@@ -2327,16 +2327,6 @@ void SvxColorExtToolBoxControl::StateChanged(
         bChoiceFromPalette = sal_False;
         switch( nSID )
         {
-            case SID_ATTR_CHAR_COLOR_EXT :
-            case SID_ATTR_CHAR_COLOR_BACKGROUND_EXT :
-                if ( SFX_ITEM_DONTCARE != eState )
-                {
-                    const SfxBoolItem* pBool = PTR_CAST( SfxBoolItem, pState );
-                    rTbx.CheckItem( nId, pBool && pBool->GetValue());
-                }
-                rTbx.EnableItem( nId, SFX_ITEM_DISABLED != eState );
-                break;
-
             case SID_ATTR_CHAR_COLOR2 :
             case SID_ATTR_CHAR_COLOR_BACKGROUND :
             case SID_BACKGROUND_COLOR :
@@ -2381,7 +2371,7 @@ void SvxColorExtToolBoxControl::Select( sal_Bool )
 
     Sequence< PropertyValue > aArgs( 1 );
     aArgs[0].Name  = aParamName;
-    aArgs[0].Value = makeAny( GetToolBox().IsItemChecked( GetId() ));
+    aArgs[0].Value = makeAny( (sal_uInt32)( mLastColor.GetColor() ));
     Dispatch( aCommand, aArgs );
 }
 

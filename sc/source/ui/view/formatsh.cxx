@@ -1421,13 +1421,12 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
     ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
     SfxBindings&        rBindings = pViewData->GetBindings();
     const SfxItemSet*   pNewAttrs = rReq.GetArgs();
+    sal_uInt16 nSlot = rReq.GetSlot();
 
     pTabViewShell->HideListBox();                   // Autofilter-DropDown-Listbox
 
     if ( !pNewAttrs )
     {
-        sal_uInt16 nSlot = rReq.GetSlot();
-
         switch ( nSlot )
         {
             case SID_ATTR_CHAR_FONT:
@@ -1449,25 +1448,10 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                     rBindings.Invalidate( nSlot );
                 }
                 break;
-
-            case SID_BACKGROUND_COLOR:
-                {
-                    //  SID_BACKGROUND_COLOR without arguments -> set background to last used color
-
-                    SvxBrushItem        aBrushItem( (const SvxBrushItem&)
-                                            pTabViewShell->GetSelectionPattern()->
-                                                GetItem( ATTR_BACKGROUND ) );
-                    aBrushItem.SetColor( pTabViewShell->GetBackgroundColor()  );
-
-                    pTabViewShell->ApplyAttr( aBrushItem );
-                }
-                break;
         }
     }
     else
     {
-        sal_uInt16 nSlot = rReq.GetSlot();
-
         switch ( nSlot )
         {
             case SID_ATTR_CHAR_OVERLINE:
@@ -1642,9 +1626,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                                             pTabViewShell->GetSelectionPattern()->
                                                 GetItem( ATTR_BACKGROUND ) );
 
-                    Color aSet = rNewColorItem.GetValue();
-                    pTabViewShell->SetBackgroundColor( aSet );
-                    aBrushItem.SetColor( aSet );
+                    aBrushItem.SetColor( rNewColorItem.GetValue() );
 
                     pTabViewShell->ApplyAttr( aBrushItem );
                 }

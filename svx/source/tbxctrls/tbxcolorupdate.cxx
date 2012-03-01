@@ -60,7 +60,17 @@ namespace svx
             mnDrawMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
         DBG_ASSERT( ptrTbx, "ToolBox not found :-(" );
         mbWasHiContrastMode = ptrTbx ? ( ptrTbx->GetSettings().GetStyleSettings().GetHighContrastMode() ) : sal_False;
-        Update(mnSlotId == SID_ATTR_CHAR_COLOR2 ? COL_BLACK : COL_GRAY);
+        switch( mnSlotId )
+        {
+            case SID_ATTR_CHAR_COLOR2 :
+                Update( COL_BLACK );
+                break;
+            case SID_ATTR_CHAR_COLOR_BACKGROUND :
+                Update( COL_YELLOW );
+                break;
+            default :
+                Update( COL_GRAY );
+        }
     }
 
     // -----------------------------------------------------------------------
