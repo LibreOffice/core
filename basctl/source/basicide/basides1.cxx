@@ -432,7 +432,10 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_OBJCAT:
         {
-            ShowObjectDialog( sal_True, sal_True );
+            if ( pObjectCatalog )
+                ShowObjectDialog( sal_False, sal_True );
+            else
+                ShowObjectDialog( sal_True, sal_True );
         }
         break;
         case SID_BASICIDE_NAMECHANGEDONTAB:
