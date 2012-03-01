@@ -65,6 +65,10 @@ XNamedRanges::XNamedRanges(const rtl::OUString& rNameToRemove):
 
 }
 
+XNamedRanges::~XNamedRanges()
+{
+}
+
 void XNamedRanges::testAddNewByName()
 {
     uno::Reference< sheet::XNamedRanges > xNamedRanges(init(), UNO_QUERY_THROW);

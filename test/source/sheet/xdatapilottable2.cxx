@@ -46,6 +46,10 @@ using namespace com::sun::star::uno;
 
 namespace apitest {
 
+XDataPilotTable2::~XDataPilotTable2()
+{
+}
+
 void XDataPilotTable2::testGetPositionData()
 {
     uno::Reference< sheet::XDataPilotTable2 > xDPTable(initDP2(), UNO_QUERY_THROW);

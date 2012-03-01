@@ -50,6 +50,7 @@ public:
     void testGetDrillDownData();
     void testGetOutputRangeByType();
     void testInsertDrillDownSheet();
+    virtual ~XDataPilotTable2();
 
     virtual uno::Reference< uno::XInterface > initDP2() = 0;
     virtual uno::Reference< uno::XInterface > getSheets() = 0;
