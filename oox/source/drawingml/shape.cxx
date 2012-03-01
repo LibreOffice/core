@@ -225,9 +225,6 @@ void Shape::addShape(
             if ( xShapes.is() )
                 addChildren( rFilterBase, *this, pTheme, xShapes, pShapeRect ? *pShapeRect : awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ), pShapeMap, aMatrix );
         }
-        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
-        if( xLockable.is() )
-            xLockable->removeActionLock();
     }
     catch( const Exception&  )
     {
@@ -270,6 +267,25 @@ void Shape::addChildren( ::oox::core::XmlFilterBase& rFilterBase,
                  awt::Rectangle( maPosition.X, maPosition.Y, maSize.Width, maSize.Height ),
                 pShapeMap, aTransformation);
 }
+
+struct ActionLockGuard
+{
+    explicit ActionLockGuard(Reference<drawing::XShape> const& xShape)
+        : m_xLockable(xShape, UNO_QUERY)
+    {
+        if (m_xLockable.is()) {
+            m_xLockable->addActionLock();
+        }
+    }
+    ~ActionLockGuard()
+    {
+        if (m_xLockable.is()) {
+            m_xLockable->removeActionLock();
+        }
+    }
+private:
+    Reference<document::XActionLockable> m_xLockable;
+};
 
 // for group shapes, the following method is also adding each child
 void Shape::addChildren(
@@ -446,9 +462,7 @@ Reference< XShape > Shape::createAndInsert(
             xSet->setPropertyValue( sVisible, Any( sal_False ) );
         }
 
-        Reference< document::XActionLockable > xLockable( mxShape, UNO_QUERY );
-        if( xLockable.is() )
-            xLockable->addActionLock();
+        ActionLockGuard const alg(mxShape);
 
         // sj: removing default text of placeholder objects such as SlideNumberShape or HeaderShape
         if ( bClearText )
@@ -562,8 +576,6 @@ Reference< XShape > Shape::createAndInsert(
                 getTextBody()->insertAt( rFilterBase, xText, xAt, aCharStyleProperties, mpMasterTextListStyle );
             }
         }
-        if( xLockable.is() )
-            xLockable->removeActionLock();
     }
 
     if( mxShape.is() )
