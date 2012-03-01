@@ -175,18 +175,31 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         aCol[j].InsertRow( nStartRow, nSize );
 
     ScNotes aNotes(pDocument);
-    for ( ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    ScNotes::iterator itr = maNotes.begin();
+    while( itr != maNotes.end() )
     {
-        if (itr->first.second >= nStartRow)
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        if (nCol >= nStartRow)
         {
-            aNotes.insert(itr->first.first, itr->first.second + nSize, itr->second);
-            maNotes.ReleaseNote(itr->first.first, itr->first.second);
+            aNotes.insert(nCol, nRow + nSize, pPostIt);
+            maNotes.ReleaseNote(nCol, nRow);
         }
     }
-    for ( ScNotes::iterator itr = aNotes.begin(); itr != aNotes.end(); ++itr)
+
+    itr = aNotes.begin();
+    while( itr != aNotes.end() )
     {
-        maNotes.insert( itr->first.first, itr->first.second, itr->second);
-        aNotes.ReleaseNote(itr->first.first, itr->first.second);
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        maNotes.insert( nCol, nRow, pPostIt);
+        aNotes.ReleaseNote( nCol, nRow);
     }
 
     DecRecalcLevel( false );
@@ -242,18 +255,31 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
     }
 
     ScNotes aNotes(pDocument);
-    for ( ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    ScNotes::iterator itr = maNotes.begin();
+    while( itr != maNotes.end() )
     {
-        if (itr->first.second >= nStartRow)
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        if (nCol >= nStartRow)
         {
-            aNotes.insert(itr->first.first, itr->first.second - nSize, itr->second);
-            maNotes.ReleaseNote(itr->first.first, itr->first.second);
+            aNotes.insert(nCol, nRow - nSize, pPostIt);
+            maNotes.ReleaseNote(nCol, nRow);
         }
     }
-    for ( ScNotes::iterator itr = aNotes.begin(); itr != aNotes.end(); ++itr)
+
+    itr = aNotes.begin();
+    while( itr != aNotes.end() )
     {
-        maNotes.insert( itr->first.first, itr->first.second, itr->second);
-        aNotes.ReleaseNote(itr->first.first, itr->first.second);
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        maNotes.insert( nCol, nRow, pPostIt);
+        aNotes.ReleaseNote( nCol, nRow);
     }
 
     {   // scope for bulk broadcast
@@ -339,20 +365,31 @@ void ScTable::InsertCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
     }
 
     ScNotes aNotes(pDocument);
-    for ( ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    ScNotes::iterator itr = maNotes.begin();
+    while( itr != maNotes.end() )
     {
-        if (itr->first.first > nStartCol)
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        if (nCol >= nStartRow)
         {
-            aNotes.insert(itr->first.first + nSize, itr->first.second, itr->second);
-            maNotes.ReleaseNote(itr->first.first, itr->first.second);
+            aNotes.insert(nCol + nSize, nRow, pPostIt);
+            maNotes.ReleaseNote(nCol, nRow);
         }
-        else
-            aNotes.insert( itr->first.first, itr->first.second, itr->second);
     }
-    for ( ScNotes::iterator itr = aNotes.begin(); itr != aNotes.end(); ++itr)
+
+    itr = aNotes.begin();
+    while( itr != aNotes.end() )
     {
-        maNotes.insert( itr->first.first, itr->first.second, itr->second);
-        aNotes.ReleaseNote(itr->first.first, itr->first.second);
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        maNotes.insert( nCol, nRow, pPostIt);
+        aNotes.ReleaseNote( nCol, nRow);
     }
 
     if (nStartCol>0)                        // copy old attributes
@@ -437,20 +474,31 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
     }
 
     ScNotes aNotes(pDocument);
-    for ( ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    ScNotes::iterator itr = maNotes.begin();
+    while( itr != maNotes.end() )
     {
-        if (itr->first.first > nStartCol)
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        if (nCol >= nStartRow)
         {
-            aNotes.insert(itr->first.first - nSize, itr->first.second, itr->second);
-            maNotes.ReleaseNote(itr->first.first, itr->first.second);
+            aNotes.insert(nCol - nSize, nRow, pPostIt);
+            maNotes.ReleaseNote(nCol, nRow);
         }
-        else
-            aNotes.insert( itr->first.first, itr->first.second, itr->second);
     }
-    for ( ScNotes::iterator itr = aNotes.begin(); itr != aNotes.end(); ++itr)
+
+    itr = aNotes.begin();
+    while( itr != aNotes.end() )
     {
-        maNotes.insert( itr->first.first, itr->first.second, itr->second);
-        aNotes.ReleaseNote(itr->first.first, itr->first.second);
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        maNotes.insert( nCol, nRow, pPostIt);
+        aNotes.ReleaseNote( nCol, nRow);
     }
 
     DecRecalcLevel();
