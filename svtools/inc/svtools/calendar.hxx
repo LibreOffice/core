@@ -434,7 +434,7 @@ private:
 #ifdef _SV_CALENDAR_CXX
                         DECL_DLLPRIVATE_LINK( ImplSelectHdl, Calendar* );
                         DECL_DLLPRIVATE_LINK( ImplClickHdl, PushButton* );
-                        DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, FloatingWindow* );
+                        DECL_DLLPRIVATE_LINK( ImplPopupModeEndHdl, void* );
 #endif
 
 public:

@@ -70,7 +70,7 @@ protected:
     SVT_DLLPRIVATE void     GetFocus();
     SVT_DLLPRIVATE void     StateChanged( StateChangedType nType );
     SVT_DLLPRIVATE WinBits  ImplInitStyle( WinBits nStyle );
-    DECL_DLLPRIVATE_LINK( ButtonHdl, PushButton* );
+    DECL_DLLPRIVATE_LINK( ButtonHdl, void* );
 
 public:
                     FileControl( Window* pParent, WinBits nStyle, FileControlMode = 0 );

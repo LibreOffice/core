@@ -54,7 +54,7 @@ private:
 
 protected:
 
-    DECL_LINK(      ImpUpdateDataHdl, Timer* );
+    DECL_LINK(      ImpUpdateDataHdl, void* );
     void            StateChanged( StateChangedType nType );
     void            DataChanged( const DataChangedEvent& rDCEvt );
     virtual long    PreNotify( NotifyEvent& rNEvt );

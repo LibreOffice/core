@@ -275,7 +275,7 @@ private:
     SVT_DLLPRIVATE void         ImplTracking( const Point& rPos, bool bRepeat );
     SVT_DLLPRIVATE void         ImplEndTracking( const Point& rPos, bool bCancel );
     DECL_DLLPRIVATE_LINK( ImplScrollHdl, ScrollBar* );
-    DECL_DLLPRIVATE_LINK( ImplTimerHdl, Timer* );
+    DECL_DLLPRIVATE_LINK( ImplTimerHdl, void* );
 #endif
 
     // Forbidden and not implemented.

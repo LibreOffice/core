@@ -43,7 +43,7 @@ private :
     ::boost::function0<void> mpCallback;
 
     bool SVT_DLLPRIVATE getCurrentModTime(TimeValue& o_rValue) const;
-    DECL_LINK(TimerHandler, Timer *);
+    DECL_LINK(TimerHandler, void *);
 
 public :
     void resetTimer();

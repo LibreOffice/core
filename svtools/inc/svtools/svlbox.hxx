@@ -266,7 +266,7 @@ class SVT_DLLPUBLIC SvLBox
 {
     friend class SvLBoxEntry;
 
-    DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, SvInplaceEdit2 * );
+    DECL_DLLPRIVATE_LINK( TextEditEndedHdl_Impl, void * );
     // Handler, der von TreeList zum Clonen eines Entries aufgerufen wird
     DECL_DLLPRIVATE_LINK( CloneHdl_Impl, SvListEntry* );
 
@@ -592,9 +592,9 @@ class SvInplaceEdit2
     sal_Bool        bMultiLine;
 
     void        CallCallBackHdl_Impl();
-    DECL_LINK( Timeout_Impl, Timer * );
-    DECL_LINK( ReturnHdl_Impl, Accelerator * );
-    DECL_LINK( EscapeHdl_Impl, Accelerator * );
+    DECL_LINK( Timeout_Impl, void * );
+    DECL_LINK( ReturnHdl_Impl, void * );
+    DECL_LINK( EscapeHdl_Impl, void * );
 
 public:
                 SvInplaceEdit2( Window* pParent, const Point& rPos, const Size& rSize,

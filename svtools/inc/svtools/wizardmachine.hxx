@@ -354,9 +354,9 @@ namespace svt
 
     private:
        // long OnNextPage( PushButton* );
-        DECL_DLLPRIVATE_LINK(OnNextPage, PushButton*);
-        DECL_DLLPRIVATE_LINK(OnPrevPage, PushButton*);
-        DECL_DLLPRIVATE_LINK(OnFinish, PushButton*);
+        DECL_DLLPRIVATE_LINK(OnNextPage, void*);
+        DECL_DLLPRIVATE_LINK(OnPrevPage, void*);
+        DECL_DLLPRIVATE_LINK(OnFinish, void*);
 
         SVT_DLLPRIVATE void     implResetDefault(Window* _pWindow);
         SVT_DLLPRIVATE void     implUpdateTitle();

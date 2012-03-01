@@ -325,7 +325,7 @@ private:
     SVT_DLLPRIVATE void            ColumnInserted( sal_uInt16 nPos );
 
     DECL_DLLPRIVATE_LINK(       ScrollHdl, ScrollBar * );
-    DECL_DLLPRIVATE_LINK(       EndScrollHdl, ScrollBar * );
+    DECL_DLLPRIVATE_LINK(       EndScrollHdl, void * );
     DECL_DLLPRIVATE_LINK(       StartDragHdl, HeaderBar * );
 
     SVT_DLLPRIVATE long            GetFrozenWidth() const;
