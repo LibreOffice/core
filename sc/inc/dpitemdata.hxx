@@ -84,8 +84,6 @@ public:
     const rtl::OUString& GetString() const;
     double GetValue() const ;
     bool HasStringData() const ;
-    bool IsDate() const;
-    void SetDate( bool b ) ;
 
     sal_uInt8 GetType() const;
 };

@@ -94,9 +94,7 @@ bool ScDPItemData::operator==( const ScDPItemData& r ) const
 {
     if ( IsValue() )
     {
-        if ( IsDate() != r.IsDate() )
-            return false;
-        else if ( r.IsValue() )
+        if ( r.IsValue() )
             return rtl::math::approxEqual( mfValue, r.mfValue );
         else
             return false;
@@ -114,19 +112,7 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
     if ( rA.IsValue() )
     {
         if ( rB.IsValue() )
-        {
-            if ( rtl::math::approxEqual( rA.mfValue, rB.mfValue ) )
-            {
-                if ( rA.IsDate() == rB.IsDate() )
-                    return 0;
-                else
-                    return rA.IsDate() ? 1: -1;
-            }
-            else if ( rA.mfValue < rB.mfValue )
-                return -1;
-            else
-                return 1;
-        }
+            return rA.mfValue < rB.mfValue ? -1 : 1;
         else
             return -1;           // values first
     }
@@ -177,17 +163,6 @@ bool ScDPItemData::HasStringData() const
 {
     return IsHasData()&&!IsHasErr()&&!IsValue();
 }
-
-bool ScDPItemData::IsDate() const
-{
-    return !!(mbFlag&MK_DATE);
-}
-
-void ScDPItemData::SetDate( bool b )
-{
-    b ? ( mbFlag |= MK_DATE ) : ( mbFlag &= ~MK_DATE );
-}
-
 
 ScDPItemDataPool::ScDPItemDataPool()
 {

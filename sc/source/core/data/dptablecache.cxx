@@ -790,11 +790,16 @@ bool ScDPCache::IsDateDimension( long nDim ) const
     if (nDim >= mnColumnCount)
         return false;
 
-    const DataListType& rItems = maFields[nDim].maItems;
-    if (rItems.empty())
+    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+    if (!pFormatter)
         return false;
 
-    return rItems[0].IsDate();
+    const std::vector<sal_uLong>& rNumFormats = maFields[nDim].maNumFormats;
+    if (rNumFormats.empty())
+        return false;
+
+    short eType = pFormatter->GetType(rNumFormats[0]);
+    return (eType == NUMBERFORMAT_DATE) || (eType == NUMBERFORMAT_DATETIME);
 }
 
 SCROW ScDPCache::GetDimMemberCount( SCCOL nDim ) const
