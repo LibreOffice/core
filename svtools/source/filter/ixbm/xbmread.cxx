@@ -65,7 +65,7 @@ XBMReader::~XBMReader()
 
 void XBMReader::InitTable()
 {
-    memset( pHexTable, 0, sizeof( short ) );
+    memset( pHexTable, 0, sizeof( short ) * 256 );
 
     pHexTable[(int)'0'] = 0;
     pHexTable[(int)'1'] = 1;
