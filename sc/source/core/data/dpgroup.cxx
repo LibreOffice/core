@@ -146,12 +146,6 @@ void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache,  std::vector< 
     lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( rString, fValue, sal_True ) );
 }
 
-template<bool bUpdateData>
-void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache, std::vector< SCROW >& vIdx, const String&  rString, const double& fValue, sal_Int32 nDatePart )
-{
-    lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData(nDatePart, rString, fValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL) );
-}
-
 void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
 {
     sal_uLong nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
@@ -668,15 +662,15 @@ void ScDPDateGroupHelper::FillColumnEntries(
     for ( sal_Int32 nValue = nStart; nValue <= nEnd; nValue++ )
     {
         String aName = lcl_GetDateGroupName( nDatePart, nValue, pFormatter );
-      lcl_InsertValue<false>( nSourceDim, pCache, rEntries, aName, nValue, nDatePart );
+        lcl_InsertValue<false>( nSourceDim, pCache, rEntries, aName, nValue );
     }
 
     // add first/last entry (min/max)
     String aFirstName = lcl_GetSpecialDateName( aNumInfo.mfStart, true, pFormatter );
-    lcl_InsertValue<true>( nSourceDim, pCache, rEntries, aFirstName, SC_DP_DATE_FIRST, nDatePart );
+    lcl_InsertValue<true>( nSourceDim, pCache, rEntries, aFirstName, SC_DP_DATE_FIRST );
 
     String aLastName = lcl_GetSpecialDateName( aNumInfo.mfEnd, false, pFormatter );
-    lcl_InsertValue<true>( nSourceDim, pCache, rEntries, aLastName, SC_DP_DATE_LAST, nDatePart );
+    lcl_InsertValue<true>( nSourceDim, pCache, rEntries, aLastName, SC_DP_DATE_LAST );
 }
 
 // -----------------------------------------------------------------------
@@ -1388,7 +1382,8 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
                 sal_Int32 nPartValue = lcl_GetDatePartValue(
                     pData->GetValue(), pDateHelper->GetDatePart(), pDoc->GetFormatTable(),
                     &pDateHelper->GetNumInfo() );
-                ScDPItemData aItemData(pDateHelper->GetDatePart(), String(), nPartValue, ScDPItemData::MK_DATA|ScDPItemData::MK_VAL);
+                sal_uInt8 nFlag = ScDPItemData::MK_DATA | ScDPItemData::MK_VAL;
+                ScDPItemData aItemData(rtl::OUString(), static_cast<double>(nPartValue), nFlag);
                 pItemDataIndex[nDim] = GetCacheTable().getCache()->GetAdditionalItemID( aItemData );
             }
         }

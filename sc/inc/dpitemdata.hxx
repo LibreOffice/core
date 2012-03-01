@@ -56,19 +56,18 @@ public:
     static bool isDate( sal_uLong nNumType );
 
 private:
-    sal_uLong mnNumFormat;
     rtl::OUString maString;
     double mfValue;
     sal_uInt8 mbFlag;
 
 public:
     ScDPItemData();
-    ScDPItemData(sal_uLong nNF, const rtl::OUString & rS, double fV, sal_uInt8 bF);
-    ScDPItemData(const rtl::OUString& rS, double fV = 0.0, bool bHV = false,
-                 const sal_uLong nNumFormat = 0, bool bData = true);
-    ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab);
+    ScDPItemData(const rtl::OUString& rS, double fV, sal_uInt8 bF);
+    ScDPItemData(const rtl::OUString& rS, double fV = 0.0, bool bHV = false, bool bData = true);
 
+    void Set(const rtl::OUString& rS, double fVal, sal_uInt8 nFlag);
     void SetString(const rtl::OUString& rS);
+    void SetErrorString(const rtl::OUString& rS);
     bool IsCaseInsEqual(const ScDPItemData& r) const;
 
     size_t Hash() const;

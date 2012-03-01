@@ -101,9 +101,9 @@ bool hasItemInDimension(const ScDPCache::DataListType& rArray, const ScDPCache::
 }
 
 ScDPItemData* lcl_GetItemValue(
-    const Reference<sdbc::XRow>& xRow, sal_Int32 nType, long nCol, const Date& rNullDate)
+    const Reference<sdbc::XRow>& xRow, sal_Int32 nType, long nCol, const Date& rNullDate, short& rNumType)
 {
-    short nNumType = NUMBERFORMAT_NUMBER;
+    rNumType = NUMBERFORMAT_NUMBER;
     try
     {
         String rStr = xRow->getString(nCol);
@@ -113,9 +113,9 @@ ScDPItemData* lcl_GetItemValue(
             case sdbc::DataType::BIT:
             case sdbc::DataType::BOOLEAN:
             {
-                nNumType = NUMBERFORMAT_LOGICAL;
+                rNumType = NUMBERFORMAT_LOGICAL;
                 fValue  = xRow->getBoolean(nCol) ? 1 : 0;
-                return new ScDPItemData( rStr, fValue,true,nNumType);
+                return new ScDPItemData(rStr, fValue, true);
             }
             case sdbc::DataType::TINYINT:
             case sdbc::DataType::SMALLINT:
@@ -129,34 +129,34 @@ ScDPItemData* lcl_GetItemValue(
             {
                 //! do the conversion here?
                 fValue = xRow->getDouble(nCol);
-                return new ScDPItemData( rStr, fValue,true);
+                return new ScDPItemData(rStr, fValue, true);
             }
             case sdbc::DataType::DATE:
             {
-                nNumType = NUMBERFORMAT_DATE;
+                rNumType = NUMBERFORMAT_DATE;
 
                 util::Date aDate = xRow->getDate(nCol);
                 fValue = Date(aDate.Day, aDate.Month, aDate.Year) - rNullDate;
-                return new ScDPItemData( rStr, fValue, true, nNumType );
+                return new ScDPItemData(rStr, fValue, true);
             }
             case sdbc::DataType::TIME:
             {
-                nNumType = NUMBERFORMAT_TIME;
+                rNumType = NUMBERFORMAT_TIME;
 
                 util::Time aTime = xRow->getTime(nCol);
                 fValue = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
                            aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                return new ScDPItemData( rStr,fValue, true, nNumType );
+                return new ScDPItemData(rStr,fValue, true);
             }
             case sdbc::DataType::TIMESTAMP:
             {
-                nNumType = NUMBERFORMAT_DATETIME;
+                rNumType = NUMBERFORMAT_DATETIME;
 
                 util::DateTime aStamp = xRow->getTimestamp(nCol);
                 fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - rNullDate ) +
                          ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
                            aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                return new ScDPItemData( rStr,fValue, true, nNumType );
+                return new ScDPItemData(rStr,fValue, true);
             }
             case sdbc::DataType::CHAR:
             case sdbc::DataType::VARCHAR:
@@ -166,7 +166,7 @@ ScDPItemData* lcl_GetItemValue(
             case sdbc::DataType::VARBINARY:
             case sdbc::DataType::LONGVARBINARY:
             default:
-                return new ScDPItemData ( rStr );
+                return new ScDPItemData(rStr);
         }
     }
     catch (uno::Exception&)
@@ -219,6 +219,8 @@ bool ScDPCache::operator== ( const ScDPCache& r ) const
     }
     return true;
 }
+
+ScDPCache::Field::Field() {}
 
 ScDPCache::ScDPCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
@@ -294,6 +296,39 @@ rtl::OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB 
     return aDocStr;
 }
 
+void initFromCell(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, ScDPItemData& rData, sal_uLong& rNumFormat)
+{
+    rtl::OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
+    rNumFormat = 0;
+
+    ScAddress aPos(nCol, nRow, nTab);
+
+    if (pDoc->GetErrCode(aPos))
+    {
+        rData.SetErrorString(aDocStr);
+    }
+    else if (pDoc->HasValueData(nCol, nRow, nTab))
+    {
+        double fVal = pDoc->GetValue(aPos);
+        sal_uLong nFormatType = NUMBERFORMAT_NUMBER;
+        rNumFormat = pDoc->GetNumberFormat(aPos);
+        sal_uInt8 nFlag = ScDPItemData::MK_VAL | ScDPItemData::MK_DATA;
+
+        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+        if (pFormatter)
+            nFormatType = pFormatter->GetType(rNumFormat);
+
+        if (ScDPItemData::isDate(nFormatType))
+            nFlag |= ScDPItemData::MK_DATE;
+
+        rData.Set(aDocStr, fVal, nFlag);
+    }
+    else if (pDoc->HasData(nCol, nRow, nTab))
+    {
+        rData.SetString(aDocStr);
+    }
+}
+
 }
 
 bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
@@ -324,7 +359,12 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     {
         AddLabel(createLabelString(pDoc, nCol, nStartRow, nDocTab));
         for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
-            AddData(nCol - nStartCol, new ScDPItemData(pDoc, nCol, nRow, nDocTab));
+        {
+            std::auto_ptr<ScDPItemData> pData(new ScDPItemData);
+            sal_uLong nNumFormat = 0;
+            initFromCell(pDoc, nCol, nRow, nDocTab, *pData, nNumFormat);
+            AddData(nCol - nStartCol, pData.release(), nNumFormat);
+        }
     }
     return true;
 }
@@ -366,9 +406,15 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
         {
             for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
             {
-                ScDPItemData * pNew =  lcl_GetItemValue( xRow, aColTypes[nCol], nCol+1, rNullDate );
+                short nFormatType = NUMBERFORMAT_UNDEFINED;
+                ScDPItemData* pNew = lcl_GetItemValue(
+                    xRow, aColTypes[nCol], nCol+1, rNullDate, nFormatType);
                 if (pNew)
-                    AddData(nCol , pNew);
+                {
+                    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+                    sal_uLong nNumFormat = pFormatter ? pFormatter->GetStandardFormat(nFormatType) : 0;
+                    AddData(nCol, pNew, nNumFormat);
+                }
             }
         }
         while (xRowSet->next());
@@ -581,14 +627,13 @@ bool ScDPCache::IsRowEmpty( SCROW nRow ) const
     return mbEmptyRow[ nRow ];
 }
 
-bool ScDPCache::AddData(long nDim, ScDPItemData* pData)
+bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
 {
     OSL_ENSURE( IsValid(), "  IsValid() == false " );
     OSL_ENSURE( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
 
     // Wrap this instance with scoped pointer to ensure proper deletion.
     auto_ptr<ScDPItemData> p(pData);
-    pData->SetDate(ScDPItemData::isDate(GetNumType(pData->mnNumFormat)));
 
     SCROW nIndex = 0;
     Field& rField = maFields[nDim];
@@ -600,9 +645,11 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData)
             rField.maGlobalOrder.begin()+nIndex, rField.maItems.size()-1);
         OSL_ENSURE(rField.maGlobalOrder[nIndex] == rField.maItems.size()-1, "ScDPTableDataCache::AddData ");
         rField.maData.push_back(rField.maItems.size()-1);
+        rField.maNumFormats.push_back(nNumFormat);
     }
     else
         rField.maData.push_back(rField.maGlobalOrder[nIndex]);
+
 //init empty row tag
     size_t nCurRow = maFields[nDim].maData.size() - 1;
 
@@ -729,26 +776,13 @@ sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
     if ( nDim >= mnColumnCount )
         return 0;
 
-    if (maFields[nDim].maItems.empty())
+    const std::vector<sal_uLong>& rNumFormats = maFields[nDim].maNumFormats;
+    if (rNumFormats.empty())
         return 0;
 
-    // TODO: This is very ugly, but the best we can do right now.  Check the
-    // first 10 dimension members, and take the first non-zero number format,
-    // else return the default number format (of 0).  For the long-term, we
-    // need to redo this cache structure to properly indicate empty cells, and
-    // skip them when trying to determine the representative number format for
-    // a dimension.
-    const DataListType& rItems = maFields[nDim].maItems;
-    size_t nCount = rItems.size();
-    if (nCount > 10)
-        nCount = 10;
-    for (size_t i = 0; i < nCount; ++i)
-    {
-        sal_uLong n = rItems[i].mnNumFormat;
-        if (n)
-            return n;
-    }
-    return 0;
+    // TODO: Find a way to determine the dominant number format in presence of
+    // multiple number formats in the same field.
+    return *rNumFormats.begin();
 }
 
 bool ScDPCache::IsDateDimension( long nDim ) const

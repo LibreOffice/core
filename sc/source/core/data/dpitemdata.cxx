@@ -40,56 +40,35 @@ bool ScDPItemData::isDate( sal_uLong nNumType )
 }
 
 ScDPItemData::ScDPItemData() :
-    mnNumFormat( 0 ), mfValue(0.0), mbFlag(0) {}
+    mfValue(0.0), mbFlag(0) {}
 
-ScDPItemData::ScDPItemData(sal_uLong nNF, const rtl::OUString & rS, double fV, sal_uInt8 bF) :
-    mnNumFormat(nNF), maString(rS), mfValue(fV), mbFlag(bF) {}
+ScDPItemData::ScDPItemData(const rtl::OUString & rS, double fV, sal_uInt8 bF) :
+    maString(rS), mfValue(fV), mbFlag(bF) {}
 
-ScDPItemData::ScDPItemData(const rtl::OUString& rS, double fV, bool bHV, const sal_uLong nNumFormatP, bool bData) :
-    mnNumFormat( nNumFormatP ), maString(rS), mfValue(fV),
-    mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!false) | (MK_DATE*!!isDate( mnNumFormat ) ) )
+ScDPItemData::ScDPItemData(const rtl::OUString& rS, double fV, bool bHV, bool bData) :
+    maString(rS), mfValue(fV),
+    mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!false) )
 {
 }
 
-ScDPItemData::ScDPItemData(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nDocTab) :
-    mnNumFormat( 0 ), mfValue(0.0), mbFlag( 0 )
+void ScDPItemData::Set(const rtl::OUString& rS, double fVal, sal_uInt8 nFlag)
 {
-    rtl::OUString aDocStr = pDoc->GetString(nCol, nRow, nDocTab);
-
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-
-    ScAddress aPos( nCol, nRow, nDocTab );
-    ScBaseCell* pCell = pDoc->GetCell( aPos );
-
-    if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA && ((ScFormulaCell*)pCell)->GetErrCode() )
-    {
-        SetString ( aDocStr );
-        mbFlag |= MK_ERR;
-    }
-    else if ( pDoc->HasValueData( nCol, nRow, nDocTab ) )
-    {
-        double fVal = pDoc->GetValue(ScAddress(nCol, nRow, nDocTab));
-        sal_uLong nFormat = NUMBERFORMAT_NUMBER;
-        if ( pFormatter )
-            nFormat = pFormatter->GetType( pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) ) );
-        maString = aDocStr;
-        mfValue = fVal;
-        mbFlag |= MK_VAL|MK_DATA;
-        mnNumFormat = pDoc->GetNumberFormat( ScAddress( nCol, nRow, nDocTab ) );
-        isDate( nFormat ) ? ( mbFlag |= MK_DATE ) : (mbFlag &= ~MK_DATE);
-    }
-    else if (pDoc->HasData(nCol, nRow, nDocTab))
-    {
-        SetString(aDocStr);
-    }
+    maString = rS;
+    mfValue = fVal;
+    mbFlag = nFlag;
 }
 
 void ScDPItemData::SetString(const rtl::OUString& rS)
 {
     maString = rS;
     mbFlag &= ~(MK_VAL|MK_DATE);
-    mnNumFormat = 0;
     mbFlag |= MK_DATA;
+}
+
+void ScDPItemData::SetErrorString(const rtl::OUString& rS)
+{
+    SetString(rS);
+    mbFlag |= MK_ERR;
 }
 
 bool ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const

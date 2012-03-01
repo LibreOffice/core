@@ -91,6 +91,10 @@ private:
          * reverse mapping of item index to global order index.
          */
         mutable IndexArrayType maIndexOrder;
+
+        std::vector<sal_uLong> maNumFormats;
+
+        Field();
     };
 
     typedef boost::ptr_vector<Field> FieldsType;
@@ -143,7 +147,7 @@ public:
 
 private:
     void AddLabel(const rtl::OUString& rLabel);
-    bool AddData(long nDim, ScDPItemData* pData);
+    bool AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat);
 };
 
 #endif
