@@ -39,18 +39,6 @@
 
 class StarBASIC;
 
-class ObjectTreeListBox : public BasicTreeListBox
-{
-private:
-
-    virtual void    Command( const CommandEvent& rCEvt );
-    virtual void    MouseButtonDown( const MouseEvent& rMEvt );
-
-public:
-            ObjectTreeListBox( Window* pParent, const ResId& rRes );
-            ~ObjectTreeListBox();
-};
-
 class ObjectCatalogToolBox_Impl: public ToolBox
 {
 public:
@@ -67,7 +55,7 @@ private:
 class ObjectCatalog : public FloatingWindow
 {
 private:
-    ObjectTreeListBox   aMacroTreeList;
+    BasicTreeListBox   aMacroTreeList;
     ObjectCatalogToolBox_Impl aToolBox;
     FixedText           aMacroDescr;
     Link                aCancelHdl;

@@ -43,45 +43,6 @@
 #include <vcl/taskpanelist.hxx>
 #include <vcl/sound.hxx>
 
-ObjectTreeListBox::ObjectTreeListBox( Window* pParent, const ResId& rRes )
-    : BasicTreeListBox( pParent, rRes )
-{
-}
-
-ObjectTreeListBox::~ObjectTreeListBox()
-{
-}
-
-void ObjectTreeListBox::Command( const CommandEvent& )
-{
-}
-
-void ObjectTreeListBox::MouseButtonDown( const MouseEvent& rMEvt )
-{
-    BasicTreeListBox::MouseButtonDown( rMEvt );
-
-    if ( rMEvt.IsLeft() && ( rMEvt.GetClicks() == 2 ) )
-    {
-        BasicEntryDescriptor aDesc( GetEntryDescriptor( GetCurEntry() ) );
-
-        if ( aDesc.GetType() == OBJ_TYPE_METHOD )
-        {
-            BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
-            SfxViewFrame* pViewFrame = pIDEShell ? pIDEShell->GetViewFrame() : NULL;
-            SfxDispatcher* pDispatcher = pViewFrame ? pViewFrame->GetDispatcher() : NULL;
-            if( pDispatcher )
-            {
-                SbxItem aSbxItem( SID_BASICIDE_ARG_SBX, aDesc.GetDocument(), aDesc.GetLibName(), aDesc.GetName(),
-                                  aDesc.GetMethodName(), ConvertType( aDesc.GetType() ) );
-                pDispatcher->Execute( SID_BASICIDE_SHOWSBX,
-                                        SFX_CALLMODE_SYNCHRON, &aSbxItem, 0L );
-            }
-        }
-    }
-}
-
-
-
 ObjectCatalog::ObjectCatalog( Window * pParent )
     :FloatingWindow( pParent, IDEResId( RID_BASICIDE_OBJCAT ) )
     ,aMacroTreeList( this, IDEResId( RID_TLB_MACROS ) )
