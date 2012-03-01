@@ -107,7 +107,7 @@ public:
 
     virtual Size        GetOptimalSize(WindowSizeType eType) const;
 
-    DECL_LINK( ClickHdl, Button* );
+    DECL_LINK( ClickHdl, void* );
 };
 
 // -----------

@@ -413,7 +413,7 @@ void MessBox::ImplPosControls()
     SetPageSizePixel( aPageSize );
 }
 
-IMPL_LINK( MessBox, ClickHdl, Button*, pBtn )
+IMPL_LINK_NOARG( MessBox, ClickHdl )
 {
     Edit aCopyHelper( this );
     aCopyHelper.SetText( maMessText, Selection( 0, maMessText.Len() ) );

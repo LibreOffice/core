@@ -86,7 +86,7 @@ private:
     SAL_DLLPRIVATE void         ImplFreeLayoutData();
     SAL_DLLPRIVATE long         ImplHandleKeyEvent( const KeyEvent& rKeyEvent );
 
-    DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, ListBox* );
+    DECL_DLLPRIVATE_LINK(       ImplListBoxSelectHdl, void* );
     DECL_DLLPRIVATE_LINK(       ImplWindowEventListener, VclSimpleEvent* );
 
 
