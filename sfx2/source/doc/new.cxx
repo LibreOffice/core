@@ -178,12 +178,12 @@ class SfxNewFileDialog_Impl
     DECL_LINK( Update, void * );
 
     DECL_LINK( RegionSelect, ListBox * );
-    DECL_LINK( TemplateSelect, ListBox * );
+    DECL_LINK(TemplateSelect, void *);
     DECL_LINK( DoubleClick, ListBox * );
     void TogglePreview(CheckBox *);
-    DECL_LINK( Expand, MoreButton * );
+    DECL_LINK( Expand, void * );
     DECL_LINK( PreviewClick, CheckBox * );
-    DECL_LINK( LoadFile, PushButton* );
+    DECL_LINK(LoadFile, void *);
     sal_uInt16  GetSelectedTemplatePos() const;
 
 public:
@@ -215,7 +215,7 @@ void SfxNewFileDialog_Impl::ClearInfo()
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxNewFileDialog_Impl, Update, void *, EMPTYARG )
+IMPL_LINK_NOARG(SfxNewFileDialog_Impl, Update)
 {
     if ( xDocShell.Is() )
     {
@@ -317,12 +317,12 @@ IMPL_LINK( SfxNewFileDialog_Impl, RegionSelect, ListBox *, pBox )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, Expand, MoreButton *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, Expand)
 {
     TemplateSelect(&aTemplateLb);
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxNewFileDialog_Impl, Expand, MoreButton *, pMoreButton )
+IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, Expand)
 
 //-------------------------------------------------------------------------
 
@@ -348,7 +348,7 @@ IMPL_LINK( SfxNewFileDialog_Impl, PreviewClick, CheckBox *, pBox )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxNewFileDialog_Impl, TemplateSelect, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SfxNewFileDialog_Impl, TemplateSelect)
 {
     // Still loading
     if ( xDocShell && xDocShell->GetProgress() )
@@ -376,12 +376,12 @@ IMPL_LINK_INLINE_END( SfxNewFileDialog_Impl, DoubleClick, ListBox *, pListBox )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SfxNewFileDialog_Impl, LoadFile, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SfxNewFileDialog_Impl, LoadFile)
 {
     pAntiImpl->EndDialog(RET_TEMPLATE_LOAD);
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxNewFileDialog_Impl, LoadFile, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SfxNewFileDialog_Impl, LoadFile)
 //-------------------------------------------------------------------------
 
 sal_uInt16  SfxNewFileDialog_Impl::GetSelectedTemplatePos() const

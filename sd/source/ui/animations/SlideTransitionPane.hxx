@@ -101,7 +101,7 @@ private:
     DECL_LINK( SoundListBoxSelected, void * );
     DECL_LINK( LoopSoundBoxChecked, void * );
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
-    DECL_LINK(LateInitCallback, Timer*);
+    DECL_LINK(LateInitCallback, void *);
 
 private:
     ViewShellBase &   mrBase;

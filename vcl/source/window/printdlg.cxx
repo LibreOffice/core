@@ -2178,7 +2178,7 @@ IMPL_LINK( PrintDialog, ModifyHdl, Edit*, pEdit )
     return 0;
 }
 
-IMPL_LINK( PrintDialog, UIOptionsChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(PrintDialog, UIOptionsChanged)
 {
     checkOptionalControlDependencies();
     return 0;

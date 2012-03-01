@@ -481,7 +481,7 @@ void DemoWindow::init()
     }
 }
 
-IMPL_LINK( DemoWindow, updateHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(DemoWindow, updateHdl)
 {
     init();
 

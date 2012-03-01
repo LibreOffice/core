@@ -1732,7 +1732,7 @@ static void ImplActivateFloatingWindows( Window* pWindow, sal_Bool bActive )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Window, ImplAsyncFocusHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Window, ImplAsyncFocusHdl)
 {
     ImplGetWindowImpl()->mpFrameData->mnFocusId = 0;
 

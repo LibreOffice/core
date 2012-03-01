@@ -63,7 +63,7 @@ private:
 
     DECL_LINK (LostFocusPathHdl_Impl,  void * ); // Combobox "path" lost its focus
 
-    DECL_LINK (TimeoutHdl_Impl      ,  Timer * );   // Handler for timer -timeout
+    DECL_LINK(TimeoutHdl_Impl      , void *);   // Handler for timer -timeout
 
     enum EPathType { Type_Unknown, Type_Invalid,
                      Type_ExistsFile, Type_File,

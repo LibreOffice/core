@@ -342,7 +342,7 @@ static const char * const aStrArr[] = {
     return 0;
 }
 
-IMPL_LINK( SwInputWindow, DropdownClickHdl, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(SwInputWindow, DropdownClickHdl)
 {
     sal_uInt16 nCurID = GetCurItemId();
     EndSelection(); // setzt CurItemId zurueck !
@@ -490,7 +490,7 @@ void SwInputWindow::SetFormula( const String& rFormula, sal_Bool bDelFlag )
     bDelSel = bDelFlag;
 }
 
-IMPL_LINK( SwInputWindow, ModifyHdl, InputEdit*, EMPTYARG )
+IMPL_LINK_NOARG(SwInputWindow, ModifyHdl)
 {
     if (bIsTable && m_bResetUndo)
     {

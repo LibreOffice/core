@@ -276,7 +276,7 @@ struct PrintJobAsync
     DECL_LINK( ExecJob, void* );
 };
 
-IMPL_LINK( PrintJobAsync, ExecJob, void*, EMPTYARG )
+IMPL_LINK_NOARG(PrintJobAsync, ExecJob)
 {
     Printer::ImplPrintJob( mpController, maInitSetup );
 

@@ -84,8 +84,8 @@ private:
     sal_Bool            mbInMove;
     sal_uLong           mnLastUserEvent;
 
-    DECL_LINK( DockingHdl, ImplDockFloatWin* );
-    DECL_LINK( DockTimerHdl, ImplDockFloatWin* );
+    DECL_LINK(DockingHdl, void *);
+    DECL_LINK(DockTimerHdl, void *);
 public:
     ImplDockFloatWin( Window* pParent, WinBits nWinBits,
                       DockingWindow* pDockingWin );
@@ -139,7 +139,7 @@ ImplDockFloatWin::~ImplDockFloatWin()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ImplDockFloatWin, DockTimerHdl, ImplDockFloatWin*, EMPTYARG )
+IMPL_LINK_NOARG(ImplDockFloatWin, DockTimerHdl)
 {
     DBG_ASSERT( mpDockWin->IsFloatingMode(), "docktimer called but not floating" );
 
@@ -168,7 +168,7 @@ IMPL_LINK( ImplDockFloatWin, DockTimerHdl, ImplDockFloatWin*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ImplDockFloatWin, DockingHdl, ImplDockFloatWin*, EMPTYARG )
+IMPL_LINK_NOARG(ImplDockFloatWin, DockingHdl)
 {
     PointerState aState = mpDockWin->GetParent()->GetPointerState();
 

@@ -699,7 +699,7 @@ void SvHeaderTabListBox::Clear()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvHeaderTabListBox, ScrollHdl_Impl, SvTabListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvHeaderTabListBox, ScrollHdl_Impl)
 {
     m_pImpl->m_pHeaderBar->SetOffset( -GetXOffset() );
     return 0;
@@ -707,7 +707,7 @@ IMPL_LINK( SvHeaderTabListBox, ScrollHdl_Impl, SvTabListBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvHeaderTabListBox, CreateAccessibleHdl_Impl, HeaderBar*, EMPTYARG )
+IMPL_LINK_NOARG(SvHeaderTabListBox, CreateAccessibleHdl_Impl)
 {
     Window* pParent = m_pImpl->m_pHeaderBar->GetAccessibleParentWindow();
     DBG_ASSERT( pParent, "SvHeaderTabListBox..CreateAccessibleHdl_Impl - accessible parent not found" );

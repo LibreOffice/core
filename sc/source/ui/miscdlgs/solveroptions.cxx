@@ -371,13 +371,13 @@ IMPL_LINK( ScSolverOptionsDialog, ButtonHdl, PushButton*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScSolverOptionsDialog, SettingsDoubleClickHdl, SvTreeListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsDoubleClickHdl)
 {
     EditOption();
     return 0;
 }
 
-IMPL_LINK( ScSolverOptionsDialog, EngineSelectHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScSolverOptionsDialog, EngineSelectHdl)
 {
     sal_uInt16 nSelectPos = maLbEngine.GetSelectEntryPos();
     if ( nSelectPos < maImplNames.getLength() )
@@ -393,7 +393,7 @@ IMPL_LINK( ScSolverOptionsDialog, EngineSelectHdl, ListBox*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScSolverOptionsDialog, SettingsSelHdl, SvxCheckListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScSolverOptionsDialog, SettingsSelHdl)
 {
     sal_Bool bCheckbox = false;
 

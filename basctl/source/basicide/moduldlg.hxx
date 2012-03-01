@@ -62,7 +62,7 @@ private:
     OKButton        aOKButton;
     CancelButton    aCancelButton;
 
-    DECL_LINK(OkButtonHandler, Button *);
+    DECL_LINK(OkButtonHandler, void *);
 
 public:
     NewObjectDialog(Window * pParent, NewObjectMode nMode, bool bCheckName = false);
@@ -78,7 +78,7 @@ class GotoLineDialog : public ModalDialog
     Edit            aEdit;
     OKButton        aOKButton;
     CancelButton    aCancelButton;
-    DECL_LINK(OkButtonHandler, Button *);
+    DECL_LINK(OkButtonHandler, void *);
 public:
     GotoLineDialog( Window * pParent );
     sal_Int32   GetLineNumber();
@@ -94,7 +94,7 @@ private:
 
     sal_Bool        mbExportAsPackage;
 
-    DECL_LINK(OkButtonHandler, Button *);
+    DECL_LINK(OkButtonHandler, void *);
 
 public:
     ExportDialog( Window * pParent );

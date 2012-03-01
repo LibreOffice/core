@@ -303,7 +303,7 @@ void Throbber::setImageList( const Sequence< Reference< XGraphic > >& rImageList
 }
 
 //----------------------------------------------------------------------------------------------------------------------
-IMPL_LINK( Throbber, TimeOutHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Throbber, TimeOutHdl)
 {
     SolarMutexGuard aGuard;
     if ( maImageList.empty() )

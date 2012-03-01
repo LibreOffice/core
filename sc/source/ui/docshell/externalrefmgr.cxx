@@ -1288,7 +1288,7 @@ void ScExternalRefLink::SetDoReferesh(bool b)
     mbDoRefresh = b;
 }
 
-IMPL_LINK( ScExternalRefLink, ExternalRefEndEditHdl, ::sfx2::SvBaseLink*, EMPTYARG )
+IMPL_LINK_NOARG(ScExternalRefLink, ExternalRefEndEditHdl)
 {
     return 0;
 }

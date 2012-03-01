@@ -344,14 +344,14 @@ bool RangeChooserTabPage::isValid()
     return bIsValid;
 }
 
-IMPL_LINK( RangeChooserTabPage, ControlEditedHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlEditedHdl)
 {
     setDirty();
     isValid();
     return 0;
 }
 
-IMPL_LINK( RangeChooserTabPage, ControlChangedHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(RangeChooserTabPage, ControlChangedHdl)
 {
     setDirty();
     if( isValid())
@@ -359,7 +359,7 @@ IMPL_LINK( RangeChooserTabPage, ControlChangedHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( RangeChooserTabPage, ChooseRangeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(RangeChooserTabPage, ChooseRangeHdl)
 {
     rtl::OUString aRange = m_aED_Range.GetText();
     // using assignment for broken gcc 3.3

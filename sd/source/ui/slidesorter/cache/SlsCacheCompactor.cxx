@@ -165,7 +165,7 @@ CacheCompactor::CacheCompactor(
 
 
 
-IMPL_LINK(CacheCompactor, CompactionCallback, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(CacheCompactor, CompactionCallback)
 {
     mbIsCompactionRunning = true;
 

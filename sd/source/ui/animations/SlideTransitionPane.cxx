@@ -1165,7 +1165,7 @@ IMPL_LINK(SlideTransitionPane,EventMultiplexerListener,
     return 0;
 }
 
-IMPL_LINK( SlideTransitionPane, ApplyToAllButtonClicked, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideTransitionPane, ApplyToAllButtonClicked)
 {
     DBG_ASSERT( mpDrawDoc, "Invalid Draw Document!" );
     if( !mpDrawDoc )
@@ -1193,44 +1193,44 @@ IMPL_LINK( SlideTransitionPane, ApplyToAllButtonClicked, void *, EMPTYARG )
 }
 
 
-IMPL_LINK( SlideTransitionPane, PlayButtonClicked, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideTransitionPane, PlayButtonClicked)
 {
     playCurrentEffect();
     return 0;
 }
 
-IMPL_LINK( SlideTransitionPane, SlideShowButtonClicked, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideTransitionPane, SlideShowButtonClicked)
 {
     mrBase.StartPresentation();
     return 0;
 }
 
-IMPL_LINK( SlideTransitionPane, TransitionSelected, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideTransitionPane, TransitionSelected)
 {
     applyToSelectedPages();
     return 0;
 }
 
-IMPL_LINK( SlideTransitionPane, AdvanceSlideRadioButtonToggled, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideTransitionPane, AdvanceSlideRadioButtonToggled)
 {
     updateControlState();
     applyToSelectedPages();
     return 0;
 }
 
-IMPL_LINK( SlideTransitionPane, AdvanceTimeModified, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideTransitionPane, AdvanceTimeModified)
 {
     applyToSelectedPages();
     return 0;
 }
 
-IMPL_LINK( SlideTransitionPane, SpeedListBoxSelected, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideTransitionPane, SpeedListBoxSelected)
 {
     applyToSelectedPages();
     return 0;
 }
 
-IMPL_LINK( SlideTransitionPane, SoundListBoxSelected, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideTransitionPane, SoundListBoxSelected)
 {
     if( maLB_SOUND.GetSelectEntryCount() )
     {
@@ -1246,20 +1246,20 @@ IMPL_LINK( SlideTransitionPane, SoundListBoxSelected, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SlideTransitionPane, LoopSoundBoxChecked, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideTransitionPane, LoopSoundBoxChecked)
 {
     applyToSelectedPages();
     return 0;
 }
 
-IMPL_LINK( SlideTransitionPane, AutoPreviewClicked, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideTransitionPane, AutoPreviewClicked)
 {
     SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
     pOptions->SetPreviewTransitions( maCB_AUTO_PREVIEW.IsChecked() ? sal_True : sal_False );
     return 0;
 }
 
-IMPL_LINK( SlideTransitionPane, LateInitCallback, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SlideTransitionPane, LateInitCallback)
 {
     const TransitionPresetList& rPresetList = TransitionPreset::getTransitionPresetList();
     TransitionPresetList::const_iterator aIter( rPresetList.begin() );

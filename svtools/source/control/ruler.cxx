@@ -2082,7 +2082,7 @@ void Ruler::ImplEndDrag()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Ruler, ImplUpdateHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Ruler, ImplUpdateHdl)
 {
     mnUpdateEvtId = 0;
 

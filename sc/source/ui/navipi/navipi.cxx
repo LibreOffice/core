@@ -454,7 +454,7 @@ void CommandToolBox::Click()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( CommandToolBox, ToolBoxDropdownClickHdl, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(CommandToolBox, ToolBoxDropdownClickHdl)
 {
     //  Das Popupmenue fuer den Dropmodus muss im Click (Button Down)
     //  statt im Select (Button Up) aufgerufen werden.

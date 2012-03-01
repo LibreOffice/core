@@ -56,7 +56,7 @@ class SwMailMergePrepareMergePage : public svt::OWizardPage
 
     SwMailMergeWizard*  m_pWizard;
 
-    DECL_LINK(EditDocumentHdl_Impl, PushButton*);
+    DECL_LINK(EditDocumentHdl_Impl, void *);
     DECL_LINK(ExcludeHdl_Impl, CheckBox*);
     DECL_LINK(MoveHdl_Impl, void*);
 

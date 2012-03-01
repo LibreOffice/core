@@ -2505,7 +2505,7 @@ IMPL_LINK( CalendarField, ImplClickHdl, PushButton*, pBtn )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( CalendarField, ImplPopupModeEndHdl, FloatingWindow*, EMPTYARG )
+IMPL_LINK_NOARG(CalendarField, ImplPopupModeEndHdl)
 {
     EndDropDown();
     GrabFocus();

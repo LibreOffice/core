@@ -369,37 +369,37 @@ void ScNameDefDlg::MorePushed()
     MoveWindow(maFlDiv, nPixel);
 }
 
-IMPL_LINK( ScNameDefDlg, CancelBtnHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScNameDefDlg, CancelBtnHdl)
 {
     CancelPushed();
     return 0;
 }
 
-IMPL_LINK( ScNameDefDlg, AddBtnHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScNameDefDlg, AddBtnHdl)
 {
     AddPushed();
     return 0;
 };
 
-IMPL_LINK( ScNameDefDlg, NameModifyHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScNameDefDlg, NameModifyHdl)
 {
     IsNameValid();
     return 0;
 }
 
-IMPL_LINK( ScNameDefDlg, EdModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDefDlg, EdModifyHdl)
 {
     IsNameValid();
     return 0;
 }
 
-IMPL_LINK( ScNameDefDlg, AssignGetFocusHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDefDlg, AssignGetFocusHdl)
 {
     EdModifyHdl( &maEdRange );
     return 0;
 }
 
-IMPL_LINK( ScNameDefDlg, MoreBtnHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScNameDefDlg, MoreBtnHdl)
 {
     MorePushed();
     return 0;

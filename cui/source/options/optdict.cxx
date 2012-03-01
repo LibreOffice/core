@@ -127,7 +127,7 @@ SvxNewDictionaryDialog::SvxNewDictionaryDialog( Window* pParent,
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxNewDictionaryDialog, OKHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxNewDictionaryDialog, OKHdl_Impl)
 {
     String sDict = aNameEdit.GetText();
     sDict.EraseTrailingChars();
@@ -204,7 +204,7 @@ IMPL_LINK( SvxNewDictionaryDialog, OKHdl_Impl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxNewDictionaryDialog, ModifyHdl_Impl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxNewDictionaryDialog, ModifyHdl_Impl)
 {
     if ( aNameEdit.GetText().Len() )
         aOKBtn.Enable();
@@ -212,7 +212,7 @@ IMPL_LINK_INLINE_START( SvxNewDictionaryDialog, ModifyHdl_Impl, Edit *, EMPTYARG
         aOKBtn.Disable();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxNewDictionaryDialog, ModifyHdl_Impl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxNewDictionaryDialog, ModifyHdl_Impl)
 
 //==========================================================================
 //
@@ -425,7 +425,7 @@ void SvxEditDictionaryDialog::RemoveDictEntry(SvLBoxEntry* pEntry)
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectBookHdl_Impl)
 {
     sal_uInt16 nPos = aAllDictsLB.GetSelectEntryPos();
 
@@ -450,7 +450,7 @@ IMPL_LINK( SvxEditDictionaryDialog, SelectBookHdl_Impl, ListBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxEditDictionaryDialog, SelectLangHdl_Impl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxEditDictionaryDialog, SelectLangHdl_Impl)
 {
     sal_uInt16 nDicPos = aAllDictsLB.GetSelectEntryPos();
     sal_uInt16 nLang = aLangLB.GetSelectLanguage();

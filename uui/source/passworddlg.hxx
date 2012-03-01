@@ -53,7 +53,7 @@ class PasswordDialog : public ModalDialog
     String          aPasswdMismatch;
 
 
-    DECL_LINK( OKHdl_Impl, OKButton * );
+    DECL_LINK(OKHdl_Impl, void *);
 
 public:
     PasswordDialog( Window* pParent, ::com::sun::star::task::PasswordRequestMode nDlgMode, ResMgr * pResMgr, ::rtl::OUString& aDocURL,

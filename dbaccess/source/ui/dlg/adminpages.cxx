@@ -140,7 +140,7 @@ namespace dbaui
 
 
     // -----------------------------------------------------------------------
-    IMPL_LINK(OGenericAdministrationPage, OnControlModified, Control*, EMPTYARG)
+    IMPL_LINK_NOARG(OGenericAdministrationPage, OnControlModified)
     {
         callModifiedHdl();
         return 0L;

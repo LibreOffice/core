@@ -1069,7 +1069,7 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, WindowEventListener, VclWin
 
 
 
-IMPL_LINK(AccessibleSlideSorterView::Implementation, SelectionChangeListener, void*, EMPTYARG )
+IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, SelectionChangeListener)
 {
     if (mnSelectionChangeUserEventId == 0)
         mnSelectionChangeUserEventId = Application::PostUserEvent(
@@ -1080,7 +1080,7 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, SelectionChangeListener, vo
 
 
 
-IMPL_LINK(AccessibleSlideSorterView::Implementation, BroadcastSelectionChange, void*, EMPTYARG )
+IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, BroadcastSelectionChange)
 {
     mnSelectionChangeUserEventId = 0;
     mrAccessibleSlideSorter.FireAccessibleEvent(
@@ -1093,7 +1093,7 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, BroadcastSelectionChange, v
 
 
 
-IMPL_LINK(AccessibleSlideSorterView::Implementation, FocusChangeListener, void*, EMPTYARG )
+IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, FocusChangeListener)
 {
     sal_Int32 nNewFocusedIndex (
         mrSlideSorter.GetController().GetFocusManager().GetFocusedPageIndex());
@@ -1126,7 +1126,7 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, FocusChangeListener, void*,
 
 
 
-IMPL_LINK(AccessibleSlideSorterView::Implementation, UpdateChildrenCallback, void*, EMPTYARG )
+IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, UpdateChildrenCallback)
 {
     mnUpdateChildrenUserEventId = 0;
     UpdateChildren();
@@ -1137,7 +1137,7 @@ IMPL_LINK(AccessibleSlideSorterView::Implementation, UpdateChildrenCallback, voi
 
 
 
-IMPL_LINK(AccessibleSlideSorterView::Implementation, VisibilityChangeListener, void*, EMPTYARG )
+IMPL_LINK_NOARG(AccessibleSlideSorterView::Implementation, VisibilityChangeListener)
 {
     UpdateChildren();
     return 1;

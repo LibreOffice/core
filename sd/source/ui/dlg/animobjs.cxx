@@ -247,7 +247,7 @@ AnimationWindow::~AnimationWindow()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( AnimationWindow, ClickFirstHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AnimationWindow, ClickFirstHdl)
 {
     aBmpExList.First();
     pBitmapEx = static_cast< BitmapEx* >( aBmpExList.GetCurObject() );
@@ -258,7 +258,7 @@ IMPL_LINK( AnimationWindow, ClickFirstHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( AnimationWindow, ClickStopHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AnimationWindow, ClickStopHdl)
 {
     bMovie = sal_False;
     return( 0L );
@@ -382,7 +382,7 @@ IMPL_LINK( AnimationWindow, ClickPlayHdl, void *, p )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( AnimationWindow, ClickLastHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AnimationWindow, ClickLastHdl)
 {
     aBmpExList.Last();
     pBitmapEx = static_cast< BitmapEx* >(  aBmpExList.GetCurObject() );
@@ -525,7 +525,7 @@ IMPL_LINK( AnimationWindow, ClickRemoveBitmapHdl, void *, pBtn )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( AnimationWindow, ClickCreateGroupHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AnimationWindow, ClickCreateGroupHdl)
 {
     // Code jetzt in CreatePresObj()
     SfxBoolItem aItem( SID_ANIMATOR_CREATE, sal_True );
@@ -537,7 +537,7 @@ IMPL_LINK( AnimationWindow, ClickCreateGroupHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( AnimationWindow, ModifyBitmapHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AnimationWindow, ModifyBitmapHdl)
 {
     sal_uLong nBmp = static_cast<sal_uLong>(aNumFldBitmap.GetValue());
 
@@ -556,7 +556,7 @@ IMPL_LINK( AnimationWindow, ModifyBitmapHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( AnimationWindow, ModifyTimeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AnimationWindow, ModifyTimeHdl)
 {
     sal_uLong nPos = static_cast<sal_uLong>(aNumFldBitmap.GetValue() - 1);
 

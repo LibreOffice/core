@@ -360,13 +360,13 @@ namespace svxform
     {
     }
     //------------------------------------------------------------------------
-    IMPL_LINK( XFormsPage, TbxSelectHdl, ToolBox *, EMPTYARG )
+    IMPL_LINK_NOARG(XFormsPage, TbxSelectHdl)
     {
         DoToolBoxAction( m_aToolBox.GetCurItemId() );
         return 0;
     }
     //------------------------------------------------------------------------
-    IMPL_LINK( XFormsPage, ItemSelectHdl, DataTreeListBox *, EMPTYARG )
+    IMPL_LINK_NOARG(XFormsPage, ItemSelectHdl)
     {
         EnableMenuItems( NULL );
         return 0;
@@ -1985,7 +1985,7 @@ namespace svxform
         return 0;
     }
     // -----------------------------------------------------------------------
-    IMPL_LINK( DataNavigatorWindow, ActivatePageHdl, TabControl *, EMPTYARG )
+    IMPL_LINK_NOARG(DataNavigatorWindow, ActivatePageHdl)
     {
         sal_uInt16 nId = 0;
         XFormsPage* pPage = GetCurrentPage( nId );
@@ -1999,7 +1999,7 @@ namespace svxform
         return 0;
     }
     // -----------------------------------------------------------------------
-    IMPL_LINK( DataNavigatorWindow, UpdateHdl, Timer *, EMPTYARG )
+    IMPL_LINK_NOARG(DataNavigatorWindow, UpdateHdl)
     {
         ModelSelectHdl( NULL );
         return 0;
@@ -2681,7 +2681,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( AddDataItemDialog, OKHdl, OKButton *, EMPTYARG )
+    IMPL_LINK_NOARG(AddDataItemDialog, OKHdl)
     {
         bool bIsHandleBinding = ( DITBinding == m_eItemType );
         bool bIsHandleText = ( DITText == m_eItemType );
@@ -3077,7 +3077,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( AddConditionDialog, EditHdl, PushButton *, EMPTYARG )
+    IMPL_LINK_NOARG(AddConditionDialog, EditHdl)
     {
         Reference< XNameContainer > xNameContnr;
         try
@@ -3102,7 +3102,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( AddConditionDialog, OKHdl, OKButton *, EMPTYARG )
+    IMPL_LINK_NOARG(AddConditionDialog, OKHdl)
     {
 /*!!!
         try
@@ -3120,14 +3120,14 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( AddConditionDialog, ModifyHdl, MultiLineEdit *, EMPTYARG )
+    IMPL_LINK_NOARG(AddConditionDialog, ModifyHdl)
     {
         m_aResultTimer.Start();
         return 0;
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( AddConditionDialog, ResultHdl, Timer *, EMPTYARG )
+    IMPL_LINK_NOARG(AddConditionDialog, ResultHdl)
     {
         String sCondition = m_aConditionED.GetText().EraseLeadingChars().EraseTrailingChars();
         String sResult;
@@ -3257,7 +3257,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( NamespaceItemDialog, OKHdl, OKButton *, EMPTYARG )
+    IMPL_LINK_NOARG(NamespaceItemDialog, OKHdl)
     {
         try
         {
@@ -3355,7 +3355,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( ManageNamespaceDialog, OKHdl, OKButton *, EMPTYARG )
+    IMPL_LINK_NOARG(ManageNamespaceDialog, OKHdl)
     {
         String sPrefix = m_aPrefixED.GetText();
 
@@ -3432,7 +3432,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( AddSubmissionDialog, RefHdl, PushButton *, EMPTYARG )
+    IMPL_LINK_NOARG(AddSubmissionDialog, RefHdl)
     {
         AddConditionDialog aDlg( this, PN_BINDING_EXPR, m_xTempBinding );
         aDlg.SetCondition( m_aRefED.GetText() );
@@ -3443,7 +3443,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( AddSubmissionDialog, OKHdl, OKButton *, EMPTYARG )
+    IMPL_LINK_NOARG(AddSubmissionDialog, OKHdl)
     {
         rtl::OUString sName(m_aNameED.GetText());
         if(sName.isEmpty()) {
@@ -3683,7 +3683,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( AddInstanceDialog, FilePickerHdl, PushButton *, EMPTYARG )
+    IMPL_LINK_NOARG(AddInstanceDialog, FilePickerHdl)
     {
         ::sfx2::FileDialogHelper aDlg(
             css::ui::dialogs::TemplateDescription::FILEOPEN_SIMPLE, 0 );

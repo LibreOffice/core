@@ -214,7 +214,7 @@ void OColorPopup::SetSlotId(sal_uInt16 _nSlotId)
     }
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK( OColorPopup, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(OColorPopup, SelectHdl)
 {
     sal_uInt16 nItemId = m_aColorSet.GetSelectItemId();
     Color aColor( nItemId == 0 ? Color( COL_TRANSPARENT ) : m_aColorSet.GetItemColor( nItemId ) );

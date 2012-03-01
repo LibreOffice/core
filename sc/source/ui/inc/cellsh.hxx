@@ -71,7 +71,7 @@ private:
     void ExecuteSubtotals(SfxRequest& rReq);
 
     DECL_LINK( ClipboardChanged, TransferableDataHelper* );
-    DECL_LINK( DialogClosed, AbstractScLinkedAreaDlg* );
+    DECL_LINK( DialogClosed, void* );
 
     RotateTransliteration m_aRotateCase;
 

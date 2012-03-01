@@ -877,7 +877,7 @@ SfxDocumentPage::SfxDocumentPage( Window* pParent, const SfxItemSet& rItemSet ) 
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SfxDocumentPage, DeleteHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SfxDocumentPage, DeleteHdl)
 {
     String aName;
     if ( bEnableUseUserData && aUseUserDataCB.IsChecked() )
@@ -898,7 +898,7 @@ IMPL_LINK( SfxDocumentPage, DeleteHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SfxDocumentPage, SignatureHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SfxDocumentPage, SignatureHdl)
 {
     SfxObjectShell* pDoc = SfxObjectShell::Current();
     if( pDoc )
@@ -911,7 +911,7 @@ IMPL_LINK( SfxDocumentPage, SignatureHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SfxDocumentPage, ChangePassHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SfxDocumentPage, ChangePassHdl)
 {
     SfxObjectShell* pShell = SfxObjectShell::Current();
     do
@@ -1371,7 +1371,7 @@ IMPL_LINK( SfxInternetPage, ClickHdlForward, Control*, pCtrl )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SfxInternetPage, ClickHdlBrowseURL, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SfxInternetPage, ClickHdlBrowseURL)
 {
     if ( !pFileDlg )
         pFileDlg = new sfx2::FileDialogHelper(
@@ -1384,7 +1384,7 @@ IMPL_LINK( SfxInternetPage, ClickHdlBrowseURL, PushButton*, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SfxInternetPage, DialogClosedHdl, sfx2::FileDialogHelper*, EMPTYARG )
+IMPL_LINK_NOARG(SfxInternetPage, DialogClosedHdl)
 {
     DBG_ASSERT( pFileDlg, "SfxInternetPage::DialogClosedHdl(): no file dialog" );
 
@@ -1756,7 +1756,7 @@ CustomPropertiesEditButton::~CustomPropertiesEditButton()
 {
 }
 
-IMPL_LINK( CustomPropertiesEditButton, ClickHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(CustomPropertiesEditButton, ClickHdl)
 {
     DurationDialog_Impl* pDurationDlg = new DurationDialog_Impl( this, m_pLine->m_aDurationField.GetDuration() );
     if( RET_OK == pDurationDlg->Execute() )
@@ -1941,13 +1941,13 @@ IMPL_LINK( CustomPropertiesWindow, BoxLoseFocusHdl, CustomPropertiesTypeBox*, pB
     return 0;
 }
 
-IMPL_LINK( CustomPropertiesWindow, EditTimeoutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(CustomPropertiesWindow, EditTimeoutHdl)
 {
     ValidateLine( m_pCurrentLine, false );
     return 0;
 }
 
-IMPL_LINK( CustomPropertiesWindow, BoxTimeoutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(CustomPropertiesWindow, BoxTimeoutHdl)
 {
     ValidateLine( m_pCurrentLine, true );
     return 0;
@@ -2371,7 +2371,7 @@ IMPL_LINK( CustomPropertiesControl, ScrollHdl, ScrollBar*, pScrollBar )
     return 0;
 }
 
-IMPL_LINK( CustomPropertiesControl, RemovedHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(CustomPropertiesControl, RemovedHdl)
 {
     m_aVertScroll.SetRangeMax( m_aPropertiesWin.GetVisibleLineCount() + 1 );
     if ( m_aPropertiesWin.GetOutputSizePixel().Height() < m_aPropertiesWin.GetVisibleLineCount() * m_aPropertiesWin.GetLineHeight() )
@@ -2402,7 +2402,7 @@ SfxCustomPropertiesPage::SfxCustomPropertiesPage( Window* pParent, const SfxItem
     m_aAddBtn.SetClickHdl( LINK( this, SfxCustomPropertiesPage, AddHdl ) );
 }
 
-IMPL_LINK( SfxCustomPropertiesPage, AddHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SfxCustomPropertiesPage, AddHdl)
 {
     Any aAny;
     m_aPropertiesCtrl.AddLine( ::rtl::OUString(), aAny, true );

@@ -571,7 +571,7 @@ void SwNaviImageButton::SetPopupWindow( SfxPopupWindow* pWindow )
 
 //--------------------------------------------------------------------
 
-IMPL_LINK( SwNaviImageButton, PopupModeEndHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SwNaviImageButton, PopupModeEndHdl)
 {
     if ( pPopupWindow->IsVisible() )
     {

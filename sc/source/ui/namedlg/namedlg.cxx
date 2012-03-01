@@ -544,54 +544,54 @@ void ScNameDlg::GetRangeNames(boost::ptr_map<rtl::OUString, ScRangeName>& rRange
     maRangeMap.swap(rRangeMap);
 }
 
-IMPL_LINK( ScNameDlg, OkBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, OkBtnHdl)
 {
     Close();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, CancelBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, CancelBtnHdl)
 {
     CancelPushed();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, AddBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, AddBtnHdl)
 {
     return AddPushed();
 }
 
-IMPL_LINK( ScNameDlg, RemoveBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, RemoveBtnHdl)
 {
     RemovePushed();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, EdModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, EdModifyHdl)
 {
     NameModified();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, AssignGetFocusHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, AssignGetFocusHdl)
 {
     EdModifyHdl( &maEdAssign );
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, SelectionChangedHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, SelectionChangedHdl_Impl)
 {
     SelectionChanged();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, ScopeChangedHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, ScopeChangedHdl)
 {
     ScopeChanged();
     return 0;
 }
 
-IMPL_LINK( ScNameDlg, MoreBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScNameDlg, MoreBtnHdl)
 {
     MorePushed();
     return 0;

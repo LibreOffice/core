@@ -1536,7 +1536,7 @@ void AutoRecovery::implts_stopTimer()
 }
 
 //-----------------------------------------------
-IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
+IMPL_LINK_NOARG(AutoRecovery, implts_timerExpired)
 {
     try
     {
@@ -1637,7 +1637,7 @@ IMPL_LINK(AutoRecovery, implts_timerExpired, void*, EMPTYARG)
 }
 
 //-----------------------------------------------
-IMPL_LINK(AutoRecovery, implts_asyncDispatch, void*, EMPTYARG)
+IMPL_LINK_NOARG(AutoRecovery, implts_asyncDispatch)
 {
     // SAFE ->
     WriteGuard aWriteLock(m_aLock);

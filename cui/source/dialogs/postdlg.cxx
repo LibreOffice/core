@@ -199,25 +199,25 @@ void SvxPostItDialog::EnableTravel(sal_Bool bNext, sal_Bool bPrev)
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxPostItDialog, PrevHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, PrevHdl)
 {
     aPrevHdlLink.Call( this );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxPostItDialog, PrevHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxPostItDialog, PrevHdl)
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxPostItDialog, NextHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxPostItDialog, NextHdl)
 {
     aNextHdlLink.Call( this );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxPostItDialog, NextHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxPostItDialog, NextHdl)
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPostItDialog, Stamp, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPostItDialog, Stamp)
 {
     Date aDate( Date::SYSTEM );
     Time aTime( Time::SYSTEM );
@@ -247,7 +247,7 @@ IMPL_LINK( SvxPostItDialog, Stamp, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPostItDialog, OKHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPostItDialog, OKHdl)
 {
     LocaleDataWrapper aLocaleWrapper( ::comphelper::getProcessServiceFactory(), Application::GetSettings().GetLocale() );
     pOutSet = new SfxItemSet( rSet );

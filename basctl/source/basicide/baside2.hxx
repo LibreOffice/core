@@ -110,7 +110,7 @@ private:
     SyntaxHighlighter   aHighlighter;
     Timer           aSyntaxIdleTimer;
     Table           aSyntaxLineTable;
-    DECL_LINK( SyntaxTimerHdl, Timer * );
+    DECL_LINK(SyntaxTimerHdl, void *);
     ProgressInfo*   pProgress;
     ModulWindow*    pModulWindow;
 
@@ -248,7 +248,7 @@ protected:
     virtual void    Paint( const Rectangle& rRect );
 
     DECL_LINK( ButtonHdl, ImageButton * );
-    DECL_LINK( TreeListHdl, SvTreeListBox * );
+    DECL_LINK(TreeListHdl, void *);
     DECL_LINK( implEndDragHdl, HeaderBar * );
     DECL_LINK( EditAccHdl, Accelerator * );
 

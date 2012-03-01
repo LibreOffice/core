@@ -47,8 +47,8 @@ namespace uui
 
         ::rtl::OUString m_sVersion;
 
-        DECL_LINK(      UpdateHdl, PushButton* );
-        DECL_LINK(      LaterHdl, CancelButton* );
+        DECL_LINK(UpdateHdl, void *);
+        DECL_LINK(LaterHdl, void *);
 
         void            InitButtonWidth();
 

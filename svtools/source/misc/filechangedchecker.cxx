@@ -95,7 +95,7 @@ bool FileChangedChecker::hasFileChanged()
         return false;
 }
 
-IMPL_LINK(FileChangedChecker, TimerHandler, Timer *, EMPTYARG)
+IMPL_LINK_NOARG(FileChangedChecker, TimerHandler)
 {
     // If the file has changed, then update the graphic in the doc
     OSL_TRACE("Timeout Called");

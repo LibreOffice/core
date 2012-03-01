@@ -1939,7 +1939,7 @@ void SfxDockingWindow::Move()
         pImp->aMoveTimer.Start();
 }
 
-IMPL_LINK( SfxDockingWindow, TimerHdl, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(SfxDockingWindow, TimerHdl)
 {
     pImp->aMoveTimer.Stop();
     if ( IsReallyVisible() && IsFloatingMode() )

@@ -459,7 +459,7 @@ void AxisPositionsTabPage::SupportAxisPositioning( bool bSupportAxisPositioning 
     m_bSupportAxisPositioning = bSupportAxisPositioning;
 }
 
-IMPL_LINK ( AxisPositionsTabPage, CrossesAtSelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AxisPositionsTabPage, CrossesAtSelectHdl)
 {
     sal_uInt16 nPos = m_aLB_CrossesAt.GetSelectEntryPos();
     m_aED_CrossesAt.Show( (2==nPos) && !m_bCrossingAxisIsCategoryAxis );
@@ -474,7 +474,7 @@ IMPL_LINK ( AxisPositionsTabPage, CrossesAtSelectHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK ( AxisPositionsTabPage, PlaceLabelsSelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AxisPositionsTabPage, PlaceLabelsSelectHdl)
 {
     sal_uInt16 nLabelPos = m_aLB_PlaceLabels.GetSelectEntryPos();
 

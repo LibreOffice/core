@@ -93,11 +93,11 @@ class SvxEditModulesDlg : public ModalDialog
     DECL_LINK( SelectHdl_Impl, SvxCheckListBox * );
     DECL_LINK( UpDownHdl_Impl, PushButton * );
     DECL_LINK( ClickHdl_Impl, PushButton * );
-    DECL_LINK( BackHdl_Impl, PushButton * );
+    DECL_LINK(BackHdl_Impl, void *);
     DECL_LINK( SelectHdlLB_Impl, ListBox * );
     DECL_LINK( LangSelectHdl_Impl, ListBox* );
     DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox * );
-    DECL_LINK( OpenURLHdl_Impl, svt::FixedHyperlink* );
+    DECL_LINK(OpenURLHdl_Impl, void *);
 #endif
 
 public:
@@ -160,8 +160,8 @@ private:
     DECL_LINK( ClickHdl_Impl, PushButton * );
     DECL_LINK( BoxDoubleClickHdl_Impl, SvTreeListBox * );
     DECL_LINK( BoxCheckButtonHdl_Impl, SvTreeListBox * );
-    DECL_LINK( PostDblClickHdl_Impl, SvTreeListBox * );
-    DECL_LINK( OpenURLHdl_Impl, svt::FixedHyperlink* );
+    DECL_LINK(PostDblClickHdl_Impl, void *);
+    DECL_LINK(OpenURLHdl_Impl, void *);
 
     void                UpdateModulesBox_Impl();
     void                UpdateDicBox_Impl();

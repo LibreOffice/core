@@ -247,7 +247,7 @@ void SfxImageManager_Impl::SetSymbolsSize_Impl( sal_Int16 nNewSymbolsSize )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxImageManager_Impl, OptionsChanged_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SfxImageManager_Impl, OptionsChanged_Impl)
 {
     SetSymbolsSize_Impl( m_aOpt.GetCurrentSymbolsSize() );
     return 0L;

@@ -916,7 +916,7 @@ IMPL_LINK( ScAcceptChgDlg, MinSizeHandle, SvxAcceptChgCtr*, pCtr )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, RefHandle, SvxTPFilter*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, RefHandle)
 {
     sal_uInt16 nId  =ScSimpleRefDlgWrapper::GetChildWindowId();
 
@@ -1106,7 +1106,7 @@ void ScAcceptChgDlg::AcceptFiltered()
     }
 }
 
-IMPL_LINK( ScAcceptChgDlg, RejectAllHandle, SvxTPView*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, RejectAllHandle)
 {
     SetPointer(Pointer(POINTER_WAIT));
     bIgnoreMsg=true;
@@ -1135,7 +1135,7 @@ IMPL_LINK( ScAcceptChgDlg, RejectAllHandle, SvxTPView*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, AcceptAllHandle)
 {
     SetPointer(Pointer(POINTER_WAIT));
 
@@ -1161,7 +1161,7 @@ IMPL_LINK( ScAcceptChgDlg, AcceptAllHandle, SvxTPView*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, SelectHandle, SvxRedlinTable*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, SelectHandle)
 {
     if(!bNoSelection)
         aSelectionTimer.Start();
@@ -1694,7 +1694,7 @@ IMPL_LINK( ScAcceptChgDlg, ChgTrackModHdl, ScChangeTrack*, pChgTrack)
 
     return 0;
 }
-IMPL_LINK( ScAcceptChgDlg, ReOpenTimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, ReOpenTimerHdl)
 {
     ScSimpleRefDlgWrapper::SetAutoReOpen(true);
     aAcceptChgCtr.ShowFilterPage();
@@ -1703,7 +1703,7 @@ IMPL_LINK( ScAcceptChgDlg, ReOpenTimerHdl, Timer*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, UpdateSelectionHdl)
 {
     ScTabView* pTabView = pViewData->GetView();
 
@@ -1753,7 +1753,7 @@ IMPL_LINK( ScAcceptChgDlg, UpdateSelectionHdl, Timer*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAcceptChgDlg, CommandHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, CommandHdl)
 {
 
     const CommandEvent aCEvt(pTheView->GetCommandEvent());
@@ -1929,7 +1929,7 @@ void ScAcceptChgDlg::InitFilter()
     }
 }
 
-IMPL_LINK( ScAcceptChgDlg, FilterModified, SvxTPFilter*, EMPTYARG )
+IMPL_LINK_NOARG(ScAcceptChgDlg, FilterModified)
 {
     return 0;
 }

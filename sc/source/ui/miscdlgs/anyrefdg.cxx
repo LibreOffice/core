@@ -898,7 +898,7 @@ void ScRefHandler::stateChanged(const StateChangedType nStateChange, const bool 
     }
 }
 
-IMPL_LINK( ScRefHandler, UpdateFocusHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScRefHandler, UpdateFocusHdl)
 {
     if (pActiveWin)
     {

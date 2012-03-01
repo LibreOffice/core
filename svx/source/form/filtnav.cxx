@@ -1281,7 +1281,7 @@ IMPL_LINK( FmFilterNavigator, OnRemove, SvLBoxEntry*, pEntry )
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK( FmFilterNavigator, OnDropActionTimer, void*, EMPTYARG )
+IMPL_LINK_NOARG(FmFilterNavigator, OnDropActionTimer)
 {
     if (--m_aTimerCounter > 0)
         return 0L;

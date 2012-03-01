@@ -174,8 +174,8 @@ private:
     DECL_LINK( ValModifyHdl, ComboBox* );
     DECL_LINK( CheckBoxHdl,  CheckBox* );
     DECL_LINK( EndDlgHdl,    Button* );
-    DECL_LINK( MoreClickHdl, MoreButton* );
-    DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK( MoreClickHdl, void* );
+    DECL_LINK( ScrollHdl, void* );
 
     // Hack: RefInput control
     DECL_LINK( TimeOutHdl,   Timer* );

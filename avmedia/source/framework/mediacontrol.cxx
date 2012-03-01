@@ -480,7 +480,7 @@ IMPL_LINK( MediaControl, implVolumeHdl, Slider*, p )
 
 // ------------------------------------------------------------------------------
 
-IMPL_LINK( MediaControl, implVolumeEndHdl, Slider*, EMPTYARG )
+IMPL_LINK_NOARG(MediaControl, implVolumeEndHdl)
 {
     return 0;
 }
@@ -603,7 +603,7 @@ IMPL_LINK( MediaControl, implZoomSelectHdl, ListBox*, p )
 
 // ------------------------------------------------------------------------------
 
-IMPL_LINK( MediaControl, implTimeoutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(MediaControl, implTimeoutHdl)
 {
     update();
     maTimer.Start();

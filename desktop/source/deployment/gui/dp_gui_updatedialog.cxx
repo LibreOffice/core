@@ -1228,7 +1228,7 @@ void UpdateDialog::setIgnoredUpdate( UpdateDialog::Index *pIndex, bool bIgnore, 
 
 //------------------------------------------------------------------------------
 
-IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
+IMPL_LINK_NOARG(UpdateDialog, selectionHandler)
 {
     rtl::OUStringBuffer b;
     bool bInserted = false;
@@ -1328,7 +1328,7 @@ IMPL_LINK(UpdateDialog, selectionHandler, void *, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(UpdateDialog, allHandler, void *, EMPTYARG)
+IMPL_LINK_NOARG(UpdateDialog, allHandler)
 {
     if (m_all.IsChecked())
     {
@@ -1371,7 +1371,7 @@ IMPL_LINK(UpdateDialog, allHandler, void *, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
+IMPL_LINK_NOARG(UpdateDialog, okHandler)
 {
     //If users are going to update a shared extension then we need
     //to warn them
@@ -1397,7 +1397,7 @@ IMPL_LINK(UpdateDialog, okHandler, void *, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(UpdateDialog, closeHandler, void *, EMPTYARG) {
+IMPL_LINK_NOARG(UpdateDialog, closeHandler) {
     m_thread->stop();
     EndDialog(RET_CANCEL);
     return 0;

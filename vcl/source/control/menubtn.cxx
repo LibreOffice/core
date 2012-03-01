@@ -139,7 +139,7 @@ MenuButton::~MenuButton()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( MenuButton, ImplMenuTimeoutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(MenuButton, ImplMenuTimeoutHdl)
 {
     // Abfragen, ob Button-Benutzung noch aktiv ist, da diese ja auch
     // vorher abgebrochen wurden sein koennte

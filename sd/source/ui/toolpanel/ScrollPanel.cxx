@@ -637,7 +637,7 @@ sal_Int32 ScrollPanel::SetupHorizontalScrollBar (bool bShow, sal_Int32 nRange)
 }
 
 
-IMPL_LINK(ScrollPanel, ScrollBarHandler, ScrollBar*, EMPTYARG)
+IMPL_LINK_NOARG(ScrollPanel, ScrollBarHandler)
 {
     maScrollOffset.X() -= maHorizontalScrollBar.GetDelta();
     maScrollOffset.Y() -= maVerticalScrollBar.GetDelta();

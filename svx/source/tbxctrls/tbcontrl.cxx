@@ -928,7 +928,7 @@ SfxPopupWindow* SvxColorWindow_Impl::Clone() const
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxColorWindow_Impl, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxColorWindow_Impl, SelectHdl)
 {
     sal_uInt16 nItemId = aColorSet.GetSelectItemId();
     SvxColorItem aColorItem( aColorSet.GetItemColor( nItemId ), theSlotId );
@@ -1140,7 +1140,7 @@ void SvxFrameWindow_Impl::DataChanged( const DataChangedEvent& rDCEvt )
 // Per default bleiben ungesetzte Linien unveraendert
 // Mit Shift werden ungesetzte Linien zurueckgsetzt
 //
-IMPL_LINK( SvxFrameWindow_Impl, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxFrameWindow_Impl, SelectHdl)
 {
     ::Color             aColBlack( COL_BLACK );
     SvxBoxItem          aBorderOuter( SID_ATTR_BORDER_OUTER );
@@ -1386,7 +1386,7 @@ SfxPopupWindow* SvxLineWindow_Impl::Clone() const
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLineWindow_Impl, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineWindow_Impl, SelectHdl)
 {
     SvxLineItem     aLineItem( SID_FRAME_LINESTYLE );
     SvxBorderStyle  nStyle = SvxBorderStyle( m_aLineStyleLb.GetSelectEntryStyle() );
@@ -1935,7 +1935,7 @@ void SvxStyleToolBoxControl::SetFamilyState( sal_uInt16 nIdx,
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxStyleToolBoxControl, VisibilityNotification, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxStyleToolBoxControl, VisibilityNotification)
 {
 
     sal_uInt16 i;

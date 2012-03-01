@@ -37,7 +37,7 @@
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( MasterPasswordCreateDialog, EditHdl_Impl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(MasterPasswordCreateDialog, EditHdl_Impl)
 {
     aOKBtn.Enable( aEDMasterPasswordCrt.GetText().Len() >= nMinLen );
     return 0;
@@ -45,7 +45,7 @@ IMPL_LINK( MasterPasswordCreateDialog, EditHdl_Impl, Edit *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( MasterPasswordCreateDialog, OKHdl_Impl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(MasterPasswordCreateDialog, OKHdl_Impl)
 {
     // compare both passwords and show message box if there are not equal!!
     if( aEDMasterPasswordCrt.GetText() == aEDMasterPasswordRepeat.GetText() )

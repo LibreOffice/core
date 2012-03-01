@@ -87,7 +87,7 @@ private:
     sal_uInt16 FindBaseItemPos( const String& rEntry, sal_uInt16 nStartPos ) const;
 
     DECL_LINK( SelectHdl, ListBox* );
-    DECL_LINK( DblClickHdl, MultiListBox* );
+    DECL_LINK( DblClickHdl, void* );
 
 private:
     FixedLine           maFlFunc;
@@ -131,7 +131,7 @@ public:
 private:
     void                Init( const ScDPLabelData& rLabelData, const ScDPFuncData& rFuncData );
 
-    DECL_LINK( DblClickHdl, MultiListBox* );
+    DECL_LINK(DblClickHdl, void *);
     DECL_LINK( RadioClickHdl, RadioButton* );
     DECL_LINK( ClickHdl, PushButton* );
 

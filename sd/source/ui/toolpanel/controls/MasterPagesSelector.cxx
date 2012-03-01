@@ -235,7 +235,7 @@ ResId MasterPagesSelector::GetContextMenuResId (void) const
 
 
 
-IMPL_LINK(MasterPagesSelector, ClickHandler, PreviewValueSet*, EMPTYARG)
+IMPL_LINK_NOARG(MasterPagesSelector, ClickHandler)
 {
     // We use the framework to assign the clicked-on master page because we
     // so use the same mechanism as the context menu does (where we do not

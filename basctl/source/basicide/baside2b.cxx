@@ -876,7 +876,7 @@ void EditorWindow::DoDelayedSyntaxHighlight( sal_uLong nPara )
     }
 }
 
-IMPL_LINK( EditorWindow, SyntaxTimerHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(EditorWindow, SyntaxTimerHdl)
 {
     DBG_ASSERT( pEditView, "Noch keine View, aber Syntax-Highlight ?!" );
 
@@ -1454,7 +1454,7 @@ IMPL_LINK_INLINE_END( WatchWindow, ButtonHdl, ImageButton *, pButton )
 
 
 
-IMPL_LINK_INLINE_START( WatchWindow, TreeListHdl, SvTreeListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(WatchWindow, TreeListHdl)
 {
     SvLBoxEntry* pCurEntry = aTreeListBox.GetCurEntry();
     if ( pCurEntry && pCurEntry->GetUserData() )
@@ -1462,7 +1462,7 @@ IMPL_LINK_INLINE_START( WatchWindow, TreeListHdl, SvTreeListBox *, EMPTYARG )
 
     return 0;
 }
-IMPL_LINK_INLINE_END( WatchWindow, TreeListHdl, SvTreeListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(WatchWindow, TreeListHdl)
 
 
 IMPL_LINK_INLINE_START( WatchWindow, implEndDragHdl, HeaderBar *, pBar )

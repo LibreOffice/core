@@ -229,7 +229,7 @@ NavigatorDragType SdNavigatorWin::GetNavigatorDragType()
 // -----------------------------------------------------------------------
 
 
-IMPL_LINK( SdNavigatorWin, SelectToolboxHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdNavigatorWin, SelectToolboxHdl)
 {
     sal_uInt16 nId = maToolbox.GetCurItemId();
     sal_uInt16 nSId = 0;
@@ -282,7 +282,7 @@ IMPL_LINK( SdNavigatorWin, SelectToolboxHdl, void *, EMPTYARG )
 // -----------------------------------------------------------------------
 
 
-IMPL_LINK( SdNavigatorWin, ClickToolboxHdl, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(SdNavigatorWin, ClickToolboxHdl)
 {
     return 0;
 }
@@ -368,7 +368,7 @@ IMPL_LINK( SdNavigatorWin, DropdownClickToolBoxHdl, ToolBox*, pBox )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdNavigatorWin, ClickObjectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdNavigatorWin, ClickObjectHdl)
 {
     if( !mbDocImported || maLbDocs.GetSelectEntryPos() != 0 )
     {
@@ -405,7 +405,7 @@ IMPL_LINK( SdNavigatorWin, ClickObjectHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SdNavigatorWin, SelectDocumentHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdNavigatorWin, SelectDocumentHdl)
 {
     String aStrLb = maLbDocs.GetSelectEntry();
     long   nPos = maLbDocs.GetSelectEntryPos();

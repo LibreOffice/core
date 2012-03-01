@@ -432,7 +432,7 @@ sal_Bool ScDbNameDlg::IsRefInputMode() const
 // Handler:
 // ========
 
-IMPL_LINK( ScDbNameDlg, OkBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDbNameDlg, OkBtnHdl)
 {
     AddBtnHdl( 0 );
 
@@ -449,16 +449,16 @@ IMPL_LINK( ScDbNameDlg, OkBtnHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( ScDbNameDlg, CancelBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScDbNameDlg, CancelBtnHdl)
 {
     Close();
     return 0;
 }
-IMPL_LINK_INLINE_END( ScDbNameDlg, CancelBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScDbNameDlg, CancelBtnHdl)
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScDbNameDlg, AddBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 {
     String  aNewName = aEdName.GetText();
     String  aNewArea = aEdAssign.GetText();
@@ -557,7 +557,7 @@ public:
 
 }
 
-IMPL_LINK( ScDbNameDlg, RemoveBtnHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDbNameDlg, RemoveBtnHdl)
 {
     ::rtl::OUString aStrEntry = aEdName.GetText();
     ScDBCollection::NamedDBs& rDBs = aLocalDbCol.getNamedDBs();
@@ -610,7 +610,7 @@ IMPL_LINK( ScDbNameDlg, RemoveBtnHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScDbNameDlg, NameModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDbNameDlg, NameModifyHdl)
 {
     String  theName     = aEdName.GetText();
     sal_Bool    bNameFound  = (COMBOBOX_ENTRY_NOTFOUND
@@ -695,7 +695,7 @@ IMPL_LINK( ScDbNameDlg, NameModifyHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScDbNameDlg, AssModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDbNameDlg, AssModifyHdl)
 {
     //  hier parsen fuer Save() etc.
 

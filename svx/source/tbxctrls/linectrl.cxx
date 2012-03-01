@@ -458,7 +458,7 @@ SvxLineEndWindow::~SvxLineEndWindow()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLineEndWindow, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineEndWindow, SelectHdl)
 {
     XLineEndItem*           pLineEndItem = NULL;
     XLineStartItem*         pLineStartItem = NULL;

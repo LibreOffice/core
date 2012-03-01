@@ -82,13 +82,13 @@ private:
     ::com::sun::star::uno::Reference< ::svt::DialogClosedListener > xDialogListener;
     ::com::sun::star::uno::Reference< ::com::sun::star::ui::dialogs::XFolderPicker > xFolderPicker;
 
-    DECL_LINK(              EnableHdl_Impl, CheckBox * );
+    DECL_LINK(EnableHdl_Impl, void *);
     DECL_LINK(              CheckHdl_Impl, SvxSimpleTable * );
-    DECL_LINK(              SelectHdl_Impl, SvxSimpleTable * );
-    DECL_LINK(              AddHdl_Impl, PushButton * );
-    DECL_LINK(              ParameterHdl_Impl, PushButton * );
-    DECL_LINK(              ClassPathHdl_Impl, PushButton * );
-    DECL_LINK(              ResetHdl_Impl, Timer * );
+    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK(AddHdl_Impl, void *);
+    DECL_LINK(ParameterHdl_Impl, void *);
+    DECL_LINK(ClassPathHdl_Impl, void *);
+    DECL_LINK(ResetHdl_Impl, void *);
 
     DECL_LINK(              StartFolderPickerHdl, void * );
     DECL_LINK(              DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
@@ -130,11 +130,11 @@ private:
     CancelButton            m_aCancelBtn;
     HelpButton              m_aHelpBtn;
 
-    DECL_LINK(              ModifyHdl_Impl, Edit * );
-    DECL_LINK(              AssignHdl_Impl, PushButton * );
-    DECL_LINK(              SelectHdl_Impl, ListBox * );
-    DECL_LINK(              DblClickHdl_Impl, ListBox * );
-    DECL_LINK(              RemoveHdl_Impl, PushButton * );
+    DECL_LINK(ModifyHdl_Impl, void *);
+    DECL_LINK(AssignHdl_Impl, void *);
+    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK(DblClickHdl_Impl, void *);
+    DECL_LINK(RemoveHdl_Impl, void *);
 
     inline void             EnableRemoveButton()
                                 { m_aRemoveBtn.Enable(
@@ -170,10 +170,10 @@ private:
 
     String                  m_sOldPath;
 
-    DECL_LINK(              AddArchiveHdl_Impl, PushButton * );
-    DECL_LINK(              AddPathHdl_Impl, PushButton * );
-    DECL_LINK(              RemoveHdl_Impl, PushButton * );
-    DECL_LINK(              SelectHdl_Impl, ListBox * );
+    DECL_LINK(AddArchiveHdl_Impl, void *);
+    DECL_LINK(AddPathHdl_Impl, void *);
+    DECL_LINK(RemoveHdl_Impl, void *);
+    DECL_LINK(SelectHdl_Impl, void *);
 
     bool                    IsPathDuplicate( const String& _rPath );
     inline void             EnableRemoveButton()

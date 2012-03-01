@@ -75,7 +75,7 @@ SvxNameDialog::SvxNameDialog( Window* pWindow, const String& rName, const String
     }
 }
 
-IMPL_LINK(SvxNameDialog, ModifyHdl, Edit*, EMPTYARG)
+IMPL_LINK_NOARG(SvxNameDialog, ModifyHdl)
 {
     if(aCheckNameHdl.IsSet())
         aBtnOK.Enable(aCheckNameHdl.Call(this) > 0);
@@ -109,7 +109,7 @@ SvxObjectNameDialog::SvxObjectNameDialog(
     aEdtName.SetModifyHdl(LINK(this, SvxObjectNameDialog, ModifyHdl));
 }
 
-IMPL_LINK(SvxObjectNameDialog, ModifyHdl, Edit*, EMPTYARG)
+IMPL_LINK_NOARG(SvxObjectNameDialog, ModifyHdl)
 {
     if(aCheckNameHdl.IsSet())
     {
@@ -190,21 +190,21 @@ SvxMessDialog::~SvxMessDialog()
 
 /*************************************************************************/
 
-IMPL_LINK_INLINE_START( SvxMessDialog, Button1Hdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxMessDialog, Button1Hdl)
 {
     EndDialog( RET_BTN_1 );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxMessDialog, Button1Hdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxMessDialog, Button1Hdl)
 
 /*************************************************************************/
 
-IMPL_LINK_INLINE_START( SvxMessDialog, Button2Hdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxMessDialog, Button2Hdl)
 {
     EndDialog( RET_BTN_2 );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxMessDialog, Button2Hdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxMessDialog, Button2Hdl)
 
 /*************************************************************************/
 

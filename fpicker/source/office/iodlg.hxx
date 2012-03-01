@@ -151,12 +151,12 @@ private:
     void                        AddControls_Impl( );
 
     DECL_LINK( SelectHdl_Impl, SvTabListBox* );
-    DECL_LINK( DblClickHdl_Impl, SvTabListBox* );
-    DECL_LINK( EntrySelectHdl_Impl, ComboBox* );
+    DECL_LINK(DblClickHdl_Impl, void *);
+    DECL_LINK(EntrySelectHdl_Impl, void *);
     DECL_LINK( OpenDoneHdl_Impl, SvtFileView* );
-    DECL_LINK( AutoExtensionHdl_Impl, CheckBox* );
+    DECL_LINK(AutoExtensionHdl_Impl, void *);
     DECL_LINK( ClickHdl_Impl, CheckBox* );
-    DECL_LINK( PlayButtonHdl_Impl, PushButton* );
+    DECL_LINK(PlayButtonHdl_Impl, void *);
 
     // removes a filter with wildcards from the path and returns it
     sal_Bool IsolateFilterFromPath_Impl( String& rPath, String& rFilter );

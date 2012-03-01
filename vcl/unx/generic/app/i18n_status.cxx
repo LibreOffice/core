@@ -267,7 +267,7 @@ void XIMStatusWindow::setPosition( SalFrame* pParent )
     }
 }
 
-IMPL_LINK( XIMStatusWindow, DelayedShowHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(XIMStatusWindow, DelayedShowHdl)
 {
     m_nDelayedEvent = 0;
     const SystemEnvData* pData = GetSystemData();

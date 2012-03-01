@@ -92,7 +92,7 @@ private:
     Size            aLogicalAttrSize;
     Timer           aDelayTimer;
 
-    DECL_LINK( DelayHdl, Timer * );
+    DECL_LINK( DelayHdl, void * );
     DECL_LINK( SelectFillTypeHdl, ListBox * );
     DECL_LINK( SelectFillAttrHdl, ListBox * );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );

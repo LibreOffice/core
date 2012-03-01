@@ -353,13 +353,13 @@ void SfxVersionDialog::RecalcDateColumn()
     }
 }
 
-IMPL_LINK( SfxVersionDialog, DClickHdl_Impl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(SfxVersionDialog, DClickHdl_Impl)
 {
     Open_Impl();
     return 0L;
 }
 
-IMPL_LINK( SfxVersionDialog, SelectHdl_Impl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(SfxVersionDialog, SelectHdl_Impl)
 {
     bool bEnable = ( aVersionBox.FirstSelected() != NULL );
     SfxObjectShell* pObjShell = pViewFrame->GetObjectShell();

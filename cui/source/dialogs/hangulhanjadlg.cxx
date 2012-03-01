@@ -698,7 +698,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversionDialog, OnSuggestionSelected, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnSuggestionSelected)
     {
         m_pPlayground->GetWordInputControl().SetText( m_aSuggestions.GetSelectEntry() );
         OnSuggestionModified( NULL );
@@ -706,7 +706,7 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversionDialog, OnSuggestionModified, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnSuggestionModified)
     {
         m_aFind.Enable( m_pPlayground->GetWordInputControl().GetSavedValue() != m_pPlayground->GetWordInputControl().GetText() );
 
@@ -748,13 +748,13 @@ namespace svx
     }
 
     //-------------------------------------------------------------------------
-    IMPL_LINK( HangulHanjaConversionDialog, OnClose, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnClose)
     {
         Close();
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaConversionDialog, OnOption, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaConversionDialog, OnOption)
     {
         HangulHanjaOptionsDialog        aOptDlg( this );
         aOptDlg.Execute();
@@ -980,7 +980,7 @@ namespace svx
         }
     }
 
-    IMPL_LINK( HangulHanjaOptionsDialog, OkHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaOptionsDialog, OkHdl)
     {
         sal_uInt32              nCnt = m_aDictList.size();
         sal_uInt32              n = 0;
@@ -1034,7 +1034,7 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaOptionsDialog, DictsLB_SelectHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaOptionsDialog, DictsLB_SelectHdl)
     {
         bool    bSel = m_aDictsLB.FirstSelected() != NULL;
 
@@ -1044,7 +1044,7 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaOptionsDialog, NewDictHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaOptionsDialog, NewDictHdl)
     {
         String                      aName;
         HangulHanjaNewDictDialog    aNewDlg( this );
@@ -1077,7 +1077,7 @@ namespace svx
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaOptionsDialog, EditDictHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaOptionsDialog, EditDictHdl)
     {
         SvLBoxEntry*    pEntry = m_aDictsLB.FirstSelected();
         DBG_ASSERT( pEntry, "+HangulHanjaEditDictDialog::EditDictHdl(): call of edit should not be possible with no selection!" );
@@ -1089,7 +1089,7 @@ namespace svx
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaOptionsDialog, DeleteDictHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaOptionsDialog, DeleteDictHdl)
     {
         sal_uInt16 nSelPos = m_aDictsLB.GetSelectEntryPos();
         if( nSelPos != LISTBOX_ENTRY_NOTFOUND )
@@ -1199,7 +1199,7 @@ namespace svx
     //=========================================================================
     //-------------------------------------------------------------------------
 
-    IMPL_LINK( HangulHanjaNewDictDialog, OKHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaNewDictDialog, OKHdl)
     {
         String  aName( m_aDictNameED.GetText() );
 
@@ -1212,7 +1212,7 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaNewDictDialog, ModifyHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaNewDictDialog, ModifyHdl)
     {
         String  aName( m_aDictNameED.GetText() );
 
@@ -1538,14 +1538,14 @@ namespace svx
     }
 
 
-    IMPL_LINK( HangulHanjaEditDictDialog, ScrollHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaEditDictDialog, ScrollHdl)
     {
         UpdateScrollbar();
 
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, OriginalModifyHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaEditDictDialog, OriginalModifyHdl)
     {
         m_bModifiedOriginal = true;
         m_aOriginal = m_aOriginalLB.GetText();
@@ -1581,13 +1581,13 @@ namespace svx
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, BookLBSelectHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaEditDictDialog, BookLBSelectHdl)
     {
         InitEditDictDialog( m_aBookLB.GetSelectEntryPos() );
         return 0;
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, NewPBPushHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaEditDictDialog, NewPBPushHdl)
     {
         DBG_ASSERT( m_pSuggestions, "-HangulHanjaEditDictDialog::NewPBPushHdl(): no suggestions... search in hell..." );
         Reference< XConversionDictionary >  xDict = m_rDictList[ m_nCurrentDict ];
@@ -1656,7 +1656,7 @@ namespace svx
         return bRemovedSomething;
     }
 
-    IMPL_LINK( HangulHanjaEditDictDialog, DeletePBPushHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaEditDictDialog, DeletePBPushHdl)
     {
         if( DeleteEntryFromDictionary( m_aOriginal, m_rDictList[ m_nCurrentDict ] ) )
         {

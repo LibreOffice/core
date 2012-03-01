@@ -238,7 +238,7 @@ void SvxHyperlinkInternetTp::SetInitFocus()
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl)
 {
     String aScheme = GetSchemeFromURL( maCbbTarget.GetText() );
     if(aScheme.Len()!=0)
@@ -257,7 +257,7 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ModifiedTargetHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, TimeoutHdl_Impl)
 {
     RefreshMarkWindow();
     return( 0L );
@@ -269,7 +269,7 @@ IMPL_LINK ( SvxHyperlinkInternetTp, TimeoutHdl_Impl, Timer *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ModifiedLoginHdl_Impl)
 {
     String aStrLogin ( maEdLogin.GetText() );
     if ( aStrLogin.EqualsIgnoreCaseAscii( sAnonymous ) )
@@ -366,7 +366,7 @@ INetProtocol SvxHyperlinkInternetTp::GetSmartProtocolFromButtons() const
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, Click_SmartProtocol_Impl)
 {
     String aScheme = GetSchemeFromButtons();
     SetScheme( aScheme );
@@ -379,7 +379,7 @@ IMPL_LINK ( SvxHyperlinkInternetTp, Click_SmartProtocol_Impl, void*, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl)
 {
     // disable login-editfields if checked
     if ( maCbAnonymous.IsChecked() )
@@ -409,7 +409,7 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickAnonymousHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl)
 {
     RefreshMarkWindow();
     return (0L);
@@ -421,7 +421,7 @@ IMPL_LINK ( SvxHyperlinkInternetTp, LostFocusTargetHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkInternetTp, ClickBrowseHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickBrowseHdl_Impl)
 {
     /////////////////////////////////////////////////
     // Open URL if available
@@ -448,7 +448,7 @@ IMPL_LINK ( SvxHyperlinkInternetTp, ClickBrowseHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkInternetTp, ClickTargetHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkInternetTp, ClickTargetHdl_Impl)
 {
     RefreshMarkWindow();
     ShowMarkWnd ();

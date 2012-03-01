@@ -2594,7 +2594,7 @@ void OSelectionBrowseBox::appendUndoAction(const String& _rOldValue,const String
     }
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK(OSelectionBrowseBox, OnInvalidateTimer, void*, EMPTYARG)
+IMPL_LINK_NOARG(OSelectionBrowseBox, OnInvalidateTimer)
 {
     static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature(SID_CUT);
     static_cast<OQueryController&>(getDesignView()->getController()).InvalidateFeature(SID_COPY);

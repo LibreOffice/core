@@ -418,14 +418,14 @@ IMPL_LINK( ErrorBarResources, CategoryChosen, void *,  )
     return 0;
 }
 
-IMPL_LINK( ErrorBarResources, SynchronizePosAndNeg, void *, EMPTYARG )
+IMPL_LINK_NOARG(ErrorBarResources, SynchronizePosAndNeg)
 {
     UpdateControlStates();
     PosValueChanged( 0 );
     return 0;
 }
 
-IMPL_LINK( ErrorBarResources, PosValueChanged, void *, EMPTYARG )
+IMPL_LINK_NOARG(ErrorBarResources, PosValueChanged)
 {
     if( m_aCbSyncPosNeg.IsChecked())
     {
@@ -441,7 +441,7 @@ IMPL_LINK( ErrorBarResources, PosValueChanged, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ErrorBarResources, IndicatorChanged, void *, EMPTYARG )
+IMPL_LINK_NOARG(ErrorBarResources, IndicatorChanged)
 {
     m_bIndicatorUnique = true;
     if( m_aRbBoth.IsChecked())

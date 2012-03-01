@@ -203,7 +203,7 @@ void SvxHyperlinkDocTp::SetInitFocus()
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkDocTp, ClickFileopenHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickFileopenHdl_Impl)
 {
     // Open Fileopen-Dialog
        ::sfx2::FileDialogHelper aDlg(
@@ -242,7 +242,7 @@ IMPL_LINK ( SvxHyperlinkDocTp, ClickFileopenHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkDocTp, ClickTargetHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkDocTp, ClickTargetHdl_Impl)
 {
     if ( GetPathType ( maStrURL ) == Type_ExistsFile  ||
          maStrURL == aEmptyStr                        ||
@@ -274,7 +274,7 @@ IMPL_LINK ( SvxHyperlinkDocTp, ClickTargetHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkDocTp, ModifiedPathHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedPathHdl_Impl)
 {
     maStrURL = GetCurrentURL();
 
@@ -292,7 +292,7 @@ IMPL_LINK ( SvxHyperlinkDocTp, ModifiedPathHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkDocTp, TimeoutHdl_Impl)
 {
     if ( IsMarkWndVisible() && ( GetPathType( maStrURL )==Type_ExistsFile ||
                                   maStrURL == aEmptyStr                   ||
@@ -317,7 +317,7 @@ IMPL_LINK ( SvxHyperlinkDocTp, TimeoutHdl_Impl, Timer *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkDocTp, ModifiedTargetHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkDocTp, ModifiedTargetHdl_Impl)
 {
     maStrURL = GetCurrentURL();
 
@@ -335,7 +335,7 @@ IMPL_LINK ( SvxHyperlinkDocTp, ModifiedTargetHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHyperlinkDocTp, LostFocusPathHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyperlinkDocTp, LostFocusPathHdl_Impl)
 {
     maStrURL = GetCurrentURL();
 

@@ -261,7 +261,7 @@ IMPL_LINK( SwConvertTableDlg, BtnHdl, Button*, pButton )
 /*                                                                   */
 /*********************************************************************/
 
-IMPL_LINK(SwConvertTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwConvertTableDlg, CheckBoxHdl)
 {
     aRepeatHeaderCB.Enable(aHeaderCB.IsChecked());
     ReapeatHeaderCheckBoxHdl();
@@ -269,7 +269,7 @@ IMPL_LINK(SwConvertTableDlg, CheckBoxHdl, CheckBox*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SwConvertTableDlg, ReapeatHeaderCheckBoxHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwConvertTableDlg, ReapeatHeaderCheckBoxHdl)
 {
     sal_Bool bEnable = aHeaderCB.IsChecked() && aRepeatHeaderCB.IsChecked();
     aRepeatHeaderBeforeFT.Enable(bEnable);

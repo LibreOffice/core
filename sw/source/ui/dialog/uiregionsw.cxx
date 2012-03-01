@@ -812,7 +812,7 @@ IMPL_LINK( SwEditRegionDlg, DeselectHdl, SvTreeListBox *, pBox )
     Description:    in OkHdl the modified settings are being applied
                     and reversed regions are deleted
 ---------------------------------------------------------------------*/
-IMPL_LINK( SwEditRegionDlg, OkHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditRegionDlg, OkHdl)
 {
     // temp. Array because during changing of a region the position
     // inside of the "Core-Arrays" can be shifted:
@@ -969,7 +969,7 @@ IMPL_LINK( SwEditRegionDlg, ChangeEditInReadonlyHdl, TriStateBox *, pBox )
 /*---------------------------------------------------------------------
  Description: clear selected region
 ---------------------------------------------------------------------*/
-IMPL_LINK( SwEditRegionDlg, ChangeDismissHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditRegionDlg, ChangeDismissHdl)
 {
     if(!CheckPasswd())
         return 0;
@@ -1105,7 +1105,7 @@ IMPL_LINK( SwEditRegionDlg, UseFileHdl, CheckBox *, pBox )
 /*---------------------------------------------------------------------
     Description: call dialog paste file
 ---------------------------------------------------------------------*/
-IMPL_LINK( SwEditRegionDlg, FileSearchHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditRegionDlg, FileSearchHdl)
 {
     if(!CheckPasswd(0))
         return 0;
@@ -1119,7 +1119,7 @@ IMPL_LINK( SwEditRegionDlg, FileSearchHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwEditRegionDlg, OptionsHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditRegionDlg, OptionsHdl)
 {
     if(!CheckPasswd())
         return 0;
@@ -1382,7 +1382,7 @@ IMPL_LINK( SwEditRegionDlg, ChangePasswdHdl, Button *, pBox )
                     TreeListBox immediately during editing, with empty
                     string no Ok()
 ---------------------------------------------------------------------*/
-IMPL_LINK( SwEditRegionDlg, NameEditHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditRegionDlg, NameEditHdl)
 {
     if(!CheckPasswd(0))
         return 0;
@@ -1777,7 +1777,7 @@ IMPL_LINK( SwInsertSectionTabPage, ChangeHideHdl, CheckBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SwInsertSectionTabPage, ChangeEditInReadonlyHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwInsertSectionTabPage, ChangeEditInReadonlyHdl)
 {
     return 0;
 }
@@ -1821,13 +1821,13 @@ IMPL_LINK( SwInsertSectionTabPage, ChangePasswdHdl, Button *, pButton )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwInsertSectionTabPage, NameEditHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwInsertSectionTabPage, NameEditHdl)
 {
     String  aName=aCurName.GetText();
     GetTabDialog()->GetOKButton().Enable(aName.Len() && aCurName.GetEntryPos( aName ) == USHRT_MAX);
     return 0;
 }
-IMPL_LINK_INLINE_END( SwInsertSectionTabPage, NameEditHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwInsertSectionTabPage, NameEditHdl)
 
 IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
 {
@@ -1859,7 +1859,7 @@ IMPL_LINK( SwInsertSectionTabPage, UseFileHdl, CheckBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SwInsertSectionTabPage, FileSearchHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwInsertSectionTabPage, FileSearchHdl)
 {
     m_pOldDefDlgParent = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
@@ -2310,7 +2310,7 @@ void SwSectionIndentTabPage::SetWrtShell(SwWrtShell& rSh)
     aPreviewWin.SetSize(aPageSize);
 }
 
-IMPL_LINK(SwSectionIndentTabPage, IndentModifyHdl, MetricField*, EMPTYARG)
+IMPL_LINK_NOARG(SwSectionIndentTabPage, IndentModifyHdl)
 {
     aPreviewWin.SetLeftMargin( static_cast< long >(aBeforeMF.Denormalize(aBeforeMF.GetValue(FUNIT_TWIP))) );
     aPreviewWin.SetRightMargin( static_cast< long >(aAfterMF.Denormalize(aAfterMF.GetValue(FUNIT_TWIP))) );

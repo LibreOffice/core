@@ -544,7 +544,7 @@ IMPL_LINK(SvxRubyDialog, ScrollHdl_Impl, ScrollBar*, pScroll)
     return 0;
 }
 
-IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SvxRubyDialog, ApplyHdl_Impl)
 {
     const Sequence<PropertyValues>&  aRubyValues = pImpl->GetRubyValues();
     if(!aRubyValues.getLength())
@@ -573,13 +573,13 @@ IMPL_LINK(SvxRubyDialog, ApplyHdl_Impl, PushButton*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SvxRubyDialog, CloseHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SvxRubyDialog, CloseHdl_Impl)
 {
     Close();
     return 0;
 }
 
-IMPL_LINK(SvxRubyDialog, StylistHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SvxRubyDialog, StylistHdl_Impl)
 {
     SfxPoolItem* pState = 0;
     SfxItemState    eState = pBindings->QueryState( SID_STYLE_DESIGNER, pState );
@@ -640,7 +640,7 @@ IMPL_LINK(SvxRubyDialog, PositionHdl_Impl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK(SvxRubyDialog, CharStyleHdl_Impl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxRubyDialog, CharStyleHdl_Impl)
 {
     AssertOneEntry();
     OUString sStyleName;

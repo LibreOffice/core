@@ -1163,7 +1163,7 @@ sal_Bool OJoinTableView::ScrollWhileDragging()
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK(OJoinTableView, OnDragScrollTimer, void*, EMPTYARG)
+IMPL_LINK_NOARG(OJoinTableView, OnDragScrollTimer)
 {
     ScrollWhileDragging();
     return 0L;

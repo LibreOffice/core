@@ -638,7 +638,7 @@ void IconChoiceDialog::SetPosSizePages ( sal_uInt16 nId )
 |
 \**********************************************************************/
 
-IMPL_LINK ( IconChoiceDialog , ChosePageHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(IconChoiceDialog , ChosePageHdl_Impl)
 {
     sal_uLong nPos;
 
@@ -669,7 +669,7 @@ IMPL_LINK ( IconChoiceDialog , ChosePageHdl_Impl, void *, EMPTYARG )
 |
 \**********************************************************************/
 
-IMPL_LINK( IconChoiceDialog, OkHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(IconChoiceDialog, OkHdl)
 {
     bInOK = sal_True;
 
@@ -688,7 +688,7 @@ IMPL_LINK( IconChoiceDialog, OkHdl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( IconChoiceDialog, ResetHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(IconChoiceDialog, ResetHdl)
 {
     ResetPageImpl ();
 
@@ -710,7 +710,7 @@ IMPL_LINK( IconChoiceDialog, ResetHdl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( IconChoiceDialog, CancelHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(IconChoiceDialog, CancelHdl)
 {
     Close();
 

@@ -119,7 +119,7 @@ private:
     OUString            maCommand;
     Reference< XFrame > mxFrame;
 
-                    DECL_LINK( ImplModifyHdl, Timer* );
+                    DECL_LINK(ImplModifyHdl, void *);
 
 protected:
 
@@ -190,7 +190,7 @@ void ImplGrafMetricField::Modify()
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( ImplGrafMetricField, ImplModifyHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ImplGrafMetricField, ImplModifyHdl)
 {
     const sal_Int64 nVal = GetValue();
 

@@ -2312,7 +2312,7 @@ void OApplicationController::showPreviewFor(const ElementType _eType,const ::rtl
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OApplicationController, OnClipboardChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(OApplicationController, OnClipboardChanged)
 {
     OnInvalidateClipboard();
     return 0L;

@@ -77,7 +77,7 @@ private:
 
     bool            mbAsciiOnly;
     DECL_DLLPRIVATE_LINK( EditModifyHdl, Edit* );
-    DECL_DLLPRIVATE_LINK( OKHdl, OKButton* );
+    DECL_DLLPRIVATE_LINK(OKHdl, void *);
 
     void            SetPasswdText();
 

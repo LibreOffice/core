@@ -67,26 +67,26 @@ static sal_uInt16 aPageRg[] = {
  Description:  handler to switch between the different possibilities
                how the footnote region's height can be set.
 ------------------------------------------------------------------------*/
-IMPL_LINK_INLINE_START( SwFootNotePage, HeightPage, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwFootNotePage, HeightPage)
 {
     aMaxHeightEdit.Enable(sal_False);
     return 0;
 }
-IMPL_LINK_INLINE_END( SwFootNotePage, HeightPage, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwFootNotePage, HeightPage)
 
 
-IMPL_LINK_INLINE_START( SwFootNotePage, HeightMetric, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwFootNotePage, HeightMetric)
 {
     aMaxHeightEdit.Enable();
     aMaxHeightEdit.GrabFocus();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwFootNotePage, HeightMetric, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwFootNotePage, HeightMetric)
 
 /*------------------------------------------------------------------------
  Description:   handler limit values
 ------------------------------------------------------------------------*/
-IMPL_LINK( SwFootNotePage, HeightModify, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG(SwFootNotePage, HeightModify)
 {
     aMaxHeightEdit.SetMax(aMaxHeightEdit.Normalize(lMaxHeight -
             (aDistEdit.Denormalize(aDistEdit.GetValue(FUNIT_TWIP)) +
@@ -107,7 +107,7 @@ IMPL_LINK( SwFootNotePage, HeightModify, MetricField *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwFootNotePage, LineWidthChanged_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SwFootNotePage, LineWidthChanged_Impl)
 {
     sal_Int64 nVal = static_cast<sal_Int64>(MetricField::ConvertDoubleValue(
                 aLineWidthEdit.GetValue( ),
@@ -118,7 +118,7 @@ IMPL_LINK( SwFootNotePage, LineWidthChanged_Impl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwFootNotePage, LineColorSelected_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SwFootNotePage, LineColorSelected_Impl)
 {
     aLineTypeBox.SetColor( aLineColorBox.GetSelectEntryColor() );
     return 0;

@@ -93,10 +93,10 @@ friend class SwDropCapsPict;
     virtual int     DeactivatePage(SfxItemSet *pSet);
     void    FillSet( SfxItemSet &rSet );
 
-    DECL_LINK( ClickHdl, Button * );
+    DECL_LINK(ClickHdl, void *);
     DECL_LINK( ModifyHdl, Edit * );
-    DECL_LINK( SelectHdl, ListBox * );
-    DECL_LINK( WholeWordHdl, CheckBox * );
+    DECL_LINK(SelectHdl, void *);
+    DECL_LINK(WholeWordHdl, void *);
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

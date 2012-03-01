@@ -623,7 +623,7 @@ void SvxShowCharSet::SelectCharacter( sal_UCS4 cNew, sal_Bool bFocus )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxShowCharSet, VscrollHdl, ScrollBar *, EMPTYARG )
+IMPL_LINK_NOARG(SvxShowCharSet, VscrollHdl)
 {
     if( nSelectedIndex < FirstInView() )
     {

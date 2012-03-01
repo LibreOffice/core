@@ -186,7 +186,7 @@ long OTableGrantControl::PreNotify(NotifyEvent& rNEvt)
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(OTableGrantControl, AsynchActivate, void*, EMPTYARG)
+IMPL_LINK_NOARG(OTableGrantControl, AsynchActivate)
 {
     m_nDeactivateEvent = 0;
     ActivateCell();
@@ -194,7 +194,7 @@ IMPL_LINK(OTableGrantControl, AsynchActivate, void*, EMPTYARG)
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(OTableGrantControl, AsynchDeactivate, void*, EMPTYARG)
+IMPL_LINK_NOARG(OTableGrantControl, AsynchDeactivate)
 {
     m_nDeactivateEvent = 0;
     DeactivateCell();

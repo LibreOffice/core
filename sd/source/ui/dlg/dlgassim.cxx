@@ -59,7 +59,7 @@ SdPageListControl::SdPageListControl(
     SetCheckButtonHdl( LINK(this,SdPageListControl,CheckButtonClickHdl) );
 }
 
-IMPL_LINK( SdPageListControl, CheckButtonClickHdl, SvLBoxButtonData *, EMPTYARG )
+IMPL_LINK_NOARG(SdPageListControl, CheckButtonClickHdl)
 {
     SvLBoxTreeList* pTreeModel = GetModel();
     SvLBoxEntry* pEntry = pTreeModel->First();

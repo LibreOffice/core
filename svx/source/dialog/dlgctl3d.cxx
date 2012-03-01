@@ -1224,7 +1224,7 @@ void SvxLightCtl3D::LoseFocus()
     maLightControl.HideFocus();
 }
 
-IMPL_LINK( SvxLightCtl3D, ScrollBarMove, void*, EMPTYARG)
+IMPL_LINK_NOARG(SvxLightCtl3D, ScrollBarMove)
 {
     const sal_Int32 nHor(maHorScroller.GetThumbPos());
     const sal_Int32 nVer(maVerScroller.GetThumbPos());
@@ -1241,7 +1241,7 @@ IMPL_LINK( SvxLightCtl3D, ScrollBarMove, void*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK( SvxLightCtl3D, ButtonPress, void*, EMPTYARG)
+IMPL_LINK_NOARG(SvxLightCtl3D, ButtonPress)
 {
     if(PREVIEW_OBJECTTYPE_SPHERE == GetSvx3DLightControl().GetObjectType())
     {
@@ -1255,7 +1255,7 @@ IMPL_LINK( SvxLightCtl3D, ButtonPress, void*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK( SvxLightCtl3D, InternalInteractiveChange, void*, EMPTYARG)
+IMPL_LINK_NOARG(SvxLightCtl3D, InternalInteractiveChange)
 {
     double fHor, fVer;
 
@@ -1271,7 +1271,7 @@ IMPL_LINK( SvxLightCtl3D, InternalInteractiveChange, void*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK( SvxLightCtl3D, InternalSelectionChange, void*, EMPTYARG)
+IMPL_LINK_NOARG(SvxLightCtl3D, InternalSelectionChange)
 {
     CheckSelection();
 

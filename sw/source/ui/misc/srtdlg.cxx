@@ -407,7 +407,7 @@ IMPL_LINK( SwSortDlg, DelimHdl, RadioButton*, pButton )
     return 0;
 }
 
-IMPL_LINK( SwSortDlg, DelimCharHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SwSortDlg, DelimCharHdl)
 {
     SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
     if(pFact)

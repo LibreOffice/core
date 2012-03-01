@@ -124,14 +124,14 @@ private:
 
     // Handler
     DECL_LINK( NewHdl_Impl, Button* );
-    DECL_LINK( DelHdl_Impl, Button* );
-    DECL_LINK( DelAllHdl_Impl, Button* );
+    DECL_LINK(DelHdl_Impl, void *);
+    DECL_LINK(DelAllHdl_Impl, void *);
 
     DECL_LINK( FillTypeCheckHdl_Impl, RadioButton* );
     DECL_LINK( TabTypeCheckHdl_Impl, RadioButton* );
 
-    DECL_LINK( SelectHdl_Impl, MetricBox* );
-    DECL_LINK( ModifyHdl_Impl, MetricBox* );
+    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK(ModifyHdl_Impl, void *);
     DECL_LINK( GetFillCharHdl_Impl, Edit* );
     DECL_LINK( GetDezCharHdl_Impl, Edit* );
 #endif

@@ -172,9 +172,9 @@ friend class SfxOrganizeListBox_Impl;
     DECL_LINK( AddFiles_Impl, Button * );
     DECL_LINK( OnAddressTemplateClicked, Button * );
 
-    DECL_LINK( ImportHdl, sfx2::FileDialogHelper* );
-    DECL_LINK( ExportHdl, sfx2::FileDialogHelper* );
-    DECL_LINK( AddFilesHdl, sfx2::FileDialogHelper* );
+    DECL_LINK(ImportHdl, void *);
+    DECL_LINK(ExportHdl, void *);
+    DECL_LINK(AddFilesHdl, void *);
 
     sal_Bool        DontDelete_Impl( SvLBoxEntry* pEntry );
 
@@ -2230,7 +2230,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, AddFiles_Impl, Button *, pButton )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxOrganizeDlg_Impl, ImportHdl, sfx2::FileDialogHelper *, EMPTYARG )
+IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ImportHdl)
 {
     DBG_ASSERT( pFileDlg, "SfxOrganizeDlg_Impl::ImportHdl(): no file dialog" );
 
@@ -2267,7 +2267,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, ImportHdl, sfx2::FileDialogHelper *, EMPTYARG )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxOrganizeDlg_Impl, ExportHdl, sfx2::FileDialogHelper *, EMPTYARG )
+IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, ExportHdl)
 {
     DBG_ASSERT( pFileDlg, "SfxOrganizeDlg_Impl::ImportHdl(): no file dialog" );
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aPaths;
@@ -2318,7 +2318,7 @@ IMPL_LINK( SfxOrganizeDlg_Impl, ExportHdl, sfx2::FileDialogHelper *, EMPTYARG )
 
 //-------------------------------------------------------------------------
 
-IMPL_LINK( SfxOrganizeDlg_Impl, AddFilesHdl, sfx2::FileDialogHelper *, EMPTYARG )
+IMPL_LINK_NOARG(SfxOrganizeDlg_Impl, AddFilesHdl)
 {
     if ( ERRCODE_NONE == pFileDlg->GetError() )
     {

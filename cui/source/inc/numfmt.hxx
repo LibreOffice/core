@@ -166,7 +166,7 @@ private:
     DECL_LINK( ClickHdl_Impl, ImageButton* pIB );
     DECL_LINK( EditHdl_Impl, Edit* pEdFormat );
     DECL_LINK( OptHdl_Impl, void * );
-    DECL_LINK( TimeHdl_Impl, Timer * );
+    DECL_LINK(TimeHdl_Impl, void *);
 
 #endif
 };

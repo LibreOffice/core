@@ -54,8 +54,8 @@ private:
     rtl::OUString       m_aNeverChecked;
     rtl::OUString       m_aLastCheckedTemplate;
 
-    DECL_LINK(  FileDialogHdl_Impl, PushButton* ) ;
-    DECL_LINK(  CheckNowHdl_Impl, PushButton* ) ;
+    DECL_LINK(FileDialogHdl_Impl, void *) ;
+    DECL_LINK(CheckNowHdl_Impl, void *) ;
     DECL_LINK(  AutoCheckHdl_Impl, CheckBox* ) ;
 
     void        CalcButtonWidth();

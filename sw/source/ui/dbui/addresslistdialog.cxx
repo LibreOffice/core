@@ -286,7 +286,7 @@ SwAddressListDialog::~SwAddressListDialog()
     }
 }
 
-IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwAddressListDialog, FilterHdl_Impl)
 {
     SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
     uno::Reference< XMultiServiceFactory > xMgr( ::comphelper::getProcessServiceFactory() );
@@ -352,7 +352,7 @@ IMPL_LINK(SwAddressListDialog, FilterHdl_Impl, PushButton*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SwAddressListDialog, LoadHdl_Impl,   PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwAddressListDialog, LoadHdl_Impl)
 {
     String sNewSource = SwNewDBMgr::LoadAndRegisterDataSource();
     if(sNewSource.Len())
@@ -486,7 +486,7 @@ IMPL_LINK(SwAddressListDialog, EditHdl_Impl, PushButton*, pButton)
     return 0;
 };
 
-IMPL_LINK(SwAddressListDialog, ListBoxSelectHdl_Impl, SvTabListBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwAddressListDialog, ListBoxSelectHdl_Impl)
 {
     SvLBoxEntry* pSelect = m_aListLB.FirstSelected();
     Application::PostUserEvent( STATIC_LINK( this, SwAddressListDialog,
@@ -670,7 +670,7 @@ IMPL_LINK(SwAddressListDialog, TableSelectHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-IMPL_LINK(SwAddressListDialog, OKHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwAddressListDialog, OKHdl_Impl)
 {
     EndDialog(sal_True);
     return 0;

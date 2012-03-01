@@ -111,8 +111,8 @@ class StatusBarManager : public ::com::sun::star::frame::XFrameActionListener   
         void MouseMove( const MouseEvent& rMEvt );
         void MouseButtonDown( const MouseEvent& rMEvt );
         void MouseButtonUp( const MouseEvent& rMEvt );
-        DECL_LINK( Click, StatusBar* );
-        DECL_LINK( DoubleClick, StatusBar* );
+        DECL_LINK(Click, void *);
+        DECL_LINK(DoubleClick, void *);
 
         void RemoveControllers();
         rtl::OUString RetrieveLabelFromCommand( const rtl::OUString& aCmdURL );

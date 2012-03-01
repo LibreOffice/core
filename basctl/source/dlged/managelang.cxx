@@ -203,7 +203,7 @@ void ManageLanguageDialog::ClearLanguageBox()
     m_aLanguageLB.Clear();
 }
 
-IMPL_LINK( ManageLanguageDialog, AddHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(ManageLanguageDialog, AddHdl)
 {
     SetDefaultLanguageDialog aDlg( this, m_pLocalizationMgr );
     if ( RET_OK == aDlg.Execute() )
@@ -222,7 +222,7 @@ IMPL_LINK( ManageLanguageDialog, AddHdl, Button *, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( ManageLanguageDialog, DeleteHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(ManageLanguageDialog, DeleteHdl)
 {
     QueryBox aQBox( this, IDEResId( RID_QRYBOX_LANGUAGE ) );
     aQBox.SetButtonText( RET_OK, m_sDeleteStr );
@@ -253,7 +253,7 @@ IMPL_LINK( ManageLanguageDialog, DeleteHdl, Button *, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( ManageLanguageDialog, MakeDefHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(ManageLanguageDialog, MakeDefHdl)
 {
     sal_uInt16 nPos = m_aLanguageLB.GetSelectEntryPos();
     LanguageEntry* pSelectEntry = (LanguageEntry*)( m_aLanguageLB.GetEntryData( nPos ) );
@@ -272,7 +272,7 @@ IMPL_LINK( ManageLanguageDialog, MakeDefHdl, Button *, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( ManageLanguageDialog, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(ManageLanguageDialog, SelectHdl)
 {
     sal_uInt16 nCount = m_aLanguageLB.GetEntryCount();
     bool bEmpty = ( !nCount ||

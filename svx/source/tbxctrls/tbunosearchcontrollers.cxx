@@ -432,7 +432,7 @@ void SAL_CALL FindTextToolbarController::statusChanged( const css::frame::Featur
     }
 }
 
-IMPL_LINK( FindTextToolbarController, EditModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl)
 {
     // enable or disable item DownSearch/UpSearch of findbar
     Window* pWindow = VCLUnoHelper::GetWindow( getParent() );

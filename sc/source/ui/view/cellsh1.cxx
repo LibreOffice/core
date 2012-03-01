@@ -2418,7 +2418,7 @@ void ScCellShell::ExecuteSubtotals(SfxRequest& rReq)
     delete pDlg;
 }
 
-IMPL_LINK( ScCellShell, DialogClosed, AbstractScLinkedAreaDlg*, EMPTYARG )
+IMPL_LINK_NOARG(ScCellShell, DialogClosed)
 {
     OSL_ENSURE( pImpl->m_pLinkedDlg, "ScCellShell::DialogClosed(): invalid request" );
     OSL_ENSURE( pImpl->m_pRequest, "ScCellShell::DialogClosed(): invalid request" );

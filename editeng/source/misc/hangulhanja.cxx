@@ -844,7 +844,7 @@ namespace editeng
         m_pAntiImpl->HandleNewUnit( m_nCurrentStartIndex - m_nReplacementBaseIndex, m_nCurrentEndIndex - m_nReplacementBaseIndex );
     }
 
-    IMPL_LINK( HangulHanjaConversion_Impl, OnOptionsChanged, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnOptionsChanged)
     {
         //options and dictionaries might have been changed
         //-> update our internal settings and the dialog
@@ -853,14 +853,14 @@ namespace editeng
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaConversion_Impl, OnIgnore, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnIgnore)
     {
         // simply ignore, and proceed
         implProceed( sal_False );
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaConversion_Impl, OnIgnoreAll, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnIgnoreAll)
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnIgnoreAll: no dialog! How this?" );
 
@@ -880,7 +880,7 @@ namespace editeng
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaConversion_Impl, OnChange, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnChange)
     {
         // change
         DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
@@ -892,7 +892,7 @@ namespace editeng
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaConversion_Impl, OnChangeAll, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnChangeAll)
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnChangeAll: no dialog! How this?" );
         if ( m_pConversionDialog )
@@ -925,7 +925,7 @@ namespace editeng
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaConversion_Impl, OnConversionTypeChanged, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnConversionTypeChanged)
     {
         DBG_ASSERT( m_pConversionDialog, "we should always have a dialog here!" );
         if( m_pConversionDialog )
@@ -933,7 +933,7 @@ namespace editeng
         return 0L;
     }
 
-    IMPL_LINK( HangulHanjaConversion_Impl, OnFind, void*, EMPTYARG )
+    IMPL_LINK_NOARG(HangulHanjaConversion_Impl, OnFind)
     {
         DBG_ASSERT( m_pConversionDialog, "HangulHanjaConversion_Impl::OnFind: where did this come from?" );
         if ( m_pConversionDialog )

@@ -489,7 +489,7 @@ void    SwAddPrinterTabPage::Init()
 
 }
 
-IMPL_LINK_INLINE_START( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, AutoClickHdl)
 {
     bAttrModified = sal_True;
     bool bIsProspect = aProspectCB.IsChecked();
@@ -502,7 +502,7 @@ IMPL_LINK_INLINE_START( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG 
     aEndPageRB.Enable( !bIsProspect );
     return 0;
 }
-IMPL_LINK_INLINE_END( SwAddPrinterTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwAddPrinterTabPage, AutoClickHdl)
 
 void  SwAddPrinterTabPage::SetFax( const std::vector<String>& rFaxLst )
 {
@@ -514,12 +514,12 @@ void  SwAddPrinterTabPage::SetFax( const std::vector<String>& rFaxLst )
     aFaxLB.SelectEntryPos(0);
 }
 
-IMPL_LINK_INLINE_START( SwAddPrinterTabPage, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwAddPrinterTabPage, SelectHdl)
 {
     bAttrModified=sal_True;
     return 0;
 }
-IMPL_LINK_INLINE_END( SwAddPrinterTabPage, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwAddPrinterTabPage, SelectHdl)
 
 void SwAddPrinterTabPage::PageCreated (SfxAllItemSet aSet)
 {
@@ -985,7 +985,7 @@ void SwStdFontTabPage::Reset( const SfxItemSet& rSet)
     aIndexHeightLB.   SaveValue();
 }
 
-IMPL_LINK( SwStdFontTabPage, StandardHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwStdFontTabPage, StandardHdl)
 {
     sal_uInt8 nFontOffset = nFontGroup * FONT_PER_GROUP;
     aStandardBox.SetText(SwStdFontConfig::GetDefaultFor(FONT_STANDARD + nFontOffset, eLanguage));
@@ -1314,7 +1314,7 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
     CheckBoxHdl(0);
 }
 
-IMPL_LINK(SwTableOptionsTabPage, CheckBoxHdl, CheckBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwTableOptionsTabPage, CheckBoxHdl)
 {
     aNumFmtFormattingCB.Enable(aNumFormattingCB.IsChecked());
     aNumAlignmentCB.Enable(aNumFormattingCB.IsChecked());
@@ -2238,7 +2238,7 @@ IMPL_LINK( SwRedlineOptionsTabPage, ColorHdl, ColorListBox *, pColorLB )
     return 0;
 }
 
-IMPL_LINK( SwRedlineOptionsTabPage, ChangedMaskPrevHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwRedlineOptionsTabPage, ChangedMaskPrevHdl)
 {
     aMarkPreviewWN.SetMarkPos(aMarkPosLB.GetSelectEntryPos());
     aMarkPreviewWN.SetColor(aMarkColorLB.GetSelectEntryColor().GetColor());
@@ -2410,7 +2410,7 @@ void SwCompareOptionsTabPage::Reset( const SfxItemSet& )
     aLenNF.SaveValue();
 }
 
-IMPL_LINK( SwCompareOptionsTabPage, ComparisonHdl, RadioButton*, EMPTYARG )
+IMPL_LINK_NOARG(SwCompareOptionsTabPage, ComparisonHdl)
 {
     bool bChecked = !aAutoRB.IsChecked();
     aSettingsFL.Enable( bChecked );
@@ -2421,7 +2421,7 @@ IMPL_LINK( SwCompareOptionsTabPage, ComparisonHdl, RadioButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwCompareOptionsTabPage, IgnoreHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SwCompareOptionsTabPage, IgnoreHdl)
 {
     aLenNF.Enable( aIgnoreCB.IsChecked() );
     return 0;
@@ -2555,12 +2555,12 @@ void SwTestTabPage::Init()
     aTest10CBox.SetClickHdl( aLk );
 }
 
-IMPL_LINK_INLINE_START( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwTestTabPage, AutoClickHdl)
 {
     bAttrModified = sal_True;
     return 0;
 }
-IMPL_LINK_INLINE_END( SwTestTabPage, AutoClickHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwTestTabPage, AutoClickHdl)
 
 
 #endif

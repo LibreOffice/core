@@ -168,7 +168,7 @@ private:
     void                InitializeIndex();
     void                ClearIndex();
 
-    DECL_LINK(          OpenHdl, PushButton* );
+    DECL_LINK(OpenHdl, void *);
     DECL_LINK(          TimeoutHdl, Timer* );
 
 public:
@@ -240,9 +240,9 @@ private:
     void                ClearSearchResults();
     void                RememberSearchText( const String& rSearchText );
 
-    DECL_LINK(          SearchHdl, PushButton* );
-    DECL_LINK(          OpenHdl, PushButton* );
-    DECL_LINK(          ModifyHdl, Edit* );
+    DECL_LINK(SearchHdl, void *);
+    DECL_LINK(OpenHdl, void *);
+    DECL_LINK(ModifyHdl, void *);
 
 public:
     SearchTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
@@ -286,7 +286,7 @@ private:
 
     long                nMinWidth;
 
-    DECL_LINK(          OpenHdl, PushButton* );
+    DECL_LINK(OpenHdl, void *);
 
 public:
     BookmarksTabPage_Impl( Window* pParent, SfxHelpIndexWindow_Impl* _pIdxWin );
@@ -340,10 +340,10 @@ private:
     inline BookmarksTabPage_Impl*   GetBookmarksPage();
 
     DECL_LINK(          ActivatePageHdl, TabControl* );
-    DECL_LINK(          SelectHdl, ListBox* );
-    DECL_LINK(          InitHdl, Timer* );
-    DECL_LINK(          SelectFactoryHdl, Timer* );
-    DECL_LINK(          KeywordHdl, IndexTabPage_Impl* );
+    DECL_LINK(SelectHdl, void *);
+    DECL_LINK(InitHdl, void *);
+    DECL_LINK(SelectFactoryHdl, void *);
+    DECL_LINK(KeywordHdl, void *);
 
 public:
     SfxHelpIndexWindow_Impl( SfxHelpWindow_Impl* pParent );
@@ -477,7 +477,7 @@ private:
                             getCursor() const;
     bool                    isHandledKey( const KeyCode& _rKeyCode );
 
-    DECL_LINK(              SelectHdl, Timer* );
+    DECL_LINK(SelectHdl, void *);
     DECL_LINK(              NotifyHdl, SvtMiscOptions* );
     DECL_LINK(              FindHdl, sfx2::SearchDialog* );
     DECL_LINK(              CloseHdl, sfx2::SearchDialog* );
@@ -547,7 +547,7 @@ friend class SfxHelpIndexWindow_Impl;
     void                ShowStartPage();
 
     DECL_LINK(          SelectHdl, ToolBox* );
-    DECL_LINK(          OpenHdl, SfxHelpIndexWindow_Impl* );
+    DECL_LINK(OpenHdl, void *);
     DECL_LINK(          SelectFactoryHdl, SfxHelpIndexWindow_Impl* );
     DECL_LINK(          ChangeHdl, HelpListener_Impl* );
 

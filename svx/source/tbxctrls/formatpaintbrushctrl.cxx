@@ -93,7 +93,7 @@ void FormatPaintBrushToolBoxControl::Click()
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK(FormatPaintBrushToolBoxControl, WaitDoubleClickHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(FormatPaintBrushToolBoxControl, WaitDoubleClickHdl)
 {
     //there was no second click during waiting
     this->impl_executePaintBrush();

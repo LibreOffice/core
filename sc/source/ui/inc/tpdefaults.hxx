@@ -56,7 +56,7 @@ private:
     void CheckPrefix(Edit* pEdit);
     void OnFocusPrefixInput(Edit* pEdit);
 
-    DECL_LINK( NumModifiedHdl, NumericField* );
+    DECL_LINK(NumModifiedHdl, void *);
     DECL_LINK( PrefixModifiedHdl, Edit* );
     DECL_LINK( PrefixEditOnFocusHdl, Edit* );
 

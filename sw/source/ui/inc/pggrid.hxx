@@ -96,7 +96,7 @@ class SwTextGridPage: public SfxTabPage
     DECL_LINK(CharorLineChangedHdl, SpinField*);
     DECL_LINK(TextSizeChangedHdl, SpinField*);
     DECL_LINK(GridModifyHdl, void*);
-    DECL_LINK(DisplayGridHdl, CheckBox*);
+    DECL_LINK(DisplayGridHdl, void *);
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

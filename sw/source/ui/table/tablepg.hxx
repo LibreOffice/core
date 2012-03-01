@@ -205,8 +205,8 @@ class SwTextFlowPage : public SfxTabPage
     sal_Bool            bHtmlMode;
 
 
-    DECL_LINK( PageBreakHdl_Impl, CheckBox* );
-    DECL_LINK( ApplyCollClickHdl_Impl, CheckBox* );
+    DECL_LINK(PageBreakHdl_Impl, void *);
+    DECL_LINK(ApplyCollClickHdl_Impl, void *);
     DECL_LINK( PageBreakPosHdl_Impl, RadioButton* );
     DECL_LINK( PageBreakTypeHdl_Impl, RadioButton* );
     DECL_LINK( SplitHdl_Impl, CheckBox* );

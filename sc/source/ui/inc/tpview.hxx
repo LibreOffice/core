@@ -141,7 +141,7 @@ class ScTpLayoutOptions : public SfxTabPage
 
     DECL_LINK( CBHdl, CheckBox* );
 
-    DECL_LINK(MetricHdl, ListBox*);
+    DECL_LINK(MetricHdl, void *);
     DECL_LINK( AlignHdl, CheckBox* );
 
     ScDocument *pDoc;

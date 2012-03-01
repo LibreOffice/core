@@ -761,7 +761,7 @@ IMPL_LINK(OfaSwAutoFmtOptionsPage, SelectHdl, OfaACorrCheckListBox*, pBox)
 /*                                                                   */
 /*********************************************************************/
 
-IMPL_LINK(OfaSwAutoFmtOptionsPage, EditHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(OfaSwAutoFmtOptionsPage, EditHdl)
 {
     sal_uLong nSelEntryPos = aCheckLB.GetSelectEntryPos();
     if( nSelEntryPos == REPLACE_BULLETS ||
@@ -2396,7 +2396,7 @@ void OfaAutoCompleteTabPage::ActivatePage( const SfxItemSet& )
     ((OfaAutoCorrDlg*)GetTabDialog())->EnableLanguage( sal_False );
 }
 
-IMPL_LINK( OfaAutoCompleteTabPage, DeleteHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(OfaAutoCompleteTabPage, DeleteHdl)
 {
     sal_uInt16 nSelCnt = pAutoCmpltList ? aLBEntries.GetSelectEntryCount() : 0;
     while( nSelCnt )
@@ -2592,7 +2592,7 @@ void OfaSmartTagOptionsTabPage::FillListBox( const SmartTagMgr& rSmartTagMgr )
 
 /** Handler for the push button
 */
-IMPL_LINK( OfaSmartTagOptionsTabPage, ClickHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, ClickHdl)
 {
     const sal_uInt16 nPos = m_aSmartTagTypesLB.GetSelectEntryPos();
     const SvLBoxEntry* pEntry = m_aSmartTagTypesLB.GetEntry(nPos);
@@ -2609,7 +2609,7 @@ IMPL_LINK( OfaSmartTagOptionsTabPage, ClickHdl, PushButton*, EMPTYARG )
 
 /** Handler for the check box
 */
-IMPL_LINK( OfaSmartTagOptionsTabPage, CheckHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, CheckHdl)
 {
     const sal_Bool bEnable = m_aMainCB.IsChecked();
     m_aSmartTagTypesLB.Enable( bEnable );
@@ -2628,7 +2628,7 @@ IMPL_LINK( OfaSmartTagOptionsTabPage, CheckHdl, CheckBox*, EMPTYARG )
 
 /** Handler for the list box
 */
-IMPL_LINK(OfaSmartTagOptionsTabPage, SelectHdl, SvxCheckListBox*, EMPTYARG)
+IMPL_LINK_NOARG(OfaSmartTagOptionsTabPage, SelectHdl)
 {
     if ( m_aSmartTagTypesLB.GetEntryCount() < 1 )
         return 0;

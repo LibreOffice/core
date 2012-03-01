@@ -280,7 +280,7 @@ void OfaMemoryOptionsPage::Reset( const SfxItemSet& rSet )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( OfaMemoryOptionsPage, GraphicCacheConfigHdl, NumericField*, EMPTYARG )
+IMPL_LINK_NOARG(OfaMemoryOptionsPage, GraphicCacheConfigHdl)
 {
     sal_Int32 n = GetNfGraphicCacheVal();
     SetNfGraphicObjectCacheMax( n );

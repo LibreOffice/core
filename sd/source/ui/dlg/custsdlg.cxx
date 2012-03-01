@@ -280,7 +280,7 @@ IMPL_LINK( SdCustomShowDlg, ClickButtonHdl, void *, p )
 /*************************************************************************
 |* StartShow-Hdl
 \************************************************************************/
-IMPL_LINK( SdCustomShowDlg, StartShowHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SdCustomShowDlg, StartShowHdl)
 {
     EndDialog( RET_YES );
 
@@ -519,7 +519,7 @@ void SdDefineCustomShowDlg::CheckCustomShow()
 /*************************************************************************
 |* OK-Hdl
 \************************************************************************/
-IMPL_LINK( SdDefineCustomShowDlg, OKHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SdDefineCustomShowDlg, OKHdl)
 {
     // Name ueberpruefen...
     sal_Bool bDifferent = sal_True;

@@ -218,7 +218,7 @@ void FuPoor::ForceScroll(const Point& aPixPos)
 |*
 \************************************************************************/
 
-IMPL_LINK_INLINE_START( FuPoor, ScrollHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(FuPoor, ScrollHdl)
 {
     Point aPnt(mpWindow->GetPointerPosPixel());
 
@@ -998,7 +998,7 @@ void FuPoor::DoPaste()
 |*
 \************************************************************************/
 
-IMPL_LINK( FuPoor, DragHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(FuPoor, DragHdl)
 {
     if( mpView )
     {
@@ -1033,7 +1033,7 @@ sal_Bool FuPoor::Command(const CommandEvent& rCEvt)
 |*
 \************************************************************************/
 
-IMPL_LINK_INLINE_START( FuPoor, DelayHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(FuPoor, DelayHdl)
 {
     aDelayToScrollTimer.Stop ();
     bScrollable = sal_True;

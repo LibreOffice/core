@@ -93,11 +93,11 @@ friend class SfxTabDialogController;
 
     DECL_DLLPRIVATE_LINK( ActivatePageHdl, TabControl * );
     DECL_DLLPRIVATE_LINK( DeactivatePageHdl, TabControl * );
-    DECL_DLLPRIVATE_LINK( OkHdl, Button * );
-    DECL_DLLPRIVATE_LINK( ResetHdl, Button * );
-    DECL_DLLPRIVATE_LINK( BaseFmtHdl, Button * );
-    DECL_DLLPRIVATE_LINK( UserHdl, Button * );
-    DECL_DLLPRIVATE_LINK( CancelHdl, Button * );
+    DECL_DLLPRIVATE_LINK(OkHdl, void *);
+    DECL_DLLPRIVATE_LINK(ResetHdl, void *);
+    DECL_DLLPRIVATE_LINK(BaseFmtHdl, void *);
+    DECL_DLLPRIVATE_LINK(UserHdl, void *);
+    DECL_DLLPRIVATE_LINK(CancelHdl, void *);
     SAL_DLLPRIVATE void Init_Impl(sal_Bool, const String *);
 
 protected:

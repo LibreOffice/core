@@ -70,8 +70,8 @@ class SwMailConfigPage : public SfxTabPage
     SwMailMergeConfigItem*  m_pConfigItem;
 
     DECL_LINK(ReplyToHdl, CheckBox*);
-    DECL_LINK(AuthenticationHdl, PushButton*);
-    DECL_LINK(TestHdl, PushButton*);
+    DECL_LINK(AuthenticationHdl, void *);
+    DECL_LINK(TestHdl, void *);
 
 
 public:

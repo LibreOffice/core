@@ -36,7 +36,7 @@
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( UnknownAuthDialog, OKHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(UnknownAuthDialog, OKHdl_Impl)
 {
     if ( m_aOptionButtonAccept.IsChecked() )
     {
@@ -51,7 +51,7 @@ IMPL_LINK( UnknownAuthDialog, OKHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( UnknownAuthDialog, ViewCertHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(UnknownAuthDialog, ViewCertHdl_Impl)
 {
     uno::Reference< ::com::sun::star::security::XDocumentDigitalSignatures > xDocumentDigitalSignatures;
 

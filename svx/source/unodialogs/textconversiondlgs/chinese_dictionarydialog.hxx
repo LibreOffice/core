@@ -138,7 +138,7 @@ public:
 
 private:
     DECL_LINK( DirectionHdl, void* );
-    DECL_LINK( EditFieldsHdl, Control* );
+    DECL_LINK(EditFieldsHdl, void *);
     DECL_LINK( MappingSelectHdl, void* );
     DECL_LINK( AddHdl, void* );
     DECL_LINK( ModifyHdl, void* );

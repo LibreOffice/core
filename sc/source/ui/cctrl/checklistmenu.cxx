@@ -73,7 +73,7 @@ void ScMenuFloatingWindow::SubMenuItemData::reset()
     maTimer.Stop();
 }
 
-IMPL_LINK( ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScMenuFloatingWindow::SubMenuItemData, TimeoutHdl)
 {
     mpParent->handleMenuTimeout(this);
     return 0;
@@ -1018,7 +1018,7 @@ IMPL_LINK( ScCheckListMenuWindow, ButtonHdl, Button*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScCheckListMenuWindow, TriStateHdl, TriStateBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScCheckListMenuWindow, TriStateHdl)
 {
     switch (mePrevToggleAllState)
     {

@@ -111,7 +111,7 @@ sal_Bool ODatasourceSelectDialog::Close()
 
 // -----------------------------------------------------------------------
 #ifdef HAVE_ODBC_ADMINISTRATION
-IMPL_LINK( ODatasourceSelectDialog, ManageClickHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ODatasourceSelectDialog, ManageClickHdl)
 {
     if ( !m_pODBCManagement.get() )
         m_pODBCManagement.reset( new OOdbcManagement( LINK( this, ODatasourceSelectDialog, ManageProcessFinished ) ) );

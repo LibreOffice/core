@@ -1495,7 +1495,7 @@ void FormController::toggleAutoFields(sal_Bool bAutoFields)
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(FormController, OnToggleAutoFields, void*, EMPTYARG)
+IMPL_LINK_NOARG(FormController, OnToggleAutoFields)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
 
@@ -2678,7 +2678,7 @@ void FormController::updateAllDispatchers() const
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(FormController, OnLoad, void*, EMPTYARG)
+IMPL_LINK_NOARG(FormController, OnLoad)
 {
     OSL_ENSURE( !impl_isDisposed_nofail(), "FormController: already disposed!" );
     m_bLocked = determineLockState();

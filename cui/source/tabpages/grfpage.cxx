@@ -538,7 +538,7 @@ IMPL_LINK( SvxGrfCropPage, CropHdl, const MetricField *, pField )
     Beschreibung: Originalgroesse einstellen
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SvxGrfCropPage, OrigSizeHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxGrfCropPage, OrigSizeHdl)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -717,7 +717,7 @@ void SvxGrfCropPage::GraphicHasChanged( sal_Bool bFound )
     aOrigSizeFT     .Enable(bFound);
 }
 
-IMPL_LINK( SvxGrfCropPage, Timeout, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SvxGrfCropPage, Timeout)
 {
     DBG_ASSERT(pLastCropField,"Timeout ohne Feld?");
     CropHdl(pLastCropField);

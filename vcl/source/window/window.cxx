@@ -2488,7 +2488,7 @@ void Window::ImplPostPaint()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Window, ImplHandlePaintHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Window, ImplHandlePaintHdl)
 {
     // save paint events until resizing is done
     if( mpWindowImpl->mbFrame && mpWindowImpl->mpFrameData->maResizeTimer.IsActive() )
@@ -2500,7 +2500,7 @@ IMPL_LINK( Window, ImplHandlePaintHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Window, ImplHandleResizeTimerHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Window, ImplHandleResizeTimerHdl)
 {
     if( mpWindowImpl->mbReallyVisible )
     {
@@ -3756,7 +3756,7 @@ void Window::ImplGenerateMouseMove()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Window, ImplGenerateMouseMoveHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Window, ImplGenerateMouseMoveHdl)
 {
     mpWindowImpl->mpFrameData->mnMouseMoveId = 0;
     Window* pCaptureWin = ImplGetSVData()->maWinData.mpCaptureWin;

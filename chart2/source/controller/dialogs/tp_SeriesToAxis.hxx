@@ -78,7 +78,7 @@ private: //member
 
     CheckBox    m_aCBIncludeHiddenCells;
 
-    DECL_LINK(EnableHdl, RadioButton * );
+    DECL_LINK(EnableHdl, void * );
 
     sal_Int32   m_nAllSeriesAxisIndex;
 

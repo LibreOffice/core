@@ -625,7 +625,7 @@ IMPL_LINK( ScOptSolverDlg, GetFocusHdl, Control*, pCtrl )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScOptSolverDlg, LoseFocusHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ScOptSolverDlg, LoseFocusHdl)
 {
     mbDlgLostFocus = !IsActive();
     return 0;
@@ -663,7 +663,7 @@ IMPL_LINK( ScOptSolverDlg, DelBtnHdl, PushButton*, pBtn )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScOptSolverDlg, TargetModifyHdl, Edit*, EMPTYARG )
+IMPL_LINK_NOARG(ScOptSolverDlg, TargetModifyHdl)
 {
     // modify handler for the target edit:
     //  select "Value of" if something is input into the edit
@@ -672,7 +672,7 @@ IMPL_LINK( ScOptSolverDlg, TargetModifyHdl, Edit*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScOptSolverDlg, CondModifyHdl, Edit*, EMPTYARG )
+IMPL_LINK_NOARG(ScOptSolverDlg, CondModifyHdl)
 {
     // modify handler for the condition edits, just to enable/disable "delete" buttons
     ReadConditions();
@@ -680,7 +680,7 @@ IMPL_LINK( ScOptSolverDlg, CondModifyHdl, Edit*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScOptSolverDlg, SelectHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScOptSolverDlg, SelectHdl)
 {
     // select handler for operator list boxes, just to enable/disable "delete" buttons
     ReadConditions();
@@ -688,7 +688,7 @@ IMPL_LINK( ScOptSolverDlg, SelectHdl, ListBox*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScOptSolverDlg, ScrollHdl, ScrollBar*, EMPTYARG )
+IMPL_LINK_NOARG(ScOptSolverDlg, ScrollHdl)
 {
     ReadConditions();
     nScrollPos = maScrollBar.GetThumbPos();

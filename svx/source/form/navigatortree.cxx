@@ -1528,7 +1528,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( NavigatorTree, OnEdit, void*, EMPTYARG )
+    IMPL_LINK_NOARG(NavigatorTree, OnEdit)
     {
         nEditEvent = 0;
         EditEntry( m_pEditEntry );
@@ -1538,7 +1538,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK( NavigatorTree, OnDropActionTimer, void*, EMPTYARG )
+    IMPL_LINK_NOARG(NavigatorTree, OnDropActionTimer)
     {
         if (--m_aTimerCounter > 0)
             return 0L;
@@ -1592,7 +1592,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK(NavigatorTree, OnSynchronizeTimer, void*, EMPTYARG)
+    IMPL_LINK_NOARG(NavigatorTree, OnSynchronizeTimer)
     {
         SynchronizeMarkList();
         return 0L;
@@ -1600,7 +1600,7 @@ namespace svxform
 
 
     //------------------------------------------------------------------------
-    IMPL_LINK( NavigatorTree, OnClipboardAction, void*, EMPTYARG )
+    IMPL_LINK_NOARG(NavigatorTree, OnClipboardAction)
     {
         if ( !m_aControlExchange.isClipboardOwner() )
         {

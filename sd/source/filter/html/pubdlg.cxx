@@ -382,7 +382,7 @@ public:
     SdDesignNameDlg(Window* pWindow, const String& aName );
 
     String GetDesignName();
-    DECL_LINK( ModifyHdl, Edit* );
+    DECL_LINK(ModifyHdl, void *);
 };
 
 // *********************************************************************
@@ -1012,7 +1012,7 @@ IMPL_LINK( SdPublishingDlg, DesignHdl, RadioButton *, pButton )
 // =====================================================================
 // Clickhandler fuer die auswahl eines Designs
 // =====================================================================
-IMPL_LINK( SdPublishingDlg, DesignSelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SdPublishingDlg, DesignSelectHdl)
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
     m_pDesign = &m_aDesignList[nPos];
@@ -1029,7 +1029,7 @@ IMPL_LINK( SdPublishingDlg, DesignSelectHdl, ListBox *, EMPTYARG )
 // =====================================================================
 // Clickhandler fuer das loeschen eines Designs
 // =====================================================================
-IMPL_LINK( SdPublishingDlg, DesignDeleteHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SdPublishingDlg, DesignDeleteHdl)
 {
     sal_uInt16 nPos = pPage1_Designs->GetSelectEntryPos();
 
@@ -1080,7 +1080,7 @@ IMPL_LINK( SdPublishingDlg, GfxFormatHdl, RadioButton *, pButton )
 // =====================================================================
 // Clickhandler fuer die Radiobuttons Stanrard/Frames
 // =====================================================================
-IMPL_LINK( SdPublishingDlg, BaseHdl, RadioButton *, EMPTYARG )
+IMPL_LINK_NOARG(SdPublishingDlg, BaseHdl)
 {
     UpdatePage();
 
@@ -1090,7 +1090,7 @@ IMPL_LINK( SdPublishingDlg, BaseHdl, RadioButton *, EMPTYARG )
 // =====================================================================
 // Clickhandler fuer die CheckBox der Titelseite
 // =====================================================================
-IMPL_LINK( SdPublishingDlg, ContentHdl, RadioButton *, EMPTYARG )
+IMPL_LINK_NOARG(SdPublishingDlg, ContentHdl)
 {
     if(pPage2_Content->IsChecked())
     {
@@ -1126,7 +1126,7 @@ IMPL_LINK( SdPublishingDlg, ResolutionHdl, RadioButton *, pButton )
 // =====================================================================
 // Clickhandler fuer das ValueSet mit den Bitmap Schaltflaechen
 // =====================================================================
-IMPL_LINK( SdPublishingDlg, ButtonsHdl, ValueSet *, EMPTYARG )
+IMPL_LINK_NOARG(SdPublishingDlg, ButtonsHdl)
 {
     // wird eine Bitmap Schaltflaeche gewaehlt, TexOnly ausschalten
     pPage5_TextOnly->Check(sal_False);
@@ -1178,7 +1178,7 @@ IMPL_LINK( SdPublishingDlg, ColorHdl, PushButton *, pButton)
     return 0;
 }
 
-IMPL_LINK( SdPublishingDlg, SlideChgHdl, RadioButton*, EMPTYARG )
+IMPL_LINK_NOARG(SdPublishingDlg, SlideChgHdl)
 {
     UpdatePage();
     return 0;
@@ -1187,7 +1187,7 @@ IMPL_LINK( SdPublishingDlg, SlideChgHdl, RadioButton*, EMPTYARG )
 // =====================================================================
 // Clickhandler fuer den Ok Button
 // =====================================================================
-IMPL_LINK( SdPublishingDlg, FinishHdl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(SdPublishingDlg, FinishHdl)
 {
     //Ende
     SdPublishingDesign* pDesign = new SdPublishingDesign();
@@ -1436,7 +1436,7 @@ void SdPublishingDlg::LoadPreviewButtons()
 // =====================================================================
 // Clickhandler fuer den Weiter Button
 // =====================================================================
-IMPL_LINK( SdPublishingDlg, NextPageHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SdPublishingDlg, NextPageHdl)
 {
     aAssistentFunc.NextPage();
     ChangePage();
@@ -1589,7 +1589,7 @@ void SdPublishingDlg::GetDesign( SdPublishingDesign* pDesign )
 // =====================================================================
 // Clickhandler fuer den Zurueck Button
 // =====================================================================
-IMPL_LINK( SdPublishingDlg, LastPageHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SdPublishingDlg, LastPageHdl)
 {
     aAssistentFunc.PreviousPage();
     ChangePage();
@@ -1708,7 +1708,7 @@ String SdDesignNameDlg::GetDesignName()
     return m_aEdit.GetText();
 }
 
-IMPL_LINK( SdDesignNameDlg, ModifyHdl, Edit*, EMPTYARG )
+IMPL_LINK_NOARG(SdDesignNameDlg, ModifyHdl)
 {
     m_aBtnOK.Enable(m_aEdit.GetText().Len() != 0);
 

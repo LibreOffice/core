@@ -112,7 +112,7 @@ void CanvasUpdateRequester::RequestUpdate (const sal_Bool bUpdateAll)
 
 
 
-IMPL_LINK(CanvasUpdateRequester, Callback, void*, EMPTYARG)
+IMPL_LINK_NOARG(CanvasUpdateRequester, Callback)
 {
     mnUserEventId = 0;
     if (mxCanvas.is())

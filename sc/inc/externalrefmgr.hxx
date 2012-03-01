@@ -83,7 +83,7 @@ private:
     ScExternalRefLink(); // disabled
     ScExternalRefLink(const ScExternalRefLink&); // disabled
 
-    DECL_LINK( ExternalRefEndEditHdl, ::sfx2::SvBaseLink* );
+    DECL_LINK( ExternalRefEndEditHdl, void* );
 
     sal_uInt16  mnFileId;
     String      maFilterName;

@@ -986,7 +986,7 @@ void ScTabPageSortOptions::EdOutPosModHdl( Edit* pEd )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ScTabPageSortOptions, FillAlgorHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScTabPageSortOptions, FillAlgorHdl)
 {
     aLbAlgorithm.SetUpdateMode( false );
     aLbAlgorithm.Clear();

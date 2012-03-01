@@ -510,29 +510,29 @@ IMPL_LINK( SvxHFPage, TurnOnHdl, CheckBox *, pBox )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SvxHFPage, DistModify, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxHFPage, DistModify)
 {
     UpdateExample();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxHFPage, DistModify, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxHFPage, DistModify)
 
-IMPL_LINK_INLINE_START( SvxHFPage, HeightModify, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxHFPage, HeightModify)
 {
     UpdateExample();
 
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxHFPage, HeightModify, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxHFPage, HeightModify)
 
-IMPL_LINK_INLINE_START( SvxHFPage, BorderModify, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxHFPage, BorderModify)
 {
     UpdateExample();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxHFPage, BorderModify, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxHFPage, BorderModify)
 
-IMPL_LINK( SvxHFPage, BackgroundHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHFPage, BackgroundHdl)
 {
     if ( !pBBSet )
     {
@@ -859,7 +859,7 @@ int SvxHFPage::DeactivatePage( SfxItemSet* _pSet )
     return LEAVE_PAGE;
 }
 
-IMPL_LINK( SvxHFPage, RangeHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHFPage, RangeHdl)
 {
     long nHHeight = aBspWin.GetHdHeight();
     long nHDist   = aBspWin.GetHdDist();

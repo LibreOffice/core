@@ -234,7 +234,7 @@ void WebConnectionInfoDialog::FillPasswordList()
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( WebConnectionInfoDialog, RemovePasswordHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(WebConnectionInfoDialog, RemovePasswordHdl)
 {
     try
     {
@@ -271,7 +271,7 @@ IMPL_LINK( WebConnectionInfoDialog, RemovePasswordHdl, PushButton*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( WebConnectionInfoDialog, RemoveAllPasswordsHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(WebConnectionInfoDialog, RemoveAllPasswordsHdl)
 {
     try
     {
@@ -300,7 +300,7 @@ IMPL_LINK( WebConnectionInfoDialog, RemoveAllPasswordsHdl, PushButton*, EMPTYARG
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( WebConnectionInfoDialog, ChangePasswordHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(WebConnectionInfoDialog, ChangePasswordHdl)
 {
     try
     {
@@ -344,7 +344,7 @@ IMPL_LINK( WebConnectionInfoDialog, ChangePasswordHdl, PushButton*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( WebConnectionInfoDialog, EntrySelectedHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(WebConnectionInfoDialog, EntrySelectedHdl)
 {
     SvLBoxEntry* pEntry = m_aPasswordsLB.GetCurEntry();
     if ( !pEntry )

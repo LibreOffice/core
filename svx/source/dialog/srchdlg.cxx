@@ -1611,7 +1611,7 @@ IMPL_LINK( SvxSearchDialog, ModifyHdl_Impl, ComboBox *, pEd )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchDialog, TemplateHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSearchDialog, TemplateHdl_Impl)
 {
     if ( pImpl->bSaveToModule )
         SaveToModule_Impl();
@@ -2054,7 +2054,7 @@ IMPL_LINK( SvxSearchDialog, FocusHdl_Impl, Control *, pCtrl )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchDialog, LoseFocusHdl_Impl, Control *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSearchDialog, LoseFocusHdl_Impl)
 {
     SaveToModule_Impl();
     return 0;
@@ -2062,7 +2062,7 @@ IMPL_LINK( SvxSearchDialog, LoseFocusHdl_Impl, Control *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchDialog, FormatHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSearchDialog, FormatHdl_Impl)
 {
     SfxObjectShell* pSh = SfxObjectShell::Current();
 
@@ -2158,7 +2158,7 @@ IMPL_LINK( SvxSearchDialog, FormatHdl_Impl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchDialog, NoFormatHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSearchDialog, NoFormatHdl_Impl)
 {
     aLayoutBtn.SetText( aStylesStr );
     bFormat = sal_False;
@@ -2189,7 +2189,7 @@ IMPL_LINK( SvxSearchDialog, NoFormatHdl_Impl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxSearchDialog, AttributeHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxSearchDialog, AttributeHdl_Impl)
 {
     if ( !pSearchList || !pImpl->pRanges )
         return 0;

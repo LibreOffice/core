@@ -1780,7 +1780,7 @@ IMPL_LINK( ScDPLayoutDlg, ClickHdl, PushButton *, pBtn )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(ScDPLayoutDlg, OkHdl)
 {
     rtl::OUString aOutPosStr = aEdOutPos.GetText();
     ScAddress   aAdrDest;
@@ -1940,7 +1940,7 @@ IMPL_LINK( ScDPLayoutDlg, OkHdl, OKButton *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScDPLayoutDlg, CancelHdl, CancelButton *, EMPTYARG )
+IMPL_LINK_NOARG(ScDPLayoutDlg, CancelHdl)
 {
     Close();
     return 0;
@@ -1948,7 +1948,7 @@ IMPL_LINK( ScDPLayoutDlg, CancelHdl, CancelButton *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScDPLayoutDlg, MoreClickHdl, MoreButton *, EMPTYARG )
+IMPL_LINK_NOARG(ScDPLayoutDlg, MoreClickHdl)
 {
     if ( aBtnMore.GetState() )
     {
@@ -1979,7 +1979,7 @@ IMPL_LINK( ScDPLayoutDlg, MoreClickHdl, MoreButton *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScDPLayoutDlg, EdModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(ScDPLayoutDlg, EdModifyHdl)
 {
     rtl::OUString theCurPosStr = aEdOutPos.GetText();
     sal_uInt16  nResult = ScAddress().Parse( theCurPosStr, pDoc, pDoc->GetAddressConvention() );
@@ -2005,7 +2005,7 @@ IMPL_LINK( ScDPLayoutDlg, EdModifyHdl, Edit *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDPLayoutDlg, EdInModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(ScDPLayoutDlg, EdInModifyHdl)
 {
     UpdateSrcRange();
     return 0;
@@ -2013,7 +2013,7 @@ IMPL_LINK( ScDPLayoutDlg, EdInModifyHdl, Edit *, EMPTYARG )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScDPLayoutDlg, SelAreaHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(ScDPLayoutDlg, SelAreaHdl)
 {
     rtl::OUString  aString;
     sal_uInt16  nSelPos = aLbOutPos.GetSelectEntryPos();

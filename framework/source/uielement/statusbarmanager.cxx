@@ -664,7 +664,7 @@ void StatusBarManager::MouseButtonUp( const MouseEvent& rMEvt )
     MouseButton(rMEvt,&frame::XStatusbarController::mouseButtonUp);
 }
 
-IMPL_LINK( StatusBarManager, Click, StatusBar*, EMPTYARG )
+IMPL_LINK_NOARG(StatusBarManager, Click)
 {
     ResetableGuard aGuard( m_aLock );
 
@@ -683,7 +683,7 @@ IMPL_LINK( StatusBarManager, Click, StatusBar*, EMPTYARG )
     return 1;
 }
 
-IMPL_LINK( StatusBarManager, DoubleClick, StatusBar*, EMPTYARG )
+IMPL_LINK_NOARG(StatusBarManager, DoubleClick)
 {
     ResetableGuard aGuard( m_aLock );
 

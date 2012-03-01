@@ -464,7 +464,7 @@ void ExtrusionDepthWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ExtrusionDepthWindow, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ExtrusionDepthWindow, SelectHdl)
 {
     int nSelected = getSelectedEntryId();
     if( nSelected != -1 )
@@ -900,7 +900,7 @@ void SAL_CALL ExtrusionSurfaceWindow::statusChanged(
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ExtrusionSurfaceWindow, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ExtrusionSurfaceWindow, SelectHdl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();

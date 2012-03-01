@@ -893,7 +893,7 @@ void BackingWindow::Resize()
     maTemplateButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );
 }
 
-IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(BackingWindow, ToolboxHdl)
 {
     const char* pNodePath = NULL;
     const char* pNode = NULL;

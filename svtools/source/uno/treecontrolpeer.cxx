@@ -103,9 +103,9 @@ public:
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& );
     virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
 
-    DECL_LINK( OnSelectionChangeHdl, UnoTreeListBoxImpl* );
-    DECL_LINK( OnExpandingHdl, UnoTreeListBoxImpl* );
-    DECL_LINK( OnExpandedHdl, UnoTreeListBoxImpl* );
+    DECL_LINK(OnSelectionChangeHdl, void *);
+    DECL_LINK(OnExpandingHdl, void *);
+    DECL_LINK(OnExpandedHdl, void *);
 
 private:
     rtl::Reference< TreeControlPeer > mxPeer;
@@ -1537,7 +1537,7 @@ UnoTreeListBoxImpl::~UnoTreeListBoxImpl()
 
 // --------------------------------------------------------------------
 
-IMPL_LINK( UnoTreeListBoxImpl, OnSelectionChangeHdl, UnoTreeListBoxImpl*, EMPTYARG )
+IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnSelectionChangeHdl)
 {
     if( mxPeer.is() )
         mxPeer->onSelectionChanged();
@@ -1546,7 +1546,7 @@ IMPL_LINK( UnoTreeListBoxImpl, OnSelectionChangeHdl, UnoTreeListBoxImpl*, EMPTYA
 
 // --------------------------------------------------------------------
 
-IMPL_LINK(UnoTreeListBoxImpl, OnExpandingHdl, UnoTreeListBoxImpl*, EMPTYARG )
+IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandingHdl)
 {
     UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( GetHdlEntry() );
 
@@ -1559,7 +1559,7 @@ IMPL_LINK(UnoTreeListBoxImpl, OnExpandingHdl, UnoTreeListBoxImpl*, EMPTYARG )
 
 // --------------------------------------------------------------------
 
-IMPL_LINK(UnoTreeListBoxImpl, OnExpandedHdl, UnoTreeListBoxImpl*, EMPTYARG )
+IMPL_LINK_NOARG(UnoTreeListBoxImpl, OnExpandedHdl)
 {
     UnoTreeListEntry* pEntry = dynamic_cast< UnoTreeListEntry* >( GetHdlEntry() );
     if( pEntry && mxPeer.is() )

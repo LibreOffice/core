@@ -62,7 +62,7 @@ class SwBaseShell: public SfxShell
     // Update-Timer for graphic
     std::set<sal_uInt16> aGrfUpdateSlots;
 
-    DECL_LINK( GraphicArrivedHdl, SwCrsrShell* );
+    DECL_LINK( GraphicArrivedHdl, void* );
 
 protected:
     SwWrtShell&         GetShell();

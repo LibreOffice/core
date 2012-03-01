@@ -478,7 +478,7 @@ SwCreateAddressListDialog::~SwCreateAddressListDialog()
     delete m_pFindDlg;
 }
 
-IMPL_LINK(SwCreateAddressListDialog, NewHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwCreateAddressListDialog, NewHdl_Impl)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
     ::std::vector<OUString> aNewData;
@@ -494,7 +494,7 @@ IMPL_LINK(SwCreateAddressListDialog, NewHdl_Impl, PushButton*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SwCreateAddressListDialog, DeleteHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwCreateAddressListDialog, DeleteHdl_Impl)
 {
     sal_uInt32 nCurrent = m_pAddressControl->GetCurrentDataSet();
     if(m_pCSVData->aDBData.size() > 1)
@@ -516,7 +516,7 @@ IMPL_LINK(SwCreateAddressListDialog, DeleteHdl_Impl, PushButton*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SwCreateAddressListDialog, FindHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwCreateAddressListDialog, FindHdl_Impl)
 {
     if(!m_pFindDlg)
     {
@@ -560,7 +560,7 @@ IMPL_LINK(SwCreateAddressListDialog, CustomizeHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-IMPL_LINK(SwCreateAddressListDialog, OkHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwCreateAddressListDialog, OkHdl_Impl)
 {
     if(!m_sURL.Len())
     {
@@ -658,7 +658,7 @@ IMPL_LINK(SwCreateAddressListDialog, DBCursorHdl_Impl, PushButton*, pButton)
     return 0;
 }
 
-IMPL_LINK(SwCreateAddressListDialog, DBNumCursorHdl_Impl, NumericField*, EMPTYARG)
+IMPL_LINK_NOARG(SwCreateAddressListDialog, DBNumCursorHdl_Impl)
 {
     m_pAddressControl->SetCurrentDataSet( static_cast< sal_uInt32 >(m_aSetNoNF.GetValue() - 1) );
     UpdateButtons();
@@ -748,7 +748,7 @@ SwFindEntryDialog::~SwFindEntryDialog()
 {
 }
 
-IMPL_LINK(SwFindEntryDialog, FindHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwFindEntryDialog, FindHdl_Impl)
 {
     sal_Int32 nColumn = -1;
     if(m_aFindOnlyCB.IsChecked())
@@ -758,13 +758,13 @@ IMPL_LINK(SwFindEntryDialog, FindHdl_Impl, PushButton*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SwFindEntryDialog, FindEnableHdl_Impl, Edit*, EMPTYARG)
+IMPL_LINK_NOARG(SwFindEntryDialog, FindEnableHdl_Impl)
 {
     m_aFindPB.Enable(m_aFindED.GetText().Len() > 0);
     return 0;
 }
 
-IMPL_LINK(SwFindEntryDialog, CloseHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwFindEntryDialog, CloseHdl_Impl)
 {
     Show(sal_False);
     return 0;

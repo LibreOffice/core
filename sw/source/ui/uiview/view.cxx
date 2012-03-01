@@ -218,7 +218,7 @@ void SwView::GotFocus() const
     a request to put the form shell on the top of the dispatcher
     stack
  --------------------------------------------------------------------*/
-IMPL_LINK( SwView, FormControlActivated, FmFormShell*, EMPTYARG )
+IMPL_LINK_NOARG(SwView, FormControlActivated)
 {
     // if a form control has been activated, and the form shell is not on the top
     // of the dispatcher stack, then we need to activate it
@@ -489,7 +489,7 @@ extern "C"
     }
 }
 
-IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
+IMPL_LINK_NOARG(SwView, AttrChangedNotify)
 {
      if ( GetEditWin().IsChainMode() )
         GetEditWin().SetChainMode( sal_False );
@@ -538,7 +538,7 @@ IMPL_LINK( SwView, AttrChangedNotify, SwWrtShell *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwView, TimeoutHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwView, TimeoutHdl)
 {
     DBG_PROFSTART(viewhdl);
 

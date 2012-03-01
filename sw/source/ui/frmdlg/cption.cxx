@@ -334,16 +334,16 @@ IMPL_LINK_INLINE_START( SwCaptionDialog, OptionHdl, Button*, pButton )
     DrawSample();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwCaptionDialog, OptionHdl, Button*, EMPTYARG )
+IMPL_LINK_INLINE_END( SwCaptionDialog, OptionHdl, Button*, pButton )
 
-IMPL_LINK_INLINE_START( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwCaptionDialog, SelectHdl)
 {
     DrawSample();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwCaptionDialog, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwCaptionDialog, SelectHdl)
 
-IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwCaptionDialog, ModifyHdl)
 {
     SwWrtShell &rSh = rView.GetWrtShell();
     String sFldTypeName = aCategoryBox.GetText();
@@ -365,7 +365,7 @@ IMPL_LINK( SwCaptionDialog, ModifyHdl, Edit *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK(SwCaptionDialog, CaptionHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwCaptionDialog, CaptionHdl)
 {
     SfxItemSet  aSet( rView.GetDocShell()->GetDoc()->GetAttrPool() );
     SwCaptionOptDlg aDlg( this, aSet );

@@ -182,9 +182,9 @@ private:
     void                KeepHandler( bool bMine );
     void                KeepAllHandler( bool bMine );
 
-    DECL_LINK( SelectHandle, SvxRedlinTable* );
-    DECL_LINK( DeselectHandle, SvxRedlinTable* );
-    DECL_LINK( UpdateSelectionHdl, Timer* );
+    DECL_LINK( SelectHandle, void* );
+    DECL_LINK( DeselectHandle, void* );
+    DECL_LINK( UpdateSelectionHdl, void* );
     DECL_LINK( KeepMineHandle, void* );
     DECL_LINK( KeepOtherHandle, void* );
     DECL_LINK( KeepAllMineHandle, void* );

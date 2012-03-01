@@ -56,7 +56,7 @@ class SwRenameXNamedDlg : public ModalDialog
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >   xSecondAccess;
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >   xThirdAccess;
 
-    DECL_LINK(OkHdl, OKButton*);
+    DECL_LINK(OkHdl, void *);
     DECL_LINK(ModifyHdl, NoSpaceEdit*);
 
 public:

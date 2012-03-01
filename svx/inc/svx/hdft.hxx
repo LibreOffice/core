@@ -95,13 +95,13 @@ protected:
 
     void            InitHandler();
     DECL_LINK( TurnOnHdl, CheckBox*);
-    DECL_LINK( DistModify, MetricField*);
-    DECL_LINK( HeightModify, MetricField*);
-    DECL_LINK( BorderModify, MetricField*);
-    DECL_LINK( BackgroundHdl, Button*);
+    DECL_LINK(DistModify, void *);
+    DECL_LINK(HeightModify, void *);
+    DECL_LINK(BorderModify, void *);
+    DECL_LINK(BackgroundHdl, void *);
 
     void            UpdateExample();
-    DECL_LINK( RangeHdl, Edit*);
+    DECL_LINK(RangeHdl, void *);
 
 private:
 #ifdef _SVX_HDFT_CXX

@@ -356,13 +356,13 @@ void SeriesHeader::SetEditChangedHdl( const Link & rLink )
     m_aChangeLink = rLink;
 }
 
-IMPL_LINK( SeriesHeader, SeriesNameChanged, void * , EMPTYARG )
+IMPL_LINK_NOARG(SeriesHeader, SeriesNameChanged)
 {
     notifyChanges();
     return 0;
 }
 
-IMPL_LINK( SeriesHeader, SeriesNameEdited, void * , EMPTYARG )
+IMPL_LINK_NOARG(SeriesHeader, SeriesNameEdited)
 {
     m_bSeriesNameChangePending = true;
     return 0;

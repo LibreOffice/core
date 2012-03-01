@@ -77,7 +77,7 @@ namespace svx
         void    get(        String& _rName,         String& _rURL ) const;
 
     protected:
-        DECL_LINK( OnTextModified, Control* );
+        DECL_LINK(OnTextModified, void *);
         DECL_LINK( OnBrowseFile, void* );
         DECL_LINK( OnOk, void* );
 

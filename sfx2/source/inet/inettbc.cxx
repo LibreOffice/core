@@ -173,7 +173,7 @@ Window* SfxURLToolBoxControl_Impl::CreateItemWindow( Window* pParent )
     return pURLBox;
 }
 
-IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, SelectHdl)
 {
     SvtURLBox* pURLBox = GetURLBox();
     String aName( pURLBox->GetURL() );
@@ -184,7 +184,7 @@ IMPL_LINK( SfxURLToolBoxControl_Impl, SelectHdl, void*, EMPTYARG )
     return 1L;
 }
 
-IMPL_LINK( SfxURLToolBoxControl_Impl, OpenHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SfxURLToolBoxControl_Impl, OpenHdl)
 {
     SvtURLBox* pURLBox = GetURLBox();
     OpenURL( pURLBox->GetURL(), pURLBox->IsCtrlOpen() );

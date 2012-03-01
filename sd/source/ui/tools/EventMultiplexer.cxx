@@ -797,7 +797,7 @@ void EventMultiplexer::Implementation::CallListeners (EventMultiplexerEvent& rEv
 
 
 
-IMPL_LINK(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener, void*, EMPTYARG)
+IMPL_LINK_NOARG(EventMultiplexer::Implementation, SlideSorterSelectionChangeListener)
 {
     CallListeners (EventMultiplexerEvent::EID_SLIDE_SORTER_SELECTION);
     return 0;

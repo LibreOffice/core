@@ -548,7 +548,7 @@ namespace svt { namespace table
     }
 
     //------------------------------------------------------------------------------------------------------------------
-    IMPL_LINK( TableControl, ImplSelectHdl, void*, EMPTYARG )
+    IMPL_LINK_NOARG(TableControl, ImplSelectHdl)
     {
         Select();
         return 1;

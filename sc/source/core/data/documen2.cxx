@@ -324,7 +324,7 @@ void ScDocument::SetChangeTrack( ScChangeTrack* pTrack )
 }
 
 
-IMPL_LINK( ScDocument, TrackTimeHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScDocument, TrackTimeHdl)
 {
     if ( ScDdeLink::IsInUpdate() )      // nicht verschachteln
     {

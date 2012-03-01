@@ -125,7 +125,7 @@ bool SvxLoadSaveEmbed::GetEmbed()
     return pList.is() ? pList->IsEmbedInDocument() : 0;
 }
 
-IMPL_LINK( SvxLoadSaveEmbed, EmbedToggleHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLoadSaveEmbed, EmbedToggleHdl_Impl)
 {
     SetEmbed( maBoxEmbed.IsChecked() );
     return 0;
@@ -164,7 +164,7 @@ void SvxLoadSaveEmbed::UpdateTableName()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLoadSaveEmbed, ClickLoadHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLoadSaveEmbed, ClickLoadHdl_Impl)
 {
     ResMgr& rMgr = CUI_MGR();
     sal_uInt16 nReturn = RET_YES;
@@ -236,7 +236,7 @@ void SvxLoadSaveEmbed::EnableSave( bool bCanSave )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxLoadSaveEmbed, ClickSaveHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLoadSaveEmbed, ClickSaveHdl_Impl)
 {
     ::sfx2::FileDialogHelper aDlg(
         css::ui::dialogs::TemplateDescription::FILESAVE_SIMPLE, 0 );
@@ -658,7 +658,7 @@ SfxTabPage* SvxColorTabPage::Create( Window* pWindow,
 //
 // Wird aufgerufen, wenn Inhalt der MtrFileds f�r Farbwerte ver�ndert wird
 //
-IMPL_LINK( SvxColorTabPage, ModifiedHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxColorTabPage, ModifiedHdl_Impl)
 {
     // lese aktuelle MtrFields aus, wenn cmyk, dann k-Wert als Trans.-Farbe
     aAktuellColor.SetColor ( Color( (sal_uInt8)PercentToColor_Impl( (sal_uInt16) aMtrFldColorModel4.GetValue() ),
@@ -680,7 +680,7 @@ IMPL_LINK( SvxColorTabPage, ModifiedHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxColorTabPage, ClickAddHdl_Impl)
 {
     Window *pWindow = this;
     while( pWindow )
@@ -758,7 +758,7 @@ IMPL_LINK( SvxColorTabPage, ClickAddHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxColorTabPage, ClickModifyHdl_Impl)
 {
     sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
 
@@ -834,7 +834,7 @@ IMPL_LINK( SvxColorTabPage, ClickModifyHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxColorTabPage, ClickWorkOnHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxColorTabPage, ClickWorkOnHdl_Impl)
 {
     SvColorDialog* pColorDlg = new SvColorDialog( GetParentDialog() );
 
@@ -872,7 +872,7 @@ IMPL_LINK( SvxColorTabPage, ClickWorkOnHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxColorTabPage, ClickDeleteHdl_Impl)
 {
     sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
 
@@ -909,7 +909,7 @@ IMPL_LINK( SvxColorTabPage, ClickDeleteHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxColorTabPage, SelectColorLBHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxColorTabPage, SelectColorLBHdl_Impl)
 {
     sal_uInt16 nPos = aLbColor.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -932,7 +932,7 @@ IMPL_LINK( SvxColorTabPage, SelectColorLBHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxColorTabPage, SelectValSetHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxColorTabPage, SelectValSetHdl_Impl)
 {
     sal_uInt16 nPos = aValSetColorList.GetSelectItemId();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -982,7 +982,7 @@ void SvxColorTabPage::ConvertColorValues (Color& rColor, ColorModel eModell)
 //
 // Auswahl Listbox 'Farbmodell' (RGB/CMY)
 //
-IMPL_LINK( SvxColorTabPage, SelectColorModelHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxColorTabPage, SelectColorModelHdl_Impl)
 {
     int nPos = aLbColorModel.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )

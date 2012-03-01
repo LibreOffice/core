@@ -66,8 +66,8 @@ private:
     void                LoadConfig();
     void                SaveConfig();
 
-    DECL_LINK(          FindHdl, PushButton* );
-    DECL_LINK(          ToggleHdl, CheckBox* );
+    DECL_LINK(FindHdl, void *);
+    DECL_LINK(ToggleHdl, void *);
 
 public:
     SearchDialog( Window* pWindow, const ::rtl::OUString& rConfigName );

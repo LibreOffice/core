@@ -94,7 +94,7 @@ namespace rptui
         sal_Bool                                m_bDeleted;
 
 
-        DECL_LINK( MarkTimeout, Timer * );
+        DECL_LINK(MarkTimeout, void *);
         DECL_LINK( SplitHdl, void* );
 
         void ImplInitSettings();

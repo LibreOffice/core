@@ -80,7 +80,7 @@ class IcnViewEdit_Impl : public MultiLineEdit
     sal_Bool            bGrabFocus;
 
     void            CallCallBackHdl_Impl();
-                    DECL_LINK( Timeout_Impl, Timer * );
+                    DECL_LINK(Timeout_Impl, void *);
                     DECL_LINK( ReturnHdl_Impl, Accelerator * );
                     DECL_LINK( EscapeHdl_Impl, Accelerator * );
 
@@ -265,7 +265,7 @@ IMPL_LINK( SvxIconChoiceCtrl_Impl, ScrollLeftRightHdl, ScrollBar*, pScrollBar )
     return 0;
 }
 
-IMPL_LINK( SvxIconChoiceCtrl_Impl, EndScrollHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EndScrollHdl)
 {
     if( pView->HasBackground() && !pView->GetBackground().IsScrollable() &&
         bEndScrollInvalidate )
@@ -2940,21 +2940,21 @@ void SvxIconChoiceCtrl_Impl::ClearSelectedRectList()
     aSelectedRectList.Remove( 0, aSelectedRectList.Count() );
 }
 
-IMPL_LINK(SvxIconChoiceCtrl_Impl, AutoArrangeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, AutoArrangeHdl)
 {
     aAutoArrangeTimer.Stop();
     Arrange( IsAutoArrange() );
     return 0;
 }
 
-IMPL_LINK(SvxIconChoiceCtrl_Impl, VisRectChangedHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, VisRectChangedHdl)
 {
     aVisRectChangedTimer.Stop();
     pView->VisibleRectChanged();
     return 0;
 }
 
-IMPL_LINK(SvxIconChoiceCtrl_Impl, DocRectChangedHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, DocRectChangedHdl)
 {
     aDocRectChangedTimer.Stop();
     pView->DocumentRectChanged();
@@ -2969,7 +2969,7 @@ sal_Bool SvxIconChoiceCtrl_Impl::IsTextHit( SvxIconChoiceCtrlEntry* pEntry, cons
     return sal_False;
 }
 
-IMPL_LINK(SvxIconChoiceCtrl_Impl, EditTimeoutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, EditTimeoutHdl)
 {
     SvxIconChoiceCtrlEntry* pEntry = GetCurEntry();
     if( bEntryEditingEnabled && pEntry &&
@@ -3229,7 +3229,7 @@ void SvxIconChoiceCtrl_Impl::EditEntry( SvxIconChoiceCtrlEntry* pEntry )
         LINK( this, SvxIconChoiceCtrl_Impl, TextEditEndedHdl ) );
 }
 
-IMPL_LINK( SvxIconChoiceCtrl_Impl, TextEditEndedHdl, IcnViewEdit_Impl*, EMPTYARG )
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, TextEditEndedHdl)
 {
     DBG_ASSERT(pEdit,"TextEditEnded: pEdit not set");
     if( !pEdit )
@@ -3389,7 +3389,7 @@ void IcnViewEdit_Impl::CallCallBackHdl_Impl()
     }
 }
 
-IMPL_LINK( IcnViewEdit_Impl, Timeout_Impl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(IcnViewEdit_Impl, Timeout_Impl)
 {
     CallCallBackHdl_Impl();
     return 0;
@@ -3860,7 +3860,7 @@ void SvxIconChoiceCtrl_Impl::CallSelectHandler( SvxIconChoiceCtrlEntry* )
         aCallSelectHdlTimer.Start();
 }
 
-IMPL_LINK( SvxIconChoiceCtrl_Impl, CallSelectHdlHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxIconChoiceCtrl_Impl, CallSelectHdlHdl)
 {
     pHdlEntry = 0;
     pView->ClickIcon();

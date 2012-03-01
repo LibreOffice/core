@@ -122,7 +122,7 @@ public:
     SfxBindings&            GetBindings()
                             { return *pBindings; }
 
-    DECL_LINK( TimerHdl, Timer* );
+    DECL_LINK(TimerHdl, void *);
 
 };
 
@@ -160,7 +160,7 @@ public:
     virtual void            FillInfo(SfxChildWinInfo&) const;
     void                    Initialize (SfxChildWinInfo* pInfo);
 
-    DECL_LINK( TimerHdl, Timer* );
+    DECL_LINK(TimerHdl, void *);
 
 };
 
@@ -204,7 +204,7 @@ private:
 
     SingleTabDlgImpl*   pImpl;
 
-    DECL_DLLPRIVATE_LINK( OKHdl_Impl, Button * );
+    DECL_DLLPRIVATE_LINK(OKHdl_Impl, void *);
 };
 
 #endif

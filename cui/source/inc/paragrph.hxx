@@ -112,7 +112,7 @@ private:
     void                    UpdateExample_Impl( sal_Bool bAll = sal_False );
 
     DECL_LINK( LineDistHdl_Impl, ListBox* );
-    DECL_LINK( ModifyHdl_Impl, SvxRelativeField* );
+    DECL_LINK(ModifyHdl_Impl, void *);
     DECL_LINK( AutoHdl_Impl, CheckBox* );
 #endif
 
@@ -120,7 +120,7 @@ protected:
     virtual int             DeactivatePage( SfxItemSet* pSet = 0 );
 
 public:
-    DECL_LINK( ELRLoseFocusHdl, Edit* );
+    DECL_LINK(ELRLoseFocusHdl, void *);
 
     static SfxTabPage*      Create( Window* pParent, const SfxItemSet& rSet );
     static sal_uInt16*          GetRanges();
@@ -169,9 +169,9 @@ class SvxParaAlignTabPage : public SfxTabPage
     svx::FrameDirectionListBox  aTextDirectionLB;
 
 #ifdef _SVX_PARAGRPH_CXX
-    DECL_LINK(              AlignHdl_Impl, RadioButton* );
-    DECL_LINK(              LastLineHdl_Impl, ListBox* );
-    DECL_LINK(              TextDirectionHdl_Impl, ListBox* );
+    DECL_LINK(AlignHdl_Impl, void *);
+    DECL_LINK(LastLineHdl_Impl, void *);
+    DECL_LINK(TextDirectionHdl_Impl, void *);
 
     void                    UpdateExample_Impl( sal_Bool bAll = sal_False );
 #endif
@@ -273,12 +273,12 @@ private:
     sal_uInt16              nStdPos;
 
 #ifdef _SVX_PARAGRPH_CXX
-    DECL_LINK( PageBreakHdl_Impl, TriStateBox* );
-    DECL_LINK( KeepTogetherHdl_Impl, TriStateBox* );
-    DECL_LINK( WidowHdl_Impl, TriStateBox* );
-    DECL_LINK( OrphanHdl_Impl, TriStateBox* );
-    DECL_LINK( HyphenClickHdl_Impl, TriStateBox* );
-    DECL_LINK( ApplyCollClickHdl_Impl, TriStateBox* );
+    DECL_LINK(PageBreakHdl_Impl, void *);
+    DECL_LINK(KeepTogetherHdl_Impl, void *);
+    DECL_LINK(WidowHdl_Impl, void *);
+    DECL_LINK(OrphanHdl_Impl, void *);
+    DECL_LINK(HyphenClickHdl_Impl, void *);
+    DECL_LINK(ApplyCollClickHdl_Impl, void *);
     DECL_LINK( PageBreakPosHdl_Impl, ListBox* );
     DECL_LINK( PageBreakTypeHdl_Impl, ListBox* );
 #endif

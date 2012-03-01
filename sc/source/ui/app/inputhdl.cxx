@@ -2142,7 +2142,7 @@ void ScInputHandler::SyncViews( EditView* pSourceView )
     }
 }
 
-IMPL_LINK( ScInputHandler, ModifyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScInputHandler, ModifyHdl)
 {
     if ( !bInOwnChange && ( eMode==SC_INPUT_TYPE || eMode==SC_INPUT_TABLE ) &&
          pEngine && pEngine->GetUpdateMode() && pInputWin )

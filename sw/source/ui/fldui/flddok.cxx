@@ -190,7 +190,7 @@ void SwFldDokPage::Reset(const SfxItemSet& )
     }
 }
 
-IMPL_LINK( SwFldDokPage, TypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 {
     // save old ListBoxPos
     const sal_uInt16 nOld = GetTypeSel();
@@ -450,7 +450,7 @@ void SwFldDokPage::AddSubType(sal_uInt16 nTypeId)
     aSelectionLB.SetEntryData(nPos, reinterpret_cast<void*>(nTypeId));
 }
 
-IMPL_LINK( SwFldDokPage, SubTypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldDokPage, SubTypeHdl)
 {
     sal_uInt16 nPos = aSelectionLB.GetSelectEntryPos();
     if(nPos == LISTBOX_ENTRY_NOTFOUND)
@@ -519,7 +519,7 @@ sal_uInt16 SwFldDokPage::FillFormatLB(sal_uInt16 nTypeId)
     return nSize;
 }
 
-IMPL_LINK( SwFldDokPage, FormatHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldDokPage, FormatHdl)
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 

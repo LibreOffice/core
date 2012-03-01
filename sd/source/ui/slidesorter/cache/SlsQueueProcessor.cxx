@@ -149,7 +149,7 @@ void QueueProcessor::SetPreviewSize (
 
 
 
-IMPL_LINK(QueueProcessor, ProcessRequestHdl, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(QueueProcessor, ProcessRequestHdl)
 {
     ProcessRequests();
     return 1;

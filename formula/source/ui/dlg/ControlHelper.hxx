@@ -60,7 +60,7 @@ private:
     Link            aSelChangedLink;
     Selection       aOldSel;
     sal_Bool            bMouseFlag;
-                    DECL_LINK( ChangedHdl, EditBox* );
+                    DECL_LINK(ChangedHdl, void *);
 
 protected:
 

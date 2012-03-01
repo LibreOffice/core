@@ -45,7 +45,7 @@ private:
     std::map< String, ::ucbhelper::Content >   aFileContentMap;
 
     DECL_LINK( AddHdl_Impl, PushButton * );
-    DECL_LINK( DelHdl_Impl, PushButton * );
+    DECL_LINK(DelHdl_Impl, void *);
 
 public:
     SvxMultiFileDialog( Window* pParent, sal_Bool bEmptyAllowed = sal_False );

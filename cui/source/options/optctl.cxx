@@ -34,7 +34,7 @@
 
 // class SvxCTLOptionsPage -----------------------------------------------------
 
-IMPL_LINK( SvxCTLOptionsPage, SequenceCheckingCB_Hdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxCTLOptionsPage, SequenceCheckingCB_Hdl)
 {
     sal_Bool bIsSequenceChecking = m_aSequenceCheckingCB.IsChecked();
     m_aRestrictedCB.Enable( bIsSequenceChecking );

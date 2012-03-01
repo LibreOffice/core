@@ -256,33 +256,33 @@ SwTitlePageDlg::SwTitlePageDlg( Window *pParent ) :
     aPagePropertiesPB.SetClickHdl(LINK(this, SwTitlePageDlg, EditHdl));
 }
 
-IMPL_LINK(SwTitlePageDlg, UpHdl, NumericField *, EMPTYARG)
+IMPL_LINK_NOARG(SwTitlePageDlg, UpHdl)
 {
     if (aPageCountNF.GetValue() == 2)
         FillList();
     return 0;
 }
 
-IMPL_LINK(SwTitlePageDlg, DownHdl, NumericField *, EMPTYARG)
+IMPL_LINK_NOARG(SwTitlePageDlg, DownHdl)
 {
     if (aPageCountNF.GetValue() == 1)
         FillList();
     return 0;
 }
 
-IMPL_LINK(SwTitlePageDlg, RestartNumberingHdl, CheckBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwTitlePageDlg, RestartNumberingHdl)
 {
     aRestartNumberingNF.Enable(aRestartNumberingCB.IsChecked());
     return 0;
 }
 
-IMPL_LINK(SwTitlePageDlg, SetPageNumberHdl, CheckBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwTitlePageDlg, SetPageNumberHdl)
 {
     aSetPageNumberNF.Enable(aSetPageNumberCB.IsChecked());
     return 0;
 }
 
-IMPL_LINK(SwTitlePageDlg, StartPageHdl, RadioButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwTitlePageDlg, StartPageHdl)
 {
     aPageStartNF.Enable(aPageStartRB.IsChecked());
     return 0;

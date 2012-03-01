@@ -498,7 +498,7 @@ sal_uInt16* SvxShadowTabPage::GetRanges()
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxShadowTabPage, ClickShadowHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxShadowTabPage, ClickShadowHdl_Impl)
 {
     if( aTsbShowShadow.GetState() == STATE_NOCHECK )
     {
@@ -531,7 +531,7 @@ IMPL_LINK( SvxShadowTabPage, ClickShadowHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxShadowTabPage, ModifyShadowHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxShadowTabPage, ModifyShadowHdl_Impl)
 {
     if( aTsbShowShadow.GetState() == STATE_CHECK )
         rXFSet.Put( XFillStyleItem( XFILL_SOLID ) );

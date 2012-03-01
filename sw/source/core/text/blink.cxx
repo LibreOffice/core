@@ -71,7 +71,7 @@ SwBlink::~SwBlink( )
  * invalidieren.
  *************************************************************************/
 
-IMPL_LINK( SwBlink, Blinker, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwBlink, Blinker)
 {
     bVisible = !bVisible;
     if( bVisible )

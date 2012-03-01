@@ -291,8 +291,8 @@ private:
     bool GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize);
     void HandleScroll();
 
-    DECL_LINK(ScrollHdl, ScrollBar*);
-    DECL_LINK(EndScrollHdl, ScrollBar*);
+    DECL_LINK(ScrollHdl, void*);
+    DECL_LINK(EndScrollHdl, void*);
 
 private:
 
@@ -363,8 +363,8 @@ private:
     bool GetFieldBtnPosSize(size_t nPos, Point& rPos, Size& rSize);
     void HandleScroll();
 
-    DECL_LINK(ScrollHdl, ScrollBar*);
-    DECL_LINK(EndScrollHdl, ScrollBar*);
+    DECL_LINK(ScrollHdl, void*);
+    DECL_LINK(EndScrollHdl, void*);
 
 private:
 

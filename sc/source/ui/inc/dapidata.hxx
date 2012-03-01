@@ -56,7 +56,7 @@ private:
 
     void    FillObjects();
 
-    DECL_LINK( SelectHdl, ListBox* );
+    DECL_LINK( SelectHdl, void* );
 
 public:
             ScDataPilotDatabaseDlg( Window* pParent );

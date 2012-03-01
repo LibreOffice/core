@@ -298,7 +298,7 @@ void ThreeD_SceneAppearance_TabPage::updateScheme()
     }
 }
 
-IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectSchemeHdl)
 {
     if( !m_bUpdateOtherControls )
         return 0;
@@ -324,7 +324,7 @@ IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectSchemeHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ThreeD_SceneAppearance_TabPage, SelectShading, void*, EMPTYARG )
+IMPL_LINK_NOARG(ThreeD_SceneAppearance_TabPage, SelectShading)
 {
     if( !m_bUpdateOtherControls )
         return 0;

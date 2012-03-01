@@ -1825,7 +1825,7 @@ IMPL_LINK( Outliner, ParaVisibleStateChangedHdl, Paragraph*, pPara )
     return 0;
 }
 
-IMPL_LINK( Outliner, BeginMovingParagraphsHdl, MoveParagraphsInfo*, EMPTYARG )
+IMPL_LINK_NOARG(Outliner, BeginMovingParagraphsHdl)
 {
     DBG_CHKTHIS(Outliner,0);
 

@@ -182,7 +182,7 @@ void FileControl::Resize()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FileControl, ButtonHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(FileControl, ButtonHdl)
 {
     ImplBrowseFile( );
 

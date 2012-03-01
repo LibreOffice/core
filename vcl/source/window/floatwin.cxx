@@ -550,7 +550,7 @@ sal_Bool FloatingWindow::ImplIsFloatPopupModeWindow( const Window* pWindow )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FloatingWindow, ImplEndPopupModeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(FloatingWindow, ImplEndPopupModeHdl)
 {
     mnPostId            = 0;
     mnPopupModeFlags    = 0;

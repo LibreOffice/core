@@ -67,7 +67,7 @@ private:
     DECL_LINK (LostFocusTargetHdl_Impl   , void * );        // Combobox "Target" lost its focus
     DECL_LINK (ModifiedTargetHdl_Impl    , void * );        // Contens of editfield "Target" modified
 
-    DECL_LINK (TimeoutHdl_Impl           , Timer * );       // Handler for timer -timeout
+    DECL_LINK(TimeoutHdl_Impl           , void *);       // Handler for timer -timeout
 
 
     void    SetScheme( const String& aScheme );

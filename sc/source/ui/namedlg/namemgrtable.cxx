@@ -265,7 +265,7 @@ void CalculateItemSize(const long& rTableSize, long& rItemNameSize, long& rItemR
 
 }
 
-IMPL_LINK( ScRangeManagerTable, HeaderEndDragHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScRangeManagerTable, HeaderEndDragHdl)
 {
     long aTableSize = maHeaderBar.GetSizePixel().Width();
     long aItemNameSize = maHeaderBar.GetItemSize(ITEMID_NAME);
@@ -289,7 +289,7 @@ IMPL_LINK( ScRangeManagerTable, HeaderEndDragHdl, void*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK( ScRangeManagerTable, ScrollHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(ScRangeManagerTable, ScrollHdl)
 {
     CheckForFormulaString();
     return 0;

@@ -429,7 +429,7 @@ long ScExtIButton::PreNotify( NotifyEvent& rNEvt )
     return ImageButton::PreNotify(rNEvt );
 }
 
-IMPL_LINK( ScExtIButton, TimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScExtIButton, TimerHdl)
 {
     StartPopup();
     return 0;

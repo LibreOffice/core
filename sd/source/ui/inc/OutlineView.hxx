@@ -113,10 +113,10 @@ public:
     DECL_LINK( ParagraphInsertedHdl, Outliner * );
     DECL_LINK( ParagraphRemovingHdl, Outliner * );
     DECL_LINK( DepthChangedHdl, Outliner * );
-    DECL_LINK( StatusEventHdl, EditStatus * );
+    DECL_LINK( StatusEventHdl, void * );
     DECL_LINK( BeginMovingHdl, Outliner * );
     DECL_LINK( EndMovingHdl, Outliner * );
-    DECL_LINK( RemovingPagesHdl, OutlinerView * );
+    DECL_LINK(RemovingPagesHdl, void *);
     DECL_LINK( IndentingPagesHdl, OutlinerView * );
     DECL_LINK( BeginDropHdl, void * );
     DECL_LINK( EndDropHdl, void * );

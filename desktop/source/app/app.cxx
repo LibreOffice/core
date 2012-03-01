@@ -2055,7 +2055,7 @@ void Desktop::SystemSettingsChanging( AllSettings& rSettings, Window* )
 }
 
 // ========================================================================
-IMPL_LINK( Desktop, AsyncInitFirstRun, void*, EMPTYARG )
+IMPL_LINK_NOARG(Desktop, AsyncInitFirstRun)
 {
     DoFirstRunInitializations();
     return 0L;
@@ -2077,7 +2077,7 @@ class ExitTimer : public Timer
     }
 };
 
-IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Desktop, OpenClients_Impl)
 {
     RTL_LOGFILE_PRODUCT_CONTEXT( aLog, "PERFORMANCE - DesktopOpenClients_Impl()" );
 
@@ -2100,7 +2100,7 @@ IMPL_LINK( Desktop, OpenClients_Impl, void*, EMPTYARG )
 }
 
 // enable acceptos
-IMPL_LINK( Desktop, EnableAcceptors_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Desktop, EnableAcceptors_Impl)
 {
     enableAcceptors();
     return 0;

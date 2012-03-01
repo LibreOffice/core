@@ -296,13 +296,13 @@ private:
 
     void setActiveXToolbarsVisible( sal_Bool bVisible );
 
-    DECL_LINK( updateHdl, Timer* );
+    DECL_LINK(updateHdl, void *);
     DECL_LINK( PostYieldListener, void* );
-    DECL_LINK( ReadyForNextInputHdl, Timer* );
+    DECL_LINK(ReadyForNextInputHdl, void *);
     DECL_LINK( endPresentationHdl, void* );
     DECL_LINK( ContextMenuSelectHdl, Menu * );
     DECL_LINK( ContextMenuHdl, void* );
-    DECL_LINK( deactivateHdl, Timer* );
+    DECL_LINK(deactivateHdl, void *);
     DECL_LINK( EventListenerHdl, VclSimpleEvent* );
 
     // helper

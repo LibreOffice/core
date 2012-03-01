@@ -97,7 +97,7 @@ public:
     virtual void            InsertAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
     virtual void            RemoveAccessibleTextData( ScAccessibleEditLineTextData& rTextData );
 
-    DECL_LINK( NotifyHdl, EENotify* );
+    DECL_LINK( NotifyHdl, void* );
 
 protected:
     virtual void    Paint( const Rectangle& rRec );
@@ -245,8 +245,8 @@ private:
     PushButton      aButton;
     ScrollBar       aScrollBar;
     long            nVertOffset;
-    DECL_LINK( ClickHdl,	 PushButton* );
-    DECL_LINK( Impl_ScrollHdl,  ScrollBar* );
+    DECL_LINK( ClickHdl, void* );
+    DECL_LINK( Impl_ScrollHdl, void* );
 
 };
 

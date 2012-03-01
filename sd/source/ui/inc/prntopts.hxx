@@ -83,7 +83,7 @@ private:
     const SfxItemSet&   rOutAttrs;
 
     DECL_LINK( ClickCheckboxHdl, CheckBox * );
-    DECL_LINK( ClickBookletHdl, CheckBox * );
+    DECL_LINK( ClickBookletHdl, void * );
 
     void updateControls();
 

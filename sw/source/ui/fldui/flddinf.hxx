@@ -61,8 +61,8 @@ class SwFldDokInfPage : public SwFldPage
     sal_uLong               nOldFormat;
     ::rtl::OUString     m_sOldCustomFieldName;
 
-    DECL_LINK( TypeHdl, ListBox* pLB = 0 );
-    DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
+    DECL_LINK(TypeHdl, void * = 0);
+    DECL_LINK(SubTypeHdl, void * = 0);
 
     sal_uInt16              FillSelectionLB(sal_uInt16 nSubTypeId);
 

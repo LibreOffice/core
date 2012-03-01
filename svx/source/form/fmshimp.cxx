@@ -1058,7 +1058,7 @@ void FmXFormShell::LockSlotInvalidation(sal_Bool bLock)
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(FmXFormShell, OnInvalidateSlots, void*, EMPTYARG)
+IMPL_LINK_NOARG(FmXFormShell, OnInvalidateSlots)
 {
     if ( impl_checkDisposed() )
         return 0L;

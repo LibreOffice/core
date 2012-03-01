@@ -63,7 +63,7 @@ struct MultiPath_Impl
 
 // class SvxMultiPathDialog ----------------------------------------------
 
-IMPL_LINK( SvxMultiPathDialog, SelectHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxMultiPathDialog, SelectHdl_Impl)
 {
     sal_uLong nCount = pImpl->bIsRadioButtonMode ? aRadioLB.GetEntryCount() : aPathLB.GetEntryCount();
     bool bIsSelected = pImpl->bIsRadioButtonMode
@@ -87,7 +87,7 @@ IMPL_LINK( SvxMultiPathDialog, CheckHdl_Impl, svx::SvxRadioButtonListBox *, pBox
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxMultiPathDialog, AddHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxMultiPathDialog, AddHdl_Impl)
 {
     rtl::OUString aService( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
     Reference < XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
@@ -140,7 +140,7 @@ IMPL_LINK( SvxMultiPathDialog, AddHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxMultiPathDialog, DelHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxMultiPathDialog, DelHdl_Impl)
 {
     if ( pImpl->bIsRadioButtonMode )
     {

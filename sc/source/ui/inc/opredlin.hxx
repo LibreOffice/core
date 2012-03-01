@@ -59,7 +59,7 @@ class ScRedlineOptionsTabPage : public SfxTabPage
     ColorListBox        aMoveColorLB;
     FixedLine           aChangedGB;
     String              aAuthorStr;
-    DECL_LINK( ColorHdl, ColorListBox *pColorLB );
+    DECL_LINK(ColorHdl, void *);
 
 
 public:

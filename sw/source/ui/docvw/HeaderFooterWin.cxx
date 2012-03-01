@@ -513,7 +513,7 @@ void SwHeaderFooterWin::Select( )
     ExecuteCommand( GetCurItemId() );
 }
 
-IMPL_LINK( SwHeaderFooterWin, FadeHandler, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwHeaderFooterWin, FadeHandler)
 {
     const int TICKS_BEFORE_WE_APPEAR = 10;
     if ( m_bIsAppearing && m_nDelayAppearing < TICKS_BEFORE_WE_APPEAR )

@@ -272,7 +272,7 @@ const String* ScInsertTableDlg::GetNextTable( sal_uInt16* pN )
 // Handler:
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScInsertTableDlg, CountHdl_Impl, NumericField*, EMPTYARG )
+IMPL_LINK_NOARG(ScInsertTableDlg, CountHdl_Impl)
 {
     nTableCount = static_cast<SCTAB>(aNfCount.GetValue());
     if ( nTableCount==1)
@@ -297,7 +297,7 @@ IMPL_LINK( ScInsertTableDlg, CountHdl_Impl, NumericField*, EMPTYARG )
 }
 
 //------------------------------------------------------------------------
-IMPL_LINK( ScInsertTableDlg, ChoiceHdl_Impl, RadioButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScInsertTableDlg, ChoiceHdl_Impl)
 {
     if ( aBtnNew.IsChecked() )
         SetNewTable_Impl();
@@ -310,7 +310,7 @@ IMPL_LINK( ScInsertTableDlg, ChoiceHdl_Impl, RadioButton*, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScInsertTableDlg, BrowseHdl_Impl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScInsertTableDlg, BrowseHdl_Impl)
 {
     if ( pDocInserter )
         delete pDocInserter;
@@ -322,7 +322,7 @@ IMPL_LINK( ScInsertTableDlg, BrowseHdl_Impl, PushButton*, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScInsertTableDlg, SelectHdl_Impl, MultiListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScInsertTableDlg, SelectHdl_Impl)
 {
     DoEnable_Impl();
     return 0;
@@ -338,7 +338,7 @@ void ScInsertTableDlg::DoEnable_Impl()
         aBtnOk.Disable();
 }
 
-IMPL_LINK( ScInsertTableDlg, DoEnterHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScInsertTableDlg, DoEnterHdl)
 {
     if(nTableCount > 1 || rDoc.ValidTabName(aEdName.GetText()))
     {
@@ -352,7 +352,7 @@ IMPL_LINK( ScInsertTableDlg, DoEnterHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScInsertTableDlg, BrowseTimeoutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScInsertTableDlg, BrowseTimeoutHdl)
 {
     bMustClose = true;
     BrowseHdl_Impl( &aBtnBrowse );

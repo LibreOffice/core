@@ -165,10 +165,10 @@ private:
     DECL_LINK( ChangeCond3TemplateHdl, void * );
 
     DECL_LINK( GetFocusHdl, Control* );
-    DECL_LINK( LoseFocusHdl, Control* );
+    DECL_LINK( LoseFocusHdl, void* );
     DECL_LINK( BtnHdl, PushButton* );
     DECL_LINK( NewBtnHdl, PushButton* );
-    DECL_LINK( ScrollHdl, ScrollBar* );
+    DECL_LINK( ScrollHdl, void* );
 
 #endif // _CONDFRMT_CXX
 };

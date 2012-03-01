@@ -77,8 +77,8 @@ private:
         ::com::sun::star::linguistic2::XDictionary >    xNewDic;
 
 #ifdef _SVX_OPTDICT_CXX
-    DECL_LINK( OKHdl_Impl, Button * );
-    DECL_LINK( ModifyHdl_Impl, Edit * );
+    DECL_LINK(OKHdl_Impl, void *);
+    DECL_LINK(ModifyHdl_Impl, void *);
 #endif
 
 public:
@@ -150,8 +150,8 @@ private:
     sal_Bool                bDicIsReadonly;
 
 #ifdef _SVX_OPTDICT_CXX
-    DECL_LINK( SelectBookHdl_Impl, ListBox * );
-    DECL_LINK( SelectLangHdl_Impl, ListBox * );
+    DECL_LINK(SelectBookHdl_Impl, void *);
+    DECL_LINK(SelectLangHdl_Impl, void *);
     DECL_LINK(SelectHdl, SvTabListBox*);
     DECL_LINK(NewDelHdl, PushButton*);
     DECL_LINK(ModifyHdl, Edit*);

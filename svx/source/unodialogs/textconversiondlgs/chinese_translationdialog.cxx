@@ -132,13 +132,13 @@ void ChineseTranslationDialog::impl_UpdateVariantsCheckBox()
 //    m_aCB_Use_Variants.Enable( m_aRB_To_Traditional.IsChecked() );
 }
 
-IMPL_LINK( ChineseTranslationDialog, DirectionHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChineseTranslationDialog, DirectionHdl)
 {
     impl_UpdateVariantsCheckBox();
     return 0;
 }
 
-IMPL_LINK( ChineseTranslationDialog, CommonTermsHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChineseTranslationDialog, CommonTermsHdl)
 {
 // #117820# (search for other occurrences!)
 //    if( m_aCB_Translate_Commonterms.IsChecked() && m_aRB_To_Traditional.IsChecked() )
@@ -146,7 +146,7 @@ IMPL_LINK( ChineseTranslationDialog, CommonTermsHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ChineseTranslationDialog, OkHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChineseTranslationDialog, OkHdl)
 {
     //save settings to configuration
     SvtLinguConfig  aLngCfg;
@@ -162,7 +162,7 @@ IMPL_LINK( ChineseTranslationDialog, OkHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ChineseTranslationDialog, DictionaryHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChineseTranslationDialog, DictionaryHdl)
 {
     if( !m_pDictionaryDialog )
     {

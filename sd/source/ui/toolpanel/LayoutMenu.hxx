@@ -227,9 +227,9 @@ private:
 
     /** When clicked then set the current page of the view in the center pane.
     */
-    DECL_LINK(ClickHandler, ValueSet*);
+    DECL_LINK(ClickHandler, void *);
     DECL_LINK(RightClickHandler, MouseEvent*);
-    DECL_LINK(StateChangeHandler, ::rtl::OUString*);
+    DECL_LINK(StateChangeHandler, void *);
     DECL_LINK(EventMultiplexerListener, ::sd::tools::EventMultiplexerEvent*);
 };
 

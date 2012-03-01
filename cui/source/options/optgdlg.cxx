@@ -348,7 +348,7 @@ OfaMiscTabPage::OfaMiscTabPage(Window* pParent, const SfxItemSet& rSet ) :
 }
 
 #ifdef WNT
-IMPL_LINK( OfaMiscTabPage, OnFileDlgToggled, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(OfaMiscTabPage, OnFileDlgToggled)
 {
     aODMADlgCB.Enable( !aFileDlgCB.IsChecked() );
     return 0;
@@ -543,7 +543,7 @@ IMPL_LINK( OfaMiscTabPage, TwoFigureConfigHdl, NumericField*, pEd )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( OfaMiscTabPage, HelpCheckHdl_Impl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(OfaMiscTabPage, HelpCheckHdl_Impl)
 {
     aExtHelpCB.Enable( aToolTipsCB.IsChecked() );
     aHelpAgentResetBtn.Enable( aHelpAgentCB.IsChecked() );
@@ -552,7 +552,7 @@ IMPL_LINK( OfaMiscTabPage, HelpCheckHdl_Impl, CheckBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( OfaMiscTabPage, HelpAgentResetHdl_Impl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(OfaMiscTabPage, HelpAgentResetHdl_Impl)
 {
     SvtHelpOptions().resetAgentIgnoreURLCounter();
     return 0;

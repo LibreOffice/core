@@ -75,7 +75,7 @@ public:
 
     sal_Bool    IsUsed() const;
 
-    DECL_LINK( RefreshHdl, ScTableLink* );
+    DECL_LINK( RefreshHdl, void* );
     DECL_LINK( TableEndEditHdl, ::sfx2::SvBaseLink* );
 };
 

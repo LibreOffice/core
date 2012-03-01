@@ -196,8 +196,8 @@ private:
     void                        SetFirstFormula( const String& rFmlaStr );
     void                        SetSecondFormula( const String& rFmlaStr );
 
-                                DECL_LINK( SelectHdl, ListBox* );
-                                DECL_LINK( CheckHdl, CheckBox* );
+                                DECL_LINK(SelectHdl, void *);
+                                DECL_LINK(CheckHdl, void *);
 
     FixedText                   maFtAllow;
     ListBox                     maLbAllow;
@@ -220,7 +220,7 @@ private:
     String                      maStrList;
     sal_Unicode                 mcFmlaSep;      /// List separator in formulas.
 
-    DECL_LINK( EditSetFocusHdl, Edit *);
+    DECL_LINK(EditSetFocusHdl, void *);
     DECL_LINK( KillFocusHdl, Window *);
     void    OnClick( Button *pBtn );
     formula::RefEdit*           m_pRefEdit;
@@ -296,8 +296,8 @@ private:
     void    Init();
 
     // Handler ------------------------
-    DECL_LINK( SelectActionHdl, ListBox * );
-    DECL_LINK( ClickSearchHdl, PushButton * );
+    DECL_LINK(SelectActionHdl, void *);
+    DECL_LINK(ClickSearchHdl, void *);
 
 public:
             ScTPValidationError( Window* pParent, const SfxItemSet& rArgSet );

@@ -283,7 +283,7 @@ IMPL_LINK( ScMoveTableDlg, CheckBtnHdl, void *, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScMoveTableDlg, OkHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScMoveTableDlg, OkHdl)
 {
     sal_uInt16  nDocSel     = aLbDoc.GetSelectEntryPos();
     sal_uInt16  nDocLast    = aLbDoc.GetEntryCount()-1;

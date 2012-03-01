@@ -762,7 +762,7 @@ IMPL_LINK( ScFilterDlg, EndDlgHdl, Button*, pBtn )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScFilterDlg, MoreClickHdl, MoreButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScFilterDlg, MoreClickHdl)
 {
     if ( aBtnMore.GetState() )
         pTimer->Start();
@@ -1178,7 +1178,7 @@ IMPL_LINK( ScFilterDlg, ValModifyHdl, ComboBox*, pEd )
 }
 
 //----------------------------------------------------------------------------
-IMPL_LINK( ScFilterDlg, ScrollHdl, ScrollBar*, EMPTYARG )
+IMPL_LINK_NOARG(ScFilterDlg, ScrollHdl)
 {
     SliderMoved();
     return 0;

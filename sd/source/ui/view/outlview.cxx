@@ -866,7 +866,7 @@ IMPL_LINK( OutlineView, DepthChangedHdl, ::Outliner *, pOutliner )
 |*
 \************************************************************************/
 
-IMPL_LINK( OutlineView, StatusEventHdl, EditStatus *, EMPTYARG )
+IMPL_LINK_NOARG(OutlineView, StatusEventHdl)
 {
     ::sd::Window*   pWin = mrOutlineViewShell.GetActiveWindow();
     OutlinerView*   pOutlinerView = GetViewByWindow(pWin);
@@ -891,7 +891,7 @@ IMPL_LINK( OutlineView, StatusEventHdl, EditStatus *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( OutlineView, BeginDropHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(OutlineView, BeginDropHdl)
 {
     DBG_ASSERT(maDragAndDropModelGuard.get() == 0, "sd::OutlineView::BeginDropHdl(), prior drag operation not finished correctly!" );
 
@@ -899,7 +899,7 @@ IMPL_LINK( OutlineView, BeginDropHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( OutlineView, EndDropHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(OutlineView, EndDropHdl)
 {
     maDragAndDropModelGuard.reset(0);
     InvalidateSlideNumberArea();
@@ -1297,7 +1297,7 @@ void OutlineView::FillOutliner()
 |*
 \************************************************************************/
 
-IMPL_LINK( OutlineView, RemovingPagesHdl, OutlinerView *, EMPTYARG )
+IMPL_LINK_NOARG(OutlineView, RemovingPagesHdl)
 {
     sal_uInt16 nNumOfPages = mrOutliner.GetSelPageCount();
 
@@ -1594,7 +1594,7 @@ void OutlineView::onUpdateStyleSettings( bool bForceUpdate /* = false */ )
     }
 }
 
-IMPL_LINK( OutlineView, AppEventListenerHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(OutlineView, AppEventListenerHdl)
 {
     onUpdateStyleSettings();
     return 0;

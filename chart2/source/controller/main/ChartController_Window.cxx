@@ -580,7 +580,7 @@ void ChartController::stopDoubleClickWaiting()
     m_bWaitingForDoubleClick = false;
 }
 
-IMPL_LINK( ChartController, DoubleClickWaitingHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChartController, DoubleClickWaitingHdl)
 {
     m_bWaitingForDoubleClick = false;
 

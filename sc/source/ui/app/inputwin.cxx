@@ -1035,7 +1035,7 @@ void ScInputBarGroup::DecrementVerticalSize()
     }
 }
 
-IMPL_LINK( ScInputBarGroup, ClickHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScInputBarGroup, ClickHdl)
 {
     Window *w=GetParent();
     ScInputWindow *pParent;
@@ -1110,7 +1110,7 @@ void ScInputBarGroup::TriggerToolboxLayout()
     }
 }
 
-IMPL_LINK( ScInputBarGroup, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
+IMPL_LINK_NOARG(ScInputBarGroup, Impl_ScrollHdl)
 {
     aMultiTextWnd.DoScroll();
     return 0;
@@ -1792,7 +1792,7 @@ void ScTextWnd::StartEditEngine()
         pViewFrm->GetBindings().Invalidate( SID_ATTR_INSERT );
 }
 
-IMPL_LINK(ScTextWnd, NotifyHdl, EENotify*, EMPTYARG)
+IMPL_LINK_NOARG(ScTextWnd, NotifyHdl)
 {
     if (pEditView && !bInputMode)
     {

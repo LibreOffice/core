@@ -123,15 +123,15 @@ class SwIndexMarkDlg : public Window
     void            UpdateMark();
 
     DECL_LINK( InsertHdl, Button * );
-    DECL_LINK( CloseHdl, Button * );
-    DECL_LINK( DelHdl, Button * );
-    DECL_LINK( NextHdl, Button * );
-    DECL_LINK( NextSameHdl, Button * );
-    DECL_LINK( PrevHdl, Button * );
-    DECL_LINK( PrevSameHdl, Button * );
+    DECL_LINK(CloseHdl, void *);
+    DECL_LINK(DelHdl, void *);
+    DECL_LINK(NextHdl, void *);
+    DECL_LINK(NextSameHdl, void *);
+    DECL_LINK(PrevHdl, void *);
+    DECL_LINK(PrevSameHdl, void *);
     DECL_LINK( ModifyHdl, ListBox* pBox = 0 );
     DECL_LINK( KeyDCBModifyHdl, ComboBox * );
-    DECL_LINK( NewUserIdxHdl, Button*);
+    DECL_LINK(NewUserIdxHdl, void *);
     DECL_LINK( SearchTypeHdl, CheckBox*);
     DECL_LINK( PhoneticEDModifyHdl, Edit * );
 
@@ -227,8 +227,8 @@ class SwAuthMarkDlg : public Window
 
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >    xBibAccess;
 
-    DECL_LINK(InsertHdl, PushButton*);
-    DECL_LINK(CloseHdl, PushButton*);
+    DECL_LINK(InsertHdl, void *);
+    DECL_LINK(CloseHdl, void *);
     DECL_LINK(CreateEntryHdl, PushButton*);
     DECL_LINK(CompEntryHdl, ListBox*);
     DECL_LINK(ChangeSourceHdl, RadioButton*);

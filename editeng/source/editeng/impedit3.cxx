@@ -322,7 +322,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
     CallStatusHdl();
 }
 
-IMPL_LINK( ImpEditEngine, OnlineSpellHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(ImpEditEngine, OnlineSpellHdl)
 {
     if ( !Application::AnyInput( VCL_INPUT_KEYBOARD ) && GetUpdateMode() && IsFormatted() )
         DoOnlineSpelling();
@@ -332,7 +332,7 @@ IMPL_LINK( ImpEditEngine, OnlineSpellHdl, Timer *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( ImpEditEngine, IdleFormatHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ImpEditEngine, IdleFormatHdl)
 {
     aIdleFormatter.ResetRestarts();
 
@@ -350,7 +350,7 @@ IMPL_LINK_INLINE_START( ImpEditEngine, IdleFormatHdl, Timer *, EMPTYARG )
     }
     return 0;
 }
-IMPL_LINK_INLINE_END( ImpEditEngine, IdleFormatHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ImpEditEngine, IdleFormatHdl)
 
 void ImpEditEngine::CheckIdleFormatter()
 {
@@ -3884,12 +3884,12 @@ void ImpEditEngine::InvalidateFromParagraph( sal_uInt16 nFirstInvPara )
     pTmpPortion->ResetHeight();
 }
 
-IMPL_LINK_INLINE_START( ImpEditEngine, StatusTimerHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ImpEditEngine, StatusTimerHdl)
 {
     CallStatusHdl();
     return 0;
 }
-IMPL_LINK_INLINE_END( ImpEditEngine, StatusTimerHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ImpEditEngine, StatusTimerHdl)
 
 void ImpEditEngine::CallStatusHdl()
 {

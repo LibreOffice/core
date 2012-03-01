@@ -106,7 +106,7 @@ void OrientationHelper_Impl::ShowDependentWindows()
         aIt->first->Show( mbVisible );
 }
 
-IMPL_LINK( OrientationHelper_Impl, ClickHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(OrientationHelper_Impl, ClickHdl)
 {
     EnableDependentWindows();
     return 0L;

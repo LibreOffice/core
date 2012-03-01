@@ -1018,7 +1018,7 @@ void ScTabViewShell::SetFormShellAtTop( sal_Bool bSet )
     }
 }
 
-IMPL_LINK( ScTabViewShell, FormControlActivated, FmFormShell*, EMPTYARG )
+IMPL_LINK_NOARG(ScTabViewShell, FormControlActivated)
 {
     // a form control got the focus, so the form shell has to be on top
     SetFormShellAtTop( sal_True );
@@ -1125,7 +1125,7 @@ void ScTabViewShell::StopEditShell()
 
 // close handler to ensure function of dialog:
 
-IMPL_LINK( ScTabViewShell, SimpleRefClose, String*, EMPTYARG )
+IMPL_LINK_NOARG(ScTabViewShell, SimpleRefClose)
 {
     SfxInPlaceClient* pClient = GetIPClient();
     if ( pClient && pClient->IsObjectInPlaceActive() )

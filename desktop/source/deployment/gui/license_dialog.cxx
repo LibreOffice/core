@@ -104,9 +104,9 @@ struct LicenseDialogImpl : public ModalDialog
     OKButton m_acceptButton;
     CancelButton m_declineButton;
 
-    DECL_LINK(PageDownHdl, PushButton*);
-    DECL_LINK(ScrolledHdl, LicenseView*);
-    DECL_LINK(EndReachedHdl, LicenseView*);
+    DECL_LINK(PageDownHdl, void *);
+    DECL_LINK(ScrolledHdl, void *);
+    DECL_LINK(EndReachedHdl, void *);
 
     bool m_bLicenseRead;
 
@@ -255,7 +255,7 @@ void LicenseDialogImpl::Activate()
     }
 }
 
-IMPL_LINK( LicenseDialogImpl, ScrolledHdl, LicenseView *, EMPTYARG )
+IMPL_LINK_NOARG(LicenseDialogImpl, ScrolledHdl)
 {
 
     if (m_mlLicense.IsEndReached())
@@ -266,13 +266,13 @@ IMPL_LINK( LicenseDialogImpl, ScrolledHdl, LicenseView *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( LicenseDialogImpl, PageDownHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(LicenseDialogImpl, PageDownHdl)
 {
     m_mlLicense.ScrollDown( SCROLL_PAGEDOWN );
     return 0;
 }
 
-IMPL_LINK( LicenseDialogImpl, EndReachedHdl, LicenseView *, EMPTYARG )
+IMPL_LINK_NOARG(LicenseDialogImpl, EndReachedHdl)
 {
     m_acceptButton.Enable();
     m_acceptButton.GrabFocus();

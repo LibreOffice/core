@@ -63,8 +63,8 @@ private:
     sal_uLong                   m_nSavedOptions;
 
     // handler
-    DECL_LINK(              SelectHdl, ListBox* );
-    DECL_LINK(              UseAsDefaultHdl, PushButton* );
+    DECL_LINK(SelectHdl, void *);
+    DECL_LINK(UseAsDefaultHdl, void *);
 
     // private methods
     void                    InitControls( const SfxItemSet& rSet );

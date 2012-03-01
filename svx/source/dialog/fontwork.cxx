@@ -663,7 +663,7 @@ void SvxFontWorkDialog::SetShadowYVal_Impl(const XFormTextShadowYValItem* pItem)
     }
 }
 
-IMPL_LINK( SvxFontWorkDialog, SelectStyleHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxFontWorkDialog, SelectStyleHdl_Impl)
 {
     sal_uInt16 nId = aTbxStyle.GetCurItemId();
 
@@ -691,7 +691,7 @@ IMPL_LINK( SvxFontWorkDialog, SelectStyleHdl_Impl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxFontWorkDialog, SelectAdjustHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxFontWorkDialog, SelectAdjustHdl_Impl)
 {
     sal_uInt16 nId = aTbxAdjust.GetCurItemId();
 
@@ -718,7 +718,7 @@ IMPL_LINK( SvxFontWorkDialog, SelectAdjustHdl_Impl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxFontWorkDialog, SelectShadowHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxFontWorkDialog, SelectShadowHdl_Impl)
 {
     sal_uInt16 nId = aTbxShadow.GetCurItemId();
 
@@ -758,14 +758,14 @@ IMPL_LINK( SvxFontWorkDialog, SelectShadowHdl_Impl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SvxFontWorkDialog, ModifyInputHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxFontWorkDialog, ModifyInputHdl_Impl)
 {
     aInputTimer.Start();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxFontWorkDialog, ModifyInputHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxFontWorkDialog, ModifyInputHdl_Impl)
 
-IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxFontWorkDialog, InputTimoutHdl_Impl)
 {
     // Possibly set the Metric system again. This should be done with a
     // listen, this is however not possible at the moment due to compabillity
@@ -819,7 +819,7 @@ IMPL_LINK( SvxFontWorkDialog, InputTimoutHdl_Impl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxFontWorkDialog, FormSelectHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxFontWorkDialog, FormSelectHdl_Impl)
 {
     XFormTextStdFormItem aItem;
 
@@ -832,7 +832,7 @@ IMPL_LINK( SvxFontWorkDialog, FormSelectHdl_Impl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxFontWorkDialog, ColorSelectHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxFontWorkDialog, ColorSelectHdl_Impl)
 {
     XFormTextShadowColorItem aItem( (const String &) String(),
                                     (const Color &) aShadowColorLB.GetSelectEntryColor() );

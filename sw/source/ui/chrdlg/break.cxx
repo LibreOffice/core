@@ -70,12 +70,12 @@ void SwBreakDlg::Apply()
     }
 }
 
-IMPL_LINK_INLINE_START( SwBreakDlg, ClickHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwBreakDlg, ClickHdl)
 {
     CheckEnable();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwBreakDlg, ClickHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwBreakDlg, ClickHdl)
 
 /*------------------------------------------------------------------------
  Description:   Handler for Change Page Number
@@ -93,12 +93,12 @@ IMPL_LINK_INLINE_END( SwBreakDlg, PageNumHdl, CheckBox *, pBox )
  Description:   By changing the Page number the checkbox is checked.
 ------------------------------------------------------------------------*/
 
-IMPL_LINK_INLINE_START( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwBreakDlg, PageNumModifyHdl)
 {
     aPageNumBox.Check();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwBreakDlg, PageNumModifyHdl)
 
 /*------------------------------------------------------------------------
  Description:   Ok-Handler;
@@ -107,7 +107,7 @@ IMPL_LINK_INLINE_END( SwBreakDlg, PageNumModifyHdl, Edit *, EMPTYARG )
                 with alternating pages)
 ------------------------------------------------------------------------*/
 
-IMPL_LINK( SwBreakDlg, OkHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwBreakDlg, OkHdl)
 {
     if(aPageNumBox.IsChecked()) {
         // In case of differing page descriptions, test validity

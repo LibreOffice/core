@@ -1329,7 +1329,7 @@ sal_Bool  SwContentTree::Collapse( SvLBoxEntry* pParent )
 /***************************************************************************
     Beschreibung:   Auch auf Doppelclick wird zunaechst nur aufgeklappt
 ***************************************************************************/
-IMPL_LINK( SwContentTree, ContentDoubleClickHdl, SwContentTree *, EMPTYARG )
+IMPL_LINK_NOARG(SwContentTree, ContentDoubleClickHdl)
 {
     SvLBoxEntry* pEntry = GetCurEntry();
     // ist es ein Inhaltstyp?
@@ -2227,7 +2227,7 @@ void    SwContentTree::HideTree()
 /***************************************************************************
     Beschreibung:   Kein Idle mit Focus oder waehrend des Dragging
 ***************************************************************************/
-IMPL_LINK( SwContentTree, TimerUpdate, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(SwContentTree, TimerUpdate)
 {
     // kein Update waehrend D&D
     // Viewabfrage, da der Navigator zu spaet abgeraeumt wird

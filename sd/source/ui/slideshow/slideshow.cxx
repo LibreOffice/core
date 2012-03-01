@@ -1165,7 +1165,7 @@ void SlideShow::StartInPlacePresentationConfigurationCallback()
 
 // ---------------------------------------------------------
 
-IMPL_LINK( SlideShow, StartInPlacePresentationConfigurationHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SlideShow, StartInPlacePresentationConfigurationHdl)
 {
     mnInPlaceConfigEvent = 0;
     StartInPlacePresentation();

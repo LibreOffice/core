@@ -135,14 +135,14 @@ struct SvxHyphenWordDialog_Impl
     void            SelLeft_Impl();
     void            SelRight_Impl();
 
-    DECL_LINK( Left_Impl, Button* );
-    DECL_LINK( Right_Impl, Button* );
-    DECL_LINK( CutHdl_Impl, Button* );
-    DECL_LINK( ContinueHdl_Impl, Button* );
-    DECL_LINK( DeleteHdl_Impl, Button* );
+    DECL_LINK(Left_Impl, void *);
+    DECL_LINK(Right_Impl, void *);
+    DECL_LINK(CutHdl_Impl, void *);
+    DECL_LINK(ContinueHdl_Impl, void *);
+    DECL_LINK(DeleteHdl_Impl, void *);
     DECL_LINK( HyphenateAllHdl_Impl, Button* );
-    DECL_LINK( CancelHdl_Impl, Button* );
-    DECL_LINK( GetFocusHdl_Impl, Edit* );
+    DECL_LINK(CancelHdl_Impl, void *);
+    DECL_LINK(GetFocusHdl_Impl, void *);
 
 
     SvxHyphenWordDialog_Impl(
@@ -489,7 +489,7 @@ void SvxHyphenWordDialog_Impl::SelRight_Impl()
 }
 
 
-IMPL_LINK( SvxHyphenWordDialog_Impl, CutHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyphenWordDialog_Impl, CutHdl_Impl)
 {
     if( !bBusy )
     {
@@ -531,7 +531,7 @@ IMPL_LINK( SvxHyphenWordDialog_Impl, HyphenateAllHdl_Impl, Button *, EMPTYARG /*
 }
 
 
-IMPL_LINK( SvxHyphenWordDialog_Impl, DeleteHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyphenWordDialog_Impl, DeleteHdl_Impl)
 {
     if( !bBusy )
     {
@@ -543,7 +543,7 @@ IMPL_LINK( SvxHyphenWordDialog_Impl, DeleteHdl_Impl, Button *, EMPTYARG )
 }
 
 
-IMPL_LINK( SvxHyphenWordDialog_Impl, ContinueHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyphenWordDialog_Impl, ContinueHdl_Impl)
 {
     if( !bBusy )
     {
@@ -555,7 +555,7 @@ IMPL_LINK( SvxHyphenWordDialog_Impl, ContinueHdl_Impl, Button *, EMPTYARG )
 }
 
 
-IMPL_LINK( SvxHyphenWordDialog_Impl, CancelHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyphenWordDialog_Impl, CancelHdl_Impl)
 {
     if( !bBusy )
     {
@@ -568,7 +568,7 @@ IMPL_LINK( SvxHyphenWordDialog_Impl, CancelHdl_Impl, Button *, EMPTYARG )
 }
 
 
-IMPL_LINK( SvxHyphenWordDialog_Impl, Left_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyphenWordDialog_Impl, Left_Impl)
 {
     if( !bBusy )
     {
@@ -580,7 +580,7 @@ IMPL_LINK( SvxHyphenWordDialog_Impl, Left_Impl, Button *, EMPTYARG )
 }
 
 
-IMPL_LINK( SvxHyphenWordDialog_Impl, Right_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyphenWordDialog_Impl, Right_Impl)
 {
     if( !bBusy )
     {
@@ -592,7 +592,7 @@ IMPL_LINK( SvxHyphenWordDialog_Impl, Right_Impl, Button *, EMPTYARG )
 }
 
 
-IMPL_LINK( SvxHyphenWordDialog_Impl, GetFocusHdl_Impl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHyphenWordDialog_Impl, GetFocusHdl_Impl)
 {
     aWordEdit.SetSelection( Selection( nOldPos, nOldPos + 1 ) );
     return 0;

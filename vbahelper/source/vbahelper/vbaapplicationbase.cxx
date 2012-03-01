@@ -122,7 +122,7 @@ public:
     DECL_LINK( MacroCallHdl, void* );
 };
 
-IMPL_LINK( VbaTimer, MacroCallHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(VbaTimer, MacroCallHdl)
 {
     if ( m_aTimerInfo.second.second == 0 || GetNow() < m_aTimerInfo.second.second )
     {

@@ -136,7 +136,7 @@ void lcl_SetBOOLProp(
     }
 }
 
-IMPL_LINK( SwMultiTOXTabDialog, CreateExample_Hdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwMultiTOXTabDialog, CreateExample_Hdl)
 {
     try
     {

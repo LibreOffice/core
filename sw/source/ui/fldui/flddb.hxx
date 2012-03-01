@@ -70,8 +70,8 @@ class SwFldDBPage : public SwFldPage
     DECL_LINK( TypeHdl, ListBox* );
     DECL_LINK( NumSelectHdl, NumFormatListBox* pLB = 0);
     DECL_LINK( TreeSelectHdl, SvTreeListBox* pBox );
-    DECL_LINK( ModifyHdl, Edit *pED = 0 );
-    DECL_LINK( AddDBHdl, PushButton* );
+    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK(AddDBHdl, void *);
 
     void                CheckInsert();
 

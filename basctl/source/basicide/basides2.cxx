@@ -58,12 +58,12 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 namespace css = ::com::sun::star;
 
-IMPL_LINK_INLINE_START( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(BasicIDEShell, ObjectDialogCancelHdl)
 {
     ShowObjectDialog( sal_False, sal_True );
     return 0;
 }
-IMPL_LINK_INLINE_END( BasicIDEShell, ObjectDialogCancelHdl, ObjectCatalog *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(BasicIDEShell, ObjectDialogCancelHdl)
 
 Reference< view::XRenderable > BasicIDEShell::GetRenderable()
 {

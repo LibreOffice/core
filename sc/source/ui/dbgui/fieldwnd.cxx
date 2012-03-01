@@ -1027,13 +1027,13 @@ void ScDPHorFieldControl::HandleScroll()
     Redraw();
 }
 
-IMPL_LINK(ScDPHorFieldControl, ScrollHdl, ScrollBar*, EMPTYARG)
+IMPL_LINK_NOARG(ScDPHorFieldControl, ScrollHdl)
 {
     HandleScroll();
     return 0;
 }
 
-IMPL_LINK(ScDPHorFieldControl, EndScrollHdl, ScrollBar*, EMPTYARG)
+IMPL_LINK_NOARG(ScDPHorFieldControl, EndScrollHdl)
 {
     HandleScroll();
     return 0;
@@ -1303,13 +1303,13 @@ void ScDPRowFieldControl::HandleScroll()
     Redraw();
 }
 
-IMPL_LINK(ScDPRowFieldControl, ScrollHdl, ScrollBar*, EMPTYARG)
+IMPL_LINK_NOARG(ScDPRowFieldControl, ScrollHdl)
 {
     HandleScroll();
     return 0;
 }
 
-IMPL_LINK(ScDPRowFieldControl, EndScrollHdl, ScrollBar*, EMPTYARG)
+IMPL_LINK_NOARG(ScDPRowFieldControl, EndScrollHdl)
 {
     HandleScroll();
     return 0;

@@ -105,7 +105,7 @@ sal_Int32 SlideShowRestarter::GetDisplayCount (void)
     return xIndexAccess->getCount();
 }
 
-IMPL_LINK(SlideShowRestarter, EndPresentation, void*, EMPTYARG)
+IMPL_LINK_NOARG(SlideShowRestarter, EndPresentation)
 {
     mnEventId = 0;
     if (mpSlideShow.is())

@@ -128,13 +128,13 @@ class SwMailMergeOutputPage : public svt::OWizardPage
     DECL_LINK(SaveStartHdl_Impl, PushButton* );
     DECL_LINK(SaveOutputHdl_Impl, PushButton* );
     DECL_LINK(PrinterChangeHdl_Impl, ListBox* );
-    DECL_LINK(PrintHdl_Impl, PushButton* );
+    DECL_LINK(PrintHdl_Impl, void *);
     DECL_LINK(PrinterSetupHdl_Impl, PushButton* );
     DECL_LINK(SendTypeHdl_Impl, ListBox*);
     DECL_LINK(SendAsHdl_Impl, PushButton*);
     DECL_LINK(SendDocumentsHdl_Impl, PushButton*);
     DECL_LINK(DocumentSelectionHdl_Impl, RadioButton*);
-    DECL_LINK(SaveCancelHdl_Impl, Button*);
+    DECL_LINK(SaveCancelHdl_Impl, void *);
 protected:
         virtual bool    canAdvance() const;
         virtual void    ActivatePage();
@@ -203,9 +203,9 @@ class SW_DLLPUBLIC SwSendMailDialog : public ModelessDialog //SfxModalDialog
     sal_Int32               m_nSendCount;
     sal_Int32               m_nErrorCount;
 
-    SW_DLLPRIVATE DECL_LINK( DetailsHdl_Impl, PushButton* );
+    SW_DLLPRIVATE DECL_LINK( DetailsHdl_Impl, void* );
     SW_DLLPRIVATE DECL_LINK( StopHdl_Impl, PushButton* );
-    SW_DLLPRIVATE DECL_LINK( CloseHdl_Impl, PushButton* );
+    SW_DLLPRIVATE DECL_LINK( CloseHdl_Impl, void* );
     SW_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StartSendMails, SwSendMailDialog* );
     SW_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, StopSendMails, SwSendMailDialog* );
     SW_DLLPRIVATE DECL_STATIC_LINK( SwSendMailDialog, RemoveThis, Timer* );

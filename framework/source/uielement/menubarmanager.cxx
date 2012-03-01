@@ -1125,7 +1125,7 @@ IMPL_LINK( MenuBarManager, Select, Menu *, pMenu )
 }
 
 
-IMPL_LINK( MenuBarManager, Highlight, Menu *, EMPTYARG )
+IMPL_LINK_NOARG(MenuBarManager, Highlight)
 {
     return 0;
 }

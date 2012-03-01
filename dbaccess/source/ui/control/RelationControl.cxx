@@ -211,14 +211,14 @@ namespace dbaui
     }
 
     //------------------------------------------------------------------------------
-    IMPL_LINK(ORelationControl, AsynchActivate, void*, EMPTYARG)
+    IMPL_LINK_NOARG(ORelationControl, AsynchActivate)
     {
         ActivateCell();
         return 0L;
     }
 
     //------------------------------------------------------------------------------
-    IMPL_LINK(ORelationControl, AsynchDeactivate, void*, EMPTYARG)
+    IMPL_LINK_NOARG(ORelationControl, AsynchDeactivate)
     {
         DeactivateCell();
         return 0L;

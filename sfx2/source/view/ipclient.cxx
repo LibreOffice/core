@@ -133,7 +133,7 @@ public:
     ~SfxInPlaceClient_Impl();
 
     void SizeHasChanged();
-    DECL_LINK           (TimerHdl, Timer*);
+    DECL_LINK(TimerHdl, void *);
     uno::Reference < frame::XFrame > GetFrame() const;
 
     // XEmbeddedClient
@@ -618,7 +618,7 @@ void SfxInPlaceClient_Impl::SizeHasChanged()
 }
 
 //--------------------------------------------------------------------
-IMPL_LINK( SfxInPlaceClient_Impl, TimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SfxInPlaceClient_Impl, TimerHdl)
 {
     if ( m_pClient && m_xObject.is() )
         m_pClient->GetViewShell()->CheckIPClient_Impl( m_pClient, m_pClient->GetViewShell()->GetObjectShell()->GetVisArea() );

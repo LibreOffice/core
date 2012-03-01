@@ -421,7 +421,7 @@ IMPL_LINK( ScDPFunctionDlg, SelectHdl, ListBox*, pLBox )
     return 0;
 }
 
-IMPL_LINK( ScDPFunctionDlg, DblClickHdl, MultiListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScDPFunctionDlg, DblClickHdl)
 {
     maBtnOk.Click();
     return 0;
@@ -516,7 +516,7 @@ IMPL_LINK( ScDPSubtotalDlg, RadioClickHdl, RadioButton*, pBtn )
     return 0;
 }
 
-IMPL_LINK( ScDPSubtotalDlg, DblClickHdl, MultiListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScDPSubtotalDlg, DblClickHdl)
 {
     maBtnOk.Click();
     return 0;

@@ -204,8 +204,8 @@ private:
     void                FillOnlineSpellingList(SdPage* pPage);
     void                SpellObject(SdrTextObj* pObj);
 
-                        DECL_LINK(WorkStartupHdl, Timer*);
-                        DECL_LINK(OnlineSpellingHdl, Timer*);
+                        DECL_LINK(WorkStartupHdl, void *);
+                        DECL_LINK(OnlineSpellingHdl, void *);
                         DECL_LINK(OnlineSpellEventHdl, EditStatus*);
 
     std::vector< rtl::OUString > maAnnotationAuthors;

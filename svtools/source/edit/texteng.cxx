@@ -1581,7 +1581,7 @@ void TextEngine::UpdateViews( TextView* pCurView )
     maInvalidRec = Rectangle();
 }
 
-IMPL_LINK( TextEngine, IdleFormatHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(TextEngine, IdleFormatHdl)
 {
     FormatAndUpdate( mpIdleFormatter->GetView() );
     return 0;

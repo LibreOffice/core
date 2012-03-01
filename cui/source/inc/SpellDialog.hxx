@@ -203,15 +203,15 @@ private:
         ::com::sun::star::linguistic2::XSpellChecker1 >     xSpell;
     LanguageType        nOldLang;
 
-    DECL_LINK( ChangeHdl, Button * );
-    DECL_LINK( ChangeAllHdl, Button * );
+    DECL_LINK(ChangeHdl, void *);
+    DECL_LINK(ChangeAllHdl, void *);
     DECL_LINK( IgnoreAllHdl, Button * );
-    DECL_LINK( IgnoreHdl, Button * );
+    DECL_LINK(IgnoreHdl, void *);
     DECL_LINK( CheckGrammarHdl, CheckBox* );
     DECL_LINK( ExtClickHdl, Button * );
-    DECL_LINK( CancelHdl, Button * );
+    DECL_LINK(CancelHdl, void *);
     DECL_LINK( ModifyHdl, SentenceEditWindow_Impl *);
-    DECL_LINK( UndoHdl, Button * );
+    DECL_LINK(UndoHdl, void *);
     DECL_LINK( AddToDictionaryHdl, MenuButton* );
     DECL_LINK( LanguageSelectHdl, SvxLanguageBox* );
     DECL_LINK( DialogUndoHdl, SpellUndoAction_Impl* );

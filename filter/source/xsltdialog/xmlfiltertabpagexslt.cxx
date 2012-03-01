@@ -199,7 +199,7 @@ OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox& rURLBox )
     return aURL;
 }
 
-IMPL_LINK ( XMLFilterTabPageXSLT, ToggleXSLTImplHdl, void *, EMPTYARG) {
+IMPL_LINK_NOARG(XMLFilterTabPageXSLT, ToggleXSLTImplHdl) {
     return (0L);
 }
 

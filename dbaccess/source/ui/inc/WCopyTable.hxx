@@ -284,10 +284,10 @@ namespace dbaui
         sal_Bool                        m_bUseHeaderLine;
 
     private:
-        DECL_LINK( ImplPrevHdl  , PushButton* );
-        DECL_LINK( ImplNextHdl  , PushButton* );
-        DECL_LINK( ImplOKHdl    , OKButton* );
-        DECL_LINK( ImplActivateHdl, WizardDialog* );
+        DECL_LINK( ImplPrevHdl  , void* );
+        DECL_LINK( ImplNextHdl  , void* );
+        DECL_LINK( ImplOKHdl    , void* );
+        DECL_LINK( ImplActivateHdl, void* );
         sal_Bool CheckColumns(sal_Int32& _rnBreakPos);
         void loadData( const ICopyTableSourceObject& _rSourceObject,
                        ODatabaseExport::TColumns& _rColumns,

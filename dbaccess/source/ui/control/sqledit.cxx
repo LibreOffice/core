@@ -179,7 +179,7 @@ void OSqlEdit::GetFocus()
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
+IMPL_LINK_NOARG(OSqlEdit, OnUndoActionTimer)
 {
     String aText  =GetText();
     if(aText != m_strOrigText)
@@ -200,7 +200,7 @@ IMPL_LINK(OSqlEdit, OnUndoActionTimer, void*, EMPTYARG)
     return 0L;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK(OSqlEdit, OnInvalidateTimer, void*, EMPTYARG)
+IMPL_LINK_NOARG(OSqlEdit, OnInvalidateTimer)
 {
     OJoinController& rController = m_pView->getContainerWindow()->getDesignView()->getController();
     rController.InvalidateFeature(SID_CUT);

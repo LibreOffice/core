@@ -67,9 +67,9 @@ private:
 
 #ifdef _TPHF_CXX
 private:
-    DECL_LINK( BtnHdl, PushButton* );
+    DECL_LINK(BtnHdl, void *);
     DECL_LINK( HFEditHdl, void* );
-    DECL_LINK( TurnOnHdl, CheckBox* );
+    DECL_LINK(TurnOnHdl, void *);
 #endif
 };
 

@@ -446,7 +446,7 @@ void OButtonControl::actionPerformed(const ActionEvent& /*rEvent*/) throw ( ::co
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( OButtonControl, OnClick, void*, EMPTYARG )
+IMPL_LINK_NOARG(OButtonControl, OnClick)
 {
     ::osl::ClearableMutexGuard aGuard( m_aMutex );
     m_nClickEvent = 0;

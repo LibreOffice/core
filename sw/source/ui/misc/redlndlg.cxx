@@ -892,31 +892,31 @@ sal_uInt16 SwRedlineAcceptDlg::GetRedlinePos( const SvLBoxEntry& rEntry ) const
                                     rEntry.GetUserData())->pData)->pData );
 }
 
-IMPL_LINK( SwRedlineAcceptDlg, AcceptHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptHdl)
 {
     CallAcceptReject( sal_True, sal_True );
     return 0;
 }
 
-IMPL_LINK( SwRedlineAcceptDlg, AcceptAllHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, AcceptAllHdl)
 {
     CallAcceptReject( sal_False, sal_True );
     return 0;
 }
 
-IMPL_LINK( SwRedlineAcceptDlg, RejectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, RejectHdl)
 {
     CallAcceptReject( sal_True, sal_False );
     return 0;
 }
 
-IMPL_LINK( SwRedlineAcceptDlg, RejectAllHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, RejectAllHdl)
 {
     CallAcceptReject( sal_False, sal_False );
     return 0;
 }
 
-IMPL_LINK( SwRedlineAcceptDlg, UndoHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, UndoHdl)
 {
     SwView * pView = ::GetActiveView();
     pView->GetViewFrame()->GetDispatcher()->
@@ -928,7 +928,7 @@ IMPL_LINK( SwRedlineAcceptDlg, UndoHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwRedlineAcceptDlg, FilterChangedHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, FilterChangedHdl)
 {
     SvxTPFilter *pFilterTP = aTabPagesCTRL.GetFilterPage();
 
@@ -942,7 +942,7 @@ IMPL_LINK( SwRedlineAcceptDlg, FilterChangedHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwRedlineAcceptDlg, DeselectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, DeselectHdl)
 {
     // avoid flickering of buttons:
     aDeselectTimer.Start();
@@ -950,7 +950,7 @@ IMPL_LINK( SwRedlineAcceptDlg, DeselectHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwRedlineAcceptDlg, SelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, SelectHdl)
 {
     aDeselectTimer.Stop();
     aSelectTimer.Start();
@@ -958,7 +958,7 @@ IMPL_LINK( SwRedlineAcceptDlg, SelectHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, GotoHdl)
 {
     SwWrtShell* pSh = ::GetActiveView()->GetWrtShellPtr();
     aSelectTimer.Stop();
@@ -1027,7 +1027,7 @@ IMPL_LINK( SwRedlineAcceptDlg, GotoHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwRedlineAcceptDlg, CommandHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwRedlineAcceptDlg, CommandHdl)
 {
     const CommandEvent aCEvt(pTable->GetCommandEvent());
 

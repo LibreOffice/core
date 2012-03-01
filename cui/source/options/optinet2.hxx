@@ -184,11 +184,11 @@ private:
 
     String              msPasswordStoringDeactivateStr;
 
-    DECL_LINK(          SecurityOptionsHdl, PushButton* );
+    DECL_LINK(SecurityOptionsHdl, void *);
     DECL_LINK(          SavePasswordHdl, void* );
-    DECL_LINK(          MasterPasswordHdl, PushButton* );
+    DECL_LINK(MasterPasswordHdl, void *);
     DECL_LINK(          MasterPasswordCBHdl, void* );
-    DECL_LINK(          ShowPasswordsHdl, PushButton* );
+    DECL_LINK(ShowPasswordsHdl, void *);
     DECL_LINK(          MacroSecPBHdl, void* );
 
     void                InitControls();

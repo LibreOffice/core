@@ -96,8 +96,8 @@ class Window;
 class DlgEditor: public SfxBroadcaster
 {
 private:
-    DECL_LINK( PaintTimeout, Timer * );
-    DECL_LINK( MarkTimeout, Timer * );
+    DECL_LINK(PaintTimeout, void *);
+    DECL_LINK(MarkTimeout, void *);
 
     void Print( Printer* pPrinter, const ::rtl::OUString& rTitle );
 

@@ -555,7 +555,7 @@ IMPL_LINK( ParaWin, GetEdFocusHdl, ArgInput*, pPtr )
 }
 
 
-IMPL_LINK( ParaWin, ScrollHdl, ScrollBar*, EMPTYARG )
+IMPL_LINK_NOARG(ParaWin, ScrollHdl)
 {
     SliderMoved();
 

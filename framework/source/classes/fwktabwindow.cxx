@@ -286,7 +286,7 @@ TabEntry* FwkTabWindow::FindEntry( sal_Int32 nIndex ) const
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FwkTabWindow, ActivatePageHdl, TabControl *, EMPTYARG )
+IMPL_LINK_NOARG(FwkTabWindow, ActivatePageHdl)
 {
     const sal_uInt16 nId = m_aTabCtrl.GetCurPageId();
     FwkTabPage* pTabPage = static_cast< FwkTabPage* >( m_aTabCtrl.GetTabPage( nId ) );
@@ -310,7 +310,7 @@ IMPL_LINK( FwkTabWindow, ActivatePageHdl, TabControl *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FwkTabWindow, DeactivatePageHdl, TabControl *, EMPTYARG )
+IMPL_LINK_NOARG(FwkTabWindow, DeactivatePageHdl)
 {
     m_aTabCtrl.BroadcastEvent( VCLEVENT_TABPAGE_DEACTIVATE );
     return 1;

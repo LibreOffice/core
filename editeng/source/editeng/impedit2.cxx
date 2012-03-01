@@ -4423,7 +4423,7 @@ void ImpEditEngine::LeaveBlockNotifications()
     }
 }
 
-IMPL_LINK( ImpEditEngine, DocModified, void*, EMPTYARG )
+IMPL_LINK_NOARG(ImpEditEngine, DocModified)
 {
     aModifyHdl.Call( NULL /*GetEditEnginePtr()*/ ); // NULL, because also used for Outliner
     return 0;

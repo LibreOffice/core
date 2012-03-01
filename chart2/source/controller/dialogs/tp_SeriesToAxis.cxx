@@ -80,7 +80,7 @@ SchOptionTabPage::~SchOptionTabPage()
 {
 }
 
-IMPL_LINK( SchOptionTabPage, EnableHdl, RadioButton *, EMPTYARG )
+IMPL_LINK_NOARG(SchOptionTabPage, EnableHdl)
 {
     if( m_nAllSeriesAxisIndex == 0 )
         aCBAxisSideBySide.Enable( aRbtAxis2.IsChecked());

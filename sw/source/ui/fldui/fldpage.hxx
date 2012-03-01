@@ -62,7 +62,7 @@ protected:
     SwWrtShell*         GetWrtShell() { return m_pWrtShell;}
 
     DECL_LINK( InsertHdl, Button *pBtn = 0 );
-    DECL_LINK( NumFormatHdl, ListBox *pBtn = 0 );
+    DECL_LINK(NumFormatHdl, void *);
 
     void                Init();
     void                SavePos( const ListBox* pLst1,

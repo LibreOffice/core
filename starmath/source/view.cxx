@@ -272,7 +272,7 @@ void SmGraphicWindow::RepaintViewShellDoc()
     rDoc.Repaint();
 }
 
-IMPL_LINK( SmGraphicWindow, CaretBlinkTimerHdl, AutoTimer *, EMPTYARG )
+IMPL_LINK_NOARG(SmGraphicWindow, CaretBlinkTimerHdl)
 {
     if (IsCursorVisible())
         SetIsCursorVisible(false);

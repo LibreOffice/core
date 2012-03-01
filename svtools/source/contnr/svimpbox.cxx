@@ -309,7 +309,7 @@ void SvImpLBox::Clear()
 // Painten, Navigieren, Scrollen
 // *********************************************************************
 
-IMPL_LINK_INLINE_START( SvImpLBox, EndScrollHdl, ScrollBar *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvImpLBox, EndScrollHdl)
 {
     if( nFlags & F_ENDSCROLL_SET_VIS_SIZE )
     {
@@ -319,7 +319,7 @@ IMPL_LINK_INLINE_START( SvImpLBox, EndScrollHdl, ScrollBar *, EMPTYARG )
     EndScroll();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvImpLBox, EndScrollHdl, ScrollBar *, pScrollBar )
+IMPL_LINK_NOARG_INLINE_END(SvImpLBox, EndScrollHdl)
 
 
 // Handler vertikale ScrollBar
@@ -3030,7 +3030,7 @@ void SvImpLBox::BeginDrag()
     }
 }
 
-IMPL_LINK( SvImpLBox, BeginDragHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvImpLBox, BeginDragHdl)
 {
     pView->StartDrag( 0, aAsyncBeginDragPos );
     return 0;
@@ -3245,7 +3245,7 @@ void SvImpLBox::SetCurEntry( SvLBoxEntry* pEntry )
         pView->Select( pEntry, sal_True );
 }
 
-IMPL_LINK( SvImpLBox, EditTimerCall, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SvImpLBox, EditTimerCall)
 {
     if( pView->IsInplaceEditingEnabled() )
     {

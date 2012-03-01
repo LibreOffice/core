@@ -666,7 +666,7 @@ IMPL_LINK( SwNewUserIdxDlg, ModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-IMPL_LINK( SwIndexMarkDlg, NewUserIdxHdl, Button*, EMPTYARG)
+IMPL_LINK_NOARG(SwIndexMarkDlg, NewUserIdxHdl)
 {
     SwNewUserIdxDlg* pDlg = new SwNewUserIdxDlg(this);
     if(RET_OK == pDlg->Execute())
@@ -696,7 +696,7 @@ IMPL_LINK( SwIndexMarkDlg, InsertHdl, Button *, pButton )
     return 0;
 }
 
-IMPL_LINK( SwIndexMarkDlg, CloseHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwIndexMarkDlg, CloseHdl)
 {
     if(bNewMark)
     {
@@ -789,34 +789,34 @@ IMPL_LINK( SwIndexMarkDlg, ModifyHdl, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwIndexMarkDlg, NextHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwIndexMarkDlg, NextHdl)
 {
     InsertUpdate();
     pTOXMgr->NextTOXMark();
     UpdateDialog();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwIndexMarkDlg, NextHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwIndexMarkDlg, NextHdl)
 
-IMPL_LINK_INLINE_START( SwIndexMarkDlg, NextSameHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwIndexMarkDlg, NextSameHdl)
 {
     InsertUpdate();
     pTOXMgr->NextTOXMark(sal_True);
     UpdateDialog();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwIndexMarkDlg, NextSameHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwIndexMarkDlg, NextSameHdl)
 
-IMPL_LINK_INLINE_START( SwIndexMarkDlg, PrevHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwIndexMarkDlg, PrevHdl)
 {
     InsertUpdate();
     pTOXMgr->PrevTOXMark();
     UpdateDialog();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwIndexMarkDlg, PrevHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwIndexMarkDlg, PrevHdl)
 
-IMPL_LINK_INLINE_START( SwIndexMarkDlg, PrevSameHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwIndexMarkDlg, PrevSameHdl)
 {
     InsertUpdate();
     pTOXMgr->PrevTOXMark(sal_True);
@@ -824,9 +824,9 @@ IMPL_LINK_INLINE_START( SwIndexMarkDlg, PrevSameHdl, Button *, EMPTYARG )
 
     return 0;
 }
-IMPL_LINK_INLINE_END( SwIndexMarkDlg, PrevSameHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwIndexMarkDlg, PrevSameHdl)
 
-IMPL_LINK( SwIndexMarkDlg, DelHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwIndexMarkDlg, DelHdl)
 {
     bDel = sal_True;
     InsertUpdate();
@@ -1248,7 +1248,7 @@ void    SwAuthMarkDlg::ReInitDlg(SwWrtShell& rWrtShell)
     InitControls();
 }
 
-IMPL_LINK( SwAuthMarkDlg, CloseHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwAuthMarkDlg, CloseHdl)
 {
     if(bNewEntry)
     {
@@ -1326,7 +1326,7 @@ IMPL_LINK( SwAuthMarkDlg, CompEntryHdl, ListBox*, pBox)
     return 0;
 }
 
-IMPL_LINK( SwAuthMarkDlg, InsertHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwAuthMarkDlg, InsertHdl)
 {
     //insert or update the SwAuthorityField...
     if(pSh)

@@ -52,7 +52,7 @@ class SwMailMergeOutputTypePage : public svt::OWizardPage
 
     SwMailMergeWizard*  m_pWizard;
 
-    DECL_LINK(TypeHdl_Impl, RadioButton*);
+    DECL_LINK(TypeHdl_Impl, void *);
 
 public:
         SwMailMergeOutputTypePage( SwMailMergeWizard* _pParent);

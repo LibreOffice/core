@@ -675,7 +675,7 @@ Page: CheckBox's Click-Handler
 ****************************************************************************/
 
 
-IMPL_LINK( SwDropCapsPage, ClickHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwDropCapsPage, ClickHdl)
 {
     sal_Bool bChecked = aDropCapsBox.IsChecked();
 
@@ -710,7 +710,7 @@ Page: CheckBox's Click-Handler
 ****************************************************************************/
 
 
-IMPL_LINK( SwDropCapsPage, WholeWordHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwDropCapsPage, WholeWordHdl)
 {
     aDropCapsField.Enable( !aWholeWordCB.IsChecked() );
 
@@ -786,13 +786,13 @@ Page: Template-Box' Select-Handler.
 *****************************************************************************/
 
 
-IMPL_LINK_INLINE_START( SwDropCapsPage, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwDropCapsPage, SelectHdl)
 {
     pPict->UpdatePaintSettings();
     bModified = sal_True;
     return 0;
 }
-IMPL_LINK_INLINE_END( SwDropCapsPage, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwDropCapsPage, SelectHdl)
 
 sal_uInt16*  SwDropCapsPage::GetRanges()
 {

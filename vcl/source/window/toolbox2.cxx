@@ -2018,7 +2018,7 @@ IMPL_LINK( ToolBox, ImplCustomMenuListener, VclMenuEvent*, pEvent )
     return 0;
 }
 
-IMPL_LINK( ToolBox, ImplCallExecuteCustomMenu, void*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBox, ImplCallExecuteCustomMenu)
 {
     mpData->mnEventId = 0;
     ImplExecuteCustomMenu();

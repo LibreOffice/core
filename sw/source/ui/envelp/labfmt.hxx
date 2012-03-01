@@ -124,10 +124,10 @@ class SwLabFmtPage : public SfxTabPage
      SwLabFmtPage(Window* pParent, const SfxItemSet& rSet);
     ~SwLabFmtPage();
 
-    DECL_LINK( ModifyHdl, Edit * );
-    DECL_LINK( PreviewHdl, Timer * );
+    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK(PreviewHdl, void *);
     DECL_LINK( LoseFocusHdl, Control * );
-    DECL_LINK( SaveHdl, PushButton* );
+    DECL_LINK(SaveHdl, void *);
 
     void ChangeMinMax();
 
@@ -166,8 +166,8 @@ class SwSaveLabelDlg : public ModalDialog
     SwLabFmtPage*   pLabPage;
     SwLabRec&       rLabRec;
 
-    DECL_LINK(OkHdl, OKButton*);
-    DECL_LINK(ModifyHdl, Edit*);
+    DECL_LINK(OkHdl, void *);
+    DECL_LINK(ModifyHdl, void *);
 
 public:
     SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec);

@@ -86,12 +86,12 @@ class SwFldVarPage : public SwFldPage
     sal_uLong               nOldFormat;
     sal_Bool                bInit;
 
-    DECL_LINK( TypeHdl, ListBox* pLB = 0 );
+    DECL_LINK(TypeHdl, void *);
     DECL_LINK( SubTypeHdl, ListBox* pLB = 0 );
-    DECL_LINK( ModifyHdl, Edit *pED = 0 );
+    DECL_LINK(ModifyHdl, void * = 0);
     DECL_LINK( TBClickHdl, ToolBox *pTB = 0);
-    DECL_LINK( ChapterHdl, ListBox *pLB = 0);
-    DECL_LINK( SeparatorHdl, Edit *pED = 0 );
+    DECL_LINK(ChapterHdl, void * = 0);
+    DECL_LINK(SeparatorHdl, void * = 0);
 
     void                UpdateSubType();
     sal_uInt16              FillFormatLB(sal_uInt16 nTypeId);

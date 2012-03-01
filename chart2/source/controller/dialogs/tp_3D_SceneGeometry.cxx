@@ -200,7 +200,7 @@ void ThreeD_SceneGeometry_TabPage::applyAnglesToModel()
     m_bAngleChangePending = false;
 }
 
-IMPL_LINK( ThreeD_SceneGeometry_TabPage, AngleEdited, void*, EMPTYARG )
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, AngleEdited)
 {
     m_nXRotation = m_aMFXRotation.GetValue();
     m_nYRotation = m_aMFYRotation.GetValue();
@@ -209,7 +209,7 @@ IMPL_LINK( ThreeD_SceneGeometry_TabPage, AngleEdited, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ThreeD_SceneGeometry_TabPage, AngleChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, AngleChanged)
 {
     applyAnglesToModel();
     return 0;
@@ -236,26 +236,26 @@ void ThreeD_SceneGeometry_TabPage::applyPerspectiveToModel()
     m_bPerspectiveChangePending = false;
 }
 
-IMPL_LINK( ThreeD_SceneGeometry_TabPage, PerspectiveEdited, void*, EMPTYARG )
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveEdited)
 {
     m_bPerspectiveChangePending = true;
     return 0;
 }
 
-IMPL_LINK( ThreeD_SceneGeometry_TabPage, PerspectiveChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveChanged)
 {
     applyPerspectiveToModel();
     return 0;
 }
 
-IMPL_LINK( ThreeD_SceneGeometry_TabPage, PerspectiveToggled, void*, EMPTYARG )
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, PerspectiveToggled)
 {
     m_aMFPerspective.Enable( m_aCbxPerspective.IsChecked() );
     applyPerspectiveToModel();
     return 0;
 }
 
-IMPL_LINK( ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled, void*, EMPTYARG )
+IMPL_LINK_NOARG(ThreeD_SceneGeometry_TabPage, RightAngledAxesToggled)
 {
     ControllerLockHelperGuard aGuard( m_rControllerLockHelper );
 

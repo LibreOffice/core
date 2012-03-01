@@ -191,7 +191,7 @@ void SwFldInputDlg::Apply()
 }
 
 
-IMPL_LINK(SwFldInputDlg, NextHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwFldInputDlg, NextHdl)
 {
     EndDialog(RET_OK);
     return 0;

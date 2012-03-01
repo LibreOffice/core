@@ -656,7 +656,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------------
-    IMPL_LINK(OPropertyBrowserController, OnPageActivation, void*, EMPTYARG)
+    IMPL_LINK_NOARG(OPropertyBrowserController, OnPageActivation)
     {
         updateViewDataFromActivePage();
         return 0L;

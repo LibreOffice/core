@@ -70,7 +70,7 @@ public:
     void SetReadonly( bool bReadonly );
 
 private:
-    DECL_LINK( FadeHandler, Timer * );
+    DECL_LINK( FadeHandler, void * );
 };
 
 #endif

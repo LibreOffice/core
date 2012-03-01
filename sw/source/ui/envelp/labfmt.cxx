@@ -382,16 +382,16 @@ SwLabFmtPage::~SwLabFmtPage()
 }
 
 // Modify-handler of MetricFields. start preview timer
-IMPL_LINK_INLINE_START( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, ModifyHdl)
 {
     bModified = sal_True;
     aPreviewTimer.Start();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwLabFmtPage, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwLabFmtPage, ModifyHdl)
 
 // Invalidate preview
-IMPL_LINK_INLINE_START( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwLabFmtPage, PreviewHdl)
 {
     aPreviewTimer.Stop();
     ChangeMinMax();
@@ -400,7 +400,7 @@ IMPL_LINK_INLINE_START( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
 
     return 0;
 }
-IMPL_LINK_INLINE_END( SwLabFmtPage, PreviewHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwLabFmtPage, PreviewHdl)
 
 // LoseFocus-Handler: Update on change --------------------------
 IMPL_LINK_INLINE_START( SwLabFmtPage, LoseFocusHdl, Control *, pControl )
@@ -570,7 +570,7 @@ void SwLabFmtPage::Reset(const SfxItemSet& )
     PreviewHdl(0);
 }
 
-IMPL_LINK( SwLabFmtPage, SaveHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwLabFmtPage, SaveHdl)
 {
     SwLabRec aRec;
     aRec.lHDist  = static_cast< long >(GETFLDVAL(aHDistField ));
@@ -638,7 +638,7 @@ SwSaveLabelDlg::SwSaveLabelDlg(SwLabFmtPage* pParent, SwLabRec& rRec) :
         aMakeCB.InsertEntry(pMan[i]);
 }
 
-IMPL_LINK(SwSaveLabelDlg, OkHdl, OKButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwSaveLabelDlg, OkHdl)
 {
     SwLabelConfig& rCfg = pLabPage->GetParent()->GetLabelsConfig();
     String sMake(aMakeCB.GetText());
@@ -663,7 +663,7 @@ IMPL_LINK(SwSaveLabelDlg, OkHdl, OKButton*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SwSaveLabelDlg, ModifyHdl, Edit*, EMPTYARG)
+IMPL_LINK_NOARG(SwSaveLabelDlg, ModifyHdl)
 {
     aOKPB.Enable(aMakeCB.GetText().Len() && aTypeED.GetText().Len());
     return 0;

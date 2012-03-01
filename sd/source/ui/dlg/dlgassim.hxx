@@ -51,7 +51,7 @@ public:
     sal_uInt16 GetSelectedPage();
     sal_Bool IsPageChecked( sal_uInt16 nPage );
 
-    DECL_LINK( CheckButtonClickHdl, SvLBoxButtonData * );
+    DECL_LINK( CheckButtonClickHdl, void * );
 
     virtual void DataChanged( const DataChangedEvent& rDCEvt );
 

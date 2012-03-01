@@ -295,7 +295,7 @@ IMPL_LINK( HeaderFooterDialog, ActivatePageHdl, TabControl *, pTabCtrl )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( HeaderFooterDialog, DeactivatePageHdl, TabControl *, EMPTYARG )
+IMPL_LINK_NOARG(HeaderFooterDialog, DeactivatePageHdl)
 {
     return sal_True;
 }
@@ -559,7 +559,7 @@ HeaderFooterTabPage::~HeaderFooterTabPage()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( HeaderFooterTabPage, LanguageChangeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(HeaderFooterTabPage, LanguageChangeHdl)
 {
     FillFormatList( (int)(sal_IntPtr)maCBDateTimeFormat.GetEntryData( maCBDateTimeFormat.GetSelectEntryPos() ) );
 
@@ -677,7 +677,7 @@ void HeaderFooterTabPage::update()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( HeaderFooterTabPage, UpdateOnClickHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(HeaderFooterTabPage, UpdateOnClickHdl)
 {
     update();
 
@@ -686,7 +686,7 @@ IMPL_LINK( HeaderFooterTabPage, UpdateOnClickHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( HeaderFooterTabPage, ClickApplyToAllHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(HeaderFooterTabPage, ClickApplyToAllHdl)
 {
     mpDialog->ApplyToAll( this );
     return 0;
@@ -694,7 +694,7 @@ IMPL_LINK( HeaderFooterTabPage, ClickApplyToAllHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( HeaderFooterTabPage, ClickApplyHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(HeaderFooterTabPage, ClickApplyHdl)
 {
     mpDialog->Apply( this );
     return 0;
@@ -702,7 +702,7 @@ IMPL_LINK( HeaderFooterTabPage, ClickApplyHdl, void *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( HeaderFooterTabPage, ClickCancelHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(HeaderFooterTabPage, ClickCancelHdl)
 {
     mpDialog->Cancel( this );
     return 0;

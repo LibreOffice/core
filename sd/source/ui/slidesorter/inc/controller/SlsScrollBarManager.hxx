@@ -268,7 +268,7 @@ private:
 
     DECL_LINK(HorizontalScrollBarHandler, ScrollBar*);
     DECL_LINK(VerticalScrollBarHandler, ScrollBar*);
-    DECL_LINK(AutoScrollTimeoutHandler, Timer*);
+    DECL_LINK(AutoScrollTimeoutHandler, void *);
 
     void PlaceHorizontalScrollBar (const Rectangle& aArea);
     void PlaceVerticalScrollBar (const Rectangle& aArea);

@@ -333,7 +333,7 @@ void SwEndNoteOptionPage::SetShell( SwWrtShell &rShell )
 ------------------------------------------------------------------------*/
 
 
-IMPL_LINK( SwEndNoteOptionPage, PosPageHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwEndNoteOptionPage, PosPageHdl)
 {
     const SwFtnNum eNum = (const SwFtnNum)GetNumbering();
     bPosDoc = sal_False;
@@ -349,7 +349,7 @@ IMPL_LINK( SwEndNoteOptionPage, PosPageHdl, Button *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwEndNoteOptionPage, NumCountHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SwEndNoteOptionPage, NumCountHdl)
 {
     sal_Bool bEnable = sal_True;
     if( aNumCountBox.GetEntryCount() - 1 != aNumCountBox.GetSelectEntryPos() )
@@ -369,7 +369,7 @@ IMPL_LINK( SwEndNoteOptionPage, NumCountHdl, ListBox*, EMPTYARG )
 ------------------------------------------------------------------------*/
 
 
-IMPL_LINK_INLINE_START( SwEndNoteOptionPage, PosChapterHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwEndNoteOptionPage, PosChapterHdl)
 {
     if ( !bPosDoc )
         SelectNumbering(FTNNUM_DOC);
@@ -381,7 +381,7 @@ IMPL_LINK_INLINE_START( SwEndNoteOptionPage, PosChapterHdl, Button *, EMPTYARG )
     aPageTemplBox.Enable();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwEndNoteOptionPage, PosChapterHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwEndNoteOptionPage, PosChapterHdl)
 
 SwCharFmt* lcl_GetCharFormat( SwWrtShell* pSh, const String& rCharFmtName )
 {

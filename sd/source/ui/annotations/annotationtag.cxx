@@ -753,7 +753,7 @@ IMPL_LINK(AnnotationTag, WindowEventHandler, VclWindowEvent*, pEvent)
     return sal_True;
 }
 
-IMPL_LINK( AnnotationTag, ClosePopupHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AnnotationTag, ClosePopupHdl)
 {
     mnClosePopupEvent = 0;
     ClosePopup();

@@ -91,8 +91,8 @@ class SvxSingleNumPickTabPage : public SfxTabPage
     sal_uInt16              nNumItemId;
 
     protected:
-        DECL_LINK( NumSelectHdl_Impl, ValueSet*);
-        DECL_LINK( DoubleClickHdl_Impl, ValueSet* );
+        DECL_LINK(NumSelectHdl_Impl, void *);
+        DECL_LINK(DoubleClickHdl_Impl, void *);
 
     public:
         SvxSingleNumPickTabPage(Window* pParent,
@@ -129,8 +129,8 @@ class SvxBulletPickTabPage : public SfxTabPage
 
     String              sBulletCharFmtName;
     protected:
-        DECL_LINK(NumSelectHdl_Impl, ValueSet*);
-        DECL_LINK( DoubleClickHdl_Impl, ValueSet* );
+        DECL_LINK(NumSelectHdl_Impl, void *);
+        DECL_LINK(DoubleClickHdl_Impl, void *);
     public:
         SvxBulletPickTabPage(Window* pParent,
                                const SfxItemSet& rSet);
@@ -174,8 +174,8 @@ class SvxNumPickTabPage : public SfxTabPage
 
 
     protected:
-        DECL_LINK(NumSelectHdl_Impl, ValueSet*);
-        DECL_LINK( DoubleClickHdl_Impl, ValueSet* );
+        DECL_LINK(NumSelectHdl_Impl, void *);
+        DECL_LINK(DoubleClickHdl_Impl, void *);
 
     public:
         SvxNumPickTabPage(Window* pParent,
@@ -220,9 +220,9 @@ class SvxBitmapPickTabPage : public SfxTabPage
     sal_Bool                bPreset     : 1;
 
     protected:
-        DECL_LINK( NumSelectHdl_Impl, ValueSet*);
-        DECL_LINK( DoubleClickHdl_Impl, ValueSet* );
-        DECL_LINK( LinkBmpHdl_Impl, CheckBox* );
+        DECL_LINK(NumSelectHdl_Impl, void *);
+        DECL_LINK(DoubleClickHdl_Impl, void *);
+        DECL_LINK(LinkBmpHdl_Impl, void *);
 
     public:
         SvxBitmapPickTabPage(Window* pParent,
@@ -317,19 +317,19 @@ class SvxNumOptionsTabPage : public SfxTabPage
 
         DECL_LINK( NumberTypeSelectHdl_Impl, ListBox * );
         DECL_LINK( LevelHdl_Impl, ListBox * );
-        DECL_LINK( PopupActivateHdl_Impl, Menu * );
+        DECL_LINK(PopupActivateHdl_Impl, void *);
         DECL_LINK( GraphicHdl_Impl, MenuButton * );
-        DECL_LINK( BulletHdl_Impl, Button * );
+        DECL_LINK(BulletHdl_Impl, void *);
         DECL_LINK( SizeHdl_Impl, MetricField * );
         DECL_LINK( RatioHdl_Impl, CheckBox * );
-        DECL_LINK( CharFmtHdl_Impl, ListBox * );
+        DECL_LINK(CharFmtHdl_Impl, void *);
         DECL_LINK( EditModifyHdl_Impl, Edit * );
         DECL_LINK( AllLevelHdl_Impl, NumericField * );
         DECL_LINK( OrientHdl_Impl, ListBox * );
         DECL_LINK( SameLevelHdl_Impl, CheckBox * );
         DECL_LINK( BulColorHdl_Impl, ColorListBox* );
         DECL_LINK( BulRelSizeHdl_Impl, MetricField *);
-        DECL_LINK( PreviewInvalidateHdl_Impl, Timer* );
+        DECL_LINK(PreviewInvalidateHdl_Impl, void *);
 
         DECL_STATIC_LINK( SvxNumOptionsTabPage, GraphicArrivedHdl_Impl, SvxBrushItem* );
 
@@ -415,15 +415,15 @@ class SvxNumPositionTabPage : public SfxTabPage
     void                InitControls();
 
     DECL_LINK( LevelHdl_Impl, ListBox * );
-    DECL_LINK( EditModifyHdl_Impl, Edit*);
+    DECL_LINK(EditModifyHdl_Impl, void *);
     DECL_LINK( DistanceHdl_Impl, MetricField * );
     DECL_LINK( RelativeHdl_Impl, CheckBox * );
-    DECL_LINK( StandardHdl_Impl, PushButton * );
+    DECL_LINK(StandardHdl_Impl, void *);
 
     void InitPosAndSpaceMode();
     void ShowControlsDependingOnPosAndSpaceMode();
 
-    DECL_LINK( LabelFollowedByHdl_Impl, ListBox* );
+    DECL_LINK(LabelFollowedByHdl_Impl, void *);
     DECL_LINK( ListtabPosHdl_Impl, MetricField* );
     DECL_LINK( AlignAtHdl_Impl, MetricField* );
     DECL_LINK( IndentAtHdl_Impl, MetricField* );

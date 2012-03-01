@@ -54,7 +54,7 @@ private:
     CancelButton    aBtnCancel;
     HelpButton      aBtnHelp;
 
-    DECL_LINK( OkHdl, OKButton * );
+    DECL_LINK(OkHdl, void *);
 };
 
 

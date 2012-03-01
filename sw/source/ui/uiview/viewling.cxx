@@ -911,7 +911,7 @@ IMPL_LINK( SwFieldDialog, MyListBoxHandler, ListBox *, pBox )
     return res;
 }
 
-IMPL_LINK( SwView, FieldPopupModeEndHdl, FloatingWindow*, EMPTYARG )
+IMPL_LINK_NOARG(SwView, FieldPopupModeEndHdl)
 {
     if ( mpFieldPopup )
     {

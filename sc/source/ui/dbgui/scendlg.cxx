@@ -207,7 +207,7 @@ void ScNewScenarioDlg::SetScenarioData( const rtl::OUString& rName, const rtl::O
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScNewScenarioDlg, OkHdl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(ScNewScenarioDlg, OkHdl)
 {
     String      aName   ( aEdName.GetText() );
     ScDocument* pDoc    = ((ScTabViewShell*)SfxViewShell::Current())->

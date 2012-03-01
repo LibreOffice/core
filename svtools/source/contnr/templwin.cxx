@@ -1082,7 +1082,7 @@ SvtTemplateWindow::~SvtTemplateWindow()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , IconClickHdl_Impl)
 {
     String aURL = pIconWin->GetSelectedIconURL();
     if ( !aURL.Len() )
@@ -1098,7 +1098,7 @@ IMPL_LINK ( SvtTemplateWindow , IconClickHdl_Impl, SvtIconChoiceCtrl *, EMPTYARG
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , FileSelectHdl_Impl, SvtFileView *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , FileSelectHdl_Impl)
 {
     aSelectTimer.Start();
     return 0;
@@ -1106,7 +1106,7 @@ IMPL_LINK ( SvtTemplateWindow , FileSelectHdl_Impl, SvtFileView *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , FileDblClickHdl_Impl)
 {
     if ( aSelectTimer.IsActive() )
         aSelectTimer.Stop();
@@ -1125,7 +1125,7 @@ IMPL_LINK ( SvtTemplateWindow , FileDblClickHdl_Impl, SvtFileView *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , NewFolderHdl_Impl)
 {
     pFrameWin->OpenFile( String(), sal_True, sal_False, sal_False );
     aFileViewTB.EnableItem( TI_DOCTEMPLATE_PRINT, sal_False );
@@ -1140,7 +1140,7 @@ IMPL_LINK ( SvtTemplateWindow , NewFolderHdl_Impl, SvtFileView *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , TimeoutHdl_Impl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , TimeoutHdl_Impl)
 {
     aSelectHdl.Call( this );
     String sURL = pFileWin->GetSelectedFile();
@@ -1170,7 +1170,7 @@ IMPL_LINK ( SvtTemplateWindow , ClickHdl_Impl, ToolBox *, pToolBox )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtTemplateWindow , ResizeHdl_Impl, SplitWindow *, EMPTYARG )
+IMPL_LINK_NOARG(SvtTemplateWindow , ResizeHdl_Impl)
 {
     Resize();
     return 0;
@@ -1736,7 +1736,7 @@ sal_Bool SvtDocumentTemplateDialog::CanEnableEditBtn() const
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , SelectHdl_Impl, SvtTemplateWindow *, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog , SelectHdl_Impl)
 {
     aEditBtn.Enable( pImpl->pWin->IsTemplateFolderOpen() && CanEnableEditBtn() );
     aOKBtn.Enable( pImpl->pWin->IsFileSelected() );
@@ -1745,7 +1745,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , SelectHdl_Impl, SvtTemplateWindow *, EMP
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , DoubleClickHdl_Impl, SvtTemplateWindow *, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog , DoubleClickHdl_Impl)
 {
     EndDialog( RET_OK );
 
@@ -1756,7 +1756,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , DoubleClickHdl_Impl, SvtTemplateWindow *
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , NewFolderHdl_Impl, SvtTemplateWindow *, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog , NewFolderHdl_Impl)
 {
     String aNewTitle( pImpl->aTitle );
     aNewTitle += String( ASCII_STR(" - ") );
@@ -1769,7 +1769,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , NewFolderHdl_Impl, SvtTemplateWindow *, 
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , SendFocusHdl_Impl, SvtTemplateWindow *, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog , SendFocusHdl_Impl)
 {
     if ( pImpl->pWin->HasIconWinFocus() )
         aHelpBtn.GrabFocus();
@@ -1802,7 +1802,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog , OKHdl_Impl, PushButton *, pBtn )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog , OrganizerHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog , OrganizerHdl_Impl)
 {
     Window* pOldDefWin = Application::GetDefDialogParent();
     Application::SetDefDialogParent( this );
@@ -1877,7 +1877,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog, UpdateHdl_Impl, Timer*, _pEventSource )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK ( SvtDocumentTemplateDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, EMPTYARG )
+IMPL_LINK_NOARG(SvtDocumentTemplateDialog, OpenLinkHdl_Impl)
 {
     ::rtl::OUString sURL( aMoreTemplatesLink.GetURL() );
     if ( !sURL.isEmpty() )

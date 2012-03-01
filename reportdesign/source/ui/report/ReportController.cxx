@@ -2367,7 +2367,7 @@ void OReportController::groupChange( const uno::Reference< report::XGroup>& _xGr
     }
 }
 //------------------------------------------------------------------------------
-IMPL_LINK( OReportController, OnClipboardChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(OReportController, OnClipboardChanged)
 {
     OnInvalidateClipboard();
     return 0;

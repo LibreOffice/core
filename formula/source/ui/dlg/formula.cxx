@@ -142,15 +142,15 @@ namespace formula
         DECL_LINK( ModifyHdl, ParaWin* );
         DECL_LINK( FxHdl, ParaWin* );
 
-        DECL_LINK( MatrixHdl, CheckBox *);
-        DECL_LINK( FormulaHdl, MultiLineEdit* );
-        DECL_LINK( FormulaCursorHdl, EditBox*);
+        DECL_LINK(MatrixHdl, void *);
+        DECL_LINK(FormulaHdl, void *);
+        DECL_LINK(FormulaCursorHdl, void *);
         DECL_LINK( BtnHdl, PushButton* );
         DECL_LINK( GetEdFocusHdl, ArgInput* );
         DECL_LINK( GetFxFocusHdl, ArgInput* );
-        DECL_LINK( DblClkHdl, FuncPage* );
-        DECL_LINK( FuncSelHdl, FuncPage*);
-        DECL_LINK( StructSelHdl, StructPage * );
+        DECL_LINK(DblClkHdl, void *);
+        DECL_LINK(FuncSelHdl, void *);
+        DECL_LINK(StructSelHdl, void *);
     public:
         OModuleClient                                           m_aModuleClient;
         mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
@@ -1029,7 +1029,7 @@ IMPL_LINK( FormulaDlg_Impl, BtnHdl, PushButton*, pBtn )
 
 // Handler for Listboxes
 
-IMPL_LINK( FormulaDlg_Impl, DblClkHdl, FuncPage*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, DblClkHdl)
 {
     sal_uInt16 nFunc = pFuncPage->GetFunction();
 
@@ -1242,7 +1242,7 @@ IMPL_LINK( FormulaDlg_Impl, ModifyHdl, ParaWin*, pPtr )
     return 0;
 }
 
-IMPL_LINK( FormulaDlg_Impl, FormulaHdl, MultiLineEdit*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaHdl)
 {
 
     FormEditData* pData = m_pHelper->getFormEditData();
@@ -1307,7 +1307,7 @@ IMPL_LINK( FormulaDlg_Impl, FormulaHdl, MultiLineEdit*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( FormulaDlg_Impl, FormulaCursorHdl, EditBox*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, FormulaCursorHdl)
 {
     FormEditData* pData = m_pHelper->getFormEditData();
     if (!pData) return 0;
@@ -1537,7 +1537,7 @@ sal_Bool FormulaDlg_Impl::CheckMatrix(String& aFormula)
     aTabCtrl.SetCurPageId(TP_STRUCT);
     return bMatrix;
 }
-IMPL_LINK( FormulaDlg_Impl, StructSelHdl, StructPage*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, StructSelHdl)
 {
     bStructUpdate=sal_False;
     if(pStructPage->IsVisible())    aBtnForward.Enable(sal_False); //@New
@@ -1545,13 +1545,13 @@ IMPL_LINK( FormulaDlg_Impl, StructSelHdl, StructPage*, EMPTYARG )
     bStructUpdate=sal_True;
     return 0;
 }
-IMPL_LINK( FormulaDlg_Impl, MatrixHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, MatrixHdl)
 {
     bUserMatrixFlag=sal_True;
     return 0;
 }
 
-IMPL_LINK( FormulaDlg_Impl, FuncSelHdl, FuncPage*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg_Impl, FuncSelHdl)
 {
     sal_uInt16 nCat = pFuncPage->GetCategory();
     if ( nCat == LISTBOX_ENTRY_NOTFOUND ) nCat = 0;
@@ -1872,7 +1872,7 @@ void FormulaDlg::SetEdSelection()
 {
     m_pImpl->SetEdSelection();
 }
-IMPL_LINK( FormulaDlg, UpdateFocusHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(FormulaDlg, UpdateFocusHdl)
 {
     FormEditData* pData = m_pImpl->m_pHelper->getFormEditData();
 

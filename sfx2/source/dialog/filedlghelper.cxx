@@ -694,7 +694,7 @@ void FileDialogHelper_Impl::updateVersions()
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( FileDialogHelper_Impl, TimeOutHdl_Impl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(FileDialogHelper_Impl, TimeOutHdl_Impl)
 {
     if ( !mbHasPreview )
         return 0;
@@ -2298,7 +2298,7 @@ void FileDialogHelper::SetContext( Context _eNewContext )
 }
 
 // ------------------------------------------------------------------------
-IMPL_LINK( FileDialogHelper, ExecuteSystemFilePicker, void*, EMPTYARG )
+IMPL_LINK_NOARG(FileDialogHelper, ExecuteSystemFilePicker)
 {
     m_nError = mpImp->execute();
     if ( m_aDialogClosedLink.IsSet() )

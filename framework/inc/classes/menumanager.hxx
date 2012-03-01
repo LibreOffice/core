@@ -106,7 +106,7 @@ class MenuManager : public ThreadHelpBase           ,
         );
 
     protected:
-        DECL_LINK( Highlight, Menu * );
+        DECL_LINK(Highlight, void *);
         DECL_LINK( Activate, Menu * );
         DECL_LINK( Deactivate, Menu * );
 

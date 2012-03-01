@@ -123,9 +123,9 @@ private:
     bool setProperty1Value( sal_Int32 nType, CustomAnimationEffectPtr pEffect, const ::com::sun::star::uno::Any& rValue );
 
     DECL_LINK( implControlHdl, Control* );
-    DECL_LINK( implPropertyHdl, Control* );
+    DECL_LINK(implPropertyHdl, void *);
     DECL_LINK(EventMultiplexerListener, tools::EventMultiplexerEvent*);
-    DECL_LINK(lateInitCallback, Timer*);
+    DECL_LINK(lateInitCallback, void *);
 
 private:
     ViewShellBase& mrBase;

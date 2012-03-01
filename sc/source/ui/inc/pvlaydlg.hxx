@@ -245,12 +245,12 @@ private:
 
     // Handler
     DECL_LINK( ClickHdl, PushButton * );
-    DECL_LINK( SelAreaHdl, ListBox * );
-    DECL_LINK( MoreClickHdl, MoreButton * );
-    DECL_LINK( EdModifyHdl, Edit * );
-    DECL_LINK( EdInModifyHdl, Edit * );
-    DECL_LINK( OkHdl, OKButton * );
-    DECL_LINK( CancelHdl, CancelButton * );
+    DECL_LINK( SelAreaHdl, void * );
+    DECL_LINK( MoreClickHdl, void * );
+    DECL_LINK( EdModifyHdl, void * );
+    DECL_LINK( EdInModifyHdl, void * );
+    DECL_LINK( OkHdl, void * );
+    DECL_LINK( CancelHdl, void * );
     DECL_LINK( GetFocusHdl, Control* );
 };
 

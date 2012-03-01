@@ -81,12 +81,12 @@ class AddonsToolBarManager : public ToolBarManager
         void FillToolbar( const com::sun::star::uno::Sequence< com::sun::star::uno::Sequence< com::sun::star::beans::PropertyValue > >& rAddonToolbar );
 
     protected:
-        DECL_LINK( Click, ToolBox * );
-        DECL_LINK( DoubleClick, ToolBox * );
-        DECL_LINK( Command, CommandEvent * );
-        DECL_LINK( Select, ToolBox * );
-        DECL_LINK( Activate, ToolBox * );
-        DECL_LINK( Deactivate, ToolBox * );
+        DECL_LINK(Click, void *);
+        DECL_LINK(DoubleClick, void *);
+        DECL_LINK(Command, void *);
+        DECL_LINK(Select, void *);
+        DECL_LINK(Activate, void *);
+        DECL_LINK(Deactivate, void *);
         DECL_LINK( StateChanged, StateChangedType* );
         DECL_LINK( DataChanged, DataChangedEvent* );
 

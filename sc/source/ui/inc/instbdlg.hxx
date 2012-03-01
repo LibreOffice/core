@@ -106,12 +106,12 @@ private:
     void    FillTables_Impl( ScDocument* pSrcDoc );
     void    DoEnable_Impl();
 
-    DECL_LINK( BrowseHdl_Impl, PushButton* );
-    DECL_LINK( ChoiceHdl_Impl, RadioButton* );
-    DECL_LINK( SelectHdl_Impl, MultiListBox* );
-    DECL_LINK( CountHdl_Impl, NumericField* );
-    DECL_LINK( DoEnterHdl, PushButton* );
-    DECL_LINK( BrowseTimeoutHdl, Timer* );
+    DECL_LINK(BrowseHdl_Impl, void *);
+    DECL_LINK(ChoiceHdl_Impl, void *);
+    DECL_LINK(SelectHdl_Impl, void *);
+    DECL_LINK(CountHdl_Impl, void *);
+    DECL_LINK(DoEnterHdl, void *);
+    DECL_LINK(BrowseTimeoutHdl, void *);
     DECL_LINK( DialogClosedHdl, sfx2::FileDialogHelper* );
 #endif
 };

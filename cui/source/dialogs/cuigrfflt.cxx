@@ -144,7 +144,7 @@ GraphicFilterDialog::~GraphicFilterDialog()
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GraphicFilterDialog, ImplPreviewTimeoutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(GraphicFilterDialog, ImplPreviewTimeoutHdl)
 {
     maTimer.Stop();
     maPreview.SetGraphic( GetFilteredGraphic( maGraphic, mfScaleX, mfScaleY ) );
@@ -154,7 +154,7 @@ IMPL_LINK( GraphicFilterDialog, ImplPreviewTimeoutHdl, Timer*, EMPTYARG )
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GraphicFilterDialog, ImplModifyHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(GraphicFilterDialog, ImplModifyHdl)
 {
     if( maGraphic.GetType() == GRAPHIC_BITMAP )
     {

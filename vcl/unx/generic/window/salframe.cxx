@@ -3714,7 +3714,7 @@ long X11SalFrame::HandleSizeEvent( XConfigureEvent *pEvent )
     return 1;
 }
 
-IMPL_LINK( X11SalFrame, HandleAlwaysOnTopRaise, void*, EMPTYARG )
+IMPL_LINK_NOARG(X11SalFrame, HandleAlwaysOnTopRaise)
 {
     if( bMapped_ )
         ToTop( 0 );

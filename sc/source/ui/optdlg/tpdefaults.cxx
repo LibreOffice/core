@@ -150,7 +150,7 @@ void ScTpDefaultsOptions::OnFocusPrefixInput(Edit* pEdit)
 }
 
 
-IMPL_LINK( ScTpDefaultsOptions, NumModifiedHdl, NumericField*, EMPTYARG )
+IMPL_LINK_NOARG(ScTpDefaultsOptions, NumModifiedHdl)
 {
     CheckNumSheets();
     return 0;

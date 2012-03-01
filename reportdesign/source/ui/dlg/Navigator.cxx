@@ -420,7 +420,7 @@ void NavigatorTree::StartDrag( sal_Int8 /*_nAction*/, const Point& _rPosPixel )
     }
 }
 //------------------------------------------------------------------------
-IMPL_LINK( NavigatorTree, OnDropActionTimer, void*, EMPTYARG )
+IMPL_LINK_NOARG(NavigatorTree, OnDropActionTimer)
 {
     if (--m_nTimerCounter > 0)
         return 0L;

@@ -71,7 +71,7 @@ private:
     const String        aDefScenarioName;
     sal_Bool                bIsEdit;
 
-    DECL_LINK( OkHdl, OKButton * );
+    DECL_LINK(OkHdl, void *);
     DECL_LINK( EnableHdl, CheckBox * );
 };
 

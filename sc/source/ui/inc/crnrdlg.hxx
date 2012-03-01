@@ -103,7 +103,7 @@ private:
     DECL_LINK( RowClickHdl, void * );
     DECL_LINK( Range2DataModifyHdl, void * );
     DECL_LINK( GetFocusHdl, Control* );
-    DECL_LINK( LoseFocusHdl, Control* );
+    DECL_LINK( LoseFocusHdl, void* );
 #endif
 };
 

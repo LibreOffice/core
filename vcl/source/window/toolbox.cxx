@@ -2854,7 +2854,7 @@ void ToolBox::ImplFormat( sal_Bool bResize )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ToolBox, ImplDropdownLongClickHdl, ToolBox*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBox, ImplDropdownLongClickHdl)
 {
     if( mnCurPos != TOOLBOX_ITEM_NOTFOUND &&
         (mpData->m_aItems[ mnCurPos ].mnBits & TIB_DROPDOWN)
@@ -2885,7 +2885,7 @@ IMPL_LINK( ToolBox, ImplDropdownLongClickHdl, ToolBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ToolBox, ImplUpdateHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ToolBox, ImplUpdateHdl)
 {
     DBG_CHKTHIS( Window, ImplDbgCheckWindow );
 

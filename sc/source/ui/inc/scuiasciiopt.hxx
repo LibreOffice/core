@@ -126,7 +126,7 @@ private:
                                 DECL_LINK( RbSepFixHdl, RadioButton* );
                                 DECL_LINK( SeparatorHdl, Control* );
                                 DECL_LINK( LbColTypeHdl, ListBox* );
-                                DECL_LINK( UpdateTextHdl, ScCsvTableBox* );
+                                DECL_LINK(UpdateTextHdl, void *);
                                 DECL_LINK( ColTypeHdl, ScCsvTableBox* );
 };
 

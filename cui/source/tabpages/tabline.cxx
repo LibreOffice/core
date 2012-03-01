@@ -194,14 +194,14 @@ short SvxLineTabDialog::Ok()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxLineTabDialog, CancelHdlImpl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxLineTabDialog, CancelHdlImpl)
 {
     SavePalettes();
 
     EndDialog( RET_CANCEL );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxLineTabDialog, CancelHdlImpl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxLineTabDialog, CancelHdlImpl)
 
 // -----------------------------------------------------------------------
 

@@ -232,7 +232,7 @@ class SvxIconChoiceCtrl_Impl
 
                         DECL_LINK( ScrollUpDownHdl, ScrollBar * );
                         DECL_LINK( ScrollLeftRightHdl, ScrollBar * );
-                        DECL_LINK( EditTimeoutHdl, Timer* );
+                        DECL_LINK(EditTimeoutHdl, void *);
                         DECL_LINK( UserEventHdl, void* );
                         DECL_LINK( EndScrollHdl, void* );
                         DECL_LINK( AutoArrangeHdl, void* );
@@ -320,7 +320,7 @@ class SvxIconChoiceCtrl_Impl
     void                VisRectChanged() { aVisRectChangedTimer.Start(); }
     void                SetOrigin( const Point&, sal_Bool bDoNotUpdateWallpaper = sal_False );
 
-                        DECL_LINK( TextEditEndedHdl, IcnViewEdit_Impl* );
+                        DECL_LINK(TextEditEndedHdl, void *);
 
     void                ShowFocus ( Rectangle& rRect );
     void                DrawFocusRect ( OutputDevice* pOut );

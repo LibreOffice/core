@@ -63,7 +63,7 @@ private:
     void            CheckState();
 
     DECL_LINK( ClickButtonHdl, void * );
-    DECL_LINK( StartShowHdl, Button* );
+    DECL_LINK( StartShowHdl, void* );
 
 public:
                 SdCustomShowDlg( Window* pWindow, SdDrawDocument& rDrawDoc );
@@ -100,7 +100,7 @@ private:
     void            CheckCustomShow();
 
     DECL_LINK( ClickButtonHdl, void * );
-    DECL_LINK( OKHdl, Button* );
+    DECL_LINK( OKHdl, void * );
 
 public:
 

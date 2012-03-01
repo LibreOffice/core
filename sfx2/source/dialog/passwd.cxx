@@ -73,11 +73,11 @@ IMPL_LINK_INLINE_START( SfxPasswordDialog, EditModifyHdl, Edit *, pEdit )
     maOKBtn.Enable( bEnable );
     return 0;
 }
-IMPL_LINK_INLINE_END( SfxPasswordDialog, EditModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_INLINE_END(SfxPasswordDialog, EditModifyHdl, Edit *, pEdit)
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SfxPasswordDialog, OKHdl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(SfxPasswordDialog, OKHdl)
 {
     bool bConfirmFailed = ( ( mnExtras & SHOWEXTRAS_CONFIRM ) == SHOWEXTRAS_CONFIRM ) &&
                             ( GetConfirm() != GetPassword() );

@@ -61,7 +61,7 @@ class SvxAsianLayoutPage : public SfxTabPage
 
     SvxAsianLayoutPage_Impl* pImpl;
 
-    DECL_LINK(LanguageHdl, SvxLanguageBox*);
+    DECL_LINK(LanguageHdl, void *);
     DECL_LINK(ChangeStandardHdl, CheckBox*);
     DECL_LINK(ModifyHdl, Edit*);
 

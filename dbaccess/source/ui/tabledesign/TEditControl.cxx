@@ -123,7 +123,7 @@ OTableEditorCtrl::ClipboardInvalidator::~ClipboardInvalidator()
 }
 
 //------------------------------------------------------------------
-IMPL_LINK(OTableEditorCtrl::ClipboardInvalidator, OnInvalidate, void*, EMPTYARG)
+IMPL_LINK_NOARG(OTableEditorCtrl::ClipboardInvalidator, OnInvalidate)
 {
     m_pOwner->GetView()->getController().InvalidateFeature(SID_CUT);
     m_pOwner->GetView()->getController().InvalidateFeature(SID_COPY);

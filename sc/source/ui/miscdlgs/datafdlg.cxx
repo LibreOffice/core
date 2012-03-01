@@ -277,7 +277,7 @@ IMPL_LINK( ScDataFormDlg, Impl_DataModifyHdl, Edit*, pEdit)
     return 0;
 }
 
-IMPL_LINK( ScDataFormDlg, Impl_NewHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_NewHdl)
 {
     ScViewData* pViewData = pTabViewShell->GetViewData();
     ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -311,7 +311,7 @@ IMPL_LINK( ScDataFormDlg, Impl_NewHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDataFormDlg, Impl_PrevHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_PrevHdl)
 {
     if (pDoc)
     {
@@ -324,7 +324,7 @@ IMPL_LINK( ScDataFormDlg, Impl_PrevHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDataFormDlg, Impl_NextHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_NextHdl)
 {
     if (pDoc)
     {
@@ -337,7 +337,7 @@ IMPL_LINK( ScDataFormDlg, Impl_NextHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDataFormDlg, Impl_RestoreHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_RestoreHdl)
 {
     if (pDoc)
     {
@@ -346,7 +346,7 @@ IMPL_LINK( ScDataFormDlg, Impl_RestoreHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDataFormDlg, Impl_DeleteHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_DeleteHdl)
 {
     ScViewData* pViewData = pTabViewShell->GetViewData();
     ScDocShell* pDocSh = pViewData->GetDocShell();
@@ -366,13 +366,13 @@ IMPL_LINK( ScDataFormDlg, Impl_DeleteHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDataFormDlg, Impl_CloseHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_CloseHdl)
 {
     EndDialog( );
     return 0;
 }
 
-IMPL_LINK( ScDataFormDlg, Impl_ScrollHdl, ScrollBar*, EMPTYARG )
+IMPL_LINK_NOARG(ScDataFormDlg, Impl_ScrollHdl)
 {
     long nOffset = aSlider.GetThumbPos();
     nCurrentRow = nStartRow + nOffset + 1;

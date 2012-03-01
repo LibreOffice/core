@@ -1089,7 +1089,7 @@ void MultiLineEdit::Modify()
         pUpdateDataTimer->Start();
 }
 
-IMPL_LINK( MultiLineEdit, ImpUpdateDataHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(MultiLineEdit, ImpUpdateDataHdl)
 {
     UpdateData();
     return 0;

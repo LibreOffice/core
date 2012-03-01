@@ -245,7 +245,7 @@ void SearchProgress::Terminate()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( SearchProgress, ClickCancelBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(SearchProgress, ClickCancelBtn)
 {
     Terminate();
     return 0L;
@@ -253,7 +253,7 @@ IMPL_LINK( SearchProgress, ClickCancelBtn, void*, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( SearchProgress, CleanUpHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SearchProgress, CleanUpHdl)
 {
     EndDialog( RET_OK );
     delete this;
@@ -380,7 +380,7 @@ void TakeProgress::Terminate()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TakeProgress, ClickCancelBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(TakeProgress, ClickCancelBtn)
 {
     Terminate();
     return 0L;
@@ -388,7 +388,7 @@ IMPL_LINK( TakeProgress, ClickCancelBtn, void*, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TakeProgress, CleanUpHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(TakeProgress, CleanUpHdl)
 {
     TPGalleryThemeProperties*   mpBrowser = (TPGalleryThemeProperties*) GetParent();
     ::std::vector<bool, std::allocator<bool> >           aRemoveEntries( mpBrowser->aFoundList.size(), false );
@@ -497,7 +497,7 @@ short ActualizeProgress::Execute()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( ActualizeProgress, ClickCancelBtn, void*, EMPTYARG )
+IMPL_LINK_NOARG(ActualizeProgress, ClickCancelBtn)
 {
     pTheme->AbortActualize();
     EndDialog( RET_OK );
@@ -584,7 +584,7 @@ GalleryIdDialog::GalleryIdDialog( Window* pParent, GalleryTheme* _pThm ) :
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( GalleryIdDialog, ClickOkHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(GalleryIdDialog, ClickOkHdl)
 {
     Gallery*    pGal = pThm->GetParent();
     const sal_uLong nId = GetId();
@@ -1015,7 +1015,7 @@ void TPGalleryThemeProperties::FillFilterList()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, SelectFileTypeHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFileTypeHdl)
 {
     String aText( aCbbFileType.GetText() );
 
@@ -1051,7 +1051,7 @@ void TPGalleryThemeProperties::SearchFiles()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickSearchHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickSearchHdl)
 {
     if( bInputAllowed )
     {
@@ -1114,7 +1114,7 @@ void TPGalleryThemeProperties::TakeFiles()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickPreviewHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickPreviewHdl)
 {
     if ( bInputAllowed )
     {
@@ -1165,7 +1165,7 @@ void TPGalleryThemeProperties::DoPreview()
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickTakeHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeHdl)
 {
     if( bInputAllowed )
     {
@@ -1192,7 +1192,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickTakeHdl, void*, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, ClickTakeAllHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, ClickTakeAllHdl)
 {
     if( bInputAllowed )
     {
@@ -1206,7 +1206,7 @@ IMPL_LINK( TPGalleryThemeProperties, ClickTakeAllHdl, void *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, SelectFoundHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, SelectFoundHdl)
 {
     if( bInputAllowed )
     {
@@ -1239,7 +1239,7 @@ IMPL_LINK( TPGalleryThemeProperties, SelectFoundHdl, void *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, DClickFoundHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, DClickFoundHdl)
 {
     if( bInputAllowed )
     {
@@ -1254,7 +1254,7 @@ IMPL_LINK( TPGalleryThemeProperties, DClickFoundHdl, void *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, PreviewTimerHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, PreviewTimerHdl)
 {
     aPreviewTimer.Stop();
     DoPreview();
@@ -1263,7 +1263,7 @@ IMPL_LINK( TPGalleryThemeProperties, PreviewTimerHdl, void *, EMPTYARG )
 
 // ------------------------------------------------------------------------
 
-IMPL_LINK( TPGalleryThemeProperties, EndSearchProgressHdl, SearchProgress *, EMPTYARG )
+IMPL_LINK_NOARG(TPGalleryThemeProperties, EndSearchProgressHdl)
 {
   if( !aFoundList.empty() )
   {

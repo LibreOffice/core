@@ -1088,11 +1088,11 @@ void ScViewData::SetEditEngine( ScSplitPos eWhich,
     //  needed, wenn position changed
 }
 
-IMPL_LINK_INLINE_START( ScViewData, EmptyEditHdl, EditStatus *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScViewData, EmptyEditHdl)
 {
     return 0;
 }
-IMPL_LINK_INLINE_END( ScViewData, EmptyEditHdl, EditStatus *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScViewData, EmptyEditHdl)
 
 IMPL_LINK( ScViewData, EditEngineHdl, EditStatus *, pStatus )
 {

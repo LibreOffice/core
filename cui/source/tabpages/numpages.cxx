@@ -349,7 +349,7 @@ void  SvxSingleNumPickTabPage::Reset( const SfxItemSet& rSet )
         *pActNum = *pSaveNum;
 }
 
-IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
+IMPL_LINK_NOARG(SvxSingleNumPickTabPage, NumSelectHdl_Impl)
 {
     if(pActNum)
     {
@@ -391,7 +391,7 @@ IMPL_LINK(SvxSingleNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SvxSingleNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
+IMPL_LINK_NOARG(SvxSingleNumPickTabPage, DoubleClickHdl_Impl)
 {
     NumSelectHdl_Impl(pExamplesVS);
     OKButton& rOk = GetTabDialog()->GetOKButton();
@@ -512,7 +512,7 @@ void  SvxBulletPickTabPage::Reset( const SfxItemSet& rSet )
         *pActNum = *pSaveNum;
 }
 
-IMPL_LINK(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
+IMPL_LINK_NOARG(SvxBulletPickTabPage, NumSelectHdl_Impl)
 {
     if(pActNum)
     {
@@ -546,7 +546,7 @@ IMPL_LINK(SvxBulletPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
 }
 
 
-IMPL_LINK(SvxBulletPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
+IMPL_LINK_NOARG(SvxBulletPickTabPage, DoubleClickHdl_Impl)
 {
     NumSelectHdl_Impl(pExamplesVS);
     OKButton& rOk = GetTabDialog()->GetOKButton();
@@ -717,7 +717,7 @@ void  SvxNumPickTabPage::Reset( const SfxItemSet& rSet )
 }
 
 // Hier werden alle Ebenen veraendert
-IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
+IMPL_LINK_NOARG(SvxNumPickTabPage, NumSelectHdl_Impl)
 {
     if(pActNum)
     {
@@ -803,7 +803,7 @@ IMPL_LINK(SvxNumPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SvxNumPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
+IMPL_LINK_NOARG(SvxNumPickTabPage, DoubleClickHdl_Impl)
 {
     NumSelectHdl_Impl(pExamplesVS);
     OKButton& rOk = GetTabDialog()->GetOKButton();
@@ -980,7 +980,7 @@ void  SvxBitmapPickTabPage::Reset( const SfxItemSet& rSet )
     }
 }
 
-IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, NumSelectHdl_Impl)
 {
     if(pActNum)
     {
@@ -1023,7 +1023,7 @@ IMPL_LINK(SvxBitmapPickTabPage, NumSelectHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SvxBitmapPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, DoubleClickHdl_Impl)
 {
     NumSelectHdl_Impl(pExamplesVS);
     OKButton& rOk = GetTabDialog()->GetOKButton();
@@ -1031,7 +1031,7 @@ IMPL_LINK(SvxBitmapPickTabPage, DoubleClickHdl_Impl, ValueSet*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK(SvxBitmapPickTabPage, LinkBmpHdl_Impl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxBitmapPickTabPage, LinkBmpHdl_Impl)
 {
     if(!pExamplesVS->IsNoSelection())
     {
@@ -1732,7 +1732,7 @@ IMPL_LINK( SvxNumOptionsTabPage, LevelHdl_Impl, ListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SvxNumOptionsTabPage, PreviewInvalidateHdl_Impl)
 {
     pPreviewWIN->Invalidate();
     return 0;
@@ -2015,7 +2015,7 @@ IMPL_LINK( SvxNumOptionsTabPage, GraphicHdl_Impl, MenuButton *, pButton )
     return 0;
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, EMPTYARG )
+IMPL_LINK_NOARG(SvxNumOptionsTabPage, PopupActivateHdl_Impl)
 {
     if(!bMenuButtonInitialized)
     {
@@ -2069,7 +2069,7 @@ IMPL_LINK( SvxNumOptionsTabPage, PopupActivateHdl_Impl, Menu *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, BulletHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxNumOptionsTabPage, BulletHdl_Impl)
 {
     SvxCharacterMap* pMap = new SvxCharacterMap( this, sal_True );
 
@@ -2210,7 +2210,7 @@ IMPL_LINK( SvxNumOptionsTabPage, RatioHdl_Impl, CheckBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SvxNumOptionsTabPage, CharFmtHdl_Impl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxNumOptionsTabPage, CharFmtHdl_Impl)
 {
     bAutomaticCharStyles = sal_False;
     sal_uInt16 nEntryPos = aCharFmtLB.GetSelectEntryPos();
@@ -3176,7 +3176,7 @@ void    SvxNumPositionTabPage::SetMetric(FieldUnit eMetric)
     aIndentAtMF.SetUnit( eMetric );
 }
 
-IMPL_LINK( SvxNumPositionTabPage, EditModifyHdl_Impl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SvxNumPositionTabPage, EditModifyHdl_Impl)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < pActNum->GetLevelCount(); i++)
@@ -3362,7 +3362,7 @@ IMPL_LINK( SvxNumPositionTabPage, RelativeHdl_Impl, CheckBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SvxNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxNumPositionTabPage, LabelFollowedByHdl_Impl)
 {
     // determine value to be set at the chosen list levels
     SvxNumberFormat::SvxNumLabelFollowedBy eLabelFollowedBy =
@@ -3505,7 +3505,7 @@ IMPL_LINK( SvxNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pFld )
     return 0;
 }
 
-IMPL_LINK( SvxNumPositionTabPage, StandardHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxNumPositionTabPage, StandardHdl_Impl)
 {
     sal_uInt16 nMask = 1;
     SvxNumRule aTmpNumRule( pActNum->GetFeatureFlags(),

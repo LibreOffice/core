@@ -581,7 +581,7 @@ void SwEditWin::UpdatePointer(const Point &rLPt, sal_uInt16 nModifier )
     Description: increase timer for selection
  --------------------------------------------------------------------*/
 
-IMPL_LINK( SwEditWin, TimerHandler, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditWin, TimerHandler)
 {
     DBG_PROFSTART(edithdl);
 
@@ -5382,13 +5382,13 @@ void SwEditWin::ClearTip()
 {
 }
 
-IMPL_LINK( SwEditWin, KeyInputFlushHandler, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditWin, KeyInputFlushHandler)
 {
     FlushInBuffer();
     return 0;
 }
 
-IMPL_LINK( SwEditWin, KeyInputTimerHandler, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SwEditWin, KeyInputTimerHandler)
 {
     bTblInsDelMode = sal_False;
     return 0;
@@ -5411,7 +5411,7 @@ void SwEditWin::StopQuickHelp()
         pQuickHlpData->Stop( rView.GetWrtShell() );
 }
 
-IMPL_LINK(SwEditWin, TemplateTimerHdl, Timer*, EMPTYARG)
+IMPL_LINK_NOARG(SwEditWin, TemplateTimerHdl)
 {
     SetApplyTemplate(SwApplyTemplate());
     return 0;

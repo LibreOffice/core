@@ -408,7 +408,7 @@ void Animation::ImplRestartTimer( sal_uLong nTimeout )
 // -----------------------------------------------------------------------
 typedef ::std::vector< AInfo* > AInfoList_impl;
 
-IMPL_LINK( Animation, ImplTimeoutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(Animation, ImplTimeoutHdl)
 {
     const size_t nAnimCount = maList.size();
     AInfoList_impl aAInfoList;

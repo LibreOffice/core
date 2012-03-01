@@ -93,7 +93,7 @@ protected:
 
 private:
     void RepaintViewShellDoc();
-    DECL_LINK(CaretBlinkTimerHdl, AutoTimer *);
+    DECL_LINK(CaretBlinkTimerHdl, void *);
     void CaretBlinkInit();
     void CaretBlinkStart();
     void CaretBlinkStop();

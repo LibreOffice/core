@@ -957,7 +957,7 @@ LanguageType SdDrawDocument::GetLanguage( const sal_uInt16 nId ) const
 |*
 \************************************************************************/
 
-IMPL_LINK( SdDrawDocument, WorkStartupHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
 {
     if( mpDocSh )
         mpDocSh->SetWaitCursor( sal_True );

@@ -82,7 +82,7 @@ SelectionEngine::~SelectionEngine()
 |*
 *************************************************************************/
 
-IMPL_LINK( SelectionEngine, ImpWatchDog, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SelectionEngine, ImpWatchDog)
 {
     if ( !aArea.IsInside( aLastMove.GetPosPixel() ) )
         SelMouseMove( aLastMove );

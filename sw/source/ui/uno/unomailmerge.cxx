@@ -266,7 +266,7 @@ namespace
     }
 
     //--------------------------------------------------------------------
-    IMPL_LINK( DelayedFileDeletion, OnTryDeleteFile, void*, EMPTYARG )
+    IMPL_LINK_NOARG(DelayedFileDeletion, OnTryDeleteFile)
     {
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 

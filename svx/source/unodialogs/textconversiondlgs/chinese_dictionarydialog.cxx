@@ -631,7 +631,7 @@ void ChineseDictionaryDialog::setDirectionAndTextConversionOptions( bool bDirect
     updateAfterDirectionChange();
 }
 
-IMPL_LINK( ChineseDictionaryDialog, DirectionHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChineseDictionaryDialog, DirectionHdl)
 {
     updateAfterDirectionChange();
     return 0;
@@ -657,12 +657,12 @@ void ChineseDictionaryDialog::updateAfterDirectionChange()
     updateButtons();
 }
 
-IMPL_LINK( ChineseDictionaryDialog, EditFieldsHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ChineseDictionaryDialog, EditFieldsHdl)
 {
     updateButtons();
     return 0;
 }
-IMPL_LINK( ChineseDictionaryDialog, MappingSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChineseDictionaryDialog, MappingSelectHdl)
 {
     DictionaryEntry* pE = getActiveDictionary().getFirstSelectedEntry();
     if(pE)
@@ -749,7 +749,7 @@ void ChineseDictionaryDialog::updateButtons()
     m_aPB_Modify.Enable( bModify );
 }
 
-IMPL_LINK( ChineseDictionaryDialog, AddHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChineseDictionaryDialog, AddHdl)
 {
     if( !isEditFieldsHaveContent() )
         return 0;
@@ -767,7 +767,7 @@ IMPL_LINK( ChineseDictionaryDialog, AddHdl, void*, EMPTYARG )
     updateButtons();
     return 0;
 }
-IMPL_LINK( ChineseDictionaryDialog, ModifyHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChineseDictionaryDialog, ModifyHdl)
 {
     rtl::OUString aTerm( m_aED_Term.GetText() );
     rtl::OUString aMapping( m_aED_Mapping.GetText() );
@@ -800,7 +800,7 @@ IMPL_LINK( ChineseDictionaryDialog, ModifyHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ChineseDictionaryDialog, DeleteHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChineseDictionaryDialog, DeleteHdl)
 {
     DictionaryList& rActive  = getActiveDictionary();
     DictionaryList& rReverse = getReverseDictionary();
@@ -860,7 +860,7 @@ short ChineseDictionaryDialog::Execute()
     return nRet;
 }
 
-IMPL_LINK( ChineseDictionaryDialog, HeaderBarClick, void*, EMPTYARG )
+IMPL_LINK_NOARG(ChineseDictionaryDialog, HeaderBarClick)
 {
     if(m_pHeaderBar)
     {

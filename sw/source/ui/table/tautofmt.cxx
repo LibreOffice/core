@@ -345,7 +345,7 @@ IMPL_LINK( SwAutoFormatDlg, CheckHdl, Button *, pBtn )
 /*------------------------------------------------------------------------*/
 
 
-IMPL_LINK( SwAutoFormatDlg, AddHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SwAutoFormatDlg, AddHdl)
 {
     sal_Bool bOk = sal_False, bFmtInserted = sal_False;
     while( !bOk )
@@ -412,7 +412,7 @@ IMPL_LINK( SwAutoFormatDlg, AddHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SwAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SwAutoFormatDlg, RemoveHdl)
 {
     String aMessage = aStrDelMsg ;
     aMessage.AppendAscii("\n\n");
@@ -449,7 +449,7 @@ IMPL_LINK( SwAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwAutoFormatDlg, RenameHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SwAutoFormatDlg, RenameHdl)
 {
     sal_Bool bOk = sal_False;
     while( !bOk )
@@ -519,7 +519,7 @@ IMPL_LINK( SwAutoFormatDlg, RenameHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SwAutoFormatDlg, SelFmtHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SwAutoFormatDlg, SelFmtHdl)
 {
     sal_Bool bBtnEnable = sal_False;
     sal_uInt8 nSelPos = (sal_uInt8) aLbFormat.GetSelectEntryPos(), nOldIdx = nIndex;
@@ -554,14 +554,14 @@ IMPL_LINK( SwAutoFormatDlg, SelFmtHdl, void *, EMPTYARG )
 }
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SwAutoFormatDlg, OkHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwAutoFormatDlg, OkHdl)
 {
     if( bSetAutoFmt )
         pShell->SetTableAutoFmt( *(*pTableTbl)[ nIndex ] );
     EndDialog( RET_OK );
     return sal_True;
 }
-IMPL_LINK_INLINE_END( SwAutoFormatDlg, OkHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwAutoFormatDlg, OkHdl)
 
 //========================================================================
 // AutoFmtPreview

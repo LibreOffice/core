@@ -88,15 +88,15 @@ private:
     void SetButtonState();
 
     // Handler:
-    DECL_LINK( Impl_NewHdl,     PushButton*    );
-    DECL_LINK( Impl_PrevHdl,    PushButton*    );
-    DECL_LINK( Impl_NextHdl,    PushButton*    );
+    DECL_LINK(Impl_NewHdl, void *);
+    DECL_LINK(Impl_PrevHdl, void *);
+    DECL_LINK(Impl_NextHdl, void *);
 
-    DECL_LINK( Impl_RestoreHdl, PushButton*    );
-    DECL_LINK( Impl_DeleteHdl,  PushButton*    );
-    DECL_LINK( Impl_CloseHdl,   PushButton*    );
+    DECL_LINK(Impl_RestoreHdl, void *);
+    DECL_LINK(Impl_DeleteHdl, void *);
+    DECL_LINK(Impl_CloseHdl, void *);
 
-    DECL_LINK( Impl_ScrollHdl,  ScrollBar*    );
+    DECL_LINK(Impl_ScrollHdl, void *);
     DECL_LINK( Impl_DataModifyHdl,  Edit*    );
 };
 #endif // SC_DATAFDLG_HXX

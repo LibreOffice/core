@@ -2516,7 +2516,7 @@ void Edit::UpdateData()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Edit, ImplUpdateDataHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(Edit, ImplUpdateDataHdl)
 {
     UpdateData();
     return 0;

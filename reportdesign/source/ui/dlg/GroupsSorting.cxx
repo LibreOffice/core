@@ -409,14 +409,14 @@ IMPL_LINK( OFieldExpressionControl, CBChangeHdl, ComboBox*, /*pComboBox*/ )
     return 0L;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK(OFieldExpressionControl, AsynchActivate, void*, EMPTYARG)
+IMPL_LINK_NOARG(OFieldExpressionControl, AsynchActivate)
 {
     ActivateCell();
     return 0L;
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(OFieldExpressionControl, AsynchDeactivate, void*, EMPTYARG)
+IMPL_LINK_NOARG(OFieldExpressionControl, AsynchDeactivate)
 {
     DeactivateCell();
     return 0L;

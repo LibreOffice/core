@@ -128,7 +128,7 @@ DataEditor::~DataEditor()
 }
 
 // react on click (or keypress) on toolbar icon
-IMPL_LINK( DataEditor, ToolboxHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DataEditor, ToolboxHdl)
 {
     switch( m_aTbxData.GetCurItemId() )
     {
@@ -159,7 +159,7 @@ IMPL_LINK( DataEditor, ToolboxHdl, void *, EMPTYARG )
 }
 
 // refresh toolbar icons according to currently selected cell in brwose box
-IMPL_LINK( DataEditor, BrowserCursorMovedHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(DataEditor, BrowserCursorMovedHdl)
 {
     if( m_bReadOnly )
         return 0;
@@ -196,7 +196,7 @@ void DataEditor::SetReadOnly( bool bReadOnly )
     m_apBrwData->SetReadOnly( m_bReadOnly );
 }
 
-IMPL_LINK( DataEditor, MiscHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(DataEditor, MiscHdl)
 {
     SvtMiscOptions aMiscOptions;
     sal_Int16 nStyle( aMiscOptions.GetToolboxStyle() );
@@ -206,7 +206,7 @@ IMPL_LINK( DataEditor, MiscHdl, void*, EMPTYARG )
     return 0L;
 }
 
-IMPL_LINK( DataEditor, CellModified, void*, EMPTYARG )
+IMPL_LINK_NOARG(DataEditor, CellModified)
 {
     return 0;
 }

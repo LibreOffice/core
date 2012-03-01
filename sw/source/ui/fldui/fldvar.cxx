@@ -192,7 +192,7 @@ void SwFldVarPage::Reset(const SfxItemSet& )
     }
 }
 
-IMPL_LINK( SwFldVarPage, TypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldVarPage, TypeHdl)
 {
     // save old ListBoxPos
     const sal_uInt16 nOld = GetTypeSel();
@@ -824,7 +824,7 @@ sal_uInt16 SwFldVarPage::FillFormatLB(sal_uInt16 nTypeId)
 /*--------------------------------------------------------------------
     Description: Modify
  --------------------------------------------------------------------*/
-IMPL_LINK( SwFldVarPage, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldVarPage, ModifyHdl)
 {
     String sValue(aValueED.GetText());
     sal_Bool bHasValue = sValue.Len() != 0;
@@ -1098,7 +1098,7 @@ IMPL_LINK( SwFldVarPage, TBClickHdl, ToolBox *, pBox )
     return sal_True;
 }
 
-IMPL_LINK( SwFldVarPage, ChapterHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldVarPage, ChapterHdl)
 {
     sal_Bool bEnable = aChapterLevelLB.GetSelectEntryPos() != 0;
 
@@ -1109,7 +1109,7 @@ IMPL_LINK( SwFldVarPage, ChapterHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwFldVarPage, SeparatorHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldVarPage, SeparatorHdl)
 {
     sal_Bool bEnable = aSeparatorED.GetText().Len() != 0 ||
                     aChapterLevelLB.GetSelectEntryPos() == 0;

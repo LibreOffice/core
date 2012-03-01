@@ -1048,7 +1048,7 @@ void ScFunctionDockWin::ToggleFloatingMode()
     aTimer.Start();
 }
 
-IMPL_LINK( ScFunctionDockWin, TimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScFunctionDockWin, TimerHdl)
 {
     CheckAlignment(eSfxOldAlignment,eSfxNewAlignment);
     SetSize();

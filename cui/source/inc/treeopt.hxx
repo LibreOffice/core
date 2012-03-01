@@ -199,9 +199,9 @@ private:
 
 protected:
     DECL_LINK(ExpandedHdl_Impl, SvTreeListBox* );
-    DECL_LINK(ShowPageHdl_Impl, SvTreeListBox* );
-    DECL_LINK(BackHdl_Impl, PushButton* );
-    DECL_LINK( OKHdl_Impl, Button * );
+    DECL_LINK(ShowPageHdl_Impl, void *);
+    DECL_LINK(BackHdl_Impl, void *);
+    DECL_LINK(OKHdl_Impl, void *);
     DECL_LINK( HintHdl_Impl, Timer * );
     void SelectHdl_Impl();
 

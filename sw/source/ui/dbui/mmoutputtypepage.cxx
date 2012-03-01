@@ -88,7 +88,7 @@ SwMailMergeOutputTypePage::~SwMailMergeOutputTypePage()
 {
 }
 
-IMPL_LINK( SwMailMergeOutputTypePage, TypeHdl_Impl, RadioButton*, EMPTYARG )
+IMPL_LINK_NOARG(SwMailMergeOutputTypePage, TypeHdl_Impl)
 {
     bool bLetter = m_aLetterRB.IsChecked();
         m_aHintHeaderFI.SetText(bLetter ? m_sLetterHintHeader : m_sMailHintHeader);

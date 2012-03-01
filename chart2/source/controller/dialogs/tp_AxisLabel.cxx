@@ -303,7 +303,7 @@ void SchAxisLabelTabPage::SetComplexCategories( bool bComplexCategories )
 // event handling routines
 // -----------------------
 
-IMPL_LINK ( SchAxisLabelTabPage, ToggleShowLabel, void *, EMPTYARG )
+IMPL_LINK_NOARG(SchAxisLabelTabPage, ToggleShowLabel)
 {
     sal_Bool bEnable = ( aCbShowDescription.GetState() != STATE_NOCHECK );
 

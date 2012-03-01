@@ -64,8 +64,8 @@ class SwBreakDlg: public SvxStandardDialog
 
     DECL_LINK( ClickHdl, void * );
     DECL_LINK( PageNumHdl, CheckBox * );
-    DECL_LINK( PageNumModifyHdl, Edit * );
-    DECL_LINK( OkHdl, Button * );
+    DECL_LINK(PageNumModifyHdl, void *);
+    DECL_LINK(OkHdl, void *);
 
     void CheckEnable();
 

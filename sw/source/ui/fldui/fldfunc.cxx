@@ -189,7 +189,7 @@ void SwFldFuncPage::Reset(const SfxItemSet& )
     }
 }
 
-IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
 {
     // save old ListBoxPos
     const sal_uInt16 nOld = GetTypeSel();
@@ -410,7 +410,7 @@ IMPL_LINK( SwFldFuncPage, TypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwFldFuncPage, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldFuncPage, SelectHdl)
 {
     sal_uInt16 nTypeId = (sal_uInt16)(sal_uLong)aTypeLB.GetEntryData(GetTypeSel());
 
@@ -420,7 +420,7 @@ IMPL_LINK( SwFldFuncPage, SelectHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwFldFuncPage, InsertMacroHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldFuncPage, InsertMacroHdl)
 {
     SelectHdl();
     InsertHdl();
@@ -475,7 +475,7 @@ IMPL_LINK( SwFldFuncPage, ListModifyHdl, Control*, pControl)
     return 0;
 }
 
-IMPL_LINK( SwFldFuncPage, ListEnableHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(SwFldFuncPage, ListEnableHdl)
 {
     //enable "Add" button when text is in the Edit that's not already member of the box
     aListAddPB.Enable(aListItemED.GetText().Len() &&
@@ -673,7 +673,7 @@ void    SwFldFuncPage::FillUserData()
     SetUserData(sData);
 }
 
-IMPL_LINK( SwFldFuncPage, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldFuncPage, ModifyHdl)
 {
     String aName(aNameED.GetText());
     const sal_uInt16 nLen = aName.Len();

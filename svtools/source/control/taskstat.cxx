@@ -158,7 +158,7 @@ TaskStatusBar::~TaskStatusBar()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( TaskStatusBar, ImplTimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(TaskStatusBar, ImplTimerHdl)
 {
     sal_Bool bUpdate = ImplUpdateClock();
     if ( ImplUpdateFlashItems() )

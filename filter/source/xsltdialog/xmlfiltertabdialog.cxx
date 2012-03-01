@@ -336,7 +336,7 @@ filter_info_impl* XMLFilterTabDialog::getNewFilterInfo() const
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( XMLFilterTabDialog, OkHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(XMLFilterTabDialog, OkHdl)
 {
     if( onOk() )
         EndDialog(1);

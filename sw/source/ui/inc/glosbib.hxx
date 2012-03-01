@@ -97,10 +97,10 @@ class SwGlossaryGroupDlg : public SvxStandardDialog
 protected:
     virtual void Apply();
     DECL_LINK( SelectHdl, SvTabListBox* );
-    DECL_LINK( NewHdl, Button* );
+    DECL_LINK(NewHdl, void *);
     DECL_LINK( DeleteHdl, Button*  );
-    DECL_LINK( ModifyHdl, Edit* );
-    DECL_LINK( RenameHdl, Button*  );
+    DECL_LINK(ModifyHdl, void *);
+    DECL_LINK(RenameHdl, void *);
 
 public:
     SwGlossaryGroupDlg(Window * pParent,

@@ -74,9 +74,9 @@ private:
     FixedText       aLineDistLbl;
     MetricField     aLineDistEdit;
 
-    DECL_LINK( HeightPage, Button * );
-    DECL_LINK( HeightMetric, Button * );
-    DECL_LINK( HeightModify, MetricField * );
+    DECL_LINK(HeightPage, void *);
+    DECL_LINK(HeightMetric, void *);
+    DECL_LINK(HeightModify, void *);
     DECL_LINK( LineWidthChanged_Impl, void * );
     DECL_LINK( LineColorSelected_Impl, void * );
 

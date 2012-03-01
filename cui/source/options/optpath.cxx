@@ -400,7 +400,7 @@ void SvxPathTabPage::FillUserData()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPathTabPage, PathSelect_Impl, svx::OptHeaderTabListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPathTabPage, PathSelect_Impl)
 {
     sal_uInt16 nSelCount = 0;
     SvLBoxEntry* pEntry = pPathBox->FirstSelected();
@@ -423,7 +423,7 @@ IMPL_LINK( SvxPathTabPage, PathSelect_Impl, svx::OptHeaderTabListBox *, EMPTYARG
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPathTabPage, StandardHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPathTabPage, StandardHdl_Impl)
 {
     SvLBoxEntry* pEntry = pPathBox->FirstSelected();
     while ( pEntry )
@@ -544,7 +544,7 @@ void SvxPathTabPage::ChangeCurrentEntry( const String& _rFolder )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxPathTabPage, PathHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvxPathTabPage, PathHdl_Impl)
 {
     SvLBoxEntry* pEntry = pPathBox->GetCurEntry();
     sal_uInt16 nPos = ( pEntry != NULL ) ? ( (PathUserData_Impl*)pEntry->GetUserData() )->nRealId : 0;

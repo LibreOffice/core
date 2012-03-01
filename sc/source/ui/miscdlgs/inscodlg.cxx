@@ -317,14 +317,14 @@ void ScInsertContentsDlg::SetCellShiftDisabled( int nDisable )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScInsertContentsDlg, InsAllHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScInsertContentsDlg, InsAllHdl)
 {
     DisableChecks( aBtnInsAll.IsChecked() );
 
     return 0;
 }
 
-IMPL_LINK( ScInsertContentsDlg, LinkBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ScInsertContentsDlg, LinkBtnHdl)
 {
     TestModes();
 

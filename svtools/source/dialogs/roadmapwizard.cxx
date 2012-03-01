@@ -533,7 +533,7 @@ namespace svt
     }
 
     //--------------------------------------------------------------------
-    IMPL_LINK( RoadmapWizard, OnRoadmapItemSelected, void*, EMPTYARG )
+    IMPL_LINK_NOARG(RoadmapWizard, OnRoadmapItemSelected)
     {
         DBG_CHKTHIS( RoadmapWizard, CheckInvariants );
 

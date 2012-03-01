@@ -259,7 +259,7 @@ IMPL_LINK_INLINE_START( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioBut
 }
 IMPL_LINK_INLINE_END( SvBaseLinksDlg, ManualClickHdl, RadioButton *, pRadioButton )
 
-IMPL_LINK( SvBaseLinksDlg, UpdateNowClickHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvBaseLinksDlg, UpdateNowClickHdl)
 {
     SvTabListBox& rListBox = Links();
     sal_uInt16 nSelCnt = (sal_uInt16)rListBox.GetSelectionCount();

@@ -68,7 +68,7 @@ class SwGreetingsHandler
 
     SwMailMergeWizard*  m_pWizard;
 
-    DECL_LINK(IndividualHdl_Impl, CheckBox*);
+    DECL_LINK(IndividualHdl_Impl, void *);
     DECL_LINK(GreetingHdl_Impl, PushButton*);
 
     void    Contains(sal_Bool bContainsGreeting);
@@ -112,7 +112,7 @@ class SwMailMergeGreetingsPage : public svt::OWizardPage,
 
     DECL_LINK(ContainsHdl_Impl, CheckBox*);
     DECL_LINK(InsertDataHdl_Impl, ImageButton*);
-    DECL_LINK(GreetingSelectHdl_Impl, ListBox*);
+    DECL_LINK(GreetingSelectHdl_Impl, void *);
     DECL_LINK(AssignHdl_Impl, PushButton*);
 
     virtual void    UpdatePreview();
@@ -156,7 +156,7 @@ class SwMailBodyDialog : public SfxModalDialog, public SwGreetingsHandler
     HelpButton          m_aHelp;
 
     DECL_LINK(ContainsHdl_Impl, CheckBox*);
-    DECL_LINK(OKHdl, PushButton*);
+    DECL_LINK(OKHdl, void *);
 public:
     SwMailBodyDialog(Window* pParent, SwMailMergeWizard* pWizard);
     ~SwMailBodyDialog();

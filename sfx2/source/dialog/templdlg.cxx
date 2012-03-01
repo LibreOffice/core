@@ -332,7 +332,7 @@ sal_Int8 DropListBox_Impl::ExecuteDrop( const ExecuteDropEvent& rEvt )
 }
 
 
-IMPL_LINK( DropListBox_Impl, OnAsyncExecuteDrop, SvLBoxEntry*, EMPTYARG )
+IMPL_LINK_NOARG(DropListBox_Impl, OnAsyncExecuteDrop)
 {
     pDialog->ActionSelect( SID_STYLE_NEW_BY_EXAMPLE );
     return 0;

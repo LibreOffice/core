@@ -2486,7 +2486,7 @@ void SbaXDataBrowserController::CellDeactivated()
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( SbaXDataBrowserController, OnClipboardChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(SbaXDataBrowserController, OnClipboardChanged)
 {
     SolarMutexGuard aGuard;
     return OnInvalidateClipboard( NULL );
@@ -2657,7 +2657,7 @@ IMPL_LINK(SbaXDataBrowserController, OnCanceledNotFound, FmFoundRecordInformatio
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK(SbaXDataBrowserController, OnAsyncGetCellFocus, void*, EMPTYARG)
+IMPL_LINK_NOARG(SbaXDataBrowserController, OnAsyncGetCellFocus)
 {
     SbaGridControl* pVclGrid = getBrowserView() ? getBrowserView()->getVclControl() : NULL;
     // if we have a controller, but the window for the controller doesn't have the focus, we correct this

@@ -355,7 +355,7 @@ void SwLabPage::SetToBusinessCard()
     aTypeBox.SetPosPixel(aLBPos);
 };
 
-IMPL_LINK( SwLabPage, AddrHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwLabPage, AddrHdl)
 {
     String aWriting;
 
@@ -380,7 +380,7 @@ IMPL_LINK( SwLabPage, DatabaseHdl, ListBox *, pListBox )
     return 0;
 }
 
-IMPL_LINK( SwLabPage, FieldHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwLabPage, FieldHdl)
 {
     String aStr ( '<' );
     aStr += aDatabaseLB.GetSelectEntry();
@@ -398,14 +398,14 @@ IMPL_LINK( SwLabPage, FieldHdl, Button *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwLabPage, PageHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwLabPage, PageHdl)
 {
     aMakeBox.GetSelectHdl().Call( &aMakeBox );
     return 0;
 }
-IMPL_LINK_INLINE_END( SwLabPage, PageHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwLabPage, PageHdl)
 
-IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwLabPage, MakeHdl)
 {
     WaitObject aWait( GetParent() );
 
@@ -459,13 +459,13 @@ IMPL_LINK( SwLabPage, MakeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwLabPage, TypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwLabPage, TypeHdl)
 {
     DisplayFormat();
     aItem.aType = aTypeBox.GetSelectEntry();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwLabPage, TypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwLabPage, TypeHdl)
 
 void SwLabPage::DisplayFormat()
 {

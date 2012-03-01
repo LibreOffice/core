@@ -519,7 +519,7 @@ IMPL_LINK(AnnotationWindow, ScrollHdl, ScrollBar*, pScroll)
     return 0;
 }
 
-IMPL_LINK(AnnotationWindow, ModifyHdl, void*, EMPTYARG)
+IMPL_LINK_NOARG(AnnotationWindow, ModifyHdl)
 {
     return 0;
 }

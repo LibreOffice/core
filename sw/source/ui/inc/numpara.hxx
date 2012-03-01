@@ -67,9 +67,9 @@ class SwParagraphNumTabPage : public SfxTabPage
     sal_Bool                    bModified : 1;
     sal_Bool                    bCurNumrule : 1;
 
-    DECL_LINK( NewStartHdl_Impl, CheckBox* );
+    DECL_LINK(NewStartHdl_Impl, void *);
     DECL_LINK( StyleHdl_Impl, ListBox* );
-    DECL_LINK( LineCountHdl_Impl, CheckBox* );
+    DECL_LINK(LineCountHdl_Impl, void *);
 
 protected:
         SwParagraphNumTabPage(Window* pParent, const SfxItemSet& rSet );

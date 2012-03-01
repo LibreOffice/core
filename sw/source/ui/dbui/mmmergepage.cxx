@@ -76,14 +76,14 @@ SwMailMergeMergePage::~SwMailMergeMergePage()
 {
 }
 
-IMPL_LINK( SwMailMergeMergePage, EditDocumentHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailMergeMergePage, EditDocumentHdl_Impl)
 {
     m_pWizard->SetRestartPage(MM_MERGEPAGE);
     m_pWizard->EndDialog(RET_EDIT_RESULT_DOC);
     return 0;
 }
 
-IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailMergeMergePage, FindHdl_Impl)
 {
     SvxSearchItem aSearchItem( SID_SEARCH_ITEM );
 
@@ -105,7 +105,7 @@ IMPL_LINK( SwMailMergeMergePage, FindHdl_Impl, PushButton*, EMPTYARG)
     return 0;
 }
 
-IMPL_LINK( SwMailMergeMergePage, EnteredFindStringHdl_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwMailMergeMergePage, EnteredFindStringHdl_Impl)
 {
     m_aFindPB.GetClickHdl().Call( &m_aFindPB );
     return 0;

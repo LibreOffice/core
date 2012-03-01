@@ -456,7 +456,7 @@ sal_Bool SvxColorDockingWindow::Close()
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxColorDockingWindow, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxColorDockingWindow, SelectHdl)
 {
     SfxDispatcher* pDispatcher = GetBindings().GetDispatcher();
     sal_uInt16 nPos = aColorSet.GetSelectItemId();

@@ -1331,7 +1331,7 @@ IMPL_LINK( SvxLineTabPage, ChangeStartHdl_Impl, void *, p )
 //------------------------------------------------------------------------
 // #116827#
 
-IMPL_LINK( SvxLineTabPage, ChangeEdgeStyleHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineTabPage, ChangeEdgeStyleHdl_Impl)
 {
     ChangePreviewHdl_Impl( this );
 
@@ -1340,7 +1340,7 @@ IMPL_LINK( SvxLineTabPage, ChangeEdgeStyleHdl_Impl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineTabPage, ClickInvisibleHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineTabPage, ClickInvisibleHdl_Impl)
 {
     if( aLbLineStyle.GetSelectEntryPos() == 0 ) // unsichtbar
     {
@@ -1417,7 +1417,7 @@ IMPL_LINK( SvxLineTabPage, ChangeEndHdl_Impl, void *, p )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( SvxLineTabPage, ChangeTransparentHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxLineTabPage, ChangeTransparentHdl_Impl)
 {
     sal_uInt16 nVal = (sal_uInt16)aMtrTransparent.GetValue();
     XLineTransparenceItem aItem( nVal );

@@ -1010,7 +1010,7 @@ void    SwGlobalTree::ExcecuteContextMenuAction( sal_uInt16 nSelectedPopupEntry 
         bDeleteContentCopy = true;
 }
 
-IMPL_LINK( SwGlobalTree, Timeout, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SwGlobalTree, Timeout)
 {
     if(!HasFocus() && Update( sal_False ))
         Display();
@@ -1208,7 +1208,7 @@ void SwGlobalTree::OpenDoc(const SwGlblDocContent* pCont)
     }
 }
 
-IMPL_LINK(  SwGlobalTree, DoubleClickHdl, SwGlobalTree *, EMPTYARG )
+IMPL_LINK_NOARG( SwGlobalTree, DoubleClickHdl)
 {
     SvLBoxEntry* pEntry = GetCurEntry();
     SwGlblDocContent* pCont = (SwGlblDocContent*)pEntry->GetUserData();

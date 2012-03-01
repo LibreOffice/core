@@ -65,11 +65,11 @@ protected:
     Dialog*         pDialog;
 
     Timer           aScrollTimer;           // fuer Autoscrolling
-    DECL_LINK( ScrollHdl, Timer * );
+    DECL_LINK( ScrollHdl, void * );
     void ForceScroll(const Point& aPixPos);
 
     Timer           aDragTimer;             // fuer Drag&Drop
-    DECL_LINK( DragTimerHdl, Timer * );
+    DECL_LINK( DragTimerHdl, void * );
     DECL_LINK( DragHdl, void * );
     sal_Bool            bIsInDragMode;
     Point           aMDPos;                 // Position von MouseButtonDown

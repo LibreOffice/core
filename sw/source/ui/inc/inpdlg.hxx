@@ -64,7 +64,7 @@ class SwFldInputDlg: public SvxStandardDialog
     PushButton          aNextBT;
     HelpButton          aHelpBT;
 
-    DECL_LINK(NextHdl, PushButton*);
+    DECL_LINK(NextHdl, void *);
 public:
     SwFldInputDlg(  Window *pParent, SwWrtShell &rSh,
                     SwField* pField, sal_Bool bNextButton = sal_False );

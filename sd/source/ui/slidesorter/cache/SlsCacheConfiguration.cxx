@@ -166,7 +166,7 @@ Any CacheConfiguration::GetValue (const ::rtl::OUString& rName)
 
 
 
-IMPL_LINK(CacheConfiguration,TimerCallback, Timer*,EMPTYARG)
+IMPL_LINK_NOARG(CacheConfiguration, TimerCallback)
 {
     CacheConfigSharedPtr &rInstancePtr = theInstance::get();
     // Release out reference to the instance.

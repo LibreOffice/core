@@ -1447,7 +1447,7 @@ IMPL_LINK(BrowseBox,ScrollHdl,ScrollBar*,pBar)
 
 //-------------------------------------------------------------------
 
-IMPL_LINK( BrowseBox,EndScrollHdl,ScrollBar*, EMPTYARG )
+IMPL_LINK_NOARG(BrowseBox, EndScrollHdl)
 {
     DBG_CHKTHIS(BrowseBox,BrowseBoxCheckInvariants);
 

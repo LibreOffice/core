@@ -115,7 +115,7 @@ MacroWarning::~MacroWarning()
 {
 }
 
-IMPL_LINK( MacroWarning, ViewSignsBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl)
 {
     DBG_ASSERT( mxCert.is(), "*MacroWarning::ViewSignsBtnHdl(): no certificate set!" );
 
@@ -125,7 +125,7 @@ IMPL_LINK( MacroWarning, ViewSignsBtnHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( MacroWarning, EnableBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl)
 {
     if( mbSignedMode && maAlwaysTrustCB.IsChecked() )
     {   // insert path into trusted path list

@@ -436,7 +436,7 @@ protected:
     void lockRebuilds();
     void unlockRebuilds();
 
-    DECL_LINK( onTimerHdl, Timer * );
+    DECL_LINK(onTimerHdl, void *);
 
     virtual void implRebuild();
 

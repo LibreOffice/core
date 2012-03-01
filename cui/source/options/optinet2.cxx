@@ -691,7 +691,7 @@ SvxSecurityTabPage::~SvxSecurityTabPage()
     delete mpSecOptDlg;
 }
 
-IMPL_LINK( SvxSecurityTabPage, SecurityOptionsHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, SecurityOptionsHdl)
 {
     if ( !mpSecOptDlg )
         mpSecOptDlg = new svx::SecurityOptionsDialog( this, mpSecOptions );
@@ -699,7 +699,7 @@ IMPL_LINK( SvxSecurityTabPage, SecurityOptionsHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxSecurityTabPage, SavePasswordHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, SavePasswordHdl)
 {
     try
     {
@@ -756,7 +756,7 @@ IMPL_LINK( SvxSecurityTabPage, SavePasswordHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxSecurityTabPage, MasterPasswordHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordHdl)
 {
     try
     {
@@ -774,7 +774,7 @@ IMPL_LINK( SvxSecurityTabPage, MasterPasswordHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxSecurityTabPage, MasterPasswordCBHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, MasterPasswordCBHdl)
 {
     try
     {
@@ -820,7 +820,7 @@ IMPL_LINK( SvxSecurityTabPage, MasterPasswordCBHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxSecurityTabPage, ShowPasswordsHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, ShowPasswordsHdl)
 {
     try
     {
@@ -840,7 +840,7 @@ IMPL_LINK( SvxSecurityTabPage, ShowPasswordsHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxSecurityTabPage, MacroSecPBHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSecurityTabPage, MacroSecPBHdl)
 {
     try
     {

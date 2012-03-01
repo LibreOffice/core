@@ -473,7 +473,7 @@ IMPL_LINK( SwFldDBPage, TreeSelectHdl, SvTreeListBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SwFldDBPage, AddDBHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldDBPage, AddDBHdl)
 {
     String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
     if(sNewDB.Len())
@@ -486,7 +486,7 @@ IMPL_LINK( SwFldDBPage, AddDBHdl, PushButton *, EMPTYARG )
 /*--------------------------------------------------------------------
     Description: Modify
  --------------------------------------------------------------------*/
-IMPL_LINK( SwFldDBPage, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldDBPage, ModifyHdl)
 {
     CheckInsert();
     return 0;

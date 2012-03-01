@@ -270,7 +270,7 @@ void Cursor::ImplNew()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Cursor, ImplTimerHdl, AutoTimer*, EMPTYARG )
+IMPL_LINK_NOARG(Cursor, ImplTimerHdl)
 {
     if ( mpData->mbCurVisible )
         ImplRestore();

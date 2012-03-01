@@ -387,7 +387,7 @@ void SfxSecurityPage_Impl::Reset_Impl( const SfxItemSet & )
 }
 
 
-IMPL_LINK( SfxSecurityPage_Impl, RecordChangesCBToggleHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SfxSecurityPage_Impl, RecordChangesCBToggleHdl)
 {
     // when change recording gets disabled protection must be disabled as well
     if (!m_aRecordChangesCB.IsChecked())    // the new check state is already present, thus the '!'
@@ -437,7 +437,7 @@ IMPL_LINK( SfxSecurityPage_Impl, RecordChangesCBToggleHdl, void*, EMPTYARG )
 }
 
 
-IMPL_LINK( SfxSecurityPage_Impl, ChangeProtectionPBHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SfxSecurityPage_Impl, ChangeProtectionPBHdl)
 {
     if (m_eRedlingMode == RL_NONE)
         return 0;

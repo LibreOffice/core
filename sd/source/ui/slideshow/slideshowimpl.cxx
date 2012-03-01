@@ -1448,7 +1448,7 @@ void SlideshowImpl::endPresentation()
 
 // ---------------------------------------------------------
 
-IMPL_LINK( SlideshowImpl, endPresentationHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, endPresentationHdl)
 {
     mnEndShowEvent = 0;
 
@@ -1834,7 +1834,7 @@ void SlideshowImpl::startUpdateTimer()
     This is used to unfreeze user input that was disabled after
     slide change to skip input that was buffered during slide
     transition preperation */
-IMPL_LINK( SlideshowImpl, ReadyForNextInputHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, ReadyForNextInputHdl)
 {
     mbInputFreeze = false;
     return 0;
@@ -1846,7 +1846,7 @@ IMPL_LINK( SlideshowImpl, ReadyForNextInputHdl, Timer*, EMPTYARG )
     and not by using the timer, I will personaly punish this
     person seriously, even if this person is me.
 */
-IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, updateHdl)
 {
     mnUpdateEvent = 0;
 
@@ -1856,7 +1856,7 @@ IMPL_LINK( SlideshowImpl, updateHdl, Timer*, EMPTYARG )
 
 
 
-IMPL_LINK( SlideshowImpl, PostYieldListener, void*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, PostYieldListener)
 {
     // prevent me from deletion when recursing (App::Reschedule does)
     const rtl::Reference<SlideshowImpl> this_(this);
@@ -2162,7 +2162,7 @@ void SlideshowImpl::mouseButtonUp(const MouseEvent& rMEvt)
 
 // ---------------------------------------------------------
 
-IMPL_LINK( SlideshowImpl, ContextMenuHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, ContextMenuHdl)
 {
     mnContextMenuEvent = 0;
 
@@ -2764,7 +2764,7 @@ void SAL_CALL SlideshowImpl::deactivate() throw (RuntimeException)
 
 // -----------------------------------------------------------------------------
 
-IMPL_LINK( SlideshowImpl, deactivateHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SlideshowImpl, deactivateHdl)
 {
     if( mbActive && mxShow.is() )
     {

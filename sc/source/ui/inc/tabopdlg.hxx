@@ -105,7 +105,7 @@ private:
 
     DECL_LINK( BtnHdl, PushButton* );
     DECL_LINK( GetFocusHdl, Control* );
-    DECL_LINK( LoseFocusHdl, Control* );
+    DECL_LINK( LoseFocusHdl, void* );
 #endif  // _TABOPDLG_CXX
 };
 

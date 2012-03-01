@@ -262,7 +262,7 @@ private:
     FieldUnit           eFUnit;
 
 #ifdef _SVX_TPAREA_CXX
-    DECL_LINK( SelectDialogTypeHdl_Impl, ListBox * );
+    DECL_LINK(SelectDialogTypeHdl_Impl, void *);
     DECL_LINK( ClickInvisibleHdl_Impl, void * );
     DECL_LINK( ClickColorHdl_Impl, void * );
     DECL_LINK( ModifyColorHdl_Impl, void * );

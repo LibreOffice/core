@@ -158,7 +158,7 @@ namespace
         return nRet;
     }
     // -----------------------------------------------------------------------------
-    IMPL_LINK(OTablePreviewWindow, OnDisableInput, void*, EMPTYARG)
+    IMPL_LINK_NOARG(OTablePreviewWindow, OnDisableInput)
     {
         EnableInput(sal_False);
         return 0L;

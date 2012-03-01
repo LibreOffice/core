@@ -79,7 +79,7 @@ private:
     sal_uInt16              nMode;
 
     DECL_LINK( MacroSelectHdl, SvTreeListBox * );
-    DECL_LINK( MacroDoubleClickHdl, SvTreeListBox * );
+    DECL_LINK(MacroDoubleClickHdl, void *);
     DECL_LINK( BasicSelectHdl, SvTreeListBox * );
     DECL_LINK( EditModifyHdl, Edit * );
     DECL_LINK( ButtonHdl, Button * );

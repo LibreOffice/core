@@ -175,7 +175,7 @@ private:
     // #97680# --------------------
     std::vector< short > aContextBmpWidthVector;
 
-    DECL_LINK( EditTimerCall, Timer * );
+    DECL_LINK(EditTimerCall, void *);
 
     DECL_LINK( BeginDragHdl, void* );
     DECL_LINK( MyUserEvent,void*);
@@ -202,7 +202,7 @@ private:
     // ScrollBar-Handler
     DECL_LINK( ScrollUpDownHdl, ScrollBar * );
     DECL_LINK( ScrollLeftRightHdl, ScrollBar * );
-    DECL_LINK( EndScrollHdl, ScrollBar * );
+    DECL_LINK( EndScrollHdl, void * );
 
     void                SetNodeBmpYOffset( const Image& );
     void                SetNodeBmpTabDistance();

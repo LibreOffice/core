@@ -796,7 +796,7 @@ ScAppCfg::ScAppCfg() :
     aFormulaItem.SetCommitLink( LINK(this, ScAppCfg, FormulaCommitHdl) );
 }
 
-IMPL_LINK( ScAppCfg, LayoutCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAppCfg, LayoutCommitHdl)
 {
     Sequence<OUString> aNames = GetLayoutPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -828,7 +828,7 @@ IMPL_LINK( ScAppCfg, LayoutCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAppCfg, InputCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAppCfg, InputCommitHdl)
 {
     Sequence<OUString> aNames = GetInputPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -854,7 +854,7 @@ IMPL_LINK( ScAppCfg, InputCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAppCfg, RevisionCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAppCfg, RevisionCommitHdl)
 {
     Sequence<OUString> aNames = GetRevisionPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -883,7 +883,7 @@ IMPL_LINK( ScAppCfg, RevisionCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAppCfg, ContentCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAppCfg, ContentCommitHdl)
 {
     Sequence<OUString> aNames = GetContentPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -903,7 +903,7 @@ IMPL_LINK( ScAppCfg, ContentCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAppCfg, SortListCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAppCfg, SortListCommitHdl)
 {
     Sequence<OUString> aNames = GetSortListPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -923,7 +923,7 @@ IMPL_LINK( ScAppCfg, SortListCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAppCfg, MiscCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAppCfg, MiscCommitHdl)
 {
     Sequence<OUString> aNames = GetMiscPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -949,7 +949,7 @@ IMPL_LINK( ScAppCfg, MiscCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAppCfg, CompatCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAppCfg, CompatCommitHdl)
 {
     Sequence<OUString> aNames = GetCompatPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -968,7 +968,7 @@ IMPL_LINK( ScAppCfg, CompatCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAppCfg, FormulaCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAppCfg, FormulaCommitHdl)
 {
     Sequence<OUString> aNames = GetFormulaPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

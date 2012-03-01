@@ -535,7 +535,7 @@ void ViewOverlayManager::UpdateTags()
         mnUpdateTagsEvent = Application::PostUserEvent( LINK( this, ViewOverlayManager, UpdateTagsHdl ) );
 }
 
-IMPL_LINK(ViewOverlayManager,UpdateTagsHdl, void *, EMPTYARG)
+IMPL_LINK_NOARG(ViewOverlayManager, UpdateTagsHdl)
 {
     OSL_TRACE("ViewOverlayManager::UpdateTagsHdl");
 

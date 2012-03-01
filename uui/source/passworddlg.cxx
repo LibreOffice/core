@@ -167,7 +167,7 @@ PasswordDialog::PasswordDialog(
 }
 
 
-IMPL_LINK( PasswordDialog, OKHdl_Impl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(PasswordDialog, OKHdl_Impl)
 {
     bool bEDPasswdValid = aEDPassword.GetText().Len() >= nMinLen;
     bool bPasswdMismatch = aEDConfirmPassword.GetText() != aEDPassword.GetText();

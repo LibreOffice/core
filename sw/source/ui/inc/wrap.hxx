@@ -120,7 +120,7 @@ class SwWrapTabPage: public SfxTabPage
 
     DECL_LINK( RangeModifyHdl, MetricField * );
     DECL_LINK( WrapTypeHdl, ImageRadioButton * );
-    DECL_LINK( ContourHdl, CheckBox * );
+    DECL_LINK(ContourHdl, void *);
 
     using SfxTabPage::ActivatePage;
     using SfxTabPage::DeactivatePage;

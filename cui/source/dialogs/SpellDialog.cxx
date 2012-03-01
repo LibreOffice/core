@@ -648,7 +648,7 @@ String SpellDialog::getReplacementString() const
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SpellDialog, ChangeHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SpellDialog, ChangeHdl)
 {
     if(aSentenceED.IsUndoEditMode())
     {
@@ -670,7 +670,7 @@ IMPL_LINK( SpellDialog, ChangeHdl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SpellDialog, ChangeAllHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SpellDialog, ChangeAllHdl)
 {
     aSentenceED.UndoActionStart( SPELLUNDO_CHANGE_GROUP );
     String aString = getReplacementString();
@@ -746,7 +746,7 @@ IMPL_LINK( SpellDialog, IgnoreAllHdl, Button *, pButton )
 }
 
 //-----------------------------------------------------------------------
-IMPL_LINK( SpellDialog, UndoHdl, Button*, EMPTYARG )
+IMPL_LINK_NOARG(SpellDialog, UndoHdl)
 {
     aSentenceED.Undo();
     if(!aSentenceED.GetUndoActionCount())
@@ -814,7 +814,7 @@ void SpellDialog::Impl_Restore()
     aIgnorePB.SetText(aIgnoreOnceST);
 }
 
-IMPL_LINK( SpellDialog, IgnoreHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SpellDialog, IgnoreHdl)
 {
     if(aIgnorePB.GetText() == aResumeST)
     {
@@ -1086,7 +1086,7 @@ IMPL_LINK(SpellDialog, ModifyHdl, SentenceEditWindow_Impl*, pEd)
 };
 
 //-----------------------------------------------------------------------
-IMPL_LINK(SpellDialog, CancelHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SpellDialog, CancelHdl)
 {
     //apply changes and ignored text parts first - if there are any
     rParent.ApplyChangedSentence(aSentenceED.CreateSpellPortions(true), false);

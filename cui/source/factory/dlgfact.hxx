@@ -402,7 +402,7 @@ class AbstractSvxNameDialog_Impl :public AbstractSvxNameDialog
     virtual void    SetText( const XubString& rStr ) ;
 private:
     Link aCheckNameHdl;
-    DECL_LINK( CheckNameHdl, Window*);
+    DECL_LINK(CheckNameHdl, void *);
 };
 //for SvxNameDialog end
 
@@ -421,7 +421,7 @@ class AbstractSvxObjectNameDialog_Impl :public AbstractSvxObjectNameDialog
 
 private:
     Link aCheckNameHdl;
-    DECL_LINK(CheckNameHdl, Window*);
+    DECL_LINK(CheckNameHdl, void *);
 };
 
 class AbstractSvxObjectTitleDescDialog_Impl :public AbstractSvxObjectTitleDescDialog
@@ -565,8 +565,8 @@ class AbstractSvxPostItDialog_Impl :public AbstractSvxPostItDialog
 private:
     Link aNextHdl;
     Link aPrevHdl;
-    DECL_LINK( NextHdl, Window*);
-    DECL_LINK( PrevHdl, Window*);
+    DECL_LINK(NextHdl, void *);
+    DECL_LINK(PrevHdl, void *);
 };
 //add for SvxPostItDialog end
 

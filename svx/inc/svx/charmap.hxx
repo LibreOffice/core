@@ -130,7 +130,7 @@ private:
     void            InitSettings( sal_Bool bForeground, sal_Bool bBackground);
     // abstraction layers are: Unicode<->MapIndex<->Pixel
     Point           MapIndexToPixel( int) const;
-    DECL_LINK( VscrollHdl, ScrollBar* );
+    DECL_LINK(VscrollHdl, void *);
 };
 
 #endif

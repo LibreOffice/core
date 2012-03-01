@@ -166,7 +166,7 @@ private:
     Timer           aTimer;
     ScDocument*     pDoc;
 
-                    DECL_LINK( TimerHdl, Timer* );
+                    DECL_LINK(TimerHdl, void *);
 
                     // not implemented
     ScChartListenerCollection& operator=( const ScChartListenerCollection& );

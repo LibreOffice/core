@@ -110,7 +110,7 @@ InsertObjectDialog_Impl::InsertObjectDialog_Impl( Window * pParent, const ResId 
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvInsertOleDlg, DoubleClickHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvInsertOleDlg, DoubleClickHdl)
 {
     EndDialog( RET_OK );
     return 0;
@@ -119,7 +119,7 @@ IMPL_LINK_INLINE_END( SvInsertOleDlg, DoubleClickHdl, ListBox *, pListBox )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvInsertOleDlg, BrowseHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvInsertOleDlg, BrowseHdl)
 {
     Reference< XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory() );
     if( xFactory.is() )
@@ -162,7 +162,7 @@ IMPL_LINK( SvInsertOleDlg, BrowseHdl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvInsertOleDlg, RadioHdl, RadioButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvInsertOleDlg, RadioHdl)
 {
     if ( aRbNewObject.IsChecked() )
     {
@@ -396,7 +396,7 @@ uno::Reference< io::XInputStream > SvInsertOleDlg::GetIconIfIconified( ::rtl::OU
     return uno::Reference< io::XInputStream >();
 }
 
-IMPL_LINK( SvInsertPlugInDialog, BrowseHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SvInsertPlugInDialog, BrowseHdl)
 {
     Sequence< OUString > aFilterNames, aFilterTypes;
     void fillNetscapePluginFilters( Sequence< OUString >& rNames, Sequence< OUString >& rTypes );

@@ -374,7 +374,7 @@ SdrMediaObj* View::InsertMediaURL( const rtl::OUString& rMediaURL, sal_Int8& rAc
 |*
 \************************************************************************/
 
-IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(View, DropInsertFileHdl)
 {
     DBG_ASSERT( mpViewSh, "sd::View::DropInsertFileHdl(), I need a view shell to work!" );
     if( !mpViewSh )
@@ -566,7 +566,7 @@ IMPL_LINK( View, DropInsertFileHdl, Timer*, EMPTYARG )
 |*
 \************************************************************************/
 
-IMPL_LINK( View, DropErrorHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(View, DropErrorHdl)
 {
     InfoBox( mpViewSh ? mpViewSh->GetActiveWindow() : 0, String(SdResId(STR_ACTION_NOTPOSSIBLE) ) ).Execute();
     return 0;

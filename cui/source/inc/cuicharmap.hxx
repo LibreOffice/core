@@ -104,14 +104,14 @@ friend class SvxCharacterMap;
     sal_Bool            bOne;
     const SubsetMap* pSubsetMap;
 
-    DECL_LINK( OKHdl, OKButton* );
-    DECL_LINK( FontSelectHdl, ListBox* );
-    DECL_LINK( SubsetSelectHdl, ListBox* );
-    DECL_LINK( CharDoubleClickHdl, Control* pControl );
-    DECL_LINK( CharSelectHdl, Control* pControl );
-    DECL_LINK( CharHighlightHdl, Control* pControl );
-    DECL_LINK( CharPreSelectHdl, Control* pControl );
-    DECL_LINK( DeleteHdl, PushButton* pBtn );
+    DECL_LINK(OKHdl, void *);
+    DECL_LINK(FontSelectHdl, void *);
+    DECL_LINK(SubsetSelectHdl, void *);
+    DECL_LINK(CharDoubleClickHdl, void *);
+    DECL_LINK(CharSelectHdl, void *);
+    DECL_LINK(CharHighlightHdl, void *);
+    DECL_LINK(CharPreSelectHdl, void *);
+    DECL_LINK(DeleteHdl, void *);
 };
 
 class SvxCharacterMap : public SfxModalDialog

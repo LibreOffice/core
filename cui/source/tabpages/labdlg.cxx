@@ -498,12 +498,12 @@ IMPL_LINK( SvxCaptionTabPage, LineOptHdl_Impl, Button *, pButton )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxCaptionTabPage, SelectCaptTypeHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 {
     SetupType_Impl( aCT_CAPTTYPE.GetSelectItemId() );
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxCaptionTabPage, SelectCaptTypeHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxCaptionTabPage, SelectCaptTypeHdl_Impl)
 
 //------------------------------------------------------------------------
 

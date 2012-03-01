@@ -209,7 +209,7 @@ void SdPresLayoutDlg::FillValueSet()
 |*
 \************************************************************************/
 
-IMPL_LINK(SdPresLayoutDlg, ClickLayoutHdl, void *, EMPTYARG)
+IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLayoutHdl)
 {
     EndDialog(RET_OK);
     return 0;
@@ -221,7 +221,7 @@ IMPL_LINK(SdPresLayoutDlg, ClickLayoutHdl, void *, EMPTYARG)
 |*
 \************************************************************************/
 
-IMPL_LINK(SdPresLayoutDlg, ClickLoadHdl, void *, EMPTYARG)
+IMPL_LINK_NOARG(SdPresLayoutDlg, ClickLoadHdl)
 {
     SfxNewFileDialog* pDlg = new SfxNewFileDialog(this, SFXWB_PREVIEW);
     pDlg->SetText(String(SdResId(STR_LOAD_PRESENTATION_LAYOUT)));

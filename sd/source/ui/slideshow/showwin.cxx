@@ -652,7 +652,7 @@ IMPL_LINK( ShowWindow, PauseTimeoutHdl, Timer*, pTimer )
     return 0L;
 }
 
-IMPL_LINK( ShowWindow, MouseTimeoutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ShowWindow, MouseTimeoutHdl)
 {
     if( mbMouseCursorHidden )
     {

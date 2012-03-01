@@ -449,7 +449,7 @@ SfxDialogExecutor_Impl::SfxDialogExecutor_Impl( SfxViewShell* pViewSh, PrinterSe
 
 //--------------------------------------------------------------------
 
-IMPL_LINK( SfxDialogExecutor_Impl, Execute, void *, EMPTYARG )
+IMPL_LINK_NOARG(SfxDialogExecutor_Impl, Execute)
 {
     // Options noted locally
     if ( !_pOptions )

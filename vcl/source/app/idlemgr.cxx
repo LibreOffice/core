@@ -120,7 +120,7 @@ void ImplIdleMgr::RemoveIdleHdl( const Link& rLink )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ImplIdleMgr, TimeoutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ImplIdleMgr, TimeoutHdl)
 {
     for ( size_t i = 0; i < mpIdleList->size(); ++i ) {
         ImplIdleData* pIdleData = (*mpIdleList)[ i ];

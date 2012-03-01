@@ -487,10 +487,10 @@ private:
     sal_Bool            bIgnoreFirstMove;
     sal_Bool            bKeyInput;
 
-                    DECL_LINK( PopupEnd, FloatingWindow* );
+                    DECL_LINK(PopupEnd, void *);
                     DECL_LINK( HighlightChanged, Timer* );
-                    DECL_LINK( SubmenuClose, Timer* );
-                    DECL_LINK( AutoScroll, Timer* );
+                    DECL_LINK(SubmenuClose, void *);
+                    DECL_LINK(AutoScroll, void *);
                     DECL_LINK( ShowHideListener, VclWindowEvent* );
 
     void            StateChanged( StateChangedType nType );
@@ -702,9 +702,9 @@ private:
 
     void            ImplInitStyleSettings();
 
-                    DECL_LINK( CloserHdl, PushButton* );
-                    DECL_LINK( FloatHdl, PushButton* );
-                    DECL_LINK( HideHdl, PushButton* );
+                    DECL_LINK(CloserHdl, void *);
+                    DECL_LINK(FloatHdl, void *);
+                    DECL_LINK(HideHdl, void *);
                     DECL_LINK( ToolboxEventHdl, VclWindowEvent* );
                     DECL_LINK( ShowHideListener, VclWindowEvent* );
 
@@ -2990,7 +2990,7 @@ void Menu::ImplCallHighlight( sal_uInt16 nHighlightedItem )
     }
 }
 
-IMPL_LINK( Menu, ImplCallSelect, Menu*, EMPTYARG )
+IMPL_LINK_NOARG(Menu, ImplCallSelect)
 {
     nEventId = 0;
     Select();
@@ -4122,7 +4122,7 @@ void MenuFloatingWindow::ImplHighlightItem( const MouseEvent& rMEvt, sal_Bool bM
     }
 }
 
-IMPL_LINK( MenuFloatingWindow, PopupEnd, FloatingWindow*, EMPTYARG )
+IMPL_LINK_NOARG(MenuFloatingWindow, PopupEnd)
 {
     // "this" will be deleted before the end of this method!
     Menu* pM = pMenu;
@@ -4171,7 +4171,7 @@ IMPL_LINK( MenuFloatingWindow, PopupEnd, FloatingWindow*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( MenuFloatingWindow, AutoScroll, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(MenuFloatingWindow, AutoScroll)
 {
     ImplScroll( GetPointerPosPixel() );
     return 1;
@@ -4240,7 +4240,7 @@ IMPL_LINK( MenuFloatingWindow, HighlightChanged, Timer*, pTimer )
     return 0;
 }
 
-IMPL_LINK( MenuFloatingWindow, SubmenuClose, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(MenuFloatingWindow, SubmenuClose)
 {
     if( pMenu && pMenu->pStartedFrom )
     {
@@ -5221,7 +5221,7 @@ Size MenuBarWindow::MinCloseButtonSize()
     return aCloser.getMinSize();
 }
 
-IMPL_LINK( MenuBarWindow, CloserHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(MenuBarWindow, CloserHdl)
 {
     if( ! pMenu )
         return 0;
@@ -5284,12 +5284,12 @@ IMPL_LINK( MenuBarWindow, ShowHideListener, VclWindowEvent*, pEvent )
     return 0;
 }
 
-IMPL_LINK( MenuBarWindow, FloatHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(MenuBarWindow, FloatHdl)
 {
     return pMenu ? ((MenuBar*)pMenu)->GetFloatButtonClickHdl().Call( pMenu ) : 0;
 }
 
-IMPL_LINK( MenuBarWindow, HideHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(MenuBarWindow, HideHdl)
 {
     return pMenu ? ((MenuBar*)pMenu)->GetHideButtonClickHdl().Call( pMenu ) : 0;
 }

@@ -118,7 +118,7 @@ void MacroWarning::SetDocumentURL( const String& rDocURL )
     maDocNameFI.SetText( rDocURL );
 }
 
-IMPL_LINK( MacroWarning, ViewSignsBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroWarning, ViewSignsBtnHdl)
 {
     DBG_ASSERT( mxCert.is(), "*MacroWarning::ViewSignsBtnHdl(): no certificate set!" );
 
@@ -137,7 +137,7 @@ IMPL_LINK( MacroWarning, ViewSignsBtnHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( MacroWarning, EnableBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroWarning, EnableBtnHdl)
 {
     if( mbSignedMode && maAlwaysTrustCB.IsChecked() )
     {   // insert path into trusted path list
@@ -164,13 +164,13 @@ IMPL_LINK( MacroWarning, EnableBtnHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( MacroWarning, DisableBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroWarning, DisableBtnHdl)
 {
     EndDialog( RET_CANCEL );
     return 0;
 }
 
-IMPL_LINK( MacroWarning, AlwaysTrustCheckHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(MacroWarning, AlwaysTrustCheckHdl)
 {
     bool bEnable = ( mnActSecLevel < 2 || maAlwaysTrustCB.IsChecked() );
     maEnableBtn.Enable( bEnable );

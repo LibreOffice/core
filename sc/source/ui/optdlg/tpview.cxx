@@ -655,7 +655,7 @@ int ScTpLayoutOptions::DeactivatePage( SfxItemSet* pSetP )
     return SfxTabPage::LEAVE_PAGE;
 }
 
-IMPL_LINK(ScTpLayoutOptions, MetricHdl, ListBox*, EMPTYARG)
+IMPL_LINK_NOARG(ScTpLayoutOptions, MetricHdl)
 {
     const sal_uInt16 nMPos = aUnitLB.GetSelectEntryPos();
     if(nMPos != USHRT_MAX)

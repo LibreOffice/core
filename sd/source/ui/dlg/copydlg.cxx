@@ -163,7 +163,7 @@ CopyDlg::~CopyDlg()
 |*
 \************************************************************************/
 
-IMPL_LINK( CopyDlg, Reset, void*, EMPTYARG )
+IMPL_LINK_NOARG(CopyDlg, Reset)
 {
     const SfxPoolItem* pPoolItem = NULL;
     String aStr( GetExtraData() );
@@ -285,7 +285,7 @@ void CopyDlg::GetAttr( SfxItemSet& rOutAttrs )
 |*
 \************************************************************************/
 
-IMPL_LINK( CopyDlg, SelectColorHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(CopyDlg, SelectColorHdl)
 {
     sal_uInt16 nPos = maLbStartColor.GetSelectEntryPos();
 
@@ -303,7 +303,7 @@ IMPL_LINK( CopyDlg, SelectColorHdl, void *, EMPTYARG )
 |* Setzt Werte der Selektion
 \************************************************************************/
 
-IMPL_LINK( CopyDlg, SetViewData, void*, EMPTYARG )
+IMPL_LINK_NOARG(CopyDlg, SetViewData)
 {
     Rectangle aRect = mpView->GetAllMarkedRect();
 
@@ -327,7 +327,7 @@ IMPL_LINK( CopyDlg, SetViewData, void*, EMPTYARG )
 |* Setzt Werte auf Standard
 \************************************************************************/
 
-IMPL_LINK( CopyDlg, SetDefault, void*, EMPTYARG )
+IMPL_LINK_NOARG(CopyDlg, SetDefault)
 {
     maNumFldCopies.SetValue( 1L );
 

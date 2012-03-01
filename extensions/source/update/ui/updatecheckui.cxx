@@ -152,11 +152,11 @@ class UpdateCheckUI : public ::cppu::WeakImplHelper3
     sal_uInt16              mnIconID;
 
 private:
-                    DECL_LINK( ClickHdl, sal_uInt16* );
+                    DECL_LINK(ClickHdl, void *);
                     DECL_LINK( HighlightHdl, MenuBar::MenuBarButtonCallbackArg* );
-                    DECL_LINK( WaitTimeOutHdl, Timer* );
-                    DECL_LINK( TimeOutHdl, Timer* );
-                    DECL_LINK( UserEventHdl, UpdateCheckUI* );
+                    DECL_LINK(WaitTimeOutHdl, void *);
+                    DECL_LINK(TimeOutHdl, void *);
+                    DECL_LINK(UserEventHdl, void *);
                     DECL_LINK( WindowEventHdl, VclWindowEvent* );
                     DECL_LINK( ApplicationEventHdl, VclSimpleEvent* );
 
@@ -633,7 +633,7 @@ void UpdateCheckUI::RemoveBubbleWindow( bool bRemoveIcon )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( UpdateCheckUI, ClickHdl, sal_uInt16*, EMPTYARG )
+IMPL_LINK_NOARG(UpdateCheckUI, ClickHdl)
 {
     SolarMutexGuard aGuard;
 
@@ -667,7 +667,7 @@ IMPL_LINK( UpdateCheckUI, HighlightHdl, MenuBar::MenuBarButtonCallbackArg*, pDat
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( UpdateCheckUI, WaitTimeOutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(UpdateCheckUI, WaitTimeOutHdl)
 {
     SolarMutexGuard aGuard;
 
@@ -682,7 +682,7 @@ IMPL_LINK( UpdateCheckUI, WaitTimeOutHdl, Timer*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( UpdateCheckUI, TimeOutHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(UpdateCheckUI, TimeOutHdl)
 {
     RemoveBubbleWindow( false );
 
@@ -690,7 +690,7 @@ IMPL_LINK( UpdateCheckUI, TimeOutHdl, Timer*, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( UpdateCheckUI, UserEventHdl, UpdateCheckUI*, EMPTYARG )
+IMPL_LINK_NOARG(UpdateCheckUI, UserEventHdl)
 {
     SolarMutexGuard aGuard;
 

@@ -1894,7 +1894,7 @@ void lcl_CheckNeedsRepaint( ScDocShell* pDocShell )
     }
 }
 
-IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScModule, IdleHandler)
 {
     if ( Application::AnyInput( VCL_INPUT_MOUSEANDKEYBOARD ) )
     {
@@ -1949,7 +1949,7 @@ IMPL_LINK( ScModule, IdleHandler, Timer*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScModule, SpellTimerHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(ScModule, SpellTimerHdl)
 {
     if ( Application::AnyInput( VCL_INPUT_KEYBOARD ) )
     {

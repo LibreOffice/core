@@ -197,7 +197,7 @@ IMPL_LINK( ScAutoFormatDlg, CloseHdl, PushButton *, pBtn )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( ScAutoFormatDlg, DblClkHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScAutoFormatDlg, DblClkHdl)
 {
     if ( bCoreDataChanged )
         ScGlobal::GetOrCreateAutoFormat()->Save();
@@ -205,7 +205,7 @@ IMPL_LINK_INLINE_START( ScAutoFormatDlg, DblClkHdl, void *, EMPTYARG )
     EndDialog( RET_OK );
     return 0;
 }
-IMPL_LINK_INLINE_END( ScAutoFormatDlg, DblClkHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScAutoFormatDlg, DblClkHdl)
 
 //------------------------------------------------------------------------
 
@@ -240,7 +240,7 @@ IMPL_LINK( ScAutoFormatDlg, CheckHdl, Button *, pBtn )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAutoFormatDlg, AddHdl)
 {
     if ( !bFmtInserted && pSelFmtData )
     {
@@ -314,7 +314,7 @@ IMPL_LINK( ScAutoFormatDlg, AddHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAutoFormatDlg, RemoveHdl)
 {
     if ( (nIndex > 0) && (aLbFormat.GetEntryCount() > 0) )
     {
@@ -352,7 +352,7 @@ IMPL_LINK( ScAutoFormatDlg, RemoveHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAutoFormatDlg, RenameHdl)
 {
     sal_Bool bOk = false;
     while( !bOk )
@@ -439,7 +439,7 @@ IMPL_LINK( ScAutoFormatDlg, RenameHdl, void *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK( ScAutoFormatDlg, SelFmtHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScAutoFormatDlg, SelFmtHdl)
 {
     nIndex = aLbFormat.GetSelectEntryPos();
     UpdateChecks();

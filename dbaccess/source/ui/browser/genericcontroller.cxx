@@ -277,7 +277,7 @@ sal_Bool OGenericUnoController::Construct(Window* /*pParent*/)
     return sal_True;
 }
 //------------------------------------------------------------------------------
-IMPL_LINK(OGenericUnoController, OnAsyncInvalidateAll, void*, EMPTYARG)
+IMPL_LINK_NOARG(OGenericUnoController, OnAsyncInvalidateAll)
 {
     if ( !OGenericUnoController_Base::rBHelper.bInDispose && !OGenericUnoController_Base::rBHelper.bDisposed )
         InvalidateFeature_Impl();
@@ -1125,7 +1125,7 @@ void OGenericUnoController::closeTask()
     m_aAsyncCloseTask.Call();
 }
 // -----------------------------------------------------------------------------
-IMPL_LINK(OGenericUnoController, OnAsyncCloseTask, void*, EMPTYARG)
+IMPL_LINK_NOARG(OGenericUnoController, OnAsyncCloseTask)
 {
     if ( !OGenericUnoController_Base::rBHelper.bInDispose )
     {

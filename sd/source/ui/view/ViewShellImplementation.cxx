@@ -395,7 +395,7 @@ ViewShell::Implementation::ToolBarManagerLock::ToolBarManagerLock (
 
 
 
-IMPL_LINK(ViewShell::Implementation::ToolBarManagerLock,TimeoutCallback,Timer*,EMPTYARG)
+IMPL_LINK_NOARG(ViewShell::Implementation::ToolBarManagerLock, TimeoutCallback)
 {
     // If possible then release the lock now.  Otherwise start the timer
     // and try again later.

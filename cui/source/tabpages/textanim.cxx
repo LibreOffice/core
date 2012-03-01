@@ -532,7 +532,7 @@ SfxTabPage* SvxTextAnimationPage::Create( Window* pWindow,
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxTextAnimationPage, SelectEffectHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxTextAnimationPage, SelectEffectHdl_Impl)
 {
     sal_uInt16 nPos = aLbEffect.GetSelectEntryPos();
     if( nPos != LISTBOX_ENTRY_NOTFOUND )
@@ -630,7 +630,7 @@ IMPL_LINK( SvxTextAnimationPage, SelectEffectHdl_Impl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxTextAnimationPage, ClickEndlessHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickEndlessHdl_Impl)
 {
 
     if( eAniKind != SDRTEXTANI_SLIDE )
@@ -656,7 +656,7 @@ IMPL_LINK( SvxTextAnimationPage, ClickEndlessHdl_Impl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxTextAnimationPage, ClickAutoHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickAutoHdl_Impl)
 {
     TriState eState = aTsbAuto.GetState();
     if( eState != STATE_NOCHECK )
@@ -679,7 +679,7 @@ IMPL_LINK( SvxTextAnimationPage, ClickAutoHdl_Impl, void *, EMPTYARG )
 |*
 \************************************************************************/
 
-IMPL_LINK( SvxTextAnimationPage, ClickPixelHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxTextAnimationPage, ClickPixelHdl_Impl)
 {
     TriState eState = aTsbPixel.GetState();
     if( eState == STATE_CHECK )

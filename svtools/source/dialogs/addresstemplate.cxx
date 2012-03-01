@@ -1146,7 +1146,7 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    IMPL_LINK(AddressBookSourceDialog, OnDelayedInitialize, void*, EMPTYARG)
+    IMPL_LINK_NOARG(AddressBookSourceDialog, OnDelayedInitialize)
     {
         // load the initial data from the configuration
         loadConfiguration();
@@ -1191,7 +1191,7 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    IMPL_LINK(AddressBookSourceDialog, OnOkClicked, Button*, EMPTYARG)
+    IMPL_LINK_NOARG(AddressBookSourceDialog, OnOkClicked)
     {
         String sSelectedDS = lcl_getSelectedDataSource(  m_aDatasource );
         if ( m_pImpl->bWorkingPersistent )
@@ -1215,7 +1215,7 @@ void AssignmentPersistentData::Commit()
     }
 
     // -------------------------------------------------------------------
-    IMPL_LINK(AddressBookSourceDialog, OnAdministrateDatasources, void*, EMPTYARG)
+    IMPL_LINK_NOARG(AddressBookSourceDialog, OnAdministrateDatasources)
     {
         // collect some initial arguments for the dialog
         Sequence< Any > aArgs(1);

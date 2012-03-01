@@ -507,7 +507,7 @@ namespace dbp
     }
 
     //---------------------------------------------------------------------
-    IMPL_LINK(OLinkFieldsPage, OnSelectionModified, void*, EMPTYARG)
+    IMPL_LINK_NOARG(OLinkFieldsPage, OnSelectionModified)
     {
         implCheckFinish();
         return 0L;

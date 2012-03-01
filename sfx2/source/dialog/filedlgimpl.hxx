@@ -156,7 +156,7 @@ namespace sfx2
                                                       std::vector<rtl::OUString>&               rpURLList,
                                                       const SfxFilter*                    pFilter  );
 
-        DECL_LINK( TimeOutHdl_Impl, Timer* );
+        DECL_LINK(TimeOutHdl_Impl, void *);
         DECL_LINK( HandleEvent, FileDialogHelper* );
         DECL_LINK( InitControls, void* );
 

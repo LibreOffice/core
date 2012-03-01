@@ -497,7 +497,7 @@ void MacroChooser::CheckButtons()
 
 
 
-IMPL_LINK_INLINE_START( MacroChooser, MacroDoubleClickHdl, SvTreeListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(MacroChooser, MacroDoubleClickHdl)
 {
     StoreMacroDescription();
     if ( nMode == MACROCHOOSER_RECORDING )
@@ -510,7 +510,7 @@ IMPL_LINK_INLINE_START( MacroChooser, MacroDoubleClickHdl, SvTreeListBox *, EMPT
     EndDialog( MACRO_OK_RUN );
     return 0;
 }
-IMPL_LINK_INLINE_END( MacroChooser, MacroDoubleClickHdl, SvTreeListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(MacroChooser, MacroDoubleClickHdl)
 
 IMPL_LINK( MacroChooser, MacroSelectHdl, SvTreeListBox *, pBox )
 {

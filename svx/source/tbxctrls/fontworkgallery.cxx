@@ -253,7 +253,7 @@ void FontWorkGalleryDialog::insertSelectedFontwork()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FontWorkGalleryDialog, ClickOKHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(FontWorkGalleryDialog, ClickOKHdl)
 {
     insertSelectedFontwork();
     EndDialog( true );
@@ -262,7 +262,7 @@ IMPL_LINK( FontWorkGalleryDialog, ClickOKHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FontWorkGalleryDialog, DoubleClickFavoriteHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(FontWorkGalleryDialog, DoubleClickFavoriteHdl)
 {
     insertSelectedFontwork();
     EndDialog( true );
@@ -411,7 +411,7 @@ void FontWorkAlignmentWindow::DataChanged( const DataChangedEvent& rDCEvt )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FontWorkAlignmentWindow, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(FontWorkAlignmentWindow, SelectHdl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();
@@ -621,7 +621,7 @@ void SAL_CALL FontWorkCharacterSpacingWindow::statusChanged( const ::com::sun::s
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( FontWorkCharacterSpacingWindow, SelectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(FontWorkCharacterSpacingWindow, SelectHdl)
 {
     if ( IsInPopupMode() )
         EndPopupMode();

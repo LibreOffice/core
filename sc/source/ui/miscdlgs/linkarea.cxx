@@ -107,7 +107,7 @@ short ScLinkedAreaDlg::Execute()
 #define FILTERNAME_HTML  "HTML (StarCalc)"
 #define FILTERNAME_QUERY "calc_HTML_WebQuery"
 
-IMPL_LINK( ScLinkedAreaDlg, BrowseHdl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(ScLinkedAreaDlg, BrowseHdl)
 {
     if ( !pDocInserter )
         pDocInserter = new sfx2::DocumentInserter(
@@ -116,7 +116,7 @@ IMPL_LINK( ScLinkedAreaDlg, BrowseHdl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScLinkedAreaDlg, FileHdl, ComboBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScLinkedAreaDlg, FileHdl)
 {
     rtl::OUString aEntered = aCbUrl.GetURL();
     if (pSourceShell)
@@ -210,13 +210,13 @@ void ScLinkedAreaDlg::InitFromOldLink( const String& rFile, const String& rFilte
     UpdateEnable();
 }
 
-IMPL_LINK( ScLinkedAreaDlg, RangeHdl, MultiListBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScLinkedAreaDlg, RangeHdl)
 {
     UpdateEnable();
     return 0;
 }
 
-IMPL_LINK( ScLinkedAreaDlg, ReloadHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScLinkedAreaDlg, ReloadHdl)
 {
     UpdateEnable();
     return 0;

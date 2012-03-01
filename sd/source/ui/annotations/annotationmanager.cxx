@@ -851,7 +851,7 @@ void AnnotationManagerImpl::UpdateTags( bool bSynchron )
     }
 }
 
-IMPL_LINK(AnnotationManagerImpl,UpdateTagsHdl, void *, EMPTYARG)
+IMPL_LINK_NOARG(AnnotationManagerImpl, UpdateTagsHdl)
 {
     mnUpdateTagsEvent  = 0;
     DisposeTags();

@@ -58,7 +58,7 @@ public:
     void SetColumns(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexContainer>& xCols);
 
 protected:
-    DECL_LINK( OnClickedOk, Button* );
+    DECL_LINK(OnClickedOk, void *);
 };
 
 #endif // _SVX_SHOWCOLS_HXX

@@ -126,7 +126,7 @@ public:
 class VCLXFileControl : ::com::sun::star::awt::XTextComponent, public ::com::sun::star::awt::XTextLayoutConstrains, public VCLXWindow
 {
 protected:
-    DECL_LINK(      ModifyHdl, Edit* );
+    DECL_LINK(ModifyHdl, void *);
     TextListenerMultiplexer maTextListeners;
 
 public:

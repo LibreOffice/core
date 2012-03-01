@@ -114,7 +114,7 @@ private:
 
     AnimationId mnNextAnimationId;
 
-    DECL_LINK(TimeoutHandler, Timer*);
+    DECL_LINK(TimeoutHandler, void *);
 
     /** Execute one step of every active animation.
         @param nTime

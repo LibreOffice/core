@@ -170,7 +170,7 @@ sal_Bool SdInsertPagesObjsDlg::IsRemoveUnnessesaryMasterPages() const
 |*
 \************************************************************************/
 
-IMPL_LINK( SdInsertPagesObjsDlg, SelectObjectHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SdInsertPagesObjsDlg, SelectObjectHdl)
 {
     if( aLbTree.IsLinkableSelected() )
         aCbxLink.Enable();

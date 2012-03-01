@@ -687,7 +687,7 @@ IMPL_LINK( ScImportAsciiDlg, LbColTypeHdl, ListBox*, pListBox )
     return 0;
 }
 
-IMPL_LINK( ScImportAsciiDlg, UpdateTextHdl, ScCsvTableBox*, EMPTYARG )
+IMPL_LINK_NOARG(ScImportAsciiDlg, UpdateTextHdl)
 {
     sal_Int32 nBaseLine = maTableBox.GetFirstVisLine();
     sal_Int32 nRead = maTableBox.GetVisLineCount();

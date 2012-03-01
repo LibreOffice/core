@@ -40,7 +40,7 @@ class SwFldEditDlg : public SfxSingleTabDialog
     ImageButton aNextBT;
     PushButton  aAddressBT;
 
-    DECL_LINK( AddressHdl, PushButton *pBt = 0 );
+    DECL_LINK(AddressHdl, void *);
     DECL_LINK( NextPrevHdl, Button *pBt = 0 );
 
     void            Init();
@@ -51,7 +51,7 @@ public:
      SwFldEditDlg(SwView& rVw);
     ~SwFldEditDlg();
 
-    DECL_LINK( OKHdl, Button * );
+    DECL_LINK(OKHdl, void *);
 
     virtual short   Execute();
 

@@ -270,20 +270,20 @@ public:
     Image GetUiIconForCommand (const ::rtl::OUString& aCommandURL);
 
     DECL_LINK( StartScanHdl, void * );
-    DECL_LINK( SelectFileHdl, ListBox * );
+    DECL_LINK( SelectFileHdl, void * );
     DECL_LINK( SelectRegionHdl, ListBox * );
     DECL_LINK( UpdatePreviewHdl, void * );
     DECL_LINK( UpdatePageListHdl, void * );
     DECL_LINK( StartTypeHdl, RadioButton * );
-    DECL_LINK( SelectTemplateHdl, ListBox * );
-    DECL_LINK( NextPageHdl, PushButton * );
-    DECL_LINK( LastPageHdl, PushButton * );
-    DECL_LINK( PreviewFlagHdl, CheckBox * );
-    DECL_LINK( EffectPreviewHdl, Button * );
-    DECL_LINK( SelectLayoutHdl, ListBox * );
-    DECL_LINK( PageSelectHdl, Control * );
-    DECL_LINK( PresTypeHdl, RadioButton * );
-    DECL_LINK( UpdateUserDataHdl, Edit* );
+    DECL_LINK( SelectTemplateHdl, void * );
+    DECL_LINK( NextPageHdl, void * );
+    DECL_LINK( LastPageHdl, void * );
+    DECL_LINK( PreviewFlagHdl, void * );
+    DECL_LINK( EffectPreviewHdl, void * );
+    DECL_LINK( SelectLayoutHdl, void * );
+    DECL_LINK( PageSelectHdl, void * );
+    DECL_LINK( PresTypeHdl, void * );
+    DECL_LINK( UpdateUserDataHdl, void * );
     DECL_LINK( SelectEffectHdl, void* );
     DECL_LINK( OpenButtonHdl, Button * );
 
@@ -1203,7 +1203,7 @@ IMPL_LINK( AssistentDlgImpl, SelectRegionHdl, ListBox *, pLB )
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, SelectEffectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, SelectEffectHdl)
 {
     maEffectPrevTimer.Start();
     return 0;
@@ -1216,7 +1216,7 @@ IMPL_LINK( AssistentDlgImpl, OpenButtonHdl, Button*, pButton )
     return mpPage1OpenLB->GetDoubleClickHdl().Call(pButton);
 }
 
-IMPL_LINK( AssistentDlgImpl, EffectPreviewHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, EffectPreviewHdl)
 {
     if(mbPreview && xDocShell.Is() )
     {
@@ -1237,7 +1237,7 @@ IMPL_LINK( AssistentDlgImpl, EffectPreviewHdl, Button *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, PreviewFlagHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, PreviewFlagHdl)
 
 {
     if( maPreviewFlag.IsChecked() != mbPreview )
@@ -1248,7 +1248,7 @@ IMPL_LINK( AssistentDlgImpl, PreviewFlagHdl, CheckBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, SelectTemplateHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, SelectTemplateHdl)
 {
     SetStartType( ST_TEMPLATE );
     mpPage2Medium5RB->Check();
@@ -1257,20 +1257,20 @@ IMPL_LINK( AssistentDlgImpl, SelectTemplateHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, SelectLayoutHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, SelectLayoutHdl)
 {
     maPrevTimer.Start();
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, SelectFileHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, SelectFileHdl)
 {
     SetStartType( ST_OPEN );
     maPrevTimer.Start();
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, PageSelectHdl, Control *, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, PageSelectHdl)
 {
     sal_uInt16 nPage = mpPage5PageListCT->GetSelectedPage();
     if( mnShowPage != nPage )
@@ -1282,13 +1282,13 @@ IMPL_LINK( AssistentDlgImpl, PageSelectHdl, Control *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, UpdatePageListHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, UpdatePageListHdl)
 {
     UpdatePageList();
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, UpdatePreviewHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, UpdatePreviewHdl)
 {
     UpdatePreview( sal_True );
     return 0;
@@ -1318,7 +1318,7 @@ IMPL_LINK( AssistentDlgImpl, StartTypeHdl, RadioButton *, pButton )
 }
 
 
-IMPL_LINK( AssistentDlgImpl, NextPageHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, NextPageHdl)
 {
     // When changing from the first to the second page make sure that the
     // templates are present.
@@ -1332,7 +1332,7 @@ IMPL_LINK( AssistentDlgImpl, NextPageHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, LastPageHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, LastPageHdl)
 {
     LeavePage();
     maAssistentFunc.PreviousPage();
@@ -1340,7 +1340,7 @@ IMPL_LINK( AssistentDlgImpl, LastPageHdl, PushButton *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, PresTypeHdl, RadioButton*, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, PresTypeHdl)
 {
     if(maDocFile.Len() == 0)
       {
@@ -1356,7 +1356,7 @@ IMPL_LINK( AssistentDlgImpl, PresTypeHdl, RadioButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( AssistentDlgImpl, UpdateUserDataHdl, Edit*, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlgImpl, UpdateUserDataHdl)
 {
     mbUserDataDirty = sal_True;
     String aTopic = mpPage4AskTopicEDT->GetText();
@@ -1869,7 +1869,7 @@ AssistentDlg::AssistentDlg(Window* pParent, sal_Bool bAutoPilot) :
     FreeResource();
 }
 
-IMPL_LINK( AssistentDlg, FinishHdl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(AssistentDlg, FinishHdl)
 {
     if( GetStartType() == ST_OPEN )
     {

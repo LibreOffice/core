@@ -507,7 +507,7 @@ void DlgEditor::Paint( const Rectangle& rRect )
 }
 
 
-IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(DlgEditor, PaintTimeout)
 {
     if( !pDlgEdView )
         return 0;
@@ -618,7 +618,7 @@ IMPL_LINK( DlgEditor, PaintTimeout, Timer *, EMPTYARG )
 }
 
 
-IMPL_LINK( DlgEditor, MarkTimeout, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(DlgEditor, MarkTimeout)
 {
     BasicIDEShell* pIDEShell = BasicIDEGlobals::GetShell();
 

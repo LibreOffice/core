@@ -160,7 +160,7 @@ void ScMetricInputDlg::CalcPositions()
 //------------------------------------------------------------------------
 // Handler:
 
-IMPL_LINK( ScMetricInputDlg, SetDefValHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(ScMetricInputDlg, SetDefValHdl)
 {
     if ( aBtnDefVal.IsChecked() )
     {
@@ -174,12 +174,12 @@ IMPL_LINK( ScMetricInputDlg, SetDefValHdl, CheckBox *, EMPTYARG )
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( ScMetricInputDlg, ModifyHdl, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(ScMetricInputDlg, ModifyHdl)
 {
     aBtnDefVal.Check( nDefaultValue == aEdValue.GetValue() );
     return 0;
 }
-IMPL_LINK_INLINE_END( ScMetricInputDlg, ModifyHdl, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(ScMetricInputDlg, ModifyHdl)
 
 
 

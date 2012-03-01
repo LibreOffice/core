@@ -461,7 +461,7 @@ css::uno::Reference< css::util::XURLTransformer > AcceleratorExecute::impl_ts_ge
 }
 
 //-----------------------------------------------
-IMPL_LINK(AcceleratorExecute, impl_ts_asyncCallback, void*, EMPTYARG)
+IMPL_LINK_NOARG(AcceleratorExecute, impl_ts_asyncCallback)
 {
     // replaced by AsyncAccelExec!
     return 0;

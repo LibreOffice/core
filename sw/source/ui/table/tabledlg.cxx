@@ -1717,7 +1717,7 @@ void SwTextFlowPage::SetShell(SwWrtShell* pSh)
     }
 }
 
-IMPL_LINK( SwTextFlowPage, PageBreakHdl_Impl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SwTextFlowPage, PageBreakHdl_Impl)
 {
     if( aPgBrkCB.IsChecked() )
     {
@@ -1755,7 +1755,7 @@ IMPL_LINK( SwTextFlowPage, PageBreakHdl_Impl, CheckBox*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwTextFlowPage, ApplyCollClickHdl_Impl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SwTextFlowPage, ApplyCollClickHdl_Impl)
 {
     sal_Bool bEnable = sal_False;
     if ( aPageCollCB.IsChecked() &&
@@ -1834,7 +1834,7 @@ IMPL_LINK( SwTextFlowPage, SplitRowHdl_Impl, TriStateBox*, pBox )
     return 0;
 }
 
-IMPL_LINK( SwTextFlowPage, HeadLineCBClickHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SwTextFlowPage, HeadLineCBClickHdl)
 {
     aRepeatHeaderCombo.Enable(aHeadLineCB.IsChecked());
 

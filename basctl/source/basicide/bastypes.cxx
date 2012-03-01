@@ -344,7 +344,7 @@ ExtendedEdit::ExtendedEdit( Window* pParent, IDEResId nRes ) :
     Control::SetLoseFocusHdl( LINK( this, ExtendedEdit, ImplLoseFocusHdl ) );
 }
 
-IMPL_LINK( ExtendedEdit, ImplGetFocusHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ExtendedEdit, ImplGetFocusHdl)
 {
     Application::InsertAccel( &aAcc );
     aLoseFocusHdl.Call( this );
@@ -352,7 +352,7 @@ IMPL_LINK( ExtendedEdit, ImplGetFocusHdl, Control*, EMPTYARG )
 }
 
 
-IMPL_LINK( ExtendedEdit, ImplLoseFocusHdl, Control*, EMPTYARG )
+IMPL_LINK_NOARG(ExtendedEdit, ImplLoseFocusHdl)
 {
     Application::RemoveAccel( &aAcc );
     return 0;

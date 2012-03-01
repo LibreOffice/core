@@ -211,7 +211,7 @@ void LoginDialog::EnableUseSysCredsControls_Impl( sal_Bool bUseSysCredsEnabled )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( LoginDialog, OKHdl_Impl, OKButton *, EMPTYARG )
+IMPL_LINK_NOARG(LoginDialog, OKHdl_Impl)
 {
     // trim the strings
     aNameED.SetText( aNameED.GetText().EraseLeadingChars().
@@ -224,7 +224,7 @@ IMPL_LINK( LoginDialog, OKHdl_Impl, OKButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( LoginDialog, PathHdl_Impl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(LoginDialog, PathHdl_Impl)
 {
     PathDialog* pDlg = new PathDialog( this, WB_3DLOOK );
     pDlg->SetPath( aPathED.GetText() );
@@ -238,7 +238,7 @@ IMPL_LINK( LoginDialog, PathHdl_Impl, PushButton *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( LoginDialog, UseSysCredsHdl_Impl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(LoginDialog, UseSysCredsHdl_Impl)
 {
     EnableUseSysCredsControls_Impl( aUseSysCredsCB.IsChecked() );
     return 1;

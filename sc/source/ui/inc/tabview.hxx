@@ -190,7 +190,7 @@ private:
     void            DoHSplit(long nSplitPos);
     void            DoVSplit(long nSplitPos);
 
-    DECL_LINK(      TimerHdl, Timer* );
+    DECL_LINK(      TimerHdl, void* );
 
     void            UpdateVarZoom();
 

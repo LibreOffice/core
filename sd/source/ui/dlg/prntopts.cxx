@@ -241,7 +241,7 @@ IMPL_LINK( SdPrintOptions, ClickCheckboxHdl, CheckBox *, pCbx )
 
 //-----------------------------------------------------------------------
 
-IMPL_LINK( SdPrintOptions, ClickBookletHdl, CheckBox *, EMPTYARG )
+IMPL_LINK_NOARG(SdPrintOptions, ClickBookletHdl)
 {
     updateControls();
     return 0;

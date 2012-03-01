@@ -278,7 +278,7 @@ String lcl_GetDBAreaRange( ScDocument* pDoc, const String& rDBName )
     return aRet;
 }
 
-IMPL_LINK( ScContentTree, ContentDoubleClickHdl, ScContentTree *, EMPTYARG )
+IMPL_LINK_NOARG(ScContentTree, ContentDoubleClickHdl)
 {
     sal_uInt16 nType;
     sal_uLong nChild;

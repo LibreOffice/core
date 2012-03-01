@@ -138,8 +138,8 @@ class SwGlossaryDlg : public SvxStandardDialog
     DECL_LINK( GrpSelect, SvTreeListBox * );
     DECL_LINK( MenuHdl, Menu * );
     DECL_LINK( EnableHdl, Menu * );
-    DECL_LINK( BibHdl, Button * );
-    DECL_LINK( EditHdl, Button * );
+    DECL_LINK(BibHdl, void *);
+    DECL_LINK(EditHdl, void *);
     DECL_LINK( PathHdl, Button * );
     DECL_LINK( CheckBoxHdl, CheckBox * );
     DECL_LINK( ShowPreviewHdl, CheckBox * );

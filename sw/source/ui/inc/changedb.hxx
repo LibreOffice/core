@@ -65,9 +65,9 @@ class SwChangeDBDlg: public SvxStandardDialog
     SwWrtShell      *pSh;
     SwFldMgr        *pMgr;
 
-    DECL_LINK(TreeSelectHdl, SvTreeListBox* pBox = 0);
-    DECL_LINK(ButtonHdl, Button* pBtn);
-    DECL_LINK(AddDBHdl, PushButton*);
+    DECL_LINK(TreeSelectHdl, void * = 0);
+    DECL_LINK(ButtonHdl, void *);
+    DECL_LINK(AddDBHdl, void *);
 
     virtual void    Apply();
     void            UpdateFlds();

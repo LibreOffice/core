@@ -66,7 +66,7 @@ private:
     NumericField    maNewStartNF;
     bool            mbModified;
 
-    DECL_LINK( ImplNewStartHdl, CheckBox* );
+    DECL_LINK( ImplNewStartHdl, void* );
 };
 
 SdParagraphNumTabPage::SdParagraphNumTabPage(Window* pParent, const SfxItemSet& rAttr )
@@ -157,7 +157,7 @@ void SdParagraphNumTabPage::Reset( const SfxItemSet& rSet )
     mbModified = sal_False;
 }
 
-IMPL_LINK( SdParagraphNumTabPage, ImplNewStartHdl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(SdParagraphNumTabPage, ImplNewStartHdl)
 {
     sal_Bool bEnable = maNewStartCB.IsChecked();
     maNewStartNumberCB.Enable(bEnable);

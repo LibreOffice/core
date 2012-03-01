@@ -388,7 +388,7 @@ bool AlignmentTabPage::HasAlignmentChanged( const SfxItemSet& rNew, sal_uInt16 n
     return eMethodOld != eMethodNew;
 }
 
-IMPL_LINK( AlignmentTabPage, UpdateEnableHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(AlignmentTabPage, UpdateEnableHdl)
 {
     UpdateEnableControls();
     return 0;

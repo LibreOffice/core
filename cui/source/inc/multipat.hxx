@@ -69,8 +69,8 @@ protected:
 
     MultiPath_Impl* pImpl;
 
-    DECL_LINK( AddHdl_Impl, PushButton * );
-    DECL_LINK( DelHdl_Impl, PushButton * );
+    DECL_LINK(AddHdl_Impl, void *);
+    DECL_LINK(DelHdl_Impl, void *);
     DECL_LINK( SelectHdl_Impl, void * );
     DECL_LINK( CheckHdl_Impl, svx::SvxRadioButtonListBox * );
 

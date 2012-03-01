@@ -71,7 +71,7 @@ namespace svx
         DECL_LINK( EditHdl, void * );
         DECL_LINK( DeleteHdl, void * );
 
-        DECL_LINK( PathSelect_Impl, SvTabListBox* );
+        DECL_LINK(PathSelect_Impl, void *);
 
         DECL_LINK( HeaderSelect_Impl, HeaderBar * );
         DECL_LINK( HeaderEndDrag_Impl, HeaderBar * );

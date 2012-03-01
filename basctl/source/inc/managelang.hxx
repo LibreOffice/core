@@ -79,10 +79,10 @@ private:
     void                FillLanguageBox();
     void                ClearLanguageBox();
 
-    DECL_LINK(          AddHdl, Button * );
-    DECL_LINK(          DeleteHdl, Button * );
-    DECL_LINK(          MakeDefHdl, Button * );
-    DECL_LINK(          SelectHdl, ListBox * );
+    DECL_LINK(AddHdl, void *);
+    DECL_LINK(DeleteHdl, void *);
+    DECL_LINK(MakeDefHdl, void *);
+    DECL_LINK(SelectHdl, void *);
 
 public:
     ManageLanguageDialog( Window* pParent, boost::shared_ptr<LocalizationMgr> _pLMgr );

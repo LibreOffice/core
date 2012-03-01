@@ -380,7 +380,7 @@ sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText
 // NewObjectDialog
 //----------------------------------------------------------------------------
 
-IMPL_LINK(NewObjectDialog, OkButtonHandler, Button *, EMPTYARG)
+IMPL_LINK_NOARG(NewObjectDialog, OkButtonHandler)
 {
     if (BasicIDE::IsValidSbxName(aEdit.GetText()))
         EndDialog(1);
@@ -455,7 +455,7 @@ sal_Int32 GotoLineDialog::GetLineNumber()
     return rtl::OUString( aEdit.GetText() ).toInt32();
 }
 
-IMPL_LINK(GotoLineDialog, OkButtonHandler, Button *, EMPTYARG)
+IMPL_LINK_NOARG(GotoLineDialog, OkButtonHandler)
 {
     if ( GetLineNumber() )
         EndDialog(1);
@@ -469,7 +469,7 @@ IMPL_LINK(GotoLineDialog, OkButtonHandler, Button *, EMPTYARG)
 // ExportDialog
 //----------------------------------------------------------------------------
 
-IMPL_LINK(ExportDialog, OkButtonHandler, Button *, EMPTYARG)
+IMPL_LINK_NOARG(ExportDialog, OkButtonHandler)
 {
     mbExportAsPackage = maExportAsPackageButton.IsChecked();
     EndDialog(1);

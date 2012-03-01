@@ -1848,7 +1848,7 @@ IMPL_LINK( SmSymDefineDialog, StyleChangeHdl, ComboBox *, EMPTYARG pComboBox )
 }
 
 
-IMPL_LINK( SmSymDefineDialog, CharHighlightHdl, Control *, EMPTYARG )
+IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl)
 {
    sal_UCS4 cChar = aCharsetDisplay.GetSelectCharacter();
 

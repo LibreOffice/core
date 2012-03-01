@@ -365,7 +365,7 @@ class TPGalleryThemeProperties : public SfxTabPage
                         DECL_LINK( SelectFileTypeHdl, void* );
                         DECL_LINK( DClickFoundHdl, void* );
                         DECL_LINK( PreviewTimerHdl, void* );
-                        DECL_LINK( EndSearchProgressHdl, SearchProgress* );
+                        DECL_LINK(EndSearchProgressHdl, void *);
                         DECL_LINK( DialogClosedHdl, ::com::sun::star::ui::dialogs::DialogClosedEvent* );
 
 public:

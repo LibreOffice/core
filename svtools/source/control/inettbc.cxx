@@ -1036,7 +1036,7 @@ long SvtURLBox::PreNotify( NotifyEvent& rNEvt )
 }
 
 //-------------------------------------------------------------------------
-IMPL_LINK( SvtURLBox, AutoCompleteHdl_Impl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvtURLBox, AutoCompleteHdl_Impl)
 {
     if ( GetSubEdit()->GetAutocompleteAction() == AUTOCOMPLETE_KEYINPUT )
     {

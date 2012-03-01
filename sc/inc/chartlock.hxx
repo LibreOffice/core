@@ -77,7 +77,7 @@ private:
     Timer                               maTimer;
     std::auto_ptr< ScChartLockGuard >   mapScChartLockGuard;
 
-    DECL_LINK( TimeoutHdl, Timer* );
+    DECL_LINK(TimeoutHdl, void *);
 
     ScTemporaryChartLock();
     ScTemporaryChartLock( const ScTemporaryChartLock& );

@@ -1204,7 +1204,7 @@ void ScrollBar::Resize()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ScrollBar, ImplAutoTimerHdl, AutoTimer*, EMPTYARG )
+IMPL_LINK_NOARG(ScrollBar, ImplAutoTimerHdl)
 {
     if( mpData && mpData->mbHide )
         return 0;

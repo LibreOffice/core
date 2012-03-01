@@ -72,13 +72,13 @@ OfaMSFilterTabPage::~OfaMSFilterTabPage()
 {
 }
 
-IMPL_LINK( OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadWordBasicCheckHdl_Impl)
 {
     aWBasicWbctblCB.Enable( aWBasicCodeCB.IsChecked() );
     return 0;
 }
 
-IMPL_LINK( OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl, CheckBox*, EMPTYARG )
+IMPL_LINK_NOARG(OfaMSFilterTabPage, LoadExcelBasicCheckHdl_Impl)
 {
     aEBasicExectblCB.Enable( aEBasicCodeCB.IsChecked() );
     return 0;

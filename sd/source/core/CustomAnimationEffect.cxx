@@ -3685,7 +3685,7 @@ bool MainSequence::setTrigger( const CustomAnimationEffectPtr& pEffect, const ::
 
 // --------------------------------------------------------------------
 
-IMPL_LINK( MainSequence, onTimerHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(MainSequence, onTimerHdl)
 {
     if( mbTimerMode )
     {

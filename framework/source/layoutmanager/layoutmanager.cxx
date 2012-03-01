@@ -2666,7 +2666,7 @@ sal_Bool LayoutManager::implts_resetMenuBar()
     return sal_False;
 }
 
-IMPL_LINK( LayoutManager, MenuBarClose, MenuBar *, EMPTYARG )
+IMPL_LINK_NOARG(LayoutManager, MenuBarClose)
 {
     ReadGuard aReadLock( m_aLock );
     uno::Reference< frame::XDispatchProvider >   xProvider(m_xFrame, uno::UNO_QUERY);
@@ -2689,7 +2689,7 @@ IMPL_LINK( LayoutManager, MenuBarClose, MenuBar *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( LayoutManager, SettingsChanged, void*, EMPTYARG )
+IMPL_LINK_NOARG(LayoutManager, SettingsChanged)
 {
     return 1;
 }
@@ -2832,7 +2832,7 @@ void SAL_CALL LayoutManager::windowHidden( const lang::EventObject& aEvent ) thr
     }
 }
 
-IMPL_LINK( LayoutManager, AsyncLayoutHdl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG(LayoutManager, AsyncLayoutHdl)
 {
     ReadGuard aReadLock( m_aLock );
     m_aAsyncLayoutTimer.Stop();

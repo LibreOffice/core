@@ -90,7 +90,7 @@ SwMailMergePrepareMergePage::~SwMailMergePrepareMergePage()
 {
 }
 
-IMPL_LINK( SwMailMergePrepareMergePage, EditDocumentHdl_Impl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwMailMergePrepareMergePage, EditDocumentHdl_Impl)
 {
     m_pWizard->SetRestartPage(MM_PREPAREMERGEPAGE);
     m_pWizard->EndDialog(RET_EDIT_DOC);

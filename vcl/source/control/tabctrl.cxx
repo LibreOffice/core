@@ -1014,7 +1014,7 @@ long TabControl::ImplHandleKeyEvent( const KeyEvent& rKeyEvent )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( TabControl, ImplListBoxSelectHdl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(TabControl, ImplListBoxSelectHdl)
 {
     SelectTabPage( GetPageId( mpTabCtrlData->mpListBox->GetSelectEntryPos() ) );
     return 0;

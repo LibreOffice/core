@@ -271,7 +271,7 @@ sal_Bool ComboBox::IsAutocompleteEnabled() const
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ComboBox, ImplClickBtnHdl)
 {
     ImplCallEventListeners( VCLEVENT_DROPDOWN_PRE_OPEN );
     mpSubEdit->GrabFocus();
@@ -293,7 +293,7 @@ IMPL_LINK( ComboBox, ImplClickBtnHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ComboBox, ImplPopupModeEndHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ComboBox, ImplPopupModeEndHdl)
 {
     if( mpFloatWin->IsPopupModeCanceled() )
     {
@@ -375,7 +375,7 @@ IMPL_LINK( ComboBox, ImplAutocompleteHdl, Edit*, pEdit )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ComboBox, ImplSelectHdl)
 {
     sal_Bool bPopup = IsInDropDown();
     sal_Bool bCallSelect = sal_False;
@@ -469,7 +469,7 @@ IMPL_LINK( ComboBox, ImplSelectHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ComboBox, ImplCancelHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ComboBox, ImplCancelHdl)
 {
     if( IsInDropDown() )
         mpFloatWin->EndPopupMode();
@@ -492,7 +492,7 @@ IMPL_LINK( ComboBox, ImplSelectionChangedHdl, void*, n )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( ComboBox, ImplDoubleClickHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(ComboBox, ImplDoubleClickHdl)
 {
     DoubleClick();
     return 0;

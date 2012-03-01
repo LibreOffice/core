@@ -176,7 +176,7 @@ sal_uInt16 GetHtmlMode_Impl(const SfxItemSet& rSet)
 
 // class SvxStdParagraphTabPage ------------------------------------------
 
-IMPL_LINK( SvxStdParagraphTabPage, ELRLoseFocusHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SvxStdParagraphTabPage, ELRLoseFocusHdl)
 {
     SfxItemPool* pPool = GetItemSet().GetPool();
     DBG_ASSERT( pPool, "Wo ist der Pool" );
@@ -872,12 +872,12 @@ IMPL_LINK( SvxStdParagraphTabPage, LineDistHdl_Impl, ListBox *, pBox )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK_INLINE_START( SvxStdParagraphTabPage, ModifyHdl_Impl, SvxRelativeField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvxStdParagraphTabPage, ModifyHdl_Impl)
 {
     UpdateExample_Impl();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvxStdParagraphTabPage, ModifyHdl_Impl, SvxRelativeField *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvxStdParagraphTabPage, ModifyHdl_Impl)
 
 // -----------------------------------------------------------------------
 
@@ -1316,7 +1316,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
     UpdateExample_Impl(sal_True);
 }
 
-IMPL_LINK( SvxParaAlignTabPage, AlignHdl_Impl, RadioButton*, EMPTYARG )
+IMPL_LINK_NOARG(SvxParaAlignTabPage, AlignHdl_Impl)
 {
     sal_Bool bJustify = aJustify.IsChecked();
     aLastLineFT.Enable(bJustify);
@@ -1326,13 +1326,13 @@ IMPL_LINK( SvxParaAlignTabPage, AlignHdl_Impl, RadioButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SvxParaAlignTabPage, LastLineHdl_Impl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxParaAlignTabPage, LastLineHdl_Impl)
 {
     UpdateExample_Impl(sal_False);
     return 0;
 }
 
-IMPL_LINK( SvxParaAlignTabPage, TextDirectionHdl_Impl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SvxParaAlignTabPage, TextDirectionHdl_Impl)
 {
     SvxFrameDirection eDir = aTextDirectionLB.GetSelectEntryValue();
     switch ( eDir )
@@ -2018,7 +2018,7 @@ sal_uInt16* SvxExtParagraphTabPage::GetRanges()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, PageBreakHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, PageBreakHdl_Impl)
 {
     switch ( aPageBreakBox.GetState() )
     {
@@ -2062,7 +2062,7 @@ IMPL_LINK( SvxExtParagraphTabPage, PageBreakHdl_Impl, TriStateBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, KeepTogetherHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, KeepTogetherHdl_Impl)
 {
     sal_Bool bEnable = aKeepTogetherBox.GetState() == STATE_NOCHECK;
     aWidowBox.Enable(bEnable);
@@ -2073,7 +2073,7 @@ IMPL_LINK( SvxExtParagraphTabPage, KeepTogetherHdl_Impl, TriStateBox *, EMPTYARG
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, WidowHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, WidowHdl_Impl)
 {
     switch ( aWidowBox.GetState() )
     {
@@ -2098,7 +2098,7 @@ IMPL_LINK( SvxExtParagraphTabPage, WidowHdl_Impl, TriStateBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, OrphanHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, OrphanHdl_Impl)
 {
     switch( aOrphanBox.GetState() )
     {
@@ -2123,7 +2123,7 @@ IMPL_LINK( SvxExtParagraphTabPage, OrphanHdl_Impl, TriStateBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, HyphenClickHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, HyphenClickHdl_Impl)
 {
 
     sal_Bool bEnable = aHyphenBox.GetState() == STATE_CHECK;
@@ -2140,7 +2140,7 @@ IMPL_LINK( SvxExtParagraphTabPage, HyphenClickHdl_Impl, TriStateBox *, EMPTYARG 
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxExtParagraphTabPage, ApplyCollClickHdl_Impl, TriStateBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxExtParagraphTabPage, ApplyCollClickHdl_Impl)
 {
     sal_Bool bEnable = sal_False;
     if ( aApplyCollBtn.GetState() == STATE_CHECK &&

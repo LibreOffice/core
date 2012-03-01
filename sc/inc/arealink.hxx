@@ -85,7 +85,7 @@ public:
     const String&   GetSource() const       { return aSourceArea;   }
     const ScRange&  GetDestArea() const     { return aDestArea;     }
 
-    DECL_LINK( RefreshHdl, ScAreaLink* );
+    DECL_LINK( RefreshHdl, void* );
     DECL_LINK( AreaEndEditHdl, void* );
 };
 

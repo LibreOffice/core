@@ -63,7 +63,7 @@ namespace com { namespace sun { namespace star { namespace frame { class XModule
 class DropListBox_Impl : public SvTreeListBox
 {
 private:
-    DECL_LINK( OnAsyncExecuteDrop, SvLBoxEntry* );
+    DECL_LINK(OnAsyncExecuteDrop, void *);
 
 protected:
     SfxCommonTemplateDialog_Impl* pDialog;

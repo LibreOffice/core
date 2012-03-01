@@ -486,7 +486,7 @@ void SvxHlinkDlgMarkWnd::SelectEntry ( String aStrMark )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl)
 {
     SvLBoxEntry* pEntry = maLbTree.GetCurEntry();
 
@@ -510,7 +510,7 @@ IMPL_LINK ( SvxHlinkDlgMarkWnd, ClickApplyHdl_Impl, void *, EMPTYARG )
 |*
 |************************************************************************/
 
-IMPL_LINK ( SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SvxHlinkDlgMarkWnd, ClickCloseHdl_Impl)
 {
     Close();
 

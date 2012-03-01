@@ -319,7 +319,7 @@ IMPL_LINK( ScFillSeriesDlg, DisableHdl, Button *, pBtn )
 
 //----------------------------------------------------------------------------
 
-IMPL_LINK( ScFillSeriesDlg, OKHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScFillSeriesDlg, OKHdl)
 {
     if ( aBtnLeft.IsChecked() )             theFillDir = FILL_TO_LEFT;
     else if ( aBtnRight.IsChecked() )       theFillDir = FILL_TO_RIGHT;

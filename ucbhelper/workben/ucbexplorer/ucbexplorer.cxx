@@ -288,7 +288,7 @@ StringInputDialog::StringInputDialog( ResMgr& rResMgr,
 };
 
 //=========================================================================
-IMPL_LINK( StringInputDialog, OKHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(StringInputDialog, OKHdl)
 {
     // trim the strings
     m_aNameEdit.SetText(
@@ -298,7 +298,7 @@ IMPL_LINK( StringInputDialog, OKHdl, Button *, EMPTYARG )
 }
 
 //=========================================================================
-IMPL_LINK( StringInputDialog, NameHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(StringInputDialog, NameHdl)
 {
 /*
     // trim the strings

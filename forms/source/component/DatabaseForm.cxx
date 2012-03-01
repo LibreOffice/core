@@ -2672,7 +2672,7 @@ void SAL_CALL ODatabaseForm::reloaded(const EventObject& /*aEvent*/) throw( Runt
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( ODatabaseForm, OnTimeout, void*, EMPTYARG )
+IMPL_LINK_NOARG(ODatabaseForm, OnTimeout)
 {
     reload_impl(sal_True);
     return 1;

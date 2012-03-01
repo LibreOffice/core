@@ -1618,7 +1618,7 @@ private:
     bool                OnlineSpellInRange( const ScRange& rSpellRange, ScAddress& rSpellPos,
                                         sal_uInt16 nMaxTest );
 
-    DECL_LINK( TrackTimeHdl, Timer* );
+    DECL_LINK(TrackTimeHdl, void *);
 
     static ScRecursionHelper*   CreateRecursionHelperInstance();
 

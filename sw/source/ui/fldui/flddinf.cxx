@@ -215,7 +215,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
     }
 }
 
-IMPL_LINK( SwFldDokInfPage, TypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldDokInfPage, TypeHdl)
 {
     // save old ListBoxPos
     SvLBoxEntry* pOldEntry = pSelEntry;
@@ -238,7 +238,7 @@ IMPL_LINK( SwFldDokInfPage, TypeHdl, ListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwFldDokInfPage, SubTypeHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwFldDokInfPage, SubTypeHdl)
 {
     sal_uInt16 nSubType = (sal_uInt16)(sal_uLong)pSelEntry->GetUserData();
     sal_uInt16 nPos = aSelectionLB.GetSelectEntryPos();

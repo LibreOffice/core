@@ -70,7 +70,7 @@ private:
 
     SearchAttrItemList& rList;
 
-    DECL_LINK( OKHdl, Button * );
+    DECL_LINK(OKHdl, void *);
 };
 
 // class SvxSearchSimilarityDialog ---------------------------------------

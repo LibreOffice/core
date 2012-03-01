@@ -217,7 +217,7 @@ void FormShellManager::UnregisterAtCenterPane (void)
 
 
 
-IMPL_LINK(FormShellManager, FormControlActivated, FmFormShell*, EMPTYARG)
+IMPL_LINK_NOARG(FormShellManager, FormControlActivated)
 {
     // The form shell has been actived.  To give it priority in reacting to
     // slot calls the form shell is moved to the top of the object bar shell

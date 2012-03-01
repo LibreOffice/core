@@ -342,7 +342,7 @@ void CertificateViewerDetailsTP::ActivatePage()
 {
 }
 
-IMPL_LINK( CertificateViewerDetailsTP, ElementSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(CertificateViewerDetailsTP, ElementSelectHdl)
 {
     SvLBoxEntry*    pEntry = maElementsLB.FirstSelected();
     String          aElementText;
@@ -461,7 +461,7 @@ void CertificateViewerCertPathTP::ActivatePage()
     }
 }
 
-IMPL_LINK( CertificateViewerCertPathTP, ViewCertHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(CertificateViewerCertPathTP, ViewCertHdl)
 {
     SvLBoxEntry* pEntry = maCertPathLB.FirstSelected();
     if( pEntry )
@@ -473,7 +473,7 @@ IMPL_LINK( CertificateViewerCertPathTP, ViewCertHdl, void*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( CertificateViewerCertPathTP, CertSelectHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(CertificateViewerCertPathTP, CertSelectHdl)
 {
     String sStatus;
     SvLBoxEntry* pEntry = maCertPathLB.FirstSelected();

@@ -70,8 +70,8 @@ class SwGlossDecideDlg : public ModalDialog
     ListBox         aListLB;
     FixedLine       aFL;
 
-    DECL_LINK(DoubleClickHdl, ListBox*);
-    DECL_LINK(SelectHdl, ListBox*);
+    DECL_LINK(DoubleClickHdl, void*);
+    DECL_LINK(SelectHdl, void*);
 
     public:
         SwGlossDecideDlg(Window* pParent);
@@ -91,13 +91,13 @@ SwGlossDecideDlg::SwGlossDecideDlg(Window* pParent) :
     aListLB.SetSelectHdl(LINK(this, SwGlossDecideDlg, SelectHdl));
 }
 
-IMPL_LINK(SwGlossDecideDlg, DoubleClickHdl, ListBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwGlossDecideDlg, DoubleClickHdl)
 {
     EndDialog(RET_OK);
     return 0;
 }
 
-IMPL_LINK(SwGlossDecideDlg, SelectHdl, ListBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwGlossDecideDlg, SelectHdl)
 {
     aOk.Enable(LISTBOX_ENTRY_NOTFOUND != aListLB.GetSelectEntryPos());
     return 0;

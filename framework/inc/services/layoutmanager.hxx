@@ -205,7 +205,7 @@ namespace framework
             virtual void SAL_CALL addLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (::com::sun::star::uno::RuntimeException);
             virtual void SAL_CALL removeLayoutManagerEventListener( const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XLayoutManagerListener >& aLayoutManagerListener ) throw (::com::sun::star::uno::RuntimeException);
 
-            DECL_LINK( MenuBarClose, MenuBar * );
+            DECL_LINK(MenuBarClose, void *);
             DECL_LINK( WindowEventListener, VclSimpleEvent* );
 
             //---------------------------------------------------------------------------------------------------------
@@ -214,7 +214,7 @@ namespace framework
             virtual void requestLayout( Hint eHint );
 
         protected:
-            DECL_LINK( AsyncLayoutHdl, Timer * );
+            DECL_LINK(AsyncLayoutHdl, void *);
 
         private:
             //---------------------------------------------------------------------------------------------------------

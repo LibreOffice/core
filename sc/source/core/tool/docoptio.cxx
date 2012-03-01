@@ -398,7 +398,7 @@ ScDocCfg::ScDocCfg() :
     aDefaultsItem.SetCommitLink( LINK(this, ScDocCfg, DefaultsCommitHdl) );
 }
 
-IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDocCfg, CalcCommitHdl)
 {
     Sequence<OUString> aNames = GetCalcPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -454,7 +454,7 @@ IMPL_LINK( ScDocCfg, CalcCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDocCfg, LayoutCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDocCfg, LayoutCommitHdl)
 {
     Sequence<OUString> aNames = GetLayoutPropertyNames();
     Sequence<Any> aValues(aNames.getLength());
@@ -477,7 +477,7 @@ IMPL_LINK( ScDocCfg, LayoutCommitHdl, void *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( ScDocCfg, DefaultsCommitHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(ScDocCfg, DefaultsCommitHdl)
 {
     Sequence<OUString> aNames = GetDefaultsPropertyNames();
     Sequence<Any> aValues(aNames.getLength());

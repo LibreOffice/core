@@ -187,23 +187,23 @@ void SvInplaceEdit2::Hide()
 }
 
 
-IMPL_LINK_INLINE_START( SvInplaceEdit2, ReturnHdl_Impl, Accelerator *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvInplaceEdit2, ReturnHdl_Impl)
 {
     DBG_CHKTHIS(SvInplaceEdit2,0);
     bCanceled = sal_False;
     CallCallBackHdl_Impl();
     return 1;
 }
-IMPL_LINK_INLINE_END( SvInplaceEdit2, ReturnHdl_Impl, Accelerator *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvInplaceEdit2, ReturnHdl_Impl)
 
-IMPL_LINK_INLINE_START( SvInplaceEdit2, EscapeHdl_Impl, Accelerator *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvInplaceEdit2, EscapeHdl_Impl)
 {
     DBG_CHKTHIS(SvInplaceEdit2,0);
     bCanceled = sal_True;
     CallCallBackHdl_Impl();
     return 1;
 }
-IMPL_LINK_INLINE_END( SvInplaceEdit2, EscapeHdl_Impl, Accelerator *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvInplaceEdit2, EscapeHdl_Impl)
 
 
 sal_Bool SvInplaceEdit2::KeyInput( const KeyEvent& rKEvt )
@@ -251,13 +251,13 @@ void SvInplaceEdit2::LoseFocus()
     }
 }
 
-IMPL_LINK_INLINE_START( SvInplaceEdit2, Timeout_Impl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SvInplaceEdit2, Timeout_Impl)
 {
     DBG_CHKTHIS(SvInplaceEdit2,0);
     CallCallBackHdl_Impl();
     return 0;
 }
-IMPL_LINK_INLINE_END( SvInplaceEdit2, Timeout_Impl, Timer *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SvInplaceEdit2, Timeout_Impl)
 
 void SvInplaceEdit2::CallCallBackHdl_Impl()
 {
@@ -1290,7 +1290,7 @@ void SvLBox::EditText( const String& rStr, const Rectangle& rRect,
         rSel, bMulti );
 }
 
-IMPL_LINK( SvLBox, TextEditEndedHdl_Impl, SvInplaceEdit2 *, EMPTYARG )
+IMPL_LINK_NOARG(SvLBox, TextEditEndedHdl_Impl)
 {
     DBG_CHKTHIS(SvLBox,0);
     if ( nImpFlags & SVLBOX_EDTEND_CALLED ) // Nesting verhindern

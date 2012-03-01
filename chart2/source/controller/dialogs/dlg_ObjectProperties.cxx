@@ -640,7 +640,7 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
     }
 }
 
-IMPL_LINK( SchAttribTabDlg, OKPressed, void * , EMPTYARG )
+IMPL_LINK_NOARG(SchAttribTabDlg, OKPressed)
 {
     m_bOKPressed = true;
     return m_aOriginalOKClickHdl.Call( this );

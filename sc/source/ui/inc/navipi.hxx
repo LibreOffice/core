@@ -216,7 +216,7 @@ public:
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );
 
-    DECL_LINK( ToolBoxDropdownClickHdl, ToolBox* );
+    DECL_LINK( ToolBoxDropdownClickHdl, void* );
 
 protected:
     virtual void    Select();

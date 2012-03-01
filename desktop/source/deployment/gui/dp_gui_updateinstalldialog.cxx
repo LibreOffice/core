@@ -332,7 +332,7 @@ void UpdateInstallDialog::setError(OUString const & exceptionMessage)
     m_mle_info.InsertText(exceptionMessage + OUSTR("\n"));
 }
 
-IMPL_LINK(UpdateInstallDialog, cancelHandler, void *, EMPTYARG)
+IMPL_LINK_NOARG(UpdateInstallDialog, cancelHandler)
 {
     m_thread->stop();
     EndDialog(RET_CANCEL);

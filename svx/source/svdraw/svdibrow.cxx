@@ -1156,7 +1156,7 @@ void SdrItemBrowser::Undirty()
     }
 }
 
-IMPL_LINK(SdrItemBrowser,IdleHdl,Timer*,EMPTYARG)
+IMPL_LINK_NOARG(SdrItemBrowser, IdleHdl)
 {
     Undirty();
     return 0;
@@ -1278,7 +1278,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
     return 0;
 }
 
-IMPL_LINK(SdrItemBrowser,SetDirtyHdl,_SdrItemBrowserControl*,EMPTYARG)
+IMPL_LINK_NOARG(SdrItemBrowser, SetDirtyHdl)
 {
     SetDirty();
     return 0;

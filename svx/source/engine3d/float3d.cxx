@@ -2325,7 +2325,7 @@ void Svx3DWin::Resize()
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( Svx3DWin, ClickUpdateHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(Svx3DWin, ClickUpdateHdl)
 {
     bUpdate = !aBtnUpdate.IsChecked();
     aBtnUpdate.Check( bUpdate );
@@ -2349,7 +2349,7 @@ IMPL_LINK( Svx3DWin, ClickUpdateHdl, void *, EMPTYARG )
 }
 
 // -----------------------------------------------------------------------
-IMPL_LINK( Svx3DWin, ClickAssignHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(Svx3DWin, ClickAssignHdl)
 {
     SfxDispatcher* pDispatcher = LocalGetDispatcher(pBindings);
     if (pDispatcher != NULL)
@@ -2983,7 +2983,7 @@ IMPL_LINK( Svx3DWin, ClickLightHdl, PushButton*, pBtn )
 
 
 // -----------------------------------------------------------------------
-IMPL_LINK( Svx3DWin, DoubleClickHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Svx3DWin, DoubleClickHdl)
 {
     // and assign
     ClickAssignHdl( NULL );
@@ -2993,7 +2993,7 @@ IMPL_LINK( Svx3DWin, DoubleClickHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Svx3DWin, ChangeLightCallbackHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Svx3DWin, ChangeLightCallbackHdl)
 {
     return( 0L );
 }
@@ -3001,7 +3001,7 @@ IMPL_LINK( Svx3DWin, ChangeLightCallbackHdl, void*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Svx3DWin, ChangeSelectionCallbackHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(Svx3DWin, ChangeSelectionCallbackHdl)
 {
     const sal_uInt32 nLight(aCtlLightPreview.GetSvx3DLightControl().GetSelectedLight());
     PushButton* pBtn = 0;

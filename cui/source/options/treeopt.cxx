@@ -639,13 +639,13 @@ sal_uInt16  OfaTreeOptionsDialog::AddGroup(const String& rGroupName,
     return nRet - 1;
 }
 
-IMPL_LINK(OfaTreeOptionsDialog, ShowPageHdl_Impl, SvTreeListBox*, EMPTYARG)
+IMPL_LINK_NOARG(OfaTreeOptionsDialog, ShowPageHdl_Impl)
 {
     SelectHdl_Impl();
     return 0;
 }
 
-IMPL_LINK( OfaTreeOptionsDialog, BackHdl_Impl, PushButton*, EMPTYARG )
+IMPL_LINK_NOARG(OfaTreeOptionsDialog, BackHdl_Impl)
 {
     if ( pCurrentPageEntry && aTreeLB.GetParent( pCurrentPageEntry ) )
     {
@@ -665,7 +665,7 @@ IMPL_LINK( OfaTreeOptionsDialog, BackHdl_Impl, PushButton*, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( OfaTreeOptionsDialog, OKHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(OfaTreeOptionsDialog, OKHdl_Impl)
 {
     aTreeLB.EndSelection();
     if ( pCurrentPageEntry && aTreeLB.GetParent( pCurrentPageEntry ) )

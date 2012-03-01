@@ -877,7 +877,7 @@ SvxMacroAssignDlg::~SvxMacroAssignDlg()
 
 //===============================================
 
-IMPL_LINK(AssignComponentDialog, ButtonHandler, Button *, EMPTYARG)
+IMPL_LINK_NOARG(AssignComponentDialog, ButtonHandler)
 {
     ::rtl::OUString aMethodName = maMethodEdit.GetText();
     maURL = ::rtl::OUString();

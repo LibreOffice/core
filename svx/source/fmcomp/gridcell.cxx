@@ -3194,7 +3194,7 @@ void DbFilterField::UpdateFromField(const Reference< XColumn >& /*_rxField*/, co
 }
 
 //------------------------------------------------------------------
-IMPL_LINK( DbFilterField, OnClick, void*, EMPTYARG )
+IMPL_LINK_NOARG(DbFilterField, OnClick)
 {
     TriState eState = ((CheckBoxControl*)m_pWindow)->GetBox().GetState();
     String aText;
@@ -4429,7 +4429,7 @@ void FmXListBoxCell::onWindowEvent( const sal_uIntPtr _nEventId, const Window& _
 
 
 //------------------------------------------------------------------
-IMPL_LINK( FmXListBoxCell, OnDoubleClick, void*, EMPTYARG )
+IMPL_LINK_NOARG(FmXListBoxCell, OnDoubleClick)
 {
     if (m_pBox)
     {
@@ -4815,7 +4815,7 @@ void SAL_CALL FmXFilterCell::setMaxTextLen( sal_Int16 /*nLen*/ ) throw( RuntimeE
 }
 
 //------------------------------------------------------------------------------
-IMPL_LINK( FmXFilterCell, OnCommit, void*, EMPTYARG )
+IMPL_LINK_NOARG(FmXFilterCell, OnCommit)
 {
     ::cppu::OInterfaceIteratorHelper aIt( m_aTextListeners );
     ::com::sun::star::awt::TextEvent aEvt;

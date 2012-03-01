@@ -511,7 +511,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK(OPropertyEditor, OnPageActivate, TabControl*, EMPTYARG)
+    IMPL_LINK_NOARG(OPropertyEditor, OnPageActivate)
     {
         if (m_aPageActivationHandler.IsSet())
             m_aPageActivationHandler.Call(NULL);
@@ -519,7 +519,7 @@ namespace pcr
     }
 
     //------------------------------------------------------------------
-    IMPL_LINK(OPropertyEditor, OnPageDeactivate, TabControl*, EMPTYARG)
+    IMPL_LINK_NOARG(OPropertyEditor, OnPageDeactivate)
     {
         // commit the data on the current (to-be-decativated) tab page
         // (79404)

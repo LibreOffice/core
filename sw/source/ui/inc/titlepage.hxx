@@ -89,11 +89,11 @@ private:
 
     DECL_LINK( OKHdl, Button * );
     DECL_LINK( EditHdl, Button * );
-    DECL_LINK( RestartNumberingHdl, CheckBox* );
-    DECL_LINK( SetPageNumberHdl, CheckBox* );
-    DECL_LINK( UpHdl, NumericField * );
-    DECL_LINK( DownHdl, NumericField * );
-    DECL_LINK( StartPageHdl, RadioButton * );
+    DECL_LINK(RestartNumberingHdl, void *);
+    DECL_LINK(SetPageNumberHdl, void *);
+    DECL_LINK(UpHdl, void *);
+    DECL_LINK(DownHdl, void *);
+    DECL_LINK(StartPageHdl, void *);
 public:
     SwTitlePageDlg( Window *pParent );
     ~SwTitlePageDlg();

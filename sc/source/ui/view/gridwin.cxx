@@ -531,7 +531,7 @@ void ScGridWindow::ClickExtern()
     }
 }
 
-IMPL_LINK( ScGridWindow, PopupModeEndHdl, FloatingWindow*, EMPTYARG )
+IMPL_LINK_NOARG(ScGridWindow, PopupModeEndHdl)
 {
     if (pFilterBox)
         pFilterBox->SetCancelled();     // nicht mehr auswaehlen

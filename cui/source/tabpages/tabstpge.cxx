@@ -555,7 +555,7 @@ IMPL_LINK( SvxTabulatorTabPage, NewHdl_Impl, Button *, pBtn )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxTabulatorTabPage, DelHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxTabulatorTabPage, DelHdl_Impl)
 {
     sal_uInt16 nPos = aTabBox.GetValuePos( aTabBox.GetValue() );
 
@@ -599,7 +599,7 @@ IMPL_LINK( SvxTabulatorTabPage, DelHdl_Impl, Button *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxTabulatorTabPage, DelAllHdl_Impl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SvxTabulatorTabPage, DelAllHdl_Impl)
 {
     if ( aNewTabs.Count() )
     {
@@ -715,7 +715,7 @@ IMPL_LINK( SvxTabulatorTabPage, GetDezCharHdl_Impl, Edit *, pEdit )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxTabulatorTabPage, SelectHdl_Impl, MetricBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxTabulatorTabPage, SelectHdl_Impl)
 {
     sal_uInt16 nPos = aTabBox.GetValuePos( aTabBox.GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )
@@ -729,7 +729,7 @@ IMPL_LINK( SvxTabulatorTabPage, SelectHdl_Impl, MetricBox *, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxTabulatorTabPage, ModifyHdl_Impl, MetricBox *, EMPTYARG )
+IMPL_LINK_NOARG(SvxTabulatorTabPage, ModifyHdl_Impl)
 {
     sal_uInt16 nPos = aTabBox.GetValuePos( aTabBox.GetValue( eDefUnit ), eDefUnit );
     if ( nPos != COMBOBOX_ENTRY_NOTFOUND )

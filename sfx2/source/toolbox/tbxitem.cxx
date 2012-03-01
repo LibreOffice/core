@@ -888,7 +888,7 @@ void SfxToolBoxControl::SetPopupWindow( SfxPopupWindow* pWindow )
 
 //--------------------------------------------------------------------
 
-IMPL_LINK( SfxToolBoxControl, PopupModeEndHdl, void *, EMPTYARG )
+IMPL_LINK_NOARG(SfxToolBoxControl, PopupModeEndHdl)
 {
     if ( pImpl->mpPopupWindow->IsVisible() )
     {
@@ -1403,7 +1403,7 @@ void SfxPopupWindow::StateChanged(
 
 //--------------------------------------------------------------------
 
-IMPL_LINK( SfxPopupWindow, Delete, void *, EMPTYARG )
+IMPL_LINK_NOARG(SfxPopupWindow, Delete)
 {
     if ( m_aDeleteLink.IsSet() )
         m_aDeleteLink.Call( this );

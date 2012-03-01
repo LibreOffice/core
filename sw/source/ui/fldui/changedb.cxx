@@ -250,7 +250,7 @@ void SwChangeDBDlg::UpdateFlds()
     pSh->EndAllAction();
 }
 
-IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
+IMPL_LINK_NOARG(SwChangeDBDlg, ButtonHdl)
 {
     String sTableName, sColumnName;
     SwDBData aData;
@@ -265,7 +265,7 @@ IMPL_LINK( SwChangeDBDlg, ButtonHdl, Button *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwChangeDBDlg, TreeSelectHdl, SvTreeListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwChangeDBDlg, TreeSelectHdl)
 {
     sal_Bool bEnable = sal_False;
 
@@ -300,7 +300,7 @@ void SwChangeDBDlg::ShowDBName(const SwDBData& rDBData)
     aDocDBNameFT.SetText(sName);
 }
 
-IMPL_LINK( SwChangeDBDlg, AddDBHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwChangeDBDlg, AddDBHdl)
 {
     String sNewDB = SwNewDBMgr::LoadAndRegisterDataSource();
     if(sNewDB.Len())

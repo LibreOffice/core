@@ -606,7 +606,7 @@ IMPL_LINK( SvxSuperContourDlg, GraphSizeHdl, ContourWindow*, pWnd )
     return 0L;
 }
 
-IMPL_LINK( SvxSuperContourDlg, UpdateHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSuperContourDlg, UpdateHdl)
 {
     aUpdateTimer.Stop();
 
@@ -632,7 +632,7 @@ IMPL_LINK( SvxSuperContourDlg, UpdateHdl, Timer*, EMPTYARG )
     return 0L;
 }
 
-IMPL_LINK( SvxSuperContourDlg, CreateHdl, Timer*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSuperContourDlg, CreateHdl)
 {
     aCreateTimer.Stop();
 
@@ -800,7 +800,7 @@ void SvxSuperContourDlg::DataChanged( const DataChangedEvent& rDCEvt )
             ApplyImageList();
 }
 
-IMPL_LINK( SvxSuperContourDlg, MiscHdl, void*, EMPTYARG )
+IMPL_LINK_NOARG(SvxSuperContourDlg, MiscHdl)
 {
        SvtMiscOptions aMiscOptions;
     aTbx1.SetOutStyle( aMiscOptions.GetToolboxStyle() );

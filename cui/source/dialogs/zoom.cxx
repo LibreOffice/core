@@ -344,7 +344,7 @@ IMPL_LINK( SvxZoomDialog, UserHdl, RadioButton *, pBtn )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( SvxZoomDialog, SpinHdl, MetricField *, EMPTYARG )
+IMPL_LINK_NOARG(SvxZoomDialog, SpinHdl)
 {
     if ( !aUserBtn.IsChecked() )
         return 0;

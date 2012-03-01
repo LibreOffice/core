@@ -474,7 +474,7 @@ MyFontDialog::MyFontDialog( Window* pParent ) :
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( MyFontDialog, SelectFont, ComboBox*, EMPTYARG )
+IMPL_LINK_NOARG(MyFontDialog, SelectFont)
 {
     aStyleBox.Fill( aFontBox.GetText(), pList );
     FontInfo aInfo = pList->Get( aFontBox.GetText(), aStyleBox.GetText() );
@@ -485,7 +485,7 @@ IMPL_LINK( MyFontDialog, SelectFont, ComboBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( MyFontDialog, SelectStyle, ComboBox*, EMPTYARG )
+IMPL_LINK_NOARG(MyFontDialog, SelectStyle)
 {
     FontInfo aInfo = pList->Get( aFontBox.GetText(), aStyleBox.GetText() );
     aSizeBox.Fill( &aInfo, pList );
@@ -495,7 +495,7 @@ IMPL_LINK( MyFontDialog, SelectStyle, ComboBox*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( MyFontDialog, AttrHdl, Window*, EMPTYARG )
+IMPL_LINK_NOARG(MyFontDialog, AttrHdl)
 {
     SetAttr();
     return 0;
@@ -643,7 +643,7 @@ MyCalendar::~MyCalendar()
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( MyCalendar, RequestDateInfoHdl, Calendar*, EMPTYARG )
+IMPL_LINK_NOARG(MyCalendar, RequestDateInfoHdl)
 {
     sal_uInt16 nRequestYear = aCalendar.GetRequestYear();
     if ( (nRequestYear >= 1954) && (nRequestYear <= 1989) )
@@ -655,7 +655,7 @@ IMPL_LINK( MyCalendar, RequestDateInfoHdl, Calendar*, EMPTYARG )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( MyCalendar, DoubleClickHdl, Calendar*, EMPTYARG )
+IMPL_LINK_NOARG(MyCalendar, DoubleClickHdl)
 {
     Date aDate = aCalendar.GetCurDate();
     String aStr( RTL_CONSTASCII_USTRINGPARAM( "Info: " ) );

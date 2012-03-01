@@ -310,7 +310,7 @@ void SwLoadOptPage::Reset( const SfxItemSet& rSet)
     aUseCharUnit.SaveValue();
 }
 
-IMPL_LINK(SwLoadOptPage, MetricHdl, ListBox*, EMPTYARG)
+IMPL_LINK_NOARG(SwLoadOptPage, MetricHdl)
 {
     const sal_uInt16 nMPos = aMetricLB.GetSelectEntryPos();
     if(nMPos != USHRT_MAX)
@@ -605,7 +605,7 @@ void SwCaptionOptPage::DelUserData()
     }
 }
 
-IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwCaptionOptPage, ShowEntryHdl)
 {
     SvLBoxEntry* pSelEntry = aCheckLB.FirstSelected();
 
@@ -730,7 +730,7 @@ IMPL_LINK( SwCaptionOptPage, ShowEntryHdl, SvxCheckListBox *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK( SwCaptionOptPage, SaveEntryHdl, SvxCheckListBox *, EMPTYARG )
+IMPL_LINK_NOARG(SwCaptionOptPage, SaveEntryHdl)
 {
     SvLBoxEntry* pEntry = aCheckLB.GetHdlEntry();
 
@@ -772,7 +772,7 @@ void SwCaptionOptPage::SaveEntry(SvLBoxEntry* pEntry)
     }
 }
 
-IMPL_LINK( SwCaptionOptPage, ModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwCaptionOptPage, ModifyHdl)
 {
     String sFldTypeName = aCategoryBox.GetText();
 
@@ -791,12 +791,12 @@ IMPL_LINK( SwCaptionOptPage, ModifyHdl, Edit *, EMPTYARG )
     return 0;
 }
 
-IMPL_LINK_INLINE_START( SwCaptionOptPage, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_START(SwCaptionOptPage, SelectHdl)
 {
     DrawSample();
     return 0;
 }
-IMPL_LINK_INLINE_END( SwCaptionOptPage, SelectHdl, ListBox *, EMPTYARG )
+IMPL_LINK_NOARG_INLINE_END(SwCaptionOptPage, SelectHdl)
 
 IMPL_LINK( SwCaptionOptPage, OrderHdl, ListBox*, pBox )
 {

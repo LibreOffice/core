@@ -569,7 +569,7 @@ void SwNumPositionTabPage::SetWrtShell(SwWrtShell* pSh)
     aIndentAtMF.SetUnit( eMetric );
 }
 
-IMPL_LINK( SwNumPositionTabPage, EditModifyHdl, Edit *, EMPTYARG )
+IMPL_LINK_NOARG(SwNumPositionTabPage, EditModifyHdl)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -740,7 +740,7 @@ IMPL_LINK( SwNumPositionTabPage, RelativeHdl, CheckBox *, pBox )
     return 0;
 }
 
-IMPL_LINK( SwNumPositionTabPage, LabelFollowedByHdl_Impl, ListBox*, EMPTYARG )
+IMPL_LINK_NOARG(SwNumPositionTabPage, LabelFollowedByHdl_Impl)
 {
     // determine value to be set at the chosen list levels
     SvxNumberFormat::SvxNumLabelFollowedBy eLabelFollowedBy =
@@ -876,7 +876,7 @@ IMPL_LINK( SwNumPositionTabPage, IndentAtHdl_Impl, MetricField*, pFld )
     return 0;
 }
 
-IMPL_LINK( SwNumPositionTabPage, StandardHdl, PushButton *, EMPTYARG )
+IMPL_LINK_NOARG(SwNumPositionTabPage, StandardHdl)
 {
     sal_uInt16 nMask = 1;
     for(sal_uInt16 i = 0; i < MAXLEVEL; i++)
@@ -1018,7 +1018,7 @@ short  SwSvxNumBulletTabDialog::Ok()
     return nRet;
 }
 
-IMPL_LINK(SwSvxNumBulletTabDialog, RemoveNumberingHdl, PushButton*, EMPTYARG)
+IMPL_LINK_NOARG(SwSvxNumBulletTabDialog, RemoveNumberingHdl)
 {
     EndDialog(RET_USER);
     return 0;

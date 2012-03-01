@@ -63,13 +63,13 @@ class SwLabPage : public SfxTabPage
      SwLabPage(Window* pParent, const SfxItemSet& rSet);
     ~SwLabPage();
 
-    DECL_LINK( AddrHdl, Button * );
+    DECL_LINK(AddrHdl, void *);
     DECL_LINK( DatabaseHdl, ListBox *pListBox );
 //    DECL_LINK( DatabaseButtonHdl, Button * );
-    DECL_LINK( FieldHdl, Button * );
-    DECL_LINK( PageHdl, Button * );
-    DECL_LINK( MakeHdl, ListBox * );
-    DECL_LINK( TypeHdl, ListBox * );
+    DECL_LINK(FieldHdl, void *);
+    DECL_LINK(PageHdl, void *);
+    DECL_LINK(MakeHdl, void *);
+    DECL_LINK(TypeHdl, void *);
 
     void DisplayFormat  ();
     SwLabRec* GetSelectedEntryPos();
