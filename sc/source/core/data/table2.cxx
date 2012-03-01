@@ -488,7 +488,7 @@ void ScTable::DeleteArea(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, sal
         }
     }
 
-    if (nDelFlag & IDF_CONTENTS)
+    if (nDelFlag & IDF_NOTE)
         maNotes.erase( nCol1, nRow1, nCol2, nRow2);
 
     if (IsStreamValid())
@@ -512,7 +512,7 @@ void ScTable::DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark )
     for (size_t i = 0; i < aRangeList.size(); ++i)
     {
         ScRange* pRange = aRangeList[i];
-        if (nDelFlag & IDF_CONTENTS && pRange)
+        if (nDelFlag & IDF_NOTE && pRange)
             maNotes.erase(pRange->aStart.Col(), pRange->aStart.Row(), pRange->aEnd.Col(), pRange->aEnd.Row());
     }
 
