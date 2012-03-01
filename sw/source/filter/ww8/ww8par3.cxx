@@ -2466,7 +2466,7 @@ static void lcl_AddToPropertyContainer
         uno::Any aAny(C2U(""));
         xPropContainer->addProperty
             (rPropertyName,
-             static_cast<sal_Int16>(beans::PropertyAttribute::BOUND ||
+             static_cast<sal_Int16>(beans::PropertyAttribute::BOUND |
                                     beans::PropertyAttribute::REMOVABLE),
              aAny);
     }
