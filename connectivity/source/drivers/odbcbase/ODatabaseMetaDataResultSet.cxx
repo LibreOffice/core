@@ -173,7 +173,8 @@ sal_Int32 SAL_CALL ODatabaseMetaDataResultSet::findColumn( const ::rtl::OUString
 
 template < typename T, SQLSMALLINT sqlTypeId > T ODatabaseMetaDataResultSet::getInteger ( sal_Int32 columnIndex )
 {
-    checkDisposed(ODatabaseMetaDataResultSet_BASE::rBHelper.bDisposed);
+    ::cppu::OBroadcastHelper& rBHelper(ODatabaseMetaDataResultSet_BASE::rBHelper);
+    checkDisposed(rBHelper.bDisposed);
     ::osl::MutexGuard aGuard( m_aMutex );
 
     columnIndex = mapColumn(columnIndex);
