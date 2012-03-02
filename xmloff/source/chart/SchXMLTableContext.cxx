@@ -729,9 +729,9 @@ SvXMLImportContext* SchXMLTableCellContext::CreateChildContext(
     if( nPrefix == XML_NAMESPACE_TEXT && IsXMLToken( rLocalName, XML_LIST ) && mbReadText )
     {
         SchXMLCell& rCell = mrTable.aData[ mrTable.nRowIndex ][ mrTable.nColumnIndex ];
-        rCell.pComplexString = new Sequence< OUString >();
+        rCell.aComplexString = Sequence< OUString >();
         rCell.eType = SCH_CELL_TYPE_COMPLEX_STRING;
-        pContext = new SchXMLTextListContext( GetImport(), rLocalName, *rCell.pComplexString );
+        pContext = new SchXMLTextListContext( GetImport(), rLocalName, rCell.aComplexString );
         mbReadText = sal_False;//don't apply text from <text:p>
     }
     // <text:p> element - read text (and range from text:id old version)
@@ -771,12 +771,12 @@ void lcl_ApplyCellToComplexLabel( const SchXMLCell& rCell, Sequence< uno::Any >&
         rComplexLabel.realloc(1);
         rComplexLabel[0] = uno::makeAny( rCell.aString );
     }
-    else if( rCell.pComplexString && rCell.eType == SCH_CELL_TYPE_COMPLEX_STRING )
+    else if( rCell.aComplexString.getLength() && rCell.eType == SCH_CELL_TYPE_COMPLEX_STRING )
     {
-        sal_Int32 nCount = rCell.pComplexString->getLength();
+        sal_Int32 nCount = rCell.aComplexString.getLength();
         rComplexLabel.realloc( nCount );
         for( sal_Int32 nN=0; nN<nCount; nN++)
-            rComplexLabel[nN] = uno::makeAny((*rCell.pComplexString)[nN]);
+            rComplexLabel[nN] = uno::makeAny((rCell.aComplexString)[nN]);
     }
     else if( rCell.eType == SCH_CELL_TYPE_FLOAT )
     {
