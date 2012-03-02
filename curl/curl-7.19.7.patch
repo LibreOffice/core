@@ -81,3 +81,23 @@
  	  ;;
  
  	irix | nonstopux)
+--- misc/curl-7.19.7/lib/ssh.c	2009-10-30 23:28:56 +0100
++++ misc/build/curl-7.19.7/lib/ssh.c	2009-10-31 11:33:05 +0100
+@@ -119,7 +119,7 @@
+ static const char *sftp_libssh2_strerror(unsigned long err);
+ static LIBSSH2_ALLOC_FUNC(libssh2_malloc);
+ static LIBSSH2_REALLOC_FUNC(libssh2_realloc);
+-static LIBSSH2_FREE_FUNC(libssh2_free);
++static LIBSSH2_FREE_FUNC(my_libssh2_free);
+ 
+ static CURLcode get_pathname(const char **cpp, char **path);
+ 
+@@ -286,7 +286,7 @@
+   return realloc(ptr, count);
+ }
+ 
+-static LIBSSH2_FREE_FUNC(libssh2_free)
++static LIBSSH2_FREE_FUNC(my_libssh2_free)
+ {
+   (void)abstract; /* arg not used */
+   free(ptr);
