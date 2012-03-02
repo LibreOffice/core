@@ -30,7 +30,6 @@
 
 #include <svtools/langtab.hxx>
 #include <sfx2/tabdlg.hxx>
-#include <tools/table.hxx>
 #include <svx/checklbx.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
@@ -216,9 +215,15 @@ class AutoCorrEdit : public Edit
 
 // class OfaAutocorrReplacePage ------------------------------------------
 
-class DoubleStringArray;
-typedef DoubleStringArray* DoubleStringArrayPtr;
-DECLARE_TABLE(DoubleStringTable, DoubleStringArrayPtr)
+
+struct DoubleString
+{
+    String  sShort;
+    String  sLong;
+    void*   pUserData; // CheckBox -> form. Text Bool -> Selektionstext
+};
+typedef std::vector<DoubleString> DoubleStringArray;
+typedef std::map<LanguageType, DoubleStringArray> DoubleStringTable;
 
 class OfaAutocorrReplacePage : public SfxTabPage
 {
@@ -226,6 +231,8 @@ class OfaAutocorrReplacePage : public SfxTabPage
         using TabPage::DeactivatePage;
 
 private:
+
+        
         CheckBox        aTextOnlyCB;
         FixedText       aShortFT;
         AutoCorrEdit    aShortED;
@@ -274,9 +281,14 @@ public:
 
 // class OfaAutocorrExceptPage ---------------------------------------------
 
-struct StringsArrays;
-typedef StringsArrays* StringsArraysPtr;
-DECLARE_TABLE(StringsTable, StringsArraysPtr)
+struct StringsArrays
+{
+    std::vector<rtl::OUString> aAbbrevStrings;
+    std::vector<rtl::OUString> aDoubleCapsStrings;
+
+    StringsArrays() { }
+};
+typedef std::map<LanguageType, StringsArrays> StringsTable;
 
 class OfaAutocorrExceptPage : public SfxTabPage
 {

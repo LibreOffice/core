@@ -925,26 +925,9 @@ void    OfaACorrCheckListBox::KeyInput( const KeyEvent& rKEvt )
         SvxSimpleTable::KeyInput(rKEvt);
 }
 
-struct DoubleString
-{
-    String  sShort;
-    String  sLong;
-    void*   pUserData; // CheckBox -> form. Text Bool -> Selektionstext
-};
-typedef DoubleString* DoubleStringPtr;
-SV_DECL_PTRARR_DEL(DoubleStringArray, DoubleStringPtr, 4)
-SV_IMPL_PTRARR(DoubleStringArray, DoubleStringPtr);
-
 void lcl_ClearTable(DoubleStringTable& rTable)
 {
-    DoubleStringArrayPtr pArray = rTable.Last();
-    while(pArray)
-    {
-        pArray->DeleteAndDestroy(0, pArray->Count());
-        delete pArray;
-        pArray = rTable.Prev();
-    }
-    rTable.Clear();
+    rTable.clear();
 }
 
 OfaAutocorrReplacePage::OfaAutocorrReplacePage( Window* pParent,
@@ -1020,15 +1003,15 @@ int OfaAutocorrReplacePage::DeactivatePage( SfxItemSet*  )
 sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    DoubleStringArrayPtr pDoubleStringArray = aDoubleStringTable.Last();
-    while(pDoubleStringArray)
+    for (DoubleStringTable::reverse_iterator it = aDoubleStringTable.rbegin(); it != aDoubleStringTable.rend(); ++it)
     {
-        LanguageType eCurLang = (LanguageType)aDoubleStringTable.GetCurKey();
+        LanguageType eCurLang = it->first;
+        DoubleStringArray& rDoubleStringArray = it->second;
         if(eCurLang != eLang) // die aktuelle Sprache wird weiter hinten behandelt
         {
             SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eCurLang);
             sal_uInt16 nWordListCount = pWordList->Count();
-            sal_uInt16 nDoubleStringArrayCount = pDoubleStringArray->Count();
+            sal_uInt16 nDoubleStringArrayCount = rDoubleStringArray.size();
             sal_uInt16 nPos = nDoubleStringArrayCount;
             sal_uInt16 nLastPos = nPos;
             // 1. Durchlauf: Eintraege loeschen oder veraendern:
@@ -1042,20 +1025,20 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                 sal_Bool bFound = !bSWriter && !pWordPtr->IsTextOnly();
                 while(!bFound && nPos)
                 {
-                    DoubleString* pDouble = pDoubleStringArray->GetObject( nPos - 1);
+                    DoubleString& rDouble = rDoubleStringArray[ nPos - 1];
 
                     if( 0 == pCompareClass->compareString(
-                                                    sEntry, pDouble->sShort ))
+                                                    sEntry, rDouble.sShort ))
                     {
                         nLastPos = nPos - 1;
                         bFound = sal_True;
-                        if( !(pWordPtr->IsTextOnly() == (0 == pDouble->pUserData)
+                        if( !(pWordPtr->IsTextOnly() == (0 == rDouble.pUserData)
                             && 0 == pCompareClass->compareString(
-                                pWordPtr->GetLong(), pDouble->sLong ) ) )
+                                pWordPtr->GetLong(), rDouble.sLong ) ) )
                         {
-                            pAutoCorrect->PutText(sEntry, pDouble->sLong, eCurLang);
+                            pAutoCorrect->PutText(sEntry, rDouble.sLong, eCurLang);
                         }
-                        pDoubleStringArray->DeleteAndDestroy(nPos - 1, 1);
+                        rDoubleStringArray.erase(rDoubleStringArray.begin() + nPos - 1);
                         break;
                     }
                     nPos--;
@@ -1066,26 +1049,23 @@ sal_Bool OfaAutocorrReplacePage::FillItemSet( SfxItemSet& )
                     pAutoCorrect->DeleteText(sEntry, eCurLang);
                 }
             }
-            nDoubleStringArrayCount = pDoubleStringArray->Count();
+            nDoubleStringArrayCount = rDoubleStringArray.size();
             for(sal_uInt16 nDoubleStringArrayPos = 0; nDoubleStringArrayPos < nDoubleStringArrayCount; nDoubleStringArrayPos++ )
             {
                 //jetzt sollte es nur noch neue Eintraege geben
-                DoubleString* pDouble = pDoubleStringArray->GetObject( nDoubleStringArrayPos );
-                if(pDouble->pUserData == &bHasSelectionText)
-                    pAutoCorrect->PutText( pDouble->sShort,
+                DoubleString& rDouble = rDoubleStringArray[ nDoubleStringArrayPos ];
+                if(rDouble.pUserData == &bHasSelectionText)
+                    pAutoCorrect->PutText( rDouble.sShort,
                                 *SfxObjectShell::Current(), eCurLang );
                 else
                 {
-                    pAutoCorrect->PutText( pDouble->sShort, pDouble->sLong,
+                    pAutoCorrect->PutText( rDouble.sShort, rDouble.sLong,
                                                             eCurLang);
                 }
             }
         }
-        pDoubleStringArray->DeleteAndDestroy(0, pDoubleStringArray->Count());
-        delete pDoubleStringArray;
-        pDoubleStringArray = aDoubleStringTable.Prev();
     }
-    aDoubleStringTable.Clear();
+    aDoubleStringTable.clear();
     // jetzt noch die aktuelle Selektion
     SvxAutocorrWordList* pWordList = pAutoCorrect->LoadAutocorrWordList(eLang);
     sal_uInt16 nWordListCount = pWordList->Count();
@@ -1158,28 +1138,27 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
         lcl_ClearTable(aDoubleStringTable);
     else
     {
-        DoubleStringArray* pArray = 0;
-        if(aDoubleStringTable.IsKeyValid(eOldLanguage))
+        DoubleStringArray* pArray;
+        if(aDoubleStringTable.find(eOldLanguage) != aDoubleStringTable.end())
         {
-            pArray = aDoubleStringTable.Seek(sal_uLong(eOldLanguage));
-            pArray->DeleteAndDestroy(0, pArray->Count());
+            pArray = &aDoubleStringTable[eOldLanguage];
+            pArray->clear();
         }
         else
         {
-            pArray = new DoubleStringArray;
-            aDoubleStringTable.Insert(sal_uLong(eOldLanguage), pArray);
+            pArray = &aDoubleStringTable[eOldLanguage]; // create new array
         }
 
         sal_uInt16 nListBoxCount = (sal_uInt16)aReplaceTLB.GetEntryCount();
         sal_uInt16 i;
         for(i = 0; i < nListBoxCount; i++)
         {
-            DoubleString* pDouble = new DoubleString();
+            pArray->push_back(DoubleString());
+            DoubleString& rDouble = (*pArray)[pArray->size() - 1];
             SvLBoxEntry*  pEntry = aReplaceTLB.GetEntry( i );
-            pDouble->sShort = aReplaceTLB.GetEntryText(pEntry, 0);
-            pDouble->sLong = aReplaceTLB.GetEntryText(pEntry, 1);
-            pDouble->pUserData = pEntry->GetUserData();
-            pArray->Insert(pDouble, i);
+            rDouble.sShort = aReplaceTLB.GetEntryText(pEntry, 0);
+            rDouble.sLong = aReplaceTLB.GetEntryText(pEntry, 1);
+            rDouble.pUserData = pEntry->GetUserData();
         }
     }
 
@@ -1187,26 +1166,26 @@ void OfaAutocorrReplacePage::RefillReplaceBox(sal_Bool bFromReset,
     if(!bSWriter)
         aFormatText.clear();
 
-    if(aDoubleStringTable.IsKeyValid(eLang))
+    if(aDoubleStringTable.find(eLang) != aDoubleStringTable.end())
     {
-        DoubleStringArray* pArray = aDoubleStringTable.Seek(sal_uLong(eNewLanguage));
-        for(sal_uInt16 i = 0; i < pArray->Count(); i++)
+        DoubleStringArray& rArray = aDoubleStringTable[eNewLanguage];
+        for(sal_uInt16 i = 0; i < rArray.size(); i++)
         {
-            DoubleString* pDouble = pArray->GetObject(i);
-            sal_Bool bTextOnly = 0 == pDouble->pUserData;
+            DoubleString& rDouble = rArray[i];
+            sal_Bool bTextOnly = 0 == rDouble.pUserData;
             // formatierter Text wird nur im Writer angeboten
             if(bSWriter || bTextOnly)
             {
-                String sEntry(pDouble->sShort);
+                String sEntry(rDouble.sShort);
                 sEntry += '\t';
-                sEntry += pDouble->sLong;
+                sEntry += rDouble.sLong;
                 SvLBoxEntry* pEntry = aReplaceTLB.InsertEntry(sEntry);
                 aTextOnlyCB.Check(bTextOnly);
                 if(!bTextOnly)
-                    pEntry->SetUserData(pDouble->pUserData); // Das heisst: mit Formatinfo oder sogar mit Selektionstext
+                    pEntry->SetUserData(rDouble.pUserData); // Das heisst: mit Formatinfo oder sogar mit Selektionstext
             }
             else
-                aFormatText.insert(pDouble->sShort);
+                aFormatText.insert(rDouble.sShort);
         }
     }
     else
@@ -1457,14 +1436,6 @@ IMPL_LINK(OfaAutocorrReplacePage, ModifyHdl, Edit*, pEdt)
     return 0;
 }
 
-struct StringsArrays
-{
-    std::vector<rtl::OUString> aAbbrevStrings;
-    std::vector<rtl::OUString> aDoubleCapsStrings;
-
-    StringsArrays() { }
-};
-
 sal_Bool lcl_FindInArray(std::vector<rtl::OUString>& rStrings, const String& rString)
 {
     for(std::vector<rtl::OUString>::iterator i = rStrings.begin(); i != rStrings.end(); ++i)
@@ -1475,13 +1446,7 @@ sal_Bool lcl_FindInArray(std::vector<rtl::OUString>& rStrings, const String& rSt
 
 void lcl_ClearTable(StringsTable& rTable)
 {
-    StringsArraysPtr pArrays = rTable.Last();
-    while(pArrays)
-    {
-        delete pArrays;
-        pArrays = rTable.Prev();
-    }
-    rTable.Clear();
+    rTable.clear();
 }
 
 OfaAutocorrExceptPage::OfaAutocorrExceptPage( Window* pParent,
@@ -1559,10 +1524,10 @@ int     OfaAutocorrExceptPage::DeactivatePage( SfxItemSet* )
 sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
 {
     SvxAutoCorrect* pAutoCorrect = SvxAutoCorrCfg::Get().GetAutoCorrect();
-    StringsArraysPtr pArrays = aStringsTable.Last();
-    while(pArrays)
+    for(StringsTable::reverse_iterator it1 = aStringsTable.rbegin(); it1 != aStringsTable.rend(); ++it1)
     {
-        LanguageType eCurLang = (LanguageType)aStringsTable.GetCurKey();
+        LanguageType eCurLang = it1->first;
+        StringsArrays& rArrays = it1->second;
         if(eCurLang != eLang) // die aktuelle Sprache wird weiter hinten behandelt
         {
             SvStringsISortDtor* pWrdList = pAutoCorrect->LoadWrdSttExceptList(eCurLang);
@@ -1575,11 +1540,11 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                 {
                     String* pString = pWrdList->GetObject( --i );
                     //Eintrag finden u. gfs entfernen
-                    if( !lcl_FindInArray(pArrays->aDoubleCapsStrings, *pString))
+                    if( !lcl_FindInArray(rArrays.aDoubleCapsStrings, *pString))
                       pWrdList->DeleteAndDestroy( i );
                 }
 
-                for(std::vector<rtl::OUString>::iterator it = pArrays->aDoubleCapsStrings.begin(); it != pArrays->aDoubleCapsStrings.end(); ++i)
+                for(std::vector<rtl::OUString>::iterator it = rArrays.aDoubleCapsStrings.begin(); it != rArrays.aDoubleCapsStrings.end(); ++i)
                 {
                     String* s = new String(*it);
                     if(!pWrdList->Insert(s))
@@ -1597,11 +1562,11 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                 for( i = nCount; i; )
                 {
                     String* pString = pCplList->GetObject( --i );
-                    if( !lcl_FindInArray(pArrays->aAbbrevStrings, *pString))
+                    if( !lcl_FindInArray(rArrays.aAbbrevStrings, *pString))
                         pCplList->DeleteAndDestroy( i );
                 }
 
-                for(std::vector<rtl::OUString>::iterator it = pArrays->aAbbrevStrings.begin(); it != pArrays->aAbbrevStrings.end(); ++it)
+                for(std::vector<rtl::OUString>::iterator it = rArrays.aAbbrevStrings.begin(); it != rArrays.aAbbrevStrings.end(); ++it)
                 {
                     String* s = new String(*it);
                     if(!pCplList->Insert(s))
@@ -1611,9 +1576,8 @@ sal_Bool OfaAutocorrExceptPage::FillItemSet( SfxItemSet&  )
                 pAutoCorrect->SaveCplSttExceptList(eCurLang);
             }
         }
-        pArrays = aStringsTable.Prev();
     }
-    aStringsTable.Clear();
+    aStringsTable.clear();
 
     SvStringsISortDtor* pWrdList = pAutoCorrect->LoadWrdSttExceptList(eLang);
 
@@ -1691,17 +1655,16 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
         lcl_ClearTable(aStringsTable);
     else
     {
-        StringsArrays* pArrays = NULL;
-        if(aStringsTable.IsKeyValid(eOldLanguage))
+        StringsArrays* pArrays;
+        if(aStringsTable.find(eOldLanguage) != aStringsTable.end())
         {
-            pArrays = aStringsTable.Seek(sal_uLong(eOldLanguage));
+            pArrays = &aStringsTable[eOldLanguage];
             pArrays->aAbbrevStrings.clear();
             pArrays->aDoubleCapsStrings.clear();
         }
         else
         {
-            pArrays = new StringsArrays;
-            aStringsTable.Insert(sal_uLong(eOldLanguage), pArrays);
+            pArrays = &aStringsTable[eOldLanguage]; // create new array
         }
 
         sal_uInt16 i;
@@ -1717,13 +1680,13 @@ void OfaAutocorrExceptPage::RefillReplaceBoxes(sal_Bool bFromReset,
     aAbbrevED.SetText(sTemp);
     aDoubleCapsED.SetText(sTemp);
 
-    if(aStringsTable.IsKeyValid(eLang))
+    if(aStringsTable.find(eLang) != aStringsTable.end())
     {
-        StringsArrays* pArrays = aStringsTable.Seek(sal_uLong(eLang));
-        for(std::vector<rtl::OUString>::iterator i = pArrays->aAbbrevStrings.begin(); i != pArrays->aAbbrevStrings.end(); ++i)
+        StringsArrays& rArrays = aStringsTable[eLang];
+        for(std::vector<rtl::OUString>::iterator i = rArrays.aAbbrevStrings.begin(); i != rArrays.aAbbrevStrings.end(); ++i)
             aAbbrevLB.InsertEntry(*i);
 
-        for(std::vector<rtl::OUString>::iterator i = pArrays->aDoubleCapsStrings.begin(); i != pArrays->aDoubleCapsStrings.end(); ++i)
+        for(std::vector<rtl::OUString>::iterator i = rArrays.aDoubleCapsStrings.begin(); i != rArrays.aDoubleCapsStrings.end(); ++i)
             aDoubleCapsLB.InsertEntry(*i);
     }
     else
