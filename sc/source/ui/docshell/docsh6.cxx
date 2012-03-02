@@ -81,11 +81,6 @@ struct ScStylePair
     SfxStyleSheetBase *pDest;
 };
 
-inline OUString C2U(const char* s)
-{
-    return OUString::createFromAscii(s);
-}
-
 }
 
 // STATIC DATA -----------------------------------------------------------
