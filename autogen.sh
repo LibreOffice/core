@@ -146,7 +146,12 @@ if (defined $ENV{NOCONFIGURE}) {
         if (scalar(@cmdline_args) > 0) {
             # if there's already an autogen.lastrun, make a backup first
             if (-e "autogen.lastrun") {
-                system("cp autogen.lastrun autogen.lastrun.bak");
+                open (my $fh, "autogen.lastrun") || warn "can't open autogen.lastrun. \n";
+                open (BAK, ">autogen.lastrun.bak") || warn "can't create backup file. \n";
+                while (<$fh>) {
+                    print BAK;
+                }
+                close (BAK) && close ($fh);
             }
             # print "writing args to autogen.lastrun\n";
             my $fh;
@@ -159,7 +164,8 @@ if (defined $ENV{NOCONFIGURE}) {
     }
     elsif ( ! -e "autogen.lastrun")
     {
-        system("touch autogen.lastrun");
+        open (my $fh, ">autogen.lastrun") || die "can't create autogen.lastrun";
+        close ($fh);
     }
     print "running ./configure with '" . join ("' '", @args), "'\n";
     system ("./configure", @args) && die "Error running configure";
