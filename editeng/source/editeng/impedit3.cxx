@@ -305,7 +305,7 @@ void ImpEditEngine::UpdateViews( EditView* pCurView )
             // convert to window coordinates ....
             aClipRec = pView->pImpEditView->GetWindowPos( aClipRec );
 
-            if ( ( pView == pCurView )  )
+            if ( pView == pCurView )
                 Paint( pView->pImpEditView, aClipRec, sal_True );
             else
                 pView->GetWindow()->Invalidate( aClipRec );
