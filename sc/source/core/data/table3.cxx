@@ -604,6 +604,7 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
     }
 
     itr = aNoteMap.begin();
+    while(itr != aNoteMap.end())
     {
         //we can here assume that there is no note in the target location
         SCCOL nCol = itr->first.first;
@@ -667,6 +668,7 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
     }
 
     itr = aNoteMap.begin();
+    while(itr != aNoteMap.end())
     {
         //we can here assume that there is no note in the target location
         SCCOL nCol = itr->first.first;
