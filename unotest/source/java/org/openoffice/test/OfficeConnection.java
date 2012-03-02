@@ -125,6 +125,12 @@ public final class OfficeConnection {
                     context = null;
                     try {
                         desktopTerminated = desktop.terminate();
+                        if (!desktopTerminated) {
+                            // in case terminate() fails we would wait forever
+                            // for the process to die, so kill it
+                            process.destroy();
+                        }
+                        assertTrue(desktopTerminated);
                     } catch (DisposedException e) {}
                         // it appears that DisposedExceptions can already happen
                         // while receiving the response of the terminate call
@@ -139,7 +145,6 @@ public final class OfficeConnection {
             }
             boolean outTerminated = outForward == null || outForward.terminated();
             boolean errTerminated = errForward == null || errForward.terminated();
-            assertTrue(desktopTerminated);
             assertEquals(0, code);
             assertTrue(outTerminated);
             assertTrue(errTerminated);
