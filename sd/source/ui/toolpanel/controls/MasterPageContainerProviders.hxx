@@ -111,6 +111,7 @@ class PagePreviewProvider : public PreviewProvider
 {
 public:
     PagePreviewProvider (void);
+    virtual ~PagePreviewProvider() {}
     virtual Image operator () (int nWidth, SdPage* pPage, ::sd::PreviewRenderer& rRenderer);
     virtual int GetCostIndex (void);
     virtual bool NeedsPageObject (void);
@@ -164,6 +165,7 @@ class DefaultPageObjectProvider : public PageObjectProvider
 {
 public:
     DefaultPageObjectProvider (void);
+    virtual ~DefaultPageObjectProvider() {}
     virtual SdPage* operator () (SdDrawDocument* pDocument);
     virtual int GetCostIndex (void);
     virtual bool operator== (const PageObjectProvider& rProvider);
@@ -178,6 +180,7 @@ class ExistingPageProvider : public ::sd::toolpanel::controls::PageObjectProvide
 {
 public:
     ExistingPageProvider (SdPage* pPage);
+    virtual ~ExistingPageProvider() {}
     virtual SdPage* operator() (SdDrawDocument* pDocument);
     virtual int GetCostIndex (void);
     virtual bool operator== (const PageObjectProvider& rProvider);
