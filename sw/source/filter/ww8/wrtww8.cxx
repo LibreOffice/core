@@ -1377,16 +1377,16 @@ void WW8_WrtBookmarks::MoveFieldMarks(sal_uLong nFrom, sal_uLong nTo)
 void WW8Export::AppendBookmarks( const SwTxtNode& rNd,
     xub_StrLen nAktPos, xub_StrLen nLen )
 {
-    SvPtrarr aArr( 8 );
+    std::vector< const ::sw::mark::IMark* > aArr;
     sal_uInt16 nCntnt;
     xub_StrLen nAktEnd = nAktPos + nLen;
     if( GetWriter().GetBookmarks( rNd, nAktPos, nAktEnd, aArr ))
     {
         sal_uLong nNd = rNd.GetIndex(), nSttCP = Fc2Cp( Strm().Tell() );
-        for( sal_uInt16 n = 0; n < aArr.Count(); ++n )
+        for( sal_uInt16 n = 0; n < aArr.size(); ++n )
         {
-            ::sw::mark::IMark& rBkmk = *(::sw::mark::IMark*)aArr[ n ];
-            if(dynamic_cast< ::sw::mark::IFieldmark *>(&rBkmk))
+            const ::sw::mark::IMark& rBkmk = *(aArr[ n ]);
+            if(dynamic_cast< const ::sw::mark::IFieldmark *>(&rBkmk))
                 continue;
 
             const SwPosition* pPos = &rBkmk.GetMarkPos();

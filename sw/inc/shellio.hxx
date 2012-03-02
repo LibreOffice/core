@@ -47,6 +47,7 @@
 #include <swtypes.hxx>
 #include <docfac.hxx>   // SwDocFac
 #include <iodetect.hxx>
+#include <IMark.hxx>
 
 class SfxFilterContainer;
 class SfxFilter;
@@ -463,7 +464,7 @@ public:
     // Search alle Bookmarks in the range and return it in the Array.
     sal_uInt16 GetBookmarks( const SwCntntNode& rNd,
                         xub_StrLen nStt, xub_StrLen nEnd,
-                        SvPtrarr& rArr );
+                        std::vector< const ::sw::mark::IMark* >& rArr );
 
     // Create new PaM at position.
     static SwPaM * NewSwPaM(SwDoc & rDoc,

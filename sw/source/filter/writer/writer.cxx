@@ -28,9 +28,6 @@
 
 #include <hintids.hxx>
 
-#include <svl/svstdarr.hxx>
-#include <tools/table.hxx>
-
 #include <sot/storage.hxx>
 #include <sfx2/docfile.hxx>
 #include <svl/urihelper.hxx>
@@ -53,15 +50,15 @@ using namespace ::com::sun::star;
 static sal_Char aNToABuf[] = "0000000000000000000000000";
 #define NTOABUFLEN (sizeof(aNToABuf))
 
-DECLARE_TABLE( SwBookmarkNodeTable, SvPtrarr* )
+typedef std::multimap<sal_uLong, const ::sw::mark::IMark*> SwBookmarkNodeTable;
 
 struct Writer_Impl
 {
     SvStream * m_pStream;
 
     boost::scoped_ptr< std::map<String, String> > pFileNameMap;
-    SvPtrarr* pFontRemoveLst, *pBkmkArr;
-    SwBookmarkNodeTable* pBkmkNodePos;
+    std::vector<const SvxFontItem*> aFontRemoveLst;
+    SwBookmarkNodeTable aBkmkNodePos;
 
     Writer_Impl();
     ~Writer_Impl();
@@ -72,59 +69,33 @@ struct Writer_Impl
 
 Writer_Impl::Writer_Impl()
     : m_pStream(0)
-    , pFontRemoveLst( 0 )
-    , pBkmkArr( 0 ), pBkmkNodePos( 0 )
 {
 }
 
 Writer_Impl::~Writer_Impl()
 {
-    delete pFontRemoveLst;
-
-    if( pBkmkNodePos )
-    {
-        for( SvPtrarr* p = pBkmkNodePos->First(); p; p = pBkmkNodePos->Next() )
-            delete p;
-        delete pBkmkNodePos;
-    }
 }
 
 void Writer_Impl::RemoveFontList( SwDoc& rDoc )
 {
-    OSL_ENSURE( pFontRemoveLst, "wo ist die FontListe?" );
-    for( sal_uInt16 i = pFontRemoveLst->Count(); i; )
+    for( std::vector<const SvxFontItem*>::const_iterator it = aFontRemoveLst.begin();
+        it != aFontRemoveLst.end(); ++it )
     {
-        SvxFontItem* pItem = (SvxFontItem*)(*pFontRemoveLst)[ --i ];
-        rDoc.GetAttrPool().Remove( *pItem );
+        rDoc.GetAttrPool().Remove( **it );
     }
 }
 
 void Writer_Impl::InsertBkmk(const ::sw::mark::IMark& rBkmk)
 {
-    if( !pBkmkNodePos )
-        pBkmkNodePos = new SwBookmarkNodeTable;
 
     sal_uLong nNd = rBkmk.GetMarkPos().nNode.GetIndex();
-    SvPtrarr* pArr = pBkmkNodePos->Get( nNd );
-    if( !pArr )
-    {
-        pArr = new SvPtrarr( 1 );
-        pBkmkNodePos->Insert( nNd, pArr );
-    }
 
-    void* p = (void*)&rBkmk;
-    pArr->Insert( p, pArr->Count() );
+    aBkmkNodePos.insert( SwBookmarkNodeTable::value_type( nNd, &rBkmk ) );
 
     if(rBkmk.IsExpanded() && rBkmk.GetOtherMarkPos().nNode != nNd)
     {
         nNd = rBkmk.GetOtherMarkPos().nNode.GetIndex();
-        pArr = pBkmkNodePos->Get( nNd );
-        if( !pArr )
-        {
-            pArr = new SvPtrarr( 1 );
-            pBkmkNodePos->Insert( nNd, pArr );
-        }
-        pArr->Insert( p, pArr->Count() );
+        aBkmkNodePos.insert( SwBookmarkNodeTable::value_type( nNd, &rBkmk ));
     }
 }
 
@@ -166,10 +137,7 @@ const IDocumentStylePoolAccess* Writer::getIDocumentStylePoolAccess() const { re
 
 void Writer::ResetWriter()
 {
-    if (m_pImpl->pFontRemoveLst)
-    {
-        m_pImpl->RemoveFontList( *pDoc );
-    }
+    m_pImpl->RemoveFontList( *pDoc );
     m_pImpl.reset(new Writer_Impl);
 
     if( pCurPam )
@@ -471,13 +439,7 @@ void Writer::_AddFontItem( SfxItemPool& rPool, const SvxFontItem& rFont )
         rPool.Remove( *pItem );
     else
     {
-        if (!m_pImpl->pFontRemoveLst)
-        {
-            m_pImpl->pFontRemoveLst = new SvPtrarr( 0 );
-        }
-
-        void* p = (void*)pItem;
-        m_pImpl->pFontRemoveLst->Insert( p, m_pImpl->pFontRemoveLst->Count() );
+        m_pImpl->aFontRemoveLst.push_back( pItem );
     }
 }
 
@@ -497,44 +459,42 @@ void Writer::CreateBookmarkTbl()
 
 // search alle Bookmarks in the range and return it in the Array
 sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
-    xub_StrLen nEnd, SvPtrarr& rArr)
+    xub_StrLen nEnd, std::vector< const ::sw::mark::IMark* >& rArr)
 {
     OSL_ENSURE( !rArr.Count(), "es sind noch Eintraege vorhanden" );
 
     sal_uLong nNd = rNd.GetIndex();
-    SvPtrarr* pArr = (m_pImpl->pBkmkNodePos) ?
-        m_pImpl->pBkmkNodePos->Get( nNd ) : 0;
-    if( pArr )
+    SwBookmarkNodeTable::const_iterator it = m_pImpl->aBkmkNodePos.find( nNd );
+    if( it != m_pImpl->aBkmkNodePos.end() )
     {
         // there exist some bookmarks, search now all which is in the range
         if( !nStt && nEnd == rNd.Len() )
             // all
-            rArr.Insert( pArr, 0 );
+            for( ; it != m_pImpl->aBkmkNodePos.end(); ++it )
+                rArr.push_back( it->second );
         else
         {
-            sal_uInt16 n;
-            xub_StrLen nCntnt;
-            for( n = 0; n < pArr->Count(); ++n )
+            for( ; it != m_pImpl->aBkmkNodePos.end(); ++it )
             {
-                void* p = (*pArr)[ n ];
-                const ::sw::mark::IMark& rBkmk = *(::sw::mark::IMark *)p;
+                const ::sw::mark::IMark& rBkmk = *(it->second);
+                xub_StrLen nCntnt;
                 if( rBkmk.GetMarkPos().nNode == nNd &&
                     (nCntnt = rBkmk.GetMarkPos().nContent.GetIndex() ) >= nStt &&
                     nCntnt < nEnd )
                 {
-                    rArr.Insert( p, rArr.Count() );
+                    rArr.push_back( &rBkmk );
                 }
                 else if( rBkmk.IsExpanded() && nNd ==
                         rBkmk.GetOtherMarkPos().nNode.GetIndex() && (nCntnt =
                         rBkmk.GetOtherMarkPos().nContent.GetIndex() ) >= nStt &&
                         nCntnt < nEnd )
                 {
-                    rArr.Insert( p, rArr.Count() );
+                    rArr.push_back( &rBkmk );
                 }
             }
         }
     }
-    return rArr.Count();
+    return rArr.size();
 }
 
 ////////////////////////////////////////////////////////////////////////////
