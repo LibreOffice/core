@@ -130,6 +130,11 @@ CFLAGS:=-O
 .IF "$(COM)"=="C52" && "$(CPU)"=="U"
 CFLAGS+=-m64
 .ENDIF
+#ppc64 ld crashing at link time, throwing a minimal-toc at it to
+#perturb is sufficiently to not crash
+.IF "$(COM)$(OS)$(CPUNAME)" == "GCCLINUXPOWERPC64"
+CFLAGS+=-mminimal-toc
+.ENDIF
 .EXPORT: CFLAGS
 
 # NB: SOLARDIR before SYSBASE, because linux SYSBASE contains obsolete libcrypto
