@@ -48,6 +48,7 @@
 #include <svx/svdpage.hxx>
 
 #include "document.hxx"
+#include "table.hxx"
 #include "drwlayer.hxx"
 #include "chartarr.hxx"
 #include "chartlis.hxx"

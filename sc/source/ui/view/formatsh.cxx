@@ -98,6 +98,7 @@
 #include "tabvwsh.hxx"
 #include "undostyl.hxx"
 #include "markdata.hxx"
+#include "markarr.hxx"
 
 
 #define ScFormatShell

@@ -64,6 +64,7 @@
 #include "patattr.hxx"
 #include "docoptio.hxx"
 #include "tabprotection.hxx"
+#include "postit.hxx"
 
 #include "excdoc.hxx"
 #include "namebuff.hxx"

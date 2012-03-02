@@ -63,6 +63,7 @@ class StarBASIC;
 #include "filter.hxx"
 #include "asciiopt.hxx"
 #include "cell.hxx"
+#include "column.hxx"
 #include "docoptio.hxx"
 #include "progress.hxx"
 #include "scitems.hxx"

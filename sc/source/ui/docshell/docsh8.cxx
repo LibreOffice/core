@@ -69,6 +69,7 @@
 #include "filter.hxx"
 #include "progress.hxx"
 #include "cell.hxx"
+#include "column.hxx"
 #include "editutil.hxx"
 #include "cellform.hxx"
 #include "dbdocutl.hxx"

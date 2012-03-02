@@ -1302,8 +1302,8 @@ void ScColumn::CopyToColumn(SCROW nRow1, SCROW nRow2, sal_uInt16 nFlags, bool bM
                     // empty cell.
                     if (pNew->GetCellType() == CELLTYPE_STRING)
                     {
-                        String aStr = static_cast<ScStringCell*>(pNew)->GetString();
-                        if (aStr.Len() == 0)
+                        rtl::OUString aStr = static_cast<ScStringCell*>(pNew)->GetString();
+                        if (aStr.isEmpty())
                             // A string cell with empty string.  Delete the cell itself.
                             rColumn.Delete(maItems[i].nRow);
                         else

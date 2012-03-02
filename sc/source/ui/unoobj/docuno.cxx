@@ -83,6 +83,7 @@
 #include "docsh.hxx"
 #include "hints.hxx"
 #include "docfunc.hxx"
+#include "postit.hxx"
 #include "dociter.hxx"
 #include "cell.hxx"
 #include "drwlayer.hxx"

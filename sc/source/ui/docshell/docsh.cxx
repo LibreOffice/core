@@ -84,6 +84,8 @@
 // INCLUDE ---------------------------------------------------------------
 
 #include "cell.hxx"
+#include "column.hxx"
+#include "postit.hxx"
 #include "global.hxx"
 #include "filter.hxx"
 #include "scmod.hxx"

@@ -37,19 +37,21 @@
 #include "scdllapi.h"
 #include "rangelst.hxx"
 #include "rangenam.hxx"
-#include "table.hxx"
 #include "brdcst.hxx"
 #include "tabopparams.hxx"
+#include "sortparam.hxx"
 #include "types.hxx"
 #include "formula/grammar.hxx"
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include "scdllapi.h"
 #include "typedstrdata.hxx"
+#include "compressedarray.hxx"
+#include <tools/fract.hxx>
+#include <tools/gen.hxx>
 
 #include <memory>
 #include <map>
 #include <set>
-#include <list>
 #include <vector>
 #include <boost/ptr_container/ptr_vector.hpp>
 
@@ -150,6 +152,11 @@ struct ScSetStringParam;
 class ScDocRowHeightUpdater;
 struct ScColWidthParam;
 struct ScCopyBlockFromClipParams;
+class ScSheetEvents;
+class ScProgress;
+class SvtListener;
+class ScNotes;
+class ScEditDataArray;
 
 namespace com { namespace sun { namespace star {
     namespace lang {
@@ -205,9 +212,6 @@ const sal_uInt8 SC_DDE_DEFAULT       = 0;
 const sal_uInt8 SC_DDE_ENGLISH       = 1;
 const sal_uInt8 SC_DDE_TEXT          = 2;
 const sal_uInt8 SC_DDE_IGNOREMODE    = 255;       /// For usage in FindDdeLink() only!
-
-typedef std::pair<SCCOL, SCROW> ScAddress2D;
-typedef std::map<ScAddress2D, ScPostIt*> ScNoteMap;
 
 class ScDocument
 {

@@ -37,6 +37,7 @@
 #include <svl/PasswordHelper.hxx>
 #include <unotools/transliterationwrapper.hxx>
 
+#include "table.hxx"
 #include "patattr.hxx"
 #include "docpool.hxx"
 #include "cell.hxx"
