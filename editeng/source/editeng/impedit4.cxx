@@ -688,6 +688,10 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
     rOutput << "}}";    // 1xparentheses paragraphs, 1xparentheses RTF document
     rOutput.Flush();
 
+    std::vector<SvxFontItem*>::iterator it;
+    for (it = aFontTable.begin(); it != aFontTable.end(); ++it)
+        delete *it;
+
 #if (OSL_DEBUG_LEVEL > 2) && !defined( UNX )
     {
         SvFileStream aStream( String( RTL_CONSTASCII_USTRINGPARAM ( "d:\\rtf_out.rtf" ) ), STREAM_WRITE|STREAM_TRUNC );
