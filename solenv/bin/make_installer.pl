@@ -796,10 +796,15 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_non_existent_languages_in_productlists($filesinproductlanguageresolvedarrayref, $languagestringref, "Name", "file");
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles7.log", $filesinproductlanguageresolvedarrayref); }
 
-    installer::scriptitems::get_Destination_Directory_For_Item_From_Directorylist($filesinproductlanguageresolvedarrayref, $dirsinproductarrayref);
-    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles8.log", $filesinproductlanguageresolvedarrayref); }
-
     installer::scriptitems::get_Source_Directory_For_Files_From_Includepathlist($filesinproductlanguageresolvedarrayref, $includepatharrayref_lang, $dirsinproductlanguageresolvedarrayref, "Files");
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles8a.log", $filesinproductlanguageresolvedarrayref); }
+
+    $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_bundled_extension_blobs( $filesinproductlanguageresolvedarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles8b.log", $filesinproductlanguageresolvedarrayref); }
+    $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_bundled_prereg_extensions( $filesinproductlanguageresolvedarrayref);
+    if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles8c.log", $filesinproductlanguageresolvedarrayref); }
+
+    installer::scriptitems::get_Destination_Directory_For_Item_From_Directorylist($filesinproductlanguageresolvedarrayref, $dirsinproductarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles9.log", $filesinproductlanguageresolvedarrayref); }
 
     $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_Files_Without_Sourcedirectory($filesinproductlanguageresolvedarrayref);
@@ -1078,21 +1083,11 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
         $modulesinproductlanguageresolvedarrayref = installer::scriptitems::remove_not_required_language_modules($modulesinproductlanguageresolvedarrayref, $languagesarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes_modules($loggingdir . "modules2a.log", $modulesinproductlanguageresolvedarrayref); }
 
-        if ( $installer::globals::analyze_spellcheckerlanguage )
-        {
-            $modulesinproductlanguageresolvedarrayref = installer::scriptitems::remove_not_required_spellcheckerlanguage_modules($modulesinproductlanguageresolvedarrayref);
-            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes_modules($loggingdir . "modules3.log", $modulesinproductlanguageresolvedarrayref); }
-
-            $filesinproductlanguageresolvedarrayref = installer::scriptitems::remove_not_required_spellcheckerlanguage_files($filesinproductlanguageresolvedarrayref);
-            if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles15b.log", $filesinproductlanguageresolvedarrayref); }
-        }
-
         installer::scriptitems::changing_name_of_language_dependent_keys($modulesinproductlanguageresolvedarrayref);
         if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes_modules($loggingdir . "modules3a.log", $modulesinproductlanguageresolvedarrayref); }
 
         # installer::scriptitems::collect_language_specific_names($modulesinproductlanguageresolvedarrayref);
         installer::scriptitems::select_required_language_strings($modulesinproductlanguageresolvedarrayref);    # using english strings
-
     }
 
     # Copy-only projects can now start to copy all items File and ScpAction

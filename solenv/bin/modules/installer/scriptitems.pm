@@ -490,6 +490,52 @@ sub remove_not_required_spellcheckerlanguage_files
     return \@filesarray;
 }
 
+sub add_bundled_extension_blobs
+{
+    my @filelist = @{$_[0]};
+
+    my $bundleenv = $ENV{'BUNDLED_EXTENSION_BLOBS'};
+    my $bundlesrc = $ENV{'TARFILE_LOCATION'};
+    my @bundle_files = split(/\s+/, $bundleenv, -1);
+    foreach my $filename ( @bundle_files) {
+        my $basename = File::Basename::basename( $filename);
+        my $onefile = {
+            'Dir' => 'gid_Brand_Dir_Share_Extensions_Install',
+            'Name' => $basename,
+            'Styles' => '(PACKED)',
+            'UnixRights' => '444',
+            'sourcepath' => $bundlesrc . $installer::globals::separator . $filename
+        };
+        push( @filelist, $onefile);
+        push( @installer::globals::logfileinfo, "\tbundling \"$filename\" extension\n");
+    }
+
+    return \@filelist;
+}
+
+sub add_bundled_prereg_extensions
+{
+    my @filelist = @{$_[0]};
+
+    my $bundleenv = $ENV{'BUNDLED_PREREG_EXTENSIONS'};
+    my $bundlesrc = $ENV{'TARFILE_LOCATION'};
+    my @bundle_files = split(/\s+/, $bundleenv, -1);
+    foreach my $filename ( @bundle_files) {
+        my $basename = File::Basename::basename( $filename);
+        my $onefile = {
+            'Dir' => 'gid_Profileitem_Uno_Uno_Bundled_Extensions_Prereg',
+            'Name' => $basename,
+            'Styles' => '(PACKED,ARCHIVE)',
+            'UnixRights' => '444',
+            'sourcepath' => $bundlesrc . $installer::globals::separator . $filename
+        };
+        push( @filelist, $onefile);
+        push( @installer::globals::logfileinfo, "\tbundling \"$filename\" extension\n");
+    }
+
+    return \@filelist;
+}
+
 ################################################################################
 # Looking for directories without correct HostName
 ################################################################################
@@ -981,7 +1027,7 @@ sub get_Directoryname_From_Directorygid
 }
 
 ##################################################################
-# Getting destination direcotory for links, files and profiles
+# Getting destination directory for links, files and profiles
 ##################################################################
 
 sub get_Destination_Directory_For_Item_From_Directorylist       # this is used for Files, Profiles and Links
@@ -1373,7 +1419,7 @@ sub remove_Files_Without_Sourcedirectory
 
             if ( ! $installer::globals::languagepack )
             {
-                $infoline = "ERROR: Removing file $filename from file list.\n";
+                $infoline = "ERROR: No sourcepath -> Removing file $filename from file list.\n";
                 push( @installer::globals::logfileinfo, $infoline);
 
                 push(@missingfiles, "ERROR: File not found: $filename\n");

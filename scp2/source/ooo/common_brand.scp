@@ -39,7 +39,8 @@ Module gid_Module_Root_Brand
             gid_Brand_Dir_Share_C05_Faq,
             gid_Brand_Dir_Share_Config,
             gid_Brand_Dir_Share_Extension,
-            gid_Brand_Dir_Share_Extensions,            
+            gid_Brand_Dir_Share_Extensions,
+            gid_Brand_Dir_Share_Extensions_Install,
             gid_Brand_Dir_Share_Prereg,    
             gid_Brand_Dir_Share_Uno_Packages,
             gid_Brand_Dir_Share_Uno_Packages_Cache,
@@ -227,7 +228,7 @@ Directory gid_Brand_Dir_Share_Prereg
 End
 
 Directory gid_Brand_Dir_Share_Extensions_Install
-    ParentID = gid_Brand_Dir_Share_Extension;
+    ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "install";
 End
 

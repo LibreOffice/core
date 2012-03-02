@@ -327,6 +327,17 @@ AC_ARG_ENABLE(randr-link,
 [  --disable-randr-link    disable linking with libXrandr, instead dynamically 
                            open it at runtime
 ],,enable_randr_link=yes)
+AC_ARG_WITH(bundled-extension-blobs,
+[  --with-bundled-extension-blobs Whitespace seperated list of files in the tarball directory
+                          that are to be bundled as-is for installation as extensions
+                          at the first program start. Make sure to only bundle extensions
+                          which can be installed without requiring a license dialog
+],,)
+#AC_ARG_WITH(bundled-prereg-extensions,
+#[  --with-bundled-prereg-extensions Whitespace seperated list of files in the tarball directory that
+#                          are to be bundled as pre-registered extensions. Make sure to only bundle
+#                          extensions which can be installed without requiring a license dialog
+#],,)
 AC_ARG_WITH(system-dicts,
 [  --with-system-dicts    Use dictionaries from system paths- Specify
                          them via --with-{dict,hyph,thes}-path=/path
@@ -1454,37 +1465,58 @@ fi
 AC_MSG_RESULT([$ENABLE_RPATH])
 AC_SUBST(ENABLE_RPATH)
 
-dnl Test whether to include system dictionaries
 dnl ===================================================================
-AC_MSG_CHECKING([whether to use dicts from external paths])
-if test -n "$with_system_dicts" -a "$with_system_dicts" = "yes"; then
-  AC_MSG_RESULT([yes])
-  SYSTEM_DICTS=YES
-  AC_MSG_CHECKING([for spelling dictionary directory])
-  if test -n "$with_external_dict_dir"; then
-      DICT_SYSTEM_DIR=file://$with_external_dict_dir
-  else
-      DICT_SYSTEM_DIR=file:///usr/share/hunspell
-  fi
-  AC_MSG_RESULT([$DICT_SYSTEM_DIR])
-  AC_MSG_CHECKING([for hyphenation patterns directory])
-  if test -n "$with_external_hyph_dir"; then
-      HYPH_SYSTEM_DIR=file://$with_external_hyph_dir
-  else
-      HYPH_SYSTEM_DIR=file:///usr/share/hyphen
-  fi
-  AC_MSG_RESULT([$HYPH_SYSTEM_DIR])
-  AC_MSG_CHECKING([for thesaurus directory])
-  if test -n "$with_external_thes_dir"; then
-      THES_SYSTEM_DIR=file://$with_external_thes_dir
-  else
-      THES_SYSTEM_DIR=file:///usr/share/mythes
-  fi
-  AC_MSG_RESULT([$THES_SYSTEM_DIR])
+dnl Check extensions to be bundled as literal blobs
+dnl ===================================================================
+if test -n "$with_bundled_extension_blobs"; then
+	BUNDLED_EXTENSION_BLOBS="$with_bundled_extension_blobs"
 else
-  AC_MSG_RESULT([no])
-  SYSTEM_DICTS=NO
+	BUNDLED_EXTENSION_BLOBS=
 fi
+AC_SUBST(BUNDLED_EXTENSION_BLOBS)
+
+#dnl ===================================================================
+#dnl Check extensions that are to be bundled as pre-registerd
+#dnl ===================================================================
+if test -n "$with_bundled_prereg_extensions"; then
+	BUNDLED_PREREG_EXTENSIONS="$with_bundled_prereg_extensions"
+else
+	BUNDLED_PREREG_EXTENSIONS=
+fi
+AC_SUBST(BUNDLED_PREREG_EXTENSIONS)
+
+dnl ===================================================================
+dnl Configure system provided dictionary/hyphenation/thesaurus
+dnl ===================================================================
+  AC_MSG_CHECKING([whether to use dicts from external paths])
+  if test -n "$with_system_dicts" -a "$with_system_dicts" = "yes"; then
+	AC_MSG_RESULT([yes])
+	SYSTEM_DICTS=YES
+	AC_MSG_CHECKING([for spelling dictionary directory])
+	if test -n "$with_external_dict_dir"; then
+		DICT_SYSTEM_DIR=file://$with_external_dict_dir
+	else
+		DICT_SYSTEM_DIR=file:///usr/share/hunspell
+	fi
+	AC_MSG_RESULT([$DICT_SYSTEM_DIR])
+	AC_MSG_CHECKING([for hyphenation patterns directory])
+	if test -n "$with_external_hyph_dir"; then
+		HYPH_SYSTEM_DIR=file://$with_external_hyph_dir
+	else
+		HYPH_SYSTEM_DIR=file:///usr/share/hyphen
+	fi
+	AC_MSG_RESULT([$HYPH_SYSTEM_DIR])
+	AC_MSG_CHECKING([for thesaurus directory])
+	if test -n "$with_external_thes_dir"; then
+		THES_SYSTEM_DIR=file://$with_external_thes_dir
+	else
+		THES_SYSTEM_DIR=file:///usr/share/mythes
+	fi
+	AC_MSG_RESULT([$THES_SYSTEM_DIR])
+  else
+  	AC_MSG_RESULT([no])
+  	SYSTEM_DICTS=NO
+  fi
 AC_SUBST(SYSTEM_DICTS)
 AC_SUBST(DICT_SYSTEM_DIR)
 AC_SUBST(HYPH_SYSTEM_DIR)
