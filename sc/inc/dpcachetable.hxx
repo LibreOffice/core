@@ -80,6 +80,7 @@ public:
     class FilterBase
     {
     public:
+        virtual ~FilterBase() {}
         /** returns true if the matching condition is met for a single cell
             value, or false otherwise. */
         virtual bool match( const  ScDPItemData& rCellData ) const = 0;
