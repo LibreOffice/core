@@ -61,19 +61,6 @@ public:
                             SimpleResMgr( const sal_Char* pPrefixName,
                                           const ::com::sun::star::lang::Locale& _rLocale);
 
-                            /** creates a new SimpleResManager
-                                @param _rPrefixName
-                                    denotes the prefix of the resource file name
-                                @param _inout_Locale
-                                    denotes the locale of the resource file to load. If empty, no default handling
-                                    (like in the other constructor) will happen, instead an unlocalized version will be
-                                    attempted to be loaded.
-                                    Upon return, the variable will contain the actual locale of the loaded resource file.
-                                    For instance, if "en-US" is requested, but only "en" exists, the latter will be loaded
-                                    and returned. Furthermore, if an unlocalized resource file with only the base name exists,
-                                    this one will be loaded as final fallback.
-                            */
-                            SimpleResMgr( const ::rtl::OUString& _rPrefixName, ::com::sun::star::lang::Locale& _inout_Locale );
     virtual                 ~SimpleResMgr();
 
     static SimpleResMgr*    Create( const sal_Char* pPrefixName,

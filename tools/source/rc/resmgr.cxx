@@ -1926,13 +1926,6 @@ SimpleResMgr::SimpleResMgr( const sal_Char* pPrefixName,
 }
 
 // -----------------------------------------------------------------------
-SimpleResMgr::SimpleResMgr( const ::rtl::OUString& _rPrefixName, ::com::sun::star::lang::Locale& _inout_Locale )
-{
-    osl::Guard<osl::Mutex> aGuard( getResMgrMutex() );
-    m_pResImpl = ResMgrContainer::get().getResMgr( _rPrefixName, _inout_Locale, true );
-}
-
-// -----------------------------------------------------------------------
 SimpleResMgr::~SimpleResMgr()
 {
     delete m_pResImpl;
