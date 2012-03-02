@@ -580,13 +580,38 @@ void ScTable::SwapCol(SCCOL nCol1, SCCOL nCol2)
             }
         }
     }
-    for (ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+
+    ScNotes aNoteMap(pDocument);
+    ScNotes::iterator itr = maNotes.begin();
+    while(itr != maNotes.end())
     {
-        if (itr->first.first == nCol1 || itr->first.first == nCol2)
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        if (nCol == nCol1)
         {
-            //only then we need to swap
-            //TODO: implement it
+            aNoteMap.insert(nCol, nRow, pPostIt);
+            maNotes.ReleaseNote(nCol2, nRow);
         }
+        else if (nCol == nCol2)
+        {
+            aNoteMap.insert(nCol, nRow, pPostIt);
+            maNotes.ReleaseNote(nCol1, nRow);
+
+        }
+    }
+
+    itr = aNoteMap.begin();
+    {
+        //we can here assume that there is no note in the target location
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+
+        maNotes.insert(nCol, nRow, pPostIt);
+        aNoteMap.ReleaseNote(nCol, nRow);
     }
 }
 
@@ -619,13 +644,37 @@ void ScTable::SwapRow(SCROW nRow1, SCROW nRow2)
         SetRowFiltered(nRow2, nRow2, bRow1Filtered);
     }
 
-    for (ScNotes::iterator itr = maNotes.begin(); itr != maNotes.end(); ++itr)
+    ScNotes aNoteMap(pDocument);
+    ScNotes::iterator itr = maNotes.begin();
+    while(itr != maNotes.end())
     {
-        if (itr->first.second == nRow1 || itr->first.second == nRow2)
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+        ++itr;
+
+        if (nRow == nRow1)
         {
-            //only then we need to swap
-            //TODO:implement it
+            aNoteMap.insert(nCol, nRow, pPostIt);
+            maNotes.ReleaseNote(nCol, nRow2);
         }
+        else if (nRow == nRow2)
+        {
+            aNoteMap.insert(nCol, nRow, pPostIt);
+            maNotes.ReleaseNote(nCol, nRow1);
+
+        }
+    }
+
+    itr = aNoteMap.begin();
+    {
+        //we can here assume that there is no note in the target location
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+
+        maNotes.insert(nCol, nRow, pPostIt);
+        aNoteMap.ReleaseNote(nCol, nRow);
     }
 }
 
