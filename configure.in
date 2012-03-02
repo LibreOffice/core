@@ -2239,8 +2239,6 @@ if test "$_os" = "SunOS"; then
 fi
 
 
-
-
 dnl ===================================================================
 dnl  Test MacOSX sdk and version requirement
 dnl ===================================================================
@@ -2478,7 +2476,6 @@ fi
 if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" ; then
     if test "$CCACHE" != "" ; then
         AC_MSG_CHECKING([whether $CC is already ccached])
-
 
         AC_LANG_PUSH([C])
         save_CFLAGS=$CFLAGS
@@ -3331,7 +3328,6 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_CRASHDUMP)
-
 
 
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
@@ -8619,7 +8615,6 @@ if test "$enable_ext_report_builder" != "no" -a "x$enable_extension_integration"
             AC_CHECK_FILE($LIBSERIALIZER_JAR, [],
                 [AC_MSG_ERROR(libserializer.jar not found.)], [])
         fi
-
 
         if test -z $LIBBASE_JAR; then
             AC_CHECK_FILE(/usr/share/java/libbase-1.0.0.jar,
