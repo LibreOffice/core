@@ -278,6 +278,7 @@ String lcl_GetNumGroupForValue( double fValue, const ScDPNumGroupInfo& rInfo, bo
 class ScDPGroupDateFilter : public ScDPCacheTable::FilterBase
 {
 public:
+    virtual ~ScDPGroupDateFilter() {}
     ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart,
                         const Date* pNullDate, const ScDPNumGroupInfo* pNumInfo);
 
