@@ -536,7 +536,7 @@ void ScXMLChangeTrackingImportHelper::CreateGeneratedActions(ScMyGeneratedList& 
         ScMyGeneratedList::iterator aEndItr(rList.end());
         while (aItr != aEndItr)
         {
-            if (((*aItr)->nID == 0))
+            if ((*aItr)->nID == 0)
             {
                 ScBaseCell* pCell = NULL;
                 if ((*aItr)->pCellInfo)
