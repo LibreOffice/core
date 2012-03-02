@@ -380,7 +380,8 @@ Any CustomShapeProvider::createStringSequence( size_t nStrings, const char **pSt
     return makeAny( aStringSequence );
 }
 
-com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > CustomShapeProvider::createCustomShapeSegmentSequence( size_t nElems, const sal_uInt16 *pValues )
+com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment >
+CustomShapeProvider::createSegmentSequence( size_t nElems, const sal_uInt16 *pValues )
 {
     Sequence< EnhancedCustomShapeSegment > aSequence( (nElems + 1) / 2 );
     for (size_t i = 0, j = 0; i < nElems / 2; i++)
@@ -389,6 +390,17 @@ com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegme
         aSequence[i].Count = pValues[j++];
     }
     return aSequence;
+}
+
+com::sun::star::drawing::EnhancedCustomShapeParameterPair
+CustomShapeProvider::createParameterPair( const ParameterPairData *pData )
+{
+    EnhancedCustomShapeParameterPair aParameterPair;
+    aParameterPair.First.Type = pData->nFirstType;
+    aParameterPair.First.Value = makeAny(pData->nFirstValue);
+    aParameterPair.Second.Type = pData->nSecondType;
+    aParameterPair.Second.Value = makeAny(pData->nSecondValue);
+    return aParameterPair;
 }
 
 } }

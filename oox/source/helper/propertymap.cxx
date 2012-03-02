@@ -463,6 +463,62 @@ static void printLevel (int level)
         fprintf (stderr, "    ");
 }
 
+static const char *lclGetEnhancedParameterType( sal_uInt16 nType )
+{
+    const char* type;
+    switch (nType) {
+    case EnhancedCustomShapeParameterType::NORMAL:
+        type = "EnhancedCustomShapeParameterType::NORMAL";
+        break;
+    case EnhancedCustomShapeParameterType::EQUATION:
+        type = "EnhancedCustomShapeParameterType::EQUATION";
+        break;
+    case EnhancedCustomShapeParameterType::ADJUSTMENT:
+        type = "EnhancedCustomShapeParameterType::ADJUSTMENT";
+        break;
+    case EnhancedCustomShapeParameterType::LEFT:
+        type = "EnhancedCustomShapeParameterType::LEFT";
+        break;
+    case EnhancedCustomShapeParameterType::TOP:
+        type = "EnhancedCustomShapeParameterType::TOP";
+        break;
+    case EnhancedCustomShapeParameterType::RIGHT:
+        type = "EnhancedCustomShapeParameterType::RIGHT";
+        break;
+    case EnhancedCustomShapeParameterType::BOTTOM:
+        type = "EnhancedCustomShapeParameterType::BOTTOM";
+        break;
+    case EnhancedCustomShapeParameterType::XSTRETCH:
+        type = "EnhancedCustomShapeParameterType::XSTRETCH";
+        break;
+    case EnhancedCustomShapeParameterType::YSTRETCH:
+        type = "EnhancedCustomShapeParameterType::YSTRETCH";
+        break;
+    case EnhancedCustomShapeParameterType::HASSTROKE:
+        type = "EnhancedCustomShapeParameterType::HASSTROKE";
+        break;
+    case EnhancedCustomShapeParameterType::HASFILL:
+        type = "EnhancedCustomShapeParameterType::HASFILL";
+        break;
+    case EnhancedCustomShapeParameterType::WIDTH:
+        type = "EnhancedCustomShapeParameterType::WIDTH";
+        break;
+    case EnhancedCustomShapeParameterType::HEIGHT:
+        type = "EnhancedCustomShapeParameterType::HEIGHT";
+        break;
+    case EnhancedCustomShapeParameterType::LOGWIDTH:
+        type = "EnhancedCustomShapeParameterType::LOGWIDTH";
+        break;
+    case EnhancedCustomShapeParameterType::LOGHEIGHT:
+        type = "EnhancedCustomShapeParameterType::LOGHEIGHT";
+        break;
+    default:
+        type = "unknown";
+        break;
+    }
+    return type;
+}
+
 static const char* lclDumpAnyValueCode( Any value, int level = 0)
 {
     static OUString sVoid = CREATE_OUSTRING("void");
@@ -588,7 +644,7 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             }
             printLevel (level);
             fprintf (stderr,"};\n");
-            return "createCustomShapeSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues )";
+            return "createSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues )";
         } else if( value >>= segTextFrame ) {
             printLevel (level);
             fprintf (stderr, "Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (%" SAL_PRIdINT32 ");\n", segTextFrame.getLength());
@@ -649,97 +705,34 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
 
             return "aTextFrame";
         } else if( value >>= pp ) {
-            printLevel (level);
-            fprintf (stderr, "EnhancedCustomShapeParameterPair aParameterPair;\n");
-            printLevel (level);
-            fprintf (stderr, "{\n");
-            if (!pp.First.Value.getValueTypeName().equals(sVoid)) {
-                const char* var = lclDumpAnyValueCode( makeAny (pp.First), level + 1 );
-                printLevel (level + 1);
-                fprintf (stderr, "aParameterPair.First = %s;\n", var);
-            } else {
-                printLevel (level + 1);
-                fprintf (stderr, "EnhancedCustomShapeParameter aParameter;\n");
-                printLevel (level + 1);
-                fprintf (stderr, "aParameterPair.First = aParameter;\n");
-            }
-            printLevel (level);
-            fprintf (stderr, "}\n");
+            // These are always sal_Int32s so lets depend on that for our packing ...
+            sal_Int32 nFirstValue, nSecondValue;
+            if (!(pp.First.Value >>= nFirstValue))
+                assert (false);
+            if (!(pp.Second.Value >>= nSecondValue))
+                assert (false);
 
             printLevel (level);
-            fprintf (stderr, "{\n");
-            if (!pp.Second.Value.getValueTypeName().equals(sVoid)) {
-                const char* var = lclDumpAnyValueCode( makeAny (pp.Second), level + 1 );
-                printLevel (level + 1);
-                fprintf (stderr, "aParameterPair.Second = %s;\n", var);
-            } else {
-                printLevel (level + 1);
-                fprintf (stderr, "EnhancedCustomShapeParameter aParameter;\n");
-                printLevel (level + 1);
-                fprintf (stderr, "aParameterPair.Second = aParameter;\n");
-            }
+            fprintf (stderr, "static const CustomShapeProvider::ParameterPairData aData = {\n");
             printLevel (level);
-            fprintf (stderr, "}\n");
-            return "aParameterPair";
+            fprintf (stderr, "\t%s,\n", lclGetEnhancedParameterType(pp.First.Type));
+            printLevel (level);
+            fprintf (stderr, "\t%s,\n", lclGetEnhancedParameterType(pp.Second.Type));
+            printLevel (level);
+            fprintf (stderr, "\t%d, %d\n", (int)nFirstValue, (int)nSecondValue);
+            printLevel (level);
+            fprintf (stderr, "};\n");
+
+            return "createParameterPair(&aData)";
         } else if( value >>= par ) {
             printLevel (level);
             fprintf (stderr,"EnhancedCustomShapeParameter aParameter;\n");
             const char* var = lclDumpAnyValueCode( par.Value, level );
             printLevel (level);
             fprintf (stderr,"aParameter.Value = %s;\n", var);
-            const char* type;
-            switch (par.Type) {
-                case EnhancedCustomShapeParameterType::NORMAL:
-                    type = "EnhancedCustomShapeParameterType::NORMAL";
-                    break;
-                case EnhancedCustomShapeParameterType::EQUATION:
-                    type = "EnhancedCustomShapeParameterType::EQUATION";
-                    break;
-                case EnhancedCustomShapeParameterType::ADJUSTMENT:
-                    type = "EnhancedCustomShapeParameterType::ADJUSTMENT";
-                    break;
-                case EnhancedCustomShapeParameterType::LEFT:
-                    type = "EnhancedCustomShapeParameterType::LEFT";
-                    break;
-                case EnhancedCustomShapeParameterType::TOP:
-                    type = "EnhancedCustomShapeParameterType::TOP";
-                    break;
-                case EnhancedCustomShapeParameterType::RIGHT:
-                    type = "EnhancedCustomShapeParameterType::RIGHT";
-                    break;
-                case EnhancedCustomShapeParameterType::BOTTOM:
-                    type = "EnhancedCustomShapeParameterType::BOTTOM";
-                    break;
-                case EnhancedCustomShapeParameterType::XSTRETCH:
-                    type = "EnhancedCustomShapeParameterType::XSTRETCH";
-                    break;
-                case EnhancedCustomShapeParameterType::YSTRETCH:
-                    type = "EnhancedCustomShapeParameterType::YSTRETCH";
-                    break;
-                case EnhancedCustomShapeParameterType::HASSTROKE:
-                    type = "EnhancedCustomShapeParameterType::HASSTROKE";
-                    break;
-                case EnhancedCustomShapeParameterType::HASFILL:
-                    type = "EnhancedCustomShapeParameterType::HASFILL";
-                    break;
-                case EnhancedCustomShapeParameterType::WIDTH:
-                    type = "EnhancedCustomShapeParameterType::WIDTH";
-                    break;
-                case EnhancedCustomShapeParameterType::HEIGHT:
-                    type = "EnhancedCustomShapeParameterType::HEIGHT";
-                    break;
-                case EnhancedCustomShapeParameterType::LOGWIDTH:
-                    type = "EnhancedCustomShapeParameterType::LOGWIDTH";
-                    break;
-                case EnhancedCustomShapeParameterType::LOGHEIGHT:
-                    type = "EnhancedCustomShapeParameterType::LOGHEIGHT";
-                    break;
-                default:
-                    type = "unknown";
-                    break;
-            }
             printLevel (level);
-            fprintf (stderr,"aParameter.Type = %s;\n", type);
+            fprintf (stderr,"aParameter.Type = %s;\n",
+                     lclGetEnhancedParameterType(par.Type));
             return "aParameter";
         } else if( value >>= longValue ) {
             printLevel (level);
