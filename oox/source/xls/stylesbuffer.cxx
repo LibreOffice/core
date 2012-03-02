@@ -1583,25 +1583,6 @@ bool operator==( const BorderLine& rLeft, const BorderLine& rRight )
         (rLeft.LineDistance   == rRight.LineDistance);
 }
 
-bool operator==( const TableBorder& rLeft, const TableBorder& rRight )
-{
-    return
-        (rLeft.TopLine               == rRight.TopLine) &&
-        (rLeft.IsTopLineValid        == rRight.IsTopLineValid) &&
-        (rLeft.BottomLine            == rRight.BottomLine) &&
-        (rLeft.IsBottomLineValid     == rRight.IsBottomLineValid) &&
-        (rLeft.LeftLine              == rRight.LeftLine) &&
-        (rLeft.IsLeftLineValid       == rRight.IsLeftLineValid) &&
-        (rLeft.RightLine             == rRight.RightLine) &&
-        (rLeft.IsRightLineValid      == rRight.IsRightLineValid) &&
-        (rLeft.HorizontalLine        == rRight.HorizontalLine) &&
-        (rLeft.IsHorizontalLineValid == rRight.IsHorizontalLineValid) &&
-        (rLeft.VerticalLine          == rRight.VerticalLine) &&
-        (rLeft.IsVerticalLineValid   == rRight.IsVerticalLineValid) &&
-        (rLeft.Distance              == rRight.Distance) &&
-        (rLeft.IsDistanceValid       == rRight.IsDistanceValid);
-}
-
 } // namespace
 
 bool operator==( const ApiBorderData& rLeft, const ApiBorderData& rRight )
@@ -1627,11 +1608,6 @@ inline void lclSetBorderLineWidth( BorderLine& rBorderLine,
     rBorderLine.OuterLineWidth = nOuter;
     rBorderLine.LineDistance = nDist;
     rBorderLine.InnerLineWidth = nInner;
-}
-
-inline sal_Int32 lclGetBorderLineWidth( const BorderLine& rBorderLine )
-{
-    return rBorderLine.OuterLineWidth + rBorderLine.LineDistance + rBorderLine.InnerLineWidth;
 }
 
 } // namespace
