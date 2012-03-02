@@ -989,7 +989,7 @@ IMPL_LINK_NOARG(SdDrawDocument, WorkStartupHdl)
         pNotesPage->SetAutoLayout(AUTOLAYOUT_NOTES, sal_True, sal_True);
     }
 
-    SetChanged(bChanged || sal_False);
+    SetChanged(bChanged);
 
     if( mpDocSh )
         mpDocSh->SetWaitCursor( sal_False );
