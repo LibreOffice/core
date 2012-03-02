@@ -18,8 +18,11 @@ using namespace ::com::sun::star::uno;
 
 namespace oox { namespace drawingml {
 
-void CustomShapeProperties::initializePresetsMap4()
+namespace
 {
+class ShapeCteardrop : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -422,8 +425,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-teardrop");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "teardrop" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCflowChartDocument : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -668,8 +675,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartDocument");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartDocument" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCrightArrowCallout : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -1197,8 +1208,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-rightArrowCallout");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "rightArrowCallout" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCrightBrace : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -1919,8 +1934,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-rightBrace");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "rightBrace" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCchartPlus : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -2193,8 +2212,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-chartPlus");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "chartPlus" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCflowChartManualInput : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -2398,8 +2421,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartManualInput");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartManualInput" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCflowChartMerge : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -2584,8 +2611,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartMerge");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartMerge" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCline : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -2687,8 +2718,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-line");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "line" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCdownArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -3040,8 +3075,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-downArrow");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "downArrow" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCcurvedDownArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -4040,8 +4079,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-curvedDownArrow");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "curvedDownArrow" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCactionButtonReturn : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -5639,8 +5682,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-actionButtonReturn");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "actionButtonReturn" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCflowChartInputOutput : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -5847,8 +5894,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartInputOutput");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartInputOutput" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCbracketPair : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -6573,8 +6624,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-bracketPair");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "bracketPair" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCsmileyFace : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -7137,8 +7192,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-smileyFace");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "smileyFace" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCactionButtonBlank : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -7329,8 +7388,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-actionButtonBlank");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "actionButtonBlank" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCwave : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -7730,8 +7793,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-wave");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "wave" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCswooshArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -8148,8 +8215,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-swooshArrow");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "swooshArrow" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCflowChartSummingJunction : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -8760,8 +8831,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartSummingJunction");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartSummingJunction" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeClightningBolt : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -9101,8 +9176,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-lightningBolt");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "lightningBolt" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCflowChartDisplay : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -9356,8 +9435,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartDisplay");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartDisplay" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCactionButtonBackPrevious : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -9908,8 +9991,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-actionButtonBackPrevious");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "actionButtonBackPrevious" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCframe : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -10243,8 +10330,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-frame");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "frame" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCrtTriangle : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -10421,8 +10512,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-rtTriangle");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "rtTriangle" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCflowChartMagneticTape : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -10762,8 +10857,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-flowChartMagneticTape");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartMagneticTape" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCcurvedRightArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -11720,8 +11819,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-curvedRightArrow");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "curvedRightArrow" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCleftUpArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -12219,8 +12322,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-leftUpArrow");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "leftUpArrow" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCwedgeEllipseCallout : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -12522,8 +12629,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-wedgeEllipseCallout");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "wedgeEllipseCallout" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCdoubleWave : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -13037,8 +13148,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-doubleWave");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "doubleWave" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCbentArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -13633,8 +13748,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-bentArrow");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "bentArrow" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCstar10 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -14197,8 +14316,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-star10");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "star10" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCleftArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -14550,8 +14673,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-leftArrow");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "leftArrow" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCcurvedUpArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -15521,8 +15648,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-curvedUpArrow");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "curvedUpArrow" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCsnip1Rect : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -15785,8 +15916,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-snip1Rect");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "snip1Rect" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCellipseRibbon2 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -17416,8 +17551,12 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-ellipseRibbon2");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "ellipseRibbon2" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCplus : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -17810,11 +17949,48 @@ void CustomShapeProperties::initializePresetsMap4()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-plus");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "plus" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+} // anonymous namespace
+void CustomShapeProperties::initializePresetsMap4()
+{
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "teardrop" ) ) ) ] = new ShapeCteardrop();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartDocument" ) ) ) ] = new ShapeCflowChartDocument();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "rightArrowCallout" ) ) ) ] = new ShapeCrightArrowCallout();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "rightBrace" ) ) ) ] = new ShapeCrightBrace();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "chartPlus" ) ) ) ] = new ShapeCchartPlus();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartManualInput" ) ) ) ] = new ShapeCflowChartManualInput();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartMerge" ) ) ) ] = new ShapeCflowChartMerge();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "line" ) ) ) ] = new ShapeCline();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "downArrow" ) ) ) ] = new ShapeCdownArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "curvedDownArrow" ) ) ) ] = new ShapeCcurvedDownArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "actionButtonReturn" ) ) ) ] = new ShapeCactionButtonReturn();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartInputOutput" ) ) ) ] = new ShapeCflowChartInputOutput();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "bracketPair" ) ) ) ] = new ShapeCbracketPair();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "smileyFace" ) ) ) ] = new ShapeCsmileyFace();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "actionButtonBlank" ) ) ) ] = new ShapeCactionButtonBlank();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "wave" ) ) ) ] = new ShapeCwave();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "swooshArrow" ) ) ) ] = new ShapeCswooshArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartSummingJunction" ) ) ) ] = new ShapeCflowChartSummingJunction();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "lightningBolt" ) ) ) ] = new ShapeClightningBolt();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartDisplay" ) ) ) ] = new ShapeCflowChartDisplay();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "actionButtonBackPrevious" ) ) ) ] = new ShapeCactionButtonBackPrevious();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "frame" ) ) ) ] = new ShapeCframe();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "rtTriangle" ) ) ) ] = new ShapeCrtTriangle();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "flowChartMagneticTape" ) ) ) ] = new ShapeCflowChartMagneticTape();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "curvedRightArrow" ) ) ) ] = new ShapeCcurvedRightArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "leftUpArrow" ) ) ) ] = new ShapeCleftUpArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "wedgeEllipseCallout" ) ) ) ] = new ShapeCwedgeEllipseCallout();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "doubleWave" ) ) ) ] = new ShapeCdoubleWave();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "bentArrow" ) ) ) ] = new ShapeCbentArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "star10" ) ) ) ] = new ShapeCstar10();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "leftArrow" ) ) ) ] = new ShapeCleftArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "curvedUpArrow" ) ) ) ] = new ShapeCcurvedUpArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "snip1Rect" ) ) ) ] = new ShapeCsnip1Rect();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "ellipseRibbon2" ) ) ) ] = new ShapeCellipseRibbon2();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "plus" ) ) ) ] = new ShapeCplus();
 }
 
-
-}
-}
+} } // oox // drawingml
 

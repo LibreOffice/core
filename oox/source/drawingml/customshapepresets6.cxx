@@ -18,8 +18,11 @@ using namespace ::com::sun::star::uno;
 
 namespace oox { namespace drawingml {
 
-void CustomShapeProperties::initializePresetsMap6()
+namespace
 {
+class ShapeCstar5 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -402,8 +405,12 @@ void CustomShapeProperties::initializePresetsMap6()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-star5");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "star5" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeClineInv : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -505,8 +512,12 @@ void CustomShapeProperties::initializePresetsMap6()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-lineInv");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "lineInv" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCstraightConnector1 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -659,8 +670,12 @@ void CustomShapeProperties::initializePresetsMap6()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-straightConnector1");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "straightConnector1" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCstripedRightArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -1196,8 +1211,12 @@ void CustomShapeProperties::initializePresetsMap6()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-stripedRightArrow");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "stripedRightArrow" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCcallout3 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -1790,8 +1809,12 @@ void CustomShapeProperties::initializePresetsMap6()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-callout3");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "callout3" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCbentUpArrow : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -2231,8 +2254,12 @@ void CustomShapeProperties::initializePresetsMap6()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-bentUpArrow");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "bentUpArrow" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCnoSmoking : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -2747,8 +2774,12 @@ void CustomShapeProperties::initializePresetsMap6()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-noSmoking");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "noSmoking" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCtrapezoid : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -2999,8 +3030,12 @@ void CustomShapeProperties::initializePresetsMap6()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-trapezoid");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "trapezoid" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCcloudCallout : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -4707,8 +4742,12 @@ void CustomShapeProperties::initializePresetsMap6()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-cloudCallout");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "cloudCallout" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCcallout1 : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -5115,8 +5154,12 @@ void CustomShapeProperties::initializePresetsMap6()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-callout1");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "callout1" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
+};
+class ShapeCribbon : public CustomShapeProvider
+{
+  virtual PropertyMap getProperties()
   {
     PropertyMap aPropertyMap;
 
@@ -7033,12 +7076,29 @@ void CustomShapeProperties::initializePresetsMap6()
     }
     aPropertyMap [ PROP_Type ] <<= CREATE_OUSTRING("ooxml-ribbon");
 
-    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "ribbon" ) ) ) ] = aPropertyMap;
+    return aPropertyMap;
   }
-
+};
+} // anonymous namespace
+void CustomShapeProperties::initializePresetsMap6()
+{
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "star5" ) ) ) ] = new ShapeCstar5();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "lineInv" ) ) ) ] = new ShapeClineInv();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "straightConnector1" ) ) ) ] = new ShapeCstraightConnector1();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "stripedRightArrow" ) ) ) ] = new ShapeCstripedRightArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "callout3" ) ) ) ] = new ShapeCcallout3();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "bentUpArrow" ) ) ) ] = new ShapeCbentUpArrow();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "noSmoking" ) ) ) ] = new ShapeCnoSmoking();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "trapezoid" ) ) ) ] = new ShapeCtrapezoid();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "cloudCallout" ) ) ) ] = new ShapeCcloudCallout();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "callout1" ) ) ) ] = new ShapeCcallout1();
+    maPresetsMap [ StaticTokenMap::get().getTokenFromUnicode( OUString( RTL_CONSTASCII_USTRINGPARAM( "ribbon" ) ) ) ] = new ShapeCribbon();
 }
 
-void CustomShapeProperties::initializePresetsMap()
+} } // oox // drawingml
+
+
+void ::oox::drawingml::CustomShapeProperties::initializePresetsMap()
 {
 initializePresetsMap1();
 initializePresetsMap2();
@@ -7047,7 +7107,3 @@ initializePresetsMap4();
 initializePresetsMap5();
 initializePresetsMap6();
 }
-
-}
-}
-
