@@ -181,11 +181,11 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
     ScTabViewShell* pTabViewShell       = GetViewData()->GetViewShell();
     SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
 
-    sal_Bool bProtected = false;
+    bool bProtected = false;
     SCTAB nTabCount = pDoc->GetTableCount();
     for (SCTAB i=0; i<nTabCount; i++)
         if (pDoc->IsTabProtected(i))                // ueberhaupt eine Tabelle geschuetzt?
-            bProtected = sal_True;
+            bProtected = true;
 
     SfxWhichIter    aIter(rSet);
     sal_uInt16          nWhich = aIter.FirstWhich();
@@ -240,7 +240,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
             {
                 ISfxTemplateCommon* pDesigner = SFX_APP()->
                         GetCurrentTemplateCommon(pTabViewShell->GetViewFrame()->GetBindings());
-                sal_Bool bPage = pDesigner && SFX_STYLE_FAMILY_PAGE == pDesigner->GetActualFamily();
+                bool bPage = pDesigner && SFX_STYLE_FAMILY_PAGE == pDesigner->GetActualFamily();
 
                 if ( bProtected || bPage )
                     rSet.DisableItem( nSlotId );
@@ -252,7 +252,7 @@ void ScFormatShell::GetStyleState( SfxItemSet& rSet )
             {
                 ISfxTemplateCommon* pDesigner = SFX_APP()->
                         GetCurrentTemplateCommon(pTabViewShell->GetViewFrame()->GetBindings());
-                sal_Bool bPage = pDesigner && SFX_STYLE_FAMILY_PAGE == pDesigner->GetActualFamily();
+                bool bPage = pDesigner && SFX_STYLE_FAMILY_PAGE == pDesigner->GetActualFamily();
 
                 if ( bProtected && !bPage )
                     rSet.DisableItem( nSlotId );
@@ -289,7 +289,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
     ScMarkData&         rMark       = GetViewData()->GetMarkData();
     ScModule*           pScMod      = SC_MOD();
     String              aRefName;
-    sal_Bool                bUndo       = pDoc->IsUndoEnabled();
+    bool                bUndo       = pDoc->IsUndoEnabled();
 
     if (   (nSlotId == SID_STYLE_NEW)
         || (nSlotId == SID_STYLE_EDIT)
@@ -303,9 +303,9 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
         SfxStyleSheetBasePool*  pStylePool  = pDoc->GetStyleSheetPool();
         SfxStyleSheetBase*      pStyleSheet = NULL;
 
-        sal_Bool bStyleToMarked = false;
-        sal_Bool bListAction = false;
-        sal_Bool bAddUndo = false;          // add ScUndoModifyStyle (style modified)
+        bool bStyleToMarked = false;
+        bool bListAction = false;
+        bool bAddUndo = false;          // add ScUndoModifyStyle (style modified)
         ScStyleSaveData aOldData;       // for undo/redo
         ScStyleSaveData aNewData;
 
@@ -391,7 +391,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
             case SID_STYLE_WATERCAN:
             {
-                sal_Bool bWaterCan = pScMod->GetIsWaterCan();
+                bool bWaterCan = pScMod->GetIsWaterCan();
 
                 if( !bWaterCan )
                 {
@@ -418,7 +418,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                 if ( !bWaterCan && pStyleSheet )
                 {
-                    pScMod->SetWaterCan( sal_True );
+                    pScMod->SetWaterCan( true );
                     pTabViewShell->SetActivePointer( Pointer(POINTER_FILL) );
                     rReq.Done();
                 }
@@ -452,8 +452,8 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             pTabViewShell->RemoveStyleSheetInUse( pStyleSheet );
                             pStylePool->Remove( pStyleSheet );
                             pTabViewShell->InvalidateAttribs();
-                            nRetMask = sal_True;
-                            bAddUndo = sal_True;
+                            nRetMask = true;
+                            bAddUndo = true;
                             rReq.Done();
                         }
                         else
@@ -508,10 +508,10 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             {
                                 String aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
                                 pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
-                                bListAction = sal_True;
+                                bListAction = true;
                             }
 
-                            sal_Bool            bConvertBack = false;
+                            bool bConvertBack = false;
                             SfxStyleSheet*  pSheetInUse = (SfxStyleSheet*)
                                                           pTabViewShell->GetStyleSheetFromMarked();
 
@@ -531,7 +531,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 //!!! bei Gelenheit mal eine Methode, die
                                 //    das fuer einen bestimmten Style macht
                                 pDoc->StylesToNames();
-                                bConvertBack = sal_True;
+                                bConvertBack = true;
                                 pStylePool->Remove(pStyleSheet);
                             }
 
@@ -556,7 +556,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             //  call SetStyleSheetToMarked after adding the ScUndoModifyStyle
                             //  (pStyleSheet pointer is used!)
-                            bStyleToMarked = sal_True;
+                            bStyleToMarked = true;
                         }
                         else // ( nSlotId == SID_STYLE_UPDATE_BY_EXAMPLE )
                         {
@@ -570,7 +570,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 {
                                     String aUndo = ScGlobal::GetRscString( STR_UNDO_EDITCELLSTYLE );
                                     pDocSh->GetUndoManager()->EnterListAction( aUndo, aUndo );
-                                    bListAction = sal_True;
+                                    bListAction = true;
                                 }
 
                                 pStyleSheet->GetItemSet().Put( aAttrSet );
@@ -578,12 +578,12 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                                 //  call SetStyleSheetToMarked after adding the ScUndoModifyStyle
                                 //  (pStyleSheet pointer is used!)
-                                bStyleToMarked = sal_True;
+                                bStyleToMarked = true;
                             }
                         }
 
                         aNewData.InitFromStyle( pStyleSheet );
-                        bAddUndo = sal_True;
+                        bAddUndo = true;
                         rReq.Done();
                     }
                     break;
@@ -605,14 +605,14 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         {
                             if ( pDoc->RemovePageStyleInUse( pStyleSheet->GetName() ) )
                             {
-                                ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(sal_True), nCurTab ).UpdatePages();
+                                ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(true), nCurTab ).UpdatePages();
                                 rBindings.Invalidate( SID_STATUS_PAGESTYLE );
                                 rBindings.Invalidate( FID_RESET_PRINTZOOM );
                             }
                             pStylePool->Remove( pStyleSheet );
                             rBindings.Invalidate( SID_STYLE_FAMILY4 );
                             pDocSh->SetDocumentModified();
-                            bAddUndo = sal_True;
+                            bAddUndo = true;
                             rReq.Done();
                         }
                     }
@@ -632,7 +632,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                                 if ( aOldName != aStyleName )
                                 {
                                     pDoc->SetPageStyle( *itr, aStyleName );
-                                    ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(sal_True), *itr ).UpdatePages();
+                                    ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(true), *itr ).UpdatePages();
                                     if( !pUndoAction )
                                         pUndoAction = new ScUndoApplyPageStyle( pDocSh, aStyleName );
                                     pUndoAction->AddSheetAction( *itr, aOldName );
@@ -660,7 +660,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             SfxStyleSheetBase*  pCurStyle = pStylePool->Find( rStrCurStyle, eFamily );
                             SfxItemSet          aAttrSet  = pCurStyle->GetItemSet();
                             SCTAB               nInTab;
-                            sal_Bool                bUsed = pDoc->IsPageStyleInUse( aStyleName, &nInTab );
+                            bool                bUsed = pDoc->IsPageStyleInUse( aStyleName, &nInTab );
 
                             // wenn bereits vorhanden, erstmal entfernen...
                             if ( pStyleSheet )
@@ -676,12 +676,12 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
 
                             // wenn in Verwendung -> Update
                             if ( bUsed )
-                                ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(sal_True), nInTab ).UpdatePages();
+                                ScPrintFunc( pDocSh, pTabViewShell->GetPrinter(true), nInTab ).UpdatePages();
 
                             aNewData.InitFromStyle( pStyleSheet );
-                            bAddUndo = sal_True;
+                            bAddUndo = true;
                             rReq.Done();
-                            nRetMask = sal_True;
+                            nRetMask = true;
                         }
                     }
                     break;
@@ -757,7 +757,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                             {
                                 SvxBoxInfoItem aBoxInfoItem( ATTR_BORDER_INNER );
                                 aBoxInfoItem.SetTable(false);       // keine inneren Linien
-                                aBoxInfoItem.SetDist(sal_True);
+                                aBoxInfoItem.SetDist(true);
                                 aBoxInfoItem.SetMinDist(false);
                                 rSet.Put( aBoxInfoItem );
                             }
@@ -783,7 +783,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         pParent = pTabViewShell->GetDialogParent();
                 }
 
-                pTabViewShell->SetInFormatDialog(sal_True);
+                pTabViewShell->SetInFormatDialog(true);
 
                 ScAbstractDialogFactory* pFact = ScAbstractDialogFactory::Create();
                 OSL_ENSURE(pFact, "ScAbstractFactory create fail!");
@@ -862,7 +862,7 @@ void ScFormatShell::ExecuteStyle( SfxRequest& rReq )
                         }
 
                         aNewData.InitFromStyle( pStyleSheet );
-                        bAddUndo = sal_True;
+                        bAddUndo = true;
                     }
                 }
                 else
@@ -1001,7 +1001,7 @@ void ScFormatShell::ExecuteNumFormat( SfxRequest& rReq )
             rReq.Done();
             break;
         case SID_NUMBER_INCDEC:
-            pTabViewShell->ChangeNumFmtDecimals( sal_True );
+            pTabViewShell->ChangeNumFmtDecimals( true );
             rReq.Done();
             break;
         case SID_NUMBER_DECDEC:
@@ -1438,7 +1438,7 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
             case SID_ATTR_ALIGN_LINEBREAK:                  // ohne Parameter als Toggle
                 {
                     const ScPatternAttr* pAttrs = pTabViewShell->GetSelectionPattern();
-                    sal_Bool bOld = ((const SfxBoolItem&)pAttrs->GetItem(ATTR_LINEBREAK)).GetValue();
+                    bool bOld = ((const SfxBoolItem&)pAttrs->GetItem(ATTR_LINEBREAK)).GetValue();
                     SfxBoolItem aBreakItem( ATTR_LINEBREAK, !bOld );
                     pTabViewShell->ApplyAttr( aBreakItem );
 
@@ -1773,7 +1773,7 @@ void ScFormatShell::GetTextAttrState( SfxItemSet& rSet )
     const SvxVerJustifyItem* pVerJustify = NULL;
     SvxCellVerJustify        eVerJustify = SVX_VER_JUSTIFY_STANDARD;
     sal_uInt16                   nWhich      = 0;
-    sal_Bool                     bJustifyStd = false;
+    bool                     bJustifyStd = false;
     SfxBoolItem              aBoolItem   ( 0, sal_True );
 
     eState   = rAttrSet.GetItemState( ATTR_HOR_JUSTIFY, sal_True,
@@ -2152,7 +2152,7 @@ void ScFormatShell::ExecFormatPaintbrush( SfxRequest& rReq )
             pView->Unmark();
 
         ScDocument* pBrushDoc = new ScDocument( SCDOCMODE_CLIP );
-        pView->CopyToClip( pBrushDoc, false, sal_True );
+        pView->CopyToClip( pBrushDoc, false, true );
         pView->SetBrushDocument( pBrushDoc, bLock );
     }
 }
