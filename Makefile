@@ -191,6 +191,7 @@ libwps\
 libxml2\
 libxmlsec\
 libxslt\
+lcms2\
 lpsolve\
 lucene\
 mdds\

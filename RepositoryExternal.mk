@@ -787,6 +787,33 @@ endef
 endif # SYSTEM_LIBWPS
 
 
+ifeq ($(SYSTEM_LCMS2),YES)
+
+define gb_LinkTarget__use_lcms2
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+    $(LCMS2_CFLAGS) \
+)
+$(call gb_LinkTarget_add_libs,$(1),$(LCMS2_LIBS))
+
+endef
+
+else # !SYSTEM_LCMS2
+
+$(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
+	lcms2 \
+))
+
+define gb_LinkTarget__use_lcms2
+$(call gb_LinkTarget_add_linked_libs,$(1),\
+	lcms2 \
+)
+
+endef
+
+endif # SYSTEM_LCMS2
+
+
 ifeq ($(SYSTEM_LPSOLVE),YES)
 
 define gb_LinkTarget__use_lpsolve55

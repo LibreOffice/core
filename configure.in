@@ -1137,6 +1137,11 @@ AC_ARG_WITH(system-libcmis,
         [Use libcmis already on system.]),,
     [with_system_libcmis="$with_system_libs"])
 
+AC_ARG_WITH(system-lcms2,
+    AS_HELP_STRING([--with-system-lcms2],
+        [Use littlecms v2 already on system.]),,
+    [with_system_lcms2="$with_system_libs"])
+
 AC_ARG_WITH(system-libcdr,
     AS_HELP_STRING([--with-system-libcdr],
         [Use libcdr already on system.]),,
@@ -5799,6 +5804,23 @@ fi
 AC_SUBST(SYSTEM_LIBWPD)
 AC_SUBST(WPD_CFLAGS)
 AC_SUBST(WPD_LIBS)
+
+dnl ===================================================================
+dnl Check for system lcms2
+dnl ===================================================================
+AC_MSG_CHECKING([which littlecms v2 to use])
+if test "$with_system_lcms2" = "yes"; then
+    AC_MSG_RESULT([external])
+    SYSTEM_LCMS2=YES
+    PKG_CHECK_MODULES( LCMS2, lcms2 )
+else
+    AC_MSG_RESULT([internal])
+    SYSTEM_LCMS2=NO
+    BUILD_TYPE="$BUILD_TYPE LCMS2"
+fi
+AC_SUBST(SYSTEM_LCMS2)
+AC_SUBST(LCMS2_CFLAGS)
+AC_SUBST(LCMS2_LIBS)
 
 dnl ===================================================================
 dnl Check for system cppunit
