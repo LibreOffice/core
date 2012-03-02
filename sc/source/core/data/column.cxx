@@ -1182,7 +1182,7 @@ void ScColumn::InsertRow( SCROW nStartRow, SCSIZE nSize )
 }
 
 
-void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags, bool bCloneNoteCaptions)
+void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKeepScenarioFlags)
 {
     pAttrArray->CopyArea( nRow1, nRow2, 0, *rColumn.pAttrArray,
                             bKeepScenarioFlags ? (SC_MF_ALL & ~SC_MF_SCENARIO) : SC_MF_ALL );
@@ -1211,7 +1211,6 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKee
 
     if (nBlockCount)
     {
-        int nCloneFlags = bCloneNoteCaptions ? SC_CLONECELL_DEFAULT : SC_CLONECELL_NOCAPTION;
         rColumn.Resize( rColumn.GetCellCount() + nBlockCount );
         ScAddress aOwnPos( nCol, 0, nTab );
         ScAddress aDestPos( rColumn.nCol, 0, rColumn.nTab );
@@ -1219,7 +1218,7 @@ void ScColumn::CopyToClip(SCROW nRow1, SCROW nRow2, ScColumn& rColumn, bool bKee
         {
             aOwnPos.SetRow( maItems[i].nRow );
             aDestPos.SetRow( maItems[i].nRow );
-            ScBaseCell* pNewCell = maItems[i].pCell->Clone( *rColumn.pDocument, aDestPos, nCloneFlags );
+            ScBaseCell* pNewCell = maItems[i].pCell->Clone( *rColumn.pDocument, aDestPos, SC_CLONECELL_DEFAULT );
             rColumn.Append( aDestPos.Row(), pNewCell );
         }
     }
