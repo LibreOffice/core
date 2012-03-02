@@ -1662,7 +1662,7 @@ void DffPropertyReader::ApplyFillAttributes( SvStream& rIn, SfxItemSet& rSet, co
 
             if ( nFocus < 0 )       // Bei negativem Focus sind die Farben zu tauschen
             {
-                nFocus =- nFocus;
+                nFocus = -nFocus;
                 nChgColors ^= 1;
             }
             if( nFocus > 40 && nFocus < 60 )
