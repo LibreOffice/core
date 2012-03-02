@@ -519,7 +519,7 @@ BEGIN
         print "Setup OS/2 platform\n";
         $zippath = "zip";                   # Has to be in the path: /usr/bin/zip
         $checksumfile = "so_checksum";
-        $unopkgfile = "unopkg.exe";
+        $unopkgfile = "unopkg.bin";
         $separator = "/";
         $pathseparator = "\:";
         $libextension = "\.dll";
