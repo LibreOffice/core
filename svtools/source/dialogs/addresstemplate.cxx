@@ -192,7 +192,8 @@ public:
 
         // loop throuzh the given names
         const AliasProgrammaticPair* pFields = _rFields.getConstArray();
-        for (;pFields != pFields; ++pFields)
+        const AliasProgrammaticPair* pFieldsEnd = pFields + _rFields.getLength();
+        for (;pFields != pFieldsEnd; ++pFields)
         {
             StringBagIterator aKnownPos = aKnownNames.find( pFields->ProgrammaticName );
             if ( aKnownNames.end() != aKnownPos )
