@@ -1361,7 +1361,7 @@ PropertyState SAL_CALL Cell::getPropertyState( const OUString& PropertyName ) th
                 case XATTR_FILLFLOATTRANSPARENCE:
                     {
                         NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
-                        if( ( pItem == NULL ) )
+                        if( pItem == NULL )
                             eState = PropertyState_DEFAULT_VALUE;
                     }
                     break;

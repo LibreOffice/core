@@ -2162,7 +2162,7 @@ beans::PropertyState SAL_CALL SvxShape::_getPropertyState( const OUString& Prope
             case XATTR_FILLFLOATTRANSPARENCE:
                 {
                     NameOrIndex* pItem = (NameOrIndex*)rSet.GetItem((sal_uInt16)pMap->nWID);
-                    if( ( pItem == NULL ) )
+                    if ( pItem == NULL )
                         eState = beans::PropertyState_DEFAULT_VALUE;
                 }
                 break;
