@@ -978,7 +978,7 @@ SdrObject* SdrEscherImport::ProcessObj( SvStream& rSt, DffObjData& rObjData, voi
                 }
 
                 sal_uInt32 nDestinationInstance = aTextObj.GetInstance();
-                if ( ( rPersistEntry.ePageKind == PPT_MASTERPAGE ) )
+                if ( rPersistEntry.ePageKind == PPT_MASTERPAGE )
                 {
                     if ( !rPersistEntry.pPresentationObjects )
                     {
