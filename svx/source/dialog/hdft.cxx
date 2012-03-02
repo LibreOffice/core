@@ -431,7 +431,7 @@ void SvxHFPage::Reset( const SfxItemSet& rSet )
     {
         sal_uInt16 nHtmlMode = 0;
         nHtmlMode = ((SfxUInt16Item*)pItem)->GetValue();
-        if(nHtmlMode && HTMLMODE_ON)
+        if(nHtmlMode & HTMLMODE_ON)
         {
             aCntSharedBox.Hide();
             aBackgroundBtn.Hide();
