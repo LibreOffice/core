@@ -740,7 +740,7 @@ sal_Bool ImplSdPPTImport::Import()
                     ((SdPage*)pNotesClone)->SetLayoutName( aLayoutName );
                 }
             }
-            else if ( ( pPersist->bStarDrawFiller == sal_False ) )
+            else if ( pPersist->bStarDrawFiller == sal_False )
             {
                 PptSlidePersistEntry* pE = pPersist;
                 while( ( pE->aSlideAtom.nFlags & 4 ) && pE->aSlideAtom.nMasterId )
