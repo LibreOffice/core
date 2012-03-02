@@ -1111,6 +1111,19 @@ sub create_transforms
         chdir($installdir);
         $systemcall = $msidb . " " . " -d " . $basedbname . " -r " . $windowslanguage;
         system($systemcall);
+		# fdo#46181 - zh-HK and zh-MO should have fallen back to zh-TW not to zh-CN
+		# we need to hack zh-HK and zh-MO LCIDs directly into the MSI
+		if($windowslanguage eq '1028')
+        {
+            rename 1028,3076;
+		    $systemcall = $msidb . " " . " -d " . $basedbname . " -r " . 3076;
+            system($systemcall);
+            rename 3076,5124;
+		    $systemcall = $msidb . " " . " -d " . $basedbname . " -r " . 5124;
+            system($systemcall);
+            $templatevalue = $templatevalue . "," . 3076 . "," . 5124;
+            rename 5124,1028;
+		}
         chdir($from);
         unlink($transformfile);
 
