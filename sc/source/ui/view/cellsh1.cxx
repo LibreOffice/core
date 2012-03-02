@@ -115,7 +115,6 @@
 #include <com/sun/star/i18n/TransliterationModulesExtra.hpp>
 
 #include <boost/scoped_ptr.hpp>
-#include <iostream>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
@@ -1743,7 +1742,6 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             break;
         case FID_ADD_NAME:
             {
-                std::cout << "temp" << std::endl;
                 sal_uInt16          nId  = ScNameDefDlgWrapper::GetChildWindowId();
                 SfxViewFrame* pViewFrm = pTabViewShell->GetViewFrame();
                 SfxChildWindow* pWnd = pViewFrm->GetChildWindow( nId );
