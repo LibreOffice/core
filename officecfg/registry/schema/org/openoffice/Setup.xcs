@@ -323,7 +323,7 @@
 				<value/>
 				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
-			<prop oor:name="ooSetupInstCompleted" oor:type="xs:boolean">
+			<prop oor:name="ooSetupInstCompleted" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Service User/[username] -->
 				<!-- OldLocation: userdb.ini -->
 				<info>
@@ -331,6 +331,7 @@
 					<author>IS/BEI</author>
 					<desc>Indicates if the user data is copied successfully.</desc>
 				</info>
+                            <value>false</value>
 			</prop>
 			<prop oor:name="ooSetupLocales" oor:type="oor:string-list">
 				<!-- OldLocation: setup.inf-->
@@ -348,7 +349,7 @@
 					<desc>Enumerates the application languages that are installed, if a multilingual version is used.</desc>
 				</info>
             </set>
-			<prop oor:name="ooSetupShowIntro" oor:type="xs:boolean">
+			<prop oor:name="ooSetupShowIntro" oor:type="xs:boolean" oor:nillable="false">
 				<!-- OldPath: Common/Show-Intro -->
 				<!-- OldLocation: soffice.ini -->
 				<!-- UIHints: Tools - Options - General - View -->
@@ -357,6 +358,7 @@
 					<author>CD</author>
 					<desc>Specifies whether the splash screen is displayed during startup.</desc>
 				</info>
+                            <value>true</value>
 			</prop>
 			<prop oor:name="ooSetupConnectionURL" oor:type="xs:string" oor:nillable="false">
 				<!-- OldPath: Common-->
@@ -428,7 +430,6 @@
 					<label>Locale</label>
 				</info>
 				<value/>
-				<!-- JB: Empty default inserted into empty property node. Remove if NIL was intended -->
 			</prop>
 			<prop oor:name="ooSetupSystemLocale" oor:type="xs:string" oor:nillable="false">
 				<!-- UIHints: Tools - Options - Language Settings - Languages - Language of - Locale setting -->
@@ -468,6 +469,7 @@
 					<author>JB</author>
           <desc>Deprecated</desc>
 				</info>
+                            <value>true</value>
 			</prop>
 		</group>
     <group oor:name="Migration">

@@ -42,21 +42,14 @@
 #include <osl/security.hxx>
 #include <rtl/ref.hxx>
 
+#include <officecfg/Setup.hxx>
 #include <unotools/bootstrap.hxx>
 #include <svl/languageoptions.hxx>
 #include <unotools/syslocaleoptions.hxx>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/configuration/theDefaultProvider.hpp>
-#include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <i18npool/mslangid.hxx>
-#include <com/sun/star/uno/Any.hxx>
-#include <com/sun/star/util/XChangesBatch.hpp>
-#include <com/sun/star/beans/XHierarchicalPropertySet.hpp>
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/container/XHierarchicalNameAccess.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XLocalizable.hpp>
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -81,10 +74,6 @@ namespace desktop {
     {
         try
         {
-            OUString sAccessSrvc(
-                 RTL_CONSTASCII_USTRINGPARAM(
-                    "com.sun.star.configuration.ConfigurationAccess" ) );
-
             Reference< XMultiServiceFactory > theConfigProvider(
                 com::sun::star::configuration::theDefaultProvider::get(
                     comphelper::getProcessComponentContext() ) );
@@ -95,28 +84,7 @@ namespace desktop {
             Locale aLocale = LanguageSelection::IsoStringToLocale(aUserLanguage);
             localizable->setLocale(aLocale);
 
-            Sequence< Any > theArgs(1);
-            NamedValue v;
-            v.Name = OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath"));
-            v.Value = makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup")));
-            theArgs[0] <<= v;
-            Reference< XHierarchicalNameAccess> hnacc(
-                theConfigProvider->createInstanceWithArguments(
-                    sAccessSrvc, theArgs), UNO_QUERY_THROW);
-
-            try
-            {
-                sal_Bool bValue = sal_False;
-                hnacc->getByHierarchicalName(
-                        OUString( RTL_CONSTASCII_USTRINGPARAM(
-                            "Office/ooSetupInstCompleted" ) ) ) >>= bValue;
-
-                return bValue ? true : false;
-            }
-            catch ( NoSuchElementException const & )
-            {
-                // just return false in this case.
-            }
+            return officecfg::Setup::Office::ooSetupInstCompleted::get();
         }
         catch (Exception const & e)
         {
@@ -217,17 +185,6 @@ namespace desktop {
         return err;
     }
 
-#ifndef ANDROID
-    static const char *pszSrcList[] = {
-        "/presets",
-        NULL
-    };
-    static const char *pszDstList[] = {
-        "/user",
-        NULL
-    };
-#endif
-
     static UserInstall::UserInstallError create_user_install(OUString& aUserPath)
     {
         OUString aBasePath;
@@ -239,63 +196,37 @@ namespace desktop {
         if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST)) return UserInstall::E_Creation;
 
 #ifdef UNIX
-    // set safer permissions for the user directory by default
-    File::setAttributes(aUserPath, osl_File_Attribute_OwnWrite| osl_File_Attribute_OwnRead| osl_File_Attribute_OwnExe);
+        // Set safer permissions for the user directory by default:
+        File::setAttributes(aUserPath, osl_File_Attribute_OwnWrite| osl_File_Attribute_OwnRead| osl_File_Attribute_OwnExe);
 #endif
 
 #ifndef ANDROID
         // as of now osl_copyFile does not work on Android => don't do this.
 
-        // copy data from shared data directory of base installation
-        for (sal_Int32 i=0; pszSrcList[i]!=NULL && pszDstList[i]!=NULL; i++)
+        // Copy data from shared data directory of base installation:
+        rc = copy_recursive(
+            aBasePath + rtl::OUString("/presets"),
+            aUserPath + rtl::OUString("/user"));
+        if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST))
         {
-            rc = copy_recursive(
-                    aBasePath + OUString::createFromAscii(pszSrcList[i]),
-                    aUserPath + OUString::createFromAscii(pszDstList[i]));
-            if ((rc != FileBase::E_None) && (rc != FileBase::E_EXIST))
-            {
-                if ( rc == FileBase::E_NOSPC )
-                    return UserInstall::E_NoDiskSpace;
-                else if ( rc == FileBase::E_ACCES )
-                    return UserInstall::E_NoWriteAccess;
-                else
-                    return UserInstall::E_Creation;
-            }
+            if ( rc == FileBase::E_NOSPC )
+                return UserInstall::E_NoDiskSpace;
+            else if ( rc == FileBase::E_ACCES )
+                return UserInstall::E_NoWriteAccess;
+            else
+                return UserInstall::E_Creation;
         }
 
         Migration::migrateSettingsIfNecessary();
 #endif
-        try
-        {
-            OUString sAccessSrvc(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.configuration.ConfigurationUpdateAccess"));
 
-            Reference< XMultiServiceFactory > theConfigProvider(
-                com::sun::star::configuration::theDefaultProvider::get(
-                    comphelper::getProcessComponentContext() ) );
-            Sequence< Any > theArgs(1);
-            NamedValue v(OUString(RTL_CONSTASCII_USTRINGPARAM("nodepath")), makeAny(OUString(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup"))));
-            theArgs[0] <<= v;
-            Reference< XHierarchicalPropertySet> hpset(
-                theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-            hpset->setHierarchicalPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("Office/ooSetupInstCompleted")), makeAny(sal_True));
-            Reference< XChangesBatch >(hpset, UNO_QUERY_THROW)->commitChanges();
-        }
-        catch ( const PropertyVetoException& )
-        {
-            // we are not allowed to change this
-        }
-        catch (const Exception& e)
-        {
-            OString aMsg("create_user_install(): ");
-            aMsg += OUStringToOString(e.Message, RTL_TEXTENCODING_ASCII_US);
-            OSL_FAIL(aMsg.getStr());
-            return UserInstall::E_Creation;
-        }
+        boost::shared_ptr< comphelper::ConfigurationChanges > batch(
+            comphelper::ConfigurationChanges::create());
+        officecfg::Setup::Office::ooSetupInstCompleted::set(true, batch);
+        batch->commit();
 
         return UserInstall::E_None;
-
     }
 }
-
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
