@@ -167,7 +167,6 @@ endif
 endif
 
 ifeq ($(OS),OS2)
-#gb_Library_FILENAMES := $(patsubst basegfx:basegfx%,basegfx:ibasegfx%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelpgcc3%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppu:cppu%,cppu:cppu3%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst cppuhelper:cppuhelper%,cppuhelper:cppuh3%,$(gb_Library_FILENAMES))
@@ -175,8 +174,6 @@ gb_Library_FILENAMES := $(patsubst cppunit:icppunit%,cppunit:cppunit%,$(gb_Libra
 gb_Library_FILENAMES := $(patsubst cui:iicuc%,cui:icuc%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nisolang1:i18nisolang1%,i18nisolang1:i18nisolang1gcc3%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst i18nutil:i18nutil%,i18nutil:i18nutilgcc3%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst icule:iicule%,icule:icule%,$(gb_Library_FILENAMES))
-gb_Library_FILENAMES := $(patsubst icuuc:iicuuc%,icuuc:icuuc%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmaccess:jvmaccess%,jvmaccess:jvmaccess3gcc3%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst jvmfwk:jvmfwk%,jvmfwk:jvmfwk3%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst rdf:rdf%,rdf:librdf%,$(gb_Library_FILENAMES))
@@ -195,7 +192,6 @@ gb_Library_FILENAMES := $(patsubst xo:ixo%,xo:xo%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xml2:ixml2%,xml2:xml2%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst xslt:ixslt%,xslt:libxslt%,$(gb_Library_FILENAMES))
 gb_Library_FILENAMES := $(patsubst stl:stl%,stl:stdc++%,$(gb_Library_FILENAMES))
-#$(info libnames: $(gb_Library_FILENAMES))
 
 # translate to 8.3 naming
 gb_Library_DLLFILENAMES := $(patsubst comphelper:comphelper%,comphelper:comphelp%,$(gb_Library_DLLFILENAMES))
@@ -211,8 +207,13 @@ gb_Library_DLLFILENAMES := $(patsubst vbaswobj:vbaswobj.uno%,vbaswobj:vbaswobj%,
 gb_Library_DLLFILENAMES := $(patsubst sfx:test_sfx2_metadatable%,sfx:tstsfx2m%,$(gb_Library_DLLFILENAMES))
 
 gb_Library_NOILIBFILENAMES:=\
+    ft2lib \
     icuuc \
     icule
+
+gb_Library_ILIBFILENAMES:=\
+    ft2lib \
+    uuid \
 
 endif
 

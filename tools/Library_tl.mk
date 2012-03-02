@@ -142,6 +142,14 @@ $(eval $(call gb_Library_add_linked_static_libs,tl,\
 ))
 endif
 
+ifeq ($(OS),OS2)
+# YD FIXME above is not working... needs ldflags hack...
+$(eval $(call gb_Library_set_ldflags,tl,\
+    $$(LDFLAGS) \
+    -lz \
+))
+endif
+
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_set_include,tl,\

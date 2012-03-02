@@ -76,6 +76,14 @@ $(eval $(call gb_Library_add_linked_libs,svt,\
 $(eval $(call gb_Library_set_ldflags,svt,\
     $$(filter-out -L/usr/lib/jvm%,$$(LDFLAGS)) \
 ))
+ifeq ($(GUIBASE),os2)
+# YD FIXME above is not working... needs ldflags hack...
+$(eval $(call gb_Library_set_ldflags,svt,\
+    $$(LDFLAGS) \
+    -ljpeg \
+))
+endif
+
 else
 $(eval $(call gb_Library_add_linked_static_libs,svt,\
     jpeglib \
