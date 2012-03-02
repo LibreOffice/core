@@ -370,6 +370,20 @@ double CustomShapeProperties::getValue( const std::vector< CustomShapeGuide >& r
     return fRet;
 }
 
+Any CustomShapeProvider::createStringSequence( size_t nStrings, const char **pStrings )
+{
+    Sequence< OUString > aStringSequence( nStrings );
+    for (size_t i = 0; i < nStrings; i++)
+    {
+        aStringSequence[i] = ::rtl::OUString::intern(
+                                pStrings[i], strlen( pStrings[i] ),
+                                RTL_TEXTENCODING_ASCII_US );
+    }
+    Any aAny;
+    aAny <<= aStringSequence;
+    return aAny;
+}
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

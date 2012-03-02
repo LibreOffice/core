@@ -501,13 +501,18 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             fprintf (stderr,"OUString str = CREATE_OUSTRING (\"%s\");\n", USS( strValue ) );
             return "Any (str)";
     } else if( value >>= strArray ) {
+            if (strArray.getLength() == 0)
+                return "Sequence< OUString >(0)";
+
             printLevel (level);
-            fprintf (stderr,"Sequence< OUString > aStringSequence (%" SAL_PRIdINT32 ");\n", strArray.getLength());
+            fprintf (stderr,"static const char *aStrings[] = {\n");
             for( int i=0; i<strArray.getLength(); i++ ) {
                 printLevel (level);
-                fprintf (stderr,"aStringSequence[%d] = CREATE_OUSTRING (\"%s\");\n", i, USS( strArray[i] ) );
+                fprintf (stderr,"\t\"%s\"%s\n", USS( strArray[i] ), i < strArray.getLength() - 1 ? "," : "" );
             }
-            return "aStringSequence";
+            printLevel (level);
+            fprintf (stderr,"};\n");
+            return "createStringSequence( SAL_N_ELEMENTS( aStrings ), aStrings )";
         } else if( value >>= propArray ) {
             printLevel (level);
             fprintf (stderr,"Sequence< PropertyValue > aPropSequence (%" SAL_PRIdINT32 ");\n", propArray.getLength());

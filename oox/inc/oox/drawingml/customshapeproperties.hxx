@@ -114,6 +114,8 @@ struct Path2D
 
 
 class CustomShapeProvider {
+protected:
+    static com::sun::star::uno::Any createStringSequence( size_t nStrings, const char **pStrings );
 public:
     virtual PropertyMap getProperties() = 0;
 };
