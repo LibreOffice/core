@@ -155,9 +155,14 @@
 #include <svtools/apearcfg.hxx>
 #include <unotools/misccfg.hxx>
 #include <svtools/filter.hxx>
-//#include <unotools/regoptions.hxx>
 
 #include "langselect.hxx"
+
+#include "com/sun/star/deployment/ExtensionManager.hpp"
+#include "com/sun/star/deployment/XExtensionManager.hpp"
+#include "com/sun/star/task/XInteractionApprove.hpp"
+#include "cppuhelper/compbase3.hxx"
+#include <hash_set>
 
 #if defined MACOSX
 #include <errno.h>
@@ -165,13 +170,11 @@
 #endif
 
 #define DEFINE_CONST_UNICODE(CONSTASCII)        UniString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
-#define U2S(STRING)                                ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
+#define OUSTR(x)                                ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(x))
+#define U2S(STRING)                             ::rtl::OUStringToOString(STRING, RTL_TEXTENCODING_UTF8)
 
 using namespace vos;
 using namespace rtl;
-
-//Gives an ICE with MSVC6
-//namespace css = ::com::sun::star;
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::util;
@@ -614,7 +617,7 @@ static bool isExcludedFileOrFolder( const rtl::OUString & name)
     return bExclude;
 }
 
-static osl::FileBase::RC copy_bundled_recursive(
+static osl::FileBase::RC copy_prereg_bundled_recursive(
     const rtl::OUString& srcUnqPath,
     const rtl::OUString& dstUnqPath,
     sal_Int32            TypeToCopy )
@@ -687,7 +690,7 @@ throw()
                 newDstUnqPath += tit;
 
                 if (( newSrcUnqPath != dstUnqPath ) && !bFilter )
-                    err = copy_bundled_recursive( newSrcUnqPath,newDstUnqPath, newTypeToCopy );
+                    err = copy_prereg_bundled_recursive( newSrcUnqPath,newDstUnqPath, newTypeToCopy );
             }
 
             if( err == osl::FileBase::E_None && next != osl::FileBase::E_NOENT )
@@ -698,6 +701,121 @@ throw()
 
     return err;
 }
+
+
+//====================================================================================
+
+// MinimalCommandEnv: a tribute owed to ExtensionManager being an UNO stronghold
+class MinimalCommandEnv
+    : public ::cppu::WeakImplHelper3< css::ucb::XCommandEnvironment,
+                                      css::task::XInteractionHandler,
+                                      css::ucb::XProgressHandler >
+{
+public:
+    // XCommandEnvironment
+    virtual css::uno::Reference< css::task::XInteractionHandler> SAL_CALL getInteractionHandler()
+        throw (css::uno::RuntimeException)
+    { return this;}
+    virtual css::uno::Reference< css::ucb::XProgressHandler> SAL_CALL getProgressHandler()
+        throw (css::uno::RuntimeException)
+    { return this;}
+
+    // XInteractionHandler
+    virtual void SAL_CALL handle( const css::uno::Reference< css::task::XInteractionRequest>&)
+        throw (css::uno::RuntimeException);
+
+    // XProgressHandler
+    virtual void SAL_CALL push( const css::uno::Any& /*Status*/)
+        throw (css::uno::RuntimeException)
+    {}
+    virtual void SAL_CALL update( const css::uno::Any& /*Status*/)
+        throw (css::uno::RuntimeException)
+    {}
+    virtual void SAL_CALL pop()
+        throw (css::uno::RuntimeException)
+    {}
+};
+
+// MinimalCommandEnv's XInteractionHandler simply approves
+void MinimalCommandEnv::handle(
+    css::uno::Reference< css::task::XInteractionRequest> const& xRequest)
+    throw ( css::uno::RuntimeException )
+{
+    const css::uno::Sequence< css::uno::Reference< css::task::XInteractionContinuation > > conts( xRequest->getContinuations());
+    const css::uno::Reference< css::task::XInteractionContinuation>* pConts = conts.getConstArray();
+    const sal_Int32 len = conts.getLength();
+    for( sal_Int32 pos = 0; pos < len; ++pos )
+    {
+        css::uno::Reference< css::task::XInteractionApprove> xInteractionApprove( pConts[ pos ], css::uno::UNO_QUERY);
+        if( xInteractionApprove.is()) {
+            xInteractionApprove->select();
+            // don't query again for ongoing continuations:
+            break;
+        }
+    }
+}
+
+// install bundled but non-pre-registered extension blobs
+static void installBundledExtensionBlobs()
+{
+    // get the ExtensionManager
+    ::css::uno::Reference< ::css::uno::XComponentContext> xContext = comphelper::getProcessComponentContext();
+    ::css::uno::Reference< ::css::deployment::XExtensionManager> xEM = ::css::deployment::ExtensionManager::get( xContext);
+    // provide the minimal set of requirements to call ExtensionManager's methods
+    MinimalCommandEnv* pMiniCmdEnv = new MinimalCommandEnv;
+    ::css::uno::Reference< css::ucb::XCommandEnvironment> xCmdEnv( static_cast< cppu::OWeakObject*>(pMiniCmdEnv), css::uno::UNO_QUERY);
+    const ::css::beans::NamedValue aNamedProps( OUSTR("SUPPRESS_LICENSE"), ::css::uno::makeAny( OUSTR("1")));
+    const ::css::uno::Sequence< ::css::beans::NamedValue> xProperties( &aNamedProps, 1);
+    ::css::uno::Reference< ::css::task::XAbortChannel> xAbortChannel;
+
+    // get the list of deployed extensions
+    typedef std::hash_set< rtl::OUString, ::rtl::OUStringHash> StringSet;
+    StringSet aExtNameSet;
+    css::uno::Sequence< css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > > xListOfLists = xEM->getAllExtensions( xAbortChannel, xCmdEnv);
+    const sal_Int32 nLen1 = xListOfLists.getLength();
+    for( int i1 = 0; i1 < nLen1; ++i1) {
+        css::uno::Sequence<css::uno::Reference<css::deployment::XPackage> > xListOfPacks = xListOfLists[i1];
+        const sal_Int32 nLen2 = xListOfPacks.getLength();
+        for( int i2 = 0; i2 < nLen2; ++i2) {
+            css::uno::Reference<css::deployment::XPackage> xPackage = xListOfPacks[i2];
+            if( !xPackage.is())
+                continue;
+            aExtNameSet.insert( xPackage->getName());
+        }
+    }
+
+    // iterate over the bundled extension blobs
+    rtl::OUString aDirUrl( OUSTR("$BRAND_BASE_DIR/share/extensions/install"));
+    ::rtl::Bootstrap::expandMacros( aDirUrl);
+    ::osl::Directory aDir( aDirUrl);
+    ::osl::File::RC rc = aDir.open();
+    while( rc == osl::File::E_None) {
+        ::osl::DirectoryItem aDI;
+        if( aDir.getNextItem( aDI) != osl::File::E_None)
+            break;
+        ::osl::FileStatus aFileStat( FileStatusMask_Type | FileStatusMask_FileURL);
+        if( aDI.getFileStatus( aFileStat) != ::osl::File::E_None)
+            continue;
+        if( aFileStat.getFileType() != ::osl::FileStatus::Regular)
+            continue;
+        try {
+            // check if the extension is already installed
+            const rtl::OUString& rExtFileUrl = aFileStat.getFileURL();
+            const sal_Int32 nBaseIndex = rExtFileUrl.lastIndexOf('/');
+            const ::rtl::OUString aBaseName = (nBaseIndex < 0) ? rExtFileUrl : rExtFileUrl.copy( nBaseIndex+1);
+            const bool bFound = (aExtNameSet.find( aBaseName) != aExtNameSet.end());
+            if( bFound)
+                continue;
+            // request to install the extension blob
+            xEM->addExtension( rExtFileUrl, xProperties, OUSTR("user"), xAbortChannel, xCmdEnv);
+        // ExtensionManager problems are not worth to die for here
+        } catch( css::uno::RuntimeException&) {
+        } catch( css::deployment::DeploymentException&) {
+        }
+    }
+}
+
+//=============================================================================
 
 Desktop::Desktop()
 : m_bServicesRegistered( false )
@@ -716,7 +834,7 @@ void Desktop::Init()
     RTL_LOGFILE_CONTEXT( aLog, "desktop (cd100003) ::Desktop::Init" );
     SetBootstrapStatus(BS_OK);
 
-    // Check for lastsynchronized file for bundled extensions in the user directory
+    // Check for lastsynchronized file for pre-registered bundled extensions in the user directory
     // and test if synchronzation is necessary!
     {
         ::rtl::OUString aUserLastSyncFilePathURL = getLastSyncFileURLFromUserInstallation();
@@ -730,7 +848,7 @@ void Desktop::Init()
             // copy bundled folder to the user directory
             osl::FileBase::RC rc = osl::Directory::createPath(aUserPath);
             (void) rc;
-            copy_bundled_recursive( aPreregBundledPath, aUserPath, +1 );
+            copy_prereg_bundled_recursive( aPreregBundledPath, aUserPath, +1 );
         }
     }
 
@@ -1647,7 +1765,6 @@ void Desktop::Main()
         // terminate if requested...
         if( pCmdLineArgs->IsTerminateAfterInit() ) return;
 
-
         //  Read the common configuration items for optimization purpose
         if ( !InitializeConfiguration() ) return;
 
@@ -1720,6 +1837,9 @@ void Desktop::Main()
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "{ tools::InitTestToolLib" );
         tools::InitTestToolLib();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} tools::InitTestToolLib" );
+
+        // process non-pre-registered extensions
+        installBundledExtensionBlobs();
 
         // Check if bundled or shared extensions were added /removed
         // and process those extensions (has to be done before checking
