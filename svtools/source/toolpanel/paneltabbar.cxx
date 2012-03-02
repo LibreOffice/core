@@ -113,6 +113,7 @@ namespace svt
             :m_rTargetDevice( i_rTargetDevice )
         {
         }
+        virtual ~VCLItemRenderer() {}
 
         // ITabBarRenderer
         virtual void        renderBackground() const;
@@ -187,6 +188,7 @@ namespace svt
             :m_rTargetDevice( i_rTargetDevice )
         {
         }
+        virtual ~NWFToolboxItemRenderer() {}
 
         // ITabBarRenderer
         virtual void        renderBackground() const;
