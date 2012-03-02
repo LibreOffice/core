@@ -666,11 +666,11 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     sal_uInt8 nTag,nRecord;
     sal_uInt8 nTabType,nTabStops;
     sal_uInt16 nTabOffset;
-    String sFontName;
+    rtl::OUString sFontName;
     int i,nRet=1,newline=0;
     bool bSilent=false;
     int nPart=0;
-    String sPush,sMainTerm;
+    rtl::OUString sPush,sMainTerm;
     int nSetSize=0,nSetAlign=0;
     int nCurRow=0,nCurCol=0;
     bool bOpenString=false;
