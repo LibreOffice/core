@@ -1998,6 +1998,8 @@ End
 #endif
 #endif
 
+#if !defined(OS2) // using system libs
+
 File gid_File_Lib_Apr
      #ifdef WNT
         Name = SPECIAL_NAME(libapr-1);
@@ -2043,3 +2045,4 @@ File gid_File_Lib_Serf
     PACKED_LIB_FILE_BODY;
 End
 
+#endif // !defined(OS2)

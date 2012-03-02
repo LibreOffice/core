@@ -23,7 +23,11 @@
 #ifndef INCLUDED_SERFURI_HXX
 #define INCLUDED_SERFURI_HXX
 
+#ifdef OS2 // use system apr headers
+#include <apr_uri.h>
+#else
 #include <apr-util/apr_uri.h>
+#endif
 #include <rtl/ustring.hxx>
 #include <DAVException.hxx>
 
