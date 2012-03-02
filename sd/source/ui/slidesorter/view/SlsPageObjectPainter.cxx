@@ -50,51 +50,6 @@ using namespace ::drawinglayer::primitive2d;
 
 namespace sd { namespace slidesorter { namespace view {
 
-namespace {
-
-sal_uInt8 Blend (
-    const sal_uInt8 nValue1,
-    const sal_uInt8 nValue2,
-    const double nWeight)
-{
-    const double nValue (nValue1*(1-nWeight) + nValue2 * nWeight);
-    if (nValue < 0)
-        return 0;
-    else if (nValue > 255)
-        return 255;
-    else
-        return (sal_uInt8)nValue;
-}
-
-sal_uInt8 ClampColorChannel (const double nValue)
-{
-    if (nValue <= 0)
-        return 0;
-    else if (nValue >= 255)
-        return 255;
-    else
-        return sal_uInt8(nValue);
-}
-
-sal_uInt8 CalculateColorChannel(
-    const double nColor1,
-    const double nColor2,
-    const double nAlpha1,
-    const double nAlpha2,
-    const double nAlpha0)
-{
-    if (nAlpha0 == 0)
-        return 0;
-
-    const double nColor0 ((nAlpha1*nColor1 + nAlpha1*nAlpha2*nColor1 + nAlpha2*nColor2) / nAlpha0);
-    return ClampColorChannel(255 * nColor0);
-}
-
-} // end of anonymous namespace
-
-
-
-
 //===== PageObjectPainter =====================================================
 
 PageObjectPainter::PageObjectPainter (
