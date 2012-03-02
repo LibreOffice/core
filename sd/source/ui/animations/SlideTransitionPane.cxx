@@ -208,7 +208,13 @@ struct TransitionEffect
         mbTimeAmbiguous = mbTimeAmbiguous || aOtherEffect.mbTimeAmbiguous || mnTime != aOtherEffect.mnTime;
         mbPresChangeAmbiguous = mbPresChangeAmbiguous || aOtherEffect.mbPresChangeAmbiguous || mePresChange != aOtherEffect.mePresChange;
         mbSoundAmbiguous = mbSoundAmbiguous || aOtherEffect.mbSoundAmbiguous || mbSoundOn != aOtherEffect.mbSoundOn;
+#if 0
+                        // Weird leftover isolated expression with no effect, introduced in 2007 in
+                        // CWS impress122. Ifdeffed out to avoid compiler warning, kept here in case
+                        // somebody who understands this code notices and understands what the
+                        // "right" thing to do might be.
                         (!mbStopSound && !aOtherEffect.mbStopSound && maSound != aOtherEffect.maSound) || (mbStopSound != aOtherEffect.mbStopSound);
+#endif
         mbLoopSoundAmbiguous = mbLoopSoundAmbiguous || aOtherEffect.mbLoopSoundAmbiguous || mbLoopSound != aOtherEffect.mbLoopSound;
     }
 
