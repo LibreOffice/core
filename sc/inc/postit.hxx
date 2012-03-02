@@ -297,7 +297,7 @@ public:
     bool insert( SCCOL nCol, SCROW nRow, ScPostIt* );
     bool insert( const ScAddress& rPos, ScPostIt* );
 
-    void erase(SCCOL, SCROW);
+    void erase(SCCOL, SCROW, bool bForgetCaption = false);
     void erase(const ScAddress& rPos);
 
     /** Returns and forgets the cell note object at the passed cell address. */
@@ -311,7 +311,7 @@ public:
     ScNotes* clone(ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bCloneNoteCaption, SCTAB nTab);
     void CopyFromClip(const ScNotes& maNotes, ScDocument* pDoc, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, SCsCOL nDx, SCsROW nDy, SCTAB nTab, bool bCloneCaption);
 
-    void erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2);
+    void erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bForgetCaption = false);
 
 
 };

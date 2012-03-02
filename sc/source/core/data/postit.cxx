@@ -1009,11 +1009,14 @@ bool ScNotes::insert(const ScAddress& rPos, ScPostIt* pPostIt)
     return insert(rPos.Col(), rPos.Row(), pPostIt);
 }
 
-void ScNotes::erase(SCCOL nCol, SCROW nRow)
+void ScNotes::erase(SCCOL nCol, SCROW nRow, bool bForgetCaption)
 {
     iterator itr = maNoteMap.find(std::pair<SCCOL, SCROW>(nCol, nRow));
     if (itr != maNoteMap.end())
     {
+        if (bForgetCaption)
+            itr->second->ForgetCaption();
+
         delete itr->second;
         maNoteMap.erase(itr);
     }
@@ -1088,12 +1091,12 @@ void ScNotes::CopyFromClip(const ScNotes& rNotes, ScDocument* pDoc, SCCOL nCol1,
         if (nCol+nDx >= nCol1 && nCol+nDx <= nCol2 && nRow+nDy >= nRow1 && nRow+nDy <= nRow2)
         {
             erase(nCol+nDx, nRow+nDy);
-            insert(nCol+nDx, nRow+nDy, itr->second->Clone( ScAddress(nCol, nRow, nTab), *pDoc, ScAddress(nCol, nRow, nTab), bCloneCaption ));
+            insert(nCol+nDx, nRow+nDy, itr->second->Clone( ScAddress(nCol, nRow, nTab), *pDoc, ScAddress(nCol+nDx, nRow+nDy, nTab), bCloneCaption ));
         }
     }
 }
 
-void ScNotes::erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
+void ScNotes::erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2, bool bForgetCaption)
 {
     ScNotes::iterator itr = maNoteMap.begin();
     while(itr != maNoteMap.end())
@@ -1103,7 +1106,7 @@ void ScNotes::erase(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2)
         ++itr;
         if (nCol >= nCol1 && nCol <= nCol2 && nRow >= nRow1 && nRow <= nRow2)
         {
-            erase(nCol, nRow);
+            erase(nCol, nRow, bForgetCaption);
         }
     }
 }
