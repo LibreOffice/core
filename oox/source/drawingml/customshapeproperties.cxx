@@ -374,14 +374,21 @@ Any CustomShapeProvider::createStringSequence( size_t nStrings, const char **pSt
 {
     Sequence< OUString > aStringSequence( nStrings );
     for (size_t i = 0; i < nStrings; i++)
-    {
         aStringSequence[i] = ::rtl::OUString::intern(
                                 pStrings[i], strlen( pStrings[i] ),
                                 RTL_TEXTENCODING_ASCII_US );
+    return makeAny( aStringSequence );
+}
+
+com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > CustomShapeProvider::createCustomShapeSegmentSequence( size_t nElems, const sal_uInt16 *pValues )
+{
+    Sequence< EnhancedCustomShapeSegment > aSequence( (nElems + 1) / 2 );
+    for (size_t i = 0, j = 0; i < nElems / 2; i++)
+    {
+        aSequence[i].Command = pValues[j++];
+        aSequence[i].Count = pValues[j++];
     }
-    Any aAny;
-    aAny <<= aStringSequence;
-    return aAny;
+    return aSequence;
 }
 
 } }

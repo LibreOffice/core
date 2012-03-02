@@ -574,18 +574,21 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             }
             return "aAdjSequence";
         } else if( value >>= segArray ) {
+            if (segArray.getLength() == 0)
+                return "Sequence< EnhancedCustomShapeSegment >(0)";
+
             printLevel (level);
-            fprintf (stderr, "Sequence< EnhancedCustomShapeSegment > aSegmentSeq (%" SAL_PRIdINT32 ");\n", segArray.getLength());
-            for( int i=0; i<segArray.getLength(); i++ ) {
+            fprintf (stderr,"static const sal_uInt16 nValues[] = {\n");
+            printLevel (level);
+            fprintf (stderr,"// Command, Count\n");
+            for( int i = 0; i < segArray.getLength(); i++ ) {
                 printLevel (level);
-                fprintf (stderr, "{\n");
-                const char *var = lclDumpAnyValueCode (makeAny (segArray[i]), level + 1);
-                printLevel (level + 1);
-                fprintf (stderr, "aSegmentSeq [%d] = %s;\n", i, var);
-                printLevel (level);
-                fprintf (stderr, "}\n");
+                fprintf (stderr,"\t%d,%d%s\n", segArray[i].Command,
+                         segArray[i].Count, i < segArray.getLength() - 1 ? "," : "");
             }
-            return "aSegmentSeq";
+            printLevel (level);
+            fprintf (stderr,"};\n");
+            return "createCustomShapeSegmentSequence( SAL_N_ELEMENTS( nValues ), nValues )";
         } else if( value >>= segTextFrame ) {
             printLevel (level);
             fprintf (stderr, "Sequence< EnhancedCustomShapeTextFrame > aTextFrameSeq (%" SAL_PRIdINT32 ");\n", segTextFrame.getLength());

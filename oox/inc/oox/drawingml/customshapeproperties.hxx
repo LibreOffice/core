@@ -116,6 +116,7 @@ struct Path2D
 class CustomShapeProvider {
 protected:
     static com::sun::star::uno::Any createStringSequence( size_t nStrings, const char **pStrings );
+    static com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeSegment > createCustomShapeSegmentSequence( size_t nElems, const sal_uInt16 *pValues );
 public:
     virtual PropertyMap getProperties() = 0;
 };
