@@ -461,7 +461,7 @@ void Writer::CreateBookmarkTbl()
 sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
     xub_StrLen nEnd, std::vector< const ::sw::mark::IMark* >& rArr)
 {
-    OSL_ENSURE( !rArr.Count(), "es sind noch Eintraege vorhanden" );
+    OSL_ENSURE( rArr.empty(), "es sind noch Eintraege vorhanden" );
 
     sal_uLong nNd = rNd.GetIndex();
     SwBookmarkNodeTable::const_iterator it = m_pImpl->aBkmkNodePos.find( nNd );
