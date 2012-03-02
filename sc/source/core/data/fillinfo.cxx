@@ -513,13 +513,16 @@ void ScDocument::FillInfo( ScTableInfo& rTabInfo, SCCOL nX1, SCROW nY1, SCCOL nX
                                 //  nWidth wird nicht mehr einzeln gesetzt
 
                                 bool bEmbed = false; //bIsEmbedded &&
+#if 0 // Huh? Is this intentional or accidental? Clang warns
+      // "expression result unused", so ifdef out these lines. The
+      // code has been like this since 2004.
                                         nTab    >= aEmbedRange.aStart.Tab() &&
                                         nTab    <= aEmbedRange.aEnd.Tab()   &&
                                         nX      >= aEmbedRange.aStart.Col() &&
                                         nX      <= aEmbedRange.aEnd.Col()   &&
                                         nCurRow >= aEmbedRange.aStart.Row() &&
                                         nCurRow <= aEmbedRange.aEnd.Row();
-
+#endif
                                 if (bScenario)
                                 {
                                     pInfo->pBackground = ScGlobal::GetButtonBrushItem();
