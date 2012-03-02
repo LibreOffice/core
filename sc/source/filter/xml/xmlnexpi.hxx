@@ -49,6 +49,7 @@ public:
     class Inserter
     {
     public:
+        virtual ~Inserter() {}
         virtual void insert(ScMyNamedExpression* pExp) = 0;
     };
 
