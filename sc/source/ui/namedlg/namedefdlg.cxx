@@ -166,7 +166,13 @@ bool ScNameDefDlg::IsNameValid()
     }
 
     maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetDialogColor());
-    if (!ScRangeData::IsNameValid( aName, mpDoc ))
+    if ( aName.isEmpty() )
+    {
+        maBtnAdd.Disable();
+        maFtInfo.SetText(maStrInfoDefault);
+        return false;
+    }
+    else if (!ScRangeData::IsNameValid( aName, mpDoc ))
     {
         maFtInfo.SetControlBackground(GetSettings().GetStyleSettings().GetHighlightColor());
         maFtInfo.SetText(maErrInvalidNameStr);
