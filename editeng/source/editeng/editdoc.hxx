@@ -139,20 +139,6 @@ typedef ContentAttribsInfo* ContentAttribsInfoPtr;
 SV_DECL_PTRARR( ContentInfoArray, ContentAttribsInfoPtr, 1 )
 
 //  ----------------------------------------------------------------------
-//  class SvxFontTable
-//  ----------------------------------------------------------------------
-DECLARE_TABLE( DummyFontTable, SvxFontItem* )
-
-class SvxFontTable : public DummyFontTable
-{
-public:
-            SvxFontTable();
-            ~SvxFontTable();
-
-    sal_uLong   GetId( const SvxFontItem& rFont );
-};
-
-//  ----------------------------------------------------------------------
 //  class SvxColorList
 //  ----------------------------------------------------------------------
 typedef ContentNode* ContentNodePtr;
