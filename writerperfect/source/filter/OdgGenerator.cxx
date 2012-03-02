@@ -248,6 +248,7 @@ public:
     // graphics styles
     std::vector<DocumentElement *> mGraphicsStrokeDashStyles;
     std::vector<DocumentElement *> mGraphicsGradientStyles;
+    std::vector<DocumentElement *> mGraphicsBitmapStyles;
     std::vector<DocumentElement *> mGraphicsMarkerStyles;
     std::vector<DocumentElement *> mGraphicsAutomaticStyles;
 
@@ -270,6 +271,7 @@ public:
     ::WPXPropertyListVector mxGradient;
     ::WPXPropertyListVector mxMarker;
     int miGradientIndex;
+    int miBitmapIndex;
     int miStartMarkerIndex;
     int miEndMarkerIndex;
     int miDashIndex;
@@ -289,6 +291,7 @@ OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     mBodyElements(),
     mGraphicsStrokeDashStyles(),
     mGraphicsGradientStyles(),
+    mGraphicsBitmapStyles(),
     mGraphicsAutomaticStyles(),
     mPageAutomaticStyles(),
     mPageMasterStyles(),
@@ -299,6 +302,7 @@ OdgGeneratorPrivate::OdgGeneratorPrivate(OdfDocumentHandler *pHandler, const Odf
     mxStyle(), mxGradient(),
     mxMarker(),
     miGradientIndex(1),
+    miBitmapIndex(1),
     miStartMarkerIndex(1),
     miEndMarkerIndex(1),
     miDashIndex(1),
@@ -340,6 +344,12 @@ OdgGeneratorPrivate::~OdgGeneratorPrivate()
             iterGraphicsGradientStyles != mGraphicsGradientStyles.end(); ++iterGraphicsGradientStyles)
     {
         delete((*iterGraphicsGradientStyles));
+    }
+
+    for (std::vector<DocumentElement *>::iterator iterGraphicsBitmapStyles = mGraphicsBitmapStyles.begin();
+            iterGraphicsBitmapStyles != mGraphicsBitmapStyles.end(); ++iterGraphicsBitmapStyles)
+    {
+        delete((*iterGraphicsBitmapStyles));
     }
 
     for (std::vector<DocumentElement *>::iterator iterGraphicsMarkerStyles = mGraphicsMarkerStyles.begin();
@@ -451,6 +461,12 @@ OdgGenerator::~OdgGenerator()
                 iterGraphicsGradientStyles != mpImpl->mGraphicsGradientStyles.end(); ++iterGraphicsGradientStyles)
         {
             (*iterGraphicsGradientStyles)->write(mpImpl->mpHandler);
+        }
+
+        for (std::vector<DocumentElement *>::const_iterator iterGraphicsBitmapStyles = mpImpl->mGraphicsBitmapStyles.begin();
+                iterGraphicsBitmapStyles != mpImpl->mGraphicsBitmapStyles.end(); ++iterGraphicsBitmapStyles)
+        {
+            (*iterGraphicsBitmapStyles)->write(mpImpl->mpHandler);
         }
 
         for (std::vector<DocumentElement *>::const_iterator iterGraphicsMarkerStyles = mpImpl->mGraphicsMarkerStyles.begin();
@@ -1234,6 +1250,20 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
             delete pDrawOpacityElement;
     }
 
+    if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "bitmap" &&
+            mxStyle["draw:fill-image"] && mxStyle["libwpg:mime-type"])
+    {
+        TagOpenElement *pDrawBitmapElement = new TagOpenElement("draw:fill-image");
+        WPXString sValue;
+        sValue.sprintf("Bitmap_%i", miBitmapIndex++);
+        pDrawBitmapElement->addAttribute("draw:name", sValue);
+        mGraphicsBitmapStyles.push_back(pDrawBitmapElement);
+        mGraphicsBitmapStyles.push_back(new TagOpenElement("office:binary-data"));
+        mGraphicsBitmapStyles.push_back(new CharDataElement(mxStyle["draw:fill-image"]->getStr()));
+        mGraphicsBitmapStyles.push_back(new TagCloseElement("office:binary-data"));
+        mGraphicsBitmapStyles.push_back(new TagCloseElement("draw:fill-image"));
+    }
+
     TagOpenElement *pStyleStyleElement = new TagOpenElement("style:style");
     WPXString sValue;
     sValue.sprintf("gr%i",  miGraphicsStyleIndex);
@@ -1325,6 +1355,24 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
             else
                 pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "solid");
         }
+    }
+
+    if(mxStyle["draw:fill"] && mxStyle["draw:fill"]->getStr() == "bitmap")
+    {
+        if (mxStyle["draw:fill-image"] && mxStyle["libwpg:mime-type"])
+        {
+            pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "bitmap");
+            sValue.sprintf("Bitmap_%i", miBitmapIndex-1);
+            pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-name", sValue);
+            if (mxStyle["svg:width"])
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-width", mxStyle["svg:width"]->getStr());
+            if (mxStyle["svg:height"])
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-height", mxStyle["svg:height"]->getStr());
+            if (mxStyle["style:repeat"])
+                pStyleGraphicsPropertiesElement->addAttribute("style:repeat", mxStyle["style:repeat"]->getStr());
+        }
+        else
+            pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "none");
     }
 
 
