@@ -28,7 +28,6 @@
 
 #include "sal/config.h"
 
-#include "migration.hxx"
 #include "userinstall.hxx"
 #include "langselect.hxx"
 
@@ -68,7 +67,7 @@ using namespace com::sun::star::util;
 
 namespace desktop {
 
-    static UserInstall::UserInstallError create_user_install(OUString&);
+    static UserInstall::UserInstallStatus create_user_install(OUString&);
 
     static bool is_user_install()
     {
@@ -95,7 +94,7 @@ namespace desktop {
         return false;
     }
 
-    UserInstall::UserInstallError UserInstall::finalize()
+    UserInstall::UserInstallStatus UserInstall::finalize()
     {
         OUString aUserInstallPath;
         utl::Bootstrap::PathStatus aLocateResult =
@@ -114,7 +113,7 @@ namespace desktop {
                 // path exists, check if an installation lives there
                 if ( is_user_install() )
                 {
-                    return E_None;
+                    return Ok;
                 }
                 // Note: fall-thru intended.
             }
@@ -185,7 +184,7 @@ namespace desktop {
         return err;
     }
 
-    static UserInstall::UserInstallError create_user_install(OUString& aUserPath)
+    static UserInstall::UserInstallStatus create_user_install(OUString& aUserPath)
     {
         OUString aBasePath;
         if (utl::Bootstrap::locateBaseInstallation(aBasePath) != utl::Bootstrap::PATH_EXISTS)
@@ -216,8 +215,6 @@ namespace desktop {
             else
                 return UserInstall::E_Creation;
         }
-
-        Migration::migrateSettingsIfNecessary();
 #endif
 
         boost::shared_ptr< comphelper::ConfigurationChanges > batch(
@@ -225,7 +222,7 @@ namespace desktop {
         officecfg::Setup::Office::ooSetupInstCompleted::set(true, batch);
         batch->commit();
 
-        return UserInstall::E_None;
+        return UserInstall::Created;
     }
 }
 

@@ -36,8 +36,9 @@ namespace desktop
 class UserInstall
 {
 public:
-    enum UserInstallError {
-        E_None,                 // no error
+    enum UserInstallStatus {
+        Ok,                     // no error, existing user installation found
+        Created,                // no error, new user installation created
         E_Creation,             // error while creating user install
         E_InvalidBaseinstall,   // corrupt base installation
         E_SetupFailed,          // external setup did not run correctly
@@ -48,7 +49,7 @@ public:
         E_Unknown               // unknown error
     };
 
-    static UserInstallError finalize();
+    static UserInstallStatus finalize();
 };
 }
 

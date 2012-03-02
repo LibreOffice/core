@@ -36,6 +36,7 @@
 #include "userinstall.hxx"
 #include "desktopcontext.hxx"
 #include "exithelper.hxx"
+#include "migration.hxx"
 
 #include <svtools/javacontext.hxx>
 #include <com/sun/star/frame/XSessionManagerListener.hpp>
@@ -1476,23 +1477,21 @@ int Desktop::Main()
 
     SetSplashScreenProgress(10);
 
+    UserInstall::UserInstallStatus inst_fin = UserInstall::finalize();
+    if (inst_fin != UserInstall::Ok && inst_fin != UserInstall::Created)
     {
-        UserInstall::UserInstallError instErr_fin = UserInstall::finalize();
-        if ( instErr_fin != UserInstall::E_None)
-        {
-            OSL_FAIL("userinstall failed");
-            if ( instErr_fin == UserInstall::E_NoDiskSpace )
-                HandleBootstrapErrors( BE_USERINSTALL_NOTENOUGHDISKSPACE );
-            else if ( instErr_fin == UserInstall::E_NoWriteAccess )
-                HandleBootstrapErrors( BE_USERINSTALL_NOWRITEACCESS );
-            else
-                HandleBootstrapErrors( BE_USERINSTALL_FAILED );
-            return EXIT_FAILURE;
-        }
-        // refresh path information
-        utl::Bootstrap::reloadData();
-        SetSplashScreenProgress(20);
+        OSL_FAIL("userinstall failed");
+        if ( inst_fin == UserInstall::E_NoDiskSpace )
+            HandleBootstrapErrors( BE_USERINSTALL_NOTENOUGHDISKSPACE );
+        else if ( inst_fin == UserInstall::E_NoWriteAccess )
+            HandleBootstrapErrors( BE_USERINSTALL_NOWRITEACCESS );
+        else
+            HandleBootstrapErrors( BE_USERINSTALL_FAILED );
+        return EXIT_FAILURE;
     }
+    // refresh path information
+    utl::Bootstrap::reloadData();
+    SetSplashScreenProgress(20);
 
     Reference< XMultiServiceFactory > xSMgr =
         ::comphelper::getProcessServiceFactory();
@@ -1623,6 +1622,11 @@ int Desktop::Main()
 
         // check whether the shutdown is caused by restart
         pExecGlobals->bRestartRequested = ( xRestartManager.is() && xRestartManager->isRestartRequested( sal_True ) );
+
+        if (inst_fin == UserInstall::Created)
+        {
+            Migration::migrateSettingsIfNecessary();
+        }
 #endif
 
         // keep a language options instance...
