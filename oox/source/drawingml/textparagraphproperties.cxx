@@ -433,6 +433,8 @@ void TextParagraphProperties::pushToPropSet( const ::oox::core::XmlFilterBase* p
             rioBulletMap[ PROP_FirstLineOffset ] <<= static_cast< sal_Int32 >( *noFirstLineIndentation );
             noFirstLineIndentation = boost::optional< sal_Int32 >( 0 );
         }
+        if ( nNumberingType != NumberingType::BITMAP && !rioBulletMap.hasProperty( PROP_BulletColor ))
+            rioBulletMap[ PROP_BulletColor ] <<= static_cast< sal_Int32 >( maTextCharacterProperties.maCharColor.getColor( pFilterBase->getGraphicHelper()));
     }
 
     if ( bApplyBulletMap )
