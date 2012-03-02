@@ -299,8 +299,10 @@ void Shape::addChildren(
               aChildTransformation.get(2, 2));
 
     std::vector< ShapePtr >::iterator aIter( rMaster.maChildren.begin() );
-    while( aIter != rMaster.maChildren.end() )
+    while( aIter != rMaster.maChildren.end() ) {
+        (*aIter)->setMasterTextListStyle( mpMasterTextListStyle );
         (*aIter++)->addShape( rFilterBase, pTheme, rxShapes, aChildTransformation, NULL, pShapeMap );
+    }
 }
 
 Reference< XShape > Shape::createAndInsert(

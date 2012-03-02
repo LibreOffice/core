@@ -310,7 +310,7 @@ void PPTShape::addShape(
             {
                 if ( !aMasterTextListStyle.get() )
                 {
-                    bool isOther = !getTextBody().get();
+                    bool isOther = !getTextBody().get() && !sServiceName.equalsAscii("com.sun.star.drawing.GroupShape");
                     TextListStylePtr aSlideStyle = isOther ? rSlidePersist.getOtherTextStyle() : rSlidePersist.getDefaultTextStyle();
                     // Combine from MasterSlide details as well.
                     if( rSlidePersist.getMasterPersist().get() )
