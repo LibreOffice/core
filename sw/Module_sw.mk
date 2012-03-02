@@ -49,8 +49,6 @@ endif
 
 $(eval $(call gb_Module_add_check_targets,sw,\
     CppunitTest_sw_filters_test \
-    CppunitTest_sw_macros_test \
-    CppunitTest_sw_swdoc_test \
 ))
 
 $(eval $(call gb_Module_add_slowcheck_targets,sw,\

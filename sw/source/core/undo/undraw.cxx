@@ -66,30 +66,6 @@ struct SwUndoGroupObjImpl
 };
 
 
-// Draw-Objecte
-
-IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
-{
-#if OSL_DEBUG_LEVEL > 1
-    sal_uInt16 nId = pUndo->GetId();
-    (void)nId;
-    String sComment( pUndo->GetComment() );
-#endif
-
-    if (GetIDocumentUndoRedo().DoesUndo() &&
-        GetIDocumentUndoRedo().DoesDrawUndo())
-    {
-        const SdrMarkList* pMarkList = 0;
-        ViewShell* pSh = GetCurrentViewShell();
-        if( pSh && pSh->HasDrawView() )
-            pMarkList = &pSh->GetDrawView()->GetMarkedObjectList();
-
-        GetIDocumentUndoRedo().AppendUndo( new SwSdrUndo(pUndo, pMarkList) );
-    }
-    else
-        delete pUndo;
-    return 0;
-}
 
 SwSdrUndo::SwSdrUndo( SdrUndoAction* pUndo, const SdrMarkList* pMrkLst )
     : SwUndo( UNDO_DRAWUNDO ), pSdrUndo( pUndo )

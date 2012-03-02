@@ -1,7 +1,53 @@
 #include <doc.hxx>
 #include <iostream>
+#include "UndoManager.hxx"
+#include "fmtmeta.hxx"
+#include "printdata.hxx"
+#include "docary.hxx"
+#include "docfld.hxx"
+#include "lineinfo.hxx"
+#include "docstat.hxx"
+#include "ftninfo.hxx"
+#include "tox.hxx"
+#include "pagedesc.hxx"
+#include "frmfmt.hxx"
+#include "ftnidx.hxx"
+#include "unochart.hxx"
+#include "istyleaccess.hxx"
+#include "fmtcntnt.hxx"
+#include "swstylemanager.hxx"
+#include "fmtfld.hxx"
+#include "switerator.hxx"
+#include "fldbas.hxx"
+#include "txtfld.hxx"
+#include "ndtxt.hxx"
+#include "docufld.hxx"
+#include <editeng/forbiddencharacterstable.hxx>
+#include <sfx2/Metadatable.hxx>
+#include <sfx2/linkmgr.hxx>
+
+
+
+// Page descriptors
+SV_IMPL_PTRARR(SwPageDescs,SwPageDescPtr);
+// Table Of ...
+SV_IMPL_PTRARR( SwTOXTypes, SwTOXTypePtr )
+// Field types
+SV_IMPL_PTRARR( SwFldTypes, SwFldTypePtr)
+
+
 
 using namespace std;
+
+SwDoc::SwDoc()
+{
+    cout << "Constructor" << std::endl;
+}
+
+SwDoc::~SwDoc()
+{
+
+}
 
 bool SwDoc::IsInDtor() const{
 	bool out = false;
@@ -22,7 +68,7 @@ SwNodes & SwDoc::GetNodes(){
 }
 
 SwNodes const & SwDoc::GetNodes() const{
-	SwNodes const out(this);
+	SwNodes out(const_cast<SwDoc*>(this));
 	cout << "GetNodes(";
 	cout << ") -> ";
 	cout << "type: \"SwNodes\"";
@@ -31,21 +77,11 @@ SwNodes const & SwDoc::GetNodes() const{
 }
 
 sal_Int32 SwDoc::acquire(){
-	sal_Int32 out = 0;
-	cout << "acquire(";
-	cout << ") -> ";
-	cout << out;
-	cout << "\n";
-	return out;
+    return osl_incrementInterlockedCount(&mReferenceCount);
 }
 
 sal_Int32 SwDoc::release(){
-	sal_Int32 out = 0;
-	cout << "release(";
-	cout << ") -> ";
-	cout << out;
-	cout << "\n";
-	return out;
+    return osl_decrementInterlockedCount(&mReferenceCount);
 }
 
 sal_Int32 SwDoc::getReferenceCount() const{
@@ -258,13 +294,15 @@ void SwDoc::setVirtualDevice(VirtualDevice * pVd, bool bDeleteOld, bool bCallVir
 }
 
 OutputDevice * SwDoc::getReferenceDevice(bool bCreate) const{
-	OutputDevice * out = 0;
-	cout << "getReferenceDevice(";
-	cout << bCreate;
-	cout << ") -> ";
-	cout << out;
-	cout << "\n";
-	return out;
+    VirtualDevice* pNewVir = new VirtualDevice( 1 );
+
+    pNewVir->SetReferenceDevice( VirtualDevice::REFDEV_MODE_MSO1 );
+
+    MapMode aMapMode( pNewVir->GetMapMode() );
+    aMapMode.SetMapUnit( MAP_TWIP );
+    pNewVir->SetMapMode( aMapMode );
+
+    return pNewVir;
 }
 
 void SwDoc::setReferenceDeviceType(bool bNewVirtual, bool bNewHiRes){
@@ -584,7 +622,7 @@ sal_uInt16 SwDoc::GetRedlineAuthor(){
 sal_uInt16 SwDoc::InsertRedlineAuthor(const String & rAuthor){
 	sal_uInt16 out = 0;
 	cout << "InsertRedlineAuthor(";
-	cout << rAuthor.c_str();
+	cout << rAuthor.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -596,7 +634,7 @@ bool SwDoc::SetRedlineComment(const SwPaM & rPam, const String & rComment){
 	cout << "SetRedlineComment(";
 	cout << "rPam";
 	cout << ",";
-	cout << rComment.c_str();
+	cout << rComment.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -622,7 +660,7 @@ void SwDoc::SetRedlinePassword(const ::com::sun::star::uno::Sequence<sal_Int8> &
 }
 
 IDocumentUndoRedo & SwDoc::GetIDocumentUndoRedo(){
-	IDocumentUndoRedo out(::std::auto_ptr<SwNodes>(new SwNodes(this)),*this,*whis,*this);
+    sw::UndoManager out(::std::auto_ptr<SwNodes>(new SwNodes(this)),static_cast<IDocumentDrawModelAccess&>(*this),static_cast<IDocumentRedlineAccess&>(*this),static_cast<IDocumentState&>(*this));
 	cout << "GetIDocumentUndoRedo(";
 	cout << ") -> ";
 	cout << "type: \"IDocumentUndoRedo\"";
@@ -631,7 +669,7 @@ IDocumentUndoRedo & SwDoc::GetIDocumentUndoRedo(){
 }
 
 IDocumentUndoRedo const & SwDoc::GetIDocumentUndoRedo() const{
-	IDocumentUndoRedo const out(::std::auto_ptr<SwNodes>(new SwNodes(this)),*this,*whis,*this);
+    sw::UndoManager out(::std::auto_ptr<SwNodes>(new SwNodes(const_cast<SwDoc*>(this))),static_cast<IDocumentDrawModelAccess&>(*const_cast<SwDoc*>(this)),static_cast<IDocumentRedlineAccess&>(*const_cast<SwDoc*>(this)),static_cast<IDocumentState&>(*const_cast<SwDoc*>(this)));
 	cout << "GetIDocumentUndoRedo(";
 	cout << ") -> ";
 	cout << "type: \"IDocumentUndoRedo\"";
@@ -658,7 +696,7 @@ void SwDoc::SetVisibleLinks(bool bFlag){
 }
 
 sfx2::LinkManager & SwDoc::GetLinkManager(){
-	sfx2::LinkManager out;
+	sfx2::LinkManager out(NULL);
 	cout << "GetLinkManager(";
 	cout << ") -> ";
 	cout << "type: \"sfx2::LinkManager\"";
@@ -667,7 +705,7 @@ sfx2::LinkManager & SwDoc::GetLinkManager(){
 }
 
 const sfx2::LinkManager & SwDoc::GetLinkManager() const{
-	sfx2::LinkManager out;
+	sfx2::LinkManager out(NULL);
 	cout << "GetLinkManager(";
 	cout << ") -> ";
 	cout << "type: \"sfx2::LinkManager\"";
@@ -689,7 +727,7 @@ bool SwDoc::GetData(const rtl::OUString & rItem, const String & rMimeType, ::com
 	cout << "GetData(";
 	cout << "rItem";
 	cout << ",";
-	cout << rMimeType.c_str();
+	cout << rMimeType.GetBuffer();
 	cout << ",";
 	cout << "rValue";
 	cout << ") -> ";
@@ -703,7 +741,7 @@ bool SwDoc::SetData(const rtl::OUString & rItem, const String & rMimeType, const
 	cout << "SetData(";
 	cout << "rItem";
 	cout << ",";
-	cout << rMimeType.c_str();
+	cout << rMimeType.GetBuffer();
 	cout << ",";
 	cout << "rValue";
 	cout << ") -> ";
@@ -783,7 +821,7 @@ SwFieldType * SwDoc::GetFldType(sal_uInt16 nResId, const String & rName, bool bD
 	cout << "GetFldType(";
 	cout << nResId;
 	cout << ",";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ",";
 	cout << bDbFieldMatching;
 	cout << ") -> ";
@@ -1144,7 +1182,7 @@ bool SwDoc::Overwrite(const SwPaM & rRg, const String & rStr){
 	cout << "Overwrite(";
 	cout << "rRg";
 	cout << ",";
-	cout << rStr.c_str();
+	cout << rStr.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -1194,9 +1232,9 @@ SwFlyFrmFmt * SwDoc::Insert(const SwPaM & rRg, const String & rGrfName, const St
 	cout << "Insert(";
 	cout << "rRg";
 	cout << ",";
-	cout << rGrfName.c_str();
+	cout << rGrfName.GetBuffer();
 	cout << ",";
-	cout << rFltName.c_str();
+	cout << rFltName.GetBuffer();
 	cout << ",";
 	cout << pGraphic;
 	cout << ",";
@@ -1295,9 +1333,9 @@ void SwDoc::ReRead(SwPaM & arg1, const String & rGrfName, const String & rFltNam
 	cout << "ReRead(";
 	cout << "arg1";
 	cout << ",";
-	cout << rGrfName.c_str();
+	cout << rGrfName.GetBuffer();
 	cout << ",";
-	cout << rFltName.c_str();
+	cout << rFltName.GetBuffer();
 	cout << ",";
 	cout << pGraphic;
 	cout << ",";
@@ -1324,7 +1362,7 @@ SwFlyFrmFmt * SwDoc::InsertOLE(const SwPaM & rRg, const String & rObjName, sal_I
 	cout << "InsertOLE(";
 	cout << "rRg";
 	cout << ",";
-	cout << rObjName.c_str();
+	cout << rObjName.GetBuffer();
 	cout << ",";
 	cout << nAspect;
 	cout << ",";
@@ -1375,7 +1413,7 @@ bool SwDoc::ReplaceRange(SwPaM & rPam, const String & rNewStr, const bool bRegEx
 	cout << "ReplaceRange(";
 	cout << "rPam";
 	cout << ",";
-	cout << rNewStr.c_str();
+	cout << rNewStr.GetBuffer();
 	cout << ",";
 	cout << bRegExReplace;
 	cout << ") -> ";
@@ -1987,7 +2025,7 @@ String SwDoc::getListItemText(const SwNodeNum & rNodeNum, const bool bWithNumber
 	cout << ",";
 	cout << bWithSpacesForLevel;
 	cout << ") -> ";
-	cout << out.c_str();
+	cout << out.GetBuffer();
 	cout << "\n";
 	return out;
 }
@@ -2038,7 +2076,7 @@ String SwDoc::getOutlineText(const sal_Int32 nIdx, const bool bWithNumber, const
 	cout << ",";
 	cout << bWithSpacesForLevel;
 	cout << ") -> ";
-	cout << out.c_str();
+	cout << out.GetBuffer();
 	cout << "\n";
 	return out;
 }
@@ -2065,9 +2103,9 @@ void SwDoc::getOutlineNodes(IDocumentOutlineNodes::tSortedOutlineNodeList & orOu
 SwList * SwDoc::createList(String sListId, const String sDefaultListStyleName){
 	SwList * out = 0;
 	cout << "createList(";
-	cout << sListId.c_str();
+	cout << sListId.GetBuffer();
 	cout << ",";
-	cout << sDefaultListStyleName.c_str();
+	cout << sDefaultListStyleName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -2076,7 +2114,7 @@ SwList * SwDoc::createList(String sListId, const String sDefaultListStyleName){
 
 void SwDoc::deleteList(const String sListId){
 	cout << "deleteList(";
-	cout << sListId.c_str();
+	cout << sListId.GetBuffer();
 	cout << ") -> ";
 	cout << "type: \"void\"";
 	cout << "\n";
@@ -2086,7 +2124,7 @@ void SwDoc::deleteList(const String sListId){
 SwList * SwDoc::getListByName(const String sListId) const{
 	SwList * out = 0;
 	cout << "getListByName(";
-	cout << sListId.c_str();
+	cout << sListId.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -2096,7 +2134,7 @@ SwList * SwDoc::getListByName(const String sListId) const{
 SwList * SwDoc::createListForListStyle(const String sListStyleName){
 	SwList * out = 0;
 	cout << "createListForListStyle(";
-	cout << sListStyleName.c_str();
+	cout << sListStyleName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -2106,7 +2144,7 @@ SwList * SwDoc::createListForListStyle(const String sListStyleName){
 SwList * SwDoc::getListForListStyle(const String sListStyleName) const{
 	SwList * out = 0;
 	cout << "getListForListStyle(";
-	cout << sListStyleName.c_str();
+	cout << sListStyleName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -2115,7 +2153,7 @@ SwList * SwDoc::getListForListStyle(const String sListStyleName) const{
 
 void SwDoc::deleteListForListStyle(const String sListStyleName){
 	cout << "deleteListForListStyle(";
-	cout << sListStyleName.c_str();
+	cout << sListStyleName.GetBuffer();
 	cout << ") -> ";
 	cout << "type: \"void\"";
 	cout << "\n";
@@ -2124,9 +2162,9 @@ void SwDoc::deleteListForListStyle(const String sListStyleName){
 
 void SwDoc::trackChangeOfListStyleName(const String sListStyleName, const String sNewListStyleName){
 	cout << "trackChangeOfListStyleName(";
-	cout << sListStyleName.c_str();
+	cout << sListStyleName.GetBuffer();
 	cout << ",";
-	cout << sNewListStyleName.c_str();
+	cout << sNewListStyleName.GetBuffer();
 	cout << ") -> ";
 	cout << "type: \"void\"";
 	cout << "\n";
@@ -2217,7 +2255,7 @@ void SwDoc::GetAllFlyFmts(SwPosFlyFrms & rPosFlyFmts, const SwPaM * arg1, sal_Bo
 SwFlyFrmFmt * SwDoc::MakeFlyFrmFmt(const String & rFmtName, SwFrmFmt * pDerivedFrom){
 	SwFlyFrmFmt * out = 0;
 	cout << "MakeFlyFrmFmt(";
-	cout << rFmtName.c_str();
+	cout << rFmtName.GetBuffer();
 	cout << ",";
 	cout << pDerivedFrom;
 	cout << ") -> ";
@@ -2229,7 +2267,7 @@ SwFlyFrmFmt * SwDoc::MakeFlyFrmFmt(const String & rFmtName, SwFrmFmt * pDerivedF
 SwDrawFrmFmt * SwDoc::MakeDrawFrmFmt(const String & rFmtName, SwFrmFmt * pDerivedFrom){
 	SwDrawFrmFmt * out = 0;
 	cout << "MakeDrawFrmFmt(";
-	cout << rFmtName.c_str();
+	cout << rFmtName.GetBuffer();
 	cout << ",";
 	cout << pDerivedFrom;
 	cout << ") -> ";
@@ -2323,7 +2361,7 @@ void SwDoc::SetFlyFrmTitle(SwFlyFrmFmt & rFlyFrmFmt, const String & sNewTitle){
 	cout << "SetFlyFrmTitle(";
 	cout << "rFlyFrmFmt";
 	cout << ",";
-	cout << sNewTitle.c_str();
+	cout << sNewTitle.GetBuffer();
 	cout << ") -> ";
 	cout << "type: \"void\"";
 	cout << "\n";
@@ -2334,7 +2372,7 @@ void SwDoc::SetFlyFrmDescription(SwFlyFrmFmt & rFlyFrmFmt, const String & sNewDe
 	cout << "SetFlyFrmDescription(";
 	cout << "rFlyFrmFmt";
 	cout << ",";
-	cout << sNewDescription.c_str();
+	cout << sNewDescription.GetBuffer();
 	cout << ") -> ";
 	cout << "type: \"void\"";
 	cout << "\n";
@@ -2400,7 +2438,7 @@ bool SwDoc::SetCurFtn(const SwPaM & rPam, const String & rNumStr, sal_uInt16 nNu
 	cout << "SetCurFtn(";
 	cout << "rPam";
 	cout << ",";
-	cout << rNumStr.c_str();
+	cout << rNumStr.GetBuffer();
 	cout << ",";
 	cout << nNumber;
 	cout << ",";
@@ -2565,7 +2603,7 @@ void SwDoc::ChangeDBFields(const std::vector<String> & rOldNames, const String &
 	cout << "ChangeDBFields(";
 	cout << "rOldNames";
 	cout << ",";
-	cout << rNewName.c_str();
+	cout << rNewName.GetBuffer();
 	cout << ") -> ";
 	cout << "type: \"void\"";
 	cout << "\n";
@@ -2632,7 +2670,7 @@ String SwDoc::GetUniqueGrfName() const{
 	String out;
 	cout << "GetUniqueGrfName(";
 	cout << ") -> ";
-	cout << out.c_str();
+	cout << out.GetBuffer();
 	cout << "\n";
 	return out;
 }
@@ -2641,7 +2679,7 @@ String SwDoc::GetUniqueOLEName() const{
 	String out;
 	cout << "GetUniqueOLEName(";
 	cout << ") -> ";
-	cout << out.c_str();
+	cout << out.GetBuffer();
 	cout << "\n";
 	return out;
 }
@@ -2650,7 +2688,7 @@ String SwDoc::GetUniqueFrameName() const{
 	String out;
 	cout << "GetUniqueFrameName(";
 	cout << ") -> ";
-	cout << out.c_str();
+	cout << out.GetBuffer();
 	cout << "\n";
 	return out;
 }
@@ -2668,7 +2706,7 @@ void SwDoc::SetFlyName(SwFlyFrmFmt & rFmt, const String & rName){
 	cout << "SetFlyName(";
 	cout << "rFmt";
 	cout << ",";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << "type: \"void\"";
 	cout << "\n";
@@ -2678,7 +2716,7 @@ void SwDoc::SetFlyName(SwFlyFrmFmt & rFmt, const String & rName){
 const SwFlyFrmFmt * SwDoc::FindFlyByName(const String & rName, sal_Int8 nNdTyp) const{
 	const SwFlyFrmFmt * out = 0;
 	cout << "FindFlyByName(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ",";
 	cout << nNdTyp;
 	cout << ") -> ";
@@ -2786,13 +2824,13 @@ void SwDoc::SetDefault(const SfxItemSet & arg1){
 }
 
 const SfxPoolItem & SwDoc::GetDefault(sal_uInt16 nFmtHint) const{
-	const SfxPoolItem out(0);
+	const SfxPoolItem* pItem = new SwFmtCntnt();
 	cout << "GetDefault(";
 	cout << nFmtHint;
 	cout << ") -> ";
 	cout << "type: \"SfxPoolItem\"";
 	cout << "\n";
-	return out;
+	return *pItem;
 }
 
 sal_Bool SwDoc::DontExpandFmt(const SwPosition & rPos, sal_Bool bFlag){
@@ -2925,12 +2963,12 @@ SwCharFmt * SwDoc::GetDfltCharFmt(){
 }
 
 IStyleAccess & SwDoc::GetIStyleAccess(){
-	IStyleAccess out;
+	IStyleAccess* out = createStyleManager(NULL);
 	cout << "GetIStyleAccess(";
 	cout << ") -> ";
 	cout << "type: \"IStyleAccess\"";
 	cout << "\n";
-	return out;
+	return *out;
 }
 
 void SwDoc::RemoveAllFmtLanguageDependencies(){
@@ -2944,7 +2982,7 @@ void SwDoc::RemoveAllFmtLanguageDependencies(){
 SwFrmFmt * SwDoc::MakeFrmFmt(const String & rFmtName, SwFrmFmt * pDerivedFrom, sal_Bool bBroadcast, sal_Bool bAuto){
 	SwFrmFmt * out = 0;
 	cout << "MakeFrmFmt(";
-	cout << rFmtName.c_str();
+	cout << rFmtName.GetBuffer();
 	cout << ",";
 	cout << pDerivedFrom;
 	cout << ",";
@@ -2971,7 +3009,7 @@ void SwDoc::DelFrmFmt(SwFrmFmt * pFmt, sal_Bool bBroadcast){
 SwFrmFmt * SwDoc::FindFrmFmtByName(const String & rName) const{
 	SwFrmFmt * out = 0;
 	cout << "FindFrmFmtByName(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -2981,7 +3019,7 @@ SwFrmFmt * SwDoc::FindFrmFmtByName(const String & rName) const{
 SwCharFmt * SwDoc::MakeCharFmt(const String & rFmtName, SwCharFmt * pDerivedFrom, sal_Bool bBroadcast, sal_Bool bAuto){
 	SwCharFmt * out = 0;
 	cout << "MakeCharFmt(";
-	cout << rFmtName.c_str();
+	cout << rFmtName.GetBuffer();
 	cout << ",";
 	cout << pDerivedFrom;
 	cout << ",";
@@ -3019,7 +3057,7 @@ void SwDoc::DelCharFmt(SwCharFmt * pFmt, sal_Bool bBroadcast){
 SwCharFmt * SwDoc::FindCharFmtByName(const String & rName) const{
 	SwCharFmt * out = 0;
 	cout << "FindCharFmtByName(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -3047,7 +3085,7 @@ const SwTxtFmtColls * SwDoc::GetTxtFmtColls() const{
 SwTxtFmtColl * SwDoc::MakeTxtFmtColl(const String & rFmtName, SwTxtFmtColl * pDerivedFrom, sal_Bool bBroadcast, sal_Bool bAuto){
 	SwTxtFmtColl * out = 0;
 	cout << "MakeTxtFmtColl(";
-	cout << rFmtName.c_str();
+	cout << rFmtName.GetBuffer();
 	cout << ",";
 	cout << pDerivedFrom;
 	cout << ",";
@@ -3063,7 +3101,7 @@ SwTxtFmtColl * SwDoc::MakeTxtFmtColl(const String & rFmtName, SwTxtFmtColl * pDe
 SwConditionTxtFmtColl * SwDoc::MakeCondTxtFmtColl(const String & rFmtName, SwTxtFmtColl * pDerivedFrom, sal_Bool bBroadcast){
 	SwConditionTxtFmtColl * out = 0;
 	cout << "MakeCondTxtFmtColl(";
-	cout << rFmtName.c_str();
+	cout << rFmtName.GetBuffer();
 	cout << ",";
 	cout << pDerivedFrom;
 	cout << ",";
@@ -3115,7 +3153,7 @@ sal_Bool SwDoc::SetTxtFmtColl(const SwPaM & rRg, SwTxtFmtColl * pFmt, bool bRese
 SwTxtFmtColl * SwDoc::FindTxtFmtCollByName(const String & rName) const{
 	SwTxtFmtColl * out = 0;
 	cout << "FindTxtFmtCollByName(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -3151,7 +3189,7 @@ const SwGrfFmtColls * SwDoc::GetGrfFmtColls() const{
 SwGrfFmtColl * SwDoc::MakeGrfFmtColl(const String & rFmtName, SwGrfFmtColl * pDerivedFrom){
 	SwGrfFmtColl * out = 0;
 	cout << "MakeGrfFmtColl(";
-	cout << rFmtName.c_str();
+	cout << rFmtName.GetBuffer();
 	cout << ",";
 	cout << pDerivedFrom;
 	cout << ") -> ";
@@ -3163,7 +3201,7 @@ SwGrfFmtColl * SwDoc::MakeGrfFmtColl(const String & rFmtName, SwGrfFmtColl * pDe
 SwGrfFmtColl * SwDoc::FindGrfFmtCollByName(const String & rName) const{
 	SwGrfFmtColl * out = 0;
 	cout << "FindGrfFmtCollByName(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -3199,7 +3237,8 @@ sal_uInt16 SwDoc::GetTblFrmFmtCount(sal_Bool bUsed) const{
 }
 
 SwFrmFmt & SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, sal_Bool bUsed) const{
-	SwFrmFmt out;
+    SwAttrPool* pPool = new SwAttrPool(const_cast<SwDoc*>(this));
+	SwFrmFmt out(*pPool, "test", NULL);
 	cout << "GetTblFrmFmt(";
 	cout << nFmt;
 	cout << ",";
@@ -3213,7 +3252,7 @@ SwFrmFmt & SwDoc::GetTblFrmFmt(sal_uInt16 nFmt, sal_Bool bUsed) const{
 SwTableFmt * SwDoc::MakeTblFrmFmt(const String & rFmtName, SwFrmFmt * pDerivedFrom){
 	SwTableFmt * out = 0;
 	cout << "MakeTblFrmFmt(";
-	cout << rFmtName.c_str();
+	cout << rFmtName.GetBuffer();
 	cout << ",";
 	cout << pDerivedFrom;
 	cout << ") -> ";
@@ -3234,7 +3273,7 @@ void SwDoc::DelTblFrmFmt(SwTableFmt * pFmt){
 SwTableFmt * SwDoc::FindTblFmtByName(const String & rName, sal_Bool bAll) const{
 	SwTableFmt * out = 0;
 	cout << "FindTblFmtByName(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ",";
 	cout << bAll;
 	cout << ") -> ";
@@ -3355,7 +3394,7 @@ sal_Bool SwDoc::IsUsed(const SwNumRule & arg1) const{
 sal_uInt16 SwDoc::SetDocPattern(const String & rPatternName){
 	sal_uInt16 out = 0;
 	cout << "SetDocPattern(";
-	cout << rPatternName.c_str();
+	cout << rPatternName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -3394,7 +3433,7 @@ sal_Bool SwDoc::InsertGlossary(SwTextBlocks & rBlock, const String & rEntry, SwP
 	cout << "InsertGlossary(";
 	cout << "rBlock";
 	cout << ",";
-	cout << rEntry.c_str();
+	cout << rEntry.GetBuffer();
 	cout << ",";
 	cout << "rPaM";
 	cout << ",";
@@ -3462,7 +3501,7 @@ sal_uInt16 SwDoc::GetPageDescCnt() const{
 }
 
 const SwPageDesc & SwDoc::GetPageDesc(const sal_uInt16 i) const{
-	SwPageDesc out;
+	SwPageDesc out(String(), NULL, const_cast<SwDoc*>(this));
 	cout << "GetPageDesc(";
 	cout << i;
 	cout << ") -> ";
@@ -3474,7 +3513,7 @@ const SwPageDesc & SwDoc::GetPageDesc(const sal_uInt16 i) const{
 SwPageDesc * SwDoc::FindPageDescByName(const String & rName, sal_uInt16 * pPos) const{
 	SwPageDesc * out = 0;
 	cout << "FindPageDescByName(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ",";
 	cout << pPos;
 	cout << ") -> ";
@@ -3521,7 +3560,7 @@ void SwDoc::CopyFooter(const SwFrmFmt & rSrcFmt, SwFrmFmt & rDestFmt){
 SwPageDesc * SwDoc::GetPageDesc(const String & rName){
 	SwPageDesc * out = 0;
 	cout << "GetPageDesc(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -3529,7 +3568,7 @@ SwPageDesc * SwDoc::GetPageDesc(const String & rName){
 }
 
 SwPageDesc & SwDoc::_GetPageDesc(sal_uInt16 i) const{
-	SwPageDesc out;
+	SwPageDesc out(String(), NULL, const_cast<SwDoc*>(this));
 	cout << "_GetPageDesc(";
 	cout << i;
 	cout << ") -> ";
@@ -3540,7 +3579,7 @@ SwPageDesc & SwDoc::_GetPageDesc(sal_uInt16 i) const{
 
 void SwDoc::ChgPageDesc(const String & rName, const SwPageDesc & arg1){
 	cout << "ChgPageDesc(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ",";
 	cout << "arg1";
 	cout << ") -> ";
@@ -3563,7 +3602,7 @@ void SwDoc::ChgPageDesc(sal_uInt16 i, const SwPageDesc & arg1){
 sal_Bool SwDoc::FindPageDesc(const String & rName, sal_uInt16 * pFound){
 	sal_Bool out = false;
 	cout << "FindPageDesc(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ",";
 	cout << pFound;
 	cout << ") -> ";
@@ -3574,7 +3613,7 @@ sal_Bool SwDoc::FindPageDesc(const String & rName, sal_uInt16 * pFound){
 
 void SwDoc::DelPageDesc(const String & rName, sal_Bool bBroadcast){
 	cout << "DelPageDesc(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ",";
 	cout << bBroadcast;
 	cout << ") -> ";
@@ -3606,7 +3645,7 @@ void SwDoc::PreDelPageDesc(SwPageDesc * pDel){
 sal_uInt16 SwDoc::MakePageDesc(const String & rName, const SwPageDesc * pCpy, sal_Bool bRegardLanguage, sal_Bool bBroadcast){
 	sal_uInt16 out = 0;
 	cout << "MakePageDesc(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ",";
 	cout << pCpy;
 	cout << ",";
@@ -3621,7 +3660,7 @@ sal_uInt16 SwDoc::MakePageDesc(const String & rName, const SwPageDesc * pCpy, sa
 
 void SwDoc::BroadcastStyleOperation(String rName, SfxStyleFamily eFamily, sal_uInt16 nOp){
 	cout << "BroadcastStyleOperation(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ",";
 	cout << "eFamily";
 	cout << ",";
@@ -3662,7 +3701,7 @@ void SwDoc::DeleteTOXMark(const SwTOXMark * pTOXMark){
 }
 
 const SwTOXMark & SwDoc::GotoTOXMark(const SwTOXMark & rCurTOXMark, SwTOXSearch eDir, sal_Bool bInReadOnly){
-	const SwTOXMark out;
+	const SwTOXMark out(NULL);
 	cout << "GotoTOXMark(";
 	cout << "rCurTOXMark";
 	cout << ",";
@@ -3718,13 +3757,14 @@ const SwTOXBase * SwDoc::GetCurTOX(const SwPosition & rPos) const{
 }
 
 const SwAttrSet & SwDoc::GetTOXBaseAttrSet(const SwTOXBase & rTOX) const{
-	SwAttrSet out;
+    SwAttrPool* pPool = new SwAttrPool(const_cast<SwDoc*>(this));
+	SwAttrSet* pSet = new SwAttrSet(*pPool, 0, 0);
 	cout << "GetTOXBaseAttrSet(";
 	cout << "rTOX";
 	cout << ") -> ";
 	cout << "type: \"SwAttrSet\"";
 	cout << "\n";
-	return out;
+	return *pSet;
 }
 
 sal_Bool SwDoc::DeleteTOX(const SwTOXBase & rTOXBase, sal_Bool bDelNodes){
@@ -3746,7 +3786,7 @@ String SwDoc::GetUniqueTOXBaseName(const SwTOXType & rType, const String * pChkS
 	cout << ",";
 	cout << pChkStr;
 	cout << ") -> ";
-	cout << out.c_str();
+	cout << out.GetBuffer();
 	cout << "\n";
 	return out;
 }
@@ -3756,7 +3796,7 @@ sal_Bool SwDoc::SetTOXBaseName(const SwTOXBase & rTOXBase, const String & rName)
 	cout << "SetTOXBaseName(";
 	cout << "rTOXBase";
 	cout << ",";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -3796,14 +3836,14 @@ const String & SwDoc::GetTOIAutoMarkURL() const{
 	const String out;
 	cout << "GetTOIAutoMarkURL(";
 	cout << ") -> ";
-	cout << out.c_str();
+	cout << out.GetBuffer();
 	cout << "\n";
 	return out;
 }
 
 void SwDoc::SetTOIAutoMarkURL(const String & rSet){
 	cout << "SetTOIAutoMarkURL(";
-	cout << rSet.c_str();
+	cout << rSet.GetBuffer();
 	cout << ") -> ";
 	cout << "type: \"void\"";
 	cout << "\n";
@@ -4113,7 +4153,7 @@ sal_Bool SwDoc::GotoOutline(SwPosition & rPos, const String & rName) const{
 	cout << "GotoOutline(";
 	cout << "rPos";
 	cout << ",";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -4128,7 +4168,7 @@ void SwDoc::SetNumRule(const SwPaM & arg1, const SwNumRule & arg2, const bool bC
 	cout << ",";
 	cout << bCreateNewList;
 	cout << ",";
-	cout << sContinuedListId.c_str();
+	cout << sContinuedListId.GetBuffer();
 	cout << ",";
 	cout << bSetItem;
 	cout << ",";
@@ -4212,7 +4252,7 @@ void SwDoc::AddNumRule(SwNumRule * pRule){
 sal_uInt16 SwDoc::MakeNumRule(const String & rName, const SwNumRule * pCpy, sal_Bool bBroadcast, const SvxNumberFormat::SvxNumPositionAndSpaceMode eDefaultNumberFormatPositionAndSpaceMode){
 	sal_uInt16 out = 0;
 	cout << "MakeNumRule(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ",";
 	cout << pCpy;
 	cout << ",";
@@ -4228,7 +4268,7 @@ sal_uInt16 SwDoc::MakeNumRule(const String & rName, const SwNumRule * pCpy, sal_
 sal_uInt16 SwDoc::FindNumRule(const String & rName) const{
 	sal_uInt16 out = 0;
 	cout << "FindNumRule(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -4238,7 +4278,7 @@ sal_uInt16 SwDoc::FindNumRule(const String & rName) const{
 SwNumRule * SwDoc::FindNumRulePtr(const String & rName) const{
 	SwNumRule * out = 0;
 	cout << "FindNumRulePtr(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -4248,9 +4288,9 @@ SwNumRule * SwDoc::FindNumRulePtr(const String & rName) const{
 sal_Bool SwDoc::RenameNumRule(const String & aOldName, const String & aNewName, sal_Bool bBroadcast){
 	sal_Bool out = false;
 	cout << "RenameNumRule(";
-	cout << aOldName.c_str();
+	cout << aOldName.GetBuffer();
 	cout << ",";
-	cout << aNewName.c_str();
+	cout << aNewName.GetBuffer();
 	cout << ",";
 	cout << bBroadcast;
 	cout << ") -> ";
@@ -4262,7 +4302,7 @@ sal_Bool SwDoc::RenameNumRule(const String & aOldName, const String & aNewName, 
 sal_Bool SwDoc::DelNumRule(const String & rName, sal_Bool bBroadCast){
 	sal_Bool out = false;
 	cout << "DelNumRule(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ",";
 	cout << bBroadCast;
 	cout << ") -> ";
@@ -4278,7 +4318,7 @@ String SwDoc::GetUniqueNumRuleName(const String * pChkStr, sal_Bool bAutoNum) co
 	cout << ",";
 	cout << bAutoNum;
 	cout << ") -> ";
-	cout << out.c_str();
+	cout << out.GetBuffer();
 	cout << "\n";
 	return out;
 }
@@ -4307,9 +4347,9 @@ sal_Bool SwDoc::ReplaceNumRule(const SwPosition & rPos, const String & rOldRule,
 	cout << "ReplaceNumRule(";
 	cout << "rPos";
 	cout << ",";
-	cout << rOldRule.c_str();
+	cout << rOldRule.GetBuffer();
 	cout << ",";
-	cout << rNewRule.c_str();
+	cout << rNewRule.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -4361,7 +4401,7 @@ const SwNumRule * SwDoc::SearchNumRule(const SwPosition & rPos, const bool bForw
 	cout << ",";
 	cout << nNonEmptyAllowed;
 	cout << ",";
-	cout << sListId.c_str();
+	cout << sListId.GetBuffer();
 	cout << ",";
 	cout << bInvestigateStartNode;
 	cout << ") -> ";
@@ -4648,7 +4688,7 @@ String SwDoc::GetUniqueTblName() const{
 	String out;
 	cout << "GetUniqueTblName(";
 	cout << ") -> ";
-	cout << out.c_str();
+	cout << out.GetBuffer();
 	cout << "\n";
 	return out;
 }
@@ -4894,7 +4934,7 @@ sal_Bool SwDoc::InsCopyOfTbl(SwPosition & rInsPos, const SwSelBoxes & rBoxes, co
 sal_Bool SwDoc::UnProtectCells(const String & rTblName){
 	sal_Bool out = false;
 	cout << "UnProtectCells(";
-	cout << rTblName.c_str();
+	cout << rTblName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -4965,7 +5005,7 @@ sal_Bool SwDoc::MergeTable(const SwPosition & rPos, sal_Bool bWithPrev, sal_uInt
 
 void SwDoc::UpdateCharts(const String & rName) const{
 	cout << "UpdateCharts(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << "type: \"void\"";
 	cout << "\n";
@@ -4984,7 +5024,7 @@ void SwDoc::SetTableName(SwFrmFmt & rTblFmt, const String & rNewName){
 	cout << "SetTableName(";
 	cout << "rTblFmt";
 	cout << ",";
-	cout << rNewName.c_str();
+	cout << rNewName.GetBuffer();
 	cout << ") -> ";
 	cout << "type: \"void\"";
 	cout << "\n";
@@ -4994,7 +5034,7 @@ void SwDoc::SetTableName(SwFrmFmt & rTblFmt, const String & rNewName){
 const SwFmtRefMark * SwDoc::GetRefMark(const String & rName) const{
 	const SwFmtRefMark * out = 0;
 	cout << "GetRefMark(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -5026,11 +5066,11 @@ SwFlyFrmFmt * SwDoc::InsertLabel(const SwLabelType eType, const String & rTxt, c
 	cout << "InsertLabel(";
 	cout << "eType";
 	cout << ",";
-	cout << rTxt.c_str();
+	cout << rTxt.GetBuffer();
 	cout << ",";
-	cout << rSeparator.c_str();
+	cout << rSeparator.GetBuffer();
 	cout << ",";
-	cout << rNumberingSeparator.c_str();
+	cout << rNumberingSeparator.GetBuffer();
 	cout << ",";
 	cout << bBefore;
 	cout << ",";
@@ -5038,7 +5078,7 @@ SwFlyFrmFmt * SwDoc::InsertLabel(const SwLabelType eType, const String & rTxt, c
 	cout << ",";
 	cout << nIdx;
 	cout << ",";
-	cout << rCharacterStyle.c_str();
+	cout << rCharacterStyle.GetBuffer();
 	cout << ",";
 	cout << bCpyBrd;
 	cout << ") -> ";
@@ -5050,15 +5090,15 @@ SwFlyFrmFmt * SwDoc::InsertLabel(const SwLabelType eType, const String & rTxt, c
 SwFlyFrmFmt * SwDoc::InsertDrawLabel(const String & rTxt, const String & rSeparator, const String & rNumberSeparator, const sal_uInt16 nId, const String & rCharacterStyle, SdrObject & rObj){
 	SwFlyFrmFmt * out = 0;
 	cout << "InsertDrawLabel(";
-	cout << rTxt.c_str();
+	cout << rTxt.GetBuffer();
 	cout << ",";
-	cout << rSeparator.c_str();
+	cout << rSeparator.GetBuffer();
 	cout << ",";
-	cout << rNumberSeparator.c_str();
+	cout << rNumberSeparator.GetBuffer();
 	cout << ",";
 	cout << nId;
 	cout << ",";
-	cout << rCharacterStyle.c_str();
+	cout << rCharacterStyle.GetBuffer();
 	cout << ",";
 	cout << "rObj";
 	cout << ") -> ";
@@ -5068,21 +5108,21 @@ SwFlyFrmFmt * SwDoc::InsertDrawLabel(const String & rTxt, const String & rSepara
 }
 
 const SwAttrPool & SwDoc::GetAttrPool() const{
-	const SwAttrPool out(this);
+	SwAttrPool* out = new SwAttrPool(const_cast<SwDoc*>(this));
 	cout << "GetAttrPool(";
 	cout << ") -> ";
 	cout << "type: \"SwAttrPool\"";
 	cout << "\n";
-	return out;
+	return *out;
 }
 
 SwAttrPool & SwDoc::GetAttrPool(){
-	SwAttrPool out(this);
+	SwAttrPool* out = new SwAttrPool(this);
 	cout << "GetAttrPool(";
 	cout << ") -> ";
 	cout << "type: \"SwAttrPool\"";
 	cout << "\n";
-	return out;
+	return *out;
 }
 
 SwEditShell * SwDoc::GetEditShell(ViewShell * * ppSh) const{
@@ -5221,7 +5261,7 @@ String SwDoc::GetUniqueSectionName(const String * pChkStr) const{
 	cout << "GetUniqueSectionName(";
 	cout << pChkStr;
 	cout << ") -> ";
-	cout << out.c_str();
+	cout << out.GetBuffer();
 	cout << "\n";
 	return out;
 }
@@ -5310,7 +5350,7 @@ void SwDoc::SetInLoadAsynchron(bool bFlag){
 sal_Bool SwDoc::SelectServerObj(const String & rStr, SwPaM * & rpPam, SwNodeRange * & rpRange) const{
 	sal_Bool out = false;
 	cout << "SelectServerObj(";
-	cout << rStr.c_str();
+	cout << rStr.GetBuffer();
 	cout << ",";
 	cout << rpPam;
 	cout << ",";
@@ -5401,7 +5441,7 @@ void SwDoc::SetCalcFieldValueHdl(Outliner * pOutliner){
 sal_Bool SwDoc::IsVisitedURL(const String & rURL) const{
 	sal_Bool out = false;
 	cout << "IsVisitedURL(";
-	cout << rURL.c_str();
+	cout << rURL.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -5429,7 +5469,7 @@ SwAutoCorrExceptWord * SwDoc::GetAutoCorrExceptWord(){
 const SwFmtINetFmt * SwDoc::FindINetAttr(const String & rName) const{
 	const SwFmtINetFmt * out = 0;
 	cout << "FindINetAttr(";
-	cout << rName.c_str();
+	cout << rName.GetBuffer();
 	cout << ") -> ";
 	cout << out;
 	cout << "\n";
@@ -5540,7 +5580,7 @@ sal_Bool SwDoc::ConvertFieldsToText(){
 sal_Bool SwDoc::GenerateGlobalDoc(const String & rPath, const SwTxtFmtColl * pSplitColl){
 	sal_Bool out = false;
 	cout << "GenerateGlobalDoc(";
-	cout << rPath.c_str();
+	cout << rPath.GetBuffer();
 	cout << ",";
 	cout << pSplitColl;
 	cout << ") -> ";
@@ -5552,7 +5592,7 @@ sal_Bool SwDoc::GenerateGlobalDoc(const String & rPath, const SwTxtFmtColl * pSp
 sal_Bool SwDoc::GenerateGlobalDoc(const String & rPath, int nOutlineLevel){
 	sal_Bool out = false;
 	cout << "GenerateGlobalDoc(";
-	cout << rPath.c_str();
+	cout << rPath.GetBuffer();
 	cout << ",";
 	cout << nOutlineLevel;
 	cout << ") -> ";
@@ -5564,7 +5604,7 @@ sal_Bool SwDoc::GenerateGlobalDoc(const String & rPath, int nOutlineLevel){
 sal_Bool SwDoc::GenerateHTMLDoc(const String & rPath, const SwTxtFmtColl * pSplitColl){
 	sal_Bool out = false;
 	cout << "GenerateHTMLDoc(";
-	cout << rPath.c_str();
+	cout << rPath.GetBuffer();
 	cout << ",";
 	cout << pSplitColl;
 	cout << ") -> ";
@@ -5576,7 +5616,7 @@ sal_Bool SwDoc::GenerateHTMLDoc(const String & rPath, const SwTxtFmtColl * pSpli
 sal_Bool SwDoc::GenerateHTMLDoc(const String & rPath, int nOutlineLevel){
 	sal_Bool out = false;
 	cout << "GenerateHTMLDoc(";
-	cout << rPath.c_str();
+	cout << rPath.GetBuffer();
 	cout << ",";
 	cout << nOutlineLevel;
 	cout << ") -> ";
@@ -5987,15 +6027,6 @@ SwExtTextInput * SwDoc::GetExtTextInput() const{
 	return out;
 }
 
-SwAutoCompleteWord & SwDoc::GetAutoCompleteWords(){
-	SwAutoCompleteWord out;
-	cout << "GetAutoCompleteWords(";
-	cout << ") -> ";
-	cout << "type: \"SwAutoCompleteWord\"";
-	cout << "\n";
-	return out;
-}
-
 bool SwDoc::ContainsMSVBasic() const{
 	bool out = false;
 	cout << "ContainsMSVBasic(";
@@ -6098,7 +6129,7 @@ IGrammarContact * SwDoc::getGrammarContact() const{
 
 void SwDoc::MarkListLevel(const String & sListId, const int nListLevel, const sal_Bool bValue){
 	cout << "MarkListLevel(";
-	cout << sListId.c_str();
+	cout << sListId.GetBuffer();
 	cout << ",";
 	cout << nListLevel;
 	cout << ",";
@@ -6137,7 +6168,7 @@ void SwDoc::RenameFmt(SwFmt & rFmt, const String & sNewName, sal_Bool bBroadcast
 	cout << "RenameFmt(";
 	cout << "rFmt";
 	cout << ",";
-	cout << sNewName.c_str();
+	cout << sNewName.GetBuffer();
 	cout << ",";
 	cout << bBroadcast;
 	cout << ") -> ";
@@ -6162,7 +6193,7 @@ String SwDoc::GetPaMDescr(const SwPaM & rPaM) const{
 	cout << "GetPaMDescr(";
 	cout << "rPaM";
 	cout << ") -> ";
-	cout << out.c_str();
+	cout << out.GetBuffer();
 	cout << "\n";
 	return out;
 }
@@ -6313,12 +6344,12 @@ com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> SwDoc:
 }
 
 ::sfx2::IXmlIdRegistry & SwDoc::GetXmlIdRegistry(){
-	::sfx2::IXmlIdRegistry out;
-	cout << "GetXmlIdRegistry(";
+    sfx2::IXmlIdRegistry* out = sfx2::createXmlIdRegistry(false);
+    cout << "GetXmlIdRegistry(";
 	cout << ") -> ";
 	cout << "type: \"::sfx2::IXmlIdRegistry\"";
 	cout << "\n";
-	return out;
+	return *out;
 }
 
 ::sw::MetaFieldManager & SwDoc::GetMetaFieldManager(){
@@ -6331,7 +6362,7 @@ com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> SwDoc:
 }
 
 ::sw::UndoManager & SwDoc::GetUndoManager(){
-	::sw::UndoManager out;
+    sw::UndoManager out(::std::auto_ptr<SwNodes>(new SwNodes(this)),static_cast<IDocumentDrawModelAccess&>(*this),static_cast<IDocumentRedlineAccess&>(*this),static_cast<IDocumentState&>(*this));
 	cout << "GetUndoManager(";
 	cout << ") -> ";
 	cout << "type: \"::sw::UndoManager\"";
@@ -6340,7 +6371,7 @@ com::sun::star::uno::Reference<com::sun::star::container::XNameContainer> SwDoc:
 }
 
 ::sw::UndoManager const & SwDoc::GetUndoManager() const{
-	::sw::UndoManager out;
+    sw::UndoManager out(::std::auto_ptr<SwNodes>(new SwNodes(const_cast<SwDoc*>(this))),static_cast<IDocumentDrawModelAccess&>(*const_cast<SwDoc*>(this)),static_cast<IDocumentRedlineAccess&>(*const_cast<SwDoc*>(this)),static_cast<IDocumentState&>(*const_cast<SwDoc*>(this)));
 	cout << "GetUndoManager(";
 	cout << ") -> ";
 	cout << "type: \"::sw::UndoManager\"";
@@ -6375,3 +6406,72 @@ void SwDoc::SetDrawDefaults(){
 	return;
 }
 
+bool SwDoc::InsertString(const SwPaM&, const String&, IDocumentContentOperations::InsertFlags)
+{
+    return false;
+}
+
+IMPL_LINK(SwDoc, CalcFieldValueHdl, EditFieldInfo*, pInfo)
+{
+    return 0;
+}
+
+IMPL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem*, EMPTYARG )
+{
+    return 0;
+}
+
+IMPL_LINK( SwDoc, AddDrawUndo, SdrUndoAction *, pUndo )
+{
+    return 0;
+}
+
+struct _PostItFld : public _SetGetExpFld
+{
+    _PostItFld( const SwNodeIndex& rNdIdx, const SwTxtFld* pFld,  const SwIndex* pIdx = 0 )
+        : _SetGetExpFld( rNdIdx, pFld, pIdx ) {}
+
+    sal_uInt16 GetPageNo( const StringRangeEnumerator &rRangeEnum,
+            const std::set< sal_Int32 > &rPossiblePages,
+            sal_uInt16& rVirtPgNo, sal_uInt16& rLineNo );
+
+    SwPostItField* GetPostIt() const
+    {
+        return (SwPostItField*) GetFld()->GetFld().GetFld();
+    }
+};
+
+bool lcl_GetPostIts(
+    IDocumentFieldsAccess* pIDFA,
+    _SetGetExpFlds * pSrtLst )
+{
+    bool bHasPostIts = false;
+
+    SwFieldType* pFldType = pIDFA->GetSysFldType( RES_POSTITFLD );
+    OSL_ENSURE( pFldType, "kein PostItType ? ");
+
+    if( pFldType->GetDepends() )
+    {
+        // Found modify object; insert all fields into the array
+        SwIterator<SwFmtFld,SwFieldType> aIter( *pFldType );
+        const SwTxtFld* pTxtFld;
+        for( SwFmtFld* pFld = aIter.First(); pFld;  pFld = aIter.Next() )
+        {
+            if( 0 != ( pTxtFld = pFld->GetTxtFld() ) &&
+                pTxtFld->GetTxtNode().GetNodes().IsDocNodes() )
+            {
+                bHasPostIts = true;
+                if (pSrtLst)
+                {
+                    SwNodeIndex aIdx( pTxtFld->GetTxtNode() );
+                    _PostItFld* pNew = new _PostItFld( aIdx, pTxtFld );
+                    pSrtLst->Insert( pNew );
+                }
+                else
+                    break;  // we just wanted to check for the existence of postits ...
+            }
+        }
+    }
+
+    return bHasPostIts;
+}

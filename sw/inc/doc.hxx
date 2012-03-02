@@ -243,12 +243,15 @@ class SW_DLLPUBLIC SwDoc : public IInterface ,
 	 public IDocumentExternalData {
 private:
 	 SwDoc(const SwDoc & arg1);
+         sal_Int32 mReferenceCount;
 public:
 	 SwDoc();
-	 ~SwDoc();
+	 virtual ~SwDoc();
 
 	 static SwAutoCompleteWord *pACmpltWords;
 
+         virtual bool InsertString(const SwPaM &rRg, const String&,
+                 const enum InsertFlags nInsertMode = INS_EMPTYEXPAND );
 	virtual bool IsInDtor() const;
 	virtual SwNodes & GetNodes();
 	virtual SwNodes const & GetNodes() const;
@@ -350,7 +353,7 @@ public:
 	virtual bool IsNewFldLst() const;
 	virtual void SetNewFldLst(bool bFlag);
 	virtual void InsDelFldInFldLst(bool bIns, const SwTxtFld & rFld);
-	virtual SwField * GetField(const SwPosition & rPos);
+	static SwField * GetField(const SwPosition & rPos);
 	static SwTxtFld * GetTxtFld(const SwPosition & rPos);
 	virtual bool CopyRange(SwPaM & arg1, SwPosition & arg2, const bool bCopyAll) const;
 	virtual void DeleteSection(SwNode * pNode);
@@ -843,7 +846,14 @@ public:
 	virtual SfxObjectShell * CreateCopy(bool bCallInitNew) const;
 	virtual void dumpAsXml(xmlTextWriterPtr writer= NULL);
 	virtual void SetDrawDefaults();
+
+        DECL_LINK( AddDrawUndo, SdrUndoAction * );
+        DECL_STATIC_LINK( SwDoc, BackgroundDone, SvxBrushItem *);
+        DECL_LINK(CalcFieldValueHdl, EditFieldInfo*);
 };
+
+// This method is called in Dtor of SwDoc and deletes cache of ContourObjects.
+void ClrContourCache();
 
 // namespace <docfunc> for functions and procedures working on a Writer document.
 namespace docfunc
