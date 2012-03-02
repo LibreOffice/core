@@ -280,14 +280,14 @@ sub get_license_header{
 "#  distributed with this work for additional information\n".
 "#  regarding copyright ownership.  The ASF licenses this file\n".
 "#  to you under the Apache License, Version 2.0 (the\n".
-"#  "License"); you may not use this file except in compliance\n".
+"#  \"License\"); you may not use this file except in compliance\n".
 "#  with the License.  You may obtain a copy of the License at\n".
 "#  \n".
 "#    http://www.apache.org/licenses/LICENSE-2.0\n".
 "#  \n".
 "#  Unless required by applicable law or agreed to in writing,\n".
 "#  software distributed under the License is distributed on an\n".
-"#  "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\n".
+"#  \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY\n".
 "#  KIND, either express or implied.  See the License for the\n".
 "#  specific language governing permissions and limitations\n".
 "#  under the License.\n".
@@ -336,8 +336,7 @@ sub add_paths
 {
     my $langhash_ref            = shift;
     my $root_dir = $ENV{ SRC_ROOT };
-    my $ooo_l10n_dir = "$root_dir/l10n/source";
-    my $so_l10n_dir  = "$root_dir/l10n_so/source";
+    my $ooo_l10n_dir = "$root_dir/../extras/l10n/source";
 
     if( -e $ooo_l10n_dir )
     {
@@ -352,20 +351,6 @@ sub add_paths
         }
     }
     else { die "ERROR: Can not find directory $ooo_l10n_dir!!!" }
-    if( -e $so_l10n_dir )
-    {
-        foreach my $lang ( keys( %{ $langhash_ref } ) )
-        {
-            my $loc_file = "$so_l10n_dir/$lang/localize.sdf";
-            if( -e $loc_file )
-            {
-                push @sdfparticles , "$ooo_l10n_dir/$lang/localize.sdf";
-            }
-            else { #print "WARNING: $loc_file not found ....\n";
-            }
-        }
-
-    }
 }
 sub collectfiles{
     print STDOUT "### Localize\n";
