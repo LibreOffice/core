@@ -814,7 +814,16 @@ void ImpEditEngine::WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput,
         case EE_CHAR_FONTINFO_CJK:
         case EE_CHAR_FONTINFO_CTL:
         {
-            sal_uInt32 n = std::find(rFontTable.begin(), rFontTable.end(), (SvxFontItem*)&rItem ) - rFontTable.begin();
+            sal_uInt32 n = 0;
+            for (size_t i = 0; i < rFontTable.size(); ++i)
+            {
+                if (*rFontTable[i] == rItem)
+                {
+                    n = i;
+                    break;
+                }
+            }
+
             rOutput << OOO_STRING_SVTOOLS_RTF_F;
             rOutput.WriteNumber( n );
         }
