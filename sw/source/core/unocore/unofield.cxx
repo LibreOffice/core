@@ -1878,7 +1878,7 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
 
     if(pField)
     {
-        // Sonderbehandlung Serienbrieffeld
+        // special treatment for mail merge fields
         sal_uInt16 nWhich = pField->Which();
         if( RES_DBFLD == nWhich &&
             (rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_BASE_NAME)) ||
@@ -1886,8 +1886,8 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_TABLE_NAME))||
             rPropertyName.equalsAsciiL( SW_PROP_NAME(UNO_NAME_DATA_COLUMN_NAME))))
         {
-            // hier muss ein neuer Feldtyp angelegt werden und
-            // das Feld an den neuen Typ umgehaengt werden
+            // here a new field type must be created and the field must
+            // be registered at the new type
             OSL_FAIL("not implemented");
         }
         else
@@ -1906,11 +1906,12 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         }
         pField->PutValue( rValue, pEntry->nWID );
 
-    //#i100374# notify SwPostIt about new field content
-    if (RES_POSTITFLD== nWhich && pFmtFld)
-    {
-        const_cast<SwFmtFld*>(pFmtFld)->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
-    }
+        //#i100374# notify SwPostIt about new field content
+        if (RES_POSTITFLD== nWhich && pFmtFld)
+        {
+            const_cast<SwFmtFld*>(pFmtFld)->Broadcast(
+                    SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
+        }
 
         // fdo#42073 notify SwTxtFld about changes of the expanded string
         if (pFmtFld->GetTxtFld())
@@ -1918,10 +1919,10 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
             pFmtFld->GetTxtFld()->Expand();
         }
 
-    //#i100374# changing a document field should set the modify flag
-    SwDoc* pDoc = GetDoc();
-    if (pDoc)
-        pDoc->SetModified();
+        //#i100374# changing a document field should set the modify flag
+        SwDoc* pDoc = GetDoc();
+        if (pDoc)
+            pDoc->SetModified();
 
     }
     else if(m_pProps)
