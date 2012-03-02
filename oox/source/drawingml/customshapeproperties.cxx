@@ -403,6 +403,15 @@ CustomShapeProvider::createParameterPair( const ParameterPairData *pData )
     return aParameterPair;
 }
 
+com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair >
+CustomShapeProvider::createParameterPairSequence( size_t nElems, const ParameterPairData *pData )
+{
+    Sequence< EnhancedCustomShapeParameterPair > aSequence( nElems );
+    for (size_t i = 0; i < nElems; i++)
+        aSequence[i] = createParameterPair( pData + i );
+    return aSequence;
+}
+
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

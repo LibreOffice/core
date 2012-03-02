@@ -519,6 +519,27 @@ static const char *lclGetEnhancedParameterType( sal_uInt16 nType )
     return type;
 }
 
+static void printParameterPairData(int level, EnhancedCustomShapeParameterPair &pp)
+{
+    // These are always sal_Int32s so lets depend on that for our packing ...
+    sal_Int32 nFirstValue, nSecondValue;
+    if (!(pp.First.Value >>= nFirstValue))
+        assert (false);
+    if (!(pp.Second.Value >>= nSecondValue))
+        assert (false);
+
+    printLevel (level);
+    fprintf (stderr, "{\n");
+    printLevel (level + 1);
+    fprintf (stderr, "%s,\n", lclGetEnhancedParameterType(pp.First.Type));
+    printLevel (level + 1);
+    fprintf (stderr, "%s,\n", lclGetEnhancedParameterType(pp.Second.Type));
+    printLevel (level + 1);
+    fprintf (stderr, "%d, %d\n", (int)nFirstValue, (int)nSecondValue);
+    printLevel (level);
+    fprintf (stderr, "}");
+}
+
 static const char* lclDumpAnyValueCode( Any value, int level = 0)
 {
     static OUString sVoid = CREATE_OUSTRING("void");
@@ -563,8 +584,8 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             printLevel (level);
             fprintf (stderr,"static const char *aStrings[] = {\n");
             for( int i=0; i<strArray.getLength(); i++ ) {
-                printLevel (level);
-                fprintf (stderr,"\t\"%s\"%s\n", USS( strArray[i] ), i < strArray.getLength() - 1 ? "," : "" );
+                printLevel (level + 1);
+                fprintf (stderr,"\"%s\"%s\n", USS( strArray[i] ), i < strArray.getLength() - 1 ? "," : "" );
             }
             printLevel (level);
             fprintf (stderr,"};\n");
@@ -638,8 +659,8 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             printLevel (level);
             fprintf (stderr,"// Command, Count\n");
             for( int i = 0; i < segArray.getLength(); i++ ) {
-                printLevel (level);
-                fprintf (stderr,"\t%d,%d%s\n", segArray[i].Command,
+                printLevel (level + 1);
+                fprintf (stderr,"%d,%d%s\n", segArray[i].Command,
                          segArray[i].Count, i < segArray.getLength() - 1 ? "," : "");
             }
             printLevel (level);
@@ -660,17 +681,18 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
             return "aTextFrameSeq";
         } else if( value >>= ppArray ) {
             printLevel (level);
-            fprintf (stderr, "Sequence< EnhancedCustomShapeParameterPair > aParameterPairSeq (%" SAL_PRIdINT32 ");\n", ppArray.getLength());
-            for( int i=0; i<ppArray.getLength(); i++ ) {
-                printLevel (level);
-                fprintf (stderr, "{\n");
-                const char *var = lclDumpAnyValueCode (makeAny (ppArray[i]), level + 1);
-                printLevel (level + 1);
-                fprintf (stderr, "aParameterPairSeq [%d] = %s;\n", i, var);
-                printLevel (level);
-                fprintf (stderr, "}\n");
+            if (ppArray.getLength() == 0)
+                return "Sequence< EnhancedCustomShapeParameterPair >(0)";
+
+            fprintf (stderr, "static const CustomShapeProvider::ParameterPairData aData[] = {\n");
+            for( int i = 0; i < ppArray.getLength(); i++ ) {
+                printParameterPairData(level + 1, ppArray[i]);
+                fprintf (stderr,"%s\n", i < ppArray.getLength() - 1 ? "," : "");
             }
-            return "aParameterPairSeq";
+            printLevel (level);
+            fprintf (stderr,"};\n");
+
+            return "createParameterPairSequence(SAL_N_ELEMENTS(aData), aData)";
         } else if( value >>= segment ) {
             printLevel (level);
             fprintf (stderr, "EnhancedCustomShapeSegment aSegment;\n");
@@ -705,23 +727,10 @@ static const char* lclDumpAnyValueCode( Any value, int level = 0)
 
             return "aTextFrame";
         } else if( value >>= pp ) {
-            // These are always sal_Int32s so lets depend on that for our packing ...
-            sal_Int32 nFirstValue, nSecondValue;
-            if (!(pp.First.Value >>= nFirstValue))
-                assert (false);
-            if (!(pp.Second.Value >>= nSecondValue))
-                assert (false);
-
             printLevel (level);
-            fprintf (stderr, "static const CustomShapeProvider::ParameterPairData aData = {\n");
-            printLevel (level);
-            fprintf (stderr, "\t%s,\n", lclGetEnhancedParameterType(pp.First.Type));
-            printLevel (level);
-            fprintf (stderr, "\t%s,\n", lclGetEnhancedParameterType(pp.Second.Type));
-            printLevel (level);
-            fprintf (stderr, "\t%d, %d\n", (int)nFirstValue, (int)nSecondValue);
-            printLevel (level);
-            fprintf (stderr, "};\n");
+            fprintf (stderr, "static const CustomShapeProvider::ParameterPairData aData =\n");
+            printParameterPairData(level, pp);
+            fprintf (stderr, ";\n");
 
             return "createParameterPair(&aData)";
         } else if( value >>= par ) {
