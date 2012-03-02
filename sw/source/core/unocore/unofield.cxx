@@ -1912,9 +1912,8 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         const_cast<SwFmtFld*>(pFmtFld)->Broadcast(SwFmtFldHint( 0, SWFMTFLD_CHANGED ));
     }
 
-        // changes of the expanded string have to be notified
-        //#to the SwTxtFld
-        if(RES_DBFLD == nWhich && pFmtFld->GetTxtFld())
+        // fdo#42073 notify SwTxtFld about changes of the expanded string
+        if (pFmtFld->GetTxtFld())
         {
             pFmtFld->GetTxtFld()->Expand();
         }
