@@ -111,7 +111,6 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     test \
     toolkit \
     tools \
-    translations \
     twain \
     ucb \
     ucbhelper \
