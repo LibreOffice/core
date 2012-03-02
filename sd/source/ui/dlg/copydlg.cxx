@@ -120,7 +120,7 @@ CopyDlg::CopyDlg(
     SetFieldUnit( maMtrFldWidth, eFUnit, sal_True );
     SetFieldUnit( maMtrFldHeight, eFUnit, sal_True );
 
-    Reset(0L);
+    Reset();
 }
 
 /*************************************************************************
@@ -163,7 +163,7 @@ CopyDlg::~CopyDlg()
 |*
 \************************************************************************/
 
-IMPL_LINK_NOARG(CopyDlg, Reset)
+void CopyDlg::Reset()
 {
     const SfxPoolItem* pPoolItem = NULL;
     String aStr( GetExtraData() );
@@ -242,7 +242,6 @@ IMPL_LINK_NOARG(CopyDlg, Reset)
         maLbEndColor.SelectEntry( Color( nTmp ) );
     }
 
-    return 0;
 }
 
 /*************************************************************************
