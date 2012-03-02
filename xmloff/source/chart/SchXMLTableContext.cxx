@@ -124,7 +124,7 @@ void lcl_fillRangeMapping(
         const size_t nTableColCount( rRow.size());
         for( size_t nCol = 0; nCol < nTableColCount; ++nCol )
         {
-            OUString aRangeId( rRow[nCol].aRangeId );
+            const OUString aRangeId( rRow[nCol].aRangeId );
             if( !aRangeId.isEmpty())
             {
                 if( eDataRowSource == chart::ChartDataRowSource_COLUMNS )
