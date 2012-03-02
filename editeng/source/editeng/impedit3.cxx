@@ -2930,6 +2930,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                 if ( ( !IsVertical() && ( aStartPos.Y() > aClipRec.Top() ) )
                     || ( IsVertical() && aStartPos.X() < aClipRec.Right() ) )
                 {
+                    bool bPaintBullet (false);
+
                     // Why not just also call when stripping portions? This will give the correct values
                     // and needs no position corrections in OutlinerEditEng::DrawingText which tries to call
                     // PaintBullet correctly; exactly what GetEditEnginePtr()->PaintingFirstLine
@@ -2938,6 +2940,11 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     {
                         // VERT???
                         GetEditEnginePtr()->PaintingFirstLine( n, aParaStart, aTmpPos.Y(), aOrigin, nOrientation, pOutDev );
+
+                        // Remember whether a bullet was painted.
+                        const SfxBoolItem& rBulletState = static_cast<const SfxBoolItem&>(
+                            pEditEngine->GetParaAttrib(n, EE_PARA_BULLETSTATE));
+                        bPaintBullet = rBulletState.GetValue() ? true : false;
                     }
 
                     // --------------------------------------------------
@@ -2948,8 +2955,14 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                     // #i108052# When stripping a callback for empty paragraphs is needed. This
                     // was somehow lost/removed/killed by making the TextPortions with empty
                     // paragraph to type PORTIONKIND_TAB instead of PORTIONKIND_TEXT. Adding here
-                    // since I could not find out who and why this has changed.
-                    if(bStripOnly && pLine->GetStartPortion() == pLine->GetEndPortion())
+                    // since I could not find out who and why this has
+                    // changed.
+                    // #i118881#: Do not include the empty paragraph
+                    // after a bullet.  Otherwise the wrong paragraph
+                    // indices will eventually find their way into
+                    // metafiles and break the association between
+                    // paragraphs and Impress animations.
+                    if(!bPaintBullet && bStripOnly && pLine->GetStartPortion() == pLine->GetEndPortion())
                     {
                         const Color aOverlineColor(pOutDev->GetOverlineColor());
                         const Color aTextLineColor(pOutDev->GetTextLineColor());
