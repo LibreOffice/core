@@ -2229,7 +2229,7 @@ void ChartExport::exportYAxis( AxisIdPair aAxisIdPair )
         xMajorGrid.set( xAxisYSupp->getYMainGrid(), uno::UNO_QUERY );
 
     // minor grid line
-    Reference< beans::XPropertySet > xMinorGrid;( xAxisYSupp->getYHelpGrid(), uno::UNO_QUERY );
+    Reference< beans::XPropertySet > xMinorGrid;
     if( bHasYAxisMinorGrid )
         xMinorGrid.set(  xAxisYSupp->getYHelpGrid(), uno::UNO_QUERY );
 
