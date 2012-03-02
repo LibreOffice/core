@@ -1893,18 +1893,14 @@ void SwXTextField::setPropertyValue(const OUString& rPropertyName, const uno::An
         else
         {
             SwDoc * pDoc = GetDoc();
-
-            if (NULL != pDoc)
-            {
-                const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
-                if(!pTxtFld)
-                    throw uno::RuntimeException();
-                SwPosition aPosition( pTxtFld->GetTxtNode() );
-                aPosition.nContent = *pTxtFld->GetStart();
-                pDoc->PutValueToField( aPosition, rValue, pEntry->nWID);
-            }
+            assert(pDoc);
+            const SwTxtFld* pTxtFld = pFmtFld->GetTxtFld();
+            if(!pTxtFld)
+                throw uno::RuntimeException();
+            SwPosition aPosition( pTxtFld->GetTxtNode() );
+            aPosition.nContent = *pTxtFld->GetStart();
+            pDoc->PutValueToField( aPosition, rValue, pEntry->nWID);
         }
-        pField->PutValue( rValue, pEntry->nWID );
 
         //#i100374# notify SwPostIt about new field content
         if (RES_POSTITFLD== nWhich && pFmtFld)
