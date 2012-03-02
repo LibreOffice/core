@@ -27,8 +27,31 @@
  */
 
 #include "dputil.hxx"
+#include "global.hxx"
 
 #include "comphelper/string.hxx"
+#include "unotools/localedatawrapper.hxx"
+#include "unotools/calendarwrapper.hxx"
+#include "svl/zforlist.hxx"
+
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
+#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
+
+using namespace com::sun::star;
+
+namespace {
+
+const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
+
+String getTwoDigitString( sal_Int32 nValue )
+{
+    String aRet = String::CreateFromInt32( nValue );
+    if ( aRet.Len() < 2 )
+        aRet.Insert( (sal_Unicode)'0', 0 );
+    return aRet;
+}
+
+}
 
 bool ScDPUtil::isDuplicateDimension(const rtl::OUString& rName)
 {
@@ -54,6 +77,52 @@ rtl::OUString ScDPUtil::createDuplicateDimensionName(const rtl::OUString& rOrigi
         aBuf.append(sal_Unicode('*'));
 
     return aBuf.makeStringAndClear();
+}
+
+rtl::OUString ScDPUtil::getDateGroupName(
+        sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter)
+{
+    switch ( nDatePart )
+    {
+        case sheet::DataPilotFieldGroupBy::YEARS:
+            return rtl::OUString::valueOf(nValue);
+        case sheet::DataPilotFieldGroupBy::QUARTERS:
+            return ScGlobal::pLocaleData->getQuarterAbbreviation(sal_Int16(nValue-1));    // nValue is 1-based
+        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
+            return ScGlobal::GetCalendar()->getDisplayName(
+                        i18n::CalendarDisplayIndex::MONTH, sal_Int16(nValue-1), 0);    // 0-based, get short name
+        case sheet::DataPilotFieldGroupBy::DAYS:
+        {
+            Date aDate(1, 1, SC_DP_LEAPYEAR);
+            aDate += (nValue - 1);            // nValue is 1-based
+            Date aNullDate = *pFormatter->GetNullDate();
+            long nDays = aDate - aNullDate;
+
+            sal_uLong nFormat = pFormatter->GetFormatIndex(NF_DATE_SYS_DDMMM, ScGlobal::eLnge);
+            Color* pColor;
+            String aStr;
+            pFormatter->GetOutputString(nDays, nFormat, aStr, &pColor);
+            return aStr;
+        }
+        case sheet::DataPilotFieldGroupBy::HOURS:
+        {
+            //! allow am/pm format?
+            return getTwoDigitString(nValue);
+        }
+        break;
+        case sheet::DataPilotFieldGroupBy::MINUTES:
+        case sheet::DataPilotFieldGroupBy::SECONDS:
+        {
+            rtl::OUStringBuffer aBuf(ScGlobal::pLocaleData->getTimeSep());
+            aBuf.append(getTwoDigitString(nValue));
+            return aBuf.makeStringAndClear();
+        }
+        break;
+        default:
+            OSL_FAIL("invalid date part");
+    }
+
+    return rtl::OUString();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

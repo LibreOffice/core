@@ -327,7 +327,7 @@ void  ScDPCacheTable::getValue( ScDPValueData& rVal, SCCOL nCol, SCROW nRow, boo
     if (pData)
     {
         rVal.fValue = pData->IsValue() ? pData->GetValue() : 0.0;
-        rVal.nType = pData->GetType();
+        rVal.nType = pData->GetCellType();
     }
     else
         rVal.Set(0.0, SC_VALTYPE_EMPTY);

@@ -31,13 +31,8 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
-
-#include <rtl/math.hxx>
-#include <unotools/localedatawrapper.hxx>
-#include <svl/zforlist.hxx>
-
 #include "dpgroup.hxx"
+
 #include "global.hxx"
 #include "document.hxx"
 #include "dpcachetable.hxx"
@@ -45,9 +40,13 @@
 #include "dptabres.hxx"
 #include "dpobject.hxx"
 #include "dpglobal.hxx"
+#include "dputil.hxx"
+
+#include <rtl/math.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
+#include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
 #include <vector>
 #include <boost/unordered_map.hpp>
@@ -64,6 +63,48 @@ using ::rtl::OUStringHash;
 
 using ::std::vector;
 using ::boost::shared_ptr;
+
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class stack_printer
+{
+public:
+    explicit stack_printer(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~stack_printer()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
 
 #define D_TIMEFACTOR              86400.0
 
@@ -143,7 +184,7 @@ SCROW lcl_InsertValue<true>(SCCOL nSourceDim, const ScDPCache* pCache, std::vect
 template<bool bUpdateData>
 void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue )
 {
-    lcl_InsertValue<bUpdateData>( nSourceDim, pCache, vIdx, ScDPItemData( rString, fValue, sal_True ) );
+    lcl_InsertValue<bUpdateData>(nSourceDim, pCache, vIdx, ScDPItemData(fValue));
 }
 
 void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
@@ -395,66 +436,16 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
 }
 // -----------------------------------------------------------------------
 
-ScDPDateGroupHelper::ScDPDateGroupHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart ) :
+ScDPDateGroupHelper::ScDPDateGroupHelper(
+    const ScDPNumGroupInfo& rInfo, long nDim, sal_Int32 nPart ) :
     aNumInfo( rInfo ),
-    nDatePart( nPart )
+    nDatePart( nPart ),
+    mnGroupDim(nDim)
 {
 }
 
 ScDPDateGroupHelper::~ScDPDateGroupHelper()
 {
-}
-
-String lcl_GetTwoDigitString( sal_Int32 nValue )
-{
-    String aRet = String::CreateFromInt32( nValue );
-    if ( aRet.Len() < 2 )
-        aRet.Insert( (sal_Unicode)'0', 0 );
-    return aRet;
-}
-
-String lcl_GetDateGroupName( sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter )
-{
-    String aRet;
-    switch ( nDatePart )
-    {
-        case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS:
-            aRet = String::CreateFromInt32( nValue );
-            break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS:
-            aRet = ScGlobal::pLocaleData->getQuarterAbbreviation( (sal_Int16)(nValue - 1) );    // nValue is 1-based
-            break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
-            //! cache getMonths() result?
-            aRet = ScGlobal::GetCalendar()->getDisplayName(
-                        ::com::sun::star::i18n::CalendarDisplayIndex::MONTH,
-                        sal_Int16(nValue-1), 0 );    // 0-based, get short name
-            break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
-            {
-                Date aDate( 1, 1, SC_DP_LEAPYEAR );
-                aDate += ( nValue - 1 );            // nValue is 1-based
-                Date aNullDate = *(pFormatter->GetNullDate());
-                long nDays = aDate - aNullDate;
-
-                sal_uLong nFormat = pFormatter->GetFormatIndex( NF_DATE_SYS_DDMMM, ScGlobal::eLnge );
-                Color* pColor;
-                pFormatter->GetOutputString( nDays, nFormat, aRet, &pColor );
-            }
-            break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::HOURS:
-            //! allow am/pm format?
-            aRet = lcl_GetTwoDigitString( nValue );
-            break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES:
-        case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS:
-            aRet = ScGlobal::pLocaleData->getTimeSep();
-            aRet.Append( lcl_GetTwoDigitString( nValue ) );
-            break;
-        default:
-            OSL_FAIL("invalid date part");
-    }
-    return aRet;
 }
 
 sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberFormatter* pFormatter,
@@ -595,9 +586,15 @@ String lcl_GetSpecialDateName( double fValue, bool bFirst, SvNumberFormatter* pF
     return aBuffer.makeStringAndClear();
 }
 
-void ScDPDateGroupHelper::FillColumnEntries(
-    SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& rEntries, const std::vector<SCROW>& rOriginal) const
+void ScDPDateGroupHelper::SetGroupDim(long nDim)
 {
+    mnGroupDim = nDim;
+}
+
+void ScDPDateGroupHelper::FillColumnEntries(
+    SCCOL nSourceDim, ScDPCache* pCache, std::vector<SCROW>& rEntries, const std::vector<SCROW>& rOriginal) const
+{
+    stack_printer __stack_printer__("ScDPDateGroupHelper::FillColumnEntries");
     // auto min/max is only used for "Years" part, but the loop is always needed
     double fSourceMin = 0.0;
     double fSourceMax = 0.0;
@@ -659,18 +656,35 @@ void ScDPDateGroupHelper::FillColumnEntries(
             OSL_FAIL("invalid date part");
     }
 
+    pCache->ResetGroupItems(mnGroupDim);
+
+    fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   source dim = %d  group dim = %d\n",
+            nSourceDim, mnGroupDim);
     for ( sal_Int32 nValue = nStart; nValue <= nEnd; nValue++ )
     {
-        String aName = lcl_GetDateGroupName( nDatePart, nValue, pFormatter );
-        lcl_InsertValue<false>( nSourceDim, pCache, rEntries, aName, nValue );
+        rtl::OUString aName = ScDPUtil::getDateGroupName( nDatePart, nValue, pFormatter );
+        fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   name = '%s'\n",
+                rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+        SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(aName));
+        rEntries.push_back(nId);
     }
 
     // add first/last entry (min/max)
-    String aFirstName = lcl_GetSpecialDateName( aNumInfo.mfStart, true, pFormatter );
-    lcl_InsertValue<true>( nSourceDim, pCache, rEntries, aFirstName, SC_DP_DATE_FIRST );
+    rtl::OUString aFirstName = lcl_GetSpecialDateName( aNumInfo.mfStart, true, pFormatter );
+    fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   first = '%s'\n",
+            rtl::OUStringToOString(aFirstName, RTL_TEXTENCODING_UTF8).getStr());
+    SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(aFirstName));
+    rEntries.push_back(nId);
 
-    String aLastName = lcl_GetSpecialDateName( aNumInfo.mfEnd, false, pFormatter );
-    lcl_InsertValue<true>( nSourceDim, pCache, rEntries, aLastName, SC_DP_DATE_LAST );
+    rtl::OUString aLastName = lcl_GetSpecialDateName( aNumInfo.mfEnd, false, pFormatter );
+    fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   last = '%s'\n",
+            rtl::OUStringToOString(aLastName, RTL_TEXTENCODING_UTF8).getStr());
+    nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(aLastName));
+    rEntries.push_back(nId);
+
+    std::vector<SCROW>::const_iterator it = rEntries.begin(), itEnd = rEntries.end();
+    for (; it != itEnd; ++it)
+        fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   id = %d\n", *it);
 }
 
 // -----------------------------------------------------------------------
@@ -760,7 +774,7 @@ ScDPGroupDimension& ScDPGroupDimension::operator=( const ScDPGroupDimension& rOt
 void ScDPGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart )
 {
     delete pDateHelper;
-    pDateHelper = new ScDPDateGroupHelper( rInfo, nPart );
+    pDateHelper = new ScDPDateGroupHelper(rInfo, nGroupDim, nPart);
 }
 
 void ScDPGroupDimension::AddItem( const ScDPGroupItem& rItem )
@@ -771,6 +785,8 @@ void ScDPGroupDimension::AddItem( const ScDPGroupItem& rItem )
 void ScDPGroupDimension::SetGroupDim( long nDim )
 {
     nGroupDim = nDim;
+    if (pDateHelper)
+        pDateHelper->SetGroupDim(nDim);
 }
 const std::vector< SCROW >&  ScDPGroupDimension::GetColumnEntries( const ScDPCacheTable&  rCacheTable, const std::vector< SCROW >& rOriginal  )  const
 {
@@ -778,7 +794,8 @@ const std::vector< SCROW >&  ScDPGroupDimension::GetColumnEntries( const ScDPCac
     {
         if ( pDateHelper )
         {
-            pDateHelper->FillColumnEntries(  (SCCOL)GetSourceDim(), rCacheTable.getCache(), maMemberEntries,  rOriginal  );
+            pDateHelper->FillColumnEntries(
+                GetSourceDim(), const_cast<ScDPCache*>(rCacheTable.getCache()), maMemberEntries, rOriginal);
         }
         else
         {
@@ -888,10 +905,10 @@ ScDPNumGroupDimension::~ScDPNumGroupDimension()
     delete pDateHelper;
 }
 
-void ScDPNumGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart )
+void ScDPNumGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, long nDim, sal_Int32 nPart )
 {
     delete pDateHelper;
-    pDateHelper = new ScDPDateGroupHelper( rInfo, nPart );
+    pDateHelper = new ScDPDateGroupHelper(rInfo, nDim, nPart);
 
     aGroupInfo.mbEnable = sal_True;   //! or query both?
 }
@@ -904,7 +921,8 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
         SvNumberFormatter* pFormatter = pCache->GetDoc()->GetFormatTable();
 
         if ( pDateHelper )
-            pDateHelper->FillColumnEntries( nSourceDim, pCache, maMemberEntries,rOriginal );
+            pDateHelper->FillColumnEntries(
+                nSourceDim, const_cast<ScDPCache*>(pCache), maMemberEntries, rOriginal);
         else
         {
             // Copy textual entries.
@@ -998,6 +1016,8 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
 
             String aLastName = lcl_GetSpecialNumGroupName( aGroupInfo.mfEnd, false, cDecSeparator, aGroupInfo.mbDateValues, pFormatter );
             lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aLastName,  aGroupInfo.mfEnd + aGroupInfo.mfStep );
+
+            fprintf(stdout, "ScDPNumGroupDimension::GetNumEntries:   FIXME\n");
         }
     }
     return maMemberEntries;
@@ -1025,7 +1045,11 @@ void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )
     ScDPGroupDimension aNewGroup( rGroup );
     aNewGroup.SetGroupDim( GetColumnCount() );      // new dimension will be at the end
     aGroups.push_back( aNewGroup );
-    aGroupNames.insert( OUString(aNewGroup.GetName()) );
+    aGroupNames.insert(aNewGroup.GetName());
+    ScDPCache* pCache = const_cast<ScDPCache*>(GetCacheTable().getCache());
+    pCache->AppendGroupField();
+    fprintf(stdout, "ScDPGroupTableData::AddGroupDimension:   name = '%s'  group count = %d\n",
+            rtl::OUStringToOString(aNewGroup.GetName(), RTL_TEXTENCODING_UTF8).getStr(), aGroups.size());
 }
 
 void ScDPGroupTableData::SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup )
@@ -1099,6 +1123,8 @@ const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( long  nColumn 
 
 const ScDPItemData* ScDPGroupTableData::GetMemberById( long nDim, long nId )
 {
+//  stack_printer __stack_printer__("ScDPGroupTableData::GetMemberById");
+//  fprintf(stdout, "ScDPGroupTableData::GetMemberById:   dim = %d  id = %d\n", nDim, nId);
     if ( nDim >= nSourceCount )
     {
         if ( getIsDataLayoutDimension( nDim) )
@@ -1263,9 +1289,13 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
                 for (size_t i = 0; i < nGroupItemCount; ++i)
                 {
                     const ScDPGroupItem* pGrpItem = pGrpDim->GetGroupByIndex(i);
-                    ScDPItemData aName( pFilter->getMatchString(),pFilter->getMatchValue(),pFilter->hasValue()) ;
+                    ScDPItemData aName;
+                    if (pFilter->hasValue())
+                        aName.SetValue(pFilter->getMatchValue());
+                    else
+                        aName.SetString(pFilter->getMatchString());
 
-                                       if (!pGrpItem || !pGrpItem->GetName().IsCaseInsEqual(aName))
+                    if (!pGrpItem || !pGrpItem->GetName().IsCaseInsEqual(aName))
                         continue;
 
                     ScDPCacheTable::Criterion aCri;
@@ -1329,8 +1359,9 @@ const ScDPCacheTable& ScDPGroupTableData::GetCacheTable() const
     return pSourceData->GetCacheTable();
 }
 
-void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pItemDataIndex, long nCount, const long* pDims )
+void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, const long* pDims)
 {
+    stack_printer __stack_printer__("ScDPGroupTableData::FillGroupValues");
     long nGroupedColumns = aGroups.size();
 
     const ScDPCache* pCache = GetCacheTable().getCache();
@@ -1360,6 +1391,7 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
                  const ScDPItemData* pData = pCache->GetItemDataById( (SCCOL)nSourceDim, pItemDataIndex[nDim]);
                 if ( pData ->IsValue() )
                 {
+                    // TODO: This needs fixing.
                     ScDPNumGroupInfo aNumInfo;
                     bool bHasNonInteger = false;
                     sal_Unicode cDecSeparator = 0;
@@ -1367,8 +1399,8 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
                     double fGroupValue;
                     String aGroupName = lcl_GetNumGroupForValue( pData->GetValue(),
                              aNumInfo, bHasNonInteger, cDecSeparator, fGroupValue, pDoc );
-                    ScDPItemData  aItemData ( aGroupName, fGroupValue, sal_True ) ;
-                    pItemDataIndex[nDim] = pCache->GetAdditionalItemID( aItemData  );
+                    ScDPItemData aItemData(aGroupName);
+                    pItemDataIndex[nDim] = pCache->GetAdditionalItemID(aItemData);
                 }
                 // else (textual) keep original value
             }
@@ -1377,14 +1409,26 @@ void ScDPGroupTableData::FillGroupValues( /*ScDPItemData* pItemData*/ SCROW* pIt
         if ( pDateHelper )
         {
             const ScDPItemData* pData  = GetCacheTable().getCache()->GetItemDataById( (SCCOL)nSourceDim, pItemDataIndex[nDim]);
-              if ( pData ->IsValue() )
+            if ( pData ->IsValue() )
             {
+                SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 sal_Int32 nPartValue = lcl_GetDatePartValue(
-                    pData->GetValue(), pDateHelper->GetDatePart(), pDoc->GetFormatTable(),
+                    pData->GetValue(), pDateHelper->GetDatePart(), pFormatter,
                     &pDateHelper->GetNumInfo() );
-                sal_uInt8 nFlag = ScDPItemData::MK_DATA | ScDPItemData::MK_VAL;
-                ScDPItemData aItemData(rtl::OUString(), static_cast<double>(nPartValue), nFlag);
-                pItemDataIndex[nDim] = GetCacheTable().getCache()->GetAdditionalItemID( aItemData );
+                rtl::OUString aName = ScDPUtil::getDateGroupName(pDateHelper->GetDatePart(), nPartValue, pFormatter);
+                fprintf(stdout, "ScDPGroupTableData::FillGroupValues:   column = %d  source dim = %d  group by = %d  value = %d  name = '%s'\n",
+                        nColumn, nSourceDim,
+                        pDateHelper->GetDatePart(), nPartValue,
+                        rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+                ScDPItemData aItem(pDateHelper->GetDatePart(), nPartValue);
+                pItemDataIndex[nDim] = GetCacheTable().getCache()->GetIdByItemData(nColumn, aItem);
+                const ScDPItemData* pTest = GetCacheTable().getCache()->GetItemDataById(nColumn, pItemDataIndex[nDim]);
+                fprintf(stdout, "ScDPGroupTableData::FillGroupValues:   id = %d\n", pItemDataIndex[nDim]);
+                if (pTest)
+                    fprintf(stdout, "ScDPGroupTableData::FillGroupValues:   test str = '%s'\n", rtl::OUStringToOString(pTest->GetString(), RTL_TEXTENCODING_UTF8).getStr());
+//              sal_uInt8 nFlag = ScDPItemData::MK_DATA | ScDPItemData::MK_VAL;
+//              ScDPItemData aItemData(rtl::OUString(), static_cast<double>(nPartValue), nFlag);
+//              pItemDataIndex[nDim] = GetCacheTable().getCache()->GetAdditionalItemID( aItemData );
             }
         }
     }
@@ -1437,6 +1481,10 @@ sal_Bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
 sal_Bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                     const ScDPItemData& rBaseData, long nBaseIndex ) const
 {
+    stack_printer __stack_printer__("ScDPGroupTableData::IsInGroup");
+    fprintf(stdout, "ScDPGroupTableData::IsInGroup:   group = '%s'  base = '%s'  group id = %d  base id = %d\n",
+            rtl::OUStringToOString(rGroupData.GetString(), RTL_TEXTENCODING_UTF8).getStr(),
+            rtl::OUStringToOString(rBaseData.GetString(), RTL_TEXTENCODING_UTF8).getStr(), nGroupIndex, nBaseIndex);
     for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
     {
         const ScDPGroupDimension& rDim = *aIter;

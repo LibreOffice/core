@@ -70,8 +70,18 @@ private:
      */
     mutable ObjectSetType maRefObjects;
 
+    struct GroupItems : boost::noncopyable
+    {
+        DataListType maItems;
+    };
+
     struct Field : boost::noncopyable
     {
+        /**
+         * Optional items for grouped field.
+         */
+        boost::scoped_ptr<GroupItems> mpGroup;
+
         DataListType maItems; /// Unique values in the field.
 
         /**
@@ -97,13 +107,19 @@ private:
         Field();
     };
 
+    struct GroupField : boost::noncopyable
+    {
+        DataListType maItems; /// Unique values in the field.
+    };
+
     typedef boost::ptr_vector<Field> FieldsType;
+    typedef boost::ptr_vector<GroupField> GroupFieldsType;
+
     FieldsType maFields;
+    GroupFieldsType maGroupFields;
 
     LabelsType maLabelNames;    // Stores dimension names.
     std::vector<bool> mbEmptyRow; // Keeps track of empty rows.
-
-    boost::scoped_ptr<ScDPItemDataPool> mpAdditionalData;
 
     bool mbDisposing;
 
@@ -114,6 +130,10 @@ public:
 
     SCROW GetIdByItemData(long nDim, const rtl::OUString& sItemData) const;
     SCROW GetIdByItemData(long nDim, const ScDPItemData& rData) const;
+
+    void AppendGroupField();
+    void ResetGroupItems(long nDim);
+    SCROW SetGroupItem(long nDim, const ScDPItemData& rData);
 
     SCROW GetAdditionalItemID( const ScDPItemData& rData ) const;
 
@@ -137,6 +157,7 @@ public:
 
     ScDocument* GetDoc() const;//ms-cache-core
     long GetColumnCount() const;
+    long GetGroupFieldCount() const;
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
 

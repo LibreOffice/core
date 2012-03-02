@@ -34,80 +34,7 @@
 #include "globstr.hrc"
 #include "dptabdat.hxx"
 
-bool ScDPItemData::isDate( sal_uLong nNumType )
-{
-    return ((nNumType & NUMBERFORMAT_DATE) != 0) ? 1 : 0;
-}
-
-ScDPItemData::ScDPItemData() :
-    mfValue(0.0), mbFlag(0) {}
-
-ScDPItemData::ScDPItemData(const rtl::OUString & rS, double fV, sal_uInt8 bF) :
-    maString(rS), mfValue(fV), mbFlag(bF) {}
-
-ScDPItemData::ScDPItemData(const rtl::OUString& rS, double fV, bool bHV, bool bData) :
-    maString(rS), mfValue(fV),
-    mbFlag( (MK_VAL*!!bHV) | (MK_DATA*!!bData) | (MK_ERR*!!false) )
-{
-}
-
-void ScDPItemData::Set(const rtl::OUString& rS, double fVal, sal_uInt8 nFlag)
-{
-    maString = rS;
-    mfValue = fVal;
-    mbFlag = nFlag;
-}
-
-void ScDPItemData::SetString(const rtl::OUString& rS)
-{
-    maString = rS;
-    mbFlag &= ~(MK_VAL|MK_DATE);
-    mbFlag |= MK_DATA;
-}
-
-void ScDPItemData::SetErrorString(const rtl::OUString& rS)
-{
-    SetString(rS);
-    mbFlag |= MK_ERR;
-}
-
-bool ScDPItemData::IsCaseInsEqual( const ScDPItemData& r ) const
-{
-    //! pass Transliteration?
-    //! inline?
-    return IsValue() ? ( r.IsValue() && rtl::math::approxEqual( mfValue, r.mfValue ) ) :
-                       ( !r.IsValue() &&
-                        ScGlobal::GetpTransliteration()->isEqual( maString, r.maString ) );
-}
-
-size_t ScDPItemData::Hash() const
-{
-    if ( IsValue() )
-        return (size_t) rtl::math::approxFloor( mfValue );
-    else
-        // If we do unicode safe case insensitive hash we can drop
-        // ScDPItemData::operator== and use ::IsCasInsEqual
-        return rtl_ustr_hashCode_WithLength(maString.getStr(), maString.getLength());
-}
-
-bool ScDPItemData::operator==( const ScDPItemData& r ) const
-{
-    if ( IsValue() )
-    {
-        if ( r.IsValue() )
-            return rtl::math::approxEqual( mfValue, r.mfValue );
-        else
-            return false;
-    }
-    else if ( r.IsValue() )
-        return false;
-    else
-        // need exact equality until we have a safe case insensitive string hash
-        return maString == r.maString;
-}
-
-sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
-                                 const ScDPItemData& rB )
+sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
 {
     if ( rA.IsValue() )
     {
@@ -119,14 +46,105 @@ sal_Int32 ScDPItemData::Compare( const ScDPItemData& rA,
     else if ( rB.IsValue() )
         return 1;                // values first
     else
-        return ScGlobal::GetCollator()->compareString( rA.maString, rB.maString );
+        return ScGlobal::GetCollator()->compareString(rA.GetString(), rB.GetString());
 }
 
-sal_uInt8 ScDPItemData::GetType() const
+ScDPItemData::ScDPItemData() :
+    mfValue(0.0), meType(Empty) {}
+
+ScDPItemData::ScDPItemData(const rtl::OUString& rStr) :
+    mpString(new rtl::OUString(rStr)), meType(String) {}
+
+ScDPItemData::ScDPItemData(double fVal) :
+    mfValue(fVal), meType(Value) {}
+
+ScDPItemData::ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue) :
+    meType(GroupValue)
 {
-    if ( IsHasErr() )
+    maGroupValue.mnGroupType = nGroupType;
+    maGroupValue.mnValue = nValue;
+}
+
+ScDPItemData::~ScDPItemData()
+{
+    if (meType == String)
+        delete mpString;
+}
+
+void ScDPItemData::SetString(const rtl::OUString& rS)
+{
+    if (meType == String)
+        delete mpString;
+    mpString = new rtl::OUString(rS);
+    meType = String;
+}
+
+void ScDPItemData::SetValue(double fVal)
+{
+    if (meType == String)
+        delete mpString;
+    mfValue = fVal;
+    meType = Value;
+}
+
+void ScDPItemData::SetGroupValue(sal_Int32 nGroupType, sal_Int32 nValue)
+{
+    if (meType == String)
+        delete mpString;
+
+    maGroupValue.mnGroupType = nGroupType;
+    maGroupValue.mnValue = nValue;
+    meType = GroupValue;
+}
+
+void ScDPItemData::SetErrorString(const rtl::OUString& rS)
+{
+    SetString(rS);
+}
+
+bool ScDPItemData::IsCaseInsEqual(const ScDPItemData& r) const
+{
+    if (meType != r.meType)
+        return false;
+
+    if (meType == Value)
+        return rtl::math::approxEqual(mfValue, r.mfValue);
+
+    return ScGlobal::GetpTransliteration()->isEqual(GetString(), r.GetString());
+}
+
+size_t ScDPItemData::Hash() const
+{
+    if (meType == Value)
+        return static_cast<size_t>(rtl::math::approxFloor(mfValue));
+
+    // If we do unicode safe case insensitive hash we can drop
+    // ScDPItemData::operator== and use ::IsCasInsEqual
+    rtl::OUString aStr = GetString();
+    return rtl_ustr_hashCode_WithLength(aStr.getStr(), aStr.getLength());
+}
+
+bool ScDPItemData::operator== (const ScDPItemData& r) const
+{
+    if (meType != r.meType)
+        return false;
+
+    if (meType == Value)
+        return (r.meType == Value) ? rtl::math::approxEqual(mfValue, r.mfValue) : false;
+
+    if (meType == GroupValue)
+        return maGroupValue.mnGroupType == r.maGroupValue.mnGroupType &&
+            maGroupValue.mnValue == r.maGroupValue.mnValue;
+
+    // need exact equality until we have a safe case insensitive string hash
+    return GetString() == r.GetString();
+}
+
+sal_uInt8 ScDPItemData::GetCellType() const
+{
+    if (meType == Error)
         return SC_VALTYPE_ERROR;
-    else if ( !IsHasData() )
+    else if (meType == Empty)
         return SC_VALTYPE_EMPTY;
     else if ( IsValue())
         return SC_VALTYPE_VALUE;
@@ -134,83 +152,50 @@ sal_uInt8 ScDPItemData::GetType() const
         return SC_VALTYPE_STRING;
 }
 
-bool ScDPItemData::IsHasData() const
+bool ScDPItemData::IsEmpty() const
 {
-    return !!(mbFlag&MK_DATA);
-}
-
-bool ScDPItemData::IsHasErr() const
-{
-    return !!(mbFlag&MK_ERR);
+    return meType == Empty;
 }
 
 bool ScDPItemData::IsValue() const
 {
-    return !!(mbFlag&MK_VAL);
+    return meType == Value || meType == GroupValue;
 }
 
-const rtl::OUString& ScDPItemData::GetString() const
+rtl::OUString ScDPItemData::GetString() const
 {
-    return maString;
+    if (meType == String)
+        return *mpString;
+
+    // TODO: Generate appropriate string.
+    return rtl::OUString();
 }
 
 double ScDPItemData::GetValue() const
 {
-    return mfValue;
+    if (meType == Value)
+        return mfValue;
+
+    if (meType == GroupValue)
+        return maGroupValue.mnValue;
+
+    return 0.0;
+}
+
+ScDPItemData::GroupValueAttr ScDPItemData::GetGroupValue() const
+{
+    if (meType == GroupValue)
+        return maGroupValue;
+
+    GroupValueAttr aGV;
+    aGV.mnGroupType = -1;
+    aGV.mnValue = -1;
+    return aGV;
 }
 
 bool ScDPItemData::HasStringData() const
 {
-    return IsHasData()&&!IsHasErr()&&!IsValue();
-}
-
-ScDPItemDataPool::ScDPItemDataPool()
-{
-}
-
-ScDPItemDataPool::ScDPItemDataPool(const ScDPItemDataPool& r):
-    maItems(r.maItems),
-    maItemIds(r.maItemIds)
-{
-}
-
-ScDPItemDataPool::~ScDPItemDataPool()
-{
-}
-
-
-const ScDPItemData* ScDPItemDataPool::getData( sal_Int32 nId )
-{
-    if ( nId >= static_cast<sal_Int32>(maItems.size()) )
-        return NULL;
-    else
-        return &(maItems[nId]);
-}
-
-sal_Int32 ScDPItemDataPool::getDataId( const ScDPItemData& aData )
-{
-    DataHash::const_iterator itr = maItemIds.find( aData),
-            itrEnd = maItemIds.end();
-    if ( itr == itrEnd )
-         // not exist
-        return -1;
-
-    else //exist
-        return itr->second;
-
-}
-
-sal_Int32 ScDPItemDataPool::insertData( const ScDPItemData& aData )
-{
-    sal_Int32 nResult = getDataId( aData );
-
-    if( nResult < 0 )
-    {
-        maItemIds.insert( DataHash::value_type( aData, nResult = maItems.size() ) );
-        maItems.push_back( aData );
-    }
-
-    return nResult;
+    return meType == String;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

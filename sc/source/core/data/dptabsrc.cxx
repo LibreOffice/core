@@ -1022,6 +1022,7 @@ void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*>
         for (long nLev=0; nLev<nLevCount; nLev++)
         {
             ScDPLevel* pLevel = pLevels->getByIndex(nLev);
+//          fprintf(stdout, "ScDPSource::FillLevelList:   level name = '%s'\n", rtl::OUStringToOString(pLevel->getName(), RTL_TEXTENCODING_UTF8).getStr());
             rList.push_back(pLevel);
         }
     }
@@ -1473,7 +1474,7 @@ const ScDPItemData& ScDPDimension::GetSelectedData()
         }
 
         if ( !pSelectedData )
-            pSelectedData = new ScDPItemData( aSelectedPage, 0.0, false );      // default - name only
+            pSelectedData = new ScDPItemData(aSelectedPage);      // default - name only
     }
 
     return *pSelectedData;
@@ -2524,7 +2525,8 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 if (aName.isEmpty())
                     aName = rtl::OUString::valueOf(nVal);
 
-                ScDPItemData aData(aName, nVal, true, 0);
+                // TODO: This needs fixing.
+                ScDPItemData aData(nVal);
                 pNew = new ScDPMember(
                     pSource, nDim, nHier, nLev, pSource->GetCache()->GetAdditionalItemID(aData));
             }
@@ -2570,10 +2572,11 @@ ScDPMember::~ScDPMember()
 bool ScDPMember::IsNamedItem(SCROW nIndex) const
 {
     long nSrcDim = pSource->GetSourceDim( nDim );
+    fprintf(stdout, "ScDPMember::IsNamedItem:   dim = %d  src dim = %d\n", nDim, nSrcDim);
     if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) )
     {
-        const ScDPItemData* pData =  pSource->GetCache()->GetItemDataById( (SCCOL) nSrcDim, nIndex );
-        if (  pData->IsValue()  )
+        const ScDPItemData* pData = pSource->GetCache()->GetItemDataById(nDim, nIndex);
+        if (pData->IsValue())
         {
             long nComp = pSource->GetData()->GetDatePart(
                 (long)::rtl::math::approxFloor( pData->GetValue() ),
@@ -2583,6 +2586,7 @@ bool ScDPMember::IsNamedItem(SCROW nIndex) const
         }
     }
 
+    fprintf(stdout, "ScDPMember::IsNamedItem:   result = %d\n", nIndex == mnDataId);
     return  nIndex == mnDataId;
 }
 

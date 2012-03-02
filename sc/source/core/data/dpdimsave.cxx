@@ -38,6 +38,48 @@
 #include <rtl/math.hxx>
 #include <algorithm>
 
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class stack_printer
+{
+public:
+    explicit stack_printer(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~stack_printer()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
 // ============================================================================
 
 ScDPSaveGroupItem::ScDPSaveGroupItem( const rtl::OUString& rName ) :
@@ -110,7 +152,7 @@ void ScDPSaveGroupItem::AddToData( ScDPGroupDimension& rDataDim, SvNumberFormatt
         sal_uInt32 nFormat = 0;      //! ...
         double fValue;
         if ( pFormatter->IsNumberFormat( *aIter, nFormat, fValue ) )
-            aData = ScDPItemData( *aIter, fValue, sal_True );
+            aData.SetValue(fValue);
         else
             aData.SetString( *aIter );
 
@@ -309,12 +351,15 @@ ScDPSaveNumGroupDimension::~ScDPSaveNumGroupDimension()
 
 void ScDPSaveNumGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 {
+    stack_printer __stack_printer__("ScDPSaveNumGroupDimension::AddToData");
+    fprintf(stdout, "ScDPSaveNumGroupDimension::AddToData:   dim name = '%s'\n",
+            rtl::OUStringToOString(aDimensionName, RTL_TEXTENCODING_UTF8).getStr());
     long nSource = rData.GetDimensionIndex( aDimensionName );
     if ( nSource >= 0 )
     {
         ScDPNumGroupDimension aDim( aGroupInfo );           // aGroupInfo: value grouping
         if ( nDatePart )
-            aDim.MakeDateHelper( aDateInfo, nDatePart );    // date grouping
+            aDim.MakeDateHelper( aDateInfo, nSource, nDatePart );    // date grouping
 
         rData.SetNumGroupDimension( nSource, aDim );
     }

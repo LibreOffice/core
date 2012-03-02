@@ -77,6 +77,10 @@ public:
 
 typedef ::std::vector<ScDPSaveGroupItem> ScDPSaveGroupItemVec;
 
+/**
+ * Represents a new group dimension whose dimension ID is higher than the
+ * highest source dimension ID.
+ */
 class SC_DLLPUBLIC ScDPSaveGroupDimension
 {
     rtl::OUString           aSourceDim;     // always the real source from the original data
@@ -116,6 +120,11 @@ public:
     void    Rename( const rtl::OUString& rNewName );
 };
 
+/**
+ * Represents a group dimension that introduces a new hierarchy for an
+ * existing dimension.  Unlike the ScDPSaveGroupDimension counterpart, it
+ * re-uses the source dimension.
+ */
 class SC_DLLPUBLIC ScDPSaveNumGroupDimension
 {
     rtl::OUString       aDimensionName;
@@ -140,6 +149,10 @@ public:
     void        SetDateInfo( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
 };
 
+/**
+ * This class has to do with handling exclusively grouped dimensions?  TODO:
+ * Find out what this class does and document it here.
+ */
 class SC_DLLPUBLIC ScDPDimensionSaveData
 {
 public:

@@ -50,6 +50,49 @@ using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::std::vector;
+
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class stack_printer
+{
+public:
+    explicit stack_printer(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~stack_printer()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
 // ---------------------------------------------------------------------------
 
 ScDPTableData::CalcInfo::CalcInfo() :
@@ -184,18 +227,19 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTab
 
 void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAutoShow)
 {
+    stack_printer __stack_printer__("ScDPTableData::ProcessRowData");
     if (!bAutoShow)
     {
-            LateInitParams  aColParams( rInfo.aColDims, rInfo.aColLevels, false );
-            LateInitParams  aRowParams ( rInfo.aRowDims, rInfo.aRowLevels, sal_True );
+            LateInitParams  aColParams(rInfo.aColDims, rInfo.aColLevels, false);
+            LateInitParams  aRowParams(rInfo.aRowDims, rInfo.aRowLevels, true);
             // root always init child
-            aColParams.SetInitChild( sal_True );
+            aColParams.SetInitChild(true);
             aColParams.SetInitAllChildren( false);
-            aRowParams.SetInitChild( sal_True );
+            aRowParams.SetInitChild(true);
             aRowParams.SetInitAllChildren( false);
 
-            rInfo.pColRoot->LateInitFrom( aColParams, rData.aColData,0, *rInfo.pInitState);
-            rInfo.pRowRoot->LateInitFrom( aRowParams, rData.aRowData, 0, *rInfo.pInitState);
+            rInfo.pColRoot->LateInitFrom(aColParams, rData.aColData, 0, *rInfo.pInitState);
+            rInfo.pRowRoot->LateInitFrom(aRowParams, rData.aRowData, 0, *rInfo.pInitState);
     }
 
     if ( ( !rInfo.pColRoot->GetChildDimension() || rInfo.pColRoot->GetChildDimension()->IsValidEntry(rData.aColData) ) &&
@@ -204,7 +248,7 @@ void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAu
         //! single process method with ColMembers, RowMembers and data !!!
         if (rInfo.pColRoot->GetChildDimension())
         {
-            vector</*ScDPItemData*/ SCROW > aEmptyData;
+            vector<SCROW> aEmptyData;
             rInfo.pColRoot->GetChildDimension()->ProcessData(rData.aColData, NULL, aEmptyData, rData.aValues);
         }
 

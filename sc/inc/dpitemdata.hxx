@@ -45,69 +45,55 @@ class ScDocument;
 class SC_DLLPUBLIC ScDPItemData
 {
     friend class ScDPCache;
+
 public:
-    enum {
-        MK_VAL      = 0x01,
-        MK_DATA     = 0x02,
-        MK_ERR      = 0x04,
-        MK_DATE     = 0x08
+    enum Type { String, Value, Error, Empty, GroupValue };
+
+    struct GroupValueAttr
+    {
+        sal_Int32 mnGroupType;
+        sal_Int32 mnValue;
     };
 
-    static bool isDate( sal_uLong nNumType );
-
 private:
-    rtl::OUString maString;
-    double mfValue;
-    sal_uInt8 mbFlag;
+
+    union {
+        rtl::OUString* mpString;
+        GroupValueAttr maGroupValue;
+        double mfValue;
+    };
+
+    Type meType;
 
 public:
-    ScDPItemData();
-    ScDPItemData(const rtl::OUString& rS, double fV, sal_uInt8 bF);
-    ScDPItemData(const rtl::OUString& rS, double fV = 0.0, bool bHV = false, bool bData = true);
+    // case insensitive equality
+    static sal_Int32 Compare(const ScDPItemData& rA, const ScDPItemData& rB);
 
-    void Set(const rtl::OUString& rS, double fVal, sal_uInt8 nFlag);
+    ScDPItemData();
+    ScDPItemData(const rtl::OUString& rStr);
+    ScDPItemData(double fVal);
+    ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue);
+    ~ScDPItemData();
+
     void SetString(const rtl::OUString& rS);
+    void SetValue(double fVal);
+    void SetGroupValue(sal_Int32 nGroupType, sal_Int32 nValue);
     void SetErrorString(const rtl::OUString& rS);
     bool IsCaseInsEqual(const ScDPItemData& r) const;
 
     size_t Hash() const;
 
     // exact equality
-    bool operator==( const ScDPItemData& r ) const;
-    // case insensitive equality
-    static sal_Int32 Compare( const ScDPItemData& rA, const ScDPItemData& rB );
+    bool operator==(const ScDPItemData& r) const;
 
-public:
-    bool IsHasData() const ;
-    bool IsHasErr() const ;
+    bool IsEmpty() const;
     bool IsValue() const;
-    const rtl::OUString& GetString() const;
-    double GetValue() const ;
+    rtl::OUString GetString() const;
+    double GetValue() const;
+    GroupValueAttr GetGroupValue() const;
     bool HasStringData() const ;
 
-    sal_uInt8 GetType() const;
-};
-
-class SC_DLLPUBLIC ScDPItemDataPool
-{
-public:
-    ScDPItemDataPool();
-    ScDPItemDataPool(const ScDPItemDataPool& r);
-
-    virtual ~ScDPItemDataPool();
-    virtual const ScDPItemData* getData( sal_Int32 nId  );
-    virtual sal_Int32 getDataId( const ScDPItemData& aData );
-    virtual sal_Int32 insertData( const ScDPItemData& aData );
-protected:
-    struct DataHashFunc : public std::unary_function< const ScDPItemData &, size_t >
-    {
-        size_t operator() (const ScDPItemData &rData) const { return rData.Hash(); }
-    };
-
-    typedef ::boost::unordered_multimap< ScDPItemData, sal_Int32, DataHashFunc > DataHash;
-
-    ::std::vector< ScDPItemData > maItems;
-    DataHash  maItemIds;
+    sal_uInt8 GetCellType() const;
 };
 
 #endif

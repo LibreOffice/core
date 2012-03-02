@@ -60,6 +60,48 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::std::vector;
 using ::std::auto_ptr;
 
+#include <stdio.h>
+#include <string>
+#include <sys/time.h>
+
+namespace {
+
+class stack_printer
+{
+public:
+    explicit stack_printer(const char* msg) :
+        msMsg(msg)
+    {
+        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
+        mfStartTime = getTime();
+    }
+
+    ~stack_printer()
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
+    }
+
+    void printTime(int line) const
+    {
+        double fEndTime = getTime();
+        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
+    }
+
+private:
+    double getTime() const
+    {
+        timeval tv;
+        gettimeofday(&tv, NULL);
+        return tv.tv_sec + tv.tv_usec / 1000000.0;
+    }
+
+    ::std::string msMsg;
+    double mfStartTime;
+};
+
+}
+
 namespace {
 
 /**
@@ -106,7 +148,6 @@ ScDPItemData* lcl_GetItemValue(
     rNumType = NUMBERFORMAT_NUMBER;
     try
     {
-        String rStr = xRow->getString(nCol);
         double fValue = 0.0;
         switch (nType)
         {
@@ -115,7 +156,7 @@ ScDPItemData* lcl_GetItemValue(
             {
                 rNumType = NUMBERFORMAT_LOGICAL;
                 fValue  = xRow->getBoolean(nCol) ? 1 : 0;
-                return new ScDPItemData(rStr, fValue, true);
+                return new ScDPItemData(fValue);
             }
             case sdbc::DataType::TINYINT:
             case sdbc::DataType::SMALLINT:
@@ -129,7 +170,7 @@ ScDPItemData* lcl_GetItemValue(
             {
                 //! do the conversion here?
                 fValue = xRow->getDouble(nCol);
-                return new ScDPItemData(rStr, fValue, true);
+                return new ScDPItemData(fValue);
             }
             case sdbc::DataType::DATE:
             {
@@ -137,7 +178,7 @@ ScDPItemData* lcl_GetItemValue(
 
                 util::Date aDate = xRow->getDate(nCol);
                 fValue = Date(aDate.Day, aDate.Month, aDate.Year) - rNullDate;
-                return new ScDPItemData(rStr, fValue, true);
+                return new ScDPItemData(fValue);
             }
             case sdbc::DataType::TIME:
             {
@@ -146,7 +187,7 @@ ScDPItemData* lcl_GetItemValue(
                 util::Time aTime = xRow->getTime(nCol);
                 fValue = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
                            aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                return new ScDPItemData(rStr,fValue, true);
+                return new ScDPItemData(fValue);
             }
             case sdbc::DataType::TIMESTAMP:
             {
@@ -156,7 +197,7 @@ ScDPItemData* lcl_GetItemValue(
                 fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - rNullDate ) +
                          ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
                            aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                return new ScDPItemData(rStr,fValue, true);
+                return new ScDPItemData(fValue);
             }
             case sdbc::DataType::CHAR:
             case sdbc::DataType::VARCHAR:
@@ -166,7 +207,7 @@ ScDPItemData* lcl_GetItemValue(
             case sdbc::DataType::VARBINARY:
             case sdbc::DataType::LONGVARBINARY:
             default:
-                return new ScDPItemData(rStr);
+                return new ScDPItemData(xRow->getString(nCol));
         }
     }
     catch (uno::Exception&)
@@ -225,7 +266,6 @@ ScDPCache::Field::Field() {}
 ScDPCache::ScDPCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
     mnColumnCount ( 0 ),
-    mpAdditionalData(new ScDPItemDataPool),
     mbDisposing(false)
 {
 }
@@ -310,18 +350,8 @@ void initFromCell(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, ScDPItem
     else if (pDoc->HasValueData(nCol, nRow, nTab))
     {
         double fVal = pDoc->GetValue(aPos);
-        sal_uLong nFormatType = NUMBERFORMAT_NUMBER;
         rNumFormat = pDoc->GetNumberFormat(aPos);
-        sal_uInt8 nFlag = ScDPItemData::MK_VAL | ScDPItemData::MK_DATA;
-
-        SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-        if (pFormatter)
-            nFormatType = pFormatter->GetType(rNumFormat);
-
-        if (ScDPItemData::isDate(nFormatType))
-            nFlag |= ScDPItemData::MK_DATE;
-
-        rData.Set(aDocStr, fVal, nFlag);
+        rData.SetValue(fVal);
     }
     else if (pDoc->HasData(nCol, nRow, nTab))
     {
@@ -464,11 +494,11 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
         if (rEntry.GetQueryItem().meType == ScQueryEntry::ByEmpty)
         {
             if (rEntry.IsQueryByEmpty())
-                bOk = !pCellData->IsHasData();
+                bOk = pCellData->IsEmpty();
             else
             {
                 OSL_ASSERT(rEntry.IsQueryByNonEmpty());
-                bOk =  pCellData->IsHasData();
+                bOk = !pCellData->IsEmpty();
             }
         }
         else if (rEntry.GetQueryItem().meType != ScQueryEntry::ByString && pCellData->IsValue())
@@ -656,7 +686,7 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
     while ( mbEmptyRow.size() <= nCurRow )
         mbEmptyRow.push_back( true );
 
-    if ( pData->IsHasData() )
+    if (!pData->IsEmpty())
         mbEmptyRow[ nCurRow ] = false;
 
     return true;
@@ -729,7 +759,7 @@ SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty)
     const Field& rField = maFields[nDim];
     if (bRepeatIfEmpty)
     {
-        while (nRow > 0 && !rField.maItems[rField.maData[nRow]].IsHasData())
+        while (nRow > 0 && rField.maItems[rField.maData[nRow]].IsEmpty())
             --nRow;
     }
 
@@ -738,14 +768,61 @@ SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty)
 
 const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
 {
-    if ( nId >= GetRowCount()  )
-        return mpAdditionalData->getData(nId - GetRowCount());
-
-    const Field& rField = maFields[nDim];
-    if (static_cast<size_t>(nId) >= rField.maItems.size() || nDim >= mnColumnCount  || nId < 0)
+//  stack_printer __stack_printer__("ScDPCache::GetItemDataById");
+//  fprintf(stdout, "ScDPCache::GetItemDataById:   dim = %d  id = %d\n", nDim, nId);
+    if (nDim < 0)
+    {
+        fprintf(stdout, "ScDPCache::GetItemDataById:   fail (%d)\n", __LINE__);
         return NULL;
-    else
-        return &rField.maItems[nId];
+    }
+
+    long nSourceCount = static_cast<long>(maFields.size());
+    if (nDim < nSourceCount)
+    {
+        // source field.
+        const Field& rField = maFields[nDim];
+        if (nId < rField.maItems.size())
+        {
+//          fprintf(stdout, "ScDPCache::GetItemDataById:   s = '%s' (source)\n",
+//                  rtl::OUStringToOString(rField.maItems[nId].GetString(), RTL_TEXTENCODING_UTF8).getStr());
+            return &rField.maItems[nId];
+        }
+
+        if (!rField.mpGroup)
+        {
+            fprintf(stdout, "ScDPCache::GetItemDataById:   fail (%d)\n", __LINE__);
+            return NULL;
+        }
+
+        nId -= rField.maItems.size();
+        const DataListType& rGI = rField.mpGroup->maItems;
+        if (nId >= rGI.size())
+        {
+            fprintf(stdout, "ScDPCache::GetItemDataById:   fail (%d)\n", __LINE__);
+            return NULL;
+        }
+//      fprintf(stdout, "ScDPCache::GetItemDataById:   s = '%s' (grouped source field)\n",
+//              rtl::OUStringToOString(rGI[nId].GetString(), RTL_TEXTENCODING_UTF8).getStr());
+        return &rGI[nId];
+    }
+
+    // Try group fields.
+    nDim -= nSourceCount;
+    if (nDim >= maGroupFields.size())
+    {
+        fprintf(stdout, "ScDPCache::GetItemDataById:   fail (%d)\n", __LINE__);
+        return NULL;
+    }
+
+    const DataListType& rGI = maGroupFields[nDim].maItems;
+    if (nId >= rGI.size())
+    {
+        fprintf(stdout, "ScDPCache::GetItemDataById:   fail (%d)\n", __LINE__);
+        return NULL;
+    }
+//  fprintf(stdout, "ScDPCache::GetItemDataById:   s = '%s' (group field)\n",
+//          rtl::OUStringToOString(rGI[nId].GetString(), RTL_TEXTENCODING_UTF8).getStr());
+    return &rGI[nId];
 }
 
 SCROW ScDPCache::GetRowCount() const
@@ -841,23 +918,56 @@ const ScDPCache::ObjectSetType& ScDPCache::GetAllReferences() const
 
 SCROW ScDPCache::GetIdByItemData(long nDim, const rtl::OUString& sItemData) const
 {
-    if ( nDim < mnColumnCount && nDim >=0 )
+//  stack_printer __stack_printer__("ScDPCache::GetIdByItemData");
+//  fprintf(stdout, "ScDPCache::GetIdByItemData:   dim = %ld  s = '%s'\n",
+//          nDim, rtl::OUStringToOString(sItemData, RTL_TEXTENCODING_UTF8).getStr());
+    if (nDim < 0)
+        return -1;
+
+    if (nDim < mnColumnCount)
     {
+        // source field.
         const DataListType& rItems = maFields[nDim].maItems;
         for (size_t i = 0, n = rItems.size(); i < n; ++i)
         {
+//          fprintf(stdout, "ScDPCache::GetIdByItemData:   source item = '%s'\n", rtl::OUStringToOString(rItems[i].GetString(), RTL_TEXTENCODING_UTF8).getStr());
             if (rItems[i].GetString() == sItemData)
+                return i;
+        }
+
+        if (!maFields[nDim].mpGroup)
+            return -1;
+
+        // grouped source field.
+        const DataListType& rGI = maFields[nDim].mpGroup->maItems;
+        for (size_t i = 0, n = rGI.size(); i < n; ++i)
+        {
+//          fprintf(stdout, "ScDPCache::GetIdByItemData:   grouped source item = '%s'\n", rtl::OUStringToOString(rGI[i].GetString(), RTL_TEXTENCODING_UTF8).getStr());
+            if (rGI[i].GetString() == sItemData)
+                return rItems.size() + i;
+        }
+        return -1;
+    }
+
+    // group field.
+    nDim -= mnColumnCount;
+    if (nDim < maGroupFields.size())
+    {
+        const DataListType& rGI = maGroupFields[nDim].maItems;
+        for (size_t i = 0, n = rGI.size(); i < n; ++i)
+        {
+//          fprintf(stdout, "ScDPCache::GetIdByItemData:   grouped item = '%s'\n", rtl::OUStringToOString(rGI[i].GetString(), RTL_TEXTENCODING_UTF8).getStr());
+            if (rGI[i].GetString() == sItemData)
                 return i;
         }
     }
 
-    ScDPItemData rData ( sItemData );
-    return GetRowCount() + mpAdditionalData->getDataId(rData);
-
+    return -1;
 }
 
 SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rData) const
 {
+    fprintf(stdout, "ScDPCache::GetIdByItemData:   FIXME\n");
     if ( nDim < mnColumnCount && nDim >=0 )
     {
         const DataListType& rItems = maFields[nDim].maItems;
@@ -867,12 +977,57 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rData) const
                 return i;
         }
     }
-    return GetRowCount() + mpAdditionalData->getDataId(rData);
+    return -1;
 }
 
-SCROW ScDPCache::GetAdditionalItemID( const ScDPItemData& rData ) const
+void ScDPCache::AppendGroupField()
 {
-    return GetRowCount() + mpAdditionalData->insertData(rData);
+    maGroupFields.push_back(new GroupField);
+}
+
+void ScDPCache::ResetGroupItems(long nDim)
+{
+    if (nDim < 0)
+        return;
+
+    long nSourceCount = static_cast<long>(maFields.size());
+    if (nDim < nSourceCount)
+    {
+        maFields.at(nDim).mpGroup.reset(new GroupItems);
+        return;
+    }
+
+    nDim -= nSourceCount;
+    if (nDim < static_cast<long>(maGroupFields.size()))
+        maGroupFields[nDim].maItems.clear();
+}
+
+SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
+{
+    long nSourceCount = static_cast<long>(maFields.size());
+    if (nDim < nSourceCount)
+    {
+        GroupItems& rGI = *maFields.at(nDim).mpGroup;
+        rGI.maItems.push_back(new ScDPItemData(rData));
+        SCROW nId = maFields[nDim].maItems.size() + rGI.maItems.size() - 1;
+        return nId;
+    }
+
+    nDim -= nSourceCount;
+    if (nDim < static_cast<long>(maGroupFields.size()))
+    {
+        DataListType& rItems = maGroupFields.at(nDim).maItems;
+        rItems.push_back(new ScDPItemData(rData));
+        return rItems.size()-1;
+    }
+
+    return -1;
+}
+
+SCROW ScDPCache::GetAdditionalItemID(const ScDPItemData&) const
+{
+    fprintf(stdout, "ScDPCache::GetAdditionalItemID:   FIXME\n");
+    return -1;
 }
 
 
@@ -905,6 +1060,11 @@ ScDocument* ScDPCache::GetDoc() const
 long ScDPCache::GetColumnCount() const
 {
     return mnColumnCount;
+}
+
+long ScDPCache::GetGroupFieldCount() const
+{
+    return maGroupFields.size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -32,6 +32,8 @@
 #include "rtl/ustring.hxx"
 #include "scdllapi.h"
 
+class SvNumberFormatter;
+
 class ScDPUtil
 {
 public:
@@ -40,6 +42,9 @@ public:
     SC_DLLPUBLIC static rtl::OUString getSourceDimensionName(const rtl::OUString& rName);
 
     static rtl::OUString createDuplicateDimensionName(const rtl::OUString& rOriginal, size_t nDupCount);
+
+    static rtl::OUString getDateGroupName(
+        sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter);
 };
 
 #endif

@@ -506,7 +506,7 @@ public:
     typedef std::vector<ScDPResultMember*>     MemberArray;
     typedef std::map<SCROW, ScDPResultMember*> MemberHash;
 private:
-        const ScDPResultData*   pResultData;
+    const ScDPResultData*   pResultData;
     MemberArray             maMemberArray;
     MemberHash              maMemberHash;
     sal_Bool                    bInitialized;

@@ -61,16 +61,19 @@ class ScDPDateGroupHelper
 {
     ScDPNumGroupInfo    aNumInfo;       // only start and end (incl. auto flags) are used
     sal_Int32           nDatePart;      // single part
+    long                mnGroupDim;
 
 public:
-                ScDPDateGroupHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
+                ScDPDateGroupHelper( const ScDPNumGroupInfo& rInfo, long nDim, sal_Int32 nPart );
                 ~ScDPDateGroupHelper();
+
+    void SetGroupDim(long nDim);
 
     sal_Int32   GetDatePart() const { return nDatePart; }
     const ScDPNumGroupInfo& GetNumInfo() const { return aNumInfo; }
 
     void FillColumnEntries(
-        SCCOL nSourceDim, const ScDPCache* pCahe , std::vector<SCROW>& rEntries,
+        SCCOL nSourceDim, ScDPCache* pCahe , std::vector<SCROW>& rEntries,
         const std::vector<SCROW>& rOriginal) const;
 };
 
@@ -160,7 +163,7 @@ public:
         SCCOL nSourceDim, const ScDPCache* pCache,
         const std::vector< SCROW >& rOriginal) const;
 
-    void        MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
+    void MakeDateHelper( const ScDPNumGroupInfo& rInfo, long nDim, sal_Int32 nPart );
 
     void        DisposeData();
 };
