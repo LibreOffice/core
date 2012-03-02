@@ -43,6 +43,8 @@
 #include "hcode.h"
 #include "hstream.h"
 
+#include <osl/diagnose.h>
+
 #define HWPHeadLen  128
 #define HWPSummaryLen   1008
 
@@ -75,22 +77,22 @@ HWPFile::~HWPFile()
     delete oledata;
     delete hiodev;
 
-    LinkedListIterator < ColumnInfo > it_column(&columnlist);
-    for (; it_column.current(); ++it_column)
-        delete it_column.current();
+    std::list < ColumnInfo* >::iterator it_column = columnlist.begin();
+    for (; it_column != columnlist.end(); ++it_column)
+        delete *it_column;
 
-    LinkedListIterator < HWPPara > it(&plist);
-    for (; it.current(); ++it)
-        delete it.current();
+    std::list < HWPPara* >::iterator it = plist.begin();
+    for (; it != plist.end(); ++it)
+        delete *it;
 
-    LinkedListIterator < Table > tbl(&tables);
-    for (; tbl.current(); ++tbl)
-        delete tbl.current();
+    std::list < Table* >::iterator tbl = tables.begin();
+    for (; tbl != tables.end(); ++tbl)
+        delete *tbl;
 
-    LinkedListIterator < HyperText > hyp(&hyperlist);
-    for (; hyp.current(); ++hyp)
+    std::list < HyperText* >::iterator hyp = hyperlist.begin();
+    for (; hyp != hyperlist.end(); ++hyp)
     {
-        delete hyp.current();
+        delete *hyp;
     }
 }
 
@@ -248,10 +250,8 @@ bool HWPFile::ParaListRead(void)
     return ReadParaList(plist);
 }
 
-bool HWPFile::ReadParaList(LinkedList < HWPPara > &aplist, unsigned char flag)
+bool HWPFile::ReadParaList(std::list < HWPPara* > &aplist, unsigned char flag)
 {
-    LinkedListIterator < HWPPara > it(&aplist);
-
     HWPPara *spNode = new HWPPara;
      unsigned char tmp_etcflag;
      unsigned char prev_etcflag = 0;
@@ -264,8 +264,8 @@ bool HWPFile::ReadParaList(LinkedList < HWPPara > &aplist, unsigned char flag)
          }
         if (spNode->nch && spNode->reuse_shape)
         {
-            if (aplist.count()){
-                     spNode->pshape = aplist.last()->pshape;
+            if (aplist.size()){
+                     spNode->pshape = aplist.back()->pshape;
                 }
                 else{
                      spNode->nch = 0;
@@ -276,9 +276,9 @@ bool HWPFile::ReadParaList(LinkedList < HWPPara > &aplist, unsigned char flag)
           if( spNode->nch )
                 AddParaShape( &spNode->pshape );
 
-        if (aplist.count())
-            aplist.last()->SetNext(spNode);
-        aplist.insert(spNode, -1);
+        if (aplist.size())
+            aplist.back()->SetNext(spNode);
+        aplist.push_back(spNode);
         spNode = new HWPPara;
     }
     delete spNode;
@@ -310,7 +310,7 @@ bool HWPFile::TagsRead(void)
                 EmPicture *emb = new EmPicture(size);
 
                 if (true == emb->Read(*this))
-                    emblist.insert(emb, -1);
+                    emblist.push_back(emb);
                 else
                     delete emb;
             }
@@ -330,7 +330,7 @@ bool HWPFile::TagsRead(void)
                 {
                     HyperText *hypert = new HyperText;
                     hypert->Read(*this);
-                    hyperlist.insert(hypert, -1);
+                    hyperlist.push_back(hypert);
                 }
                 break;
             }
@@ -377,21 +377,27 @@ bool HWPFile::TagsRead(void)
 
 ColumnDef *HWPFile::GetColumnDef(int num)
 {
-    ColumnInfo *cinfo = columnlist.find(num);
-    if( cinfo )
-        return cinfo->coldef;
+    std::list<ColumnInfo*>::iterator it = columnlist.begin();
+
+    for(int i = 0; it != columnlist.end() ; ++it, i++){
+        if( i == num )
+	  break;
+    }
+
+    if( it != columnlist.end() )
+        return (*it)->coldef;
     else
         return 0;
 }
 /* @return 인덱스는 1부터 시작한다. */
 int HWPFile::GetPageMasterNum(int page)
 {
-    LinkedListIterator<ColumnInfo> it(&columnlist);
+    std::list<ColumnInfo*>::iterator it = columnlist.begin();
     ColumnInfo *now = 0;
     int i;
 
-    for( i = 1 ; it.current() ; ++it, i++){
-        now = it.current();
+    for( i = 1 ; it != columnlist.end() ; ++it, i++){
+        now = *it;
         if( page < now->start_page )
             return i-1;
     }
@@ -400,7 +406,15 @@ int HWPFile::GetPageMasterNum(int page)
 
 HyperText *HWPFile::GetHyperText()
 {
-    return hyperlist.find(currenthyper++);
+    std::list<HyperText*>::iterator it = hyperlist.begin();
+
+    for( int i = 0; it != hyperlist.end(); ++it, i++ ){
+	if( i == currenthyper )
+	  break;
+    }
+
+    currenthyper++;
+    return *it;
 }
 
 EmPicture *HWPFile::GetEmPicture(Picture * pic)
@@ -411,10 +425,10 @@ EmPicture *HWPFile::GetEmPicture(Picture * pic)
     name[1] = 'W';
     name[2] = 'P';
 
-    LinkedListIterator < EmPicture > it(&emblist);
-    for (; it.current(); ++it)
-        if (strcmp(name, it.current()->name) == 0)
-            return it.current();
+    std::list < EmPicture* >::iterator it = emblist.begin();
+    for (; it != emblist.end(); ++it)
+        if (strcmp(name, (*it)->name) == 0)
+            return *it;
     return 0;
 }
 
@@ -424,10 +438,10 @@ EmPicture *HWPFile::GetEmPictureByName(char * name)
     name[1] = 'W';
     name[2] = 'P';
 
-    LinkedListIterator < EmPicture > it(&emblist);
-    for (; it.current(); ++it)
-        if (strcmp(name, it.current()->name) == 0)
-            return it.current();
+    std::list < EmPicture* >::iterator it = emblist.begin();
+    for (; it != emblist.end(); ++it)
+        if (strcmp(name, (*it)->name) == 0)
+            return *it;
     return 0;
 }
 
@@ -436,52 +450,102 @@ void HWPFile::AddBox(FBox * box)
 {
 // LATER if we don't use box->next(),
 // AddBox() and GetBoxHead() are useless;
-    if (blist.count())
+    if (blist.size())
     {
-        box->prev = blist.last();
+        box->prev = blist.back();
         box->prev->next = box;
     }
     else
         box->prev = 0;
-    blist.insert(box, -1);
+    blist.push_back(box);
 }
 
 
 ParaShape *HWPFile::getParaShape(int index)
 {
-    return pslist.find(index);
+    std::list<ParaShape*>::iterator it = pslist.begin();
+
+    for( int i = 0; it != pslist.end(); ++it, i++ ){
+	if( i == index )
+	  break;
+    }
+
+    return *it;
 }
 
 
 CharShape *HWPFile::getCharShape(int index)
 {
-    return cslist.find(index);
+    std::list<CharShape*>::iterator it = cslist.begin();
+
+    for( int i = 0; it != cslist.end(); ++it, i++ ){
+	if( i == index )
+	  break;
+    }
+
+    return *it;
 }
 
 
 FBoxStyle *HWPFile::getFBoxStyle(int index)
 {
-    return fbslist.find(index);
+    std::list<FBoxStyle*>::iterator it = fbslist.begin();
+
+    for( int i = 0; it != fbslist.end(); ++it, i++ ){
+	if( i == index )
+	  break;
+    }
+
+    return *it;
 }
 
 DateCode *HWPFile::getDateCode(int index)
 {
-    return datecodes.find(index);
+    std::list<DateCode*>::iterator it = datecodes.begin();
+
+    for( int i = 0; it != datecodes.end(); ++it, i++ ){
+	if( i == index )
+	  break;
+    }
+
+    return *it;
 }
 
 HeaderFooter *HWPFile::getHeaderFooter(int index)
 {
-    return headerfooters.find(index);
+    std::list<HeaderFooter*>::iterator it = headerfooters.begin();
+
+    for( int i = 0; it != headerfooters.end(); ++it, i++ ){
+	if( i == index )
+	  break;
+    }
+
+    return *it;
 }
 
 ShowPageNum *HWPFile::getPageNumber(int index)
 {
-    return pagenumbers.find(index);
+    std::list<ShowPageNum*>::iterator it = pagenumbers.begin();
+
+    for( int i = 0; it != pagenumbers.end(); ++it, i++ ){
+	if( i == index )
+	  break;
+    }
+
+    return *it;
+
 }
 
 Table *HWPFile::getTable(int index)
 {
-    return tables.find(index);
+    std::list<Table*>::iterator it = tables.begin();
+
+    for( int i = 0; it != tables.end(); ++it, i++ ){
+	if( i == index )
+	  break;
+    }
+
+    return *it;
 }
 
 void HWPFile::AddParaShape(ParaShape * pshape)
@@ -508,7 +572,7 @@ void HWPFile::AddParaShape(ParaShape * pshape)
     if( value == 0 || nscount )
     {
         pshape->index = ++pcount;
-        pslist.insert(pshape, -1);
+        pslist.push_back(pshape);
     }
     else
         pshape->index = value;
@@ -521,7 +585,7 @@ void HWPFile::AddCharShape(CharShape * cshape)
     if( value == 0 )
     {
         cshape->index = ++ccount;
-        cslist.insert(cshape, -1);
+        cslist.push_back(cshape);
     }
     else
         cshape->index = value;
@@ -530,13 +594,13 @@ void HWPFile::AddCharShape(CharShape * cshape)
 void HWPFile::AddColumnInfo()
 {
     ColumnInfo *cinfo = new ColumnInfo(m_nCurrentPage);
-   columnlist.insert(cinfo, -1);
+    columnlist.push_back(cinfo);
     setMaxSettedPage();
 }
 
 void HWPFile::SetColumnDef(ColumnDef *coldef)
 {
-    ColumnInfo *cinfo = columnlist.last();
+    ColumnInfo *cinfo = columnlist.back();
     if( cinfo->bIsSet )
         return;
     cinfo->coldef = coldef;
@@ -546,38 +610,38 @@ void HWPFile::SetColumnDef(ColumnDef *coldef)
 void HWPFile::AddDateFormat(DateCode * hbox)
 {
     hbox->key = sal::static_int_cast<char>(++datecodecount);
-    datecodes.insert(hbox, -1);
+    datecodes.push_back(hbox);
 }
 
 void HWPFile::AddPageNumber(ShowPageNum * hbox)
 {
-    pagenumbers.insert(hbox, -1);
+    pagenumbers.push_back(hbox);
 }
 
 void HWPFile::AddHeaderFooter(HeaderFooter * hbox)
 {
-    headerfooters.insert(hbox, -1);
+    headerfooters.push_back(hbox);
 }
 
 void HWPFile::AddTable(Table * hbox)
 {
-    tables.insert(hbox, -1);
+    tables.push_back(hbox);
 }
 
 void HWPFile::AddFBoxStyle(FBoxStyle * fbstyle)
 {
-    fbslist.insert(fbstyle, -1);
+    fbslist.push_back(fbstyle);
 }
 
 int HWPFile::compareCharShape(CharShape *shape)
 {
-    int count = cslist.count();
+    int count = cslist.size();
     if( count > 0 )
     {
         CharShape *cshape=0;
         for(int i = 0; i< count; i++)
         {
-            cshape = cslist.find(i);
+            cshape = getCharShape(i);
 
             if( shape->size == cshape->size &&
                 shape->font[0] == cshape->font[0] &&
@@ -598,13 +662,13 @@ int HWPFile::compareCharShape(CharShape *shape)
 
 int HWPFile::compareParaShape(ParaShape *shape)
 {
-    int count = pslist.count();
+    int count = pslist.size();
     if( count > 0 )
     {
         ParaShape *pshape=0;
         for(int i = 0; i< count; i++)
         {
-            pshape = pslist.find(i);
+            pshape = getParaShape(i);
             if( shape->left_margin == pshape->left_margin &&
                 shape->right_margin == pshape->right_margin &&
                 shape->pspacing_prev == pshape->pspacing_prev &&

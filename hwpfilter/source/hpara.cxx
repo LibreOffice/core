@@ -28,6 +28,8 @@
 
 #include "precompile.h"
 
+#include <osl/diagnose.h>
+
 #include "hwplib.h"
 #include "hwpfile.h"
 #include "hpara.h"

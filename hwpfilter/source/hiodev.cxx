@@ -40,6 +40,8 @@
 # include <unistd.h>
 #endif
 
+#include <osl/diagnose.h>
+
 #include "hwplib.h"
 #include "hgzip.h"
 #include "hiodev.h"

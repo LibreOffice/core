@@ -28,7 +28,7 @@
 
 #include "precompile.h"
 
-#include "list.hxx"
+#include <list>
 
 #include "hwpfile.h"
 #include "hbox.h"
@@ -294,7 +294,7 @@ int TxtBox::Read(HWPFile & hwpf)
     }
     if (ncell == 1)
         style.cell = &cell[0];
-    plists = new LinkedList < HWPPara >[ncell];
+    plists = new std::list < HWPPara* >[ncell];
     for (ii = 0; ii < ncell; ii++)
         hwpf.ReadParaList(plists[ii]);
      // caption
@@ -342,7 +342,7 @@ int TxtBox::Read(HWPFile & hwpf)
                 }
           }
           for( ii = 0 ; ii < ncell ; ii++ ){
-                tbl->cells.insert(pArr[ii]);
+                tbl->cells.push_back(pArr[ii]);
           }
           tbl->box = this;
           hwpf.AddTable(tbl);

@@ -30,6 +30,8 @@
 
 #include <ctype.h>
 
+#include <osl/diagnose.h>
+
 #include "hwpfile.h"
 #include "hbox.h"
 #include "hpara.h"
@@ -334,14 +336,14 @@ TxtBox::~TxtBox(void)
 
     for (int ii = 0; ii < nCell; ++ii)
     {
-        LinkedListIterator < HWPPara > it(&plists[ii]);
-        for (; it.current(); ++it)
-            delete it.current();
+        std::list < HWPPara* >::iterator it = plists[ii].begin();
+        for (; it != plists[ii].end(); ++it)
+            delete &it;
     }
 
-    LinkedListIterator < HWPPara > it(&caption);
-    for (; it.current(); ++it)
-        delete it.current();
+    std::list < HWPPara* >::iterator it = caption.begin();
+    for (; it != caption.end(); ++it)
+        delete &it;
 
     delete[]plists;
 }
@@ -368,9 +370,9 @@ Picture::~Picture(void)
     if( pictype == PICTYPE_DRAW && picinfo.picdraw.hdo )
         delete (HWPDrawingObject *) picinfo.picdraw.hdo;
 
-    LinkedListIterator < HWPPara > it(&caption);
-    for (; it.current(); ++it)
-        delete it.current();
+    std::list < HWPPara* >::iterator it = caption.begin();
+    for (; it != caption.end(); ++it)
+        delete &it;
 }
 
 
@@ -390,27 +392,27 @@ hunit Picture::Height(CharShape * sty)
 // hidden(15)
 Hidden::~Hidden(void)
 {
-    LinkedListIterator < HWPPara > it(&plist);
-    for (; it.current(); ++it)
-        delete it.current();
+    std::list < HWPPara* >::iterator it = plist.begin();
+    for (; it != plist.end(); ++it)
+        delete &it;
 }
 
 
 // header/footer(16)
 HeaderFooter::~HeaderFooter(void)
 {
-    LinkedListIterator < HWPPara > it(&plist);
-    for (; it.current(); ++it)
-        delete it.current();
+    std::list < HWPPara* >::iterator it = plist.begin();
+    for (; it != plist.end(); ++it)
+        delete &it;
 }
 
 
 // footnote(17)
 Footnote::~Footnote(void)
 {
-    LinkedListIterator < HWPPara > it(&plist);
-    for (; it.current(); ++it)
-        delete it.current();
+    std::list < HWPPara* >::iterator it = plist.begin();
+    for (; it != plist.end(); ++it)
+        delete &it;
 }
 
 

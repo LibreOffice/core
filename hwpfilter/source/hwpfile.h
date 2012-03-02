@@ -34,6 +34,7 @@
 #ifndef _HWPFILE_H_
 #define _HWPFILE_H_
 
+#include <list>
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
@@ -42,7 +43,6 @@
 #include "hfont.h"
 #include "hstyle.h"
 #include "hpara.h"
-#include "list.hxx"
 
 #define HWPIDLen    30
 #define V20SIGNATURE    "HWP Document File V2.00 \032\1\2\3\4\5"
@@ -166,7 +166,7 @@ class DLLEXPORT HWPFile
 /**
  * Reads main paragraph list
  */
-        bool ReadParaList(LinkedList<HWPPara> &plist, unsigned char flag = 0);
+        bool ReadParaList(std::list<HWPPara*> &aplist, unsigned char flag = 0);
 /**
  * Sets if the stream is compressed
  */
@@ -234,13 +234,13 @@ class DLLEXPORT HWPFile
         HWPInfo *GetHWPInfo(void) { return &_hwpInfo; }
         HWPFont *GetHWPFont(void) { return &_hwpFont; }
         HWPStyle *GetHWPStyle(void) { return &_hwpStyle; }
-        HWPPara *GetFirstPara(void) { return plist.first(); }
-        HWPPara *GetLastPara(void) { return plist.last(); }
+        HWPPara *GetFirstPara(void) { return plist.front(); }
+        HWPPara *GetLastPara(void) { return plist.back(); }
 
         EmPicture *GetEmPicture(Picture *pic);
         EmPicture *GetEmPictureByName(char * name);
         HyperText *GetHyperText();
-        FBox *GetBoxHead (void) { return blist.count()?blist.first():0; }
+        FBox *GetBoxHead (void) { return blist.size()?blist.front():0; }
         ParaShape *getParaShape(int);
         CharShape *getCharShape(int);
         FBoxStyle *getFBoxStyle(int);
@@ -249,14 +249,14 @@ class DLLEXPORT HWPFile
         ShowPageNum *getPageNumber(int);
           Table *getTable(int);
 
-        int getParaShapeCount(){ return pslist.count(); }
-        int getCharShapeCount(){ return cslist.count(); }
-        int getFBoxStyleCount(){ return fbslist.count(); }
-        int getDateFormatCount(){ return datecodes.count(); }
-        int getHeaderFooterCount(){ return headerfooters.count(); }
-        int getPageNumberCount(){ return pagenumbers.count(); }
-        int getTableCount(){ return tables.count(); }
-        int getColumnCount(){ return columnlist.count(); }
+        int getParaShapeCount(){ return pslist.size(); }
+        int getCharShapeCount(){ return cslist.size(); }
+        int getFBoxStyleCount(){ return fbslist.size(); }
+        int getDateFormatCount(){ return datecodes.size(); }
+        int getHeaderFooterCount(){ return headerfooters.size(); }
+        int getPageNumberCount(){ return pagenumbers.size(); }
+        int getTableCount(){ return tables.size(); }
+        int getColumnCount(){ return columnlist.size(); }
 
           int getMaxSettedPage(){ return m_nMaxSettedPage; }
           void setMaxSettedPage(){ m_nMaxSettedPage = m_nCurrentPage; }
@@ -284,22 +284,22 @@ class DLLEXPORT HWPFile
         HWPInfo   _hwpInfo;
         HWPFont   _hwpFont;
         HWPStyle  _hwpStyle;
-        LinkedList<ColumnInfo> columnlist;
+        std::list<ColumnInfo*> columnlist;
           // paragraph linked list
-        LinkedList<HWPPara> plist;
+        std::list<HWPPara*> plist;
           // floating box linked list
-        LinkedList<FBox> blist;
+        std::list<FBox*> blist;
           // embedded picture list(tag datas)
-        LinkedList<EmPicture> emblist;
-        LinkedList<HyperText> hyperlist;
+        std::list<EmPicture*> emblist;
+        std::list<HyperText*> hyperlist;
         int currenthyper;
-        LinkedList<ParaShape> pslist;             /* 스타오피스의 구조상 필요 */
-        LinkedList<CharShape> cslist;
-        LinkedList<FBoxStyle> fbslist;
-        LinkedList<DateCode> datecodes;
-        LinkedList<HeaderFooter> headerfooters;
-        LinkedList<ShowPageNum> pagenumbers;
-        LinkedList<Table> tables;
+        std::list<ParaShape*> pslist;             /* 스타오피스의 구조상 필요 */
+        std::list<CharShape*> cslist;
+        std::list<FBoxStyle*> fbslist;
+        std::list<DateCode*> datecodes;
+        std::list<HeaderFooter*> headerfooters;
+        std::list<ShowPageNum*> pagenumbers;
+        std::list<Table*> tables;
 
 // for global document handling
         static HWPFile *cur_doc;
