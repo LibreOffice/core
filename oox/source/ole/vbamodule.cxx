@@ -221,6 +221,7 @@ void VbaModule::createEmptyModule( const Reference< XNameContainer >& rxBasicLib
 OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNameContainer >& rxOleNameOverrides ) const
 {
     OUStringBuffer aSourceCode;
+    const static rtl::OUString sUnmatchedRemovedTag( RTL_CONSTASCII_USTRINGPARAM( "Rem removed unmatched Sub/End: " ) );
     if( !maStreamName.isEmpty() && (mnOffset != SAL_MAX_UINT32) )
     {
         BinaryXInputStream aInStrm( rVbaStrg.openInputStream( maStreamName ), true );
@@ -234,6 +235,14 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNam
             VbaInputStream aVbaStrm( aInStrm );
             // load the source code line-by-line, with some more processing
             TextInputStream aVbaTextStrm( mxContext, aVbaStrm, meTextEnc );
+
+            struct ProcedurePair
+            {
+                bool bInProcedure;
+                sal_uInt32 nPos;
+                ProcedurePair() : bInProcedure( false ), nPos( 0 ) {};
+            } procInfo;
+
             while( !aVbaTextStrm.isEof() )
             {
                 OUString aCodeLine = aVbaTextStrm.readLine();
@@ -244,6 +253,45 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNam
                 }
                 else
                 {
+                    // Hack here to weed out any unmatched End Sub / Sub Foo statements.
+                    // The behaviour of the vba ide practically guarantees the case and
+                    // spacing of Sub statement(s). However, indentation can be arbitrary hence
+                    // the trim.
+                    rtl::OUString trimLine( aCodeLine.trim() );
+                    if ( mbExecutable && (
+                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Sub ") )         ||
+                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Public Sub ") )  ||
+                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Private Sub ") ) ||
+                      trimLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM("Static Sub ") ) ) )
+                    {
+                        // this should never happen, basic doesn't support nested procedures
+                        // first Sub Foo must be bogus
+                        if ( procInfo.bInProcedure )
+                        {
+                            // comment out the line
+                            aSourceCode.insert( procInfo.nPos, sUnmatchedRemovedTag );
+                            // mark location of this Sub
+                            procInfo.nPos = aSourceCode.getLength();
+                        }
+                        else
+                        {
+                            procInfo.bInProcedure = true;
+                            procInfo.nPos = aSourceCode.getLength();
+                        }
+                    }
+                    else if ( mbExecutable && aCodeLine.trim().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("End Sub")) )
+                    {
+                        // un-matched End Sub
+                        if ( !procInfo.bInProcedure )
+                        {
+                            aSourceCode.append( sUnmatchedRemovedTag );
+                        }
+                        else
+                        {
+                            procInfo.bInProcedure = false;
+                            procInfo.nPos = 0;
+                        }
+                    }
                     // normal source code line
                     if( !mbExecutable )
                         aSourceCode.appendAscii( RTL_CONSTASCII_STRINGPARAM( "Rem " ) );
