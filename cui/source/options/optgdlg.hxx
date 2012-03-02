@@ -80,7 +80,7 @@ private:
     DECL_LINK(HelpCheckHdl_Impl, void *);
     DECL_LINK(HelpAgentResetHdl_Impl, void *);
 #ifdef WNT
-    DECL_LINK( OnFileDlgToggled, CheckBox* );
+    DECL_LINK( OnFileDlgToggled, void* );
 #endif
 protected:
     virtual int         DeactivatePage( SfxItemSet* pSet = NULL );
