@@ -906,27 +906,27 @@ void DrawingML::GetUUID( OStringBuffer& rBuffer )
     rBuffer.append( '{' );
     for( i = 0; i < 4; i++ ) {
         rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] && 0xf ] );
+        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
     }
     rBuffer.append( '-' );
     for( ; i < 6; i++ ) {
         rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] && 0xf ] );
+        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
     }
     rBuffer.append( '-' );
     for( ; i < 8; i++ ) {
         rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] && 0xf ] );
+        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
     }
     rBuffer.append( '-' );
     for( ; i < 10; i++ ) {
         rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] && 0xf ] );
+        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
     }
     rBuffer.append( '-' );
     for( ; i < 16; i++ ) {
         rBuffer.append( cDigits[ aSeq[i] >> 4 ] );
-        rBuffer.append( cDigits[ aSeq[i] && 0xf ] );
+        rBuffer.append( cDigits[ aSeq[i] & 0xf ] );
     }
     rBuffer.append( '}' );
 }
