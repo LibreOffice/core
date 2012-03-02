@@ -29,9 +29,16 @@ sub generatePPTX
 	mkdir ("pptx");
 	system ("unzip -qq -o -d cshape cshape.pptx");
 
-	generateSlide ($shapes, $type, ">cshape/ppt/slides/slide1.xml");
+	# custom shape(s) slide with preset definition
+	generateSlide ($shapes, $type, ">cshape/ppt/slides/slide1.xml", 0);
 
 	$pptx = "../pptx/cshape-" . (defined $type ? $type : "all") . ".pptx";
+	system ("cd cshape\nrm -rf ". $pptx . "\nzip -q -r " . $pptx . " .\ncd ..");
+
+	# preset(s) slide, for testing
+	generateSlide ($shapes, $type, ">cshape/ppt/slides/slide1.xml", 1);
+
+	$pptx = "../pptx/preset-cshape-" . (defined $type ? $type : "all") . ".pptx";
 	system ("cd cshape\nrm -rf ". $pptx . "\nzip -q -r " . $pptx . " .\ncd ..");
 }
 
@@ -79,6 +86,7 @@ sub generateSlide
 	$shapes = shift;
 	$type = shift;
 	$file = shift;
+	$preset = shift;
 
 	open (OUT, $file);
 
@@ -132,11 +140,18 @@ sub generateSlide
             <a:off x=\"" . (350000 + $col++*$size) . "\" y=\"" . (450000 + $row*$size) . "\"/>
             <a:ext cx=\"" . (4*$size/5) . "\" cy=\"" . (4*$size/5) . "\"/>
           </a:xfrm>
-          <a:custGeom>
 ";
-		print OUT @{$shapes->{$shape}};
-		print OUT "          </a:custGeom>
-          <a:solidFill>
+		if ($preset) {
+		    print OUT "          <a:prstGeom prst=\"" . $shape . "\"><a:avLst/></a:prstGeom>
+";
+		} else {
+		    print OUT "          <a:custGeom>
+";
+		    print OUT @{$shapes->{$shape}};
+		    print OUT "          </a:custGeom>
+";
+		}
+		print OUT "          <a:solidFill>
             <a:srgbClr val=\"FFFF7F\"/>
           </a:solidFill>
           <a:ln w=\"19080\">
