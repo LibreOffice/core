@@ -4117,7 +4117,7 @@ dnl ===================================================================
 if test "$GXX" = "yes"; then
     AC_MSG_CHECKING([for g++ include path])
     if test -z "$with_gxx_include_path"; then
-        with_gxx_include_path=`echo "#include <cstring>" | $CXX -E -xc++ - | $SED -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
+        with_gxx_include_path=`echo "#include <cstring>" | $CXX -E -xc++ - 2>/dev/null | $SED -n '/.*1*"\(.*\)\/cstring".*/s//\1/p' | head -n 1`
         if test "$with_gxx_include_path" = "/usr/libexec/(null)/include"; then
             with_gxx_include_path="/usr/include"
         fi
