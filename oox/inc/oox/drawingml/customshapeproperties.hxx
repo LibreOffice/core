@@ -112,6 +112,12 @@ struct Path2D
     Path2D() : w( 0 ), h( 0 ), fill( XML_norm ), stroke( sal_True ), extrusionOk( sal_True ) {};
 };
 
+
+class CustomShapeProvider {
+public:
+    virtual PropertyMap getProperties() = 0;
+};
+
 class CustomShapeProperties
 {
 public:
@@ -160,7 +166,7 @@ private:
     sal_Bool                        mbMirroredY;
     sal_Int32                       mnTextRotateAngle;
 
-    typedef boost::unordered_map< sal_Int32, PropertyMap > PresetsMap;
+    typedef boost::unordered_map< sal_Int32, CustomShapeProvider * > PresetsMap;
 
     static PresetsMap maPresetsMap;
     static void initializePresetsMap();

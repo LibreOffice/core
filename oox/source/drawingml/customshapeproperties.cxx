@@ -147,7 +147,9 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         {
             OSL_TRACE("found property map for preset: %s (%d)", USS(getShapePresetTypeName()), mnShapePresetType);
 
-            aPropertyMap = maPresetsMap[ mnShapePresetType ];
+            CustomShapeProvider *pProvider = maPresetsMap[ mnShapePresetType ];
+            if (pProvider)
+                aPropertyMap = pProvider->getProperties();
 #ifdef DEBUG
             aPropertyMap.dumpCode();
 #endif
