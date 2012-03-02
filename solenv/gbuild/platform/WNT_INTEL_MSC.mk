@@ -700,6 +700,6 @@ gb_WinResTarget__command_dep =
 endif
 
 # Python
-gb_PYTHON_PRECOMMAND :=  PATH="$${PATH}:$(OUTDIR)/bin" PYTHONHOME="$(OUTDIR)/lib/python" PYTHONPATH="$(OUTDIR)/lib/python;$(OUTDIR)/lib/python/lib-dynload"
+gb_PYTHON_PRECOMMAND :=  PATH="$${PATH}:$(shell cygpath -m $(OUTDIR)/bin)" PYTHONHOME="$(shell cygpath -m $(OUTDIR))/lib/python" PYTHONPATH="$(shell cygpath -m $(OUTDIR))/lib/python;$(shell cygpath -m $(OUTDIR))/lib/python/lib-dynload"
 
 # vim: set noet sw=4:
