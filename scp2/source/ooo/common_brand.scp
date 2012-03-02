@@ -388,12 +388,21 @@ File gid_Brand_File_Bin_Unopkgcom
 End
 #endif
 
-#if defined(WNT) || defined(OS2)
+#if defined(WNT)
 File gid_Brand_File_Bin_Unopkgexe
     BIN_FILE_BODY;
     Dir = gid_Brand_Dir_Program;
     Styles = (PACKED);
     Name = "unopkg.exe";
+End
+#endif
+
+#if defined(OS2)
+File gid_Brand_File_Bin_Unopkgexe
+    BIN_FILE_BODY;
+    Dir = gid_Brand_Dir_Program;
+    Styles = (PACKED);
+    Name = "unopkg.bin";
 End
 #endif
 

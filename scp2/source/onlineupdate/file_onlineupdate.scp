@@ -23,7 +23,11 @@
 
 #include "macros.inc"
 
+#ifdef OS2
+SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Updchk , updchkun )
+#else
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Updchk , updchk.uno )
+#endif
 
 File gid_File_Share_Registry_Onlineupdate_Xcd
     TXT_FILE_BODY;
