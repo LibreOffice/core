@@ -70,6 +70,7 @@ public:
     static sal_Int32 Compare(const ScDPItemData& rA, const ScDPItemData& rB);
 
     ScDPItemData();
+    ScDPItemData(const ScDPItemData& r);
     ScDPItemData(const rtl::OUString& rStr);
     ScDPItemData(double fVal);
     ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue);
@@ -85,6 +86,8 @@ public:
 
     // exact equality
     bool operator==(const ScDPItemData& r) const;
+
+    ScDPItemData& operator= (const ScDPItemData& r);
 
     bool IsEmpty() const;
     bool IsValue() const;

@@ -52,6 +52,28 @@ sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
 ScDPItemData::ScDPItemData() :
     mfValue(0.0), meType(Empty) {}
 
+ScDPItemData::ScDPItemData(const ScDPItemData& r) :
+    meType(r.meType)
+{
+    switch (r.meType)
+    {
+        case String:
+        case Error:
+            mpString = new rtl::OUString(*r.mpString);
+        break;
+        case Value:
+            mfValue = r.mfValue;
+        break;
+        case GroupValue:
+            maGroupValue.mnGroupType = r.maGroupValue.mnGroupType;
+            maGroupValue.mnValue = r.maGroupValue.mnValue;
+        break;
+        case Empty:
+        default:
+            mfValue = 0.0;
+    }
+}
+
 ScDPItemData::ScDPItemData(const rtl::OUString& rStr) :
     mpString(new rtl::OUString(rStr)), meType(String) {}
 
@@ -100,6 +122,7 @@ void ScDPItemData::SetGroupValue(sal_Int32 nGroupType, sal_Int32 nValue)
 void ScDPItemData::SetErrorString(const rtl::OUString& rS)
 {
     SetString(rS);
+    meType = Error;
 }
 
 bool ScDPItemData::IsCaseInsEqual(const ScDPItemData& r) const
@@ -121,6 +144,9 @@ size_t ScDPItemData::Hash() const
     // If we do unicode safe case insensitive hash we can drop
     // ScDPItemData::operator== and use ::IsCasInsEqual
     rtl::OUString aStr = GetString();
+    if (aStr.isEmpty())
+        return 0;
+
     return rtl_ustr_hashCode_WithLength(aStr.getStr(), aStr.getLength());
 }
 
@@ -138,6 +164,29 @@ bool ScDPItemData::operator== (const ScDPItemData& r) const
 
     // need exact equality until we have a safe case insensitive string hash
     return GetString() == r.GetString();
+}
+
+ScDPItemData& ScDPItemData::operator= (const ScDPItemData& r)
+{
+    meType = r.meType;
+    switch (r.meType)
+    {
+        case String:
+        case Error:
+            mpString = new rtl::OUString(*r.mpString);
+        break;
+        case Value:
+            mfValue = r.mfValue;
+        break;
+        case GroupValue:
+            maGroupValue.mnGroupType = r.maGroupValue.mnGroupType;
+            maGroupValue.mnValue = r.maGroupValue.mnValue;
+        break;
+        case Empty:
+        default:
+            mfValue = 0.0;
+    }
+    return *this;
 }
 
 sal_uInt8 ScDPItemData::GetCellType() const
@@ -168,7 +217,7 @@ rtl::OUString ScDPItemData::GetString() const
         return *mpString;
 
     // TODO: Generate appropriate string.
-    return rtl::OUString();
+    return rtl::OUString::createFromAscii("fail");
 }
 
 double ScDPItemData::GetValue() const
