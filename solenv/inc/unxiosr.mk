@@ -57,7 +57,10 @@ OBJCFLAGS=-fexceptions -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS
 OBJCXXFLAGS:=-x objective-c++ $(OBJCFLAGS)
 
 # Comp Flags for files that need exceptions enabled (C and C++)
-CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
+CFLAGSEXCEPTIONS=-fexceptions
+.IF "$(COM_GCC_IS_CLANG)" != "TRUE"
+CFLAGSEXCEPTIONS+=-fno-enforce-eh-specs
+.ENDIF
 
 # Comp Flags for files that do not need exceptions enabled (C and C++)
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions

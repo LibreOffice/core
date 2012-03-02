@@ -2442,9 +2442,9 @@ if test "$_os" = "WINNT"; then
 fi
 
 dnl ===================================================================
-dnl  Test the gcc version,  3 is OK
+dnl  Test the gcc version
 dnl ===================================================================
-if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
+if test "$GCC" = "yes"; then
     AC_MSG_CHECKING([the GNU C compiler version])
     _gcc_version=`$CC -dumpversion`
     _gcc_major=`echo $_gcc_version | $AWK -F. '{ print \$1 }'`
@@ -2465,10 +2465,27 @@ if test \( "$_os" != "WINNT" -o "$WITH_MINGW" = "yes" \) -a "$GCC" = "yes"; then
             AC_MSG_RESULT([implicitly using CC=$CC])
         fi
     else
-        AC_MSG_RESULT([checked (gcc $_gcc_version)])
+        AC_MSG_RESULT([gcc $_gcc_version])
     fi
 fi
 
+dnl ===================================================================
+dnl  Is it actually Clang?
+dnl ===================================================================
+
+if test "$GCC" = "yes"; then
+    AC_MSG_CHECKING([whether GCC is actually Clang])
+    AC_COMPILE_IFELSE([AC_LANG_SOURCE([[
+        #ifndef __clang__
+        you lose
+        #endif
+        int foo=42;
+        ]])],
+        [AC_MSG_RESULT([yes])
+         COM_GCC_IS_CLANG=TRUE],
+        [AC_MSG_RESULT([no])])
+fi
+AC_SUBST(COM_GCC_IS_CLANG)
 
 #
 # prefix C with ccache if needed

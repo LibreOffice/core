@@ -121,7 +121,7 @@ gb_LinkTarget_EXCEPTIONFLAGS := \
 	-fexceptions
 
 # Clang doesn't have this option
-ifeq (,$(findstring /clang,$(CXX)))
+ifneq ($(COM_GCC_IS_CLANG),TRUE)
 gb_LinkTarget_EXCEPTIONFLAGS += \
 	-fno-enforce-eh-specs
 endif

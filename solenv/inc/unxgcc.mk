@@ -78,7 +78,10 @@ CFLAGSENABLESYMBOLS=-g
 # flags for the C++ Compiler
 CFLAGSCC= -pipe $(ARCH_FLAGS)
 # Flags for enabling exception handling
-CFLAGSEXCEPTIONS=-fexceptions -fno-enforce-eh-specs
+CFLAGSEXCEPTIONS=-fexceptions
+.IF "$(COM_GCC_IS_CLANG)" != "TRUE"
+CFLAGSEXCEPTIONS+=-fno-enforce-eh-specs
+.ENDIF
 # Flags for disabling exception handling
 CFLAGS_NO_EXCEPTIONS=-fno-exceptions
 
