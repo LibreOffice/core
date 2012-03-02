@@ -52,9 +52,9 @@ CONFIGURE_ACTION =
 
 .IF "$(CCNUMVER)" >= "001600000000"
 BUILD_DIR=Projects/VC2008/lcms2_DLL
-BUILD_ACTION=cd allinone && MSBuild.exe lcms2_DLL.vcxproj /p:Configuration=Release /p:Platform=Win32
+BUILD_ACTION=MSBuild.exe lcms2_DLL.vcxproj /p:Configuration=Release /p:Platform=Win32
 .ELSE
-BUILD_ACTION=cd allinone && $(COMPATH)$/vcpackages$/vcbuild.exe lcms2_DLL.vcproj "Release|Win32"
+BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe lcms2_DLL.vcproj "Release|Win32"
 .ENDIF
 
 .ELSE #"$(GUI)$(COM)"!="WNTMSC"
@@ -82,8 +82,8 @@ OUT2LIB+=src$/.libs$/liblcms2.*.dylib
 OUT2LIB+=src$/.libs$/liblcms2.dll.a
 OUT2BIN+=src$/.libs$/*.dll
 .ELSE
-OUT2LIB+=
-OUT2BIN+=
+OUT2LIB+=bin$/lcms2.lib
+OUT2BIN+=bin$/lcms2.dll
 .ENDIF
 .ELSE
 OUT2LIB+=src$/.libs$/liblcms2.so*
