@@ -1758,14 +1758,11 @@ void ValueSet::ImplInsertItem( ValueSetItem *const pItem, const size_t nPos )
 Rectangle ValueSet::ImplGetItemRect( size_t nPos ) const
 {
     const size_t nVisibleBegin = static_cast<size_t>(mnFirstLine)*mnCols;
-    const size_t nMaxVisible = static_cast<size_t>(mnVisLines)*mnCols;
-    size_t nVisibleEnd = nVisibleBegin+nMaxVisible;
-    if ( nVisibleEnd>mItemList.size() )
-    {
-        nVisibleEnd = mItemList.size();
-    }
+    const size_t nVisibleEnd = nVisibleBegin + static_cast<size_t>(mnVisLines)*mnCols;
 
-    if ( nPos<nVisibleBegin || nPos>=nVisibleEnd )
+    // Check if the item is inside the range of the displayed ones,
+    // taking into account that last row could be incomplete
+    if ( nPos<nVisibleBegin || nPos>=nVisibleEnd || nPos>=mItemList.size() )
         return Rectangle();
 
     nPos -= nVisibleBegin;
