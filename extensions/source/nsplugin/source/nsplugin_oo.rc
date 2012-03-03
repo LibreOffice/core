@@ -28,3 +28,49 @@
     VALUE "FileOpenName", "StarCalc 3.0 - 5.0|StarChart 3.0 - 5.0|StarDraw 3.0 - 5.0|StarImpress 3.0 - 5.0|StarImpress-packed 3.0 - 5.0|StarMath 3.0 - 5.0|StarWriter Template 3.0 - 5.0|StarWriter Global 3.0 - 5.0|StarWriter 3.0 - 5.0|StarOffice 6.0/7 Spreadsheet|StarOffice 6.0/7 Spreadsheet Template|StarOffice 6.0/7 Drawing|StarOffice 6.0/7 Drawing Template|StarOffice 6.0/7 Presentation|StarOffice 6.0/7 Presentation Template|StarOffice 6.0/7 Formula|StarOffice 6.0/7 Text Document|StarOffice 6.0/7 Master Document|StarOffice 6.0/7 Text Document Template|OpenDocument Text|OpenDocument Text Template|OpenDocument Master Document|HTML Document Template|OpenDocument Spreadsheet|OpenDocument Spreadsheet Template|OpenDocument Drawing|OpenDocument Drawing Template|OpenDocument Presentation|OpenDocument Presentation Template|OpenDocument Formula\0"
 #define ADDITIONAL_VERINFO2    VALUE "FileDescription", "LibreOffice Plug-in handles all its documents" VALUE "ProductName", "LibreOffice Plug-in"  VALUE "MIMEType",   "application/vnd.stardivision.calc|application/vnd.stardivision.chart|application/vnd.stardivision.draw|application/vnd.stardivision.impress|application/vnd.stardivision.impress-packed|application/vnd.stardivision.math|application/vnd.stardivision.writer|application/vnd.stardivision.writer-global|application/vnd.staroffice.writer|application/vnd.sun.xml.calc|application/vnd.sun.xml.calc.template|application/vnd.sun.xml.draw|application/vnd.sun.xml.draw.template|"
 #define ADDITIONAL_VERINFO3     "application/vnd.sun.xml.impress|application/vnd.sun.xml.impress.template|application/vnd.sun.xml.math|application/vnd.sun.xml.writer|application/vnd.sun.xml.writer.global|application/vnd.sun.xml.writer.template|application/vnd.oasis.opendocument.text|application/vnd.oasis.opendocument.text-template|application/vnd.oasis.opendocument.text-master|application/vnd.oasis.opendocument.text-web|application/vnd.oasis.opendocument.spreadsheet|application/vnd.oasis.opendocument.spreadsheet-template|application/vnd.oasis.opendocument.graphics|application/vnd.oasis.opendocument.graphics-template|application/vnd.oasis.opendocument.presentation|application/vnd.oasis.opendocument.presentation-template|application/vnd.oasis.opendocument.formula\0"
+#define VERVARIANT 3
+#define ORG_NAME npsoplugin.dll
+#define RES_APP_VENDOR
+#define INTERNAL_NAME npsoplugin
+
+#include <windows.h>
+#include "version.hrc"
+
+VS_VERSION_INFO VERSIONINFO
+    FILEVERSION    VERSION, SUBVERSION, MICROVERSION, VERVARIANT
+    PRODUCTVERSION VERSION, SUBVERSION, MICROVERSION, VERVARIANT
+    FILEFLAGSMASK 0x3F
+    FILEFLAGS
+#if defined(DEBUG)
+    VS_FF_DEBUG |
+#endif
+#ifdef VER_PREL
+    VS_FF_PRERELEASE |
+#endif
+    0
+    FILEOS VOS_NT_WINDOWS32
+    FILETYPE VFT_APP
+    {
+        BLOCK "StringFileInfo"
+        {
+            BLOCK "040904E4"
+            {
+                // International StringTable
+                VALUE "CompanyName",      PPS(RES_APP_VENDOR) "\0"
+                VALUE "ProductName",      "LibreOffice\0"
+                VALUE "ProductVersion",   PPS(VER_LEVEL) "\0"
+                VALUE "FileVersion",      PPS(VER_LEVEL) "\0"
+                VALUE "OriginalFilename", PPS(ORG_NAME) "\0"
+                VALUE "InternalName",     PPS(INTERNAL_NAME) "\0"
+                VALUE "LegalCopyright",   S_CRIGHT " LibreOffice contributors and/or their affiliates. All rights reserved.\0"
+                ADDITIONAL_VERINFO1
+                ADDITIONAL_VERINFO2
+                ADDITIONAL_VERINFO3
+            }
+        }
+
+        BLOCK "VarFileInfo"
+        {
+            VALUE "Translation", 0x0409, 1252
+        }
+    }
