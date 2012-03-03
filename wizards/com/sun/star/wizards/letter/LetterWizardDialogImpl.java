@@ -27,6 +27,8 @@
  ************************************************************************/
 package com.sun.star.wizards.letter;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Vector;
 import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.WrappedTargetException;
@@ -64,6 +66,20 @@ import com.sun.star.wizards.common.Helper;
 
 public class LetterWizardDialogImpl extends LetterWizardDialog
 {
+
+    private class Strings
+    {
+	public String Norm;
+	public String NormPath;
+	public String LanguageLabel;
+
+	public Strings(String norm, String normPath, String languageLabel)
+	{
+	    Norm = norm;
+	    NormPath = normPath;
+	    LanguageLabel = languageLabel;
+	}
+    }
 
     protected void enterStep(int OldStep, int NewStep)
     {
@@ -1163,9 +1179,8 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
             e.printStackTrace();
         }
 
-        Vector NormsVector = new Vector();
-        Vector NormsPathVector = new Vector();
-        Vector LanguageLabelsVector = new Vector();
+	Vector StringsVector = new Vector();
+
         String[] LanguageLabels;
 
         boolean found = false;
@@ -1202,21 +1217,25 @@ public class LetterWizardDialogImpl extends LetterWizardDialog
 
             if (found)
             {
-                NormsVector.add(cIsoCode);
-                NormsPathVector.add(nameList[i]);
-                LanguageLabelsVector.add(lc.getLanguageString(MSID));
+		StringsVector.add(new Strings(cIsoCode, (String)nameList[i], lc.getLanguageString(MSID)));
             }
         }
 
+	Collections.sort(StringsVector, new Comparator() {
+		public int compare(Object a, Object b) {
+			return ((Strings)a).LanguageLabel.compareTo(((Strings)b).LanguageLabel);
+		}
+	});
 
-        Norms = new String[NormsVector.size()];
-        NormsVector.toArray(Norms);
+        Norms = new String[StringsVector.size()];
+        NormPaths = new String[StringsVector.size()];
+        LanguageLabels = new String[StringsVector.size()];
 
-        NormPaths = new String[NormsPathVector.size()];
-        NormsPathVector.toArray(NormPaths);
-
-        LanguageLabels = new String[LanguageLabelsVector.size()];
-        LanguageLabelsVector.toArray(LanguageLabels);
+	for(int i = 0; i<StringsVector.size(); i++) {
+		Norms[i] = ((Strings)StringsVector.elementAt(i)).Norm;
+		NormPaths[i] = ((Strings)StringsVector.elementAt(i)).NormPath;
+		LanguageLabels[i] = ((Strings)StringsVector.elementAt(i)).LanguageLabel;
+	}
 
         setControlProperty("lstLetterNorm", PropertyNames.STRING_ITEM_LIST, LanguageLabels);
     }
