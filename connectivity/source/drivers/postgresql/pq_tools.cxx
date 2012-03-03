@@ -518,6 +518,7 @@ static bool isOperator( char c )
     case '?':
     case '$':
         ret = true;
+        break;
     default:
         ret = false;
     }
