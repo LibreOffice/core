@@ -348,7 +348,6 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
         aPropertyMap[ PROP_Handles ] <<= aHandles;
 
 #ifdef DEBUG
-        //aPropertyMap.dump();
         OSL_TRACE("==cscode== begin");
         aPropertyMap.dumpCode();
         OSL_TRACE("==cscode== end");

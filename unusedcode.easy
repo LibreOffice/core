@@ -975,14 +975,8 @@ ooo::vba::extractBoolFromAny(com::sun::star::uno::Any const&, bool)
 ooo::vba::extractIntFromAny(com::sun::star::uno::Any const&, int)
 oox::AttributeConversion::decodeHyperHex(rtl::OUString const&)
 oox::AttributeConversion::decodeUnsignedHex(rtl::OUString const&)
-oox::BinaryInputStream::readNulCharArray()
 oox::ContainerHelper::insertByIndex(com::sun::star::uno::Reference<com::sun::star::container::XIndexContainer> const&, int, com::sun::star::uno::Any const&)
 oox::GraphicHelper::convertScreenPixelToHmm(com::sun::star::awt::Point const&) const
-oox::ObjectContainer::getObject(rtl::OUString const&) const
-oox::PropertyMap::dump()
-oox::PropertySet::getProperties(com::sun::star::uno::Sequence<com::sun::star::uno::Any>&, com::sun::star::uno::Sequence<rtl::OUString> const&) const
-oox::core::PowerPointExport::WriteAnimationNodeCommonPropsEnd(boost::shared_ptr<sax_fastparser::FastSerializerHelper>)
-oox::core::PowerPointExport::WriteTextStyles(boost::shared_ptr<sax_fastparser::FastSerializerHelper>)
 oox::core::XmlFilterBase::getChartConverter()
 oox::drawingml::ChartExport::exportDataSeq(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&, int)
 oox::drawingml::ChartExport::exportXAxis(oox::drawingml::AxisIdPair)

@@ -164,10 +164,6 @@ public:
     template< typename Type >
     void                skipArray( sal_Int32 nElemCount );
 
-    /** Reads a NUL-terminated byte character array and returns the string.
-     */
-    ::rtl::OString      readNulCharArray();
-
     /** Reads a NUL-terminated Unicode character array and returns the string.
      */
     ::rtl::OUString     readNulUnicodeArray();

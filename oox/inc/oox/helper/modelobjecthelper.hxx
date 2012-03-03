@@ -56,9 +56,6 @@ public:
     /** Returns true, if the object with the passed name exists in the container. */
     bool                hasObject( const ::rtl::OUString& rObjName ) const;
 
-    /** Returns the object with the passed name from the container. */
-    ::com::sun::star::uno::Any getObject( const ::rtl::OUString& rObjName ) const;
-
     /** Inserts the passed object into the container, returns its final name. */
     ::rtl::OUString     insertObject(
                             const ::rtl::OUString& rObjName,

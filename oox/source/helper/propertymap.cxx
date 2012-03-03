@@ -450,11 +450,6 @@ void PropertyMap::dump( Reference< XPropertySet > rXPropSet )
         }
     }
 }
-
-void PropertyMap::dump()
-{
-    dump( Reference< XPropertySet >( makePropertySet(), UNO_QUERY ) );
-}
 #endif
 
 static void printLevel (int level)

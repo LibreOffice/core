@@ -122,11 +122,9 @@ protected:
     void WriteAnimationNodeSeq( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, sal_Bool bMainSeqChild );
     void WriteAnimationNodeEffect( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Int32 nXmlNodeType, sal_Bool bMainSeqChild );
     void WriteAnimationNodeCommonPropsStart( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Reference< ::com::sun::star::animations::XAnimationNode >& rXNode, sal_Bool bSingle, sal_Bool bMainSeqChild );
-    void WriteAnimationNodeCommonPropsEnd( ::sax_fastparser::FSHelperPtr pFS );
     void WriteAnimationProperty( ::sax_fastparser::FSHelperPtr pFS, const ::com::sun::star::uno::Any& rAny );
     void WriteAnimationTarget( ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Any aTarget );
     bool WriteComments( sal_uInt32 nPageNum );
-    void WriteTextStyles( ::sax_fastparser::FSHelperPtr pFS );
     void WriteTextStyle( ::sax_fastparser::FSHelperPtr pFS, int nInstance, sal_Int32 xmlToken );
     void WriteTextStyleLevel( ::sax_fastparser::FSHelperPtr pFS, int nInstance, int nLevel );
     void ImplWriteBackground( ::sax_fastparser::FSHelperPtr pFS, ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > aXBackgroundPropSet );

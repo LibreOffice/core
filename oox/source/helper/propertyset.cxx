@@ -79,30 +79,6 @@ Any PropertySet::getAnyProperty( sal_Int32 nPropId ) const
     return implGetPropertyValue( aValue, PropertyMap::getPropertyName( nPropId ) ) ? aValue : Any();
 }
 
-void PropertySet::getProperties( Sequence< Any >& orValues, const Sequence< OUString >& rPropNames ) const
-{
-    if( mxMultiPropSet.is() ) try
-    {
-        orValues = mxMultiPropSet->getPropertyValues( rPropNames );
-        return;
-    }
-    catch( Exception& )
-    {
-        OSL_FAIL( "PropertySet::getProperties - cannot get all property values - fallback to single mode" );
-    }
-
-    if( mxPropSet.is() )
-    {
-        sal_Int32 nLen = rPropNames.getLength();
-        const OUString* pPropName = rPropNames.getConstArray();
-        const OUString* pPropNameEnd = pPropName + nLen;
-        orValues.realloc( nLen );
-        Any* pValue = orValues.getArray();
-        for( ; pPropName != pPropNameEnd; ++pPropName, ++pValue )
-            implGetPropertyValue( *pValue, *pPropName );
-    }
-}
-
 // Set properties -------------------------------------------------------------
 
 bool PropertySet::setAnyProperty( sal_Int32 nPropId, const Any& rValue )

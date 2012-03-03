@@ -1145,11 +1145,6 @@ void PowerPointExport::WriteAnimationNodeCommonPropsStart( FSHelperPtr pFS, cons
     pFS->endElementNS( XML_p, XML_cTn );
 }
 
-void PowerPointExport::WriteAnimationNodeCommonPropsEnd( FSHelperPtr pFS )
-{
-    pFS->endElementNS( XML_p, XML_cTn );
-}
-
 void PowerPointExport::WriteAnimationNodeSeq( FSHelperPtr pFS, const Reference< XAnimationNode >& rXNode, sal_Int32, sal_Bool bMainSeqChild )
 {
     DBG(printf ("write animation node SEQ\n"));
@@ -1564,17 +1559,6 @@ void PowerPointExport::WriteTextStyle( FSHelperPtr pFS, int nInstance, sal_Int32
     WriteTextStyleLevel( pFS, nInstance, nLevel );
 
     pFS->endElementNS( XML_p, xmlToken );
-}
-
-void PowerPointExport::WriteTextStyles( FSHelperPtr pFS )
-{
-    pFS->startElementNS( XML_p, XML_txBody, FSEND );
-
-    WriteTextStyle( pFS, EPP_TEXTTYPE_Title, XML_titleStyle );
-    WriteTextStyle( pFS, EPP_TEXTTYPE_Body, XML_bodyStyle );
-    WriteTextStyle( pFS, EPP_TEXTTYPE_Other, XML_otherStyle );
-
-    pFS->endElementNS( XML_p, XML_txBody );
 }
 
 void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > aXBackgroundPropSet )
