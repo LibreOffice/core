@@ -114,7 +114,7 @@ sal_Bool LWPFilterReader::filter( const Sequence< PropertyValue >& aDescriptor )
     for( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
         //Note we should attempt to use "InputStream" if it exists first!
-        if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
+        if( aDescriptor[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
             aDescriptor[i].Value >>= sURL;
     }
 
@@ -218,11 +218,11 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
     sal_Int32 nPropertyCount = aDescriptor.getLength();
      for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
-        if( aDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("TypeName")) )
+        if( aDescriptor[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("TypeName")) )
         {
             aDescriptor[nProperty].Value >>= aTypeName;
         }
-        else if( aDescriptor[nProperty].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate")) )
+        else if( aDescriptor[nProperty].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("AsTemplate")) )
         {
             bOpenAsTemplate = sal_True;
         }
@@ -232,17 +232,17 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
     {
         OUString strTemp;
         aDescriptor[i].Value >>= strTemp;
-        if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream")) )
+        if( aDescriptor[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("InputStream")) )
         {
             uno::Reference< XInputStream> rInputStream;
             aDescriptor[i].Value >>= rInputStream;
             //
-            // TRANSFORM IMPLEMENTATION HERE!!!!!!
+            // TODO TRANSFORM IMPLEMENTATION HERE!!!!!!
             // and call m_DocumentHandler's SAX mDochods
             //
             if( IsWordproFile(rInputStream) )
             {
-                if( aTypeName == OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro_template")) )
+                if( aTypeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wordpro_template")) )
                 {
                     if(!bOpenAsTemplate)
                     {
@@ -259,7 +259,7 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
             }
             return ret;
         }
-        else if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
+        else if( aDescriptor[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
         {
                     OUString        sURL;
             OUString        sFileName;
@@ -277,7 +277,7 @@ Sequence< OUString> LWPFilterImportFilter::getSupportedServiceNames( void ) thro
             //end with .lwp:
             if( IsWordproFile(sURL) )
             {
-                if( aTypeName == OUString(RTL_CONSTASCII_USTRINGPARAM("wordpro_template")) )
+                if( aTypeName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("wordpro_template")) )
                 {
                     if(!bOpenAsTemplate)
                     {

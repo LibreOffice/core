@@ -84,7 +84,7 @@ sal_Bool RtfImportFilter::filter( const uno::Sequence< beans::PropertyValue >& a
     OUString sTemp;
     for ( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
-        if( aDescriptor[i].Name == OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) )
+        if( aDescriptor[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
         {
             aDescriptor[i].Value >>= sTemp;
             aURL = sTemp;
