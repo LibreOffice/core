@@ -128,6 +128,8 @@ public:
     ScDPTableData(ScDocument* pDoc);
     virtual     ~ScDPTableData();
 
+    rtl::OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
+
     long        GetDatePart( long nDateVal, long nHierarchy, long nLevel );
 
                 //! use (new) typed collection instead of ScStrCollection

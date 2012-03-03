@@ -1423,8 +1423,8 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
     sheet::MemberResult* pArray = pSequences->getArray();
     OSL_ENSURE( rPos+nSize <= pSequences->getLength(), "bumm" );
 
-    sal_Bool bIsNumeric = false;
-    String aName;
+    bool bIsNumeric = false;
+    rtl::OUString aName;
     if ( pMemberName )          // if pMemberName != NULL, use instead of real member name
     {
         aName = *pMemberName;
@@ -1433,7 +1433,14 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
     {
         ScDPItemData aItemData;
         FillItemData( aItemData );
-        aName = aItemData.GetString();
+        if (aParentDimData.mpParentDim)
+        {
+            long nDim = aParentDimData.mpParentDim->GetDimension();
+            aName = pResultData->GetSource()->GetData()->GetFormattedString(nDim, aItemData);
+        }
+        else
+            aName = aItemData.GetString();
+
         bIsNumeric = aItemData.IsValue();
     }
 

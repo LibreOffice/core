@@ -980,6 +980,23 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rData) const
     return -1;
 }
 
+rtl::OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) const
+{
+    if (!rItem.IsValue())
+        return rItem.GetString();
+
+    sal_uLong nNumFormat = GetNumberFormat(nDim);
+    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+    if (pFormatter)
+    {
+        Color* pColor = NULL;
+        String aStr;
+        pFormatter->GetOutputString(rItem.GetValue(), nNumFormat, aStr, &pColor);
+        return aStr;
+    }
+    return rtl::OUString::createFromAscii("fail again");
+}
+
 void ScDPCache::AppendGroupField()
 {
     maGroupFields.push_back(new GroupField);

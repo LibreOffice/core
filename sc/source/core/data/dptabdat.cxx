@@ -31,6 +31,14 @@
 
 // INCLUDE ---------------------------------------------------------------
 
+#include "dptabdat.hxx"
+
+#include "global.hxx"
+#include "dpcachetable.hxx"
+#include "dptabres.hxx"
+#include "document.hxx"
+#include "dpobject.hxx"
+
 #include <stdio.h>
 #include <rtl/math.hxx>
 #include <tools/date.hxx>
@@ -39,59 +47,10 @@
 
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 
-#include "dptabdat.hxx"
-#include "global.hxx"
-#include "dpcachetable.hxx"
-#include "dptabres.hxx"
-#include "document.hxx"
-#include "dpobject.hxx"
-
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::uno::Any;
 using ::std::vector;
-
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class stack_printer
-{
-public:
-    explicit stack_printer(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~stack_printer()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-    void printTime(int line) const
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
 
 // ---------------------------------------------------------------------------
 
@@ -112,6 +71,12 @@ ScDPTableData::ScDPTableData(ScDocument* pDoc) :
 
 ScDPTableData::~ScDPTableData()
 {
+}
+
+rtl::OUString ScDPTableData::GetFormattedString(long nDim, const ScDPItemData& rItem) const
+{
+    const ScDPCache* pCache = GetCacheTable().getCache();
+    return pCache->GetFormattedString(nDim, rItem);
 }
 
 long ScDPTableData::GetDatePart( long nDateVal, long nHierarchy, long nLevel )
@@ -227,7 +192,6 @@ void ScDPTableData::FillRowDataFromCacheTable(sal_Int32 nRow, const ScDPCacheTab
 
 void ScDPTableData::ProcessRowData(CalcInfo& rInfo, CalcRowData& rData, bool bAutoShow)
 {
-    stack_printer __stack_printer__("ScDPTableData::ProcessRowData");
     if (!bAutoShow)
     {
             LateInitParams  aColParams(rInfo.aColDims, rInfo.aColLevels, false);

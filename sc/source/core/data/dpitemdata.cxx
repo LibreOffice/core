@@ -213,8 +213,15 @@ bool ScDPItemData::IsValue() const
 
 rtl::OUString ScDPItemData::GetString() const
 {
-    if (meType == String)
-        return *mpString;
+    switch (meType)
+    {
+        case String:
+            return *mpString;
+        case Value:
+            return rtl::OUString::valueOf(mfValue);
+        default:
+            ;
+    }
 
     // TODO: Generate appropriate string.
     return rtl::OUString::createFromAscii("fail");
