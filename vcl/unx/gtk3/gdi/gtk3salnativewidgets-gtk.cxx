@@ -1002,8 +1002,10 @@ void GtkSalGraphics::renderAreaToPix( cairo_t *cr,
 
     unsigned char *src = data.get();
     src += (int)ay * nStride + (int)ax * 3;
+    awidth = MIN (region->width, size.getX() - ax);
+    aheight = MIN (region->height, size.getY() - ay);
 
-    for (int y = 0; y < size.getY(); ++y)
+    for (int y = 0; y < aheight; ++y)
     {
         for (int x = 0; x < awidth && y < aheight; ++x)
         {
