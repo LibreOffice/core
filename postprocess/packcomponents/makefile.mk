@@ -32,7 +32,6 @@ TARGET = packcomponents
 .INCLUDE: settings.mk
 
 my_components = \
-    calc \
     component/animations/source/animcore/animcore \
     component/avmedia/util/avmedia \
     component/chart2/source/controller/chartcontroller \
@@ -46,11 +45,6 @@ my_components = \
     component/configmgr/source/configmgr \
     component/cppcanvas/source/uno/mtfrenderer \
     component/cui/util/cui \
-    component/dbaccess/source/ext/macromigration/dbmm \
-    component/dbaccess/source/filter/xml/dbaxml \
-    component/dbaccess/util/dba \
-    component/dbaccess/util/dbu \
-    component/dbaccess/util/sdbt \
     component/dtrans/util/mcnttype \
     component/embeddedobj/util/embobj \
     component/eventattacher/source/evtatt \
@@ -67,7 +61,6 @@ my_components = \
     component/filter/source/xmlfilterdetect/xmlfd \
     component/filter/source/xsltdialog/xsltdlg \
     component/filter/source/xsltfilter/xsltfilter \
-    component/forms/util/frm \
     component/formula/util/for \
     component/framework/util/fwk \
     component/framework/util/fwl \
@@ -84,9 +77,6 @@ my_components = \
     component/oox/util/oox \
     component/package/source/xstor/xstor \
     component/package/util/package2 \
-    component/reportdesign/util/rpt \
-    component/reportdesign/util/rptui \
-    component/reportdesign/util/rptxml \
     component/sax/source/expatwrap/expwrap \
     component/sax/source/fastparser/fastsax \
     component/sc/util/sc \
@@ -131,17 +121,25 @@ my_components = \
     component/unoxml/source/rdf/unordf \
     component/unoxml/source/service/unoxml \
     component/uui/util/uui \
-    component/writerfilter/util/writerfilter \
-    component/writerperfect/util/msworksfilter \
-    component/writerperfect/util/visiofilter \
-    component/writerperfect/util/wpft \
-    component/writerperfect/util/wpgfilter \
-    component/writerperfect/util/cdrfilter \
     component/xmloff/source/transform/xof \
     component/xmloff/util/xo \
     component/xmlscript/util/xcr \
     component/xmlsecurity/util/xmlsecurity \
     component/xmlsecurity/util/xsec_fw \
+
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
+
+my_components += \
+    calc \
+    component/dbaccess/source/ext/macromigration/dbmm \
+    component/dbaccess/source/filter/xml/dbaxml \
+    component/dbaccess/util/dba \
+    component/dbaccess/util/dbu \
+    component/dbaccess/util/sdbt \
+    component/forms/util/frm \
+    component/reportdesign/util/rpt \
+    component/reportdesign/util/rptui \
+    component/reportdesign/util/rptxml \
     dbase \
     dbpool2 \
     dbtools \
@@ -151,7 +149,10 @@ my_components = \
     odbc \
     sdbc2 \
 
+.ENDIF
+
 .IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DESKTOP//)"
+
 my_components += \
     component/desktop/source/deployment/deployment \
     component/desktop/source/deployment/gui/deploymentgui \
@@ -191,16 +192,34 @@ my_components += \
     component/scripting/source/vbaevents/vbaevents \
     component/scripting/util/scriptframe \
     component/sw/util/vbaswobj \
-    component/vbahelper/util/msforms
+    component/vbahelper/util/msforms \
 
 .ENDIF
 
 .IF "$(DISABLE_PYTHON)" != "TRUE"
-my_components += pythonloader
+
+my_components += \
+    pythonloader \
+
+.ENDIF
+
+.IF "$(OS)" != "IOS"
+
+my_components += \
+    component/writerfilter/util/writerfilter \
+    component/writerperfect/util/msworksfilter \
+    component/writerperfect/util/visiofilter \
+    component/writerperfect/util/wpft \
+    component/writerperfect/util/wpgfilter \
+    component/writerperfect/util/cdrfilter \
+
 .ENDIF
 
 .IF "$(OS)" != "WNT" && "$(OS)" != "MACOSX" && "$(OS)" != "IOS" && "$(OS)" != "ANDROID" && "$(GUIBASE)" != "headless"
-my_components += component/desktop/unx/splash/splash
+
+my_components += \
+    component/desktop/unx/splash/splash \
+
 .ENDIF
 
 .IF "$(DISABLE_ATL)" == ""
@@ -348,12 +367,14 @@ my_components += \
     component/canvas/source/directx/gdipluscanvas
 .END
 
+.IF "$(OS)" != "IOS" && "$(OS)" != "ANDROID"
 .IF "$(OS)" != "MACOSX" && "$(SYSTEM_MOZILLA)" != "YES" && \
     "$(WITH_MOZILLA)" != "NO"
 my_components += mozab
 .ELSE
 my_components += mozbootstrap
 .END
+.ENDIF
 
 .IF "$(OS)" != "MACOSX" && "$(OS)" != "WNT" && "$(ENABLE_KDE4)" != ""
 my_components += component/fpicker/source/unx/kde4/fps_kde4

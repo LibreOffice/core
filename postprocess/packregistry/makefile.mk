@@ -68,12 +68,16 @@ MY_FILES_calc = \
     $(MY_XCS)/Office/UI/CalcWindowState.xcs \
     $(MY_XCU)/Office/UI/CalcCommands.xcu \
     $(MY_XCU)/Office/UI/CalcWindowState.xcu \
-    $(MY_MOD)/DataAccess/calc.xcu \
     $(MY_MOD)/fcfg_calc_filters.xcu \
     $(MY_MOD)/fcfg_calc_types.xcu \
     $(MY_MOD)/org/openoffice/Office/Common-calc.xcu \
     $(MY_MOD)/org/openoffice/Office/Embedding-calc.xcu \
     $(MY_MOD)/org/openoffice/Setup-calc.xcu
+
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
+MY_FILES_calc += \
+    $(MY_MOD)/DataAccess/calc.xcu
+.ENDIF
 
 MY_DEPS_cjk = main
 MY_FILES_cjk = \
@@ -261,10 +265,6 @@ MY_FILES_main = \
     $(MY_XCU)/UserProfile.xcu \
     $(MY_XCU)/VCL.xcu \
     $(MY_XCU)/ucb/Configuration.xcu \
-    $(MY_MOD)/DataAccess/dbase.xcu \
-    $(MY_MOD)/DataAccess/flat.xcu \
-    $(MY_MOD)/DataAccess/mysql.xcu \
-    $(MY_MOD)/DataAccess/odbc.xcu \
     $(MY_MOD)/fcfg_base_filters.xcu \
     $(MY_MOD)/fcfg_base_others.xcu \
     $(MY_MOD)/fcfg_base_types.xcu \
@@ -280,6 +280,13 @@ MY_FILES_main = \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-impress.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-math.xcu \
     $(MY_MOD)/org/openoffice/TypeDetection/UISort-writer.xcu
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
+MY_FILES_main += \
+    $(MY_MOD)/DataAccess/dbase.xcu \
+    $(MY_MOD)/DataAccess/flat.xcu \
+    $(MY_MOD)/DataAccess/mysql.xcu \
+    $(MY_MOD)/DataAccess/odbc.xcu
+.ENDIF
 .IF "$(GUIBASE)" == "aqua"
 MY_FILES_main += \
     $(MY_MOD)/DataAccess/macab.xcu \
@@ -521,22 +528,33 @@ $(MISC)/lang/fcfg_langpack_%.xcd .ERRREMOVE :
     $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
         $(SOLARENV)/bin/packregistry.xslt $(MISC)/$(@:b).list
 
-$(MISC)/lang/registry_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/$$(@:b).zip \
-        $(SOLARPCKDIR)/fcfg_drivers_$$(@:b:s/registry_//).zip
+$(MISC)/lang/registry_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/$$(@:b).zip
+
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
+$(MISC)/lang/registry_{$(alllangiso)}.xcd : $(SOLARPCKDIR)/fcfg_drivers_$$(@:b:s/registry_//).zip
+.ENDIF
 
 $(MISC)/lang/registry_%.xcd .ERRREMOVE :
     $(MKDIRHIER) $(@:d)
     rm -rf $(MISC)/$(@:b).unzip
     mkdir $(MISC)/$(@:b).unzip
     cd $(MISC)/$(@:b).unzip && unzip $(SOLARPCKDIR)/$(@:b).zip
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
     rm -rf $(MISC)/fcfg_drivers_$*.unzip
     mkdir $(MISC)/fcfg_drivers_$*.unzip
     cd $(MISC)/fcfg_drivers_$*.unzip && \
         unzip $(SOLARPCKDIR)/fcfg_drivers_$*.zip
+.ENDIF
     - $(RM) $(MISC)/$(@:b).list
     # filter out filenames starting with "."
+.IF "$(BUILD_TYPE)" != "$(BUILD_TYPE:s/DBCONNECTIVITY//)"
     echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
         find $(@:b).unzip fcfg_drivers_$*.unzip -name \[!.\]\*.xcu -print) \
         '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
+.ELSE
+    echo '<list>' $(foreach,i,$(shell cd $(MISC) && \
+        find $(@:b).unzip -name \[!.\]\*.xcu -print) \
+        '<filename>$i</filename>') '</list>' > $(MISC)/$(@:b).list
+.ENDIF
     $(XSLTPROC) --nonet --stringparam prefix $(PWD)/$(MISC)/ -o $@ \
         $(SOLARENV)/bin/packregistry.xslt $(MISC)/$(@:b).list
