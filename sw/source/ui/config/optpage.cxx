@@ -1287,15 +1287,27 @@ void SwTableOptionsTabPage::Reset( const SfxItemSet& rSet)
     // hide certain controls for html
     if(bHTMLMode)
     {
-
+        aRepeatHeaderCB.Hide();
         aDontSplitCB.Hide();
+
+        long nMoveUpBy =
+        aRepeatHeaderCB.LogicToPixel( Size( 13, 13 ), MAP_APPFONT ).Height();
+
+        Point aPos = aRepeatHeaderCB.GetPosPixel();
+        aRepeatHeaderCB.SetPosPixel( Point( aPos.X(), aPos.Y() - nMoveUpBy ) );
+
+        nMoveUpBy +=
+        aDontSplitCB.LogicToPixel( Size( 13, 13 ), MAP_APPFONT ).Height();
+
+        aPos = aBorderCB.GetPosPixel();
+        aBorderCB.SetPosPixel( Point( aPos.X(), aPos.Y() - nMoveUpBy ) );
     }
 
     SwInsertTableOptions aInsOpts = pModOpt->GetInsTblFlags(bHTMLMode);
     sal_uInt16 nInsTblFlags = aInsOpts.mnInsMode;
 
     aHeaderCB.Check(0 != (nInsTblFlags & tabopts::HEADLINE));
-    aRepeatHeaderCB.Check(aInsOpts.mnRowsToRepeat > 0);
+    aRepeatHeaderCB.Check((!bHTMLMode) && (aInsOpts.mnRowsToRepeat > 0));
     aDontSplitCB.Check(!(nInsTblFlags & tabopts::SPLIT_LAYOUT));
     aBorderCB.Check(0 != (nInsTblFlags & tabopts::DEFAULT_BORDER));
 
