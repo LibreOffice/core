@@ -35,16 +35,16 @@
 	.file	"helper.S"
 	.text
 	.align	4
-	.globl privateSnippetExecutor
+	.globl _privateSnippetExecutor
 
-privateSnippetExecutor:
+_privateSnippetExecutor:
 	stmfd sp!, {r0-r3}         @ follow other parameters on stack
 	mov   r0, ip               @ r0 points to functionoffset/vtable
 	mov   r1, sp               @ r1 points to this and params
 	                           @ (see cpp2uno.cxx:codeSnippet())
 	stmfd sp!, {r4,lr}         @ save return address 
 	                           @ (r4 pushed to preserve stack alignment)
-	bl    cpp_vtable_call
+	bl    _cpp_vtable_call
 
 	add   sp, sp, #4           @ no need to restore r4 (we didn't touch it)
 	ldr   pc, [sp], #20        @ return, discarding function arguments
