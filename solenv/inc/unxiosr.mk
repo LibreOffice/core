@@ -40,11 +40,6 @@ LINKOUTPUT_FILTER=
 
 CFLAGS=-fmessage-length=0 -c $(EXTRA_CFLAGS)
 
-# enable visibility define in "sal/types.h"
-.IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
-CDEFS += -DHAVE_GCC_VISIBILITY_FEATURE
-.ENDIF # "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
-
 # ---------------------------------
 #  Compilation flags
 # ---------------------------------
