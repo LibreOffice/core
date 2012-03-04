@@ -1077,6 +1077,16 @@ void ScTable::CopyUpdated( const ScTable* pPosTab, ScTable* pDestTab ) const
 {
     for (SCCOL i=0; i<=MAXCOL; i++)
         aCol[i].CopyUpdated( pPosTab->aCol[i], pDestTab->aCol[i] );
+
+    // insert notes with captions
+    for(ScNotes::iterator itr = pDestTab->maNotes.begin(); itr != pDestTab->maNotes.end(); ++itr)
+    {
+        SCCOL nCol = itr->first.first;
+        SCROW nRow = itr->first.second;
+        ScPostIt* pPostIt = itr->second;
+
+        pDestTab->maNotes.insert(nCol, nRow, pPostIt->Clone( ScAddress(nCol, nRow, nTab),*pDestTab->pDocument, ScAddress(nCol, nRow, pDestTab->nTab), true ));
+    }
 }
 
 void ScTable::InvalidateTableArea()
