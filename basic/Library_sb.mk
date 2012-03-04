@@ -64,8 +64,6 @@ $(eval $(call gb_Library_add_linked_libs,sb,\
 	$(gb_STDLIBS) \
 ))
 
-ifneq ($(DISABLE_SCRIPTING),TRUE)
-
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/basmgr/basicmanagerrepository \
 	basic/source/basmgr/basmgr \
@@ -139,21 +137,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/sbx/sbxvalue \
 	basic/source/sbx/sbxvar \
 ))
-
-else
-
-$(eval $(call gb_Library_add_exception_objects,sb,\
-	basic/source/basmgr/basmgr-dummy \
-	basic/source/classes/sbxmod-dummy \
-))
-
-#	basic/source/classes/sbunoobj-dummy \
-#	basic/source/runtime/basrdll-dummy \
-#	basic/source/sbx/sbxobj-dummy \
-#	basic/source/sbx/sbxvalue-dummy \
-#	basic/source/sbx/sbxvar-dummy \
-
-endif
 
 # Uncomment the following line if DBG_TRACE_PROFILING is active in source/inc/sbtrace.hxx
 # $(eval $(call gb_Library_add_linked_libs,sb,\
