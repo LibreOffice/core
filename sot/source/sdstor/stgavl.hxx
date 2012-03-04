@@ -70,7 +70,6 @@ class StgAvlIterator {
 public:
     StgAvlIterator( StgAvlNode* );
     StgAvlNode* First();
-    StgAvlNode* Last();
     StgAvlNode* Next();
     StgAvlNode* Prev();
 };

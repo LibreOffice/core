@@ -295,10 +295,6 @@ public:
 
     void    SourceChanged( const ScAddress& rAddr );
 
-    /** Temporarily during save, returns RefManager's decision whether ALL
-     *  references are marked now. */
-    bool    MarkUsedExternalReferences() const;
-
     sal_Bool    operator==( const ScConditionalFormatList& r ) const;       // for Ref-Undo
 };
 

@@ -176,7 +176,6 @@ public:
     virtual sal_Bool    Revert();
     virtual sal_Bool    Validate( sal_Bool=sal_False ) const;
     virtual sal_Bool    ValidateMode( StreamMode ) const;
-    sal_Bool            ValidateMode( StreamMode, StgDirEntry* p ) const;
     const SvStream* GetSvStream() const;
     virtual sal_Bool    Equals( const BaseStorageStream& rStream ) const;
 };

@@ -226,8 +226,6 @@ public:
     void SetMemberPosition( const ::rtl::OUString& rName, sal_Int32 nNewPos );
 
     void WriteToSource( const com::sun::star::uno::Reference<com::sun::star::uno::XInterface>& xDim );
-    void Refresh( const com::sun::star::uno::Reference<com::sun::star::sheet::XDimensionsSupplier>& xSource ,
-                      const std::list<rtl::OUString> & deletedDims);
 
     void UpdateMemberVisibility(const ::boost::unordered_map< ::rtl::OUString, bool, ::rtl::OUStringHash>& rData);
 

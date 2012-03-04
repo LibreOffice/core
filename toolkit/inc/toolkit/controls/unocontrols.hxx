@@ -916,8 +916,6 @@ protected:
     virtual void        ImplSetPeerProperty( const ::rtl::OUString& rPropName, const ::com::sun::star::uno::Any& rVal );
     virtual void        updateFromModel();
 
-    ActionListenerMultiplexer&  getActionListeners();
-    ItemListenerMultiplexer&    getItemListeners();
 private:
     ActionListenerMultiplexer   maActionListeners;
     ItemListenerMultiplexer     maItemListeners;

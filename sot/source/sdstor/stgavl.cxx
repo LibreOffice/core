@@ -401,12 +401,6 @@ StgAvlNode* StgAvlIterator::First()
     return Next();
 }
 
-StgAvlNode* StgAvlIterator::Last()
-{
-    nCur = nCount;
-    return Prev();
-}
-
 StgAvlNode* StgAvlIterator::Next()
 {
     return Find( ++nCur );

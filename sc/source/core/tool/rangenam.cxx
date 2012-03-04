@@ -596,34 +596,6 @@ sal_uInt32 ScRangeData::GetUnoType() const
     return nUnoType;
 }
 
-// bei TransferTab von einem in ein anderes Dokument anpassen,
-// um Referenzen auf die eigene Tabelle mitzubekommen
-
-void ScRangeData::TransferTabRef( SCTAB nOldTab, SCTAB nNewTab )
-{
-    long nTabDiff = (long)nNewTab - nOldTab;
-    long nPosDiff = (long)nNewTab - aPos.Tab();
-    aPos.SetTab( nNewTab );
-    ScToken* t;
-    pCode->Reset();
-    while ( ( t = static_cast<ScToken*>(pCode->GetNextReference()) ) != NULL )
-    {
-        ScSingleRefData& rRef1 = t->GetSingleRef();
-        if ( rRef1.IsTabRel() )
-            rRef1.nTab = sal::static_int_cast<SCsTAB>( rRef1.nTab + nPosDiff );
-        else
-            rRef1.nTab = sal::static_int_cast<SCsTAB>( rRef1.nTab + nTabDiff );
-        if ( t->GetType() == svDoubleRef )
-        {
-            ScSingleRefData& rRef2 = t->GetDoubleRef().Ref2;
-            if ( rRef2.IsTabRel() )
-                rRef2.nTab = sal::static_int_cast<SCsTAB>( rRef2.nTab + nPosDiff );
-            else
-                rRef2.nTab = sal::static_int_cast<SCsTAB>( rRef2.nTab + nTabDiff );
-        }
-    }
-}
-
 void ScRangeData::ReplaceRangeNamesInUse( const IndexMap& rMap )
 {
     bool bCompile = false;

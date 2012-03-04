@@ -238,14 +238,6 @@ bool ScDPFieldControlBase::AppendField(const rtl::OUString& rText, size_t& rnInd
     return true;
 }
 
-sal_uInt8 ScDPFieldControlBase::GetDupCount(size_t nIndex) const
-{
-    if (maFieldNames.size() <= nIndex)
-        return 0;
-
-    return maFieldNames[nIndex].mnDupCount;
-}
-
 void ScDPFieldControlBase::DelField( size_t nDelIndex )
 {
     if ( IsExistingIndex(nDelIndex) )

@@ -2718,14 +2718,7 @@ void SAL_CALL UnoListBoxControl::itemListChanged( const lang::EventObject& i_rEv
     if ( xPeerListener.is() )
         xPeerListener->itemListChanged( i_rEvent );
 }
-ActionListenerMultiplexer&  UnoListBoxControl::getActionListeners()
-{
-    return maActionListeners;
-}
-ItemListenerMultiplexer&    UnoListBoxControl::getItemListeners()
-{
-    return maItemListeners;
-}
+
 //  ----------------------------------------------------
 //  class UnoControlComboBoxModel
 //  ----------------------------------------------------
@@ -3000,14 +2993,6 @@ void SAL_CALL UnoComboBoxControl::itemListChanged( const lang::EventObject& i_rE
     OSL_ENSURE( xPeerListener.is() || !getPeer().is(), "UnoComboBoxControl::itemListChanged: invalid peer!" );
     if ( xPeerListener.is() )
         xPeerListener->itemListChanged( i_rEvent );
-}
-ActionListenerMultiplexer&  UnoComboBoxControl::getActionListeners()
-{
-    return maActionListeners;
-}
-ItemListenerMultiplexer&    UnoComboBoxControl::getItemListeners()
-{
-    return maItemListeners;
 }
 
 void UnoComboBoxControl::addItem( const ::rtl::OUString& aItem, sal_Int16 nPos ) throw(uno::RuntimeException)

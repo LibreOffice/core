@@ -138,9 +138,6 @@ public:
 
     bool AppendField(const rtl::OUString& rText, size_t& rnIndex);
 
-
-    sal_uInt8 GetDupCount(size_t nIndex) const;
-
     /** Removes a field from the specified index. */
     void            DelField( size_t nDelIndex );
 

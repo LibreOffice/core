@@ -308,14 +308,6 @@ sal_Bool StorageStream::ValidateMode( StreamMode nMode ) const
     return bRet;
 }
 
-sal_Bool StorageStream::ValidateMode( StreamMode nMode, StgDirEntry* p ) const
-{
-    sal_Bool bRet = ValidateMode_Impl( nMode, p );
-    if ( !bRet )
-        SetError( SVSTREAM_ACCESS_DENIED );
-    return bRet;
-}
-
 ///////////////////////// class SvStorageInfo //////////////////////////////
 
 SvStorageInfo::SvStorageInfo( const StgDirEntry& rE )

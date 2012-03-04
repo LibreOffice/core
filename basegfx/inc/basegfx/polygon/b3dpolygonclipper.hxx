@@ -52,9 +52,6 @@ namespace basegfx
             B3DORIENTATION_Z        // Z-Axis
         };
 
-        // version for Polygons
-        BASEGFX_DLLPUBLIC B3DPolyPolygon clipPolygonOnOrthogonalPlane(const B3DPolygon& rCandidate, B3DOrientation ePlaneOrthogonal, bool bClipPositive, double fPlaneOffset, bool bStroke);
-
     } // end of namespace tools
 } // end of namespace basegfx
 

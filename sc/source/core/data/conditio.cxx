@@ -1674,13 +1674,4 @@ void ScConditionalFormatList::SourceChanged( const ScAddress& rAddr )
         (*this)[i]->SourceChanged( rAddr );
 }
 
-bool ScConditionalFormatList::MarkUsedExternalReferences() const
-{
-    bool bAllMarked = false;
-    sal_uInt16 nCount = Count();
-    for (sal_uInt16 i=0; !bAllMarked && i<nCount; i++)
-        bAllMarked = (*this)[i]->MarkUsedExternalReferences();
-    return bAllMarked;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
