@@ -72,6 +72,8 @@ endef
 define gb_UnoApiTarget__add_idlfile
 $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
+$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) :| \
+	$(call gb_UnoApiPartTarget_get_target,$(2)/)
 gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -199,8 +201,11 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 # invoked with the .idl file corresponding to the .urd in that case.
 # Touch the .urd file, so it is newer than the .done file, causing that to
 # be rebuilt and overwriting the .urd file again.
+$(call gb_UnoApiPartTarget_get_target,%/) :
+	mkdir -p $@
+
 $(call gb_UnoApiPartTarget_get_target,%.urd) :
-	mkdir -p $(dir $@) && touch $@
+	touch $@
 
 $(call gb_UnoApiPartTarget_get_target,%.done) :
 	$(call gb_UnoApiPartTarget__command,$@,$*,$?)
@@ -208,7 +213,6 @@ $(call gb_UnoApiPartTarget_get_target,%.done) :
 
 define gb_UnoApiPartTarget__command
 	$(call gb_Output_announce,$(2),$(true),IDL,2)
-	mkdir -p $(call gb_UnoApiPartTarget_get_target,$(dir $(2))) && \
 	RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,\
 		$(call gb_Helper_convert_native,$(INCLUDE) $(DEFS) \
 		-M $(basename $(call gb_UnoApiPartTarget_get_dep_target,$(dir $(2)))) \
