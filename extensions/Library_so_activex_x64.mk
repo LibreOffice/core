@@ -32,16 +32,15 @@ $(eval $(call gb_Library_Library,so_activex_x64))
 
 $(eval $(call gb_Library_set_x64,so_activex_x64,YES))
 
-$(SRCDIR)/extensions/source/activex/so_activex.cxx: $(WORKDIR)/CustomTarget/so_activex/so_activex.tlb
-
 $(eval $(call gb_Library_add_package_headers,so_activex_x64,\
+    extensions_so_activex_idl \
     extensions_so_activex_x64_sources \
 ))
 
 $(eval $(call gb_Library_set_include,so_activex_x64,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/extensions/source/activex \
-	-I$(WORKDIR)/CustomTarget/so_activex \
+	-I$(WORKDIR)/CustomTarget/extensions/source/activex/idl \
 	$(foreach i,$(ATL_INCLUDE), -I$(i)) \
 ))
 

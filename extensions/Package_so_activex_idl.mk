@@ -1,5 +1,4 @@
-# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
-#
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -12,12 +11,11 @@
 # for the specific language governing rights and limitations under the
 # License.
 #
-# The Initial Developer of the Original Code is
-# 	Peter Foley <pefoley2@verizon.net>
-# Portions created by the Initial Developer are Copyright (C) 2011 the
-# Initial Developer. All Rights Reserved.
-#
 # Major Contributor(s):
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+#  (initial developer)
+#
+# All Rights Reserved.
 #
 # For minor contributions see the git repository.
 #
@@ -26,26 +24,13 @@
 # the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
-#
 
-$(eval $(call gb_WinResTarget_WinResTarget,activex_res))
+$(eval $(call gb_Package_Package,extensions_so_activex_idl,$(WORKDIR)/extensions/source/activex/idl))
 
-ifneq ($(PRODUCT),)
-$(eval $(call gb_WinResTarget_set_defs,activex_res,\
-	$$(DEFS) \
-	-DPRODUCT \
+$(eval $(call gb_Package_add_customtarget,extensions_so_activex_idl,extensions/source/activex/idl))
+
+$(eval $(call gb_CustomTarget_add_dependencies,extensions/source/activex/idl,\
+    extensions/source/activex/so_activex.idl \
 ))
-endif
-
-$(eval $(call gb_WinResTarget_add_file,activex_res,extensions/source/activex/so_activex))
-
-$(eval $(call gb_WinResTarget_set_defs,activex_res,\
-	$$(DEFS) \
-	-DSO_ACTIVEX_TLB_DIR=$(call gb_Helper_convert_native,$(WORKDIR)/CustomTarget/extensions/source/activex/idl) \
-))
-
-# I suppose this dep is not really necessary, because it should always
-# be fulfilled anyway. But it cannot hurt to have it...
-$(call gb_WinResTarget_get_target,activex_res) : $(call gb_Package_get_target,extensions_so_activex_idl)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
