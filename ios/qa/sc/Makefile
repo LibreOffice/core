@@ -10,6 +10,7 @@ gb_Library__FRAMEWORKS := \
     Foundation \
     CoreFoundation \
     CoreGraphics \
+    CoreText \
     UIKit \
 
 APP=lo-qa-sc-filters-test
