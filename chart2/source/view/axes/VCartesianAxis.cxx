@@ -1333,20 +1333,15 @@ void VCartesianAxis::doStaggeringOfLabels( const AxisLabelProperties& rAxisLabel
         for( sal_Int32 nTextLevel=0; nTextLevel<nTextLevelCount; nTextLevel++ )
         {
             SAL_WNODEPRECATED_DECLARATIONS_PUSH
-            ::std::auto_ptr< TickIter > apTickIter = createLabelTickIterator( nTextLevel );
+                ::std::auto_ptr< TickIter > apTickIter = createLabelTickIterator( nTextLevel );
             SAL_WNODEPRECATED_DECLARATIONS_POP
-            if(apTickIter.get())
-            {
-                double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
-                if( nTextLevel>0 )
+                if(apTickIter.get())
                 {
-                    lcl_shiftLables( *apTickIter.get(), aCummulatedLabelsDistance );
-                    fRotationAngleDegree = 0.0;
+                    double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
+                    aCummulatedLabelsDistance += lcl_getLabelsDistance( *apTickIter.get()
+                            , pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties )
+                            , fRotationAngleDegree );
                 }
-                aCummulatedLabelsDistance += lcl_getLabelsDistance( *apTickIter.get()
-                    , pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties )
-                    , fRotationAngleDegree );
-            }
         }
     }
     else if( rAxisLabelProperties.getIsStaggered() )
@@ -1408,18 +1403,9 @@ void VCartesianAxis::createLabels()
                 AxisLabelProperties aComplexProps(m_aAxisLabelProperties);
                 if( m_aAxisProperties.m_bComplexCategories )
                 {
-                    if( nTextLevel==0 )
-                    {
-                        aComplexProps.bLineBreakAllowed = true;
-                        aComplexProps.bOverlapAllowed = !::rtl::math::approxEqual( aComplexProps.fRotationAngleDegree, 0.0 );
-                    }
-                    else
-                    {
-                        aComplexProps.bOverlapAllowed = true;
-                        aComplexProps.bRhythmIsFix = true;
-                        aComplexProps.nRhythm = 1;
-                        aComplexProps.fRotationAngleDegree = 0.0;
-                    }
+                    aComplexProps.bLineBreakAllowed = true;
+                    aComplexProps.bOverlapAllowed = !::rtl::math::approxEqual( aComplexProps.fRotationAngleDegree, 0.0 );
+
                 }
                 AxisLabelProperties& rAxisLabelProperties =  m_aAxisProperties.m_bComplexCategories ? aComplexProps : m_aAxisLabelProperties;
                 while( !createTextShapes( m_xTextTarget, *apTickIter.get(), rAxisLabelProperties, pTickFactory2D, nScreenDistanceBetweenTicks ) )
@@ -1515,8 +1501,6 @@ void VCartesianAxis::updatePositions()
                         ,static_cast<sal_Int32>(aTickScreenPos2D.getY()));
 
                     double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
-                    if( nDepth>0 )
-                        fRotationAngleDegree = 0.0;
 
                     // #i78696# use mathematically correct rotation now
                     const double fRotationAnglePi(fRotationAngleDegree * (F_PI / -180.0));
@@ -1615,8 +1599,6 @@ void VCartesianAxis::createShapes()
                 if( apTickIter.get() )
                 {
                     double fRotationAngleDegree = m_aAxisLabelProperties.fRotationAngleDegree;
-                    if( nTextLevel>0 )
-                        fRotationAngleDegree = 0.0;
                     B2DVector aLabelsDistance( lcl_getLabelsDistance( *apTickIter.get(), pTickFactory2D->getDistanceAxisTickToText( m_aAxisProperties, false ), fRotationAngleDegree ) );
                     sal_Int32 nCurrentLength = static_cast<sal_Int32>(aLabelsDistance.getLength());
                     aTickmarkPropertiesList.push_back( m_aAxisProperties.makeTickmarkPropertiesForComplexCategories( nOffset + nCurrentLength, 0, nTextLevel ) );
