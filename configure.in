@@ -9866,9 +9866,15 @@ else
         if test "$ENABLE_LIBRSVG" != NO -o -z "$ENABLE_DIRECTX"; then
             BUILD_TYPE="$BUILD_TYPE CAIRO"
         fi
-    else 
+    else
         if test "$enable_cairo_canvas" = "yes"; then
             BUILD_TYPE="$BUILD_TYPE CAIRO"
+        else
+            if test "$with_system_cairo" != "yes" ; then
+                if test "$ENABLE_LIBRSVG" != NO ; then
+                    BUILD_TYPE="$BUILD_TYPE CAIRO"
+                fi
+            fi
         fi
     fi
 fi
