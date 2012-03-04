@@ -1,6 +1,6 @@
 --- misc/build/lp_solve_5.5/lpsolve55/ccc.orig	Sat Jun 11 21:27:18 2005
 +++ misc/build/lp_solve_5.5/lpsolve55/ccc	Sun May 22 11:20:19 2011
-@@ -1,15 +1,28 @@
+@@ -1,25 +1,40 @@
  src='../lp_MDO.c ../shared/commonlib.c ../shared/mmio.c ../shared/myblas.c ../ini.c ../fortify.c ../colamd/colamd.c ../lp_rlp.c ../lp_crash.c ../bfp/bfp_LUSOL/lp_LUSOL.c ../bfp/bfp_LUSOL/LUSOL/lusol.c ../lp_Hash.c ../lp_lib.c ../lp_wlp.c ../lp_matrix.c ../lp_mipbb.c ../lp_MPS.c ../lp_params.c ../lp_presolve.c ../lp_price.c ../lp_pricePSE.c ../lp_report.c ../lp_scale.c ../lp_simplex.c ../lp_SOS.c ../lp_utils.c ../yacc_read.c'
 -c=cc
 +c=$CC
@@ -19,9 +19,11 @@
 +inline=
 +if [ "$GUI" = "WNT" -a "$COM" = "GCC" ]; then
 +     so=dll
++     a=dll.a
 +     inline=-DINLINE=static
 +else
 +     so=so
++     a=a
 +     soprefix=lib
 +     libs="-lm"
 +     pic=-fpic
@@ -35,7 +37,10 @@
  opts='-O3'
  
  $c -s -c -I.. -I../shared -I../bfp -I../bfp/bfp_LUSOL -I../bfp/bfp_LUSOL/LUSOL -I../colamd $opts $def -DYY_NEVER_INTERACTIVE -DPARSER_LP -DINVERSE_ACTIVE=INVERSE_LUSOL -DRoleIsExternalInvEngine $src
-@@ -18,8 +31,8 @@
+-ar rv liblpsolve55.a `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'`
+-ranlib liblpsolve55.a
++ar rv liblpsolve55.$a `echo $src|sed s/[.]c/.o/g|sed 's/[^ ]*\///g'`
++ranlib liblpsolve55.$a
  
  if [ "$so" != "" ]
  then
