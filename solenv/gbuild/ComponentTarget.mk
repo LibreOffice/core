@@ -52,6 +52,9 @@ $(call gb_ComponentTarget_get_target,%) : $(call gb_ComponentTarget_get_source,$
 $(call gb_ComponentTarget_get_target,%) :
 	$(eval $(call gb_Outpt_error,Unable to find component file $(call gb_ComponentTarget_get_source,,$*) in the repositories: $(gb_ComponentTarget_REPOS) or xsltproc is missing.))
 
+$(call gb_ComponentTarget_get_outdir_target,%/) :
+	mkdir -p $@
+
 $(call gb_ComponentTarget_get_outdir_target,%) :
 	$(call gb_Deliver_deliver,$<,$@)
 
@@ -59,7 +62,8 @@ define gb_ComponentTarget_ComponentTarget
 $(call gb_ComponentTarget_get_target,$(1)) : COMPONENTPREFIX := $(2)
 $(call gb_ComponentTarget_get_target,$(1)) : LIBFILENAME := $(3)
 $(call gb_ComponentTarget_get_outdir_target,$(1)) : \
-	$(call gb_ComponentTarget_get_target,$(1))
+	$(call gb_ComponentTarget_get_target,$(1)) \
+	| $(dir $(call gb_ComponentTarget_get_outdir_target,$(1)))
 $(call gb_Deliver_add_deliverable,$(call gb_ComponentTarget_get_outdir_target,$(1)),$(call gb_ComponentTarget_get_target,$(1)),$(1))
 
 endef

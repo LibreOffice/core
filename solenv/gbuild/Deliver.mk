@@ -56,11 +56,11 @@ endef
 
 ifeq ($(strip $(gb_Deliver_GNUCOPY)),)
 define gb_Deliver__deliver
-mkdir -p $(dir $(2)) && $(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) $(if $(gb_Deliver_HARDLINK),ln,cp -P -f) $(1) $(2) && touch -r $(1) $(2)
+$(if $(gb_Deliver_CLEARONDELIVER),rm -f $(2) &&) $(if $(gb_Deliver_HARDLINK),ln,cp -P -f) $(1) $(2) && touch -r $(1) $(2)
 endef
 else
 define gb_Deliver__deliver
-mkdir -p $(dir $(2)) && $(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) $(if $(gb_Deliver_HARDLINK),--link) --no-dereference --force --preserve=timestamps $(1) $(2)
+$(gb_Deliver_GNUCOPY) $(if $(gb_Deliver_CLEARONDELIVER),--remove-destination) $(if $(gb_Deliver_HARDLINK),--link) --no-dereference --force --preserve=timestamps $(1) $(2)
 endef
 endif
 

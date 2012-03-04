@@ -29,11 +29,14 @@
 
 # PackagePart class
 
+$(foreach destination,$(call gb_PackagePart_get_destinations), $(destination)/%/) :
+	mkdir -p $@
+
 $(foreach destination,$(call gb_PackagePart_get_destinations), $(destination)/%) :
 	$(call gb_Deliver_deliver,$<,$@)
 
 define gb_PackagePart_PackagePart
-$(OUTDIR)/$(1) : $(2)
+$(OUTDIR)/$(1) : $(2) | $(dir $(OUTDIR)/$(1))
 $(2) :| $(3)
 $(call gb_Deliver_add_deliverable,$(OUTDIR)/$(1),$(2),$(3))
 endef

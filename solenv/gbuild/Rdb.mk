@@ -59,13 +59,17 @@ $(call gb_Rdb_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs_native,\
 		rm -f $(call gb_Rdb_get_outdir_target,$*) $(call gb_Rdb_get_target,$*))
 
+$(call gb_Rdb_get_outdir_target,%/) :
+	mkdir -p $@
+
 $(call gb_Rdb_get_outdir_target,%) :
 	$(call gb_Deliver_deliver,$<,$@)
 
 define gb_Rdb_Rdb
 $(call gb_Rdb_get_target,$(1)) : COMPONENTS :=
 $(call gb_Rdb_get_clean_target,$(1)) : COMPONENTS :=
-$(call gb_Rdb_get_outdir_target,$(1)) : $(call gb_Rdb_get_target,$(1))
+$(call gb_Rdb_get_outdir_target,$(1)) : $(call gb_Rdb_get_target,$(1)) \
+	| $(dir $(call gb_Rdb_get_outdir_target,$(1)))
 $(call gb_Deliver_add_deliverable,$(call gb_ResTarget_get_outdir_target,$(1)),$(call gb_Rdb_get_target,$(1)),$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_Rdb_get_outdir_target,$(1)),$(call gb_Rdb_get_clean_target,$(1))))

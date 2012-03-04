@@ -76,7 +76,8 @@ $(call gb_Zip_get_clean_target,$(1)) : CLEAR_LOCATION :=
 gb_Package_Location_$(1) := $(2)
 $(eval $(call gb_Module_register_target,$(call gb_Zip_get_final_target,$(1)),$(call gb_Zip_get_clean_target,$(1))))
 $(call gb_Deliver_add_deliverable,$(call gb_Zip_get_outdir_target,$(1)),$(call gb_Zip_get_target,$(1)),$(1))
-$(call gb_Zip_get_outdir_target,$(1)) : $(call gb_Zip_get_target,$(1))
+$(call gb_Zip_get_outdir_target,$(1)) : $(call gb_Zip_get_target,$(1)) \
+	| $(dir $(call gb_Zip_get_outdir_target,$(1)))
 
 endef
 
