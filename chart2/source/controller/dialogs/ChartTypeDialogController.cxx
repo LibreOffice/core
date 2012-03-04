@@ -43,6 +43,7 @@
 #include <com/sun/star/chart2/XDataSeriesContainer.hpp>
 
 #include <svtools/controldims.hrc>
+#include <svtools/valueset.hxx>
 // header for class Image
 #include <vcl/image.hxx>
 // header for class Bitmap

@@ -58,6 +58,7 @@
 #include <vcl/bmpacc.hxx>
 #include <tools/diagnose_ex.h>
 #include <rtl/ustrbuf.hxx>
+#include <svtools/valueset.hxx>
 
 namespace rptui
 {

@@ -43,7 +43,6 @@
 #include "strings.hrc"
 #include "sdresid.hxx"
 #include "helpids.h"
-#include <svtools/valueset.hxx>
 #include "app.hrc"
 
 namespace sd { namespace toolpanel { namespace controls {

@@ -32,7 +32,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/field.hxx>
 #include <vcl/lstbox.hxx>
-#include <svtools/valueset.hxx>
 #include <svl/itemset.hxx>
 #include <svx/chrtitem.hxx>
 #include "chartview/ChartSfxItemIds.hxx"

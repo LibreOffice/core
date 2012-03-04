@@ -37,8 +37,6 @@
 
 #include <svx/fntctrl.hxx>
 
-#include <svtools/valueset.hxx>
-
 #include <vcl/fixed.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/field.hxx>

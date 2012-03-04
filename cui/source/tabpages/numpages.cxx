@@ -35,7 +35,6 @@
 #include <dialmgr.hxx>
 #include <tools/shl.hxx>
 #include <i18npool/mslangid.hxx>
-#include <svtools/valueset.hxx>
 #include <helpid.hrc>
 #include <editeng/numitem.hxx>
 #include <svl/eitem.hxx>

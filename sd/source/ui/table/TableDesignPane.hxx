@@ -37,7 +37,6 @@
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/button.hxx>
-#include <svtools/valueset.hxx>
 
 #include <boost/scoped_ptr.hpp>
 

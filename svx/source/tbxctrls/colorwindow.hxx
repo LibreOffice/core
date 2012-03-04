@@ -6,6 +6,7 @@
 #define __SVX_COLORWINDOW_HXX_
 
 #include <sfx2/tbxctrl.hxx>
+#include <svtools/valueset.hxx>
 #include <svl/lstner.hxx>
 #include <rtl/ustring.hxx>
 #include <com/sun/star/frame/XFrame.hpp>

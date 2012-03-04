@@ -36,7 +36,6 @@
 #include <com/sun/star/chart2/CurveStyle.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XChartTypeTemplate.hpp>
-#include <svtools/valueset.hxx>
 // header for class CheckBox
 #include <vcl/button.hxx>
 // header for class FixedText
@@ -44,6 +43,8 @@
 // header for class MetricField
 #include <vcl/field.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
+
+class ValueSet;
 
 //.............................................................................
 namespace chart

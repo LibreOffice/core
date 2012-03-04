@@ -30,7 +30,6 @@
 
 #include "svx/svxdllapi.h"
 
-#include <svtools/valueset.hxx>
 #include <svtools/svtreebx.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
@@ -43,6 +42,7 @@
 
 class SfxBindings;
 class SfxStatusForwarder;
+class ValueSet;
 
 //========================================================================
 

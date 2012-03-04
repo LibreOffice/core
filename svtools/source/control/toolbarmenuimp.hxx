@@ -48,8 +48,6 @@
 
 #include "framestatuslistener.hxx"
 
-#include "svtools/valueset.hxx"
-
 namespace svtools {
 
 struct ToolbarMenu_Impl;
