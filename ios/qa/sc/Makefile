@@ -27,3 +27,6 @@ all: $(APPDIR)/$(APP)
 $(APPDIR)/$(APP): $(SRCS)
 	mkdir -p $(APPDIR)
 	$(CXX) -o $@ $(CFLAGS) $(gb_OBJCXXFLAGS) $(SRCS) $(LIBS)
+
+clean:
+	rm -rf $(APPDIR)
