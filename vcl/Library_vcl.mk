@@ -517,6 +517,7 @@ $(eval $(call gb_Library_add_cxxflags,vcl,\
 $(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/ios/source/app/salnstimer \
     vcl/ios/source/app/vcluiapp \
+    vcl/ios/source/window/salframeview \
 ))
 $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/source/app/saldata \
@@ -526,8 +527,12 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/ios/source/dtrans/iOSTransferable \
     vcl/ios/source/dtrans/ios_clipboard \
     vcl/ios/source/dtrans/service_entry \
+    vcl/ios/source/gdi/salcoretextfontutils \
+    vcl/ios/source/gdi/salcoretextlayout \
     vcl/ios/source/gdi/salbmp \
     vcl/ios/source/gdi/salgdi \
+    vcl/ios/source/gdi/salnativewidgets \
+    vcl/ios/source/gdi/salgdiutils \
     vcl/ios/source/gdi/salvd \
     vcl/ios/source/window/salframe \
     vcl/ios/source/window/salmenu \

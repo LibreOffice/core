@@ -26,47 +26,37 @@
  *
  ************************************************************************/
 
-#ifndef _VCL_SALFRAMEVIEW_H
-#define _VCL_SALFRAMEVIEW_H
+#ifndef _SV_SALCORETEXTFONTUTILS_HXX
+#define _SV_SALCORETEXTFONTUTILS_HXX
 
-@interface SalFrameWindow : UIWindow
+class ImplIosFontData;
+class ImplDevFontList;
+
+#include <premac.h>
+#include <CoreText/CoreText.h>
+#include <postmac.h>
+
+#include <map>
+
+/* This class has the responsibility of assembling a list of CoreText
+   fonts available on the system and enabling access to that list.
+ */
+class SystemFontList
 {
-    IosSalFrame*       mpFrame;
-    id mDraggingDestinationHandler;
-}
--(id)initWithSalFrame: (IosSalFrame*)pFrame;
--(BOOL)canBecomeKeyWindow;
--(void)displayIfNeeded;
--(void)becomeKeyWindow;
--(void)resignKeyWindow;
--(IosSalFrame*)getSalFrame;
-@end
+public:
+    SystemFontList();
+    ~SystemFontList();
 
-@interface SalFrameView : UIView <UITextInput>
-{
-    IosSalFrame*       mpFrame;
+    void AnnounceFonts( ImplDevFontList& ) const;
+    ImplIosFontData* GetFontDataFromRef( CTFontRef ) const;
 
-    // for UITextInput
-    UIEvent*        mpLastEvent;
-    BOOL            mbNeedSpecialKeyHandle;
-    BOOL            mbInKeyInput;
-    BOOL            mbKeyHandled;
-    NSRange         mMarkedRange;
-    NSRange         mSelectedRange;
-    id              mDraggingDestinationHandler;
-    UIEvent*        mpLastSuperEvent;
+private:
+    typedef boost::unordered_map<CTFontRef,ImplIosFontData*> IosFontContainer;
+    IosFontContainer maFontContainer;
 
-    NSTimeInterval  mfLastMagnifyTime;
-    float       mfMagnifyDeltaSum;
-}
--(id)initWithSalFrame: (IosSalFrame*)pFrame;
--(IosSalFrame*)getSalFrame;
--(BOOL)acceptsFirstResponder;
--(BOOL)isOpaque;
--(void)drawRect: (CGRect)aRect;
--(void)flagsChanged: (UIEvent*)pEvent;
-@end
+    void InitGlyphFallbacks();
+};
 
-#endif
+#endif  // _SV_SALCORETEXTFONTUTILS_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
