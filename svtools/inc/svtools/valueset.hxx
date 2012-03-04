@@ -42,7 +42,6 @@ class HelpEvent;
 class KeyEvent;
 class DataChangedEvent;
 class ScrollBar;
-struct ValueSet_Impl;
 
 struct ValueSetItem;
 typedef ::std::vector< ValueSetItem* > ValueItemList;
