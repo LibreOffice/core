@@ -76,6 +76,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 ifeq ($(BUILD_X64),TRUE)
 $(eval $(call gb_Module_add_targets,extensions,\
 	Library_so_activex_x64 \
+	Package_so_activex_x64 \
 ))
 endif # BUILD_X64
 endif # DISABLE_ACTIVEX
