@@ -368,7 +368,11 @@ extern "C" void cpp_vtable_call(
 
 extern "C" { 
 extern int nFunIndexes, nVtableOffsets;
-extern unsigned char **codeSnippets; 
+#ifdef __arm
+extern int codeSnippets[];
+#else
+extern unsigned char **codeSnippets;
+#endif
 }
 
 unsigned char * codeSnippet(
@@ -389,7 +393,7 @@ unsigned char * codeSnippet(
         return NULL;
     
 #ifdef __arm
-    return codeSnippets[functionIndex*nVtableOffsets*2 + vtableOffset*2 + bHasHiddenParam];
+    return ((unsigned char *) &codeSnippets) + codeSnippets[functionIndex*nVtableOffsets*2 + vtableOffset*2 + bHasHiddenParam];
 #else
     enum { General, Void, Hyper, Float, Double, Class } exec;
     int flag = 0;

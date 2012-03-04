@@ -25,7 +25,7 @@
 #
 #*************************************************************************
 
-PRJ=..$/..$/..
+PRJ=../../..
 
 PRJNAME=bridges
 TARGET=gcc3_uno
@@ -43,20 +43,19 @@ ENABLE_EXCEPTIONS=TRUE
 CFLAGSNOOPT=-O0
 
 SLOFILES= \
-    $(SLO)$/except.obj		\
-    $(SLO)$/cpp2uno.obj		\
-    $(SLO)$/uno2cpp.obj 	\
-    $(SLO)$/codesnippets.obj    \
-    $(SLO)$/helper.obj
+    $(SLO)/except.obj	\
+    $(SLO)/cpp2uno.obj	\
+    $(SLO)/uno2cpp.obj	\
+    $(SLO)/helper.obj
 
 SHL1TARGET= $(TARGET)
 
-SHL1DEF=$(MISC)$/$(SHL1TARGET).def
+SHL1DEF=$(MISC)/$(SHL1TARGET).def
 SHL1IMPLIB=i$(TARGET)
-SHL1VERSIONMAP=..$/..$/bridge_exports.map
+SHL1VERSIONMAP=../../bridge_exports.map
 
 SHL1OBJS = $(SLOFILES)
-SHL1LIBS = $(SLB)$/cpp_uno_shared.lib
+SHL1LIBS = $(SLB)/cpp_uno_shared.lib
 SHL1RPATH = URELIB
 
 SHL1STDLIBS= \
@@ -68,10 +67,10 @@ SHL1STDLIBS= \
 
 .INCLUDE :  target.mk
 
-$(SLO)$/%.obj: %.S
-    $(CC) -c -o $(SLO)$/$(@:b).o $<
+$(SLO)/helper.obj: helper.S $(MISC)/codesnippets.S generate-snippets.pl
+    $(CC) -c -I $(MISC) -o $(SLO)/helper.o helper.S
     touch $@
 
-codesnippets.S: generate-snippets.pl
+$(MISC)/codesnippets.S: generate-snippets.pl
     $(PERL) generate-snippets.pl >$@
 
