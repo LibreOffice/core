@@ -473,11 +473,11 @@ void VCartesianAxis::createAllTickInfosFromComplexCategories( ::std::vector< ::s
         rAllTickInfos.clear();
         sal_Int32 nLevel=0;
         sal_Int32 nLevelCount = m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoryLevelCount();
+        sal_Int32 nCatIndex = 0;
         for( ; nLevel<nLevelCount; nLevel++ )
         {
             ::std::vector< TickInfo > aTickInfoVector;
             std::vector< ComplexCategory > aComplexCategories( m_aAxisProperties.m_pExplicitCategoriesProvider->getCategoriesByLevel( nLevel ) );
-            sal_Int32 nCatIndex = 0;
             std::vector< ComplexCategory >::const_iterator aIt(aComplexCategories.begin());
             std::vector< ComplexCategory >::const_iterator aEnd(aComplexCategories.end());
             for(;aIt!=aEnd;++aIt)
