@@ -2303,8 +2303,9 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
             aResult.push_back(aEntry);
         }
 
-        // regression curves
-        if ( 3 == m_nDimension )  // #i63016#
+        // don't show legend entry of regression curve & friends if this type of chart
+        // doesn't support statistics #i63016#, fdo#37197
+        if (!ChartTypeHelper::isSupportingStatisticProperties( m_xChartTypeModel, m_nDimension ))
             return aResult;
 
         Reference< XRegressionCurveContainer > xRegrCont( rSeries.getModel(), uno::UNO_QUERY );
