@@ -30,6 +30,9 @@ include $(GBUILDDIR)/gbuild_simple.mk
 # XXX: I presume that the "$(COM)"=="GCC" case in the original
 # extensions/source/activex/msidl/makefile.mk was for the
 # use-mingw-on-windows case and thus is not interesting for us.
+ifeq ($(OS_FOR_BUILD),WNT)
+override SRCDIR := $(shell cygpath -m $(SRCDIR))
+endif
 so_activex.tlb :
 	midl.exe \
 		-tlb $@ \
