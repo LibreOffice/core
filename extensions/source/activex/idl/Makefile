@@ -37,7 +37,7 @@ so_activex.tlb :
 		-iid so_activex_i.c \
 		-dlldata so_activex_dll.c \
 		-proxy so_activex_p.c \
-		-0icf \
+		-Oicf \
 		$(INCLUDE) \
 		$(SRCDIR)/extensions/source/activex/so_activex.idl
 
