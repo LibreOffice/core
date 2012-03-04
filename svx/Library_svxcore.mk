@@ -381,7 +381,7 @@ $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/xoutdev/xtablend \
 ))
 
-ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE)))
+ifneq (,$(filter DBCONNECTIVITY,$(BUILD_TYPE))$(filter IOS,$(OS)))
 $(eval $(call gb_Library_add_exception_objects,svxcore,\
     svx/source/fmcomp/dbaexchange \
     svx/source/fmcomp/fmgridcl \
