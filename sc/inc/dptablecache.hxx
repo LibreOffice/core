@@ -119,7 +119,7 @@ private:
     GroupFieldsType maGroupFields;
 
     LabelsType maLabelNames;    // Stores dimension names.
-    std::vector<bool> mbEmptyRow; // Keeps track of empty rows.
+    std::vector<bool> maEmptyRows; // Keeps track of empty rows.
 
     bool mbDisposing;
 
@@ -167,6 +167,7 @@ public:
     ~ScDPCache();
 
 private:
+    void Clear();
     void AddLabel(const rtl::OUString& rLabel);
     bool AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat);
 };

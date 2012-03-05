@@ -364,6 +364,7 @@ void initFromCell(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, ScDPItem
 
 bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 {
+    Clear();
     // Make sure the formula cells within the data range are interpreted
     // during this call, for this method may be called from the interpretation
     // of GETPIVOTDATA, which disables nested formula interpretation without
@@ -378,12 +379,10 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
     mnColumnCount = nEndCol - nStartCol + 1;
 
-    maFields.clear();
     maFields.reserve(mnColumnCount);
     for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
         maFields.push_back(new Field);
 
-    maLabelNames.clear();
     maLabelNames.reserve(mnColumnCount);
 
     for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
@@ -402,6 +401,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
 bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate)
 {
+    Clear();
     if (!xRowSet.is())
         // Don't even waste time to go any further.
         return false;
@@ -419,6 +419,7 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
             maFields.push_back(new Field);
 
         // Get column titles and types.
+        maLabelNames.clear();
         maLabelNames.reserve(mnColumnCount);
 
         std::vector<sal_Int32> aColTypes(mnColumnCount);
@@ -655,7 +656,7 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
 
 bool ScDPCache::IsRowEmpty( SCROW nRow ) const
 {
-    return mbEmptyRow[ nRow ];
+    return maEmptyRows[nRow];
 }
 
 bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
@@ -684,11 +685,11 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
 //init empty row tag
     size_t nCurRow = maFields[nDim].maData.size() - 1;
 
-    while ( mbEmptyRow.size() <= nCurRow )
-        mbEmptyRow.push_back( true );
+    while (maEmptyRows.size() <= nCurRow)
+        maEmptyRows.push_back(true);
 
     if (!pData->IsEmpty())
-        mbEmptyRow[ nCurRow ] = false;
+        maEmptyRows[nCurRow] = false;
 
     return true;
 }
@@ -722,6 +723,14 @@ public:
     }
 };
 
+}
+
+void ScDPCache::Clear()
+{
+    maFields.clear();
+    maLabelNames.clear();
+    maGroupFields.clear();
+    maEmptyRows.clear();
 }
 
 void ScDPCache::AddLabel(const rtl::OUString& rLabel)

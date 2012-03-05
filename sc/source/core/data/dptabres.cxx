@@ -1445,8 +1445,8 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
         bIsNumeric = eType == ScDPItemData::Value || ScDPItemData::GroupValue;
     }
 
-    fprintf(stdout, "ScDPResultMember::FillMemberResults:   name = '%s' numeric = %d\n",
-            rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr(), bIsNumeric);
+//  fprintf(stdout, "ScDPResultMember::FillMemberResults:   name = '%s' numeric = %d\n",
+//          rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr(), bIsNumeric);
 
     const ScDPDimension*        pParentDim = GetParentDim();
     if ( bIsNumeric && pParentDim && pResultData->IsNumOrDateGroup( pParentDim->GetDimension() ) )
@@ -2707,10 +2707,9 @@ private:
     const ScDPResultData* pResultData;
     const ScDPInitState& rInitState;
     long                 nDimSource;
-    sal_Bool                 bIncludeAll;
-    sal_Bool                 bIsBase;
+    bool                 bIncludeAll;
+    bool                 bIsBase;
     long                 nGroupBase;
-    SCROW          nBaseDataId;
 public:
             ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitState& rState, long nDimension );
             ~ScDPGroupCompare() {}
@@ -2722,13 +2721,10 @@ public:
 ScDPGroupCompare::ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitState& rState, long nDimension ) :
     pResultData( pData ),
     rInitState( rState ),
-    nDimSource( nDimension ),
-    nBaseDataId( -1 )
+    nDimSource( nDimension )
 {
     bIsBase = pResultData->IsBaseForGroup( nDimSource );
     nGroupBase = pResultData->GetGroupBase( nDimSource );      //! get together in one call?
-    if ( nGroupBase >= 0 )
-        nBaseDataId = rInitState.GetNameIdForIndex( nGroupBase );
 
     // if bIncludeAll is set, TestIncluded doesn't need to be called
     bIncludeAll = !( bIsBase || nGroupBase >= 0 );
@@ -2737,17 +2733,10 @@ ScDPGroupCompare::ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitS
 sal_Bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
 {
     stack_printer __stack_printer__("ScDPGroupCompare::TestIncluded");
-    fprintf(stdout, "ScDPGroupCompare::TestIncluded:   dim source = %d  group base = %d, base data id = %d\n",
-            nDimSource, nGroupBase, nBaseDataId);
+    fprintf(stdout, "ScDPGroupCompare::TestIncluded:   dim source = %d  group base = %d\n",
+            nDimSource, nGroupBase);
     bool bInclude = true;
-    if ( nBaseDataId >=0 )
-    {
-        fprintf(stdout, "ScDPGroupCompare::TestIncluded:   case 1 (this should not happen)\n");
-        ScDPItemData aMemberData;
-        rMember.FillItemData( aMemberData );
-        bInclude = pResultData->IsInGroup( aMemberData, nDimSource, nBaseDataId, nGroupBase );
-    }
-    else if ( bIsBase )
+    if ( bIsBase )
     {
         fprintf(stdout, "ScDPGroupCompare::TestIncluded:   case 2 (source dim)\n");
         // need to check all previous groups
@@ -3131,11 +3120,11 @@ void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>*
         }
         else if ( pMember->IsVisible() )
         {
-            fprintf(stdout, "ScDPResultDimension::FillMemberResults:   member visible\n");
+//          fprintf(stdout, "ScDPResultDimension::FillMemberResults:   member visible\n");
             pMember->FillMemberResults( pSequences, nPos, nMeasure, false, NULL, NULL );
         }
-        else
-            fprintf(stdout, "ScDPResultDimension::FillMemberResults:   member not visible\n");
+//      else
+//          fprintf(stdout, "ScDPResultDimension::FillMemberResults:   member not visible\n");
         // nPos is modified
     }
 }
@@ -4024,7 +4013,7 @@ SCROW ScDPResultMember::GetDataId( ) const
 
 ScDPResultMember* ScDPResultDimension::AddMember(const ScDPParentDimData &aData )
 {
-    fprintf(stdout, "ScDPResultDimension::AddMember:   dim name = '%s'\n", rtl::OUStringToOString(aDimensionName, RTL_TEXTENCODING_UTF8).getStr());
+//  fprintf(stdout, "ScDPResultDimension::AddMember:   dim name = '%s'\n", rtl::OUStringToOString(aDimensionName, RTL_TEXTENCODING_UTF8).getStr());
     ScDPResultMember* pMember = new ScDPResultMember( pResultData, aData, false );
     SCROW   nDataIndex = pMember->GetDataId();
     maMemberArray.push_back( pMember );
