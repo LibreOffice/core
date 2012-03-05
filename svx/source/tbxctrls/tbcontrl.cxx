@@ -2325,6 +2325,7 @@ void SvxColorExtToolBoxControl::StateChanged(
         bChoiceFromPalette = sal_False;
         switch( nSID )
         {
+            case SID_ATTR_CHAR_COLOR :
             case SID_ATTR_CHAR_COLOR2 :
             case SID_ATTR_CHAR_COLOR_BACKGROUND :
             case SID_BACKGROUND_COLOR :
@@ -2347,13 +2348,19 @@ void SvxColorExtToolBoxControl::Select( sal_Bool )
 {
     OUString aCommand;
     OUString aParamName;
+    sal_Bool bNoArgs = sal_False;
 
     switch( GetSlotId() )
     {
         case SID_ATTR_CHAR_COLOR2 :
-        case SID_ATTR_CHAR_COLOR  :
+            bNoArgs     = sal_True;
             aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharColorExt" ));
             aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharColorExt" ));
+            break;
+
+        case SID_ATTR_CHAR_COLOR  :
+            aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Color" ));
+            aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "Color" ));
             break;
 
         case SID_BACKGROUND_COLOR :
@@ -2362,6 +2369,7 @@ void SvxColorExtToolBoxControl::Select( sal_Bool )
             break;
 
         case SID_ATTR_CHAR_COLOR_BACKGROUND :
+            bNoArgs     = sal_True;
             aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharBackgroundExt" ));
             aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharBackgroundExt" ));
             break;
@@ -2369,7 +2377,10 @@ void SvxColorExtToolBoxControl::Select( sal_Bool )
 
     Sequence< PropertyValue > aArgs( 1 );
     aArgs[0].Name  = aParamName;
-    aArgs[0].Value = makeAny( (sal_uInt32)( mLastColor.GetColor() ));
+    if ( bNoArgs )
+        aArgs[0].Value = makeAny( GetToolBox().IsItemChecked( GetId() ));
+    else
+        aArgs[0].Value = makeAny( (sal_uInt32)( mLastColor.GetColor() ));
     Dispatch( aCommand, aArgs );
 }
 

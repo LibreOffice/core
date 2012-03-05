@@ -62,6 +62,7 @@ namespace svx
         mbWasHiContrastMode = ptrTbx ? ( ptrTbx->GetSettings().GetStyleSettings().GetHighContrastMode() ) : sal_False;
         switch( mnSlotId )
         {
+            case SID_ATTR_CHAR_COLOR  :
             case SID_ATTR_CHAR_COLOR2 :
                 Update( COL_BLACK );
                 break;

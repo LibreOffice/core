@@ -74,6 +74,9 @@
         Execute-Id      SID_ATTR_CHAR_COLOR2
                     and SID_ATTR_CHAR_COLOR_EXT
 
+        for cell color (calc)
+        Execute-Id      SID_ATTR_CHAR_COLOR
+
         for character background color (writer)
         Execute-Id      SID_ATTR_CHAR_COLOR_BACKGROUND
                     and SID_ATTR_CHAR_COLOR_BACKGROUND_EXT
