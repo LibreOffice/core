@@ -36,6 +36,7 @@ import com.sun.star.lang.XServiceInfo;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.beans.PropertyValue;
 import com.sun.star.container.XEnumeration;
+import com.sun.star.util.XCloseable;
 import com.sun.star.text.XText;
 import com.sun.star.text.XTextContent;
 import com.sun.star.text.XTextDocument;
@@ -138,6 +139,11 @@ public class CheckFields
             }
         }
         assertTrue(placeholders.isEmpty());
+        XCloseable xClos = (XCloseable) UnoRuntime.queryInterface(
+                    XCloseable.class, xComp);
+        if (xClos != null) {
+            xClos.close(true);
+        }
     }
 
     @Test
