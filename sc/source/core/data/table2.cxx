@@ -264,7 +264,7 @@ void ScTable::DeleteRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nCol >= nStartRow)
+        if (nRow >= nStartRow)
         {
             aNotes.insert(nCol, nRow - nSize, pPostIt);
             maNotes.ReleaseNote(nCol, nRow);
@@ -483,7 +483,7 @@ void ScTable::DeleteCol( SCCOL nStartCol, SCROW nStartRow, SCROW nEndRow, SCSIZE
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nCol >= nStartRow)
+        if (nCol >= nStartCol)
         {
             aNotes.insert(nCol - nSize, nRow, pPostIt);
             maNotes.ReleaseNote(nCol, nRow);
