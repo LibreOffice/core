@@ -206,6 +206,7 @@ class CloseDispatcher : public css::lang::XTypeProvider
                     during they call us ...
         */
         DECL_LINK( impl_asyncCallback, void* );
+        void doClose();
 
         //---------------------------------------
         /** @short  prepare m_xCloseFrame so it should be closeable without problems.
