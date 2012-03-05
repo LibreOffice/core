@@ -42,7 +42,10 @@
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/awt/XWindow2.hpp>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 
+#include <svtools/acceleratorexecute.hxx>
 #include <boost/unordered_map.hpp>
 #include <filter/msfilter/msvbahelper.hxx>
 #include <tools/datetime.hxx>
@@ -275,6 +278,52 @@ sal_Bool SAL_CALL VbaApplicationBase::getVisible() throw (uno::RuntimeException)
 void SAL_CALL VbaApplicationBase::setVisible( sal_Bool bVisible ) throw (uno::RuntimeException)
 {
     m_pImpl->mbVisible = bVisible;  // dummy implementation
+}
+
+
+void SAL_CALL
+VbaApplicationBase::OnKey( const ::rtl::OUString& Key, const uno::Any& Procedure ) throw (uno::RuntimeException)
+{
+    // parse the Key & modifiers
+    awt::KeyEvent aKeyEvent = parseKeyEvent( Key );
+    rtl::OUString MacroName;
+    Procedure >>= MacroName;
+    uno::Reference< frame::XModel > xModel;
+    SbMethod* pMeth = StarBASIC::GetActiveMethod();
+    if ( pMeth )
+    {
+        SbModule* pMod = dynamic_cast< SbModule* >( pMeth->GetParent() );
+        if ( pMod )
+            xModel = StarBASIC::GetModelFromBasic( pMod );
+    }
+
+    if ( !xModel.is() )
+        xModel = getCurrentDocument();
+
+    if ( !MacroName.isEmpty() )
+    {
+        ::rtl::OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
+        ::rtl::OUString sMacroSeparator(RTL_CONSTASCII_USTRINGPARAM("!"));
+        ::rtl::OUString aMacroName = MacroName.trim();
+        if (0 == aMacroName.indexOf('!'))
+            MacroName = aMacroName.copy(1).trim();
+
+        MacroResolvedInfo aMacroInfo = resolveVBAMacro( getSfxObjShell( xModel ), aMacroName );
+        if( !aMacroInfo.mbFound )
+            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("The procedure doesn't exist") ), uno::Reference< uno::XInterface >() );
+       MacroName = aMacroInfo.msResolvedMacro;
+    }
+    uno::Reference< ui::XUIConfigurationManagerSupplier > xCfgSupplier(xModel, uno::UNO_QUERY_THROW);
+    uno::Reference< ui::XUIConfigurationManager > xCfgMgr = xCfgSupplier->getUIConfigurationManager();
+
+    uno::Reference< ui::XAcceleratorConfiguration > xAcc( xCfgMgr->getShortCutManager(), uno::UNO_QUERY_THROW );
+    if ( MacroName.isEmpty() )
+        // I believe this should really restore the [application] default. Since
+        // afaik we don't actually setup application default bindings on import
+        // we don't even know what the 'default' would be for this key
+        xAcc->removeKeyEvent( aKeyEvent );
+    else
+        xAcc->setKeyEvent( aKeyEvent, ooo::vba::makeMacroURL( MacroName ) );
 }
 
 uno::Any SAL_CALL

@@ -33,8 +33,8 @@
 #include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/script/vba/XVBAMacroResolver.hpp>
+#include <com/sun/star/awt/KeyEvent.hpp>
 #include "filter/msfilter/msfilterdllapi.h"
-
 namespace ooo {
 namespace vba {
 
@@ -55,7 +55,7 @@ MSFILTER_DLLPUBLIC ::rtl::OUString getDefaultProjectName( SfxObjectShell* pShell
 MSFILTER_DLLPUBLIC ::rtl::OUString resolveVBAMacro( SfxObjectShell* pShell, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModuleName, const ::rtl::OUString& rMacroName );
 MSFILTER_DLLPUBLIC MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const ::rtl::OUString& rMacroName, bool bSearchGlobalTemplates = false );
 MSFILTER_DLLPUBLIC sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, com::sun::star::uno::Sequence< com::sun::star::uno::Any >& aArgs, com::sun::star::uno::Any& aRet, const com::sun::star::uno::Any& aCaller );
-
+MSFILTER_DLLPUBLIC ::com::sun::star::awt::KeyEvent parseKeyEvent( const ::rtl::OUString& sKey ) throw (::com::sun::star::uno::RuntimeException);
 // ============================================================================
 
 typedef ::cppu::WeakImplHelper3<

@@ -42,6 +42,10 @@
 #include <osl/file.hxx>
 #include <unotools/pathoptions.hxx>
 
+#include <com/sun/star/awt/KeyModifier.hpp>
+#include <svtools/acceleratorexecute.hxx>
+#include <map>
+
 using namespace ::com::sun::star;
 
 namespace ooo {
@@ -579,6 +583,130 @@ void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rAr
 {
     OSL_ENSURE( false, "VBAMacroResolver::resolveScriptURLtoVBAMacro - not implemented" );
     throw uno::RuntimeException();
+}
+bool getModifier( char c, sal_uInt16& mod )
+{
+    static const char modifiers[] = "+^%";
+    static const sal_uInt16 KEY_MODS[] = {KEY_SHIFT, KEY_MOD1, KEY_MOD2};
+
+    for ( unsigned int i=0; i<SAL_N_ELEMENTS(modifiers); ++i )
+    {
+        if ( c == modifiers[i] )
+        {
+            mod = mod | KEY_MODS[ i ];
+            return true;
+        }
+    }
+    return false;
+}
+
+typedef std::map< rtl::OUString, sal_uInt16 > MSKeyCodeMap;
+
+sal_uInt16 parseChar( char c ) throw ( uno::RuntimeException )
+{
+    sal_uInt16 nVclKey = 0;
+    // do we care about locale here for isupper etc. ? probably not
+    if ( isalpha( c ) )
+        nVclKey |= ( toupper( c ) - 'A' ) + KEY_A;
+    else if ( isdigit( c ) )
+        nVclKey |= ( c  - '0' ) + KEY_0;
+    else if ( c == '~' ) // special case
+        nVclKey = KEY_RETURN;
+    else // I guess we have a problem ( but not sure if locale specific keys might come into play here )
+        throw uno::RuntimeException();
+    return nVclKey;
+}
+
+struct KeyCodeEntry
+{
+   const char* sName;
+   sal_uInt16 nCode;
+};
+
+KeyCodeEntry aMSKeyCodesData[] = {
+    { "BACKSPACE", KEY_BACKSPACE },
+    { "BS", KEY_BACKSPACE },
+    { "DELETE", KEY_DELETE },
+    { "DEL", KEY_DELETE },
+    { "DOWN", KEY_DOWN },
+    { "UP", KEY_UP },
+    { "LEFT", KEY_LEFT },
+    { "RIGHT", KEY_RIGHT },
+    { "END", KEY_END },
+    { "ESCAPE", KEY_ESCAPE },
+    { "ESC", KEY_ESCAPE },
+    { "HELP", KEY_HELP },
+    { "HOME", KEY_HOME },
+    { "PGDN", KEY_PAGEDOWN },
+    { "PGUP", KEY_PAGEUP },
+    { "INSERT", KEY_INSERT },
+    { "F1", KEY_F1 },
+    { "F2", KEY_F2 },
+    { "F3", KEY_F3 },
+    { "F4", KEY_F4 },
+    { "F5", KEY_F5 },
+    { "F6", KEY_F6 },
+    { "F7", KEY_F7 },
+    { "F8", KEY_F8 },
+    { "F9", KEY_F1 },
+    { "F10", KEY_F10 },
+    { "F11", KEY_F11 },
+    { "F12", KEY_F12 },
+    { "F13", KEY_F13 },
+    { "F14", KEY_F14 },
+    { "F15", KEY_F15 },
+};
+
+awt::KeyEvent parseKeyEvent( const ::rtl::OUString& Key ) throw ( uno::RuntimeException )
+{
+    static MSKeyCodeMap msKeyCodes;
+    if ( msKeyCodes.empty() )
+    {
+        for ( unsigned int i = 0; i < SAL_N_ELEMENTS( aMSKeyCodesData ); ++i )
+        {
+            msKeyCodes[ rtl::OUString::createFromAscii( aMSKeyCodesData[ i ].sName ) ] = aMSKeyCodesData[ i ].nCode;
+        }
+    }
+    rtl::OUString sKeyCode;
+    sal_uInt16 nVclKey = 0;
+
+    // parse the modifier if any
+    for ( int i=0; i<Key.getLength(); ++i )
+    {
+        if ( ! getModifier( Key[ i ], nVclKey ) )
+        {
+            sKeyCode = Key.copy( i ).trim();
+            break;
+        }
+    }
+
+    // check if keycode is surrounded by '{}', if so scoop out the contents
+    // else it should be just one char of ( 'a-z,A-Z,0-9' )
+    if ( sKeyCode.getLength() == 1 ) // ( a single char )
+    {
+        char c = (char)( sKeyCode[ 0 ] );
+        nVclKey |= parseChar( c );
+    }
+    else // key should be enclosed in '{}'
+    {
+        if ( sKeyCode.getLength() < 3 ||  !( sKeyCode[0] == '{' && sKeyCode[sKeyCode.getLength() - 1 ] == '}' ) )
+            throw uno::RuntimeException();
+
+        sKeyCode = sKeyCode.copy(1, sKeyCode.getLength() - 2 );
+
+        if ( sKeyCode.getLength() == 1 )
+            nVclKey |= parseChar( (char)( sKeyCode[ 0 ] ) );
+        else
+        {
+            MSKeyCodeMap::iterator it = msKeyCodes.find( sKeyCode );
+            if ( it == msKeyCodes.end() ) // unknown or unsupported
+                throw uno::RuntimeException();
+            nVclKey |= it->second;
+        }
+    }
+
+    awt::KeyEvent aKeyEvent = svt::AcceleratorExecute::st_VCLKey2AWTKey( KeyCode( nVclKey ) );
+    return aKeyEvent;
 }
 
 // ============================================================================
