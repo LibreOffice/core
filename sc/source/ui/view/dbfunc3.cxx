@@ -976,397 +976,397 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
 {
     ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-    if ( pDPObj )
+    if (!pDPObj)
+        return;
+
+    ScDPUniqueStringSet aEntries;
+    long nSelectDimension = -1;
+    GetSelectedMemberList( aEntries, nSelectDimension );
+
+    if (aEntries.empty())
+        return;
+
+    bool bIsDataLayout;
+    OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+
+    ScDPSaveData aData( *pDPObj->GetSaveData() );
+    ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
+
+    // find original base
+    String aBaseDimName = aDimName;
+    if( const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName ) )
+        aBaseDimName = pBaseGroupDim->GetSourceDimName();
+
+    // remove all existing parts (the grouping is built completely new)
+
+    /*  Remove numeric group dimension (exists once at most). No need
+        to delete anything in save data (grouping was done inplace in
+        an existing base dimension). */
+    pDimData->RemoveNumGroupDimension( aBaseDimName );
+
+    /*  Remove named group dimension(s). Collect deleted dimension
+        names which may be reused while recreating the groups.
+        Dimensions have to be removed from dimension save data and from
+        save data too. */
+    std::vector<rtl::OUString> aDeletedNames;
+    const ScDPSaveGroupDimension* pExistingGroup = pDimData->GetGroupDimForBase( aBaseDimName );
+    while ( pExistingGroup )
     {
-        ScDPUniqueStringSet aEntries;
-        long nSelectDimension = -1;
-        GetSelectedMemberList( aEntries, nSelectDimension );
+        const rtl::OUString& aGroupDimName = pExistingGroup->GetGroupDimName();
+        pDimData->RemoveGroupDimension( aGroupDimName );     // pExistingGroup is deleted
 
-        if (!aEntries.empty())
+        // also remove SaveData settings for the dimension that no longer exists
+        aData.RemoveDimensionByName( aGroupDimName );
+
+        /*  The name can be used for the new group dimensions, although
+            it is still in use with the DataPilotSource. */
+        aDeletedNames.push_back( aGroupDimName );
+
+        // see if there are more group dimensions
+        pExistingGroup = pDimData->GetGroupDimForBase( aBaseDimName );
+
+        if ( pExistingGroup && pExistingGroup->GetGroupDimName() == aGroupDimName )
         {
-            bool bIsDataLayout;
-            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
-
-            ScDPSaveData aData( *pDPObj->GetSaveData() );
-            ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
-
-            // find original base
-            String aBaseDimName = aDimName;
-            if( const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName ) )
-                aBaseDimName = pBaseGroupDim->GetSourceDimName();
-
-            // remove all existing parts (the grouping is built completely new)
-
-            /*  Remove numeric group dimension (exists once at most). No need
-                to delete anything in save data (grouping was done inplace in
-                an existing base dimension). */
-            pDimData->RemoveNumGroupDimension( aBaseDimName );
-
-            /*  Remove named group dimension(s). Collect deleted dimension
-                names which may be reused while recreating the groups.
-                Dimensions have to be removed from dimension save data and from
-                save data too. */
-            std::vector<rtl::OUString> aDeletedNames;
-            const ScDPSaveGroupDimension* pExistingGroup = pDimData->GetGroupDimForBase( aBaseDimName );
-            while ( pExistingGroup )
-            {
-                const rtl::OUString& aGroupDimName = pExistingGroup->GetGroupDimName();
-                pDimData->RemoveGroupDimension( aGroupDimName );     // pExistingGroup is deleted
-
-                // also remove SaveData settings for the dimension that no longer exists
-                aData.RemoveDimensionByName( aGroupDimName );
-
-                /*  The name can be used for the new group dimensions, although
-                    it is still in use with the DataPilotSource. */
-                aDeletedNames.push_back( aGroupDimName );
-
-                // see if there are more group dimensions
-                pExistingGroup = pDimData->GetGroupDimForBase( aBaseDimName );
-
-                if ( pExistingGroup && pExistingGroup->GetGroupDimName() == aGroupDimName )
-                {
-                    // still get the same group dimension?
-                    OSL_FAIL("couldn't remove group dimension");
-                    pExistingGroup = NULL;      // avoid endless loop
-                }
-            }
-
-            if ( nParts )
-            {
-                // create date group dimensions
-
-                ScDPNumGroupInfo aEmpty;
-                bool bFirst = true;
-                sal_Int32 nMask = 1;
-                for (sal_uInt16 nBit=0; nBit<32; nBit++)
-                {
-                    if ( nParts & nMask )
-                    {
-                        if ( bFirst )
-                        {
-                            // innermost part: create NumGroupDimension (replacing original values)
-                            // Dimension name is left unchanged
-
-                            if ( (nParts == sheet::DataPilotFieldGroupBy::DAYS) && (rInfo.mfStep >= 1.0) )
-                            {
-                                // only days, and a step value specified: use numerical grouping
-                                // with DateValues flag, not date grouping
-
-                                ScDPNumGroupInfo aNumInfo( rInfo );
-                                aNumInfo.mbDateValues = true;
-
-                                ScDPSaveNumGroupDimension aNumGroupDim( aBaseDimName, aNumInfo );
-                                pDimData->AddNumGroupDimension( aNumGroupDim );
-                            }
-                            else
-                            {
-                                ScDPSaveNumGroupDimension aNumGroupDim( aBaseDimName, rInfo, nMask );
-                                pDimData->AddNumGroupDimension( aNumGroupDim );
-                            }
-
-                            bFirst = false;
-                        }
-                        else
-                        {
-                            // additional parts: create GroupDimension (shown as additional dimensions)
-                            String aGroupDimName = pDimData->CreateDateGroupDimName( nMask, *pDPObj, true, &aDeletedNames );
-                            ScDPSaveGroupDimension aGroupDim( aBaseDimName, aGroupDimName );
-                            aGroupDim.SetDateInfo( rInfo, nMask );
-                            pDimData->AddGroupDimension( aGroupDim );
-
-                            // set orientation
-                            ScDPSaveDimension* pSaveDimension = aData.GetDimensionByName( aGroupDimName );
-                            if ( pSaveDimension->GetOrientation() == sheet::DataPilotFieldOrientation_HIDDEN )
-                            {
-                                ScDPSaveDimension* pOldDimension = aData.GetDimensionByName( aBaseDimName );
-                                pSaveDimension->SetOrientation( pOldDimension->GetOrientation() );
-                                long nPosition = 0;     //! before (immediate) base
-                                aData.SetPosition( pSaveDimension, nPosition );
-                            }
-                        }
-                    }
-                    nMask *= 2;
-                }
-            }
-
-            // apply changes
-            ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-            ScDPObject* pNewObj = new ScDPObject( *pDPObj );
-            pNewObj->SetSaveData( aData );
-            aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
-            delete pNewObj;
-
-            // unmark cell selection
-            Unmark();
+            // still get the same group dimension?
+            OSL_FAIL("couldn't remove group dimension");
+            pExistingGroup = NULL;      // avoid endless loop
         }
     }
+
+    if ( nParts )
+    {
+        // create date group dimensions
+
+        ScDPNumGroupInfo aEmpty;
+        bool bFirst = true;
+        sal_Int32 nMask = 1;
+        for (sal_uInt16 nBit=0; nBit<32; nBit++)
+        {
+            if ( nParts & nMask )
+            {
+                if ( bFirst )
+                {
+                    // innermost part: create NumGroupDimension (replacing original values)
+                    // Dimension name is left unchanged
+
+                    if ( (nParts == sheet::DataPilotFieldGroupBy::DAYS) && (rInfo.mfStep >= 1.0) )
+                    {
+                        // only days, and a step value specified: use numerical grouping
+                        // with DateValues flag, not date grouping
+
+                        ScDPNumGroupInfo aNumInfo( rInfo );
+                        aNumInfo.mbDateValues = true;
+
+                        ScDPSaveNumGroupDimension aNumGroupDim( aBaseDimName, aNumInfo );
+                        pDimData->AddNumGroupDimension( aNumGroupDim );
+                    }
+                    else
+                    {
+                        ScDPSaveNumGroupDimension aNumGroupDim( aBaseDimName, rInfo, nMask );
+                        pDimData->AddNumGroupDimension( aNumGroupDim );
+                    }
+
+                    bFirst = false;
+                }
+                else
+                {
+                    // additional parts: create GroupDimension (shown as additional dimensions)
+                    String aGroupDimName = pDimData->CreateDateGroupDimName( nMask, *pDPObj, true, &aDeletedNames );
+                    ScDPSaveGroupDimension aGroupDim( aBaseDimName, aGroupDimName );
+                    aGroupDim.SetDateInfo( rInfo, nMask );
+                    pDimData->AddGroupDimension( aGroupDim );
+
+                    // set orientation
+                    ScDPSaveDimension* pSaveDimension = aData.GetDimensionByName( aGroupDimName );
+                    if ( pSaveDimension->GetOrientation() == sheet::DataPilotFieldOrientation_HIDDEN )
+                    {
+                        ScDPSaveDimension* pOldDimension = aData.GetDimensionByName( aBaseDimName );
+                        pSaveDimension->SetOrientation( pOldDimension->GetOrientation() );
+                        long nPosition = 0;     //! before (immediate) base
+                        aData.SetPosition( pSaveDimension, nPosition );
+                    }
+                }
+            }
+            nMask *= 2;
+        }
+    }
+
+    // apply changes
+    ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
+    ScDPObject* pNewObj = new ScDPObject( *pDPObj );
+    pNewObj->SetSaveData( aData );
+    aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
+    delete pNewObj;
+
+    // unmark cell selection
+    Unmark();
 }
 
 void ScDBFunc::NumGroupDataPilot( const ScDPNumGroupInfo& rInfo )
 {
     ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-    if ( pDPObj )
+    if (!pDPObj)
+        return;
+
+    ScDPUniqueStringSet aEntries;
+    long nSelectDimension = -1;
+    GetSelectedMemberList( aEntries, nSelectDimension );
+
+    if (aEntries.empty())
+        return;
+
+    bool bIsDataLayout;
+    OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+
+    ScDPSaveData aData( *pDPObj->GetSaveData() );
+    ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
+
+    ScDPSaveNumGroupDimension* pExisting = pDimData->GetNumGroupDimAcc( aDimName );
+    if ( pExisting )
     {
-        ScDPUniqueStringSet aEntries;
-        long nSelectDimension = -1;
-        GetSelectedMemberList( aEntries, nSelectDimension );
-
-        if (!aEntries.empty())
-        {
-            bool bIsDataLayout;
-            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
-
-            ScDPSaveData aData( *pDPObj->GetSaveData() );
-            ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
-
-            ScDPSaveNumGroupDimension* pExisting = pDimData->GetNumGroupDimAcc( aDimName );
-            if ( pExisting )
-            {
-                // modify existing group dimension
-                pExisting->SetGroupInfo( rInfo );
-            }
-            else
-            {
-                // create new group dimension
-                ScDPSaveNumGroupDimension aNumGroupDim( aDimName, rInfo );
-                pDimData->AddNumGroupDimension( aNumGroupDim );
-            }
-
-            // apply changes
-            ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-            ScDPObject* pNewObj = new ScDPObject( *pDPObj );
-            pNewObj->SetSaveData( aData );
-            aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
-            delete pNewObj;
-
-            // unmark cell selection
-            Unmark();
-        }
+        // modify existing group dimension
+        pExisting->SetGroupInfo( rInfo );
     }
+    else
+    {
+        // create new group dimension
+        ScDPSaveNumGroupDimension aNumGroupDim( aDimName, rInfo );
+        pDimData->AddNumGroupDimension( aNumGroupDim );
+    }
+
+    // apply changes
+    ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
+    ScDPObject* pNewObj = new ScDPObject( *pDPObj );
+    pNewObj->SetSaveData( aData );
+    aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
+    delete pNewObj;
+
+    // unmark cell selection
+    Unmark();
 }
 
 void ScDBFunc::GroupDataPilot()
 {
     ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-    if ( pDPObj )
+    if (!pDPObj)
+        return;
+
+    ScDPUniqueStringSet aEntries;
+    long nSelectDimension = -1;
+    GetSelectedMemberList( aEntries, nSelectDimension );
+
+    if (aEntries.empty())
+        return;
+
+    bool bIsDataLayout;
+    OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+
+    ScDPSaveData aData( *pDPObj->GetSaveData() );
+    ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
+
+    // find original base
+    String aBaseDimName( aDimName );
+    const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName );
+    if ( pBaseGroupDim )
     {
-        ScDPUniqueStringSet aEntries;
-        long nSelectDimension = -1;
-        GetSelectedMemberList( aEntries, nSelectDimension );
+        // any entry's SourceDimName is the original base
+        aBaseDimName = pBaseGroupDim->GetSourceDimName();
+    }
 
-        if (!aEntries.empty())
+    // find existing group dimension
+    // (using the selected dim, can be intermediate group dim)
+    ScDPSaveGroupDimension* pGroupDimension = pDimData->GetGroupDimAccForBase( aDimName );
+
+    // remove the selected items from their groups
+    // (empty groups are removed, too)
+    if ( pGroupDimension )
+    {
+        ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
+        for (; it != itEnd; ++it)
         {
-            bool bIsDataLayout;
-            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
-
-            ScDPSaveData aData( *pDPObj->GetSaveData() );
-            ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
-
-            // find original base
-            String aBaseDimName( aDimName );
-            const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName );
+            const rtl::OUString& aEntryName = *it;
             if ( pBaseGroupDim )
             {
-                // any entry's SourceDimName is the original base
-                aBaseDimName = pBaseGroupDim->GetSourceDimName();
-            }
-
-            // find existing group dimension
-            // (using the selected dim, can be intermediate group dim)
-            ScDPSaveGroupDimension* pGroupDimension = pDimData->GetGroupDimAccForBase( aDimName );
-
-            // remove the selected items from their groups
-            // (empty groups are removed, too)
-            if ( pGroupDimension )
-            {
-                ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
-                for (; it != itEnd; ++it)
-                {
-                    const rtl::OUString& aEntryName = *it;
-                    if ( pBaseGroupDim )
-                    {
-                        // for each selected (intermediate) group, remove all its items
-                        // (same logic as for adding, below)
-                        const ScDPSaveGroupItem* pBaseGroup = pBaseGroupDim->GetNamedGroup( aEntryName );
-                        if ( pBaseGroup )
-                            pBaseGroup->RemoveElementsFromGroups( *pGroupDimension );   // remove all elements
-                        else
-                            pGroupDimension->RemoveFromGroups( aEntryName );
-                    }
-                    else
-                        pGroupDimension->RemoveFromGroups( aEntryName );
-                }
-            }
-
-            ScDPSaveGroupDimension* pNewGroupDim = NULL;
-            if ( !pGroupDimension )
-            {
-                // create a new group dimension
-                String aGroupDimName = pDimData->CreateGroupDimName( aBaseDimName, *pDPObj, false, NULL );
-                pNewGroupDim = new ScDPSaveGroupDimension( aBaseDimName, aGroupDimName );
-
-                pGroupDimension = pNewGroupDim;     // make changes to the new dim if none existed
-
-                if ( pBaseGroupDim )
-                {
-                    // If it's a higher-order group dimension, pre-allocate groups for all
-                    // non-selected original groups, so the individual base members aren't
-                    // used for automatic groups (this would make the original groups hard
-                    // to find).
-                    //! Also do this when removing groups?
-                    //! Handle this case dynamically with automatic groups?
-
-                    long nGroupCount = pBaseGroupDim->GetGroupCount();
-                    for ( long nGroup = 0; nGroup < nGroupCount; nGroup++ )
-                    {
-                        const ScDPSaveGroupItem* pBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
-
-                        if (!aEntries.count(pBaseGroup->GetGroupName()))
-                        {
-                            // add an additional group for each item that is not in the selection
-                            ScDPSaveGroupItem aGroup( pBaseGroup->GetGroupName() );
-                            aGroup.AddElementsFromGroup( *pBaseGroup );
-                            pGroupDimension->AddGroupItem( aGroup );
-                        }
-                    }
-                }
-            }
-            String aGroupDimName = pGroupDimension->GetGroupDimName();
-
-            //! localized prefix string
-            String aGroupName = pGroupDimension->CreateGroupName( String::CreateFromAscii("Group") );
-            ScDPSaveGroupItem aGroup( aGroupName );
-            ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
-            for (; it != itEnd; ++it)
-            {
-                const rtl::OUString& aEntryName = *it;
-                if ( pBaseGroupDim )
-                {
-                    // for each selected (intermediate) group, add all its items
-                    const ScDPSaveGroupItem* pBaseGroup = pBaseGroupDim->GetNamedGroup( aEntryName );
-                    if ( pBaseGroup )
-                        aGroup.AddElementsFromGroup( *pBaseGroup );
-                    else
-                        aGroup.AddElement( aEntryName );    // no group found -> automatic group, add the item itself
-                }
+                // for each selected (intermediate) group, remove all its items
+                // (same logic as for adding, below)
+                const ScDPSaveGroupItem* pBaseGroup = pBaseGroupDim->GetNamedGroup( aEntryName );
+                if ( pBaseGroup )
+                    pBaseGroup->RemoveElementsFromGroups( *pGroupDimension );   // remove all elements
                 else
-                    aGroup.AddElement( aEntryName );        // no group dimension, add all items directly
+                    pGroupDimension->RemoveFromGroups( aEntryName );
             }
-
-            pGroupDimension->AddGroupItem( aGroup );
-
-            if ( pNewGroupDim )
-            {
-                pDimData->AddGroupDimension( *pNewGroupDim );
-                delete pNewGroupDim;        // AddGroupDimension copies the object
-                // don't access pGroupDimension after here
-            }
-            pGroupDimension = pNewGroupDim = NULL;
-
-            // set orientation
-            ScDPSaveDimension* pSaveDimension = aData.GetDimensionByName( aGroupDimName );
-            if ( pSaveDimension->GetOrientation() == sheet::DataPilotFieldOrientation_HIDDEN )
-            {
-                ScDPSaveDimension* pOldDimension = aData.GetDimensionByName( aDimName );
-                pSaveDimension->SetOrientation( pOldDimension->GetOrientation() );
-                long nPosition = 0;     //! before (immediate) base
-                aData.SetPosition( pSaveDimension, nPosition );
-            }
-
-            // apply changes
-            ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-            ScDPObject* pNewObj = new ScDPObject( *pDPObj );
-            pNewObj->SetSaveData( aData );
-            aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
-            delete pNewObj;
-
-            // unmark cell selection
-            Unmark();
+            else
+                pGroupDimension->RemoveFromGroups( aEntryName );
         }
     }
+
+    ScDPSaveGroupDimension* pNewGroupDim = NULL;
+    if ( !pGroupDimension )
+    {
+        // create a new group dimension
+        String aGroupDimName = pDimData->CreateGroupDimName( aBaseDimName, *pDPObj, false, NULL );
+        pNewGroupDim = new ScDPSaveGroupDimension( aBaseDimName, aGroupDimName );
+
+        pGroupDimension = pNewGroupDim;     // make changes to the new dim if none existed
+
+        if ( pBaseGroupDim )
+        {
+            // If it's a higher-order group dimension, pre-allocate groups for all
+            // non-selected original groups, so the individual base members aren't
+            // used for automatic groups (this would make the original groups hard
+            // to find).
+            //! Also do this when removing groups?
+            //! Handle this case dynamically with automatic groups?
+
+            long nGroupCount = pBaseGroupDim->GetGroupCount();
+            for ( long nGroup = 0; nGroup < nGroupCount; nGroup++ )
+            {
+                const ScDPSaveGroupItem* pBaseGroup = pBaseGroupDim->GetGroupByIndex( nGroup );
+
+                if (!aEntries.count(pBaseGroup->GetGroupName()))
+                {
+                    // add an additional group for each item that is not in the selection
+                    ScDPSaveGroupItem aGroup( pBaseGroup->GetGroupName() );
+                    aGroup.AddElementsFromGroup( *pBaseGroup );
+                    pGroupDimension->AddGroupItem( aGroup );
+                }
+            }
+        }
+    }
+    String aGroupDimName = pGroupDimension->GetGroupDimName();
+
+    //! localized prefix string
+    String aGroupName = pGroupDimension->CreateGroupName( String::CreateFromAscii("Group") );
+    ScDPSaveGroupItem aGroup( aGroupName );
+    ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
+    for (; it != itEnd; ++it)
+    {
+        const rtl::OUString& aEntryName = *it;
+        if ( pBaseGroupDim )
+        {
+            // for each selected (intermediate) group, add all its items
+            const ScDPSaveGroupItem* pBaseGroup = pBaseGroupDim->GetNamedGroup( aEntryName );
+            if ( pBaseGroup )
+                aGroup.AddElementsFromGroup( *pBaseGroup );
+            else
+                aGroup.AddElement( aEntryName );    // no group found -> automatic group, add the item itself
+        }
+        else
+            aGroup.AddElement( aEntryName );        // no group dimension, add all items directly
+    }
+
+    pGroupDimension->AddGroupItem( aGroup );
+
+    if ( pNewGroupDim )
+    {
+        pDimData->AddGroupDimension( *pNewGroupDim );
+        delete pNewGroupDim;        // AddGroupDimension copies the object
+        // don't access pGroupDimension after here
+    }
+    pGroupDimension = pNewGroupDim = NULL;
+
+    // set orientation
+    ScDPSaveDimension* pSaveDimension = aData.GetDimensionByName( aGroupDimName );
+    if ( pSaveDimension->GetOrientation() == sheet::DataPilotFieldOrientation_HIDDEN )
+    {
+        ScDPSaveDimension* pOldDimension = aData.GetDimensionByName( aDimName );
+        pSaveDimension->SetOrientation( pOldDimension->GetOrientation() );
+        long nPosition = 0;     //! before (immediate) base
+        aData.SetPosition( pSaveDimension, nPosition );
+    }
+
+    // apply changes
+    ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
+    ScDPObject* pNewObj = new ScDPObject( *pDPObj );
+    pNewObj->SetSaveData( aData );
+    aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
+    delete pNewObj;
+
+    // unmark cell selection
+    Unmark();
 }
 
 void ScDBFunc::UngroupDataPilot()
 {
     ScDPObject* pDPObj = GetViewData()->GetDocument()->GetDPAtCursor( GetViewData()->GetCurX(),
                                         GetViewData()->GetCurY(), GetViewData()->GetTabNo() );
-    if ( pDPObj )
+    if (!pDPObj)
+        return;
+
+    ScDPUniqueStringSet aEntries;
+    long nSelectDimension = -1;
+    GetSelectedMemberList( aEntries, nSelectDimension );
+
+    if (aEntries.empty())
+        return;
+
+    bool bIsDataLayout;
+    OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
+
+    ScDPSaveData aData( *pDPObj->GetSaveData() );
+    ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
+    //! test first if DimensionData exists?
+
+    sal_Bool bApply = false;
+
+    ScDPSaveGroupDimension* pGroupDim = pDimData->GetNamedGroupDimAcc( aDimName );
+    const ScDPSaveNumGroupDimension* pNumGroupDim = pDimData->GetNumGroupDim( aDimName );
+    if ( ( pGroupDim && pGroupDim->GetDatePart() != 0 ) ||
+         ( pNumGroupDim && pNumGroupDim->GetDatePart() != 0 ) )
     {
-        ScDPUniqueStringSet aEntries;
-        long nSelectDimension = -1;
-        GetSelectedMemberList( aEntries, nSelectDimension );
+        // Date grouping: need to remove all affected group dimensions.
+        // This is done using DateGroupDataPilot with nParts=0.
 
-        if (!aEntries.empty())
+        DateGroupDataPilot( ScDPNumGroupInfo(), 0 );
+        // bApply remains FALSE
+        // dimension pointers become invalid
+    }
+    else if ( pGroupDim )
+    {
+        ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
+        for (; it != itEnd; ++it)
+            pGroupDim->RemoveGroup(*it);
+
+        // remove group dimension if empty
+        bool bEmptyDim = pGroupDim->IsEmpty();
+        if ( !bEmptyDim )
         {
-            bool bIsDataLayout;
-            OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
-
-            ScDPSaveData aData( *pDPObj->GetSaveData() );
-            ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
-            //! test first if DimensionData exists?
-
-            sal_Bool bApply = false;
-
-            ScDPSaveGroupDimension* pGroupDim = pDimData->GetNamedGroupDimAcc( aDimName );
-            const ScDPSaveNumGroupDimension* pNumGroupDim = pDimData->GetNumGroupDim( aDimName );
-            if ( ( pGroupDim && pGroupDim->GetDatePart() != 0 ) ||
-                 ( pNumGroupDim && pNumGroupDim->GetDatePart() != 0 ) )
-            {
-                // Date grouping: need to remove all affected group dimensions.
-                // This is done using DateGroupDataPilot with nParts=0.
-
-                DateGroupDataPilot( ScDPNumGroupInfo(), 0 );
-                // bApply remains FALSE
-                // dimension pointers become invalid
-            }
-            else if ( pGroupDim )
-            {
-                ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
-                for (; it != itEnd; ++it)
-                    pGroupDim->RemoveGroup(*it);
-
-                // remove group dimension if empty
-                bool bEmptyDim = pGroupDim->IsEmpty();
-                if ( !bEmptyDim )
-                {
-                    // If all remaining groups in the dimension aren't shown, remove
-                    // the dimension too, as if it was completely empty.
-                    ScDPUniqueStringSet aVisibleEntries;
-                    pDPObj->GetMemberResultNames( aVisibleEntries, nSelectDimension );
-                    bEmptyDim = pGroupDim->HasOnlyHidden( aVisibleEntries );
-                }
-                if ( bEmptyDim )
-                {
-                    pDimData->RemoveGroupDimension( aDimName );     // pGroupDim is deleted
-
-                    // also remove SaveData settings for the dimension that no longer exists
-                    aData.RemoveDimensionByName( aDimName );
-                }
-                bApply = sal_True;
-            }
-            else if ( pNumGroupDim )
-            {
-                // remove the numerical grouping
-                pDimData->RemoveNumGroupDimension( aDimName );
-                // SaveData settings can remain unchanged - the same dimension still exists
-                bApply = sal_True;
-            }
-
-            if ( bApply )
-            {
-                // apply changes
-                ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-                ScDPObject* pNewObj = new ScDPObject( *pDPObj );
-                pNewObj->SetSaveData( aData );
-                aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
-                delete pNewObj;
-
-                // unmark cell selection
-                Unmark();
-            }
+            // If all remaining groups in the dimension aren't shown, remove
+            // the dimension too, as if it was completely empty.
+            ScDPUniqueStringSet aVisibleEntries;
+            pDPObj->GetMemberResultNames( aVisibleEntries, nSelectDimension );
+            bEmptyDim = pGroupDim->HasOnlyHidden( aVisibleEntries );
         }
+        if ( bEmptyDim )
+        {
+            pDimData->RemoveGroupDimension( aDimName );     // pGroupDim is deleted
+
+            // also remove SaveData settings for the dimension that no longer exists
+            aData.RemoveDimensionByName( aDimName );
+        }
+        bApply = sal_True;
+    }
+    else if ( pNumGroupDim )
+    {
+        // remove the numerical grouping
+        pDimData->RemoveNumGroupDimension( aDimName );
+        // SaveData settings can remain unchanged - the same dimension still exists
+        bApply = sal_True;
+    }
+
+    if ( bApply )
+    {
+        // apply changes
+        ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
+        ScDPObject* pNewObj = new ScDPObject( *pDPObj );
+        pNewObj->SetSaveData( aData );
+        aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
+        delete pNewObj;
+
+        // unmark cell selection
+        Unmark();
     }
 }
 
