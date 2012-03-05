@@ -122,6 +122,9 @@ SbxVariable* getDefaultProp( SbxVariable* pRef );
 
 #ifndef DISABLE_SCRIPTING
 
+// forward decl.
+sal_Bool implDateSerial( sal_Int16 nYear, sal_Int16 nMonth, sal_Int16 nDay, double& rdRet );
+
 // from source/classes/sbxmod.cxx
 Reference< XModel > getDocumentModel( StarBASIC* );
 
