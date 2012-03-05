@@ -155,9 +155,6 @@ CXX_FOR_BUILD=ccache g++
 --disable-nss-module
 --disable-zenity
 --enable-python=system
---with-external-tar=/mnt/hemulen/ooo/git/master/src
---with-num-cpus=1
---with-max-jobs=1
 --with-system-altlinuxhyph
 --with-system-boost
 --with-system-cairo
@@ -277,7 +274,6 @@ CC=ccache /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xct
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --with-distro=LibreOfficeiOS
---with-external-tar=/Volumes/ooo/git/master/src
 --with-system-nss
 --without-help
 --without-helppack-integration
@@ -289,7 +285,6 @@ CC=ccache /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneSimulator.p
 CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --with-distro=LibreOfficeiOS
---with-external-tar=/Volumes/ooo/git/master/src
 --with-system-nss
 --enable-debug
 --without-help
@@ -310,7 +305,6 @@ CC_FOR_BUILD=ccache /Xcode3/usr/bin/gcc-4.0 -mmacosx-version-min=10.4
 CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --enable-werror
 --with-distro=LibreOfficeiOS
---with-external-tar=/Users/tml/lo/10.4/src
 --with-system-nss
 --without-help
 --without-helppack-integration
@@ -347,7 +341,6 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0 -mmacosx-version-min=10.4
 --disable-zenity
 --enable-werror
 --with-distro=LibreOfficeAndroid
---with-external-tar=/Volumes/ooo/git/master/src
 --disable-python
 --without-helppack-integration
 --without-myspell-dicts
@@ -363,7 +356,6 @@ CXX_FOR_BUILD=ccache g++
 --build=x86_64-unknown-linux-gnu
 --disable-zenity
 --with-distro=LibreOfficeAndroid
---with-external-tar=/mnt/hemulen/ooo/git/master/src
 --disable-python
 --with-num-cpus=1
 --with-max-jobs=1
@@ -427,4 +419,3 @@ CXX_FOR_BUILD=ccache /Xcode3/usr/bin/g++-4.0
 --host=powerpc-apple-darwin10
 --disable-mozilla
 --disable-build-mozilla
---with-external-tar=/Volumes/ooo/git/master/src
