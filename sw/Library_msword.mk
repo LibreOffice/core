@@ -90,6 +90,7 @@ $(eval $(call gb_Library_add_exception_objects,msword,\
     sw/source/filter/ww8/rtfexportfilter \
     sw/source/filter/ww8/rtfimportfilter \
     sw/source/filter/ww8/rtfsdrexport \
+    sw/source/filter/ww8/rtfstringbuffer \
     sw/source/filter/ww8/WW8FFData \
     sw/source/filter/ww8/WW8FibData \
     sw/source/filter/ww8/WW8Sttbf \

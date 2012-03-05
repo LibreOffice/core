@@ -32,6 +32,7 @@
 
 #include "attributeoutputbase.hxx"
 #include "rtfexport.hxx"
+#include "rtfstringbuffer.hxx"
 
 #include <rtl/strbuf.hxx>
 
@@ -43,6 +44,7 @@ class SwFlyFrmFmt;
 /// The class that has handlers for various resource types when exporting as RTF
 class RtfAttributeOutput : public AttributeOutputBase
 {
+    friend class RtfStringBufferValue;
 public:
     /// Export the state of RTL/CJK.
     virtual void RTLAndCJKState( bool bIsRTL, sal_uInt16 nScript );
@@ -446,8 +448,8 @@ private:
      * This is needed because the call order is: run text, run properties, paragraph properties.
      * What we need is the opposite.
      */
-    rtl::OStringBuffer m_aRun;
-    rtl::OStringBuffer m_aRunText;
+    RtfStringBuffer m_aRun;
+    RtfStringBuffer m_aRunText;
     /*
      * This is written after runs.
      */

@@ -447,12 +447,12 @@ void RtfSdrExport::impl_writeGraphic()
     Size aMapped(aGraphic.GetPrefSize());
 
     // Add it to the properties.
-    OStringBuffer aBuf;
-    aBuf.append('{').append(OOO_STRING_SVTOOLS_RTF_PICT).append(OOO_STRING_SVTOOLS_RTF_PNGBLIP);
-    aBuf.append(OOO_STRING_SVTOOLS_RTF_PICW).append(sal_Int32(aMapped.Width()));
-    aBuf.append(OOO_STRING_SVTOOLS_RTF_PICH).append(sal_Int32(aMapped.Height())).append(RtfExport::sNewLine);
-    aBuf.append(RtfAttributeOutput::WriteHex(pGraphicAry, nSize));
-    aBuf.append('}');
+    RtfStringBuffer aBuf;
+    aBuf->append('{').append(OOO_STRING_SVTOOLS_RTF_PICT).append(OOO_STRING_SVTOOLS_RTF_PNGBLIP);
+    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICW).append(sal_Int32(aMapped.Width()));
+    aBuf->append(OOO_STRING_SVTOOLS_RTF_PICH).append(sal_Int32(aMapped.Height())).append(RtfExport::sNewLine);
+    aBuf->append(RtfAttributeOutput::WriteHex(pGraphicAry, nSize));
+    aBuf->append('}');
     m_aShapeProps.insert(std::pair<OString,OString>(OString("pib"), aBuf.makeStringAndClear()));
 }
 
