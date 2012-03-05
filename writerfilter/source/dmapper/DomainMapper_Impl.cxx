@@ -191,8 +191,6 @@ DomainMapper_Impl::DomainMapper_Impl(
         m_bIsFirstSection( true ),
         m_bIsColumnBreakDeferred( false ),
         m_bIsPageBreakDeferred( false ),
-        m_bIsInShape( false ),
-        m_bShapeContextAdded( false ),
         m_pLastSectionContext( ),
         m_nCurrentTabStopIndex( 0 ),
         m_sCurrentParaStyleId(),
@@ -583,37 +581,6 @@ void DomainMapper_Impl::clearDeferredBreaks()
     m_bIsColumnBreakDeferred = false;
     m_bIsPageBreakDeferred = false;
 }
-
-bool lcl_removeShape( const uno::Reference<  text::XTextDocument >& rDoc, const uno::Reference< drawing::XShape >& rShape, TextContentStack& rAnchoredStack,TextAppendStack&  rTextAppendStack )
-{
-    bool bRet = false;
-    // probably unecessary but just double check that indeed the top of Anchored stack
-    // does contain the shape we intend to remove
-    uno::Reference< drawing::XShape > xAnchorShape(rAnchoredStack.top( ), uno::UNO_QUERY );
-    if ( xAnchorShape == rShape )
-    {
-        // because we only want to process the embedded object and not the associated
-        // shape we need to get rid of that shape from the Draw page and Anchored and
-        // Append stacks  so it wont be processed further
-        try
-        {
-            uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(rDoc, uno::UNO_QUERY_THROW);
-            uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
-            if ( xDrawPage.is() )
-            {
-                xDrawPage->remove( rShape );
-            }
-            rAnchoredStack.pop();
-            rTextAppendStack.pop();
-            bRet = true;
-        }
-        catch( uno::Exception& )
-        {
-        }
-    }
-    return bRet;
-}
-
 
 
 void lcl_MoveBorderPropertiesToFrame(uno::Sequence<beans::PropertyValue>& rFrameProperties,
@@ -1049,21 +1016,6 @@ void DomainMapper_Impl::finishParagraph( PropertyMapPtr pPropertyMap )
                     xTextAppend->finishParagraph( aProperties );
                 getTableManager( ).handle(xTextRange);
 
-                // Set the anchor of the objects to the created paragraph
-                while ( m_aAnchoredStack.size( ) > 0 && !m_bIsInShape )
-                {
-                    uno::Reference< text::XTextContent > xObj = m_aAnchoredStack.top( );
-                    try
-                    {
-                        xObj->attach( xTextRange );
-                    }
-                    catch ( uno::RuntimeException& )
-                    {
-                        // this is normal: the shape is already attached
-                    }
-                    m_aAnchoredStack.pop( );
-                }
-
                 // Get the end of paragraph character inserted
                 uno::Reference< text::XTextCursor > xCur = xTextRange->getText( )->createTextCursor( );
                 xCur->gotoEnd( false );
@@ -1202,11 +1154,9 @@ void DomainMapper_Impl::appendOLE( const ::rtl::OUString& rStreamName, OLEHandle
         // gives a better ( visually ) result
         xOLEProperties->setPropertyValue(PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_ANCHOR_TYPE ),  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) );
         // remove ( if valid ) associated shape ( used for graphic replacement )
-        if ( m_bShapeContextAdded )
-        {
-            if ( lcl_removeShape(  m_xTextDocument, pOLEHandler->getShape(), m_aAnchoredStack, m_aTextAppendStack ) )
-                m_bShapeContextAdded = false; // ensure PopShapeContext processing doesn't pop the append stack
-        }
+        m_aAnchoredStack.top( ).bToRemove = true;
+        RemoveLastParagraph();
+        m_aTextAppendStack.pop();
 
         //
         appendTextContent( xOLE, uno::Sequence< beans::PropertyValue >() );
@@ -1543,12 +1493,10 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
     if (m_aTextAppendStack.empty())
         return;
     uno::Reference<text::XTextAppend> xTextAppend = m_aTextAppendStack.top().xTextAppend;
-    m_bIsInShape = true;
     try
     {
         // Add the shape to the text append stack
         m_aTextAppendStack.push( uno::Reference< text::XTextAppend >( xShape, uno::UNO_QUERY_THROW ) );
-        m_bShapeContextAdded = true;
 
         // Add the shape to the anchored objects stack
         uno::Reference< text::XTextContent > xTxtContent( xShape, uno::UNO_QUERY_THROW );
@@ -1587,13 +1535,45 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
 
 void DomainMapper_Impl::PopShapeContext()
 {
-    if ( m_bShapeContextAdded )
+    if ( m_aAnchoredStack.size() > 0 )
     {
-        RemoveLastParagraph();
-        m_aTextAppendStack.pop();
-        m_bShapeContextAdded = false;
+        // For OLE object replacement shape, the text append context was already removed
+        // or the OLE object couldn't be inserted.
+        if ( !m_aAnchoredStack.top().bToRemove )
+        {
+            RemoveLastParagraph();
+            m_aTextAppendStack.pop();
+        }
+
+        uno::Reference< text::XTextContent > xObj = m_aAnchoredStack.top( ).xTextContent;
+        try
+        {
+            appendTextContent( xObj, uno::Sequence< beans::PropertyValue >() );
+        }
+        catch ( uno::RuntimeException& )
+        {
+            // this is normal: the shape is already attached
+        }
+
+        // Remove the shape if required (most likely replacement shape for OLE object)
+        if ( m_aAnchoredStack.top().bToRemove )
+        {
+            try
+            {
+                uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(m_xTextDocument, uno::UNO_QUERY_THROW);
+                uno::Reference<drawing::XDrawPage> xDrawPage = xDrawPageSupplier->getDrawPage();
+                if ( xDrawPage.is() )
+                {
+                    uno::Reference<drawing::XShape> xShape( xObj, uno::UNO_QUERY_THROW );
+                    xDrawPage->remove( xShape );
+                }
+            }
+            catch( uno::Exception& )
+            {
+            }
+        }
+        m_aAnchoredStack.pop();
     }
-    m_bIsInShape = false;
 }
 
 
