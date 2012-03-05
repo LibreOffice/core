@@ -184,7 +184,7 @@ void ScTable::InsertRow( SCCOL nStartCol, SCCOL nEndCol, SCROW nStartRow, SCSIZE
         ScPostIt* pPostIt = itr->second;
         ++itr;
 
-        if (nCol >= nStartRow)
+        if (nRow >= nStartRow)
         {
             aNotes.insert(nCol, nRow + nSize, pPostIt);
             maNotes.ReleaseNote(nCol, nRow);
