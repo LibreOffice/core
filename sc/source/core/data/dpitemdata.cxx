@@ -36,17 +36,40 @@
 
 sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
 {
-    if ( rA.IsValue() )
+    if (rA.meType != rB.meType)
     {
-        if ( rB.IsValue() )
-            return rA.mfValue < rB.mfValue ? -1 : 1;
-        else
-            return -1;           // values first
+        // group value, value and string in this order.
+        return rA.meType < rB.meType;
     }
-    else if ( rB.IsValue() )
-        return 1;                // values first
-    else
-        return ScGlobal::GetCollator()->compareString(rA.GetString(), rB.GetString());
+
+    switch (rA.meType)
+    {
+        case GroupValue:
+        {
+            if (rA.maGroupValue.mnGroupType == rB.maGroupValue.mnGroupType)
+            {
+                if (rA.maGroupValue.mnValue == rB.maGroupValue.mnValue)
+                    return 0;
+
+                return rA.maGroupValue.mnValue < rB.maGroupValue.mnValue;
+            }
+
+            return rA.maGroupValue.mnGroupType < rB.maGroupValue.mnGroupType;
+        }
+        case Value:
+        {
+            if (rA.mfValue == rB.mfValue)
+                return 0;
+
+            return rA.mfValue < rB.mfValue ? -1 : 1;
+        }
+        case String:
+        case Error:
+            return ScGlobal::GetCollator()->compareString(rA.GetString(), rB.GetString());
+        default:
+            ;
+    }
+    return 0;
 }
 
 ScDPItemData::ScDPItemData() :
@@ -216,14 +239,16 @@ void ScDPItemData::Dump(const char* msg) const
             printf("empty\n");
         break;
         case Error:
-            printf("error\n");
+            printf("error: %s\n",
+                   rtl::OUStringToOString(*mpString, RTL_TEXTENCODING_UTF8).getStr());
         break;
         case GroupValue:
             printf("group value: group type = %d  value = %d\n",
                    maGroupValue.mnGroupType, maGroupValue.mnValue);
         break;
         case String:
-            printf("string\n");
+            printf("string: %s\n",
+                   rtl::OUStringToOString(*mpString, RTL_TEXTENCODING_UTF8).getStr());
         break;
         case Value:
             printf("value: %g\n", mfValue);
@@ -242,7 +267,7 @@ bool ScDPItemData::IsEmpty() const
 
 bool ScDPItemData::IsValue() const
 {
-    return meType == Value || meType == GroupValue;
+    return meType == Value;
 }
 
 rtl::OUString ScDPItemData::GetString() const
@@ -266,9 +291,6 @@ double ScDPItemData::GetValue() const
 {
     if (meType == Value)
         return mfValue;
-
-    if (meType == GroupValue)
-        return maGroupValue.mnValue;
 
     return 0.0;
 }

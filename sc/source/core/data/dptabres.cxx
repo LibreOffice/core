@@ -1441,7 +1441,8 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
         else
             aName = aItemData.GetString();
 
-        bIsNumeric = aItemData.IsValue();
+        ScDPItemData::Type eType = aItemData.GetType();
+        bIsNumeric = eType == ScDPItemData::Value || ScDPItemData::GroupValue;
     }
 
     fprintf(stdout, "ScDPResultMember::FillMemberResults:   name = '%s' numeric = %d\n",

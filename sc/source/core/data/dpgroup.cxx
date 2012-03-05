@@ -522,64 +522,6 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
     return nResult;
 }
 
-sal_Bool lcl_DateContained( sal_Int32 nGroupPart, const ScDPItemData& rGroupData,
-                        sal_Int32 nBasePart, const ScDPItemData& rBaseData )
-{
-    if ( !rGroupData.IsValue() || !rBaseData.IsValue() )
-    {
-        // non-numeric entries involved: only match equal entries
-        return rGroupData.IsCaseInsEqual( rBaseData );
-    }
-
-    // no approxFloor needed, values were created from integers
-    sal_Int32 nGroupValue = (sal_Int32) rGroupData.GetValue();
-    sal_Int32 nBaseValue = (sal_Int32) rBaseData.GetValue();
-    if ( nBasePart > nGroupPart )
-    {
-        // switch, so the base part is the smaller (inner) part
-
-        ::std::swap( nGroupPart, nBasePart );
-        ::std::swap( nGroupValue, nBaseValue );
-    }
-
-    if ( nGroupValue == SC_DP_DATE_FIRST || nGroupValue == SC_DP_DATE_LAST ||
-         nBaseValue == SC_DP_DATE_FIRST || nBaseValue == SC_DP_DATE_LAST )
-    {
-        // first/last entry matches only itself
-        return ( nGroupValue == nBaseValue );
-    }
-
-    sal_Bool bContained = sal_True;
-    switch ( nBasePart )        // inner part
-    {
-        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
-            // a month is only contained in its quarter
-            if ( nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS )
-            {
-                // months and quarters are both 1-based
-                bContained = ( nGroupValue - 1 == ( nBaseValue - 1 ) / 3 );
-            }
-            break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
-            // a day is only contained in its quarter or month
-            if ( nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS || nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS )
-            {
-                Date aDate( 1, 1, SC_DP_LEAPYEAR );
-                aDate += ( nBaseValue - 1 );            // days are 1-based
-                sal_Int32 nCompare = aDate.GetMonth();
-                if ( nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS )
-                    nCompare = ( ( nCompare - 1 ) / 3 ) + 1;    // get quarter from date
-
-                bContained = ( nGroupValue == nCompare );
-            }
-            break;
-
-        // other parts: everything is contained
-    }
-
-    return bContained;
-}
-
 String lcl_GetSpecialDateName( double fValue, bool bFirst, SvNumberFormatter* pFormatter )
 {
     rtl::OUStringBuffer aBuffer;
@@ -1577,9 +1519,7 @@ sal_Bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, l
                 return true;
             }
 
-            sal_Int32 nFirstPart = pFirstDateHelper->GetDatePart();
-            sal_Int32 nSecondPart = pSecondDateHelper->GetDatePart();
-            return lcl_DateContained( nFirstPart, rFirstData, nSecondPart, rSecondData );
+            return isDateInGroup(rFirstData, rSecondData);
         }
 
         const ScDPGroupItem* pFirstItem = pFirstDim->GetGroupForName( rFirstData );

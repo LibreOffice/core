@@ -37,6 +37,7 @@
 #include "globstr.hrc"
 #include "docoptio.hxx"
 #include "dpitemdata.hxx"
+#include "dputil.hxx"
 
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
@@ -1010,6 +1011,13 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
 
 rtl::OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) const
 {
+    if (rItem.GetType() == ScDPItemData::GroupValue)
+    {
+        ScDPItemData::GroupValueAttr aAttr = rItem.GetGroupValue();
+        return ScDPUtil::getDateGroupName(
+            aAttr.mnGroupType, aAttr.mnValue, mpDoc->GetFormatTable());
+    }
+
     if (!rItem.IsValue())
         return rItem.GetString();
 

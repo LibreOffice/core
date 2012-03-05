@@ -49,7 +49,7 @@ class SC_DLLPUBLIC ScDPItemData
     friend class ScDPCache;
 
 public:
-    enum Type { String, Value, Error, Empty, GroupValue };
+    enum Type { GroupValue = 0, Value = 1, String = 2, Error = 3, Empty = 4 };
 
     struct GroupValueAttr
     {
