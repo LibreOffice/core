@@ -115,11 +115,6 @@ namespace comphelper
     //=====================================================================
     //= OAccessibleSelectionHelper
     //=====================================================================
-    //---------------------------------------------------------------------
-    OAccessibleSelectionHelper::OAccessibleSelectionHelper( )
-    {
-    }
-
     //--------------------------------------------------------------------
     OAccessibleSelectionHelper::OAccessibleSelectionHelper( IMutex* _pExternalLock ) : OAccessibleComponentHelper(_pExternalLock)
     {

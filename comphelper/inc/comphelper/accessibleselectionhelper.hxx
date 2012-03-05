@@ -101,8 +101,6 @@ namespace comphelper
     {
     protected:
 
-        OAccessibleSelectionHelper( );
-
         /// see the respective base class ctor for an extensive comment on this, please
         OAccessibleSelectionHelper( IMutex* _pExternalLock );
 
