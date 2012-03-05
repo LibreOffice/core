@@ -3553,7 +3553,9 @@ void SfxObjectShell::SetConfigOptionsChecked( sal_Bool bChecked )
 
 sal_Bool SfxObjectShell::QuerySaveSizeExceededModules_Impl( const uno::Reference< task::XInteractionHandler >& xHandler )
 {
-#ifndef DISABLE_SCRIPTING
+#ifdef DISABLE_SCRIPTING
+    (void) xHandler;
+#else
     if ( !HasBasic() )
         return sal_True;
 
