@@ -416,11 +416,11 @@ ORowSetValue& x)
 sal_uInt32 OPreparedStatement::AddParameter(OSQLParseNode * pParameter, const Reference<XPropertySet>& _xCol)
 {
     OSL_UNUSED( pParameter );
-    // Nr. of the new added Parameters
+    // Count of the newly added Parameters
     sal_uInt32 nParameter = m_xParamColumns->get().size()+1;
 
-    OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument ist kein Parameter");
-    OSL_ENSURE(pParameter->count() > 0,"OResultSet: Fehler im Parse Tree");
+    OSL_ENSURE(SQL_ISRULE(pParameter,parameter),"OResultSet::AddParameter: Argument is not a Parameter");
+    OSL_ENSURE(pParameter->count() > 0,"OResultSet: error in parse tree");
 #if OSL_DEBUG_LEVEL > 0
     OSQLParseNode * pMark = pParameter->getChild(0);
     OSL_UNUSED( pMark );
@@ -506,13 +506,13 @@ aParseNodes.begin();
 // -----------------------------------------------------------------------------
 void OPreparedStatement::scanParameter(OSQLParseNode* pParseNode,::std::vector< OSQLParseNode*>& _rParaNodes)
 {
-    OSL_ENSURE(pParseNode != NULL,"OResultSet: interner Fehler: ungueltiger ParseNode");
+    OSL_ENSURE(pParseNode != NULL,"OResultSet: internal error: invalid ParseNode");
 
     // Parameter Name-Row found?
     if (SQL_ISRULE(pParseNode,parameter))
     {
-        OSL_ENSURE(pParseNode->count() >= 1,"OResultSet: Parse Tree fehlerhaft");
-        OSL_ENSURE(pParseNode->getChild(0)->getNodeType() == SQL_NODE_PUNCTUATION,"OResultSet: Parse Tree fehlerhaft");
+        OSL_ENSURE(pParseNode->count() >= 1,"OResultSet: Faulty Parse Tree");
+        OSL_ENSURE(pParseNode->getChild(0)->getNodeType() == SQL_NODE_PUNCTUATION,"OResultSet: Faulty Parse Tree");
 
         _rParaNodes.push_back(pParseNode);
         // further search isn't necessary
