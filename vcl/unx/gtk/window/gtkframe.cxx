@@ -3984,8 +3984,14 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         g_slist_free (attr_list);
 
         // Set the sal attributes on our text
-        for (int i = start; i < end; i++)
+        for (int i = start; i < end; ++i)
+        {
+            SAL_WARN_IF(i >= static_cast<int>(pThis->m_aInputFlags.size()),
+                "vcl.gtk", "pango attrib out of range?");
+            if (i >= static_cast<int>(pThis->m_aInputFlags.size()))
+                continue;
             pThis->m_aInputFlags[i] |= sal_attr;
+        }
     } while (pango_attr_iterator_next (iter));
 
     pThis->m_aInputEvent.mpTextAttr         = &pThis->m_aInputFlags[0];
