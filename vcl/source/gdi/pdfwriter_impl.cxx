@@ -2364,6 +2364,7 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
 
     Point aNewPos( 0, 0 );
     bool bRightToLeft;
+    Reserve(rArgs.mnLength);
     for( int nCharPos = -1; rArgs.GetNextPos( &nCharPos, &bRightToLeft ); )
     {
         // TODO: handle unicode surrogates

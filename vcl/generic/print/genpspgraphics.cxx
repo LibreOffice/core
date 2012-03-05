@@ -616,6 +616,9 @@ bool PspFontLayout::LayoutText( ImplLayoutArgs& rArgs )
     Point aNewPos( 0, 0 );
     GlyphItem aPrevItem;
     rtl_TextEncoding aFontEnc = mrPrinterGfx.GetFontMgr().getFontEncoding( mnFontID );
+
+    Reserve(rArgs.mnLength);
+
     for(;;)
     {
         bool bRightToLeft;
