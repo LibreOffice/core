@@ -889,7 +889,6 @@ comphelper::EventLogger::EventLogger(com::sun::star::uno::Reference<com::sun::st
 comphelper::FastPropertySetInfo::FastPropertySetInfo()
 comphelper::FastPropertySetInfo::addProperty(com::sun::star::beans::Property const&)
 comphelper::MimeConfigurationHelper::GetFilterFlags(rtl::OUString const&)
-comphelper::OAccessibleTextHelper::OAccessibleTextHelper()
 comphelper::OPropertyContainerHelper::modifyAttributes(int, int, int)
 comphelper::OSelectionChangeListener::disposeAdapter()
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const

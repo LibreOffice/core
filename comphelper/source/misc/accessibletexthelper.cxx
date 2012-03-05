@@ -790,12 +790,6 @@ namespace comphelper
     // OAccessibleTextHelper
     //==============================================================================
 
-    OAccessibleTextHelper::OAccessibleTextHelper()
-    {
-    }
-
-    // -----------------------------------------------------------------------------
-
     OAccessibleTextHelper::OAccessibleTextHelper( IMutex* _pExternalLock )
         :OAccessibleExtendedComponentHelper( _pExternalLock )
     {
