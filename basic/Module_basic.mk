@@ -32,7 +32,6 @@ ifneq ($(DISABLE_SCRIPTING),TRUE)
 
 $(eval $(call gb_Module_add_targets,basic,\
 	AllLangResTarget_sb \
-	Library_sb \
 ))
 
 $(eval $(call gb_Module_add_check_targets,basic,\
@@ -42,6 +41,7 @@ $(eval $(call gb_Module_add_check_targets,basic,\
 endif
 
 $(eval $(call gb_Module_add_targets,basic,\
+	Library_sb \
 	Package_inc \
 ))
 

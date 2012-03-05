@@ -64,6 +64,8 @@ $(eval $(call gb_Library_add_linked_libs,sb,\
 	$(gb_STDLIBS) \
 ))
 
+ifneq ($(DISABLE_SCRIPTING),TRUE)
+
 $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/basmgr/basicmanagerrepository \
 	basic/source/basmgr/basmgr \
@@ -102,8 +104,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/ddectrl \
 	basic/source/runtime/inputbox \
 	basic/source/runtime/iosys \
-	basic/source/runtime/methods \
-	basic/source/runtime/methods1 \
 	basic/source/runtime/props \
 	basic/source/runtime/runtime \
 	basic/source/runtime/sbdiagnose \
@@ -112,13 +112,21 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/step0 \
 	basic/source/runtime/step1 \
 	basic/source/runtime/step2 \
+	basic/source/sbx/sbxmstrm \
+))
+
+endif
+
+$(eval $(call gb_Library_add_exception_objects,sb,\
+	basic/source/runtime/methods \
+	basic/source/runtime/methods1 \
 	basic/source/sbx/sbxarray \
-	basic/source/sbx/sbxbase \
 	basic/source/sbx/sbxbool \
 	basic/source/sbx/sbxbyte \
 	basic/source/sbx/sbxchar \
 	basic/source/sbx/sbxcoll \
 	basic/source/sbx/sbxcurr \
+	basic/source/sbx/sbxbase \
 	basic/source/sbx/sbxdate \
 	basic/source/sbx/sbxdbl \
 	basic/source/sbx/sbxdec \
@@ -126,7 +134,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/sbx/sbxform \
 	basic/source/sbx/sbxint \
 	basic/source/sbx/sbxlng \
-	basic/source/sbx/sbxmstrm \
 	basic/source/sbx/sbxobj \
 	basic/source/sbx/sbxres \
 	basic/source/sbx/sbxscan \
