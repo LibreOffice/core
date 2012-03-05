@@ -55,11 +55,10 @@ $(call gb_Helper_abbreviate_dirs,\
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-c $(3) \
 		-o $(1) \
-		$(if $(filter IOS,$(OS)),,-MMD -MT $(1) \
-			-MP -MF $(4)) \
+		-MMD -MT $(1) \
+		-MP -MF $(4) \
 		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE))
-	$(if $(filter IOS,$(OS)),@echo $(1) : $(3) >$(4))
 endef
 
 define gb_SrsPartTarget__command_dep
