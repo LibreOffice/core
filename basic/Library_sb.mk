@@ -112,7 +112,6 @@ $(eval $(call gb_Library_add_exception_objects,sb,\
 	basic/source/runtime/step0 \
 	basic/source/runtime/step1 \
 	basic/source/runtime/step2 \
-	basic/source/sbx/sbxmstrm \
 ))
 
 endif
