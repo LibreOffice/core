@@ -96,6 +96,7 @@ scaddins\
 sccomp\
 scripting\
 sd\
+sdext\
 sfx2\
 slideshow\
 smoketest\
@@ -220,7 +221,6 @@ reportbuilder\
 rhino\
 saxon\
 scp2\
-sdext\
 setup_native\
 shell\
 solenv\
