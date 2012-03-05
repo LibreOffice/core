@@ -666,7 +666,6 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
     sal_uInt8 nTag,nRecord;
     sal_uInt8 nTabType,nTabStops;
     sal_uInt16 nTabOffset;
-    rtl::OUString sFontName;
     int i,nRet=1,newline=0;
     bool bSilent=false;
     int nPart=0;
@@ -1762,8 +1761,7 @@ int MathType::HandleRecords(int nLevel,sal_uInt8 nSelector,
                             break;
                         aSeq.push_back(nChar8);
                     }
-                    sFontName = rtl::OUString(&aSeq[0], aSeq.size(),
-                        RTL_TEXTENCODING_MS_1252);
+                    // Do nothing to the font name now in aSeq!?
                 }
                 break;
             case SIZE:
