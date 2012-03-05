@@ -70,6 +70,7 @@ using namespace com::sun::star::i18n;
 
 void unoToSbxValue( SbxVariable* pVar, const Any& aValue );
 Any sbxToUnoValue( SbxVariable* pVar, const Type& rType, com::sun::star::beans::Property* pUnoProperty = NULL );
+sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 nFirstDay = 0 );
 
 static Reference< XCalendar3 > getLocaleCalendar( void )
 {
@@ -3210,7 +3211,7 @@ RTLFUNC(Me)
 
 #endif
 
-sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 nFirstDay = 0 )
+sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam, sal_Int16 nFirstDay )
 {
     Date aRefDate( 1,1,1900 );
     long nDays = (long) aDate;
