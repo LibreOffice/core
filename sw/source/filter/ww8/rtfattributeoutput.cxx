@@ -1592,7 +1592,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                         uno::Reference<beans::XPropertySet> xPropSet(xControlModel, uno::UNO_QUERY);
                         uno::Reference<beans::XPropertySetInfo> xPropSetInfo = xPropSet->getPropertySetInfo();
                         OUString sName;
-                        if (xInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.CheckBox"))))
+                        if (xInfo->supportsService("com.sun.star.form.component.CheckBox"))
                         {
 
                             m_aRun->append(OUStringToOString(OUString(FieldString(ww::eFORMCHECKBOX)), m_rExport.eCurrentEncoding));
@@ -1602,7 +1602,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                             m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFHPS "20");
 
                             OUString aStr;
-                            sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+                            sName = "Name";
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;
@@ -1611,7 +1611,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-                            sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpText"));
+                            sName = "HelpText";
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;
@@ -1621,7 +1621,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-                            sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpF1Text"));
+                            sName = "HelpF1Text";
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;
@@ -1632,10 +1632,10 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                             }
 
                             sal_Int16 nTemp = 0;
-                            xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultState"))) >>= nTemp;
+                            xPropSet->getPropertyValue("DefaultState") >>= nTemp;
                             m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
                             m_aRun->append((sal_Int32)nTemp);
-                            xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("State"))) >>= nTemp;
+                            xPropSet->getPropertyValue("State") >>= nTemp;
                             m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFRES);
                             m_aRun->append((sal_Int32)nTemp);
 
@@ -1644,7 +1644,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                             // field result is empty, ffres already contains the form result
                             m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
                         }
-                        else if (xInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.TextField"))))
+                        else if (xInfo->supportsService("com.sun.star.form.component.TextField"))
                         {
                             OStringBuffer aBuf;
                             OString aStr;
@@ -1654,12 +1654,12 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                             m_aRun->append(OUStringToOString(OUString(FieldString(ww::eFORMTEXT)), m_rExport.eCurrentEncoding));
                             m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_DATAFIELD " ");
                             for (int i = 0; i < 8; i++) aBuf.append((sal_Char)0x00);
-                            xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))) >>= aTmp;
+                            xPropSet->getPropertyValue("Name") >>= aTmp;
                             aStr = OUStringToOString(aTmp, m_rExport.eCurrentEncoding);
                             aBuf.append((sal_Char)aStr.getLength());
                             aBuf.append(aStr);
                             aBuf.append((sal_Char)0x00);
-                            xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultText"))) >>= aTmp;
+                            xPropSet->getPropertyValue("DefaultText") >>= aTmp;
                             aStr = OUStringToOString(aTmp, m_rExport.eCurrentEncoding);
                             aBuf.append((sal_Char)aStr.getLength());
                             aBuf.append(aStr);
@@ -1670,11 +1670,11 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                                 m_aRun->append(m_rExport.OutHex(*pStr, 2));
                             m_aRun->append('}');
                             m_aRun->append("}{" OOO_STRING_SVTOOLS_RTF_FLDRSLT " ");
-                            xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Text"))) >>= aTmp;
+                            xPropSet->getPropertyValue("Text") >>= aTmp;
                             m_aRun->append(OUStringToOString(aTmp, m_rExport.eCurrentEncoding));
                             m_aRun->append('}');
                             m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FORMFIELD "{");
-                            sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpText"));
+                            sName = "HelpText";
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aTmp;
@@ -1684,7 +1684,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-                            sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpF1Text"));
+                            sName = "HelpF1Text";
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aTmp;
@@ -1695,7 +1695,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                             }
                             m_aRun->append("}");
                         }
-                        else if (xInfo->supportsService(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.form.component.ListBox"))))
+                        else if (xInfo->supportsService("com.sun.star.form.component.ListBox"))
                         {
                             OUString aStr;
                             uno::Sequence<sal_Int16> aIntSeq;
@@ -1706,7 +1706,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                             m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFTYPE "2"); // 2 = list
                             m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFHASLISTBOX);
 
-                            xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultSelection"))) >>= aIntSeq;
+                            xPropSet->getPropertyValue("DefaultSelection") >>= aIntSeq;
                             if( aIntSeq.getLength() )
                             {
                                 m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFDEFRES);
@@ -1714,7 +1714,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                                 m_aRun->append((sal_Int32)aIntSeq[0]);
                             }
 
-                            xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SelectedItems"))) >>= aIntSeq;
+                            xPropSet->getPropertyValue("SelectedItems") >>= aIntSeq;
                             if( aIntSeq.getLength() )
                             {
                                 m_aRun->append(OOO_STRING_SVTOOLS_RTF_FFRES);
@@ -1722,7 +1722,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                                 m_aRun->append((sal_Int32)aIntSeq[0]);
                             }
 
-                            sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"));
+                            sName = "Name";
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;
@@ -1731,7 +1731,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-                            sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpText"));
+                            sName = "HelpText";
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;
@@ -1741,7 +1741,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                                 m_aRun->append('}');
                             }
 
-                            sName = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HelpF1Text"));
+                            sName = "HelpF1Text";
                             if (xPropSetInfo->hasPropertyByName(sName))
                             {
                                 xPropSet->getPropertyValue(sName) >>= aStr;
@@ -1752,7 +1752,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
                             }
 
 
-                            xPropSet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("StringItemList"))) >>= aStrSeq;
+                            xPropSet->getPropertyValue("StringItemList") >>= aStrSeq;
                             sal_uInt32 nListItems = aStrSeq.getLength();
                             for (sal_uInt32 i = 0; i < nListItems; i++)
                                 m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_FFL " ")

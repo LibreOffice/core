@@ -168,9 +168,9 @@ eF_ResT SwWW8ImplReader::Read_F_FormTextBox( WW8FieldDesc* pF, String& rStr )
 
     if (aBookmarkName.Len()>0) {
         maFieldStack.back().SetBookmarkName(aBookmarkName);
-        maFieldStack.back().SetBookmarkType(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMTEXT)));
-        maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Description"))] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
-        maFieldStack.back().getParameters()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name"))] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+        maFieldStack.back().SetBookmarkType(ODF_FORMTEXT);
+        maFieldStack.back().getParameters()["Description"] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+        maFieldStack.back().getParameters()["Name"] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
     }
     return FLD_TEXT;
     }
@@ -217,14 +217,13 @@ eF_ResT SwWW8ImplReader::Read_F_FormCheckBox( WW8FieldDesc* pF, String& rStr )
     {
         IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
         IFieldmark* pFieldmark = dynamic_cast<IFieldmark*>( pMarksAccess->makeNoTextFieldBookmark(
-                *pPaM, aBookmarkName,
-                rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMCHECKBOX )) ) );
+                *pPaM, aBookmarkName, ODF_FORMCHECKBOX ) );
         OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
         if (pFieldmark!=NULL) {
             IFieldmark::parameter_map_t* const pParameters = pFieldmark->GetParameters();
             ICheckboxFieldmark* pCheckboxFm = dynamic_cast<ICheckboxFieldmark*>(pFieldmark);
-            (*pParameters)[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_NAME))] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
-            (*pParameters)[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMCHECKBOX_HELPTEXT))] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
+            (*pParameters)[ODF_FORMCHECKBOX_NAME] = uno::makeAny(::rtl::OUString(aFormula.sTitle));
+            (*pParameters)[ODF_FORMCHECKBOX_HELPTEXT] = uno::makeAny(::rtl::OUString(aFormula.sToolTip));
 
             if(pCheckboxFm)
                 pCheckboxFm->SetChecked(aFormula.nChecked);
@@ -291,16 +290,15 @@ eF_ResT SwWW8ImplReader::Read_F_FormListBox( WW8FieldDesc* pF, String& rStr)
         {
             IDocumentMarkAccess* pMarksAccess = rDoc.getIDocumentMarkAccess( );
             IFieldmark *pFieldmark = dynamic_cast<IFieldmark*>(
-                    pMarksAccess->makeNoTextFieldBookmark( *pPaM, aBookmarkName,
-                           ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_FORMDROPDOWN )) ) );
+                    pMarksAccess->makeNoTextFieldBookmark( *pPaM, aBookmarkName, ODF_FORMDROPDOWN ) );
             OSL_ENSURE(pFieldmark!=NULL, "hmmm; why was the bookmark not created?");
             if ( pFieldmark != NULL )
             {
                 uno::Sequence< ::rtl::OUString > vListEntries(aFormula.maListEntries.size());
                 ::std::copy(aFormula.maListEntries.begin(), aFormula.maListEntries.end(), ::comphelper::stl_begin(vListEntries));
-                (*pFieldmark->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY))] = uno::makeAny(vListEntries);
+                (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_LISTENTRY] = uno::makeAny(vListEntries);
                 sal_Int32 nIndex = aFormula.fDropdownIndex  < aFormula.maListEntries.size() ? aFormula.fDropdownIndex : 0;
-                (*pFieldmark->GetParameters())[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT))] = uno::makeAny(nIndex);
+                (*pFieldmark->GetParameters())[ODF_FORMDROPDOWN_RESULT] = uno::makeAny(nIndex);
                 // set field data here...
             }
         }
@@ -2185,7 +2183,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         {
             if ( iRes != 25 )
                 nChecked = iRes;
-            sDefault = ( wDef == 0 ) ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("0") ) :  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("1") );
+            sDefault = ( wDef == 0 ) ? "0" : "1";
         }
     }
     // xstzTextFormat

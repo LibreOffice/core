@@ -774,7 +774,7 @@ namespace sw
             SwapQuotesInField(rParams);
 
             // Force to Japanese when finding one of 'geaE'
-            rtl::OUString sJChars(RTL_CONSTASCII_USTRINGPARAM("geE"));
+            rtl::OUString sJChars( "geE" );
             bool bForceJapanese = ( STRING_NOTFOUND != rParams.SearchChar( sJChars.getStr() ) );
             if ( bForceJapanese )
             {

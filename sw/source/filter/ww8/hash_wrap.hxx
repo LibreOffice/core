@@ -83,12 +83,12 @@ namespace ww
                 {
                     if (!bBroken)
                     {
-                        sError = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        sError =
                             "WW8: Duplicate in list, almost certainly don't "
                             "want that!\n"
                             "(You will not see this message again unless you "
                             "restart)\n"
-                            "Extra entries are...\n"));
+                            "Extra entries are...\n";
                         bBroken=true;
                     }
 

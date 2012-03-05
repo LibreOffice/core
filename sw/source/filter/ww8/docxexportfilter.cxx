@@ -42,8 +42,6 @@ using namespace ::comphelper;
 using namespace ::com::sun::star;
 using ::rtl::OUString;
 
-#define S( x ) OUString( RTL_CONSTASCII_USTRINGPARAM( x ) )
-
 DocxExportFilter::DocxExportFilter( const uno::Reference< uno::XComponentContext >& xContext )
     : oox::core::XmlFilterBase( xContext )
 {
@@ -107,7 +105,7 @@ bool DocxExportFilter::exportDocument()
 
 OUString DocxExport_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME ) );
+    return OUString( IMPL_NAME );
 }
 
 OUString DocxExportFilter::implGetImplementationName() const
@@ -117,7 +115,7 @@ OUString DocxExportFilter::implGetImplementationName() const
 
 uno::Sequence< OUString > SAL_CALL DocxExport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ExportFilter" ) );
+    const OUString aServiceName( "com.sun.star.document.ExportFilter" );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }

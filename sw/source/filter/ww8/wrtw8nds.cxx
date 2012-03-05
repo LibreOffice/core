@@ -122,17 +122,17 @@ static String lcl_getFieldCode( const IFieldmark* pFieldmark ) {
 
     if ( !pFieldmark) {
         return String();
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMTEXT ) {
         return String::CreateFromAscii(" FORMTEXT ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ) {
         return String::CreateFromAscii(" FORMDROPDOWN ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX ) {
         return String::CreateFromAscii(" FORMCHECKBOX ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_TOC ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_TOC ) {
         return String::CreateFromAscii(" TOC ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_HYPERLINK ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK ) {
         return String::CreateFromAscii(" HYPERLINK ");
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_PAGEREF ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_PAGEREF ) {
         return String::CreateFromAscii(" PAGEREF ");
     } else {
         return pFieldmark->GetFieldname();
@@ -143,17 +143,17 @@ ww::eField lcl_getFieldId( const IFieldmark* pFieldmark ) {
     OSL_ENSURE(pFieldmark!=NULL, "where is my fieldmark???");
     if ( !pFieldmark ) {
         return ww::eUNKNOWN;
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMTEXT ) {
         return ww::eFORMTEXT;
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ) {
         return ww::eFORMDROPDOWN;
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX ) {
         return ww::eFORMCHECKBOX;
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_TOC ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_TOC ) {
         return ww::eTOC;
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_HYPERLINK ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_HYPERLINK ) {
         return ww::eHYPERLINK;
-    } else if ( pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_PAGEREF ) ) ) {
+    } else if ( pFieldmark->GetFieldname( ) == ODF_PAGEREF ) {
         return ww::ePAGEREF;
     } else {
         return ww::eUNKNOWN;
@@ -1839,14 +1839,13 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                if ( pFieldmark && pFieldmark->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) )
+                if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
                     AppendBookmark( pFieldmark->GetName(), false );
                 ww::eField eFieldId = lcl_getFieldId( pFieldmark );
                 String sCode = lcl_getFieldCode( pFieldmark );
-                if ( pFieldmark && pFieldmark->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_UNHANDLED ) ) )
+                if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
                 {
-                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_ID_PARAM )) );
+                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sFieldId;
@@ -1854,8 +1853,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                         eFieldId = (ww::eField)sFieldId.toInt32();
                     }
 
-                    it = pFieldmark->GetParameters()->find(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_CODE_PARAM )) );
+                    it = pFieldmark->GetParameters()->find( ODF_CODE_PARAM );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sOUCode;
@@ -1864,17 +1862,16 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                     }
                 }
                 OutputField( NULL, eFieldId, sCode, WRITEFIELD_START | WRITEFIELD_CMD_START );
-                if ( pFieldmark && pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) )
+                if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_FORMTEXT )
                     WriteFormData( *pFieldmark );
-                else if ( pFieldmark && pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_HYPERLINK ) ) )
+                else if ( pFieldmark && pFieldmark->GetFieldname( ) == ODF_HYPERLINK )
                     WriteHyperlinkData( *pFieldmark );
                 OutputField( NULL, lcl_getFieldId( pFieldmark ), String(), WRITEFIELD_CMD_END );
 
-                if ( pFieldmark && pFieldmark->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_UNHANDLED ) ) )
+                if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
                 {
                     // Check for the presence of a linked OLE object
-                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_OLE_PARAM )) );
+                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_OLE_PARAM );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sOleId;
@@ -1892,10 +1889,9 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDEND??" );
 
                 ww::eField eFieldId = lcl_getFieldId( pFieldmark );
-                if ( pFieldmark && pFieldmark->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_UNHANDLED ) ) )
+                if ( pFieldmark && pFieldmark->GetFieldname() == ODF_UNHANDLED )
                 {
-                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find(
-                            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ODF_ID_PARAM )) );
+                    IFieldmark::parameter_map_t::const_iterator it = pFieldmark->GetParameters()->find( ODF_ID_PARAM );
                     if ( it != pFieldmark->GetParameters()->end() )
                     {
                         rtl::OUString sFieldId;
@@ -1905,7 +1901,7 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 }
 
                 OutputField( NULL, eFieldId, String(), WRITEFIELD_CLOSE );
-                if ( pFieldmark && pFieldmark->GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) )
+                if ( pFieldmark && pFieldmark->GetFieldname() == ODF_FORMTEXT )
                     AppendBookmark( pFieldmark->GetName(), false );
             }
             else if ( ch == CH_TXT_ATR_FORMELEMENT )
@@ -1914,8 +1910,8 @@ void MSWordExportBase::OutputTextNode( const SwTxtNode& rNode )
                 ::sw::mark::IFieldmark const * const pFieldmark = pMarkAccess->getFieldmarkFor( aPosition );
                 OSL_ENSURE( pFieldmark, "Looks like this doc is broken...; where is the Fieldmark for the FIELDSTART??" );
 
-                bool isDropdownOrCheckbox = pFieldmark && (pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) ||
-                    pFieldmark->GetFieldname( ).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ));
+                bool isDropdownOrCheckbox = pFieldmark && (pFieldmark->GetFieldname( ) == ODF_FORMDROPDOWN ||
+                    pFieldmark->GetFieldname( ) == ODF_FORMCHECKBOX );
 
                 if ( isDropdownOrCheckbox )
                     AppendBookmark( pFieldmark->GetName(), 0 );

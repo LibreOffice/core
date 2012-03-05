@@ -3464,21 +3464,21 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     const ::sw::mark::ICheckboxFieldmark* pAsCheckbox = dynamic_cast< const ::sw::mark::ICheckboxFieldmark* >( pFieldmark );
 
 
-    OSL_ENSURE(rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) ||
-                rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) ||
-                rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ), "Unknown field type!!!");
-    if ( ! ( rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMTEXT ) ) ||
-                rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) ||
-                rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMCHECKBOX ) ) ) )
+    OSL_ENSURE(rFieldmark.GetFieldname() == ODF_FORMTEXT ||
+                rFieldmark.GetFieldname() == ODF_FORMDROPDOWN ||
+                rFieldmark.GetFieldname() == ODF_FORMCHECKBOX, "Unknown field type!!!");
+    if ( ! ( rFieldmark.GetFieldname() == ODF_FORMTEXT ||
+                rFieldmark.GetFieldname() == ODF_FORMDROPDOWN ||
+                rFieldmark.GetFieldname() == ODF_FORMCHECKBOX ) )
         return;
 
     int type = 0; // TextFieldmark
     if ( pAsCheckbox )
         type = 1;
-    if ( rFieldmark.GetFieldname().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( ODF_FORMDROPDOWN ) ) )
+    if ( rFieldmark.GetFieldname() == ODF_FORMDROPDOWN )
         type=2;
 
-    ::sw::mark::IFieldmark::parameter_map_t::const_iterator pNameParameter = rFieldmark.GetParameters()->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("name")));
+    ::sw::mark::IFieldmark::parameter_map_t::const_iterator pNameParameter = rFieldmark.GetParameters()->find("name");
     ::rtl::OUString ffname;
     if(pNameParameter != rFieldmark.GetParameters()->end())
         pNameParameter->second >>= ffname;
@@ -3518,7 +3518,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
         ffres = 1;
     else if ( type == 2 )
     {
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_RESULT)));
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pResParameter = rFieldmark.GetParameters()->find(ODF_FORMDROPDOWN_RESULT);
         if(pResParameter != rFieldmark.GetParameters()->end())
             pResParameter->second >>= ffres;
         else
@@ -3531,7 +3531,7 @@ void WW8Export::WriteFormData( const ::sw::mark::IFieldmark& rFieldmark )
     {
         aFldHeader.bits |= 0x8000; // ffhaslistbox
         const ::sw::mark::IFieldmark::parameter_map_t* const pParameters = rFieldmark.GetParameters();
-        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ODF_FORMDROPDOWN_LISTENTRY)));
+        ::sw::mark::IFieldmark::parameter_map_t::const_iterator pListEntries = pParameters->find(ODF_FORMDROPDOWN_LISTENTRY);
         if(pListEntries != pParameters->end())
         {
             uno::Sequence< ::rtl::OUString > vListEntries;
@@ -3769,26 +3769,26 @@ const NfKeywordTable & MSWordExportBase::GetNfKeywordTable()
     {
         pKeyMap.reset(new NfKeywordTable);
         NfKeywordTable & rKeywordTable = *pKeyMap;
-        rKeywordTable[NF_KEY_D] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("d"));
-        rKeywordTable[NF_KEY_DD] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dd"));
-        rKeywordTable[NF_KEY_DDD] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ddd"));
-        rKeywordTable[NF_KEY_DDDD] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dddd"));
-        rKeywordTable[NF_KEY_M] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("M"));
-        rKeywordTable[NF_KEY_MM] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MM"));
-        rKeywordTable[NF_KEY_MMM] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MMM"));
-        rKeywordTable[NF_KEY_MMMM] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MMMM"));
-        rKeywordTable[NF_KEY_NN] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ddd"));
-        rKeywordTable[NF_KEY_NNN] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dddd"));
-        rKeywordTable[NF_KEY_NNNN] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("dddd"));
-        rKeywordTable[NF_KEY_YY] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("yy"));
-        rKeywordTable[NF_KEY_YYYY] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("yyyy"));
-        rKeywordTable[NF_KEY_H] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("H"));
-        rKeywordTable[NF_KEY_HH] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HH"));
-        rKeywordTable[NF_KEY_MI] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("m"));
-        rKeywordTable[NF_KEY_MMI] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("mm"));
-        rKeywordTable[NF_KEY_S] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("s"));
-        rKeywordTable[NF_KEY_SS] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ss"));
-        rKeywordTable[NF_KEY_AMPM] = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AM/PM"));
+        rKeywordTable[NF_KEY_D] = "d";
+        rKeywordTable[NF_KEY_DD] = "dd";
+        rKeywordTable[NF_KEY_DDD] = "ddd";
+        rKeywordTable[NF_KEY_DDDD] = "dddd";
+        rKeywordTable[NF_KEY_M] = "M";
+        rKeywordTable[NF_KEY_MM] = "MM";
+        rKeywordTable[NF_KEY_MMM] = "MMM";
+        rKeywordTable[NF_KEY_MMMM] = "MMMM";
+        rKeywordTable[NF_KEY_NN] = "ddd";
+        rKeywordTable[NF_KEY_NNN] = "dddd";
+        rKeywordTable[NF_KEY_NNNN] = "dddd";
+        rKeywordTable[NF_KEY_YY] = "yy";
+        rKeywordTable[NF_KEY_YYYY] = "yyyy";
+        rKeywordTable[NF_KEY_H] = "H";
+        rKeywordTable[NF_KEY_HH] = "HH";
+        rKeywordTable[NF_KEY_MI] = "m";
+        rKeywordTable[NF_KEY_MMI] = "mm";
+        rKeywordTable[NF_KEY_S] = "s";
+        rKeywordTable[NF_KEY_SS] = "ss";
+        rKeywordTable[NF_KEY_AMPM] = "AM/PM";
     }
 
     return *pKeyMap;

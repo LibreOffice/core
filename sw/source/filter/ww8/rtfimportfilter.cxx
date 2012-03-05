@@ -84,7 +84,7 @@ sal_Bool RtfImportFilter::filter( const uno::Sequence< beans::PropertyValue >& a
     OUString sTemp;
     for ( sal_Int32 i = 0; i < aDescriptor.getLength(); i++ )
     {
-        if( aDescriptor[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("URL")) )
+        if( aDescriptor[i].Name == "URL" )
         {
             aDescriptor[i].Value >>= sTemp;
             aURL = sTemp;
@@ -114,12 +114,12 @@ void RtfImportFilter::setTargetDocument( const uno::Reference< lang::XComponent 
 
 OUString RtfImport_getImplementationName()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( IMPL_NAME_RTFIMPORT ) );
+    return OUString( IMPL_NAME_RTFIMPORT );
 }
 
 uno::Sequence< OUString > SAL_CALL RtfImport_getSupportedServiceNames() throw()
 {
-    const OUString aServiceName( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.document.ImportFilter" ) );
+    const OUString aServiceName( "com.sun.star.document.ImportFilter" );
     const uno::Sequence< OUString > aSeq( &aServiceName, 1 );
     return aSeq;
 }

@@ -216,13 +216,13 @@ bool BasicProjImportHelper::import( const uno::Reference< io::XInputStream >& rx
 
 rtl::OUString BasicProjImportHelper::getProjectName()
 {
-    rtl::OUString sProjName( RTL_CONSTASCII_USTRINGPARAM("Standard") );
+    rtl::OUString sProjName( "Standard" );
     uno::Reference< beans::XPropertySet > xProps( mrDocShell.GetModel(), uno::UNO_QUERY );
     if ( xProps.is() )
     {
         try
         {
-            uno::Reference< script::vba::XVBACompatibility > xVBA( xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "BasicLibraries" ) ) ), uno::UNO_QUERY_THROW  );
+            uno::Reference< script::vba::XVBACompatibility > xVBA( xProps->getPropertyValue( "BasicLibraries" ), uno::UNO_QUERY_THROW  );
             sProjName = xVBA->getProjectName();
 
         }
@@ -771,7 +771,7 @@ SdrObject* SwMSDffManager::ProcessObj(SvStream& rSt,
                     {
                         fExtraTextRotation /= 100.0;
                         SdrCustomShapeGeometryItem aGeometryItem( (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY ) );
-                        const rtl::OUString sTextRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "TextRotateAngle" ) );
+                        const rtl::OUString sTextRotateAngle( "TextRotateAngle" );
                         com::sun::star::beans::PropertyValue aPropVal;
                         aPropVal.Name = sTextRotateAngle;
                         aPropVal.Value <<= fExtraTextRotation;
@@ -1590,10 +1590,9 @@ void SwWW8ImplReader::ImportDop()
             sal_Bool bValue = false;
             if (xInfo.is())
             {
-                if (xInfo->hasPropertyByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ApplyFormDesignMode"))))
+                if (xInfo->hasPropertyByName("ApplyFormDesignMode"))
                 {
-                    xDocProps->setPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ApplyFormDesignMode")),
-                                                cppu::bool2any(bValue));
+                    xDocProps->setPropertyValue("ApplyFormDesignMode", cppu::bool2any(bValue));
                 }
             }
         }
@@ -4307,7 +4306,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
     uno::Sequence< rtl::OUString > sGlobalTemplates;
 
     // first get the autoload addins in the directory STARTUP
-    uno::Reference< ucb::XSimpleFileAccess > xSFA( ::comphelper::getProcessServiceFactory()->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.ucb.SimpleFileAccess")) ), uno::UNO_QUERY_THROW );
+    uno::Reference< ucb::XSimpleFileAccess > xSFA( ::comphelper::getProcessServiceFactory()->createInstance( "com.sun.star.ucb.SimpleFileAccess" ), uno::UNO_QUERY_THROW );
 
     if( xSFA->isFolder( aAddinPath ) )
         sGlobalTemplates = xSFA->getFolderContents( aAddinPath, sal_False );
@@ -4334,7 +4333,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
         aBasicImporter.import( mpDocShell->GetMedium()->GetInputStream() );
         lcl_createTemplateToProjectEntry( xPrjNameCache, aURL, aBasicImporter.getProjectName() );
         // Read toolbars & menus
-        SvStorageStreamRef refMainStream = rRoot->OpenSotStream( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("WordDocument") ) );
+        SvStorageStreamRef refMainStream = rRoot->OpenSotStream( String::CreateFromAscii( "WordDocument" ));
         refMainStream->SetNumberFormatInt(NUMBERFORMAT_INT_LITTLEENDIAN);
         WW8Fib aWwFib( *refMainStream, 8 );
         SvStorageStreamRef xTableStream = rRoot->OpenSotStream(String::CreateFromAscii( aWwFib.fWhichTblStm ? SL::a1Table : SL::a0Table), STREAM_STD_READ);
@@ -4598,7 +4597,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             uno::Reference< container::XNameContainer > xPrjNameCache;
             uno::Reference< lang::XMultiServiceFactory> xSF(mpDocShell->GetModel(), uno::UNO_QUERY);
             if ( xSF.is() )
-                xPrjNameCache.set( xSF->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.VBAProjectNameProvider" ) ) ), uno::UNO_QUERY );
+                xPrjNameCache.set( xSF->createInstance( "ooo.vba.VBAProjectNameProvider" ), uno::UNO_QUERY );
 
             // Read Global templates
             ReadGlobalTemplateSettings( sCreatedFrom, xPrjNameCache );
@@ -4607,7 +4606,7 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             uno::Any aGlobs;
             uno::Sequence< uno::Any > aArgs(1);
             aArgs[ 0 ] <<= mpDocShell->GetModel();
-            aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ooo.vba.word.Globals")), aArgs );
+            aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
             BasicManager *pBasicMan = mpDocShell->GetBasicManager();
             if (pBasicMan)
                 pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
@@ -5465,9 +5464,7 @@ sal_uLong WW8Reader::OpenMainStream( SvStorageStreamRef& rRef, sal_uInt16& rBuff
 {
     sal_uLong nRet = ERR_SWG_READ_ERROR;
     OSL_ENSURE( pStg, "wo ist mein Storage?" );
-    rRef = pStg->OpenSotStream(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("WordDocument")),
-        STREAM_READ | STREAM_SHARE_DENYALL);
+    rRef = pStg->OpenSotStream( String::CreateFromAscii( "WordDocument" ), STREAM_READ | STREAM_SHARE_DENYALL);
 
     if( rRef.Is() )
     {

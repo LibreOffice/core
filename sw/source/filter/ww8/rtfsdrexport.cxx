@@ -432,7 +432,7 @@ void RtfSdrExport::impl_writeGraphic()
     uno::Reference<drawing::XShape> xShape = GetXShapeForSdrObject(const_cast<SdrObject*>(m_pSdrObject));
     uno::Reference<beans::XPropertySet> xPropertySet(xShape, uno::UNO_QUERY);
     OUString sGraphicURL;
-    xPropertySet->getPropertyValue(OUString(RTL_CONSTASCII_USTRINGPARAM("GraphicURL"))) >>= sGraphicURL;
+    xPropertySet->getPropertyValue("GraphicURL") >>= sGraphicURL;
     OString aURLBS(OUStringToOString(sGraphicURL, RTL_TEXTENCODING_UTF8));
     const char aURLBegin[] = "vnd.sun.star.GraphicObject:";
     Graphic aGraphic = GraphicObject(aURLBS.copy(RTL_CONSTASCII_LENGTH(aURLBegin))).GetTransformedGraphic();
