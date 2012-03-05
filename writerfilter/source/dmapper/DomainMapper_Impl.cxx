@@ -1524,6 +1524,9 @@ void DomainMapper_Impl::PushShapeContext( const uno::Reference< drawing::XShape 
         {
             xProps->setPropertyValue( rPropNameSupplier.GetName( PROP_ANCHOR_TYPE ), bIsGraphic  ?  uno::makeAny( text::TextContentAnchorType_AS_CHARACTER ) : uno::makeAny( text::TextContentAnchorType_AT_PARAGRAPH ) );
         }
+
+        appendTableManager( );
+        getTableManager().startLevel();
     }
     catch ( const uno::Exception& e )
     {
@@ -1537,6 +1540,9 @@ void DomainMapper_Impl::PopShapeContext()
 {
     if ( m_aAnchoredStack.size() > 0 )
     {
+        getTableManager().endLevel();
+        popTableManager();
+
         // For OLE object replacement shape, the text append context was already removed
         // or the OLE object couldn't be inserted.
         if ( !m_aAnchoredStack.top().bToRemove )
