@@ -841,7 +841,7 @@ bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
         // calculate right x-position for this glyph cluster
         // break if no more glyphs in layout
         // break at next glyph cluster start
-        while( (pG+1 < end) && !pG[1].IsClusterStart() )
+        while( (pG+1 != end) && !pG[1].IsClusterStart() )
         {
             // advance to next glyph in cluster
             ++pG;
