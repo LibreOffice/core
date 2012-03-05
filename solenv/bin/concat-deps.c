@@ -692,6 +692,8 @@ static void _cancel_relative(char* base, char** ref_cursor, char** ref_cursor_ou
     do
     {
         cursor += 3;
+        while(cursor_out > base && cursor_out[-1] == '/')
+            cursor_out--;
         while(cursor_out > base && *--cursor_out != '/');
     }
     while(cursor + 3 < end && !memcmp(cursor, "/../", 4));
