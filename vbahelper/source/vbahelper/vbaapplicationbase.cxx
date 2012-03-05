@@ -277,6 +277,29 @@ void SAL_CALL VbaApplicationBase::setVisible( sal_Bool bVisible ) throw (uno::Ru
     m_pImpl->mbVisible = bVisible;  // dummy implementation
 }
 
+
+void SAL_CALL
+VbaApplicationBase::OnKey( const ::rtl::OUString& Key, const uno::Any& Procedure ) throw (uno::RuntimeException)
+{
+    // parse the Key & modifiers
+    awt::KeyEvent aKeyEvent = parseKeyEvent( Key );
+    rtl::OUString MacroName;
+    Procedure >>= MacroName;
+    uno::Reference< frame::XModel > xModel;
+    SbMethod* pMeth = StarBASIC::GetActiveMethod();
+    if ( pMeth )
+    {
+        SbModule* pMod = dynamic_cast< SbModule* >( pMeth->GetParent() );
+        if ( pMod )
+            xModel = StarBASIC::GetModelFromBasic( pMod );
+    }
+
+    if ( !xModel.is() )
+        xModel = getCurrentDocument();
+
+    applyShortCutKeyBinding( xModel, aKeyEvent, MacroName );
+}
+
 uno::Any SAL_CALL
 VbaApplicationBase::CommandBars( const uno::Any& aIndex ) throw (uno::RuntimeException)
 {
