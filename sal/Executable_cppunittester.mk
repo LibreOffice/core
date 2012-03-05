@@ -29,7 +29,7 @@ $(eval $(call gb_Executable_Executable,cppunit/cppunittester))
 
 $(eval $(call gb_Executable_set_include,cppunit/cppunittester,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/sal/inc) \
+	-I$(SRCDIR)/sal/inc \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,cppunit/cppunittester,\

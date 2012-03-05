@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,msworks,writerperfect/util/msworksfil
 
 $(eval $(call gb_Library_set_include,msworks,\
 	$$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerperfect/source) \
+    -I$(SRCDIR)/writerperfect/source \
 ))
 
 $(eval $(call gb_Library_add_api,msworks,\

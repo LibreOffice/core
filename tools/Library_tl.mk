@@ -32,7 +32,7 @@ $(eval $(call gb_Library_add_package_headers,tl,tools_inc))
 $(eval $(call gb_Library_add_package_headers,tl,tools_reversemap))
 
 $(eval $(call gb_Library_set_include,tl,\
-    -I$(realpath $(SRCDIR)/tools/inc) \
+    -I$(SRCDIR)/tools/inc \
     -I$(WORKDIR)/CustomTarget/tools/source/reversemap \
     $$(INCLUDE) \
 ))
@@ -122,7 +122,7 @@ $(eval $(call gb_Library_use_external,tl,zlib))
 ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_set_include,tl,\
-    -I$(realpath $(SRCDIR)/tools/win/inc) \
+    -I$(SRCDIR)/tools/win/inc \
     $$(INCLUDE) \
 ))
 

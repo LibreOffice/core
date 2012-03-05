@@ -32,9 +32,9 @@ $(eval $(call gb_Library_Library,ooxml))
 
 $(eval $(call gb_Library_set_include,ooxml,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerfilter/inc) \
-    -I$(realpath $(SRCDIR)/writerfilter/source/ooxml) \
-    -I$(realpath $(SRCDIR)/writerfilter/source/dmapper) \
+    -I$(SRCDIR)/writerfilter/inc \
+    -I$(SRCDIR)/writerfilter/source/ooxml \
+    -I$(SRCDIR)/writerfilter/source/dmapper \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source/ooxml \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \

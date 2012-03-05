@@ -29,7 +29,7 @@
 $(eval $(call gb_CppunitTest_CppunitTest,basebmp_test))
 
 $(eval $(call gb_CppunitTest_set_include,basebmp_test,\
-	-I$(realpath $(SRCDIR)/basebmp/inc/) \
+	-I$(SRCDIR)/basebmp/inc/ \
 	$$(INCLUDE) \
 ))
 

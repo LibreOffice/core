@@ -31,8 +31,8 @@ $(eval $(call gb_Library_Library,fwm))
 $(eval $(call gb_Library_set_componentfile,fwm,framework/util/fwm))
 
 $(eval $(call gb_Library_set_include,fwm,\
-    -I$(realpath $(SRCDIR)/framework/inc) \
-    -I$(realpath $(SRCDIR)/framework/source/inc) \
+    -I$(SRCDIR)/framework/inc \
+    -I$(SRCDIR)/framework/source/inc \
     $$(INCLUDE) \
 ))
 

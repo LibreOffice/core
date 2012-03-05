@@ -31,8 +31,8 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,basegfx_s))
 $(eval $(call gb_StaticLibrary_add_package_headers,basegfx_s,basegfx_inc))
 
 $(eval $(call gb_StaticLibrary_set_include,basegfx_s,\
-	-I$(realpath $(SRCDIR)/basegfx/inc) \
-	-I$(realpath $(SRCDIR)/basegfx/source/inc) \
+	-I$(SRCDIR)/basegfx/inc \
+	-I$(SRCDIR)/basegfx/source/inc \
 	$$(INCLUDE) \
 ))
 

@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,wpft,writerperfect/util/wpft))
 
 $(eval $(call gb_Library_set_include,wpft,\
 	$$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerperfect/source) \
+    -I$(SRCDIR)/writerperfect/source \
 ))
 
 $(eval $(call gb_Library_add_api,wpft,\

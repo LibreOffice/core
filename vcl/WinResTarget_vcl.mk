@@ -30,7 +30,7 @@ $(eval $(call gb_WinResTarget_WinResTarget,vcl/src))
 
 $(eval $(call gb_WinResTarget_set_include,vcl/src,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/vcl/inc) \
+    -I$(SRCDIR)/vcl/inc \
 ))
 
 $(eval $(call gb_WinResTarget_add_file,vcl/src,\

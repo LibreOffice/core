@@ -37,7 +37,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,reportdesign/res))
 
 $(eval $(call gb_SrsTarget_set_include,reportdesign/res,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/reportdesign/source/core/inc) \
+    -I$(SRCDIR)/reportdesign/source/core/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,reportdesign/res,\

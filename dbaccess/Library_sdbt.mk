@@ -33,9 +33,9 @@ $(eval $(call gb_Library_add_package_headers,sdbt,\
 
 $(eval $(call gb_Library_set_include,sdbt,\
     $$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/dbaccess/inc) \
-	-I$(realpath $(SRCDIR)/dbaccess/source/inc/) \
-	-I$(realpath $(SRCDIR)/dbaccess/source/sdbtools/inc) \
+	-I$(SRCDIR)/dbaccess/inc \
+	-I$(SRCDIR)/dbaccess/source/inc/ \
+	-I$(SRCDIR)/dbaccess/source/sdbtools/inc \
 ))
 
 $(eval $(call gb_Library_add_api,sdbt,\

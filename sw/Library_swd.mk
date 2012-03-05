@@ -32,10 +32,10 @@ $(eval $(call gb_Library_set_componentfile,swd,sw/util/swd))
 
 $(eval $(call gb_Library_set_include,swd,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/sw/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/core/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/filter/inc) \
-    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
+    -I$(SRCDIR)/sw/inc \
+    -I$(SRCDIR)/sw/source/core/inc \
+    -I$(SRCDIR)/sw/source/filter/inc \
+    -I$(SRCDIR)/sw/source/ui/inc \
 ))
 
 $(eval $(call gb_Library_add_api,swd,\

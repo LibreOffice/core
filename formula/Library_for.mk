@@ -33,7 +33,7 @@ $(eval $(call gb_Library_add_package_headers,for,\
 
 $(eval $(call gb_Library_set_include,for,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/formula/source/core/inc) \
+    -I$(SRCDIR)/formula/source/core/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,for,\

@@ -38,8 +38,8 @@ $(eval $(call gb_SrsTarget_SrsTarget,xmlsec/res))
 
 $(eval $(call gb_SrsTarget_set_include,xmlsec/res,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/xmlsecurity/inc) \
-	-I$(realpath $(SRCDIR)/xmlsecurity/source/dialogs) \
+	-I$(SRCDIR)/xmlsecurity/inc \
+	-I$(SRCDIR)/xmlsecurity/source/dialogs \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,xmlsec/res,\

@@ -39,9 +39,9 @@ $(eval $(call gb_Library_add_api,svt,\
 
 $(eval $(call gb_Library_set_include,svt,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/svtools/inc/svtools) \
-    -I$(realpath $(SRCDIR)/svtools/source/inc) \
-    -I$(realpath $(SRCDIR)/svtools/inc) \
+    -I$(SRCDIR)/svtools/inc/svtools \
+    -I$(SRCDIR)/svtools/source/inc \
+    -I$(SRCDIR)/svtools/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,svt,\

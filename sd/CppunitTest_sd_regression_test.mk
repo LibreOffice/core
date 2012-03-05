@@ -69,8 +69,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sd_regression_test, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sd_regression_test,\
-    -I$(realpath $(SRCDIR)/sd/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sd/inc) \
+    -I$(SRCDIR)/sd/source/ui/inc \
+    -I$(SRCDIR)/sd/inc \
     $$(INCLUDE) \
 ))
 

@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,writerfilter))
 
 $(eval $(call gb_Library_set_include,writerfilter,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerfilter/inc) \
+    -I$(SRCDIR)/writerfilter/inc \
 ))
 
 $(eval $(call gb_Library_add_api,writerfilter,\

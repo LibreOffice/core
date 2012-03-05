@@ -43,8 +43,8 @@ $(eval $(call gb_Library_add_api,svxcore,\
 ))
 
 $(eval $(call gb_Library_set_include,svxcore,\
-    -I$(realpath $(SRCDIR)/svx/inc) \
-    -I$(realpath $(SRCDIR)/svx/source/inc) \
+    -I$(SRCDIR)/svx/inc \
+    -I$(SRCDIR)/svx/source/inc \
     $$(INCLUDE) \
     -I$(WORKDIR)/SdiTarget/svx/sdi \
 ))
@@ -456,8 +456,8 @@ $(eval $(call gb_SdiTarget_SdiTarget,svx/sdi/svxslots,svx/sdi/svx))
 
 $(eval $(call gb_SdiTarget_set_include,svx/sdi/svxslots,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/svx/inc) \
-    -I$(realpath $(SRCDIR)/svx/sdi) \
+    -I$(SRCDIR)/svx/inc \
+    -I$(SRCDIR)/svx/sdi \
 ))
 
 # vim: set noet sw=4 ts=4:

@@ -72,8 +72,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,dbaccess_macros_test, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,dbaccess_macros_test,\
-    -I$(realpath $(SRCDIR)/sc/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sc/inc) \
+    -I$(SRCDIR)/sc/source/ui/inc \
+    -I$(SRCDIR)/sc/inc \
     $$(INCLUDE) \
 ))
 

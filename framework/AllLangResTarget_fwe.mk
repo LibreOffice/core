@@ -40,8 +40,8 @@ $(eval $(call gb_SrsTarget_SrsTarget,fwe/fwk_classes))
 
 $(eval $(call gb_SrsTarget_set_include,fwe/fwk_classes,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/framework/inc) \
-    -I$(realpath $(SRCDIR)/framework/inc/classes) \
+    -I$(SRCDIR)/framework/inc \
+    -I$(SRCDIR)/framework/inc/classes \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,fwe/fwk_classes,\
@@ -52,8 +52,8 @@ $(eval $(call gb_SrsTarget_SrsTarget,fwe/fwk_services))
 
 $(eval $(call gb_SrsTarget_set_include,fwe/fwk_services,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/framework/inc) \
-    -I$(realpath $(SRCDIR)/framework/inc/services) \
+    -I$(SRCDIR)/framework/inc \
+    -I$(SRCDIR)/framework/inc/services \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,fwe/fwk_services,\

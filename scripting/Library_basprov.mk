@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,basprov,scripting/source/basprov/basp
 
 $(eval $(call gb_Library_set_include,basprov,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/scripting/source/inc) \
+	-I$(SRCDIR)/scripting/source/inc \
 ))
 
 $(eval $(call gb_Library_add_api,basprov,\

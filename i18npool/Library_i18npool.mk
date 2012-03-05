@@ -34,7 +34,7 @@ $(eval $(call gb_Library_set_componentfile,i18npool,i18npool/util/i18npool))
 
 $(eval $(call gb_Library_set_include,i18npool,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/i18npool/inc) \
+	-I$(SRCDIR)/i18npool/inc \
 	-I$(WORKDIR)/CustomTarget/i18npool/source/collator \
 ))
 

@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,cdrimport,writerperfect/util/cdrfilte
 
 $(eval $(call gb_Library_set_include,cdrimport,\
 	$$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerperfect/source) \
+    -I$(SRCDIR)/writerperfect/source \
 ))
 
 $(eval $(call gb_Library_add_api,cdrimport,\

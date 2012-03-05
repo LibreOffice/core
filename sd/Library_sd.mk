@@ -30,16 +30,16 @@ $(eval $(call gb_Library_Library,sd))
 $(eval $(call gb_SdiTarget_SdiTarget,sd/sdi/sdslots,sd/sdi/sdslots))
 
 $(eval $(call gb_SdiTarget_set_include,sd/sdi/sdslots,\
-    -I$(realpath $(SRCDIR)/sd/inc) \
-    -I$(realpath $(SRCDIR)/sd/sdi) \
+    -I$(SRCDIR)/sd/inc \
+    -I$(SRCDIR)/sd/sdi \
     $$(INCLUDE) \
 ))
 
 $(eval $(call gb_SdiTarget_SdiTarget,sd/sdi/sdgslots,sd/sdi/sdgslots))
 
 $(eval $(call gb_SdiTarget_set_include,sd/sdi/sdgslots,\
-    -I$(realpath $(SRCDIR)/sd/inc) \
-    -I$(realpath $(SRCDIR)/sd/sdi) \
+    -I$(SRCDIR)/sd/inc \
+    -I$(SRCDIR)/sd/sdi \
     $$(INCLUDE) \
 ))
 
@@ -50,9 +50,9 @@ $(eval $(call gb_Library_add_sdi_headers,sd,\
 
 $(eval $(call gb_Library_set_include,sd,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/sd/inc) \
-    -I$(realpath $(SRCDIR)/sd/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sd/source/ui/slidesorter/inc) \
+    -I$(SRCDIR)/sd/inc \
+    -I$(SRCDIR)/sd/source/ui/inc \
+    -I$(SRCDIR)/sd/source/ui/slidesorter/inc \
     -I$(WORKDIR)/SdiTarget/sd/sdi \
 ))
 

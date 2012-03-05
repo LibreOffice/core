@@ -27,10 +27,10 @@ $(eval $(call gb_Library_add_sdi_headers,sc,sc/sdi/scslots))
 $(eval $(call gb_Library_set_componentfile,sc,sc/util/sc))
 
 $(eval $(call gb_Library_set_include,sc,\
-	-I$(realpath $(SRCDIR)/sc/source/core/inc) \
-	-I$(realpath $(SRCDIR)/sc/source/filter/inc) \
-	-I$(realpath $(SRCDIR)/sc/source/ui/inc) \
-	-I$(realpath $(SRCDIR)/sc/inc) \
+	-I$(SRCDIR)/sc/source/core/inc \
+	-I$(SRCDIR)/sc/source/filter/inc \
+	-I$(SRCDIR)/sc/source/ui/inc \
+	-I$(SRCDIR)/sc/inc \
 	-I$(WORKDIR)/SdiTarget/sc/sdi \
 	$$(INCLUDE) \
 ))
@@ -556,8 +556,8 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 $(eval $(call gb_SdiTarget_SdiTarget,sc/sdi/scslots,sc/sdi/scalc))
 
 $(eval $(call gb_SdiTarget_set_include,sc/sdi/scslots,\
-	-I$(realpath $(SRCDIR)/sc/inc) \
-	-I$(realpath $(SRCDIR)/sc/sdi) \
+	-I$(SRCDIR)/sc/inc \
+	-I$(SRCDIR)/sc/sdi \
 	$$(INCLUDE) \
 ))
 

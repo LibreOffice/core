@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,wpgimport,writerperfect/util/wpgfilte
 
 $(eval $(call gb_Library_set_include,wpgimport,\
 	$$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerperfect/source) \
+    -I$(SRCDIR)/writerperfect/source \
 ))
 
 $(eval $(call gb_Library_add_api,wpgimport,\

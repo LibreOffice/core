@@ -31,7 +31,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,basic_scanner, \
 endif
 
 $(eval $(call gb_CppunitTest_set_include,basic_scanner,\
--I$(realpath $(SRCDIR)/basic/source/inc) \
--I$(realpath $(SRCDIR)/basic/inc) \
+-I$(SRCDIR)/basic/source/inc \
+-I$(SRCDIR)/basic/inc \
 $$(INCLUDE) \
 ))

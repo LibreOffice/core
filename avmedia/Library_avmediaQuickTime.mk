@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,avmediaQuickTime,avmedia/source/quick
 
 $(eval $(call gb_Library_set_include,avmediaQuickTime,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/avmedia/source/inc) \
+	-I$(SRCDIR)/avmedia/source/inc \
 ))
 
 $(eval $(call gb_Library_add_api,avmediaQuickTime,\

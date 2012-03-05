@@ -23,10 +23,10 @@
 $(eval $(call gb_Library_Library,vbaobj))
 
 $(eval $(call gb_Library_set_include,vbaobj,\
-	-I$(realpath $(SRCDIR)/sc/source/core/inc) \
-	-I$(realpath $(SRCDIR)/sc/source/filter/inc) \
-	-I$(realpath $(SRCDIR)/sc/source/ui/inc) \
-	-I$(realpath $(SRCDIR)/sc/inc) \
+	-I$(SRCDIR)/sc/source/core/inc \
+	-I$(SRCDIR)/sc/source/filter/inc \
+	-I$(SRCDIR)/sc/source/ui/inc \
+	-I$(SRCDIR)/sc/inc \
 	$$(INCLUDE) \
 ))
 

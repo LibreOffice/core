@@ -29,9 +29,9 @@ $(eval $(call gb_Library_Library,dbu))
 
 $(eval $(call gb_Library_set_include,dbu,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/dbaccess/inc) \
-    -I$(realpath $(SRCDIR)/dbaccess/source/inc) \
-    -I$(realpath $(SRCDIR)/dbaccess/source/ui/inc) \
+    -I$(SRCDIR)/dbaccess/inc \
+    -I$(SRCDIR)/dbaccess/source/inc \
+    -I$(SRCDIR)/dbaccess/source/ui/inc \
     -I$(WORKDIR)/inc/dbaccess \
 ))
 

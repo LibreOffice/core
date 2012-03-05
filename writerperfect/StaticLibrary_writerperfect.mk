@@ -30,7 +30,7 @@ $(eval $(call gb_StaticLibrary_StaticLibrary,writerperfect))
 
 $(eval $(call gb_StaticLibrary_set_include,writerperfect,\
 	$$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerperfect/source) \
+    -I$(SRCDIR)/writerperfect/source \
 ))
 
 $(eval $(call gb_StaticLibrary_use_externals,writerperfect,\

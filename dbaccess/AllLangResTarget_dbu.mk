@@ -38,8 +38,8 @@ $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/dbu))
 $(eval $(call gb_SrsTarget_set_include,dbaccess/dbu,\
     $$(INCLUDE) \
     -I$(WORKDIR)/inc/dbaccess \
-    -I$(realpath $(SRCDIR)/dbaccess/inc) \
-    -I$(realpath $(SRCDIR)/dbaccess/source/ui/inc) \
+    -I$(SRCDIR)/dbaccess/inc \
+    -I$(SRCDIR)/dbaccess/source/ui/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,dbaccess/dbu,\

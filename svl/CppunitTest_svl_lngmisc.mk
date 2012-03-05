@@ -49,8 +49,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,svl_lngmisc, \
 endif
 
 $(eval $(call gb_CppunitTest_set_include,svl_lngmisc,\
-	-I$(realpath $(SRCDIR)/svl/source/inc) \
-	-I$(realpath $(SRCDIR)/svl/inc) \
+	-I$(SRCDIR)/svl/source/inc \
+	-I$(SRCDIR)/svl/inc \
 	$$(INCLUDE) \
 ))
 # vim: set noet sw=4 ts=4:

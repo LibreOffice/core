@@ -31,9 +31,9 @@ $(eval $(call gb_Library_Library,passwordcontainer))
 $(eval $(call gb_Library_set_componentfile,passwordcontainer,svl/source/passwordcontainer/passwordcontainer))
 
 $(eval $(call gb_Library_set_include,passwordcontainer,\
-    -I$(realpath $(SRCDIR)/svl/inc) \
-    -I$(realpath $(SRCDIR)/svl/inc/svl) \
-    -I$(realpath $(SRCDIR)/svl/source/inc) \
+    -I$(SRCDIR)/svl/inc \
+    -I$(SRCDIR)/svl/inc/svl \
+    -I$(SRCDIR)/svl/source/inc \
     $$(INCLUDE) \
 ))
 

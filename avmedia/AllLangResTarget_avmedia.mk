@@ -36,9 +36,9 @@ $(eval $(call gb_SrsTarget_SrsTarget,avmedia/res))
 
 $(eval $(call gb_SrsTarget_set_include,avmedia/res,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/avmedia/inc) \
-	-I$(realpath $(SRCDIR)/avmedia/source/framework) \
-	-I$(realpath $(SRCDIR)/avmedia/source/viewer) \
+	-I$(SRCDIR)/avmedia/inc \
+	-I$(SRCDIR)/avmedia/source/framework \
+	-I$(SRCDIR)/avmedia/source/viewer \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,avmedia/res,\

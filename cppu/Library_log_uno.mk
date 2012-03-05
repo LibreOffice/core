@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,log_uno))
 
 $(eval $(call gb_Library_set_include,log_uno,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/cppu/inc) \
+	-I$(SRCDIR)/cppu/inc \
 ))
 
 $(eval $(call gb_Library_add_api,log_uno,\

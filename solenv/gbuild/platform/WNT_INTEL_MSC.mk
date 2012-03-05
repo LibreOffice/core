@@ -285,7 +285,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
-		-I$(realpath $(dir $(3))) \
+		-I$(dir $(3)) \
 		$(INCLUDE) \
 		-c $(realpath $(3)) \
 		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(realpath $(3)))
@@ -304,7 +304,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(WARNINGS_NOT_ERRORS),,$(gb_CXXFLAGS_WERROR)) \
 		-Fd$(PDBFILE) \
 		$(gb_COMPILERDEPFLAGS) \
-		-I$(realpath $(dir $(3))) \
+		-I$(dir $(3)) \
 		$(INCLUDE_STL) $(INCLUDE) \
 		$(if $(filter YES,$(CXXOBJECT_X64)), -U_X86_ -D_AMD64_,) \
 		-c $(realpath $(3)) \

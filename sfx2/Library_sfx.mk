@@ -43,9 +43,9 @@ $(eval $(call gb_Library_add_api,sfx,\
 ))
 
 $(eval $(call gb_Library_set_include,sfx,\
-    -I$(realpath $(SRCDIR)/sfx2/inc) \
-    -I$(realpath $(SRCDIR)/sfx2/inc/sfx2) \
-    -I$(realpath $(SRCDIR)/sfx2/source/inc) \
+    -I$(SRCDIR)/sfx2/inc \
+    -I$(SRCDIR)/sfx2/inc/sfx2 \
+    -I$(SRCDIR)/sfx2/source/inc \
     -I$(WORKDIR)/SdiTarget/sfx2/sdi \
     $$(INCLUDE) \
 ))
@@ -243,9 +243,9 @@ $(eval $(call gb_SdiTarget_SdiTarget,sfx2/sdi/sfxslots,sfx2/sdi/sfx))
 
 $(eval $(call gb_SdiTarget_set_include,sfx2/sdi/sfxslots,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/sfx2/inc/sfx2) \
-    -I$(realpath $(SRCDIR)/sfx2/inc) \
-    -I$(realpath $(SRCDIR)/sfx2/sdi) \
+    -I$(SRCDIR)/sfx2/inc/sfx2 \
+    -I$(SRCDIR)/sfx2/inc \
+    -I$(SRCDIR)/sfx2/sdi \
 ))
 
 ifeq ($(OS),$(filter WNT MACOSX,$(OS)))

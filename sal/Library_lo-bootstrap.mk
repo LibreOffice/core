@@ -39,7 +39,7 @@ $(eval $(call gb_Library_add_cobjects,lo-bootstrap,\
 
 $(eval $(call gb_Library_set_include,lo-bootstrap,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/sal/inc) \
+	-I$(SRCDIR)/sal/inc \
 ))
 
 # vim: set noet sw=4 ts=4:

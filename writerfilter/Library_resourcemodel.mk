@@ -31,7 +31,7 @@ $(eval $(call gb_Library_add_package_headers,resourcemodel,writerfilter_generate
 
 $(eval $(call gb_Library_set_include,resourcemodel,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/writerfilter/inc) \
+    -I$(SRCDIR)/writerfilter/inc \
     -I$(WORKDIR)/CustomTarget/writerfilter/source \
 ))
 

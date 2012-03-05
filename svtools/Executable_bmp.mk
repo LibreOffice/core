@@ -30,9 +30,9 @@ $(eval $(call gb_Executable_Executable,bmp))
 
 $(eval $(call gb_Executable_set_include,bmp,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/svtools/inc) \
-    -I$(realpath $(SRCDIR)/svtools/inc/svtools) \
-    -I$(realpath $(SRCDIR)/svtools/source/inc) \
+    -I$(SRCDIR)/svtools/inc \
+    -I$(SRCDIR)/svtools/inc/svtools \
+    -I$(SRCDIR)/svtools/source/inc \
 ))
 
 $(eval $(call gb_Executable_add_api,bmp,\

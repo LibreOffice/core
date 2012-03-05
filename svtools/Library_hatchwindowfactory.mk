@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,hatchwindowfactory,svtools/source/hat
 
 $(eval $(call gb_Library_set_include,hatchwindowfactory,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/svtools/inc) \
+    -I$(SRCDIR)/svtools/inc \
 ))
 
 $(eval $(call gb_Library_add_api,hatchwindowfactory,\

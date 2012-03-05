@@ -70,8 +70,8 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sw_layout_test, \
 ))
 
 $(eval $(call gb_CppunitTest_set_include,sw_layout_test,\
-    -I$(realpath $(SRCDIR)/sw/source/ui/inc) \
-    -I$(realpath $(SRCDIR)/sw/inc) \
+    -I$(SRCDIR)/sw/source/ui/inc \
+    -I$(SRCDIR)/sw/inc \
     $$(INCLUDE) \
 ))
 

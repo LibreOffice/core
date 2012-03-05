@@ -27,7 +27,7 @@ $(eval $(call gb_Library_add_sdi_headers,sm,starmath/sdi/smslots))
 $(eval $(call gb_Library_set_componentfile,sm,starmath/util/sm))
 
 $(eval $(call gb_Library_set_include,sm,\
-	-I$(realpath $(SRCDIR)/starmath/inc) \
+	-I$(SRCDIR)/starmath/inc \
 	-I$(WORKDIR)/SdiTarget/starmath/sdi \
 	$$(INCLUDE) \
 ))
@@ -98,8 +98,8 @@ $(eval $(call gb_Library_add_exception_objects,sm,\
 $(eval $(call gb_SdiTarget_SdiTarget,starmath/sdi/smslots,starmath/sdi/smath))
 
 $(eval $(call gb_SdiTarget_set_include,starmath/sdi/smslots,\
-	-I$(realpath $(SRCDIR)/starmath/inc) \
-	-I$(realpath $(SRCDIR)/starmath/sdi) \
+	-I$(SRCDIR)/starmath/inc \
+	-I$(SRCDIR)/starmath/sdi \
 	$$(INCLUDE) \
 ))
 

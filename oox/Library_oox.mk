@@ -36,7 +36,7 @@ $(eval $(call gb_Library_add_package_headers,oox,\
 
 $(eval $(call gb_Library_set_include,oox,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/oox/inc) \
+    -I$(SRCDIR)/oox/inc \
 ))
 
 ifeq ($(COM)-$(OS)-$(CPUNAME),GCC-LINUX-IA64)

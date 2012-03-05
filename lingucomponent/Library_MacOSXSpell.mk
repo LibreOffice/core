@@ -31,7 +31,7 @@ $(eval $(call gb_Library_set_componentfile,MacOSXSpell,lingucomponent/source/spe
 
 $(eval $(call gb_Library_set_include,MacOSXSpell,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/lingucomponent/source/lingutil) \
+	-I$(SRCDIR)/lingucomponent/source/lingutil \
 ))
 
 $(eval $(call gb_Library_add_api,MacOSXSpell,\

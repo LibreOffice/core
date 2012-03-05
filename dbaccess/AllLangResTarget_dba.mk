@@ -37,7 +37,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,dbaccess/dba))
 
 $(eval $(call gb_SrsTarget_set_include,dbaccess/dba,\
     $$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/dbaccess/source/core/inc) \
+	-I$(SRCDIR)/dbaccess/source/core/inc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,dbaccess/dba,\

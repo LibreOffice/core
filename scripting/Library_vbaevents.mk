@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,vbaevents,scripting/source/vbaevents/
 
 $(eval $(call gb_Library_set_include,vbaevents,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/scripting/source/inc) \
+	-I$(SRCDIR)/scripting/source/inc \
 ))
 
 $(eval $(call gb_Library_add_api,vbaevents,\

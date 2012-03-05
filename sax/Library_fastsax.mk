@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,fastsax,sax/source/fastparser/fastsax
 
 $(eval $(call gb_Library_set_include,fastsax,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/sax/inc) \
+	-I$(SRCDIR)/sax/inc \
 ))
 
 $(eval $(call gb_Library_add_api,fastsax,\

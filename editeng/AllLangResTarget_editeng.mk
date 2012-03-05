@@ -35,7 +35,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,editeng/res))
 
 $(eval $(call gb_SrsTarget_set_include,editeng/res,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/editeng/inc) \
+    -I$(SRCDIR)/editeng/inc \
 ))
 
 # add src files here (complete path relative to repository root)

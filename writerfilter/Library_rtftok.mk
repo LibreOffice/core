@@ -30,7 +30,7 @@ $(eval $(call gb_Library_Library,rtftok))
 
 $(eval $(call gb_Library_set_include,rtftok,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/writerfilter/inc) \
+	-I$(SRCDIR)/writerfilter/inc \
 	-I$(WORKDIR)/CustomTarget/writerfilter/source \
 ))
 

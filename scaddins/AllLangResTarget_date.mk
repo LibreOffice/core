@@ -36,7 +36,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,scaddins/date))
 
 $(eval $(call gb_SrsTarget_set_include,scaddins/date,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/scaddins/source/datefunc) \
+    -I$(SRCDIR)/scaddins/source/datefunc \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,scaddins/date,\

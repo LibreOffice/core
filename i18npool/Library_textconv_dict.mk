@@ -32,7 +32,7 @@ $(eval $(call gb_Library_add_package_headers,textconv_dict,i18npool_generated))
 
 $(eval $(call gb_Library_set_include,textconv_dict,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/i18npool/inc) \
+	-I$(SRCDIR)/i18npool/inc \
 ))
 
 $(eval $(call gb_Library_add_api,textconv_dict,\

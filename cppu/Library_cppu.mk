@@ -34,7 +34,7 @@ $(eval $(call gb_Library_add_package_headers,cppu,cppu_generated))
 
 $(eval $(call gb_Library_set_include,cppu,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/cppu/inc) \
+	-I$(SRCDIR)/cppu/inc \
 ))
 
 $(eval $(call gb_Library_add_api,cppu,\

@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,cairocanvas,canvas/source/cairo/cairo
 
 $(eval $(call gb_Library_set_include,cairocanvas,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/canvas/inc) \
+	-I$(SRCDIR)/canvas/inc \
 ))
 
 $(eval $(call gb_Library_add_api,cairocanvas,\

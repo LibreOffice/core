@@ -31,7 +31,7 @@ $(eval $(call gb_Library_Library,basebmp))
 $(eval $(call gb_Library_add_package_headers,basebmp,basebmp_inc))
 
 $(eval $(call gb_Library_set_include,basebmp,\
-	-I$(realpath $(SRCDIR)/basebmp/inc/) \
+	-I$(SRCDIR)/basebmp/inc/ \
 	$$(INCLUDE) \
 ))
 

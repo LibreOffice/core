@@ -32,7 +32,7 @@ $(eval $(call gb_Library_set_componentfile,avmediawin,avmedia/source/win/avmedia
 
 $(eval $(call gb_Library_set_include,avmediawin,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/avmedia/source/inc) \
+	-I$(SRCDIR)/avmedia/source/inc \
 ))
 
 $(eval $(call gb_Library_add_api,avmediawin,\

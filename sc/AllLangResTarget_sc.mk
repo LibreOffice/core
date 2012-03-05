@@ -31,13 +31,13 @@ $(eval $(call gb_SrsTarget_SrsTarget,sc/res))
 
 $(eval $(call gb_SrsTarget_set_include,sc/res,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/sc/inc) \
-	-I$(realpath $(SRCDIR)/sc/source/ui/inc) \
-	-I$(realpath $(SRCDIR)/sc/source/ui/navipi) \
-	-I$(realpath $(SRCDIR)/sc/source/ui/docshell) \
-	-I$(realpath $(SRCDIR)/sc/source/ui/pagedlg) \
-	-I$(realpath $(SRCDIR)/sc/source/ui/dbgui) \
-	-I$(realpath $(SRCDIR)/sc/source/ui/formdlg) \
+	-I$(SRCDIR)/sc/inc \
+	-I$(SRCDIR)/sc/source/ui/inc \
+	-I$(SRCDIR)/sc/source/ui/navipi \
+	-I$(SRCDIR)/sc/source/ui/docshell \
+	-I$(SRCDIR)/sc/source/ui/pagedlg \
+	-I$(SRCDIR)/sc/source/ui/dbgui \
+	-I$(SRCDIR)/sc/source/ui/formdlg \
 ))
 
 $(eval $(call gb_SrsTarget_add_files,sc/res,\

@@ -34,7 +34,7 @@ $(eval $(call gb_Library_add_package_headers,sal,sal_inc))
 
 $(eval $(call gb_Library_set_include,sal,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/sal/inc) \
+	-I$(SRCDIR)/sal/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,sal,\

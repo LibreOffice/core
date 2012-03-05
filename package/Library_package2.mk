@@ -34,7 +34,7 @@ $(eval $(call gb_Library_set_componentfile,package2,package/util/package2))
 
 $(eval $(call gb_Library_set_include,package2,\
 	$$(INCLUDE) \
-	-I$(realpath $(SRCDIR)/package/inc) \
+	-I$(SRCDIR)/package/inc \
 ))
 
 $(eval $(call gb_Library_add_api,package2,\

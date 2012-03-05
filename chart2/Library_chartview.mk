@@ -29,8 +29,8 @@ $(eval $(call gb_Library_Library,chartview))
 
 $(eval $(call gb_Library_set_include,chartview,\
     $$(INCLUDE) \
-    -I$(realpath $(SRCDIR)/chart2/source/view/inc) \
-    -I$(realpath $(SRCDIR)/chart2/source/inc) \
+    -I$(SRCDIR)/chart2/source/view/inc \
+    -I$(SRCDIR)/chart2/source/inc \
 ))
 
 $(eval $(call gb_Library_add_defs,chartview,\
