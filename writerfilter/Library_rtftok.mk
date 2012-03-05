@@ -39,7 +39,7 @@ $(eval $(call gb_Library_add_api,rtftok,\
 	udkapi \
 ))
 
-include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
+include $(SRCDIR)/writerfilter/debug_setup.mk
 
 $(eval $(call gb_Library_add_defs,rtftok,\
 	-DWRITERFILTER_RTFTOK_DLLIMPLEMENTATION \

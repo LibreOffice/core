@@ -36,7 +36,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XSLTPROC) --nonet --stringparam uri \
 		'$(subst \d,$$,$(COMPONENTPREFIX))$(LIBFILENAME)' -o $(1) \
-		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(realpath $(2)))
+		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(2))
 endef
 
 
@@ -54,7 +54,7 @@ $(call gb_ComponentTarget_get_target,%) :
 
 # the .dir is for make 3.81, which ignores trailing /
 $(dir $(call gb_ComponentTarget_get_outdir_target,))%/.dir :
-	mkdir -p $(dir $@)
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_ComponentTarget_get_outdir_target,%) :
 	$(call gb_Deliver_deliver,$<,$@)

@@ -30,7 +30,7 @@ include $(GBUILDDIR)/gbuild_simple.mk
 
 done :
 	$(call gb_Helper_abbreviate_dirs_native, \
-	$(call gb_Helper_execute,javamaker -BUCR -O$(realpath .) $(OUTDIR)/bin/offapi.rdb -X$(OUTDIR)/bin/udkapi.rdb) && \
+	$(call gb_Helper_execute,javamaker -BUCR -O. $(OUTDIR)/bin/offapi.rdb -X$(OUTDIR)/bin/udkapi.rdb) && \
 	touch $@)
 
 .DEFAULT_GOAL := all

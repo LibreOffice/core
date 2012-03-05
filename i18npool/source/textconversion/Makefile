@@ -34,7 +34,7 @@ include $(GBUILDDIR)/gbuild_simple.mk
 %.cxx : %_invis.cxx
 	sed 's/\(^.*get\)/SAL_DLLPUBLIC_EXPORT \1/' $< > $@
 
-%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/textconversion/data)/%.dic
+%_invis.cxx : $(SRCDIR)/i18npool/source/textconversion/data/%.dic
 ifeq ($(OS_FOR_BUILD),WNT)
 	$(call gb_Helper_execute,genconv_dict $* `cygpath -m $<` $@)
 else

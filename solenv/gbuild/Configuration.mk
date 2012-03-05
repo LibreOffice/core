@@ -103,9 +103,9 @@ $(call gb_XcsTarget_get_clean_target,%) :
 
 # the .dir is for make 3.81, which ignores trailing /
 $(dir $(call gb_XcsTarget_get_outdir_target,%))%/.dir :
-	$(if $(realpath $(dir $@)),,mkdir -p $(dir $@))
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 $(dir $(call gb_XcsTarget_get_outdir_target,%)).dir :
-	$(if $(realpath $(dir $@)),,mkdir -p $(dir $@))
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_XcsTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
@@ -150,9 +150,9 @@ $(call gb_XcuDataTarget_get_clean_target,%) :
 
 # the .dir is for make 3.81, which ignores trailing /
 $(dir $(call gb_XcuDataTarget_get_outdir_target,))%/.dir :
-	$(if $(realpath $(dir $@)),,mkdir -p $(dir $@))
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 $(dir $(call gb_XcuDataTarget_get_outdir_target,)).dir :
-	$(if $(realpath $(dir $@)),,mkdir -p $(dir $@))
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_XcuDataTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
@@ -193,7 +193,7 @@ $(call gb_XcuModuleTarget_get_clean_target,%) :
 
 # the .dir is for make 3.81, which ignores trailing /
 $(dir $(call gb_XcuModuleTarget_get_outdir_target,))%/.dir :
-	$(if $(realpath $(dir $@)),,mkdir -p $(dir $@))
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_XcuModuleTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
@@ -232,9 +232,9 @@ $(call gb_XcuLangpackTarget_get_clean_target,%) :
 
 # the .dir is for make 3.81, which ignores trailing /
 $(dir $(call gb_XcuLangpackTarget_get_outdir_target,))%/.dir :
-	$(if $(realpath $(dir $@)),,mkdir -p $(dir $@))
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 $(dir $(call gb_XcuLangpackTarget_get_outdir_target,)).dir :
-	$(if $(realpath $(dir $@)),,mkdir -p $(dir $@))
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_XcuLangpackTarget_get_outdir_target,%) :
 	$(call gb_Helper_abbreviate_dirs,\
@@ -271,9 +271,9 @@ $(call gb_XcuMergeTarget_get_clean_target,%) :
 define gb_XcuMergeTarget_XcuMergeTarget
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
 	$(call gb_Configuration__get_source,$(2),$(3)/$(4)) \
-	$(realpath $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
+	$(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
 $(call gb_XcuMergeTarget_get_target,$(1)) : \
-	SDF := $(realpath $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
+	SDF := $(wildcard $(gb_SDFLOCATION)/$(dir $(1))localize.sdf)
 endef
 
 

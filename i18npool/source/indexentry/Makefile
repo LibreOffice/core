@@ -34,7 +34,7 @@ include $(GBUILDDIR)/gbuild_simple.mk
 %.cxx : %_invis.cxx
 	sed 's/\(^.*get_\)/SAL_DLLPUBLIC_EXPORT \1/' $< > $@
 
-%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/indexentry/data)/%.txt
+%_invis.cxx : $(SRCDIR)/i18npool/source/indexentry/data/%.txt
 ifeq ($(OS_FOR_BUILD),WNT)
 	$(call gb_Helper_execute,genindex_data `cygpath -m $<` $@ $*)
 else

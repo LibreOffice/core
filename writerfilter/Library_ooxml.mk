@@ -25,8 +25,8 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
-include $(realpath $(SRCDIR)/writerfilter/source/generated.mk)
+include $(SRCDIR)/writerfilter/debug_setup.mk
+include $(SRCDIR)/writerfilter/source/generated.mk
 
 $(eval $(call gb_Library_Library,ooxml))
 

@@ -38,11 +38,11 @@ localedata_%.cxx : localedata_%_invis.cxx
 	sed 's/\(^.*get[^;]*$$\)/SAL_DLLPUBLIC_EXPORT \1/' $< > $@
 
 ifeq ($(OS_FOR_BUILD),WNT)
-localedata_%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/localedata/data)/%.xml saxparser.rdb \
+localedata_%_invis.cxx : $(SRCDIR)/i18npool/source/localedata/data/%.xml saxparser.rdb \
 	$(OUTDIR)/bin/saxparser$(gb_Executable_EXT)
 	$(call gb_Helper_execute,saxparser $* `cygpath -m $<` $@ $(my_file)`cygpath -m $(WORKDIR)/CustomTarget/i18npool/source/localedata/saxparser.rdb` `cygpath -m $(OUTDIR)/bin/types.rdb` -env:LO_LIB_DIR=$(my_file)`cygpath -m $(OUTDIR)/bin`)
 else
-localedata_%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/localedata/data)/%.xml saxparser.rdb \
+localedata_%_invis.cxx : $(SRCDIR)/i18npool/source/localedata/data/%.xml saxparser.rdb \
 	$(OUTDIR_FOR_BUILD)/bin/saxparser$(gb_Executable_EXT_for_build)
 	$(call gb_Helper_execute,saxparser $* $< $@ $(my_file)$(WORKDIR_FOR_BUILD)/CustomTarget/i18npool/source/localedata/saxparser.rdb $(OUTDIR_FOR_BUILD)/bin/types.rdb -env:LO_LIB_DIR=$(my_file)$(OUTDIR_FOR_BUILD)/lib)
 endif

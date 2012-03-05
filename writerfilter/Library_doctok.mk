@@ -37,7 +37,7 @@ $(eval $(call gb_Library_set_include,doctok,\
     -I$(WORKDIR)/CustomTarget/writerfilter/source/doctok \
 ))
 
-include $(realpath $(SRCDIR)/writerfilter/debug_setup.mk)
+include $(SRCDIR)/writerfilter/debug_setup.mk
 
 $(eval $(call gb_Library_add_defs,doctok,\
 	-DWRITERFILTER_DOCTOK_DLLIMPLEMENTATION \

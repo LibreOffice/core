@@ -50,7 +50,7 @@ $(call gb_SdiTarget_get_target,%) : $(SRCDIR)/%.sdi | $(gb_SdiTarget_SVIDLTARGET
 			-fx$(EXPORTS) \
 			-fm$@ \
 			-fM$(call gb_SdiTarget_get_dep_target,$*) \
-			$(realpath $<))
+			$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_SdiTarget_get_dep_target,%) : $(call gb_SdiTarget_get_target,%)

@@ -37,7 +37,7 @@ data:
 data/dict_%.cxx : data/dict_%_invis.cxx
 	sed 's/\tconst/\tSAL_DLLPUBLIC_EXPORT const/' $< > $@
 
-data/dict_%_invis.cxx : $(realpath $(SRC_ROOT)/i18npool/source/breakiterator/data)/%.dic data
+data/dict_%_invis.cxx : $(SRCDIR)/i18npool/source/breakiterator/data/%.dic data
 ifeq ($(OS_FOR_BUILD),WNT)
 	$(call gb_Helper_execute,gendict `cygpath -m $<` $@)
 else
@@ -84,7 +84,7 @@ OpenOffice_dat.c : $(subst .brk,_brk.c,$(BRKFILES))
 	$(GENBRK) -r $< -o $@
 
 # fdo#31271 ")" reclassified in more recent ICU/Unicode Standards
-%.txt.p : $(realpath $(SRC_ROOT)/i18npool/source/breakiterator/data)/%.txt
+%.txt.p : $(SRCDIR)/i18npool/source/breakiterator/data/%.txt
 ifeq ($(ICU_RECLASSIFIED_CLOSE_PARENTHESIS),YES)
 	sed "s#\[:LineBreak =  Close_Punctuation:\]#\[\[:LineBreak =  Close_Punctuation:\] \[:LineBreak = Close_Parenthesis:\]\]#" $< > $@
 else

@@ -204,7 +204,7 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 # be rebuilt and overwriting the .urd file again.
 # the .dir is for make 3.81, which ignores trailing /
 $(dir $(call gb_UnoApiPartTarget_get_target,))%/.dir :
-	$(if $(realpath $(dir $@)),,mkdir -p $(dir $@))
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_UnoApiPartTarget_get_target,%.urd) :
 	touch $@
@@ -258,7 +258,7 @@ endef
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_UnoApiPartTarget_get_dep_target,%) :
-	$(if $(realpath $@),touch $@,\
+	$(if $(wildcard $@),touch $@,\
 	  $(call gb_Object__command_dep,$@,$(call gb_UnoApiPartTarget_get_target,$*.urd)))
 
 $(call gb_UnoApiTarget_get_dep_target,%) : $(call gb_UnoApiTarget_get_target,%)
