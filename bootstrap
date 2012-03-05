@@ -2,10 +2,12 @@
 
 if test -z "${SRC_ROOT}"; then
     if test -f ./config_build.mk ; then
-        . ./config_build.mk
+        sed -e 's/^\(export [A-Z0-9_]*=\)\(.*\)$/\1"\2"/' <config_build.mk >config_build.mk.sh
+        . ./config_build.mk.sh
+        rm config_build.mk.sh
     else
         if test -f ./config_host.mk ; then
-            sed -e 's/^\(export .*=\)\(.*\)$/\1"\2"/' <config_host.mk >config_host.mk.sh
+            sed -e 's/^\(export [A-Z0-9_]*=\)\(.*\)$/\1"\2"/' <config_host.mk >config_host.mk.sh
             . ./config_host.mk.sh
             rm config_host.mk.sh
         fi
