@@ -255,9 +255,9 @@ void ScViewFunc::DoRefConversion( sal_Bool bRecord )
             {
                 if (pCell->GetCellType() == CELLTYPE_FORMULA)
                 {
-                    String aOld;
+                    rtl::OUString aOld;
                     ((ScFormulaCell*)pCell)->GetFormula(aOld);
-                    xub_StrLen nLen = aOld.Len();
+                    xub_StrLen nLen = aOld.getLength();
                     ScRefFinder aFinder( aOld, aIter.GetPos(), pDoc, pDoc->GetAddressConvention() );
                     aFinder.ToggleRel( 0, nLen );
                     if (aFinder.GetFound())

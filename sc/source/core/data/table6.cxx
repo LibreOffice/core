@@ -49,7 +49,9 @@
 
 using ::com::sun::star::util::SearchOptions;
 
-bool lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, String& rVal )
+namespace {
+
+bool lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, rtl::OUString& rVal )
 {
     //  true = more than 1 paragraph
 
@@ -61,6 +63,8 @@ bool lcl_GetTextWithBreaks( const ScEditCell& rCell, ScDocument* pDoc, String& r
     return ( rEngine.GetParagraphCount() > 1 );
 }
 
+}
+
 bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRow,
                          const ScMarkData& rMark, rtl::OUString& rUndoStr, ScDocument* pUndoDoc)
 {
@@ -68,7 +72,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
     bool    bDoSearch = true;
     bool    bDoBack = rSearchItem.GetBackward();
 
-    String  aString;
+    rtl::OUString  aString;
     ScBaseCell* pCell;
     if (rSearchItem.GetSelection())
         bDoSearch = rMark.IsCellMarked(nCol, nRow);
@@ -87,9 +91,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                         *(const ScEditCell*)pCell, pDocument, aString );
                 else
                 {
-                    rtl::OUString aOUString = aString;
-                    aCol[nCol].GetInputString( nRow, aOUString );
-                    aString = aOUString;
+                    aCol[nCol].GetInputString( nRow, aString );
                 }
             }
             break;
@@ -99,9 +101,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                         *(const ScEditCell*)pCell, pDocument, aString );
                 else
                 {
-                    rtl::OUString aOUString = aString;
-                    aCol[nCol].GetInputString( nRow, aOUString );
-                    aString = aOUString;
+                    aCol[nCol].GetInputString( nRow, aString );
                 }
                 break;
             case SVX_SEARCHIN_NOTE:
@@ -110,7 +110,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 break;
         }
         xub_StrLen nStart = 0;
-        xub_StrLen nEnd = aString.Len();
+        xub_StrLen nEnd = aString.getLength();
         ::com::sun::star::util::SearchResult aSearchResult;
         if (pSearchText)
         {
@@ -129,7 +129,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
             }
 
             if (bFound && rSearchItem.GetWordOnly())
-                bFound = (nStart == 0 && nEnd == aString.Len() - 1);
+                bFound = (nStart == 0 && nEnd == aString.getLength() - 1);
         }
         else
         {
@@ -168,15 +168,18 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 String sReplStr = rSearchItem.GetReplaceString();
                 if (rSearchItem.GetRegExp())
                 {
-                    String sFndStr = aString.Copy(nStart, nEnd-nStart+1);
                     pSearchText->ReplaceBackReferences( sReplStr, aString, aSearchResult );
-                    aString.Erase(nStart, nEnd-nStart+1);
-                    aString.Insert(sReplStr, nStart);
+                    rtl::OUStringBuffer aStrBuffer(aString);
+                    aStrBuffer.remove(nStart, nEnd-nStart+1);
+                    aStrBuffer.insert(nStart, sReplStr);
+                    aString = aStrBuffer.makeStringAndClear();
                 }
                 else
                 {
-                    aString.Erase(nStart, nEnd - nStart + 1);
-                    aString.Insert(rSearchItem.GetReplaceString(), nStart);
+                    rtl::OUStringBuffer aStrBuffer(aString);
+                    aStrBuffer.remove(nStart, nEnd-nStart+1);
+                    aStrBuffer.insert(nStart, rSearchItem.GetReplaceString());
+                    aString = aStrBuffer.makeStringAndClear();
                 }
 
                         //  Indizes anpassen
@@ -188,7 +191,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 else
                 {
                     nStart = sal::static_int_cast<xub_StrLen>( nStart + sReplStr.Len() );
-                    nEnd = aString.Len();
+                    nEnd = aString.getLength();
                 }
 
                         //  weitersuchen ?
@@ -215,12 +218,12 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
 
             if ( cMatrixFlag != MM_NONE )
             {   // Matrix nicht zerreissen
-                if ( aString.Len() > 2 )
+                if ( aString.getLength() > 2 )
                 {   // {} raus, erst hier damit auch "{=" durch "{=..." ersetzt werden kann
-                    if ( aString.GetChar( aString.Len()-1 ) == '}' )
-                        aString.Erase( aString.Len()-1, 1 );
-                    if ( aString.GetChar(0) == '{' )
-                        aString.Erase( 0, 1 );
+                    if ( aString[ aString.getLength()-1 ] == '}' )
+                        aString = aString.copy( 0, aString.getLength()-1 );
+                    if ( aString[0] == '{' )
+                        aString = aString.copy( 1 );
                 }
                 ScAddress aAdr( nCol, nRow, nTab );
                 ScFormulaCell* pFCell = new ScFormulaCell( pDocument, aAdr,
@@ -231,7 +234,7 @@ bool ScTable::SearchCell(const SvxSearchItem& rSearchItem, SCCOL nCol, SCROW nRo
                 pFCell->SetMatColsRows( nMatCols, nMatRows );
                 aCol[nCol].Insert( nRow, pFCell );
             }
-            else if ( bMultiLine && aString.Search('\n') != STRING_NOTFOUND )
+            else if ( bMultiLine && aString.indexOf('\n') != -1 )
                 PutCell( nCol, nRow, new ScEditCell( aString, pDocument ) );
             else
                 aCol[nCol].SetString(nRow, nTab, aString, pDocument->GetAddressConvention());

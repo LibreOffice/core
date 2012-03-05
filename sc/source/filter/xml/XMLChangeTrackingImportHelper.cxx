@@ -752,28 +752,26 @@ void ScXMLChangeTrackingImportHelper::SetNewCell(ScMyContentAction* pAction)
                         else
                         {
                             sal_uInt8 nMatrixFlag = static_cast<ScFormulaCell*>(pCell)->GetMatrixFlag();
-                            String sFormula;
+                            rtl::OUString sFormula;
                             // With GRAM_ODFF reference detection is faster on compilation.
                             /* FIXME: new cell should be created with a clone
                              * of the token array instead. Any reason why this
                              * wasn't done? */
                             static_cast<ScFormulaCell*>(pCell)->GetFormula(sFormula,formula::FormulaGrammar::GRAM_ODFF);
-                            rtl::OUString sOUFormula(sFormula);
 
                             // #i87826# [Collaboration] Rejected move destroys formulas
                             // FIXME: adjust ScFormulaCell::GetFormula(), so that the right formula string
                             //        is returned and no further string handling is necessary
-                            rtl::OUString sOUFormula2;
+                            rtl::OUString sFormula2;
                             if ( nMatrixFlag != MM_NONE )
                             {
-                                sOUFormula2 = sOUFormula.copy( 2, sOUFormula.getLength() - 3 );
+                                sFormula2 = sFormula.copy( 2, sFormula.getLength() - 3 );
                             }
                             else
                             {
-                                sOUFormula2 = sOUFormula.copy( 1, sOUFormula.getLength() - 1 );
+                                sFormula2 = sFormula.copy( 1, sFormula.getLength() - 1 );
                             }
 
-                            String sFormula2(sOUFormula2);
                             pNewCell = new ScFormulaCell(pDoc, aAddress, sFormula2,formula::FormulaGrammar::GRAM_ODFF, nMatrixFlag);
                             if (pNewCell)
                             {

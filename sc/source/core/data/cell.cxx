@@ -288,9 +288,9 @@ void ScBaseCell::DeleteBroadcaster()
     DELETEZ( mpBroadcaster );
 }
 
-ScBaseCell* ScBaseCell::CreateTextCell( const String& rString, ScDocument* pDoc )
+ScBaseCell* ScBaseCell::CreateTextCell( const rtl::OUString& rString, ScDocument* pDoc )
 {
-    if ( rString.Search('\n') != STRING_NOTFOUND || rString.Search(CHAR_CR) != STRING_NOTFOUND )
+    if ( rString.indexOf('\n') != -1 || rString.indexOf(CHAR_CR) != -1 )
         return new ScEditCell( rString, pDoc );
     else
         return new ScStringCell( rString );
@@ -523,9 +523,9 @@ bool ScBaseCell::HasStringData() const
     }
 }
 
-String ScBaseCell::GetStringData() const
+rtl::OUString ScBaseCell::GetStringData() const
 {
-    String aStr;
+    rtl::OUString aStr;
     switch ( eCellType )
     {
         case CELLTYPE_STRING:
@@ -573,12 +573,12 @@ bool ScBaseCell::CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 )
                      ((const ScValueCell*)pCell2)->GetValue() );
         case CELLTYPE_STRING:       // String oder Edit
             {
-                String aText1;
+                rtl::OUString aText1;
                 if ( pCell1->GetCellType() == CELLTYPE_STRING )
                     aText1 = ((const ScStringCell*)pCell1)->GetString();
                 else
                     aText1 = ((const ScEditCell*)pCell1)->GetString();
-                String aText2;
+                rtl::OUString aText2;
                 if ( pCell2->GetCellType() == CELLTYPE_STRING )
                     aText2 = ((const ScStringCell*)pCell2)->GetString();
                 else
@@ -682,7 +682,7 @@ ScStringCell::~ScStringCell()
 //
 
 ScFormulaCell::ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
-                              const String& rFormula,
+                              const rtl::OUString& rFormula,
                               const FormulaGrammar::Grammar eGrammar,
                               sal_uInt8 cMatInd ) :
     ScBaseCell( CELLTYPE_FORMULA ),
@@ -956,13 +956,6 @@ void ScFormulaCell::GetFormula( rtl::OUStringBuffer& rBuffer,
     }
 }
 
-void ScFormulaCell::GetFormula( String& rFormula, const FormulaGrammar::Grammar eGrammar ) const
-{
-    rtl::OUStringBuffer rBuffer( rFormula );
-    GetFormula( rBuffer, eGrammar );
-    rFormula = rBuffer.makeStringAndClear();
-}
-
 void ScFormulaCell::GetFormula( rtl::OUString& rFormula, const FormulaGrammar::Grammar eGrammar ) const
 {
     rtl::OUStringBuffer rBuffer( rFormula );
@@ -985,7 +978,7 @@ void ScFormulaCell::GetResultDimensions( SCSIZE& rCols, SCSIZE& rRows )
     }
 }
 
-void ScFormulaCell::Compile( const String& rFormula, bool bNoListening,
+void ScFormulaCell::Compile( const rtl::OUString& rFormula, bool bNoListening,
                             const FormulaGrammar::Grammar eGrammar )
 {
     if ( pDocument->IsClipOrUndo() )
@@ -1004,12 +997,12 @@ void ScFormulaCell::Compile( const String& rFormula, bool bNoListening,
         delete pCodeOld;
     if( !pCode->GetCodeError() )
     {
-        if ( !pCode->GetLen() && aResult.GetHybridFormula().Len() && rFormula == aResult.GetHybridFormula() )
+        if ( !pCode->GetLen() && aResult.GetHybridFormula().Len() && rFormula == rtl::OUString(aResult.GetHybridFormula()) )
         {   // nicht rekursiv CompileTokenArray/Compile/CompileTokenArray
-            if ( rFormula.GetChar(0) == '=' )
-                pCode->AddBad( rFormula.GetBuffer() + 1 );
+            if ( rFormula[0] == '=' )
+                pCode->AddBad( rFormula.copy(1) );
             else
-                pCode->AddBad( rFormula.GetBuffer() );
+                pCode->AddBad( rFormula );
         }
         bCompile = true;
         CompileTokenArray( bNoListening );
@@ -1076,9 +1069,9 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
 
     ScCompiler aComp( pDocument, aPos, *pCode);
     aComp.SetGrammar(eTempGrammar);
-    String aFormula, aFormulaNmsp;
+    rtl::OUString aFormula, aFormulaNmsp;
     aComp.CreateStringFromXMLTokenArray( aFormula, aFormulaNmsp );
-    pDocument->DecXMLImportedFormulaCount( aFormula.Len() );
+    pDocument->DecXMLImportedFormulaCount( aFormula.getLength() );
     rProgress.SetStateCountDownOnPercent( pDocument->GetXMLImportedFormulaCount() );
     // pCode darf fuer Abfragen noch nicht geloescht, muss aber leer sein
     if ( pCode )
@@ -1090,10 +1083,10 @@ void ScFormulaCell::CompileXML( ScProgress& rProgress )
     {
         if ( !pCode->GetLen() )
         {
-            if ( aFormula.GetChar(0) == '=' )
-                pCode->AddBad( aFormula.GetBuffer() + 1 );
+            if ( aFormula[0] == '=' )
+                pCode->AddBad( aFormula.copy( 1 ) );
             else
-                pCode->AddBad( aFormula.GetBuffer() );
+                pCode->AddBad( aFormula );
         }
         bSubTotal = aComp.CompileTokenArray();
         if( !pCode->GetCodeError() )
@@ -1466,8 +1459,8 @@ void ScFormulaCell::InterpretTail( ScInterpretTailParameter eTailParam )
             // documents we might need another solution. Or just confirm correctness.
             OSL_FAIL( "ScFormulaCell::Interpret: no UPN, no error, no token, but string -> Try compiling it." );
             // Force Compilation
-            String aFormula = aResult.GetHybridFormula();
-            aResult.SetHybridFormula( String() );
+            rtl::OUString aFormula = aResult.GetHybridFormula();
+            aResult.SetHybridFormula( rtl::OUString() );
             Compile( aFormula );
             InterpretTail( eTailParam );
             return;
@@ -1915,9 +1908,9 @@ void ScFormulaCell::AddRecalcMode( ScRecalcMode nBits )
 }
 
 // Dynamically create the URLField on a mouse-over action on a hyperlink() cell.
-void ScFormulaCell::GetURLResult( String& rURL, String& rCellText )
+void ScFormulaCell::GetURLResult( rtl::OUString& rURL, rtl::OUString& rCellText )
 {
-    String aCellString;
+    rtl::OUString aCellString;
 
     Color* pColor;
 
@@ -1952,7 +1945,7 @@ void ScFormulaCell::GetURLResult( String& rURL, String& rCellText )
             pFormatter->GetOutputString( nMatVal.fVal, nURLFormat, rURL, &pColor );
     }
 
-    if(!rURL.Len())
+    if(rURL.isEmpty())
     {
         if(IsValue())
             pFormatter->GetOutputString( GetValue(), nURLFormat, rURL, &pColor );
@@ -1979,8 +1972,8 @@ void ScFormulaCell::MaybeInterpret()
 
 EditTextObject* ScFormulaCell::CreateURLObject()
 {
-    String aCellText;
-    String aURL;
+    rtl::OUString aCellText;
+    rtl::OUString aURL;
     GetURLResult( aURL, aCellText );
 
     SvxURLField aUrlField( aURL, aCellText, SVXURLFORMAT_APPDEFAULT);

@@ -81,13 +81,13 @@ ScEditCell::ScEditCell( const ScEditCell& rCell, ScDocument& rDoc )  :
     SetTextObject( rCell.pData, rCell.pDoc->GetEditPool() );
 }
 
-ScEditCell::ScEditCell( const String& rString, ScDocument* pDocP )  :
+ScEditCell::ScEditCell( const rtl::OUString& rString, ScDocument* pDocP )  :
         ScBaseCell( CELLTYPE_EDIT ),
         pString( NULL ),
         pDoc( pDocP )
 {
-    OSL_ENSURE( rString.Search('\n') != STRING_NOTFOUND ||
-                rString.Search(CHAR_CR) != STRING_NOTFOUND,
+    OSL_ENSURE( rString.indexOf('\n') != -1 ||
+                rString.indexOf(CHAR_CR) != -1,
                 "EditCell mit einfachem Text !?!?" );
 
     EditEngine& rEngine = pDoc->GetEditEngine();
@@ -654,7 +654,7 @@ sal_uInt16 ScFormulaCell::GetMatrixEdge( ScAddress& rOrgPos )
                 else
                 {
 #if OSL_DEBUG_LEVEL > 0
-                    String aTmp;
+                    rtl::OUString aTmp;
                     rtl::OStringBuffer aMsg(RTL_CONSTASCII_STRINGPARAM(
                         "broken Matrix, no MatFormula at origin, Pos: "));
                     aPos.Format( aTmp, SCA_VALID_COL | SCA_VALID_ROW, pDocument );
@@ -1614,14 +1614,14 @@ void ScFormulaCell::CompileDBFormula( bool bCreateFormulaString )
         }
         if ( bRecompile )
         {
-            String aFormula;
+            rtl::OUString aFormula;
             GetFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE);
-            if ( GetMatrixFlag() != MM_NONE && aFormula.Len() )
+            if ( GetMatrixFlag() != MM_NONE && !aFormula.isEmpty() )
             {
-                if ( aFormula.GetChar( aFormula.Len()-1 ) == '}' )
-                    aFormula.Erase( aFormula.Len()-1 , 1 );
-                if ( aFormula.GetChar(0) == '{' )
-                    aFormula.Erase( 0, 1 );
+                if ( aFormula[ aFormula.getLength()-1 ] == '}' )
+                    aFormula = aFormula.copy( aFormula.getLength()-1 , 1 );
+                if ( aFormula[0] == '{' )
+                    aFormula = aFormula.copy( 1 );
             }
             EndListeningTo( pDocument );
             pDocument->RemoveFromFormulaTree( this );
@@ -1661,14 +1661,14 @@ void ScFormulaCell::CompileNameFormula( bool bCreateFormulaString )
         }
         if ( bRecompile )
         {
-            String aFormula;
+            rtl::OUString aFormula;
             GetFormula( aFormula, formula::FormulaGrammar::GRAM_NATIVE);
-            if ( GetMatrixFlag() != MM_NONE && aFormula.Len() )
+            if ( GetMatrixFlag() != MM_NONE && !aFormula.isEmpty() )
             {
-                if ( aFormula.GetChar( aFormula.Len()-1 ) == '}' )
-                    aFormula.Erase( aFormula.Len()-1 , 1 );
-                if ( aFormula.GetChar(0) == '{' )
-                    aFormula.Erase( 0, 1 );
+                if ( aFormula[ aFormula.getLength()-1 ] == '}' )
+                    aFormula = aFormula.copy( 0, aFormula.getLength()-1 );
+                if ( aFormula[0] == '{' )
+                    aFormula = aFormula.copy( 1 );
             }
             EndListeningTo( pDocument );
             pDocument->RemoveFromFormulaTree( this );

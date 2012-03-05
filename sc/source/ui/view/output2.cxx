@@ -785,8 +785,8 @@ void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScBaseCe
 {
     vcl::PDFExtOutDevData* pPDFData = PTR_CAST( vcl::PDFExtOutDevData, pDev->GetExtOutDevData() );
 
-    String aCellText;
-    String aURL;
+    rtl::OUString aCellText;
+    rtl::OUString aURL;
     if ( pCell && pCell->GetCellType() == CELLTYPE_FORMULA )
     {
         ScFormulaCell* pFCell = static_cast<ScFormulaCell*>(pCell);
@@ -794,7 +794,7 @@ void lcl_DoHyperlinkResult( OutputDevice* pDev, const Rectangle& rRect, ScBaseCe
             pFCell->GetURLResult( aURL, aCellText );
     }
 
-    if ( aURL.Len() && pPDFData )
+    if ( !aURL.isEmpty() && pPDFData )
     {
         vcl::PDFExtOutDevBookmarkEntry aBookmark;
         aBookmark.nLinkId = pPDFData->CreateLink( rRect );

@@ -3730,6 +3730,14 @@ void ScCompiler::CreateStringFromXMLTokenArray( String& rFormula, String& rFormu
     }
 }
 
+void ScCompiler::CreateStringFromXMLTokenArray( rtl::OUString& rFormula, rtl::OUString& rFormulaNmsp )
+{
+    String sFormula, aFormulaNmsp;
+    CreateStringFromXMLTokenArray(sFormula, aFormulaNmsp);
+    rFormula = sFormula;
+    rFormulaNmsp = aFormulaNmsp;
+}
+
 ScTokenArray* ScCompiler::CompileString( const String& rFormula )
 {
     OSL_ENSURE( meGrammar != FormulaGrammar::GRAM_EXTERNAL, "ScCompiler::CompileString - unexpected grammar GRAM_EXTERNAL" );

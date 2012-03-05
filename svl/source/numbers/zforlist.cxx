@@ -1568,6 +1568,49 @@ void SvNumberFormatter::GetOutputString(String& sString,
     }
 }
 
+void SvNumberFormatter::GetOutputString(const double& fOutNumber,
+                                        sal_uInt32 nFIndex,
+                                        rtl::OUString& sOutString,
+                                        Color** ppColor)
+{
+    if (bNoZero && fOutNumber == 0.0)
+    {
+        sOutString = rtl::OUString();
+        return;
+    }
+    SvNumberformat* pFormat = GetFormatEntry( nFIndex );
+    if (!pFormat)
+        pFormat = GetFormatEntry(ZF_STANDARD);
+    ChangeIntl(pFormat->GetLanguage());
+    String aOutString;
+    pFormat->GetOutputString(fOutNumber, aOutString, ppColor);
+    sOutString = aOutString;
+}
+
+void SvNumberFormatter::GetOutputString(rtl::OUString& sString,
+                                        sal_uInt32 nFIndex,
+                                        rtl::OUString& sOutString,
+                                        Color** ppColor)
+{
+    SvNumberformat* pFormat = GetFormatEntry( nFIndex );
+    if (!pFormat)
+        pFormat = GetFormatEntry(ZF_STANDARD_TEXT);
+    if (!pFormat->IsTextFormat() && !pFormat->HasTextFormat())
+    {
+        *ppColor = NULL;
+        sOutString = sString;
+    }
+    else
+    {
+        ChangeIntl(pFormat->GetLanguage());
+        String aString = sString;
+        String aOutString = sOutString;
+        pFormat->GetOutputString(aString, aOutString, ppColor);
+        sString = aString;
+        sOutString = aOutString;
+    }
+}
+
 bool SvNumberFormatter::GetPreviewString(const String& sFormatString,
                                          double fPreviewNumber,
                                          String& sOutString,

@@ -2569,7 +2569,7 @@ void ScInterpreter::ScIsFormula()
 void ScInterpreter::ScFormula()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScFormula" );
-    String aFormula;
+    rtl::OUString aFormula;
     switch ( GetStackType() )
     {
         case svDoubleRef :

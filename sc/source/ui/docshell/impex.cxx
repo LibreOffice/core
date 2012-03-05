@@ -1870,7 +1870,9 @@ sal_Bool ScImportExport::Doc2Sylk( SvStream& rStrm )
                                 aCellStr.Erase();
                             break;
                             default:
-                                pFCell->GetFormula( aCellStr,formula::FormulaGrammar::GRAM_PODF_A1);
+                                rtl::OUString aOUCellStr;
+                                pFCell->GetFormula( aOUCellStr,formula::FormulaGrammar::GRAM_PODF_A1);
+                                aCellStr = aOUCellStr;
                                 /* FIXME: do we want GRAM_ODFF_A1 instead? At
                                  * the end it probably should be
                                  * GRAM_ODFF_R1C1, since R1C1 is what Excel

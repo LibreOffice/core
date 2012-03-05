@@ -481,11 +481,22 @@ public:
     void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
                           String& sOutString, Color** ppColor );
 
+    /// Format a number according to a format index, return string and color
+    void GetOutputString( const double& fOutNumber, sal_uInt32 nFIndex,
+                          rtl::OUString& sOutString, Color** ppColor );
+
     /** Format a string according to a format index, return string and color.
         Formats only if the format code is of type text or the 4th subcode
         of a format code is specified, otherwise sOutString will be == "" */
     void GetOutputString( String& sString, sal_uInt32 nFIndex,
                           String& sOutString, Color** ppColor );
+
+
+    /** Format a string according to a format index, return string and color.
+        Formats only if the format code is of type text or the 4th subcode
+        of a format code is specified, otherwise sOutString will be == "" */
+    void GetOutputString( rtl::OUString& sString, sal_uInt32 nFIndex,
+                          rtl::OUString& sOutString, Color** ppColor );
 
     /** Format a number according to the standard default format matching
         the given format index */

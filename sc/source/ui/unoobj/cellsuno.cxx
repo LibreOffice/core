@@ -5127,7 +5127,7 @@ rtl::OUString SAL_CALL ScCellRangeObj::getArrayFormula() throw(uno::RuntimeExcep
     //  also wenn Anfang und Ende des Blocks zur selben Matrix gehoeren.
     //  Sonst Leerstring.
 
-    String aFormula;
+    rtl::OUString aFormula;
     ScDocShell* pDocSh = GetDocShell();
     if (pDocSh)
     {

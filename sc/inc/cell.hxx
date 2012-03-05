@@ -129,7 +129,7 @@ public:
     void            DeleteBroadcaster();
 
                         // String- oder EditCell
-    static ScBaseCell* CreateTextCell( const String& rString, ScDocument* );
+    static ScBaseCell* CreateTextCell( const rtl::OUString& rString, ScDocument* );
 
     // nOnlyNames may be one or more of SC_LISTENING_NAMES_*
     void            StartListeningTo( ScDocument* pDoc );
@@ -144,7 +144,7 @@ public:
     bool            HasEmptyData() const;
     bool            HasValueData() const;
     bool            HasStringData() const;
-    String          GetStringData() const;          // only real strings
+    rtl::OUString   GetStringData() const;          // only real strings
 
     static bool     CellEqual( const ScBaseCell* pCell1, const ScBaseCell* pCell2 );
 
@@ -246,7 +246,7 @@ public:
                                 const SfxItemPool* pFromPool /* = NULL */ );
                     ScEditCell( const ScEditCell& rCell, ScDocument& rDoc );
                     // for line breaks
-                    ScEditCell( const String& rString, ScDocument* );
+                    ScEditCell( const rtl::OUString& rString, ScDocument* );
 
     void            SetData( const EditTextObject* pObject,
                             const SfxItemPool* pFromPool /* = NULL */ );
@@ -363,14 +363,12 @@ public:
         also includes formula::FormulaGrammar::CONV_UNSPECIFIED, therefor uses the address
         convention associated with rPos::nTab by default. */
     ScFormulaCell( ScDocument* pDoc, const ScAddress& rPos,
-                    const String& rFormula,
+                    const rtl::OUString& rFormula,
                     const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT,
                     sal_uInt8 cMatInd = MM_NONE );
 
     ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, const ScAddress& rPos, int nCloneFlags = SC_CLONECELL_DEFAULT );
 
-    void            GetFormula( String& rFormula,
-                                const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            GetFormula( rtl::OUString& rFormula,
                                 const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT ) const;
     void            GetFormula( rtl::OUStringBuffer& rBuffer,
@@ -387,7 +385,7 @@ public:
     void            ResetDirty() { bDirty = false; }
     bool            NeedsListening() const { return bNeedListening; }
     void            SetNeedsListening( bool bVar ) { bNeedListening = bVar; }
-    void            Compile(const String& rFormula,
+    void            Compile(const rtl::OUString& rFormula,
                             bool bNoListening = false,
                             const formula::FormulaGrammar::Grammar = formula::FormulaGrammar::GRAM_DEFAULT );
     void            CompileTokenArray( bool bNoListening = false );
@@ -427,7 +425,7 @@ public:
     void            UpdateInsertTabAbs(SCTAB nTable);
     bool            UpdateDeleteTab(SCTAB nTable, bool bIsMove = false, SCTAB nSheets = 1);
     void            UpdateMoveTab(SCTAB nOldPos, SCTAB nNewPos, SCTAB nTabNo);
-    void            UpdateRenameTab(SCTAB nTable, const String& rName);
+    void            UpdateRenameTab(SCTAB nTable, const rtl::OUString& rName);
     bool            TestTabRefAbs(SCTAB nTable);
     void            UpdateCompile( bool bForceIfNameInUse = false );
     void            FindRangeNamesInUse(std::set<sal_uInt16>& rIndexes) const;
@@ -498,13 +496,13 @@ public:
         If for whatever reason you have to use both, SetHybridDouble() and
         SetHybridString() or SetHybridFormula(), use SetHybridDouble() first
         for performance reasons.*/
-    void            SetHybridFormula( const String& r,
+    void            SetHybridFormula( const rtl::OUString& r,
                                     const formula::FormulaGrammar::Grammar eGrammar )
                         { aResult.SetHybridFormula( r); eTempGrammar = eGrammar; }
     void            SetErrCode( sal_uInt16 n );
     inline bool     IsHyperLinkCell() const { return pCode && pCode->IsHyperLink(); }
     EditTextObject* CreateURLObject() ;
-    void            GetURLResult( String& rURL, String& rCellText );
+    void            GetURLResult( rtl::OUString& rURL, rtl::OUString& rCellText );
 
     /** Determines whether or not the result string contains more than one paragraph */
     bool            IsMultilineResult();
