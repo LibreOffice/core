@@ -71,16 +71,11 @@ namespace connectivity
             //====================================================================
             // Data attributes
             //====================================================================
-            SQLSMALLINT     numParams;      // Number of parameter markers
-                                            //  for the prepared statement
+            SQLSMALLINT     numParams;      // Number of parameter markers for the prepared statement
 
             OBoundParam*    boundParams;
-                            // Array of bound parameter
-                            //  objects.  Each parameter
-                            //  marker will have a
-                            //  corresponding object to
-                            //  hold bind information, and
-                            //  resulting data.
+                            // Array of bound parameter objects. Each parameter marker will have a
+                            // corresponding object to hold bind information, and resulting data.
             ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XResultSetMetaData >  m_xMetaData;
             sal_Bool                                                                        m_bPrepared;
 
@@ -109,7 +104,7 @@ namespace connectivity
                                                                         throw (::com::sun::star::uno::Exception);
         public:
             DECLARE_SERVICE_INFO();
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // A ctor, needed to return the object
             OPreparedStatement( OConnection* _pConnection,const ::rtl::OUString& sql);
 
             //XInterface
