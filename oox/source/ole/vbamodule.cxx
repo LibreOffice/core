@@ -33,7 +33,9 @@
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/script/ModuleType.hpp>
 #include <com/sun/star/script/vba/XVBAModuleInfo.hpp>
+#include <com/sun/star/awt/KeyEvent.hpp>
 #include <cppuhelper/implbase1.hxx>
+#include <filter/msfilter/msvbahelper.hxx>
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/storagebase.hxx"
 #include "oox/helper/textinputstream.hxx"
@@ -54,6 +56,7 @@ using namespace ::com::sun::star::uno;
 
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
+using ::com::sun::star::awt::KeyEvent;
 // ============================================================================
 typedef ::cppu::WeakImplHelper1< XIndexContainer > OleIdToNameContainer_BASE;
 typedef boost::unordered_map< sal_Int32, rtl::OUString >  ObjIdToName;
@@ -249,7 +252,38 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNam
                 if( aCodeLine.matchAsciiL( RTL_CONSTASCII_STRINGPARAM( "Attribute " ) ) )
                 {
                     // attribute
-                    extractOleOverrideFromAttr( aCodeLine, rxOleNameOverrides );
+                    int index = aCodeLine.indexOf( ".VB_ProcData.VB_Invoke_Func = " );
+                    if ( index != -1 )
+                    {
+                        // format is
+                        //    'Attribute Procedure.VB_ProcData.VB_Invoke_Func = "*\n14"'
+                        //    where 'Procedure' is the procedure name and '*' is the shortcut key
+                        // note: his is only relevant for Excel, seems that
+                        // word doesn't store the shortcut in the module
+                        // attributes
+                        int nSpaceIndex = aCodeLine.indexOf(' ');
+                        rtl::OUString sProc = aCodeLine.copy( nSpaceIndex + 1, index - nSpaceIndex - 1);
+                        // for Excel short cut key seems limited to cntrl+'a-z, A-Z'
+                        rtl::OUString sKey = aCodeLine.copy( aCodeLine.lastIndexOf("= ") + 3, 1 );
+                        // only alpha key valid for key shortcut, however the api will accept other keys
+                        if ( !isalpha( (char)sKey[ 0 ] ) )
+                        {
+                            // cntrl modifier is explicit ( but could be cntrl+shift ), parseKeyEvent
+                            // will handle and uppercase letter appropriately
+                            rtl::OUString sApiKey = "^";
+                            sApiKey += sKey;
+                            try
+                            {
+                                KeyEvent aKeyEvent = ooo::vba::parseKeyEvent( sApiKey );
+                                ooo::vba::applyShortCutKeyBinding( mxDocModel, aKeyEvent, sProc );
+                            }
+                            catch( Exception& )
+                            {
+                            }
+                        }
+                    }
+                    else
+                        extractOleOverrideFromAttr( aCodeLine, rxOleNameOverrides );
                 }
                 else
                 {

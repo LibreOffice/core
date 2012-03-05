@@ -44,6 +44,8 @@
 
 #include <com/sun/star/awt/KeyModifier.hpp>
 #include <svtools/acceleratorexecute.hxx>
+#include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
+#include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <map>
 
 using namespace ::com::sun::star;
@@ -584,6 +586,7 @@ void SAL_CALL VBAMacroResolver::initialize( const uno::Sequence< uno::Any >& rAr
     OSL_ENSURE( false, "VBAMacroResolver::resolveScriptURLtoVBAMacro - not implemented" );
     throw uno::RuntimeException();
 }
+
 bool getModifier( char c, sal_uInt16& mod )
 {
     static const char modifiers[] = "+^%";
@@ -607,11 +610,17 @@ sal_uInt16 parseChar( char c ) throw ( uno::RuntimeException )
     sal_uInt16 nVclKey = 0;
     // do we care about locale here for isupper etc. ? probably not
     if ( isalpha( c ) )
+    {
         nVclKey |= ( toupper( c ) - 'A' ) + KEY_A;
+        if ( isupper( c ) )
+            nVclKey |= KEY_SHIFT;
+    }
     else if ( isdigit( c ) )
         nVclKey |= ( c  - '0' ) + KEY_0;
     else if ( c == '~' ) // special case
         nVclKey = KEY_RETURN;
+    else if ( c == ' ' ) // special case
+        nVclKey = KEY_SPACE;
     else // I guess we have a problem ( but not sure if locale specific keys might come into play here )
         throw uno::RuntimeException();
     return nVclKey;
@@ -640,6 +649,9 @@ KeyCodeEntry aMSKeyCodesData[] = {
     { "PGDN", KEY_PAGEDOWN },
     { "PGUP", KEY_PAGEUP },
     { "INSERT", KEY_INSERT },
+    { "SCROLLLOCK", KEY_SCROLLLOCK },
+    { "NUMLOCK", KEY_NUMLOCK },
+    { "TAB", KEY_TAB },
     { "F1", KEY_F1 },
     { "F2", KEY_F2 },
     { "F3", KEY_F3 },
@@ -675,7 +687,7 @@ awt::KeyEvent parseKeyEvent( const ::rtl::OUString& Key ) throw ( uno::RuntimeEx
     {
         if ( ! getModifier( Key[ i ], nVclKey ) )
         {
-            sKeyCode = Key.copy( i ).trim();
+            sKeyCode = Key.copy( i );
             break;
         }
     }
@@ -709,6 +721,42 @@ awt::KeyEvent parseKeyEvent( const ::rtl::OUString& Key ) throw ( uno::RuntimeEx
     return aKeyEvent;
 }
 
+void applyShortCutKeyBinding ( const uno::Reference< frame::XModel >& rxModel, const awt::KeyEvent& rKeyEvent, const ::rtl::OUString& rMacroName ) throw (uno::RuntimeException)
+{
+    rtl::OUString MacroName( rMacroName );
+    if ( !MacroName.isEmpty() )
+    {
+        ::rtl::OUString sSeparator(RTL_CONSTASCII_USTRINGPARAM("/"));
+        ::rtl::OUString sMacroSeparator(RTL_CONSTASCII_USTRINGPARAM("!"));
+        ::rtl::OUString aMacroName = MacroName.trim();
+        if (0 == aMacroName.indexOf('!'))
+            MacroName = aMacroName.copy(1).trim();
+        SfxObjectShell* pShell = NULL;
+        if ( rxModel.is() )
+        {
+            uno::Reference< lang::XUnoTunnel >  xObjShellTunnel( rxModel, uno::UNO_QUERY_THROW );
+            pShell = reinterpret_cast<SfxObjectShell*>( xObjShellTunnel->getSomething(SfxObjectShell::getUnoTunnelId()));
+            if ( !pShell )
+                throw uno::RuntimeException();
+        }
+        MacroResolvedInfo aMacroInfo = resolveVBAMacro( pShell, aMacroName );
+        if( !aMacroInfo.mbFound )
+            throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("The procedure doesn't exist") ), uno::Reference< uno::XInterface >() );
+       MacroName = aMacroInfo.msResolvedMacro;
+    }
+    uno::Reference< ui::XUIConfigurationManagerSupplier > xCfgSupplier(rxModel, uno::UNO_QUERY_THROW);
+    uno::Reference< ui::XUIConfigurationManager > xCfgMgr = xCfgSupplier->getUIConfigurationManager();
+
+    uno::Reference< ui::XAcceleratorConfiguration > xAcc( xCfgMgr->getShortCutManager(), uno::UNO_QUERY_THROW );
+    if ( MacroName.isEmpty() )
+        // I believe this should really restore the [application] default. Since
+        // afaik we don't actually setup application default bindings on import
+        // we don't even know what the 'default' would be for this key
+        xAcc->removeKeyEvent( rKeyEvent );
+    else
+        xAcc->setKeyEvent( rKeyEvent, ooo::vba::makeMacroURL( MacroName ) );
+
+}
 // ============================================================================
 
 } // namespace vba
