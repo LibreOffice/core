@@ -129,8 +129,7 @@ PrinterGfx::PrinterGfx() :
         maFillColor (0xff,0,0),
         maTextColor (0,0,0),
         maLineColor (0, 0xff, 0),
-        mpFontSubstitutes( NULL ),
-        mbStrictSO52Compatibility( false )
+        mpFontSubstitutes( NULL )
 {
     maVirtualStatus.mfLineWidth = 1.0;
     maVirtualStatus.mnTextHeight = 12;

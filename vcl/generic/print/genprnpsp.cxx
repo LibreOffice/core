@@ -413,18 +413,6 @@ void SalGenericInstance::configurePspInfoPrinter(PspSalInfoPrinter *pPrinter,
         pJobSetup->maPrinterName    = pQueueInfo->maPrinterName;
         pJobSetup->maDriver         = aInfo.m_aDriverName;
         copyJobDataToJobSetup( pJobSetup, aInfo );
-
-        // set/clear backwards compatibility flag
-        bool bStrictSO52Compatibility = false;
-        boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
-            pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
-
-        if( compat_it != pJobSetup->maValueMap.end() )
-        {
-            if( compat_it->second.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
-                bStrictSO52Compatibility = true;
-        }
-        pPrinter->m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
     }
 }
 
@@ -627,18 +615,6 @@ sal_Bool PspSalInfoPrinter::Setup( SalFrame* pFrame, ImplJobSetup* pJobSetup )
 // should be merged into the independent data
 sal_Bool PspSalInfoPrinter::SetPrinterData( ImplJobSetup* pJobSetup )
 {
-    // set/clear backwards compatibility flag
-    bool bStrictSO52Compatibility = false;
-    boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
-        pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
-
-    if( compat_it != pJobSetup->maValueMap.end() )
-    {
-        if( compat_it->second.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
-            bStrictSO52Compatibility = true;
-    }
-    m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
-
     if( pJobSetup->mpDriverData )
         return SetData( ~0, pJobSetup );
 
@@ -990,18 +966,6 @@ sal_Bool PspSalPrinter::StartJob(
     }
 #endif
     m_aPrinterGfx.Init( m_aJobData );
-
-    // set/clear backwards compatibility flag
-    bool bStrictSO52Compatibility = false;
-    boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
-        pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
-
-    if( compat_it != pJobSetup->maValueMap.end() )
-    {
-        if( compat_it->second.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
-            bStrictSO52Compatibility = true;
-    }
-    m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
 
     return m_aPrintJob.StartJob( ! m_aTmpFile.isEmpty() ? m_aTmpFile : m_aFileName, nMode, rJobName, rAppName, m_aJobData, &m_aPrinterGfx, bDirect ) ? sal_True : sal_False;
 }

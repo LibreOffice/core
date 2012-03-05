@@ -262,7 +262,6 @@ private:
     fontID          getFontSubstitute () const;
     fontID          getFallbackID () const { return mnFallbackID; }
 
-    bool            mbStrictSO52Compatibility;
 public:
     /* grahics status update */
     void            PSSetColor ();
@@ -433,8 +432,6 @@ public:
                                 sal_Int16 nLen,
                                 sal_Int32* pDeltaArray );
 
-    bool getStrictSO52Compatibility() const;
-    void setStrictSO52Compatibility( bool );
 };
 
 } /* namespace psp */

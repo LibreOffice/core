@@ -192,17 +192,6 @@ SalInfoPrinter* SvpSalInstance::CreateInfoPrinter( SalPrinterQueueInfo* pQueueIn
         pJobSetup->maPrinterName    = pQueueInfo->maPrinterName;
         pJobSetup->maDriver         = aInfo.m_aDriverName;
         copyJobDataToJobSetup( pJobSetup, aInfo );
-
-        // set/clear backwards compatibility flag
-        bool bStrictSO52Compatibility = false;
-        boost::unordered_map<rtl::OUString, rtl::OUString, rtl::OUStringHash >::const_iterator compat_it =
-            pJobSetup->maValueMap.find( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "StrictSO52Compatibility" ) ) );
-        if( compat_it != pJobSetup->maValueMap.end() )
-        {
-            if( compat_it->second.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("true")) )
-                bStrictSO52Compatibility = true;
-        }
-        pPrinter->m_aPrinterGfx.setStrictSO52Compatibility( bStrictSO52Compatibility );
     }
 
 
