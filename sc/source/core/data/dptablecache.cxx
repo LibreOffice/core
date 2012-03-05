@@ -770,9 +770,9 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
 {
 //  stack_printer __stack_printer__("ScDPCache::GetItemDataById");
 //  fprintf(stdout, "ScDPCache::GetItemDataById:   dim = %d  id = %d\n", nDim, nId);
-    if (nDim < 0)
+    if (nDim < 0 || nId < 0)
     {
-        fprintf(stdout, "ScDPCache::GetItemDataById:   fail (%d)\n", __LINE__);
+        fprintf(stdout, "ScDPCache::GetItemDataById:   negative ID\n");
         return NULL;
     }
 
@@ -965,18 +965,46 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const rtl::OUString& sItemData) cons
     return -1;
 }
 
-SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rData) const
+SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
 {
-    fprintf(stdout, "ScDPCache::GetIdByItemData:   FIXME\n");
-    if ( nDim < mnColumnCount && nDim >=0 )
+    if (nDim < 0)
+        return -1;
+
+    if (nDim < mnColumnCount)
     {
+        // source field.
         const DataListType& rItems = maFields[nDim].maItems;
         for (size_t i = 0, n = rItems.size(); i < n; ++i)
         {
-            if (rItems[i] == rData)
+            if (rItems[i] == rItem)
+                return i;
+        }
+
+        if (!maFields[nDim].mpGroup)
+            return -1;
+
+        // grouped source field.
+        const DataListType& rGI = maFields[nDim].mpGroup->maItems;
+        for (size_t i = 0, n = rGI.size(); i < n; ++i)
+        {
+            if (rGI[i] == rItem)
+                return rItems.size() + i;
+        }
+        return -1;
+    }
+
+    // group field.
+    nDim -= mnColumnCount;
+    if (nDim < maGroupFields.size())
+    {
+        const DataListType& rGI = maGroupFields[nDim].maItems;
+        for (size_t i = 0, n = rGI.size(); i < n; ++i)
+        {
+            if (rGI[i] == rItem)
                 return i;
         }
     }
+
     return -1;
 }
 

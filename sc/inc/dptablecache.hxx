@@ -129,7 +129,7 @@ public:
     const ObjectSetType& GetAllReferences() const;
 
     SCROW GetIdByItemData(long nDim, const rtl::OUString& sItemData) const;
-    SCROW GetIdByItemData(long nDim, const ScDPItemData& rData) const;
+    SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
     rtl::OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
     void AppendGroupField();
     void ResetGroupItems(long nDim);

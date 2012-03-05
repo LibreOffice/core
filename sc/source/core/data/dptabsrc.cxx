@@ -2572,7 +2572,6 @@ ScDPMember::~ScDPMember()
 bool ScDPMember::IsNamedItem(SCROW nIndex) const
 {
     long nSrcDim = pSource->GetSourceDim( nDim );
-    fprintf(stdout, "ScDPMember::IsNamedItem:   dim = %d  src dim = %d\n", nDim, nSrcDim);
     if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) )
     {
         const ScDPItemData* pData = pSource->GetCache()->GetItemDataById(nDim, nIndex);
@@ -2586,7 +2585,6 @@ bool ScDPMember::IsNamedItem(SCROW nIndex) const
         }
     }
 
-    fprintf(stdout, "ScDPMember::IsNamedItem:   result = %d\n", nIndex == mnDataId);
     return  nIndex == mnDataId;
 }
 

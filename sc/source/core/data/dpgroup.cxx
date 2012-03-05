@@ -448,6 +448,8 @@ ScDPDateGroupHelper::~ScDPDateGroupHelper()
 {
 }
 
+namespace {
+
 sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberFormatter* pFormatter,
                                 const ScDPNumGroupInfo* pNumInfo )
 {
@@ -586,6 +588,58 @@ String lcl_GetSpecialDateName( double fValue, bool bFirst, SvNumberFormatter* pF
     return aBuffer.makeStringAndClear();
 }
 
+bool isDateInGroup(const ScDPItemData& rGroupItem, const ScDPItemData& rChildItem)
+{
+    stack_printer __stack_printer__("::isDateInGroup");
+    if (rGroupItem.GetType() != ScDPItemData::GroupValue || rChildItem.GetType() != ScDPItemData::GroupValue)
+        return false;
+
+    sal_Int32 nGroupPart = rGroupItem.GetGroupValue().mnGroupType;
+    sal_Int32 nGroupValue = rGroupItem.GetGroupValue().mnValue;
+    sal_Int32 nChildPart = rChildItem.GetGroupValue().mnGroupType;
+    sal_Int32 nChildValue = rChildItem.GetGroupValue().mnValue;
+
+    fprintf(stdout, "isDateInGroup:   group part = %d  group values = %d  child part = %d  child value = %d\n",
+            nGroupPart, nGroupValue, nChildPart, nChildValue);
+
+    if (nGroupValue == SC_DP_DATE_FIRST || nGroupValue == SC_DP_DATE_LAST ||
+        nChildValue == SC_DP_DATE_FIRST || nChildValue == SC_DP_DATE_LAST)
+    {
+        // first/last entry matches only itself
+        return nGroupValue == nChildValue;
+    }
+
+    switch (nChildPart)        // inner part
+    {
+        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
+            // a month is only contained in its quarter
+            if (nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS)
+                // months and quarters are both 1-based
+                return (nGroupValue - 1 == (nChildValue - 1) / 3);
+
+        case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
+            // a day is only contained in its quarter or month
+            if (nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS ||
+                nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS)
+            {
+                Date aDate(1, 1, SC_DP_LEAPYEAR);
+                aDate += (nChildValue - 1);            // days are 1-based
+                sal_Int32 nCompare = aDate.GetMonth();
+                if (nGroupPart == com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS)
+                    nCompare = ( ( nCompare - 1 ) / 3 ) + 1;    // get quarter from date
+
+                return nGroupValue == nCompare;
+            }
+            break;
+        default:
+            ;
+    }
+
+    return true;
+}
+
+}
+
 void ScDPDateGroupHelper::SetGroupDim(long nDim)
 {
     mnGroupDim = nDim;
@@ -665,7 +719,7 @@ void ScDPDateGroupHelper::FillColumnEntries(
         rtl::OUString aName = ScDPUtil::getDateGroupName( nDatePart, nValue, pFormatter );
         fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   name = '%s'\n",
                 rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
-        SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(aName));
+        SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, nValue));
         rEntries.push_back(nId);
     }
 
@@ -673,13 +727,13 @@ void ScDPDateGroupHelper::FillColumnEntries(
     rtl::OUString aFirstName = lcl_GetSpecialDateName( aNumInfo.mfStart, true, pFormatter );
     fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   first = '%s'\n",
             rtl::OUStringToOString(aFirstName, RTL_TEXTENCODING_UTF8).getStr());
-    SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(aFirstName));
+    SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, SC_DP_DATE_LAST));
     rEntries.push_back(nId);
 
     rtl::OUString aLastName = lcl_GetSpecialDateName( aNumInfo.mfEnd, false, pFormatter );
     fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   last = '%s'\n",
             rtl::OUStringToOString(aLastName, RTL_TEXTENCODING_UTF8).getStr());
-    nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(aLastName));
+    nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, SC_DP_DATE_LAST));
     rEntries.push_back(nId);
 
     std::vector<SCROW>::const_iterator it = rEntries.begin(), itEnd = rEntries.end();
@@ -1123,18 +1177,6 @@ const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( long  nColumn 
 
 const ScDPItemData* ScDPGroupTableData::GetMemberById( long nDim, long nId )
 {
-//  stack_printer __stack_printer__("ScDPGroupTableData::GetMemberById");
-//  fprintf(stdout, "ScDPGroupTableData::GetMemberById:   dim = %d  id = %d\n", nDim, nId);
-    if ( nDim >= nSourceCount )
-    {
-        if ( getIsDataLayoutDimension( nDim) )
-            nDim    = nSourceCount;
-        else
-        {
-            const ScDPGroupDimension& rGroupDim = aGroups[nDim - nSourceCount];
-            nDim = rGroupDim.GetSourceDim();
-        }
-    }
     return pSourceData->GetMemberById( nDim, nId );
 }
 
@@ -1482,9 +1524,7 @@ sal_Bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGr
                                     const ScDPItemData& rBaseData, long nBaseIndex ) const
 {
     stack_printer __stack_printer__("ScDPGroupTableData::IsInGroup");
-    fprintf(stdout, "ScDPGroupTableData::IsInGroup:   group = '%s'  base = '%s'  group id = %d  base id = %d\n",
-            rtl::OUStringToOString(rGroupData.GetString(), RTL_TEXTENCODING_UTF8).getStr(),
-            rtl::OUStringToOString(rBaseData.GetString(), RTL_TEXTENCODING_UTF8).getStr(), nGroupIndex, nBaseIndex);
+    fprintf(stdout, "ScDPGroupTableData::IsInGroup:   group dim = %d  base dim = %d\n", nGroupIndex, nBaseIndex);
     for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
     {
         const ScDPGroupDimension& rDim = *aIter;
@@ -1493,25 +1533,7 @@ sal_Bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGr
             const ScDPDateGroupHelper* pGroupDateHelper = rDim.GetDateHelper();
             if ( pGroupDateHelper )
             {
-                //! transform rBaseData (innermost date part)
-                //! -> always do "HasCommonElement" style comparison
-                //! (only Quarter, Month, Day affected)
-
-                const ScDPDateGroupHelper* pBaseDateHelper = NULL;
-                if ( nBaseIndex < nSourceCount )
-                    pBaseDateHelper = pNumGroups[nBaseIndex].GetDateHelper();
-
-                // If there's a date group dimension, the base dimension must have
-                // date group information, too.
-                if ( !pBaseDateHelper )
-                {
-                    OSL_FAIL( "mix of date and non-date groups" );
-                    return true;
-                }
-
-                sal_Int32 nGroupPart = pGroupDateHelper->GetDatePart();
-                sal_Int32 nBasePart = pBaseDateHelper->GetDatePart();
-                return lcl_DateContained( nGroupPart, rGroupData, nBasePart, rBaseData );
+                return isDateInGroup(rGroupData, rBaseData);
             }
             else
             {

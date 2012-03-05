@@ -93,6 +93,11 @@ ScDPItemData::~ScDPItemData()
         delete mpString;
 }
 
+ScDPItemData::Type ScDPItemData::GetType() const
+{
+    return meType;
+}
+
 void ScDPItemData::SetString(const rtl::OUString& rS)
 {
     if (meType == String)
@@ -201,6 +206,35 @@ sal_uInt8 ScDPItemData::GetCellType() const
         return SC_VALTYPE_STRING;
 }
 
+#if DEBUG_DP_ITEM_DATA
+void ScDPItemData::Dump(const char* msg) const
+{
+    printf("--- (%s)\n", msg);
+    switch (meType)
+    {
+        case Empty:
+            printf("empty\n");
+        break;
+        case Error:
+            printf("error\n");
+        break;
+        case GroupValue:
+            printf("group value: group type = %d  value = %d\n",
+                   maGroupValue.mnGroupType, maGroupValue.mnValue);
+        break;
+        case String:
+            printf("string\n");
+        break;
+        case Value:
+            printf("value: %g\n", mfValue);
+        break;
+        default:
+            printf("unknown type\n");
+    }
+    printf("---\n");
+}
+#endif
+
 bool ScDPItemData::IsEmpty() const
 {
     return meType == Empty;
@@ -216,6 +250,7 @@ rtl::OUString ScDPItemData::GetString() const
     switch (meType)
     {
         case String:
+        case Error:
             return *mpString;
         case Value:
             return rtl::OUString::valueOf(mfValue);

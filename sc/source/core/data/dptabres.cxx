@@ -974,7 +974,7 @@ bool ScDPResultData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex
 bool ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
                                 const ScDPItemData& rBaseData, long nBaseIndex ) const
 {
-    fprintf(stdout, "ScDPResultData::IsInGroup:   dim = %d  id = %d\n", nGroupIndex, nGroupDataId);
+    fprintf(stdout, "ScDPResultData::IsInGroup:   group dim = %d  group item id = %d\n", nGroupIndex, nGroupDataId);
     const ScDPItemData* pGroupData = pSource->GetItemDataById( nGroupIndex , nGroupDataId);
     if ( pGroupData )
         return pSource->GetData()->IsInGroup( *pGroupData, nGroupIndex, rBaseData , nBaseIndex );
@@ -2753,7 +2753,6 @@ sal_Bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
         //! get array of groups (or indexes) before loop?
         ScDPItemData aMemberData;
         rMember.FillItemData( aMemberData );
-        fprintf(stdout, "ScDPGroupCompare::TestIncluded:   s = '%s'\n", rtl::OUStringToOString(aMemberData.GetString(), RTL_TEXTENCODING_UTF8).getStr());
         long nInitCount = rInitState.GetCount();
         const long* pInitSource = rInitState.GetSource();
         const SCROW* pInitNames = rInitState.GetNameIds();

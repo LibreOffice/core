@@ -40,6 +40,8 @@
 
 #include <boost/unordered_map.hpp>
 
+#define DEBUG_DP_ITEM_DATA 1
+
 class ScDocument;
 
 class SC_DLLPUBLIC ScDPItemData
@@ -76,6 +78,7 @@ public:
     ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue);
     ~ScDPItemData();
 
+    Type GetType() const;
     void SetString(const rtl::OUString& rS);
     void SetValue(double fVal);
     void SetGroupValue(sal_Int32 nGroupType, sal_Int32 nValue);
@@ -97,6 +100,10 @@ public:
     bool HasStringData() const ;
 
     sal_uInt8 GetCellType() const;
+
+#if DEBUG_DP_ITEM_DATA
+    void Dump(const char* msg) const;
+#endif
 };
 
 #endif
