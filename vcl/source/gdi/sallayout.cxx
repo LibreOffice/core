@@ -863,7 +863,7 @@ bool GenericSalLayout::GetCharWidths( sal_Int32* pCharWidths ) const
         // rightmost cluster edge is the leftmost edge of next cluster
         // for clusters that do not have x-sorted glyphs
         // TODO: avoid recalculation of left bound in next cluster iteration
-        for( GlyphVector::const_iterator pN = pG; ++pN < end; )
+        for( GlyphVector::const_iterator pN = pG; ++pN != end; )
         {
             if( pN->IsClusterStart() )
                 break;
