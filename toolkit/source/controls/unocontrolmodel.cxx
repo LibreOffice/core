@@ -703,7 +703,7 @@ void UnoControlModel::write( const ::com::sun::star::uno::Reference< ::com::sun:
                 ::rtl::OUString sTypeName( rType.getTypeName() );
                 sMessage += ::rtl::OString( sTypeName.getStr(), sTypeName.getLength(), RTL_TEXTENCODING_ASCII_US );
                 sMessage += "'.\n(Currently handling property '";
-                ::rtl::OUString sPropertyName( GetPropertyName( pProp->GetId() ) );
+                ::rtl::OUString sPropertyName( GetPropertyName( *it ) );
                 sMessage += ::rtl::OString( sPropertyName.getStr(), sPropertyName.getLength(), osl_getThreadTextEncoding() );
                 sMessage += "'.)";
                 OSL_FAIL( sMessage.getStr() );
