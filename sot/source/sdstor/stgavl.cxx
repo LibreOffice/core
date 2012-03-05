@@ -406,9 +406,4 @@ StgAvlNode* StgAvlIterator::Next()
     return Find( ++nCur );
 }
 
-StgAvlNode* StgAvlIterator::Prev()
-{
-    return Find( --nCur );
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

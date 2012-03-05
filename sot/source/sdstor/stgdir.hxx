@@ -125,7 +125,6 @@ public:
     StgIterator( StgDirEntry& rStg ) : StgAvlIterator( rStg.pDown ) {}
     StgDirEntry* First() { return (StgDirEntry*) StgAvlIterator::First(); }
     StgDirEntry* Next()  { return (StgDirEntry*) StgAvlIterator::Next();  }
-    StgDirEntry* Prev()  { return (StgDirEntry*) StgAvlIterator::Prev();  }
 };
 
 #endif

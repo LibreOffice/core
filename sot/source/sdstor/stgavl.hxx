@@ -71,7 +71,6 @@ public:
     StgAvlIterator( StgAvlNode* );
     StgAvlNode* First();
     StgAvlNode* Next();
-    StgAvlNode* Prev();
 };
 
 #endif

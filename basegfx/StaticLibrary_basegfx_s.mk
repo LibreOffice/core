@@ -98,7 +98,6 @@ $(eval $(call gb_StaticLibrary_add_generated_exception_objects,basegfx_s,\
 	CustomTarget/basegfx/source/polygon/b3dpolygontools \
 	CustomTarget/basegfx/source/polygon/b2dlinegeometry \
 	CustomTarget/basegfx/source/polygon/b3dpolypolygontools \
-	CustomTarget/basegfx/source/polygon/b3dpolygonclipper \
 	CustomTarget/basegfx/source/polygon/b2dpolygonclipper \
 	CustomTarget/basegfx/source/polygon/b2dpolypolygoncutter \
 	CustomTarget/basegfx/source/polygon/b2dpolygon \

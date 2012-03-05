@@ -94,7 +94,6 @@ $(eval $(call gb_Library_add_exception_objects,basegfx,\
 	basegfx/source/polygon/b3dpolygontools \
 	basegfx/source/polygon/b2dlinegeometry \
 	basegfx/source/polygon/b3dpolypolygontools \
-	basegfx/source/polygon/b3dpolygonclipper \
 	basegfx/source/polygon/b2dpolygonclipper \
 	basegfx/source/polygon/b2dpolypolygoncutter \
 	basegfx/source/polygon/b2dpolygon \
