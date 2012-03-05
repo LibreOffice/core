@@ -149,8 +149,10 @@ void ScTabViewShell::ExecuteObject( SfxRequest& rReq )
                         }
                     }
                 }
+#ifndef DISABLE_SCRIPTING
                 if (!bDone)
                     SbxBase::SetError( SbxERR_BAD_PARAMETER );  // Basic-Fehler
+#endif
             }
             break;
 

@@ -676,8 +676,10 @@ void ScCellShell::ExecuteDB( SfxRequest& rReq )
                     }
                     rReq.Done();
                 }
+#ifndef DISABLE_SCRIPTING
                 else if (rReq.IsAPI())
                     SbxBase::SetError(SbxERR_BAD_PARAMETER);
+#endif
             }
             break;
 

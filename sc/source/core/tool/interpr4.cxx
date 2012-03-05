@@ -3108,12 +3108,13 @@ lcl_setVBARange( ScRange& aRange, ScDocument* pDok, SbxVariable* pPar )
 void ScInterpreter::ScMacro()
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "sc", "er", "ScInterpreter::ScMacro" );
-    SbxBase::ResetError();
 
 #ifdef DISABLE_SCRIPTING
     PushNoValue();      // ohne DocShell kein CallBasic
     return;
 #else
+    SbxBase::ResetError();
+
     sal_uInt8 nParamCount = GetByte();
     String aMacro( pCur->GetExternal() );
 

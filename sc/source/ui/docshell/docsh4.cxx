@@ -182,12 +182,16 @@ void ScDocShell::Execute( SfxRequest& rReq )
                     }
                     else                // geschuetzte Zelle
                     {
+#ifndef DISABLE_SCRIPTING
                         SbxBase::SetError( SbxERR_BAD_PARAMETER );      //! welchen Fehler ?
+#endif
                         break;
                     }
                 }
             }
+#ifndef DISABLE_SCRIPTING
             SbxBase::SetError( SbxERR_NO_OBJECT );
+#endif
         }
         break;
 
@@ -1098,8 +1102,10 @@ void ScDocShell::Execute( SfxRequest& rReq )
             ScTabViewShell* pSh = GetBestViewShell();
             if ( pSh )
                 pSh->Execute( rReq );
+#ifndef DISABLE_SCRIPTING
             else
                 SbxBase::SetError( SbxERR_NO_ACTIVE_OBJECT );
+#endif
         }
     }
 }

@@ -447,7 +447,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                             {
                                 if( rReq.IsAPI() )
                                 {
+#ifndef DISABLE_SCRIPTING
                                     StarBASIC::Error( SbERR_SETPROP_FAILED ); // XXX Fehlerbehandlung???
+#endif
                                 }
                                 else
                                 {
@@ -784,7 +786,9 @@ void ScTabViewShell::ExecuteTable( SfxRequest& rReq )
                                 {
                                     if( rReq.IsAPI() )
                                     {
+#ifndef DISABLE_SCRIPTING
                                         StarBASIC::Error( SbERR_SETPROP_FAILED );
+#endif
                                     }
                                 }
                             }

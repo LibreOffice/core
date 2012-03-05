@@ -672,16 +672,26 @@ uno::Sequence< sal_Int8 > SAL_CALL SfxBaseModel::getImplementationId() throw( un
 uno::Reference< script::XStarBasicAccess > implGetStarBasicAccess( SfxObjectShell* pObjectShell )
 {
     uno::Reference< script::XStarBasicAccess > xRet;
+
+#ifdef DISABLE_SCRIPTING
+    (void) pObjectShell;
+#else
     if( pObjectShell )
     {
         BasicManager* pMgr = pObjectShell->GetBasicManager();
         xRet = getStarBasicAccess( pMgr );
     }
+#endif
     return xRet;
 }
 
 uno::Reference< XNAMECONTAINER > SAL_CALL SfxBaseModel::getLibraryContainer() throw( uno::RuntimeException )
 {
+#ifdef DISABLE_SCRIPTING
+    uno::Reference< XNAMECONTAINER > dummy;
+
+    return dummy;
+#else
     SfxModelGuard aGuard( *this );
 
     uno::Reference< script::XStarBasicAccess >& rxAccess = m_pData->m_xStarBasicAccess;
@@ -692,6 +702,7 @@ uno::Reference< XNAMECONTAINER > SAL_CALL SfxBaseModel::getLibraryContainer() th
     if( rxAccess.is() )
         xRet = rxAccess->getLibraryContainer();
     return xRet;
+#endif
 }
 
 /**___________________________________________________________________________________________________
@@ -701,6 +712,12 @@ void SAL_CALL SfxBaseModel::createLibrary( const ::rtl::OUString& LibName, const
     const ::rtl::OUString& ExternalSourceURL, const ::rtl::OUString& LinkTargetURL )
         throw(ELEMENTEXISTEXCEPTION, uno::RuntimeException)
 {
+#ifdef DISABLE_SCRIPTING
+    (void) LibName;
+    (void) Password;
+    (void) ExternalSourceURL;
+    (void) LinkTargetURL;
+#else
     SfxModelGuard aGuard( *this );
 
     uno::Reference< script::XStarBasicAccess >& rxAccess = m_pData->m_xStarBasicAccess;
@@ -709,6 +726,7 @@ void SAL_CALL SfxBaseModel::createLibrary( const ::rtl::OUString& LibName, const
 
     if( rxAccess.is() )
         rxAccess->createLibrary( LibName, Password, ExternalSourceURL, LinkTargetURL );
+#endif
 }
 
 /**___________________________________________________________________________________________________
@@ -718,6 +736,12 @@ void SAL_CALL SfxBaseModel::addModule( const ::rtl::OUString& LibraryName, const
     const ::rtl::OUString& Language, const ::rtl::OUString& Source )
         throw( NOSUCHELEMENTEXCEPTION, uno::RuntimeException)
 {
+#ifdef DISABLE_SCRIPTING
+    (void) LibraryName;
+    (void) ModuleName;
+    (void) Language;
+    (void) Source;
+#else
     SfxModelGuard aGuard( *this );
 
     uno::Reference< script::XStarBasicAccess >& rxAccess = m_pData->m_xStarBasicAccess;
@@ -726,6 +750,7 @@ void SAL_CALL SfxBaseModel::addModule( const ::rtl::OUString& LibraryName, const
 
     if( rxAccess.is() )
         rxAccess->addModule( LibraryName, ModuleName, Language, Source );
+#endif
 }
 
 /**___________________________________________________________________________________________________
@@ -735,6 +760,11 @@ void SAL_CALL SfxBaseModel::addDialog( const ::rtl::OUString& LibraryName, const
     const ::com::sun::star::uno::Sequence< sal_Int8 >& Data )
         throw(NOSUCHELEMENTEXCEPTION, uno::RuntimeException)
 {
+#ifdef DISABLE_SCRIPTING
+    (void) LibraryName;
+    (void) DialogName;
+    (void) Data;
+#else
     SfxModelGuard aGuard( *this );
 
     uno::Reference< script::XStarBasicAccess >& rxAccess = m_pData->m_xStarBasicAccess;
@@ -743,6 +773,7 @@ void SAL_CALL SfxBaseModel::addDialog( const ::rtl::OUString& LibraryName, const
 
     if( rxAccess.is() )
         rxAccess->addDialog( LibraryName, DialogName, Data );
+#endif
 }
 
 

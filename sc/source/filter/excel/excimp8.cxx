@@ -392,9 +392,11 @@ void ImportExcel8::EndSheet( void )
 
 void ImportExcel8::PostDocLoad( void )
 {
+#ifndef DISABLE_SCRIPTING
     // reading basic has been delayed until sheet objects (codenames etc.) are read
     if( HasBasic() )
         ReadBasic();
+#endif
     // #i11776# filtered ranges before outlines and hidden rows
     if( pExcRoot->pAutoFilterBuffer )
         pExcRoot->pAutoFilterBuffer->Apply();

@@ -55,6 +55,7 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
 {
     impl_releaseContainers();
 
+#ifndef DISABLE_SCRIPTING
     // Note: we do not delete the old BasicManager. BasicManager instances are
     // nowadays obtained from the BasicManagerRepository, and the ownership is with
     // the repository.
@@ -74,10 +75,12 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
             DBG_UNHANDLED_EXCEPTION();
         }
     }
+#endif
 }
 
 void SfxBasicManagerHolder::storeAllLibraries()
 {
+#ifndef DISABLE_SCRIPTING
     OSL_PRECOND( isValid(), "SfxBasicManagerHolder::storeAllLibraries: not initialized!" );
     try
     {
@@ -90,10 +93,14 @@ void SfxBasicManagerHolder::storeAllLibraries()
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+#endif
 }
 
 void SfxBasicManagerHolder::setStorage( const Reference< XStorage >& _rxStorage )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) _rxStorage;
+#else
     try
     {
         if ( mxBasicContainer.is() )
@@ -105,16 +112,21 @@ void SfxBasicManagerHolder::setStorage( const Reference< XStorage >& _rxStorage 
     {
         DBG_UNHANDLED_EXCEPTION();
     }
+#endif
 }
 
 void SfxBasicManagerHolder::storeLibrariesToStorage( const Reference< XStorage >& _rxStorage )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) _rxStorage;
+#else
     OSL_PRECOND( isValid(), "SfxBasicManagerHolder::storeLibrariesToStorage: not initialized!" );
 
     if ( mxBasicContainer.is() )
         mxBasicContainer->storeLibrariesToStorage( _rxStorage );
     if ( mxDialogContainer.is() )
         mxDialogContainer->storeLibrariesToStorage( _rxStorage );
+#endif
 }
 
 Reference< XLibraryContainer > SfxBasicManagerHolder::getLibraryContainer( ContainerType _eType )
@@ -139,8 +151,12 @@ void SfxBasicManagerHolder::impl_releaseContainers()
 sal_Bool
 SfxBasicManagerHolder::LegacyPsswdBinaryLimitExceeded( Sequence< rtl::OUString >& sModules )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) sModules;
+#else
     if ( mpBasicManager )
         return mpBasicManager->LegacyPsswdBinaryLimitExceeded( sModules );
+#endif
     return sal_True;
 }
 

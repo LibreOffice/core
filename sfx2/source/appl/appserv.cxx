@@ -532,6 +532,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
             break;
         }
 
+#ifndef DISABLE_SCRIPTING
         case SID_BASICSTOP:
             StarBASIC::Stop();
             break;
@@ -539,6 +540,7 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
         case SID_BASICBREAK :
             BASIC_DLL()->BasicBreak();
             break;
+#endif
 
         case SID_CRASH :
         {
@@ -666,10 +668,12 @@ void SfxApplication::MiscState_Impl(SfxItemSet &rSet)
                     break;
                 }
 
+#ifndef DISABLE_SCRIPTING
                 case SID_BASICSTOP:
                     if ( !StarBASIC::IsRunning() )
                         rSet.DisableItem(nWhich);
                     break;
+#endif
 
                 case SID_HELPTIPS:
                 {
@@ -1174,8 +1178,10 @@ void SfxApplication::OfaExec_Impl( SfxRequest& rReq )
                 String aPLZ = pStringItem->GetValue();
                 bRet = sal_True /*!!!SfxIniManager::CheckPLZ( aPLZ )*/;
             }
+#ifndef DISABLE_SCRIPTING
             else
                 SbxBase::SetError( SbxERR_WRONG_ARGS );
+#endif
             rReq.SetReturnValue( SfxBoolItem( rReq.GetSlot(), bRet ) );
         }
         break;

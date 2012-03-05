@@ -126,6 +126,8 @@ namespace {
 
 static WeakReference< XInterface > s_xCurrentComponent;
 
+#ifndef DISABLE_SCRIPTING
+
 // remember all registered components for VBA compatibility, to be able to remove them on disposing the model
 typedef ::std::map< XInterface*, ::rtl::OString > VBAConstantNameMap;
 static VBAConstantNameMap s_aRegisteredVBAConstants;
@@ -150,6 +152,8 @@ static VBAConstantNameMap s_aRegisteredVBAConstants;
     }
     return ::rtl::OString();
 }
+
+#endif
 
 } // namespace
 
@@ -188,6 +192,7 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
         SfxObjectShell::SetCurrentComponent( Reference< XInterface >() );
     }
 
+#ifndef DISABLE_SCRIPTING
     /*  Remove VBA component from AppBasic. As every application registers its
         own current component, the disposed component may not be the "current
         component" of the SfxObjectShell. */
@@ -201,6 +206,7 @@ void SAL_CALL SfxModelListener_Impl::disposing( const com::sun::star::lang::Even
             s_aRegisteredVBAConstants.erase( aIt );
         }
     }
+#endif
 
     if ( mpDoc->Get_Impl()->bHiddenLockedByAPI )
     {
@@ -675,6 +681,7 @@ sal_uInt16 SfxObjectShell::PrepareClose
 }
 
 //--------------------------------------------------------------------
+#ifndef DISABLE_SCRIPTING
 namespace
 {
     static BasicManager* lcl_getBasicManagerForDocument( const SfxObjectShell& _rDocument )
@@ -708,15 +715,20 @@ namespace
         return pBasMgr;
     }
 }
+#endif
 
 //--------------------------------------------------------------------
 
 BasicManager* SfxObjectShell::GetBasicManager() const
 {
+#ifdef DISABLE_SCRIPTING
+    return NULL;
+#else
     BasicManager* pBasMgr = lcl_getBasicManagerForDocument( *this );
     if ( !pBasMgr )
         pBasMgr = SFX_APP()->GetBasicManager();
     return pBasMgr;
+#endif
 }
 
 //--------------------------------------------------------------------
@@ -730,6 +742,9 @@ void SfxObjectShell::SetHasNoBasic()
 
 sal_Bool SfxObjectShell::HasBasic() const
 {
+#ifdef DISABLE_SCRIPTING
+    return sal_False;
+#else
     if ( pImp->m_bNoBasicCapabilities )
         return sal_False;
 
@@ -737,9 +752,11 @@ sal_Bool SfxObjectShell::HasBasic() const
         const_cast< SfxObjectShell* >( this )->InitBasicManager_Impl();
 
     return pImp->pBasicManager->isValid();
+#endif
 }
 
 //--------------------------------------------------------------------
+#ifndef DISABLE_SCRIPTING
 namespace
 {
     const Reference< XLibraryContainer >&
@@ -768,11 +785,12 @@ namespace
         return _rxContainer;
     }
 }
-
+#endif
 //--------------------------------------------------------------------
 
 Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 {
+#ifndef DISABLE_SCRIPTING
     if ( !pImp->m_bNoBasicCapabilities )
         return lcl_getOrCreateLibraryContainer( false, pImp->xDialogLibraries, GetModel() );
 
@@ -781,6 +799,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
         return pBasMgr->GetDialogLibraryContainer().get();
 
     OSL_FAIL( "SfxObjectShell::GetDialogContainer: falling back to the application - is this really expected here?" );
+#endif
     return SFX_APP()->GetDialogContainer();
 }
 
@@ -788,6 +807,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetDialogContainer()
 
 Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 {
+#ifndef DISABLE_SCRIPTING
     if ( !pImp->m_bNoBasicCapabilities )
         return lcl_getOrCreateLibraryContainer( true, pImp->xBasicLibraries, GetModel() );
 
@@ -796,6 +816,7 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
         return pBasMgr->GetScriptLibraryContainer().get();
 
     OSL_FAIL( "SfxObjectShell::GetBasicContainer: falling back to the application - is this really expected here?" );
+#endif
     return SFX_APP()->GetBasicContainer();
 }
 
@@ -803,7 +824,11 @@ Reference< XLibraryContainer > SfxObjectShell::GetBasicContainer()
 
 StarBASIC* SfxObjectShell::GetBasic() const
 {
+#ifdef DISABLE_SCRIPTING
+    return NULL;
+#else
     return GetBasicManager()->GetLib(0);
+#endif
 }
 
 //--------------------------------------------------------------------
@@ -845,10 +870,12 @@ void SfxObjectShell::InitBasicManager_Impl()
         does not take ownership but stores only the raw pointer. Owner of all
         Basic managers is the global BasicManagerRepository instance.
      */
+#ifndef DISABLE_SCRIPTING
     DBG_ASSERT( !pImp->bBasicInitialized && !pImp->pBasicManager->isValid(), "Lokaler BasicManager bereits vorhanden");
     pImp->pBasicManager->reset( BasicManagerRepository::getDocumentBasicManager( GetModel() ) );
     DBG_ASSERT( pImp->pBasicManager->isValid(), "SfxObjectShell::InitBasicManager_Impl: did not get a BasicManager!" );
     pImp->bBasicInitialized = sal_True;
+#endif
 }
 
 //--------------------------------------------------------------------
@@ -930,6 +957,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
     // In other words, it's still possible that we here do something which is not necessary,
     // but we should have filtered quite some unnecessary calls already.
 
+#ifndef DISABLE_SCRIPTING
     BasicManager* pAppMgr = SFX_APP()->GetBasicManager();
     s_xCurrentComponent = _rxComponent;
     if ( pAppMgr )
@@ -958,6 +986,7 @@ void SfxObjectShell::SetCurrentComponent( const Reference< XInterface >& _rxComp
             }
         }
     }
+#endif
 }
 
 Reference< XInterface > SfxObjectShell::GetCurrentComponent()
@@ -1022,14 +1051,18 @@ String SfxObjectShell::GetServiceNameFromFactory( const String& rFact )
     {
         aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.formula.FormulaProperties"));
     }
+#ifndef DISABLE_SCRIPTING
     else if ( aFact.EqualsAscii("sbasic") )
     {
         aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.script.BasicIDE"));
     }
+#endif
+#ifndef DISABLE_DBCONNECTIVITY
     else if ( aFact.EqualsAscii("sdatabase") )
     {
         aServiceName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sdb.OfficeDatabaseDocument"));
     }
+#endif
 
     return aServiceName;
 }

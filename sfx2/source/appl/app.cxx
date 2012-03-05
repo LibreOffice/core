@@ -140,7 +140,9 @@ using namespace ::com::sun::star;
 
 // Static member
 SfxApplication* SfxApplication::pApp = NULL;
+#ifndef DISABLE_SCRIPTING
 static BasicDLL*       pBasic   = NULL;
+#endif
 static SfxHelp*        pSfxHelp = NULL;
 
 namespace
@@ -223,8 +225,10 @@ SfxApplication::SfxApplication()
 
     pSfxHelp = new SfxHelp;
 
+#ifndef DISABLE_SCRIPTING
     pBasic   = new BasicDLL;
     StarBASIC::SetGlobalErrorHdl( LINK( this, SfxApplication, GlobalBasicErrorHdl_Impl ) );
+#endif
     RTL_LOGFILE_CONTEXT_TRACE( aLog, "} initialize DDE" );
 }
 
@@ -241,8 +245,9 @@ SfxApplication::~SfxApplication()
 
     // delete global options
     SvtViewOptions::ReleaseOptions();
+#ifndef DISABLE_SCRIPTING
     delete pBasic;
-
+#endif
     if ( !pAppData_Impl->bDowning )
         Deinitialize();
 
@@ -482,14 +487,22 @@ void SfxApplication::Invalidate( sal_uInt16 nId )
 #define DOSTRING( x )                       #x
 #define STRING( x )                         DOSTRING( x )
 
+#ifndef DISABLE_SCRIPTING
+
 typedef long (SAL_CALL *basicide_handle_basic_error)(void*);
 typedef rtl_uString* (SAL_CALL *basicide_choose_macro)(void*, sal_Bool, rtl_uString*);
 typedef void* (SAL_CALL *basicide_macro_organizer)(sal_Int16);
 
 extern "C" { static void SAL_CALL thisModule() {} }
 
+#endif
+
 IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) pStarBasic;
+    return 0;
+#else
     // get basctl dllname
     static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
 
@@ -505,12 +518,16 @@ IMPL_LINK( SfxApplication, GlobalBasicErrorHdl_Impl, StarBASIC*, pStarBasic )
     long nRet = pSymbol ? pSymbol( pStarBasic ) : 0;
 
     return nRet;
+#endif
 }
 
 sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
 {
     sal_Bool result = sal_False;
 
+#ifdef DISABLE_SCRIPTING
+    (void) rScriptURL;
+#else
     ::com::sun::star::uno::Reference
         < ::com::sun::star::lang::XMultiServiceFactory > xSMgr =
             ::comphelper::getProcessServiceFactory();
@@ -541,6 +558,7 @@ sal_Bool SfxApplication::IsXScriptURL( const String& rScriptURL )
             // ignore, will just return FALSE
         }
     }
+#endif
     return result;
 }
 
@@ -549,6 +567,7 @@ SfxApplication::ChooseScript()
 {
     ::rtl::OUString aScriptURL;
 
+#ifndef DISABLE_SCRIPTING
     SfxAbstractDialogFactory* pFact = SfxAbstractDialogFactory::Create();
     if ( pFact )
     {
@@ -574,11 +593,15 @@ SfxApplication::ChooseScript()
 
           delete pDlg;
     }
+#endif
     return aScriptURL;
 }
 
 void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) nTabId;
+#else
     // get basctl dllname
     static ::rtl::OUString aLibName( RTL_CONSTASCII_USTRINGPARAM( SVLIBRARY( "basctl" ) ) );
 
@@ -592,11 +615,20 @@ void SfxApplication::MacroOrganizer( sal_Int16 nTabId )
 
     // call basicide_choose_macro in basctl
     pSymbol( nTabId );
+#endif
 }
 
 ErrCode SfxApplication::CallBasic( const String& rCode, BasicManager* pMgr, SbxArray* pArgs, SbxValue* pRet )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) rCode;
+    (void) pMgr;
+    (void) pArgs;
+    (void) pRet;
+    return ERRCODE_BASIC_CANNOT_LOAD;
+#else
     return pMgr->ExecuteMacro( rCode, pArgs, pRet);
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

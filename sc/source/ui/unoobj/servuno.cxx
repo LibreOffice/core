@@ -584,6 +584,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 xRet.set(static_cast<sheet::XFormulaOpCodeMapper*>(new ScFormulaOpCodeMapperObj(::std::auto_ptr<formula::FormulaCompiler> (pComp))));
                 break;
             }
+#ifndef DISABLE_SCRIPTING
         case SC_SERVICE_VBAOBJECTPROVIDER:
             if (pDocShell && pDocShell->GetDocument()->IsInVBAMode())
             {
@@ -619,6 +620,7 @@ uno::Reference<uno::XInterface> ScServiceProvider::MakeInstance(
                 }
             }
         break;
+#endif
     }
 
     return xRet;

@@ -350,6 +350,7 @@ long SfxObjectShell::DdeExecute
 */
 
 {
+#ifndef DISABLE_SCRIPTING
     StarBASIC* pBasic = GetBasic();
     DBG_ASSERT( pBasic, "Where is the Basic???" ) ;
     SbxVariable* pRet = pBasic->Execute( rCmd );
@@ -358,7 +359,7 @@ long SfxObjectShell::DdeExecute
         SbxBase::ResetError();
         return 0;
     }
-
+#endif
     return 1;
 }
 

@@ -437,6 +437,10 @@ namespace svxform
     //--------------------------------------------------------------------
     void FormScriptingEnvironment::doFireScriptEvent( const ScriptEvent& _rEvent, Any* _pSyncronousResult )
     {
+#ifdef DISABLE_SCRIPTING
+        (void) _rEvent;
+        (void) _pSyncronousResult;
+#else
         SolarMutexClearableGuard aSolarGuard;
         ::osl::ClearableMutexGuard aGuard( m_aMutex );
 
@@ -513,6 +517,7 @@ namespace svxform
             SolarMutexGuard aSolarGuarsReset;
             xObjectShell = NULL;
         }
+#endif
     }
 
     //--------------------------------------------------------------------

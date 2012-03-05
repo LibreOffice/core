@@ -138,48 +138,79 @@ sal_uInt16 SfxApplication::SaveBasicAndDialogContainer() const
 SbxVariable* MakeVariable( StarBASIC *pBas, SbxObject *pObject,
            const char *pName, sal_uInt32 nSID, SbxDataType eType, SbxClassType eClassType )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) pBas;
+    (void) pObject;
+    (void) pName;
+    (void) nSID;
+    (void) eType;
+    (void) eClassType;
+    return 0;
+#else
     SbxVariable *pVar = pBas->Make( String::CreateFromAscii(pName), eClassType, eType ); //SbxCLASS_PROPERTY
     pVar->SetUserData( nSID );
     pVar->SetFlag( SBX_DONTSTORE );
     pObject->StartListening( pVar->GetBroadcaster() );
     return pVar;
+#endif
 }
 
 //--------------------------------------------------------------------
 
 BasicManager* SfxApplication::GetBasicManager()
 {
+#ifdef DISABLE_SCRIPTING
+    return 0;
+#else
     return BasicManagerRepository::getApplicationBasicManager( true );
+#endif
 }
 
 //--------------------------------------------------------------------
 
 Reference< XLibraryContainer > SfxApplication::GetDialogContainer()
 {
+#ifdef DISABLE_SCRIPTING
+    Reference< XLibraryContainer >  dummy;
+    return dummy;
+#else
     if ( !pAppData_Impl->pBasicManager->isValid() )
         GetBasicManager();
     return pAppData_Impl->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::DIALOGS );
+#endif
 }
 
 //--------------------------------------------------------------------
 
 Reference< XLibraryContainer > SfxApplication::GetBasicContainer()
 {
+#ifdef DISABLE_SCRIPTING
+    Reference< XLibraryContainer >  dummy;
+    return dummy;
+#else
     if ( !pAppData_Impl->pBasicManager->isValid() )
         GetBasicManager();
     return pAppData_Impl->pBasicManager->getLibraryContainer( SfxBasicManagerHolder::SCRIPTS );
+#endif
 }
 
 //--------------------------------------------------------------------
 
 StarBASIC* SfxApplication::GetBasic()
 {
+#ifdef DISABLE_SCRIPTING
+    return 0;
+#else
     return GetBasicManager()->GetLib(0);
+#endif
 }
 
 //-------------------------------------------------------------------------
 void SfxApplication::PropExec_Impl( SfxRequest &rReq )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) rReq;
+#else
     rReq.GetArgs();
     sal_uInt16 nSID = rReq.GetSlot();
     switch ( nSID )
@@ -244,11 +275,15 @@ void SfxApplication::PropExec_Impl( SfxRequest &rReq )
             break;
         }
     }
+#endif
 }
 
 //-------------------------------------------------------------------------
 void SfxApplication::PropState_Impl( SfxItemSet &rSet )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) rSet;
+#else
     SfxWhichIter aIter(rSet);
     for ( sal_uInt16 nSID = aIter.FirstWhich(); nSID; nSID = aIter.NextWhich() )
     {
@@ -288,6 +323,7 @@ void SfxApplication::PropState_Impl( SfxItemSet &rSet )
             }
         }
     }
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

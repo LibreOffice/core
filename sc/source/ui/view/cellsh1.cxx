@@ -1682,8 +1682,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
 
                     rReq.Done();
                 }
+#ifndef DISABLE_SCRIPTING
                 else if (rReq.IsAPI())
                     SbxBase::SetError(SbxERR_BAD_PARAMETER);
+#endif
             }
             break;
 
@@ -1727,8 +1729,10 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                 {
                     if (pTabViewShell->InsertName( aName, aSymbol, aAttrib ))
                         rReq.Done();
+#ifndef DISABLE_SCRIPTING
                     else
                         SbxBase::SetError( SbxERR_BAD_PARAMETER );  // Basic-error
+#endif
                 }
             }
             else

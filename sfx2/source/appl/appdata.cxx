@@ -132,7 +132,9 @@ SfxAppData_Impl::SfxAppData_Impl( SfxApplication* )
     , bODFVersionWarningLater( sal_False )
 
 {
+#ifndef DISABLE_SCRIPTING
     BasicManagerRepository::registerCreationListener( *pBasMgrListener );
+#endif
 }
 
 SfxAppData_Impl::~SfxAppData_Impl()
@@ -141,8 +143,10 @@ SfxAppData_Impl::~SfxAppData_Impl()
     delete pTopFrames;
     delete pBasicManager;
 
+#ifndef DISABLE_SCRIPTING
     BasicManagerRepository::revokeCreationListener( *pBasMgrListener );
     delete pBasMgrListener;
+#endif
 }
 
 SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
@@ -156,12 +160,16 @@ SfxDocumentTemplates* SfxAppData_Impl::GetDocumentTemplates()
 
 void SfxAppData_Impl::OnApplicationBasicManagerCreated( BasicManager& _rBasicManager )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) _rBasicManager;
+#else
     pBasicManager->reset( &_rBasicManager );
 
     // global constants, additionally to the ones already added by createApplicationBasicManager:
     // ThisComponent
     Reference< XInterface > xCurrentComponent = SfxObjectShell::GetCurrentComponent();
     _rBasicManager.SetGlobalUNOConstant( "ThisComponent", makeAny( xCurrentComponent ) );
+#endif
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

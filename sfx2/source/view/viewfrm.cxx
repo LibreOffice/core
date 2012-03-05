@@ -2637,6 +2637,9 @@ void CutLines( ::rtl::OUString& rStr, sal_Int32 nStartLine, sal_Int32 nLines, sa
  */
 void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) sMacro;
+#else
     if ( sMacro.isEmpty() )
         return;
 
@@ -2816,6 +2819,7 @@ void SfxViewFrame::AddDispatchMacroToBasic_Impl( const ::rtl::OUString& sMacro )
     {
         // add code for "session only" macro
     }
+#endif
 }
 
 void SfxViewFrame::MiscExec_Impl( SfxRequest& rReq )

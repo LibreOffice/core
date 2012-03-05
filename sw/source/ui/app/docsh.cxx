@@ -581,6 +581,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
     if( pFlt->GetUserData().EqualsAscii( "HTML") )
     {
         SvxHtmlOptions& rHtmlOpt = SvxHtmlOptions::Get();
+#ifndef DISABLE_SCRIPTING
         if( !rHtmlOpt.IsStarBasic() && rHtmlOpt.IsStarBasicWarning() && HasBasic() )
         {
             uno::Reference< XLibraryContainer > xLibCont(GetBasicContainer(), UNO_QUERY);
@@ -602,6 +603,7 @@ sal_Bool SwDocShell::ConvertTo( SfxMedium& rMedium )
                 }
             }
         }
+#endif
         UpdateDocInfoForSave();
     }
 
