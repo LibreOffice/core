@@ -34,6 +34,7 @@
 #include <com/sun/star/geometry/IntegerRectangle2D.hpp>
 #include "oox/drawingml/color.hxx"
 #include "oox/helper/helper.hxx"
+#include "oox/drawingml/embeddedwavaudiofile.hxx"
 
 namespace oox {
     class GraphicHelper;
@@ -135,7 +136,8 @@ struct FillProperties
 
 struct GraphicProperties
 {
-    BlipFillProperties  maBlipProps;            /// Properties for the graphic.
+    BlipFillProperties      maBlipProps;            /// Properties for the graphic.
+    EmbeddedWAVAudioFile    maAudio;                /// Audio file details
 
     /** Overwrites all members that are explicitly set in rSourceProps. */
     void                assignUsed( const GraphicProperties& rSourceProps );
