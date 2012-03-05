@@ -428,7 +428,7 @@ namespace
 bool SAL_CALL Desktop::terminateQuickstarterToo()
     throw( css::uno::RuntimeException )
 {
-    QuickstartSuppressoraQuickstartSuppressor(this, m_xQuickLauncher);
+    QuickstartSuppressor aQuickstartSuppressor(this, m_xQuickLauncher);
     return terminate();
 }
 
