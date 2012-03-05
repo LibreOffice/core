@@ -1538,7 +1538,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             }
 
             if ( pGrfNode )
-                FlyFrameGraphic( dynamic_cast<const SwFlyFrmFmt*>( &rFrame.GetFrmFmt() ), pGrfNode );
+                m_aRunText.append(dynamic_cast<const SwFlyFrmFmt*>( &rFrame.GetFrmFmt() ), pGrfNode);
             break;
         case sw::Frame::eDrawing:
             {
@@ -3455,10 +3455,10 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
        */
     bool bIsWMF = std::strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE) == 0;
     if (!bIsWMF)
-        m_aRunText->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT);
+        m_rExport.Strm() << "{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_SHPPICT;
 
     if (pBLIPType)
-        m_aRunText->append(ExportPICT( pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
+        ExportPICT( pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm() );
     else
     {
         aStream.Seek(0);
@@ -3468,12 +3468,12 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
         nSize = aStream.Tell();
         pGraphicAry = (sal_uInt8*)aStream.GetData();
 
-        m_aRunText->append(ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
+        ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm() );
     }
 
     if (!bIsWMF)
     {
-        m_aRunText->append("}" "{" OOO_STRING_SVTOOLS_RTF_NONSHPPICT);
+        m_rExport.Strm() << "}" "{" OOO_STRING_SVTOOLS_RTF_NONSHPPICT;
 
         aStream.Seek(0);
         GraphicConverter::Export(aStream, aGraphic, CVT_WMF);
@@ -3482,12 +3482,12 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
         nSize = aStream.Tell();
         pGraphicAry = (sal_uInt8*)aStream.GetData();
 
-        m_aRunText->append(ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport ));
+        ExportPICT(pFlyFrmFmt, aSize, aRendered, aMapped, rCr, pBLIPType, pGraphicAry, nSize, m_rExport, &m_rExport.Strm() );
 
-        m_aRunText->append('}');
+        m_rExport.Strm() << '}';
     }
 
-    m_aRunText->append(m_rExport.sNewLine);
+    m_rExport.Strm() << m_rExport.sNewLine;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
