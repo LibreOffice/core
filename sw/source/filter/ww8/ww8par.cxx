@@ -2844,9 +2844,9 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
         else if (nScript == MSASCII) //Force weak chars in ascii range to use LATIN font
             nLclIdctHint = 0;
 
+        sal_uInt16 nForceFromFontId = 0;
         if (nLclIdctHint != 0xFF)
         {
-            sal_uInt16 nForceFromFontId = 0;
             switch (nLclIdctHint)
             {
                 case 0:
@@ -2861,7 +2861,10 @@ void SwWW8ImplReader::emulateMSWordAddTextToParagraph(const rtl::OUString& rAddS
                 default:
                     break;
             }
+        }
 
+        if (nForceFromFontId != 0)
+        {
             //Now we know that word would use the nForceFromFontId font for this range
             //Try and determine what script writer would assign this range to
 
