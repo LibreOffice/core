@@ -1538,7 +1538,7 @@ void RtfAttributeOutput::OutputFlyFrame_Impl( const sw::Frame& rFrame, const Poi
             }
 
             if ( pGrfNode )
-                FlyFrameGraphic( dynamic_cast<const SwFlyFrmFmt*>( &rFrame.GetFrmFmt() ), *pGrfNode );
+                FlyFrameGraphic( dynamic_cast<const SwFlyFrmFmt*>( &rFrame.GetFrmFmt() ), pGrfNode );
             break;
         case sw::Frame::eDrawing:
             {
@@ -3363,7 +3363,7 @@ void RtfAttributeOutput::FlyFrameOLE( const SwFlyFrmFmt* pFlyFrmFmt, SwOLENode& 
     m_aRunText.append("}}}}");
 }
 
-void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode& rGrfNode)
+void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const SwGrfNode* pGrfNode)
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
@@ -3371,7 +3371,7 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
     const sal_uInt8* pGraphicAry = 0;
     sal_uInt32 nSize = 0;
 
-    Graphic aGraphic(rGrfNode.GetGrf());
+    Graphic aGraphic(pGrfNode->GetGrf());
 
     // If there is no graphic there is not much point in parsing it
     if(aGraphic.GetType()==GRAPHIC_NONE)
@@ -3417,10 +3417,10 @@ void RtfAttributeOutput::FlyFrameGraphic( const SwFlyFrmFmt* pFlyFrmFmt, const S
 
     Size aMapped(eGraphicType == GRAPHIC_BITMAP ? aGraphic.GetSizePixel() : aGraphic.GetPrefSize());
 
-    const SwCropGrf &rCr = (const SwCropGrf &)rGrfNode.GetAttr(RES_GRFATR_CROPGRF);
+    const SwCropGrf &rCr = (const SwCropGrf &)pGrfNode->GetAttr(RES_GRFATR_CROPGRF);
 
     //Get original size in twips
-    Size aSize(sw::util::GetSwappedInSize(rGrfNode));
+    Size aSize(sw::util::GetSwappedInSize(*pGrfNode));
     Size aRendered(aSize);
     if (pFlyFrmFmt)
     {
