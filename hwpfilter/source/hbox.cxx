@@ -338,12 +338,18 @@ TxtBox::~TxtBox(void)
     {
         std::list < HWPPara* >::iterator it = plists[ii].begin();
         for (; it != plists[ii].end(); ++it)
-            delete &it;
+        {
+            HWPPara* pPara = *it;
+            delete pPara;
+        }
     }
 
     std::list < HWPPara* >::iterator it = caption.begin();
     for (; it != caption.end(); ++it)
-        delete &it;
+    {
+        HWPPara* pPara = *it;
+        delete pPara;
+    }
 
     delete[]plists;
 }
@@ -372,7 +378,10 @@ Picture::~Picture(void)
 
     std::list < HWPPara* >::iterator it = caption.begin();
     for (; it != caption.end(); ++it)
-        delete &it;
+    {
+        HWPPara* pPara = *it;
+        delete pPara;
+    }
 }
 
 
@@ -394,7 +403,10 @@ Hidden::~Hidden(void)
 {
     std::list < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
-        delete &it;
+    {
+        HWPPara* pPara = *it;
+        delete pPara;
+    }
 }
 
 
@@ -403,7 +415,10 @@ HeaderFooter::~HeaderFooter(void)
 {
     std::list < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
-        delete &it;
+    {
+        HWPPara* pPara = *it;
+        delete pPara;
+    }
 }
 
 
@@ -412,7 +427,10 @@ Footnote::~Footnote(void)
 {
     std::list < HWPPara* >::iterator it = plist.begin();
     for (; it != plist.end(); ++it)
-        delete &it;
+    {
+        HWPPara* pPara = *it;
+        delete pPara;
+    }
 }
 
 
