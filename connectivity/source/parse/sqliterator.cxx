@@ -1993,7 +1993,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getOrderTree() const
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
     pOrderClause = pTableExp->getChild(ORDER_BY_CHILD_POS);
-    // Wenn es aber eine order_by ist, dann darf sie nicht leer sein:
+    // If it is a order_by, it must not be empty
     if(pOrderClause->count() != 3)
         pOrderClause = NULL;
     return pOrderClause;
