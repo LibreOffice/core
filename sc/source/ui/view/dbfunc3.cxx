@@ -993,7 +993,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
     ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
 
     // find original base
-    String aBaseDimName = aDimName;
+    rtl::OUString aBaseDimName = aDimName;
     if( const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName ) )
         aBaseDimName = pBaseGroupDim->GetSourceDimName();
 
@@ -1071,7 +1071,8 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
                 else
                 {
                     // additional parts: create GroupDimension (shown as additional dimensions)
-                    String aGroupDimName = pDimData->CreateDateGroupDimName( nMask, *pDPObj, true, &aDeletedNames );
+                    rtl::OUString aGroupDimName =
+                        pDimData->CreateDateGroupDimName(nMask, *pDPObj, true, &aDeletedNames);
                     ScDPSaveGroupDimension aGroupDim( aBaseDimName, aGroupDimName );
                     aGroupDim.SetDateInfo( rInfo, nMask );
                     pDimData->AddGroupDimension( aGroupDim );
@@ -1202,7 +1203,8 @@ void ScDBFunc::GroupDataPilot()
     if ( !pGroupDimension )
     {
         // create a new group dimension
-        String aGroupDimName = pDimData->CreateGroupDimName( aBaseDimName, *pDPObj, false, NULL );
+        rtl::OUString aGroupDimName =
+            pDimData->CreateGroupDimName(aBaseDimName, *pDPObj, false, NULL);
         pNewGroupDim = new ScDPSaveGroupDimension( aBaseDimName, aGroupDimName );
 
         pGroupDimension = pNewGroupDim;     // make changes to the new dim if none existed
@@ -1231,10 +1233,10 @@ void ScDBFunc::GroupDataPilot()
             }
         }
     }
-    String aGroupDimName = pGroupDimension->GetGroupDimName();
+    rtl::OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
     //! localized prefix string
-    String aGroupName = pGroupDimension->CreateGroupName( String::CreateFromAscii("Group") );
+    rtl::OUString aGroupName = pGroupDimension->CreateGroupName( String::CreateFromAscii("Group") );
     ScDPSaveGroupItem aGroup( aGroupName );
     ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
     for (; it != itEnd; ++it)
@@ -1303,7 +1305,7 @@ void ScDBFunc::UngroupDataPilot()
     ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
     //! test first if DimensionData exists?
 
-    sal_Bool bApply = false;
+    bool bApply = false;
 
     ScDPSaveGroupDimension* pGroupDim = pDimData->GetNamedGroupDimAcc( aDimName );
     const ScDPSaveNumGroupDimension* pNumGroupDim = pDimData->GetNumGroupDim( aDimName );
@@ -1340,14 +1342,14 @@ void ScDBFunc::UngroupDataPilot()
             // also remove SaveData settings for the dimension that no longer exists
             aData.RemoveDimensionByName( aDimName );
         }
-        bApply = sal_True;
+        bApply = true;
     }
     else if ( pNumGroupDim )
     {
         // remove the numerical grouping
         pDimData->RemoveNumGroupDimension( aDimName );
         // SaveData settings can remain unchanged - the same dimension still exists
-        bApply = sal_True;
+        bApply = true;
     }
 
     if ( bApply )
