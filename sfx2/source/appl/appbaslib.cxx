@@ -55,7 +55,9 @@ void SfxBasicManagerHolder::reset( BasicManager* _pBasicManager )
 {
     impl_releaseContainers();
 
-#ifndef DISABLE_SCRIPTING
+#ifdef DISABLE_SCRIPTING
+    (void) _pBasicManager;
+#else
     // Note: we do not delete the old BasicManager. BasicManager instances are
     // nowadays obtained from the BasicManagerRepository, and the ownership is with
     // the repository.
