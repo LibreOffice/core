@@ -3160,7 +3160,7 @@ static bool StripMetafileHeader(const sal_uInt8 *&rpGraphicAry, unsigned long &r
     return false;
 }
 
-OString RtfAttributeOutput::WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, sal_uInt32 nLimit)
+OString RtfAttributeOutput::WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, SvStream* pStream, sal_uInt32 nLimit)
 {
     OStringBuffer aRet;
 
@@ -3169,11 +3169,22 @@ OString RtfAttributeOutput::WriteHex(const sal_uInt8* pData, sal_uInt32 nSize, s
     {
         OString sNo = OString::valueOf(sal_Int32(pData[i]), 16);
         if (sNo.getLength() < 2)
-            aRet.append('0');
-        aRet.append(sNo);
+        {
+            if (pStream)
+                (*pStream) << '0';
+            else
+                aRet.append('0');
+        }
+        if (pStream)
+            (*pStream) << sNo.getStr();
+        else
+            aRet.append(sNo);
         if (++nBreak == nLimit)
         {
-            aRet.append(RtfExport::sNewLine);
+            if (pStream)
+                (*pStream) << RtfExport::sNewLine;
+            else
+                aRet.append(RtfExport::sNewLine);
             nBreak = 0;
         }
     }
@@ -3212,7 +3223,7 @@ void lcl_AppendSP( OStringBuffer& rBuffer,
 
 static OString ExportPICT( const SwFlyFrmFmt* pFlyFrmFmt, const Size &rOrig, const Size &rRendered, const Size &rMapped,
     const SwCropGrf &rCr, const char *pBLIPType, const sal_uInt8 *pGraphicAry,
-    unsigned long nSize, const RtfExport& rExport )
+    unsigned long nSize, const RtfExport& rExport, SvStream *pStream = 0 )
 {
     OStringBuffer aRet;
     bool bIsWMF = std::strcmp(pBLIPType, OOO_STRING_SVTOOLS_RTF_WMETAFILE) == 0;
@@ -3274,8 +3285,15 @@ static OString ExportPICT( const SwFlyFrmFmt* pFlyFrmFmt, const Size &rOrig, con
             StripMetafileHeader(pGraphicAry, nSize);
         }
         aRet.append(RtfExport::sNewLine);
-        aRet.append(RtfAttributeOutput::WriteHex(pGraphicAry, nSize));
+        if (pStream)
+            (*pStream) << aRet.makeStringAndClear().getStr();
+        if (pStream)
+            RtfAttributeOutput::WriteHex(pGraphicAry, nSize, pStream);
+        else
+            aRet.append(RtfAttributeOutput::WriteHex(pGraphicAry, nSize));
         aRet.append('}');
+        if (pStream)
+            (*pStream) << aRet.makeStringAndClear().getStr();
     }
     return aRet.makeStringAndClear();
 }
@@ -3307,7 +3325,7 @@ void RtfAttributeOutput::FlyFrameOLEData( SwOLENode& rOLENode )
         const sal_uInt8* pNativeData = (sal_uInt8*)pStream->GetData();
         m_aRunText->append(WriteHex(nNativeDataSize));
         m_aRunText->append(RtfExport::sNewLine);
-        m_aRunText->append(RtfAttributeOutput::WriteHex(pNativeData, nNativeDataSize, 126));
+        m_aRunText->append(RtfAttributeOutput::WriteHex(pNativeData, nNativeDataSize, 0, 126));
         m_aRunText->append(RtfExport::sNewLine);
         delete pStream;
 
@@ -3319,7 +3337,7 @@ void RtfAttributeOutput::FlyFrameOLEData( SwOLENode& rOLENode )
         pStream->Seek(STREAM_SEEK_TO_END);
         sal_uInt32 nPresentationDataSize = pStream->Tell();
         const sal_uInt8* pPresentationData = (sal_uInt8*)pStream->GetData();
-        m_aRunText->append(WriteHex(pPresentationData, nPresentationDataSize, 126));
+        m_aRunText->append(WriteHex(pPresentationData, nPresentationDataSize, 0, 126));
     }
 }
 
