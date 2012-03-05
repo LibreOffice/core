@@ -757,11 +757,6 @@ public:
     ScriptExtensionIterator( void );
     rtl::OUString nextBasicOrDialogLibrary( bool& rbPureDialogLib );
 
-private:
-    com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > implGetScriptPackageFromPackage
-        ( const com::sun::star::uno::Reference< com::sun::star::deployment::XPackage > xPackage,
-          bool& rbPureDialogLib );
-
 protected:
     com::sun::star::uno::Reference< com::sun::star::deployment::XPackage >
         implGetNextUserScriptPackage( bool& rbPureDialogLib );

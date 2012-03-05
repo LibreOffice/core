@@ -100,22 +100,6 @@ BASIC_DLLPUBLIC void registerCurrentDirectory(
 
 // ============================================================================
 
-/** Returns the working directory of the application the passed document
-    belongs to.
-
-    @param rxModel
-        A document model determining the type of the application whose working
-        directory is querried.
-
-    @return
-        The working directory of the specified application, or an empty string
-        on error (e.g. if the passed document reference is empty).
- */
-BASIC_DLLPUBLIC ::rtl::OUString getCurrentDirectory(
-    const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XModel >& rxModel );
-
-// ============================================================================
-
 } // namespace vba
 } // namespace basic
 

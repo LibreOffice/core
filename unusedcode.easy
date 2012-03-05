@@ -491,8 +491,6 @@ basegfx::(anonymous namespace)::impAppendInterpolate(basegfx::B3DPolygon&, baseg
 basegfx::tools::equal(basegfx::B2DPolyPolygon const&, basegfx::B2DPolyPolygon const&, double const&)
 basegfx::tools::equal(basegfx::B3DPolyPolygon const&, basegfx::B3DPolyPolygon const&, double const&)
 basegfx::tools::getSignedArea(basegfx::B3DPolygon const&)
-basic::ScriptExtensionIterator::implGetScriptPackageFromPackage(com::sun::star::uno::Reference<com::sun::star::deployment::XPackage>, bool&)
-basic::vba::getCurrentDirectory(com::sun::star::uno::Reference<com::sun::star::frame::XModel> const&)
 binfilter::B3dEdgeEntryBucketMemArr::Insert(binfilter::B3dEdgeEntryBucketMemArr const*, unsigned short, unsigned short, unsigned short)
 binfilter::B3dEdgeEntryBucketMemArr::Replace(char const*&, unsigned short)
 binfilter::B3dEdgeEntryBucketMemArr::Replace(char const**, unsigned short, unsigned short)

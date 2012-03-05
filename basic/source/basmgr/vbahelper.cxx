@@ -235,25 +235,6 @@ void registerCurrentDirectory( const uno::Reference< frame::XModel >& rxModel, c
 
 // ============================================================================
 
-::rtl::OUString getCurrentDirectory( const uno::Reference< frame::XModel >& rxModel )
-{
-    ::rtl::OUString aPath;
-    CurrDirPool& rPool = StaticCurrDirPool::get();
-    ::osl::MutexGuard aGuard( rPool.maMutex );
-    try
-    {
-        uno::Reference< frame::XModuleManager > xModuleManager( lclCreateModuleManager(), uno::UNO_SET_THROW );
-        ::rtl::OUString aIdentifier = xModuleManager->identify( rxModel );
-        aPath = rPool.maCurrDirs[ aIdentifier ];
-    }
-    catch(const uno::Exception& )
-    {
-    }
-    return aPath;
-}
-
-// ============================================================================
-
 } // namespace vba
 } // namespace basic
 
