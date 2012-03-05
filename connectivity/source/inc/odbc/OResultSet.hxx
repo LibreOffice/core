@@ -200,7 +200,7 @@ namespace connectivity
                                          ) const;
         public:
             DECLARE_SERVICE_INFO();
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // A ctor that is needed for returning the object
             OResultSet( SQLHANDLE _pStatementHandle,OStatement_Base* pStmt);
             virtual ~OResultSet();
 

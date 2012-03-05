@@ -65,16 +65,15 @@
 
 #ifdef ODBCIMP
 
-// Stub-Version: dynamische Bindung an die DLL zur Laufzeit.
-// odbcstub definiert die in den Quellen benutzten NSQL...-Methoden
-// als indirekte Funktionsaufrufe.
-// odbcimp zieht sich selbst preos2, odbc und postos2 an.
+// Stub version: dynamic binding to the DLL at runtime.
+// odbcstub defines the NSQL... methods used in the sources
+// as indirect function calls.
+// odbcimp uses preos2, odbc and postos2 itself.
 //  #include "odbc3imp.hxx"
 
 #else
 
-// Zur Zeit verwenden wir die ODBC-DLL von Watcom-SQL direkt (ueber die
-// mitgelieferte Lib).
+// Currently, we directly use the ODBC DLL from Watcom SQL (via the supplied lib)
 
 #ifndef ODBC_OS2
 #define ODBC_OS2
@@ -101,8 +100,7 @@
 
 #endif
 
-// In der ODBC.H von Watcom werden Strings als char * erwartet
-// (nicht, wie sonst bei ODBC ueblich, als UCHAR *).
+// The ODBC.h from Watcom expects char*, not UCHAR* usually used with ODBC
 #if defined( ICC )
 #define SDB_ODBC_CHAR unsigned char
 #else
@@ -115,8 +113,7 @@
 
 #ifdef UNX
 
-// Zur Zeit verwenden wir die ODBC-shared library von Q+E direkt (ueber die
-// mitgelieferte Lib).
+// Currently, we directly use the ODBC shared library from Q+E (via the supplied lib)
 
 #ifndef ODBC_UNX
 #define ODBC_UNX
@@ -128,8 +125,7 @@
 #else
 #include <odbc/sqlext.h>
 #endif
-#undef sal_Bool // Ist in qeodbc.h definiert, wird aber von solar.h noch einmal
-            // definiert.
+#undef sal_Bool // Is defined in qeodbc.h, but gets redefined by solar.h
 
 #define SDB_ODBC_CHAR UCHAR
 #define SQL_WCHAR           (-8)

@@ -808,7 +808,7 @@ sal_Bool OSQLParseTreeIterator::getColumnTableRange(const OSQLParseNode* pNode, 
     {
         ::rtl::OUString aColName, aTableRange;
         getColumnRange(pNode, aColName, aTableRange);
-        if (aTableRange.isEmpty())   // keinen gefunden
+        if (aTableRange.isEmpty())   // None found
         {
             // Look for the columns in the tables
             for (ConstOSQLTablesIterator aIter = m_pImpl->m_pTables->begin(); aIter != m_pImpl->m_pTables->end(); ++aIter)
@@ -2015,7 +2015,7 @@ const OSQLParseNode* OSQLParseTreeIterator::getGroupByTree() const
     OSL_ENSURE(pTableExp->count() == TABLE_EXPRESSION_CHILD_COUNT,"OSQLParseTreeIterator: error in parse tree!");
 
     pGroupClause = pTableExp->getChild(2);
-    // Wenn es aber eine order_by ist, dann darf sie nicht leer sein:
+    // If it is an order_by, it must not be empty
     if(pGroupClause->count() != 3)
         pGroupClause = NULL;
     return pGroupClause;
