@@ -128,7 +128,7 @@ namespace connectivity
             template < typename T, SQLSMALLINT sqlTypeId > T getInteger ( sal_Int32 columnIndex );
 
         public:
-            // ein Konstruktor, der fuer das Returnen des Objektes benoetigt wird:
+            // A ctor needed for returning the object
             ODatabaseMetaDataResultSet(OConnection* _pConnection);
 
 
