@@ -40,6 +40,7 @@ $(eval $(call gb_JunitTest_add_sourcefiles,sw_complex,\
     sw/qa/complex/writer/CheckBookmarks \
     sw/qa/complex/writer/CheckCrossReferences \
     sw/qa/complex/writer/CheckFlies \
+    sw/qa/complex/writer/CheckFields \
     sw/qa/complex/writer/CheckIndexedPropertyValues \
     sw/qa/complex/writer/CheckNamedPropertyValues \
     sw/qa/complex/writer/LoadSaveTest \
@@ -60,6 +61,7 @@ $(eval $(call gb_JunitTest_add_classes,sw_complex,\
     complex.writer.CheckBookmarks \
     complex.checkColor.CheckChangeColor \
     complex.writer.CheckCrossReferences \
+    complex.writer.CheckFields\
     complex.writer.CheckFlies \
     complex.writer.CheckIndexedPropertyValues \
     complex.writer.CheckNamedPropertyValues \
