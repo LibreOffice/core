@@ -1093,10 +1093,8 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
 
     // apply changes
     ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-    ScDPObject* pNewObj = new ScDPObject( *pDPObj );
-    pNewObj->SetSaveData( aData );
-    aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
-    delete pNewObj;
+    pDPObj->SetSaveData( aData );
+    aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
 
     // unmark cell selection
     Unmark();
@@ -1137,10 +1135,8 @@ void ScDBFunc::NumGroupDataPilot( const ScDPNumGroupInfo& rInfo )
 
     // apply changes
     ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-    ScDPObject* pNewObj = new ScDPObject( *pDPObj );
-    pNewObj->SetSaveData( aData );
-    aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
-    delete pNewObj;
+    pDPObj->SetSaveData( aData );
+    aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
 
     // unmark cell selection
     Unmark();
@@ -1279,10 +1275,8 @@ void ScDBFunc::GroupDataPilot()
 
     // apply changes
     ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-    ScDPObject* pNewObj = new ScDPObject( *pDPObj );
-    pNewObj->SetSaveData( aData );
-    aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
-    delete pNewObj;
+    pDPObj->SetSaveData( aData );
+    aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
 
     // unmark cell selection
     Unmark();
@@ -1360,10 +1354,8 @@ void ScDBFunc::UngroupDataPilot()
     {
         // apply changes
         ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
-        ScDPObject* pNewObj = new ScDPObject( *pDPObj );
-        pNewObj->SetSaveData( aData );
-        aFunc.DataPilotUpdate( pDPObj, pNewObj, sal_True, false );
-        delete pNewObj;
+        pDPObj->SetSaveData( aData );
+        aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
 
         // unmark cell selection
         Unmark();
