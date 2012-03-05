@@ -40,12 +40,6 @@ namespace comphelper {
 // FastPropertySetInfo
 // -----------------------------------------------------------------------------
 
-FastPropertySetInfo::FastPropertySetInfo()
-{
-}
-
-// -----------------------------------------------------------------------------
-
 FastPropertySetInfo::FastPropertySetInfo( const PropertyVector& rProps )
 {
     addProperties( rProps );
@@ -55,14 +49,6 @@ FastPropertySetInfo::FastPropertySetInfo( const PropertyVector& rProps )
 
 FastPropertySetInfo::~FastPropertySetInfo()
 {
-}
-
-// -----------------------------------------------------------------------------
-
-void FastPropertySetInfo::addProperty( const Property& rProperty )
-{
-    maProperties.push_back( rProperty );
-    maMap[ rProperty.Name ] = maProperties.size() - 1;
 }
 
 // -----------------------------------------------------------------------------
