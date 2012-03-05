@@ -1162,6 +1162,44 @@ void OutputDevice::ImplDrawMask( const Point& rDestPt, const Size& rDestSize,
     }
 }
 
+namespace
+{
+    BitmapEx makeDisabledBitmap(const Bitmap &rBitmap)
+    {
+        const Size aTotalSize( rBitmap.GetSizePixel() );
+        Bitmap aGrey( aTotalSize, 8, &Bitmap::GetGreyPalette( 256 ) );
+        AlphaMask aGreyAlphaMask( aTotalSize );
+        BitmapReadAccess*  pBmp = const_cast<Bitmap&>(rBitmap).AcquireReadAccess();
+        BitmapWriteAccess* pGrey = aGrey.AcquireWriteAccess();
+        BitmapWriteAccess* pGreyAlphaMask = aGreyAlphaMask.AcquireWriteAccess();
+
+        if( pBmp && pGrey && pGreyAlphaMask )
+        {
+            BitmapColor aGreyVal( 0 );
+            BitmapColor aGreyAlphaMaskVal( 0 );
+            const int nLeft = 0, nRight = aTotalSize.Width();
+            const int nTop = 0, nBottom = nTop + aTotalSize.Height();
+
+            for( int nY = nTop; nY < nBottom; ++nY )
+            {
+                for( int nX = nLeft; nX < nRight; ++nX )
+                {
+                    aGreyVal.SetIndex( pBmp->GetLuminance( nY, nX ) );
+                    pGrey->SetPixel( nY, nX, aGreyVal );
+
+                    aGreyAlphaMaskVal.SetIndex( static_cast< sal_uInt8 >( 128ul ) );
+                    pGreyAlphaMask->SetPixel( nY, nX, aGreyAlphaMaskVal );
+                }
+            }
+        }
+
+        const_cast<Bitmap&>(rBitmap).ReleaseAccess( pBmp );
+        aGrey.ReleaseAccess( pGrey );
+        aGreyAlphaMask.ReleaseAccess( pGreyAlphaMask );
+        return BitmapEx( aGrey, aGreyAlphaMask );
+    }
+}
+
 // ------------------------------------------------------------------
 
 void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, sal_uInt16 nStyle )
@@ -1174,7 +1212,13 @@ void OutputDevice::DrawImage( const Point& rPos, const Image& rImage, sal_uInt16
     switch( rImage.mpImplData->meType )
     {
         case IMAGETYPE_BITMAP:
-            DrawBitmap( rPos, *static_cast< Bitmap* >( rImage.mpImplData->mpData ) );
+        {
+            const Bitmap &rBitmap = *static_cast< Bitmap* >( rImage.mpImplData->mpData );
+            if( nStyle & IMAGE_DRAW_DISABLE )
+                DrawBitmapEx( rPos, makeDisabledBitmap(rBitmap) );
+            else
+                DrawBitmap( rPos, rBitmap );
+        }
         break;
 
         case IMAGETYPE_IMAGE:
@@ -1210,7 +1254,13 @@ void OutputDevice::DrawImage( const Point& rPos, const Size& rSize,
         switch( rImage.mpImplData->meType )
         {
             case IMAGETYPE_BITMAP:
-                DrawBitmap( rPos, rSize, *static_cast< Bitmap* >( rImage.mpImplData->mpData ) );
+            {
+                const Bitmap &rBitmap = *static_cast< Bitmap* >( rImage.mpImplData->mpData );
+                if( nStyle & IMAGE_DRAW_DISABLE )
+                    DrawBitmapEx( rPos, rSize, makeDisabledBitmap(rBitmap) );
+                else
+                    DrawBitmap( rPos, rSize, rBitmap );
+            }
             break;
 
             case IMAGETYPE_IMAGE:
