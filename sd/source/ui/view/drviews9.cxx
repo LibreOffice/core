@@ -273,12 +273,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->Put (XFillStyleItem ((XFillStyle) pFillStyle->GetValue ()), XATTR_FILLSTYLE);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
+#ifndef DISABLE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
-
+#endif
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         // linienstil neu bestimmen
@@ -293,12 +295,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         pAttr->Put (XLineStyleItem ((XLineStyle) pLineStyle->GetValue ()), XATTR_LINESTYLE);
                         rBindings.Invalidate (SID_ATTR_LINE_STYLE);
                     }
+#ifndef DISABLE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
-
+#endif
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         // linienbreite setzen
@@ -312,8 +316,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     rBindings.Invalidate (SID_ATTR_LINE_WIDTH);
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         case SID_SETFILLCOLOR :
@@ -335,8 +340,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         case SID_SETLINECOLOR :
@@ -355,8 +361,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     rBindings.Invalidate (SID_ATTR_LINE_COLOR);
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         case SID_SETGRADSTARTCOLOR :
@@ -416,8 +423,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         case SID_SETHATCHCOLOR :
@@ -469,8 +477,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                     rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         // einstellungen fuer liniendash
@@ -513,12 +522,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         rBindings.Invalidate (SID_ATTR_LINE_DASH);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
+#ifndef DISABLE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
-
+#endif
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         // einstellungen fuer farbverlauf
@@ -588,12 +599,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         rBindings.Invalidate (SID_ATTR_FILL_GRADIENT);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
+#ifndef DISABLE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
-
+#endif
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         // einstellungen fuer schraffur
@@ -648,12 +661,14 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                         rBindings.Invalidate (SID_ATTR_FILL_HATCH);
                         rBindings.Invalidate (SID_ATTR_FILL_STYLE);
                     }
+#ifndef DISABLE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
-
+#endif
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         case SID_SELECTGRADIENT :
@@ -686,8 +701,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         case SID_SELECTHATCH :
@@ -720,8 +736,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
 
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
         case SID_UNSELECT :
@@ -734,8 +751,9 @@ void DrawViewShell::AttrExec (SfxRequest &rReq)
                 {
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             break;
 
 /*        case SID_SETFONTFAMILYNAME :

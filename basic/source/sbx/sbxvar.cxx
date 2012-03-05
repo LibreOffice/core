@@ -93,8 +93,10 @@ SbxVariable::SbxVariable( const SbxVariable& r )
     if( r.mpSbxVariableImpl != NULL )
     {
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
+#ifndef DISABLE_SCRIPTING
         if( mpSbxVariableImpl->m_xComListener.is() )
             registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
+#endif
     }
     pCst = NULL;
     if( r.CanRead() )
@@ -141,8 +143,10 @@ SbxVariable::~SbxVariable()
     if ( maName.EqualsAscii( aCellsStr ) )
         maName.AssignAscii( aCellsStr, sizeof( aCellsStr )-1 );
 #endif
+#ifndef DISABLE_SCRIPTING
     if( IsSet( SBX_DIM_AS_NEW ))
         removeDimAsNewRecoverItem( this );
+#endif
     delete mpSbxVariableImpl;
     delete pCst;
 }
@@ -333,8 +337,10 @@ SbxVariable& SbxVariable::operator=( const SbxVariable& r )
     if( r.mpSbxVariableImpl != NULL )
     {
         mpSbxVariableImpl = new SbxVariableImpl( *r.mpSbxVariableImpl );
+#ifndef DISABLE_SCRIPTING
         if( mpSbxVariableImpl->m_xComListener.is() )
             registerComListenerVariableForBasic( this, mpSbxVariableImpl->m_pComListenerParentBasic );
+#endif
     }
     else
         mpSbxVariableImpl = NULL;
@@ -422,7 +428,9 @@ void SbxVariable::SetComListener( ::com::sun::star::uno::Reference< ::com::sun::
     SbxVariableImpl* pImpl = getImpl();
     pImpl->m_xComListener = xComListener;
     pImpl->m_pComListenerParentBasic = pParentBasic;
+#ifndef DISABLE_SCRIPTING
     registerComListenerVariableForBasic( this, pParentBasic );
+#endif
 }
 
 void SbxVariable::ClearComListener( void )

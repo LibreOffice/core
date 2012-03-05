@@ -693,9 +693,11 @@ void SAL_CALL SlideshowImpl::disposing()
 
     if( maPresSettings.mbFullScreen )
     {
+#ifndef DISABLE_SCRIPTING
         // restore StarBASICErrorHdl
         StarBASIC::SetGlobalErrorHdl(maStarBASICGlobalErrorHdl);
         maStarBASICGlobalErrorHdl = Link();
+#endif
     }
     else
     {
@@ -1038,9 +1040,11 @@ bool SlideshowImpl::startShow( PresentationSettingsEx* pPresSettings )
 
             if( maPresSettings.mbFullScreen )
             {
+#ifndef DISABLE_SCRIPTING
                 // disable basic ide error handling
                 maStarBASICGlobalErrorHdl = StarBASIC::GetGlobalErrorHdl();
                 StarBASIC::SetGlobalErrorHdl( Link() );
+#endif
             }
 
             // call resize handler

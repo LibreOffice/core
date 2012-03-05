@@ -107,6 +107,8 @@ static Reference< XCalendar3 > getLocaleCalendar( void )
     return xCalendar;
 }
 
+#ifndef DISABLE_SCRIPTING
+
 RTLFUNC(CallByName)
 {
     (void)pBasic;
@@ -1835,42 +1837,6 @@ RTLFUNC(WeekdayName)
     rPar.Get(0)->PutString( String(aRetStr) );
 }
 
-sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 nFirstDay = 0 )
-{
-    Date aRefDate( 1,1,1900 );
-    long nDays = (long) aDate;
-    nDays -= 2; // normieren: 1.1.1900 => 0
-    aRefDate += nDays;
-    DayOfWeek aDay = aRefDate.GetDayOfWeek();
-    sal_Int16 nDay;
-    if ( aDay != SUNDAY )
-        nDay = (sal_Int16)aDay + 2;
-    else
-        nDay = 1;   // 1 == Sunday
-
-    // #117253 optional 2nd parameter "firstdayofweek"
-    if( bFirstDayParam )
-    {
-        if( nFirstDay < 0 || nFirstDay > 7 )
-        {
-            StarBASIC::Error( SbERR_BAD_ARGUMENT );
-            return 0;
-        }
-        if( nFirstDay == 0 )
-        {
-            Reference< XCalendar3 > xCalendar = getLocaleCalendar();
-            if( !xCalendar.is() )
-            {
-                StarBASIC::Error( SbERR_INTERNAL_ERROR );
-                return 0;
-            }
-            nFirstDay = sal_Int16( xCalendar->getFirstDayOfWeek() + 1 );
-        }
-        nDay = 1 + (nDay + 7 - nFirstDay) % 7;
-    }
-    return nDay;
-}
-
 RTLFUNC(Weekday)
 {
     (void)pBasic;
@@ -3240,6 +3206,48 @@ RTLFUNC(Me)
     }
     else
         refVar->PutObject( pClassModuleObject );
+}
+
+#endif
+
+sal_Int16 implGetWeekDay( double aDate, bool bFirstDayParam = false, sal_Int16 nFirstDay = 0 )
+{
+    Date aRefDate( 1,1,1900 );
+    long nDays = (long) aDate;
+    nDays -= 2; // normieren: 1.1.1900 => 0
+    aRefDate += nDays;
+    DayOfWeek aDay = aRefDate.GetDayOfWeek();
+    sal_Int16 nDay;
+    if ( aDay != SUNDAY )
+        nDay = (sal_Int16)aDay + 2;
+    else
+        nDay = 1;   // 1 == Sunday
+
+    // #117253 optional 2nd parameter "firstdayofweek"
+    if( bFirstDayParam )
+    {
+        if( nFirstDay < 0 || nFirstDay > 7 )
+        {
+#ifndef DISABLE_SCRIPTING
+            StarBASIC::Error( SbERR_BAD_ARGUMENT );
+#endif
+            return 0;
+        }
+        if( nFirstDay == 0 )
+        {
+            Reference< XCalendar3 > xCalendar = getLocaleCalendar();
+            if( !xCalendar.is() )
+            {
+#ifndef DISABLE_SCRIPTING
+                StarBASIC::Error( SbERR_INTERNAL_ERROR );
+#endif
+                return 0;
+            }
+            nFirstDay = sal_Int16( xCalendar->getFirstDayOfWeek() + 1 );
+        }
+        nDay = 1 + (nDay + 7 - nFirstDay) % 7;
+    }
+    return nDay;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

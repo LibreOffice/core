@@ -267,6 +267,7 @@ void SwHTMLParser::InsertBasicDocEvent( rtl::OUString aEvent, const String& rNam
 
 void SwHTMLWriter::OutBasic()
 {
+#ifndef DISABLE_SCRIPTING
     if( !bCfgStarBasic )
         return;
 
@@ -319,6 +320,7 @@ void SwHTMLWriter::OutBasic()
                                      eDestEnc, &aNonConvertableCharacters );
         }
     }
+#endif
 }
 
 static const char* aEventNames[] =

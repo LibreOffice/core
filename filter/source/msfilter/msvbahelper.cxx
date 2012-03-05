@@ -181,6 +181,13 @@ SfxObjectShell* findShellForUrl( const rtl::OUString& sMacroURLOrPath )
 bool hasMacro( SfxObjectShell* pShell, const String& sLibrary, String& sMod, const String& sMacro )
 {
     bool bFound = false;
+
+#ifdef DISABLE_SCRIPTING
+    (void) pShell;
+    (void) sLibrary;
+    (void) sMod;
+    (void) sMacro;
+#else
     if ( sLibrary.Len() && sMacro.Len() )
     {
         OSL_TRACE("** Searching for %s.%s in library %s"
@@ -228,6 +235,7 @@ bool hasMacro( SfxObjectShell* pShell, const String& sLibrary, String& sMod, con
             }
         }
     }
+#endif
     return bFound;
 }
 
@@ -266,6 +274,12 @@ void parseMacro( const rtl::OUString& sMacro, String& sContainer, String& sModul
 
 ::rtl::OUString resolveVBAMacro( SfxObjectShell* pShell, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModuleName, const ::rtl::OUString& rMacroName )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) pShell;
+    (void) rLibName;
+    (void) rModuleName;
+    (void) rMacroName;
+#else
     if( pShell )
     {
         ::rtl::OUString aLibName = rLibName.isEmpty() ?  getDefaultProjectName( pShell ) : rLibName ;
@@ -273,11 +287,19 @@ void parseMacro( const rtl::OUString& sMacro, String& sContainer, String& sModul
         if( hasMacro( pShell, aLibName, aModuleName, rMacroName ) )
             return ::rtl::OUStringBuffer( aLibName ).append( sal_Unicode( '.' ) ).append( aModuleName ).append( sal_Unicode( '.' ) ).append( rMacroName ).makeStringAndClear();
     }
+#endif
     return ::rtl::OUString();
 }
 
 MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& MacroName, bool bSearchGlobalTemplates )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) pShell;
+    (void) MacroName;
+    (void) bSearchGlobalTemplates;
+
+    return MacroResolvedInfo();
+#else
     if( !pShell )
         return MacroResolvedInfo();
 
@@ -439,11 +461,20 @@ MacroResolvedInfo resolveVBAMacro( SfxObjectShell* pShell, const rtl::OUString& 
     aRes.msResolvedMacro = sProcedure.Insert( '.', 0 ).Insert( sModule, 0).Insert( '.', 0 ).Insert( sContainer, 0 );
 
     return aRes;
+#endif
 }
 
 // Treat the args as possible inouts ( convertion at bottom of method )
 sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Sequence< uno::Any >& aArgs, uno::Any& aRet, const uno::Any& /*aCaller*/)
 {
+#ifdef DISABLE_SCRIPTING
+    (void) pShell;
+    (void) sMacroName;
+    (void) aArgs;
+    (void) aRet;
+
+    return sal_False;
+#else
     sal_Bool bRes = sal_False;
     if ( !pShell )
         return bRes;
@@ -476,6 +507,7 @@ sal_Bool executeMacro( SfxObjectShell* pShell, const String& sMacroName, uno::Se
        bRes = sal_False;
     }
     return bRes;
+#endif
 }
 
 // ============================================================================

@@ -219,11 +219,13 @@ SbxError ImpScan( const ::rtl::OUString& rWSrc, double& nVal, SbxDataType& rType
         if( l >= SbxMININT && l <= SbxMAXINT )
             eScanType = SbxINTEGER;
     }
+#ifndef DISABLE_SCRIPTING
     else if ( SbiRuntime::isVBAEnabled() )
     {
         OSL_TRACE("Reporting error converting");
         return SbxERR_CONVERSION;
     }
+#endif
     if( pLen )
         *pLen = (sal_uInt16) ( p - pStart );
     if( !bRes )

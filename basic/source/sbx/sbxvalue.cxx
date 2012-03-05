@@ -297,7 +297,11 @@ SbxValue* SbxValue::TheRealValue( sal_Bool bObjInObjError ) const
                     ((SbxValue*) pObj)->aData.eType == SbxOBJECT &&
                     ((SbxValue*) pObj)->aData.pObj == pObj )
                 {
+#ifdef DISABLE_SCRIPTING // No sbunoobj
+                    const bool bSuccess = false;
+#else
                     bool bSuccess = handleToStringForCOMObjects( pObj, p );
+#endif
                     if( !bSuccess )
                     {
                         SetError( SbxERR_BAD_PROP_VALUE );
@@ -914,8 +918,11 @@ sal_Bool SbxValue::Convert( SbxDataType eTo )
 
 sal_Bool SbxValue::Compute( SbxOperator eOp, const SbxValue& rOp )
 {
+#ifdef DISABLE_SCRIPTING
+    bool bVBAInterop = false;
+#else
     bool bVBAInterop =  SbiRuntime::isVBAEnabled();
-
+#endif
     SbxDataType eThisType = GetType();
     SbxDataType eOpType = rOp.GetType();
     SbxError eOld = GetError();
@@ -1283,7 +1290,11 @@ Lbl_OpIsEmpty:
 
 sal_Bool SbxValue::Compare( SbxOperator eOp, const SbxValue& rOp ) const
 {
+#ifdef DISABLE_SCRIPTING
+    bool bVBAInterop = false;
+#else
     bool bVBAInterop =  SbiRuntime::isVBAEnabled();
+#endif
 
     sal_Bool bRes = sal_False;
     SbxError eOld = GetError();

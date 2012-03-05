@@ -492,8 +492,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     rReq.Ignore ();
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             rReq.Ignore ();
             break;
         }
@@ -519,8 +520,9 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     rReq.Ignore ();
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             rReq.Ignore ();
             break;
         }
@@ -567,13 +569,15 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         rBindings.Invalidate( SID_ZOOM_OUT );
                         rBindings.Invalidate( SID_ATTR_ZOOMSLIDER );
                     }
+#ifndef DISABLE_SCRIPTING
                     else StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
-
+#endif
                     rReq.Ignore ();
                     break;
                 }
-
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             rReq.Ignore ();
             break;
         }

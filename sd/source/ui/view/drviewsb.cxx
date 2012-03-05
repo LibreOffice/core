@@ -164,7 +164,9 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             }
             else if (pArgs->Count () != 4)
                  {
+#ifndef DISABLE_SCRIPTING
                      StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
                      Cancel();
                      rReq.Ignore ();
                      break;
@@ -340,7 +342,9 @@ void DrawViewShell::FuTemp02(SfxRequest& rReq)
             }
             else
             {
+#ifndef DISABLE_SCRIPTING
                 StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
                 Cancel ();
                 rReq.Ignore ();
                 break;

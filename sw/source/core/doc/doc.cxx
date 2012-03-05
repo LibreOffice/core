@@ -2688,6 +2688,7 @@ void SwDoc::ChkCondColls()
 uno::Reference< script::vba::XVBAEventProcessor >
 SwDoc::GetVbaEventProcessor()
 {
+#ifndef DISABLE_SCRIPTING
     if( !mxVbaEvents.is() && pDocShell && ooo::vba::isAlienWordDoc( *pDocShell ) )
     {
         try
@@ -2701,6 +2702,7 @@ SwDoc::GetVbaEventProcessor()
         {
         }
     }
+#endif
     return mxVbaEvents;
 }
 

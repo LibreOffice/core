@@ -185,7 +185,10 @@ ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxCon
     ,m_aContainerListeners(m_aMutex)
 {
     m_pDatabaseDocumentLoader = new DatabaseDocumentLoader( m_aContext );
+
+#ifndef DISABLE_SCRIPTING
     ::basic::BasicManagerRepository::registerCreationListener( *this );
+#endif
 
     osl_incrementInterlockedCount( &m_refCount );
     {
@@ -199,7 +202,10 @@ ODatabaseContext::ODatabaseContext( const Reference< XComponentContext >& _rxCon
 
 ODatabaseContext::~ODatabaseContext()
 {
+#ifndef DISABLE_SCRIPTING
     ::basic::BasicManagerRepository::revokeCreationListener( *this );
+#endif
+
     if ( m_pDatabaseDocumentLoader )
         m_pDatabaseDocumentLoader->release();
 
@@ -749,6 +755,10 @@ Sequence< sal_Int8 > ODatabaseContext::getUnoTunnelImplementationId()
 
 void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForDocument, BasicManager& _rBasicManager )
 {
+#ifdef DISABLE_SCRIPTING
+    (void) _rxForDocument;
+    (void) _rBasicManager;
+#else
     // if it's a database document ...
     Reference< XOfficeDatabaseDocument > xDatabaseDocument( _rxForDocument, UNO_QUERY );
     // ... or a sub document of a database document ...
@@ -762,6 +772,7 @@ void ODatabaseContext::onBasicManagerCreated( const Reference< XModel >& _rxForD
     // ... whose BasicManager has just been created, then add the global DatabaseDocument variable to its scope.
     if ( xDatabaseDocument.is() )
         _rBasicManager.SetGlobalUNOConstant( "ThisDatabaseDocument", makeAny( xDatabaseDocument ) );
+#endif
 }
 
 }   // namespace dbaccess

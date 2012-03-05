@@ -177,7 +177,9 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
             }
             else
             {
+#ifndef DISABLE_SCRIPTING
                 StarBASIC::FatalError (SbERR_BAD_PROP_VALUE);
+#endif
                 rRequest.Ignore ();
                 break;
             }
@@ -189,7 +191,9 @@ void ViewShell::Implementation::ProcessModifyPageSlot (
         }
         else
         {
+#ifndef DISABLE_SCRIPTING
             StarBASIC::FatalError (SbERR_WRONG_ARGS);
+#endif
             rRequest.Ignore ();
             break;
         }

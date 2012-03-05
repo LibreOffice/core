@@ -78,8 +78,10 @@ double ImpGetDouble( const SbxValues* p )
             if( !p->pOUString )
             {
                 nRes = 0;
+#ifndef DISABLE_SCRIPTING
                 if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
                     SbxBase::SetError( SbxERR_CONVERSION );
+#endif
             }
             else
             {
@@ -88,8 +90,10 @@ double ImpGetDouble( const SbxValues* p )
                 if( ImpScan( *p->pOUString, d, t, NULL ) != SbxERR_OK )
                 {
                     nRes = 0;
+#ifndef DISABLE_SCRIPTING
                     if ( SbiRuntime::isVBAEnabled() )// VBA only behaviour
                         SbxBase::SetError( SbxERR_CONVERSION );
+#endif
                 }
                 else
                     nRes = d;

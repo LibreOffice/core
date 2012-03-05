@@ -4610,10 +4610,12 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
             uno::Sequence< uno::Any > aArgs(1);
             aArgs[ 0 ] <<= mpDocShell->GetModel();
             aGlobs <<= ::comphelper::getProcessServiceFactory()->createInstanceWithArguments( "ooo.vba.word.Globals", aArgs );
+
+#ifndef DISABLE_SCRIPTING
             BasicManager *pBasicMan = mpDocShell->GetBasicManager();
             if (pBasicMan)
                 pBasicMan->SetGlobalUNOConstant( "VBAGlobals", aGlobs );
-
+#endif
             BasicProjImportHelper aBasicImporter( *mpDocShell );
             // Import vba via oox filter
             bool bRet = aBasicImporter.import( mpDocShell->GetMedium()->GetInputStream() );

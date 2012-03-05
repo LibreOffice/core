@@ -1100,7 +1100,9 @@ void SwFrameShell::ExecFrameStyle(SfxRequest& rReq)
                     }
                     //Distance nur setzen, wenn der Request vom Controller kommt
 
+#ifndef DISABLE_SCRIPTING
                     if(!StarBASIC::IsRunning())
+#endif
                     {
                         aNewBox.SetDistance( rBoxItem.GetDistance() );
                     }
