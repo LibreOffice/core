@@ -253,6 +253,8 @@ void ViewShell::ImplEndAction( const sal_Bool bIdleEnd )
     {
         if ( !nLockPaint )
         {
+            SolarMutexGuard aGuard;
+
             sal_Bool bPaintsFromSystem = aInvalidRect.HasArea();
             GetWin()->Update();
             if ( aInvalidRect.HasArea() )

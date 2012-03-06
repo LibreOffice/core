@@ -3886,6 +3886,7 @@ void GtkSalFrame::IMHandler::signalIMCommit( GtkIMContext* CONTEXT_ARG, gchar* p
 {
     GtkSalFrame::IMHandler* pThis = (GtkSalFrame::IMHandler*)im_handler;
 
+    SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
     // open a block that will end the GTK_YIELD_GRAB before calling preedit changed again
     {
@@ -4052,6 +4053,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
 
     GTK_YIELD_GRAB();
 
+    SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
 
     pThis->m_pFrame->CallCallback( SALEVENT_EXTTEXTINPUT, (void*)&pThis->m_aInputEvent);
@@ -4072,6 +4074,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditEnd( GtkIMContext*, gpointer im_hand
 
     pThis->m_bPreeditJustChanged = true;
 
+    SolarMutexGuard aGuard;
     vcl::DeletionListener aDel( pThis->m_pFrame );
     pThis->doCallEndExtTextInput();
     if( ! aDel.isDeleted() )
