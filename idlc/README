@@ -1,2 +1,6 @@
-Contains the IDL compiler.
+Contains the C++ IDL compiler: idlcpp
 
+This compiler generates C++ headers - .hpp and .hdl files that provide
+the UNO C++ binding. That compilation is done primarily in the offapi
+and udkapi directories.
+2
