@@ -9,6 +9,10 @@ sub read_icons($)
     my $fname = shift;
     my $fileh;
     my @images;
+    if (! -e "$base_path/$fname") {
+        print "Skipping non-existent $base_path/$fname\n";
+        return @images;
+    }
     open ($fileh, "$base_path/$fname") || die "Can't open $base_path/$fname: $!";
     while (<$fileh>) {
     m/xlink:href=\"\.uno:(\S+)\"\s+/ || next;
