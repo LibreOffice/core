@@ -1,4 +1,5 @@
 Audio/Video media implementation.
 
-Needs a Java Media Framework (JMF).
-Not currently usable for streams but only for URIs in the file system.
+Provides per-platform implementations of multimedia functionality.
+Currently no stream API is provided, only a URI based one, so
+streaming has to be wrapped around it via temp files.

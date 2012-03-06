@@ -1,0 +1,4 @@
+External package containing clucene.
+
+This is used to index our downloadable help packages, and allow them
+to be searched efficiently at run-time.
