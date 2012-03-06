@@ -118,10 +118,6 @@ public:
         const String& rStr1, sal_Int32 nPos1, sal_Int32 nCount1, sal_Int32& nMatch1,
         const String& rStr2, sal_Int32 nPos2, sal_Int32 nCount2, sal_Int32& nMatch2 ) const;
 
-    sal_Int32 compareSubstring(
-        const String& rStr1, sal_Int32 nOff1, sal_Int32 nLen1,
-        const String& rStr2, sal_Int32 nOff2, sal_Int32 nLen2 ) const;
-
     sal_Int32 compareString( const String& rStr1, const String& rStr2 ) const;
 
 
