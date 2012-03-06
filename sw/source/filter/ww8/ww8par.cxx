@@ -2931,9 +2931,7 @@ void SwWW8ImplReader::simpleAddTextToParagraph(const String& rAddString)
 #if OSL_DEBUG_LEVEL > 1
         {
             rtl::OString sText(rtl::OUStringToOString(rAddString, RTL_TEXTENCODING_UTF8));
-            ::std::clog <<
-                "<addTextToParagraph>" << sText.getStr() << "</addTextToParagraph>"
-                << ::std::endl;
+            SAL_INFO("sw.ww8", "<addTextToParagraph>" << sText.getStr() << "</addTextToParagraph>");
         }
 #endif
 
