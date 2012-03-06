@@ -2849,9 +2849,6 @@ void MSWordExportBase::ExportDocument( bool bWriteAll )
         pOLEExp = new SvxMSExportOLEObjects( nSvxMSDffOLEConvFlags );
     }
 
-    if ( !pOleMap)
-        pOleMap = new WW8OleMaps;
-
     if ( !pOCXExp && pDoc->GetDocShell() )
         pOCXExp = new SwMSConvertControls( pDoc->GetDocShell(), pCurPam );
 
@@ -3266,7 +3263,7 @@ sal_uLong SwWW8Writer::Write( SwPaM& rPaM, SfxMedium& rMed,
 
 MSWordExportBase::MSWordExportBase( SwDoc *pDocument, SwPaM *pCurrentPam, SwPaM *pOriginalPam )
     : aMainStg(sMainStream), pISet(0), pUsedNumTbl(0), mpTopNodeOfHdFtPage(0),
-    pBmpPal(0), pOLEExp(0), pOCXExp(0), pOleMap(0),
+    pBmpPal(0), pOLEExp(0), pOCXExp(0),
     mpTableInfo(new ww8::WW8TableInfo()), nUniqueList(0),
     mnHdFtIndex(0), pAktPageDesc(0), pPapPlc(0), pChpPlc(0), pChpIter(0),
     pStyles( NULL ),
@@ -3284,7 +3281,6 @@ MSWordExportBase::~MSWordExportBase()
     delete pBmpPal;
     delete pOLEExp;
     delete pOCXExp;
-    delete pOleMap;
 }
 
 WW8Export::WW8Export( SwWW8Writer *pWriter,

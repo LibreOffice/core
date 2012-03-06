@@ -143,12 +143,7 @@ namespace com{namespace sun {namespace star{
 
 struct WW8LFOInfo;
 typedef WW8LFOInfo* WW8LFOInfo_Ptr;
-// Redlining: match WinWord author ids to StarWriter author ids
-struct WW8OleMap;
-typedef WW8OleMap* WW8OleMap_Ptr;
-
 SV_DECL_PTRARR_DEL(WW8LFOInfos,WW8LFOInfo_Ptr,16)
-SV_DECL_PTRARR_SORT_DEL(WW8OleMaps, WW8OleMap_Ptr,16)
 
 class WW8Reader : public StgReader
 {
@@ -160,28 +155,6 @@ public:
     virtual sal_Bool HasGlossaries() const;
     virtual sal_Bool ReadGlossaries( SwTextBlocks&, sal_Bool bSaveRelFiles ) const;
 };
-
-struct WW8OleMap
-{
-    sal_uInt32 mnWWid;
-    String msStorageName;
-
-    WW8OleMap(sal_uInt32 nWWid)
-        : mnWWid(nWWid) {}
-
-     WW8OleMap(sal_uInt32 nWWid, String sStorageName)
-        : mnWWid(nWWid), msStorageName(sStorageName) {}
-
-    bool operator==(const WW8OleMap & rEntry) const
-    {
-        return (mnWWid == rEntry.mnWWid);
-    }
-    bool operator<(const WW8OleMap & rEntry) const
-    {
-        return (mnWWid < rEntry.mnWWid);
-    }
-};
-
 
 class SwWW8ImplReader;
 struct WW8LSTInfo;

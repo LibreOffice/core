@@ -117,7 +117,7 @@ class WW8_WrtBookmarks;
 class WW8_WrtRedlineAuthor;
 class SvxMSExportOLEObjects;
 class SwMSConvertControls;
-class WW8OleMaps;
+typedef std::set<sal_uInt32> WW8OleSet;
 class SvStorageRef;
 struct WW8_PdAttrDesc;
 class SvxBrushItem;
@@ -461,7 +461,7 @@ public:
     boost::shared_ptr<NfKeywordTable> pKeyMap;
     SvxMSExportOLEObjects* pOLEExp;
     SwMSConvertControls* pOCXExp;
-    WW8OleMaps* pOleMap;
+    WW8OleSet m_aOleSet;    // To remember all already exported ole objects
     ww8::WW8TableInfo::Pointer_t mpTableInfo;
 
     sal_uInt16 nCharFmtStart;
@@ -968,7 +968,7 @@ public:
 
     SvxMSExportOLEObjects& GetOLEExp()      { return *pOLEExp; }
     SwMSConvertControls& GetOCXExp()        { return *pOCXExp; }
-    WW8OleMaps& GetOLEMap()                 { return *pOleMap; }
+    WW8OleSet& GetOLESet()                  { return m_aOleSet; }
     void ExportDopTypography(WW8DopTypography &rTypo);
 
     sal_uInt16 AddRedlineAuthor( sal_uInt16 nId );

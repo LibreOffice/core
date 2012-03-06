@@ -241,22 +241,11 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
         uno::Reference < embed::XEmbeddedObject > xObj(const_cast<SwOLENode&>(rOLENode).GetOLEObj().GetOleRef());
         if( xObj.is() )
         {
-            embed::XEmbeddedObject *pObj = xObj.get();
+            const embed::XEmbeddedObject *pObj = xObj.get();
             sal_uInt32 nPictureId = (sal_uInt32)(sal_uIntPtr)pObj;
+            //.second is false when element already existed
+            bool bIsNotDuplicate = GetOLESet().insert(nPictureId).second;
             Set_UInt32(pDataAdr, nPictureId);
-
-            WW8OleMap *pMap = new WW8OleMap(nPictureId);
-            bool bDuplicate = false;
-            WW8OleMaps &rOleMap = GetOLEMap();
-            sal_uInt16 nPos;
-            if ( rOleMap.Seek_Entry(pMap, &nPos) )
-            {
-                bDuplicate = true;
-                delete pMap;
-            }
-            else if( 0 == rOleMap.Insert( pMap) )
-                delete pMap;
-
             String sStorageName( '_' );
             sStorageName += String::CreateFromInt32( nPictureId );
             SvStorageRef xOleStg = xObjStg->OpenSotStorage( sStorageName,
@@ -267,7 +256,7 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
                 If this object storage has been written already don't
                 waste time rewriting it
                 */
-                if (!bDuplicate)
+                if (bIsNotDuplicate)
                 {
                     sal_Int64 nAspect = rOLENode.GetAspect();
                     svt::EmbeddedObjectRef aObjRef( xObj, nAspect );
