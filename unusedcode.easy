@@ -358,7 +358,6 @@ SwpHtStart::Insert(SwTxtAttr const**, unsigned short)
 SwpHtStart::Insert(SwpHtStart const*, unsigned short, unsigned short)
 SwpHtStart::Remove(SwTxtAttr const*&, unsigned short)
 SystemChildWindow::SystemChildWindow(Window*, ResId const&)
-TaskBar::TaskBar(Window*, long)
 TaskStatusFieldItem::TaskStatusFieldItem()
 TempFile::IsValid() const
 TextEngine::GetLeftMargin() const

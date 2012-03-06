@@ -35,7 +35,6 @@
 #include <vcl/toolbox.hxx>
 #include <vcl/status.hxx>
 
-class TaskBar;
 class TaskStatusFieldItem;
 struct ImplTaskSBFldItem;
 
@@ -81,39 +80,6 @@ benachrichtigt werden will, wenn die Uhrzeit oder die TaskStatusBar
 angeklickt wird. Wenn der Notify fuer die Uhrzeit kommt, ist die
 Id TASKSTATUSBAR_CLOCKID, wenn er fuer die TaskStatusBar kommt, ist
 die Id 0.
-
-
-TaskBar
-=======
-
-Erlaubte StyleBits
-------------------
-
-WB_BORDER       - Border an der oberen Kante
-WB_SIZEABLE     - Zwischen TaskToolBox und TaskStatusBar kann der Anwender
-                  die Groesse aendern.
-
-Wenn WB_SIZEABLE gesetzt ist, kann die Breite des StatusBars gesetzt und
-abgefragt werden. Dazu kann man SetStatusSize()/GetStatusSize() aufrufen.
-0 steht dabei fuer optimale Groesse, was auch der Default ist. Bei einem
-Doppelklick auf den Trenner kann der Anwender auch wieder die optimale
-Groesse einstellen.
-
-Wichtige Methoden
-------------------
-
-virtual TaskToolBox* TaskBar::CreateButtonBar();
-virtual TaskToolBox* TaskBar::CreateTaskToolBox();
-virtual TaskStatusBar* TaskBar::CreateTaskStatusBar();
-
-Diese Methoden muesste man ueberladen, wenn man eine eigene Klasse anlegen
-will.
-
-void TaskBar::ShowStatusText( const String& rText );
-void TaskBar::HideStatusText();
-
-Blendet den ButtonBar und die TaskBar ein bzw. aus um den Hilfetexte in der
-gesammten Zeile anzuzeigen.
 */
 
 // -----------------
@@ -122,10 +88,7 @@ gesammten Zeile anzuzeigen.
 
 class TaskButtonBar : public ToolBox
 {
-    friend class TaskBar;
-
 private:
-    TaskBar*            mpNotifyTaskBar;
     void*               mpDummy1;
     void*               mpDummy2;
     void*               mpDummy3;
@@ -151,11 +114,8 @@ public:
 
 class SVT_DLLPUBLIC TaskToolBox : public ToolBox
 {
-    friend class TaskBar;
-
 private:
     ImplTaskItemList*   mpItemList;
-    TaskBar*            mpNotifyTaskBar;
     Point               maContextMenuPos;
     size_t              mnOldItemCount;
     long                mnMaxTextWidth;
@@ -267,11 +227,8 @@ public:
 
 class SVT_DLLPUBLIC TaskStatusBar : public StatusBar
 {
-    friend class TaskBar;
-
 private:
     ImplTaskSBItemList* mpFieldItemList;
-    TaskBar*            mpNotifyTaskBar;
     ITaskStatusNotify*  mpNotify;
     Time                maTime;
     XubString           maTimeText;
@@ -307,82 +264,6 @@ public:
     sal_uInt16              GetFieldFlags() const { return mnFieldFlags; }
     void                SetNotifyObject( ITaskStatusNotify* pNotify ) { mpNotify = pNotify; }
     ITaskStatusNotify*  GetNotifyObject() const { return mpNotify; }
-};
-
-// -----------
-// - TaskBar -
-// -----------
-
-class SVT_DLLPUBLIC TaskBar : public Window
-{
-private:
-    TaskButtonBar*          mpButtonBar;
-    TaskToolBox*            mpTaskToolBox;
-    TaskStatusBar*          mpStatusBar;
-    void*                   mpDummy1;
-    void*                   mpDummy2;
-    void*                   mpDummy3;
-    void*                   mpDummy4;
-    String                  maOldText;
-    long                    mnStatusWidth;
-    long                    mnMouseOff;
-    long                    mnOldStatusWidth;
-    long                    mnDummy1;
-    long                    mnDummy2;
-    long                    mnDummy3;
-    long                    mnDummy4;
-    WinBits                 mnWinBits;
-    sal_uInt16                  mnLines;
-    sal_Bool                    mbStatusText;
-    sal_Bool                    mbShowItems;
-    sal_Bool                    mbAutoHide;
-    sal_Bool                    mbAlignDummy1;
-    sal_Bool                    mbDummy1;
-    sal_Bool                    mbDummy2;
-    sal_Bool                    mbDummy3;
-    sal_Bool                    mbDummy4;
-    Link                    maTaskResizeHdl;
-
-#ifdef _TASKBAR_CXX
-    SVT_DLLPRIVATE void                    ImplInitSettings();
-    SVT_DLLPRIVATE void                    ImplNewHeight( long nNewHeight );
-#endif
-
-public:
-                            TaskBar( Window* pParent, WinBits nWinStyle = WB_BORDER | WB_SIZEABLE );
-                            ~TaskBar();
-
-    virtual void            TaskResize();
-
-    virtual TaskButtonBar*  CreateButtonBar();
-    virtual TaskToolBox*    CreateTaskToolBox();
-    virtual TaskStatusBar*  CreateTaskStatusBar();
-
-    virtual void            MouseMove( const MouseEvent& rMEvt );
-    virtual void            MouseButtonDown( const MouseEvent& rMEvt );
-    virtual void            Tracking( const TrackingEvent& rMEvt );
-    virtual void            Paint( const Rectangle& rRect );
-    virtual void            Resize();
-    virtual void            StateChanged( StateChangedType nType );
-    virtual void            DataChanged( const DataChangedEvent& rDCEvt );
-
-    void                    Format();
-
-    sal_uInt16                  GetLines() const { return mnLines; }
-    sal_Bool                    IsAutoHideEnabled() const { return mbAutoHide; }
-
-    void                    SetStatusSize( long nNewSize )
-                                { mnStatusWidth=nNewSize; Resize(); }
-    long                    GetStatusSize() const { return mnStatusWidth; }
-
-    Size                    CalcWindowSizePixel() const;
-
-    TaskButtonBar*          GetButtonBar() const;
-    TaskToolBox*            GetTaskToolBox() const;
-    TaskStatusBar*          GetStatusBar() const;
-
-    void                    SetTaskResizeHdl( const Link& rLink ) { maTaskResizeHdl = rLink; }
-    const Link&             GetTaskResizeHdl() const { return maTaskResizeHdl; }
 };
 
 #endif  // _TASKBAR_HXX

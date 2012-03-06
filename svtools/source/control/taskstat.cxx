@@ -130,7 +130,6 @@ TaskStatusBar::TaskStatusBar( Window* pParent, WinBits nWinStyle ) :
     maTime( 0, 0, 0 )
 {
     mpFieldItemList = NULL;
-    mpNotifyTaskBar = NULL;
     mpNotify        = NULL;
     mnClockWidth    = 0;
     mnItemWidth     = 0;
