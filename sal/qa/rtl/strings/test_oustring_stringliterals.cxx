@@ -77,6 +77,13 @@ void test::oustring::StringLiterals::checkCtors()
     const char bad5[][ 6 ] = { "test", "test2" };
 //    CPPUNIT_ASSERT( validConversion( rtl::OUString( bad5[ 0 ] )));
     CPPUNIT_ASSERT( validConversion( rtl::OUString( bad5[ 1 ] )));
+
+// Check that contents are correct and equal to the case when RTL_CONSTASCII_USTRINGPARAM is used.
+// Also check that embedded \0 is included.
+    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" )) == rtl::OUString( "" ));
+    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\0" )) == rtl::OUString( "\0" ));
+    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ab" )) == rtl::OUString( "ab" ));
+    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "a\0b" )) == rtl::OUString( "a\0b" ));
 }
 
 void test::oustring::StringLiterals::testcall( const char str[] )

@@ -184,7 +184,7 @@ public:
     OUString( const char (&literal)[ N ] )
     {
         pData = 0;
-        rtl_uString_newFromAscii_WithLength( &pData, literal, N - 1 );
+        rtl_uString_newFromLiteral( &pData, literal, N - 1 );
         if (pData == 0) {
 #if defined EXCEPTIONS_OFF
             SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
@@ -338,7 +338,7 @@ public:
     template< int N >
     OUString& operator=( const char (&literal)[ N ] )
     {
-        rtl_uString_newFromAscii_WithLength( &pData, literal, N - 1 );
+        rtl_uString_newFromLiteral( &pData, literal, N - 1 );
         if (pData == 0) {
 #if defined EXCEPTIONS_OFF
             SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
