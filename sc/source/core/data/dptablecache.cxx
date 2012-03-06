@@ -712,14 +712,14 @@ namespace {
 
 typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> LabelSet;
 
-class InsertLabel : public std::unary_function<ScDPItemData, void>
+class InsertLabel : public std::unary_function<rtl::OUString, void>
 {
     LabelSet& mrNames;
 public:
     InsertLabel(LabelSet& rNames) : mrNames(rNames) {}
-    void operator() (const ScDPItemData& r)
+    void operator() (const rtl::OUString& r)
     {
-        mrNames.insert(r.GetString());
+        mrNames.insert(r);
     }
 };
 
@@ -1018,7 +1018,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
     return -1;
 }
 
-rtl::OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) const
+rtl::OUString ScDPCache::GetFormattedString(const ScDPItemData& rItem) const
 {
     if (rItem.GetType() == ScDPItemData::GroupValue)
     {
@@ -1027,19 +1027,26 @@ rtl::OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem
             aAttr.mnGroupType, aAttr.mnValue, mpDoc->GetFormatTable());
     }
 
-    if (!rItem.IsValue())
-        return rItem.GetString();
+    return rItem.GetString();
+}
 
-    sal_uLong nNumFormat = GetNumberFormat(nDim);
-    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-    if (pFormatter)
+rtl::OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) const
+{
+    if (rItem.IsValue())
     {
-        Color* pColor = NULL;
-        String aStr;
-        pFormatter->GetOutputString(rItem.GetValue(), nNumFormat, aStr, &pColor);
-        return aStr;
+        // Format value using the stored number format.
+        sal_uLong nNumFormat = GetNumberFormat(nDim);
+        SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+        if (pFormatter)
+        {
+            Color* pColor = NULL;
+            String aStr;
+            pFormatter->GetOutputString(rItem.GetValue(), nNumFormat, aStr, &pColor);
+            return aStr;
+        }
     }
-    return rtl::OUString::createFromAscii("fail again");
+
+    return GetFormattedString(rItem);
 }
 
 void ScDPCache::AppendGroupField()
@@ -1066,6 +1073,9 @@ void ScDPCache::ResetGroupItems(long nDim)
 
 SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
 {
+    if (nDim < 0)
+        return -1;
+
     long nSourceCount = static_cast<long>(maFields.size());
     if (nDim < nSourceCount)
     {

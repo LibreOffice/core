@@ -279,12 +279,14 @@ rtl::OUString ScDPItemData::GetString() const
             return *mpString;
         case Value:
             return rtl::OUString::valueOf(mfValue);
+        case GroupValue:
+            return rtl::OUString::createFromAscii("fail");
+        case Empty:
         default:
             ;
     }
 
-    // TODO: Generate appropriate string.
-    return rtl::OUString::createFromAscii("fail");
+    return rtl::OUString();
 }
 
 double ScDPItemData::GetValue() const

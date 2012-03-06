@@ -2627,12 +2627,12 @@ const OUString* ScDPMember::GetLayoutName() const
 
 rtl::OUString ScDPMember::GetNameStr() const
 {
-      return GetItemData().GetString();
+    return pSource->GetData()->GetFormattedString(GetItemData());
 }
 
 ::rtl::OUString SAL_CALL ScDPMember::getName() throw(uno::RuntimeException)
 {
-      return GetItemData().GetString();
+    return GetNameStr();
 }
 
 void SAL_CALL ScDPMember::setName( const ::rtl::OUString& /* rNewName */ ) throw(uno::RuntimeException)
@@ -2724,7 +2724,7 @@ const ScDPCache* ScDPSource::GetCache()
 
 const ScDPItemData& ScDPMember::GetItemData() const
 {
-    return *pSource->GetItemDataById( (SCCOL)nDim, mnDataId );//ms-cache-core
+    return *pSource->GetItemDataById(nDim, mnDataId);
 }
 
 const ScDPItemData* ScDPSource::GetItemDataById(long nDim, long nId)

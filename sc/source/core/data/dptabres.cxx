@@ -1439,7 +1439,7 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
             aName = pResultData->GetSource()->GetData()->GetFormattedString(nDim, aItemData);
         }
         else
-            aName = aItemData.GetString();
+            aName = pResultData->GetSource()->GetData()->GetFormattedString(aItemData);
 
         ScDPItemData::Type eType = aItemData.GetType();
         bIsNumeric = eType == ScDPItemData::Value || ScDPItemData::GroupValue;

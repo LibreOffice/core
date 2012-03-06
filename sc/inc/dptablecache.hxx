@@ -130,6 +130,7 @@ public:
 
     SCROW GetIdByItemData(long nDim, const rtl::OUString& sItemData) const;
     SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
+    rtl::OUString GetFormattedString(const ScDPItemData& rItem) const;
     rtl::OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
     void AppendGroupField();
     void ResetGroupItems(long nDim);
