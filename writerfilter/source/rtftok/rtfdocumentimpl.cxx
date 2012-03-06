@@ -2883,11 +2883,6 @@ int RTFDocumentImpl::popState()
     RTFSprms aSprms;
     RTFSprms aAttributes;
     OUStringBuffer aDestinationText;
-    bool bListEntryEnd = false;
-    bool bListLevelEnd = false;
-    bool bListOverrideEntryEnd = false;
-    bool bLevelTextEnd = false;
-    bool bLevelNumbersEnd = false;
     RTFShape aShape;
     RTFPicture aPicture;
     bool bPopShapeProperties = false;
@@ -2916,26 +2911,10 @@ int RTFDocumentImpl::popState()
         writerfilter::Reference<Table>::Pointer_t const pTable(new RTFReferenceTable(aListTableEntries));
         Mapper().table(NS_rtf::LN_LISTTABLE, pTable);
     }
-    else if (m_aStates.top().nDestinationState == DESTINATION_LISTENTRY)
+    else if (aState.nDestinationState == DESTINATION_LISTENTRY)
     {
-        aAttributes = m_aStates.top().aTableAttributes;
-        aSprms = m_aStates.top().aTableSprms;
-        for (RTFSprms::Iterator_t i = m_aStates.top().aListLevelEntries->begin();
-                i != m_aStates.top().aListLevelEntries->end(); ++i)
-            aSprms->push_back(make_pair(i->first, i->second));
-        bListEntryEnd = true;
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_LISTLEVEL)
-    {
-        aAttributes = m_aStates.top().aTableAttributes;
-        aSprms = m_aStates.top().aTableSprms;
-        bListLevelEnd = true;
-    }
-    else if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
-    {
-        aAttributes = m_aStates.top().aTableAttributes;
-        aSprms = m_aStates.top().aTableSprms;
-        bListOverrideEntryEnd = true;
+        for (RTFSprms::Iterator_t i = aState.aListLevelEntries->begin(); i != aState.aListLevelEntries->end(); ++i)
+            aState.aTableSprms->push_back(make_pair(i->first, i->second));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FIELDINSTRUCTION)
     {
@@ -3002,14 +2981,11 @@ int RTFDocumentImpl::popState()
         else
             aValue = aStr;
         RTFValue::Pointer_t pValue(new RTFValue(aValue, true));
-        m_aStates.top().aTableAttributes->push_back(make_pair(NS_ooxml::LN_CT_LevelText_val, pValue));
-
-        aAttributes = m_aStates.top().aTableAttributes;
-        bLevelTextEnd = true;
+        aState.aTableAttributes->push_back(make_pair(NS_ooxml::LN_CT_LevelText_val, pValue));
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_LEVELNUMBERS)
     {
-        RTFSprms& rAttributes = m_aStates.top().aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText)->getAttributes();
+        RTFSprms& rAttributes = aState.aTableSprms.find(NS_ooxml::LN_CT_Lvl_lvlText)->getAttributes();
         RTFValue::Pointer_t pValue = rAttributes.find(NS_ooxml::LN_CT_LevelText_val);
         OUString aOrig = pValue->getString();
 
@@ -3028,8 +3004,6 @@ int RTFDocumentImpl::popState()
                 aBuf.append(aOrig.copy(i, 1));
         }
         pValue->setString(aBuf.makeStringAndClear());
-        aSprms = m_aStates.top().aTableSprms;
-        bLevelNumbersEnd = true;
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYNAME
             || m_aStates.top().nDestinationState == DESTINATION_SHAPEPROPERTYVALUE
@@ -3282,32 +3256,32 @@ int RTFDocumentImpl::popState()
     m_nGroup--;
 
     // list table
-    if (bListEntryEnd)
+    if (aState.nDestinationState == DESTINATION_LISTENTRY)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+        RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
         m_aListTableSprms->push_back(make_pair(NS_ooxml::LN_CT_Numbering_abstractNum, pValue));
     }
-    else if (bListLevelEnd)
+    else if (aState.nDestinationState == DESTINATION_LISTLEVEL)
     {
         RTFValue::Pointer_t pInnerValue(new RTFValue(m_aStates.top().nListLevelNum++));
-        aAttributes->push_back(make_pair(NS_ooxml::LN_CT_Lvl_ilvl, pInnerValue));
+        aState.aTableAttributes->push_back(make_pair(NS_ooxml::LN_CT_Lvl_ilvl, pInnerValue));
 
-        RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+        RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
         m_aStates.top().aListLevelEntries->push_back(make_pair(NS_ooxml::LN_CT_AbstractNum_lvl, pValue));
     }
     // list override table
-    else if (bListOverrideEntryEnd)
+    else if (aState.nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
+        RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes, aState.aTableSprms));
         m_aListTableSprms->push_back(make_pair(NS_ooxml::LN_CT_Numbering_num, pValue));
     }
-    else if (bLevelTextEnd)
+    else if (aState.nDestinationState == DESTINATION_LEVELTEXT)
     {
-        RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
+        RTFValue::Pointer_t pValue(new RTFValue(aState.aTableAttributes));
         m_aStates.top().aTableSprms->push_back(make_pair(NS_ooxml::LN_CT_Lvl_lvlText, pValue));
     }
-    else if (bLevelNumbersEnd)
-        m_aStates.top().aTableSprms = aSprms;
+    else if (aState.nDestinationState == DESTINATION_LEVELNUMBERS)
+        m_aStates.top().aTableSprms = aState.aTableSprms;
     else if (bPopShapeProperties)
     {
         m_aStates.top().aShape = aShape;
