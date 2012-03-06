@@ -1086,6 +1086,24 @@ SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
     return -1;
 }
 
+namespace {
+
+struct ClearGroupItems : std::unary_function<ScDPCache::Field, void>
+{
+    void operator() (ScDPCache::Field& r) const
+    {
+        r.mpGroup.reset();
+    }
+};
+
+}
+
+void ScDPCache::ClearGroupFields()
+{
+    maGroupFields.clear();
+    std::for_each(maFields.begin(), maFields.end(), ClearGroupItems());
+}
+
 SCROW ScDPCache::GetAdditionalItemID(const ScDPItemData&) const
 {
     fprintf(stdout, "ScDPCache::GetAdditionalItemID:   FIXME\n");

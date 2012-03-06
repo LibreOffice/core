@@ -60,16 +60,6 @@ public:
     typedef std::vector<rtl::OUString> LabelsType;
     typedef std::vector<SCROW> IndexArrayType;
 
-private:
-
-    ScDocument* mpDoc;
-    long mnColumnCount;
-
-    /**
-     * All pivot table objects that references this cache.
-     */
-    mutable ObjectSetType maRefObjects;
-
     struct GroupItems : boost::noncopyable
     {
         DataListType maItems;
@@ -107,6 +97,16 @@ private:
         Field();
     };
 
+private:
+
+    ScDocument* mpDoc;
+    long mnColumnCount;
+
+    /**
+     * All pivot table objects that references this cache.
+     */
+    mutable ObjectSetType maRefObjects;
+
     struct GroupField : boost::noncopyable
     {
         DataListType maItems; /// Unique values in the field.
@@ -134,6 +134,7 @@ public:
     void AppendGroupField();
     void ResetGroupItems(long nDim);
     SCROW SetGroupItem(long nDim, const ScDPItemData& rData);
+    void ClearGroupFields();
 
     SCROW GetAdditionalItemID( const ScDPItemData& rData ) const;
 
