@@ -48,10 +48,10 @@ echo "*"
 echo "********************************************************************"
 echo ""
 
-dnl ===================================================================
-dnl checks build and host OSes
-dnl do this before argument processing to allow for platform dependent defaults
-dnl ===================================================================
+# ===================================================================
+# checks build and host OSes
+# do this before argument processing to allow for platform dependent defaults
+# ===================================================================
 AC_CANONICAL_HOST
 
 if test "$cross_compiling" = "yes"; then
