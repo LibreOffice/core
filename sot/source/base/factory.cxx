@@ -57,7 +57,15 @@ SotData_Impl::SotData_Impl()
 
 SotData_Impl::~SotData_Impl()
 {
-    delete pDataFlavorList;
+    if (pDataFlavorList)
+    {
+        for( tDataFlavorList::iterator aI = pDataFlavorList->begin(),
+             aEnd = pDataFlavorList->end(); aI != aEnd; ++aI)
+        {
+            delete *aI;
+        }
+        delete pDataFlavorList;
+    }
     delete pFactoryList;
 }
 
