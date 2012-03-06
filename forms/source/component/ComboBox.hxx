@@ -73,8 +73,8 @@ class OComboBoxModel
 
     ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatter> m_xFormatter;
 
-    ::com::sun::star::form::ListSourceType  m_eListSourceType;      // type der list source
-    sal_Bool                                m_bEmptyIsNull;         // LeerString wird als NULL interpretiert
+    ::com::sun::star::form::ListSourceType  m_eListSourceType;      // ListSource's type
+    sal_Bool                                m_bEmptyIsNull;         // Empty string is interpreted as NULL
 
     ::std::auto_ptr< ::dbtools::FormattedColumnValue >
                                             m_pValueFormatter;

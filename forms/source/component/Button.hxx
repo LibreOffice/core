@@ -135,7 +135,7 @@ private:
 
 protected:
 
-    // UNO Anbindung
+    // UNO binding
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Type> _getTypes();
 
 public:
@@ -146,7 +146,7 @@ public:
     IMPLEMENTATION_NAME(OButtonControl);
     virtual StringSequence SAL_CALL getSupportedServiceNames() throw();
 
-    // UNO Anbindung
+    // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OButtonControl, OClickableImageBaseControl);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation(const ::com::sun::star::uno::Type& _rType) throw(::com::sun::star::uno::RuntimeException);
 

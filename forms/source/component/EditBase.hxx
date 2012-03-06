@@ -66,7 +66,7 @@ class OEditBaseModel :  public OBoundControlModel
     sal_Int16                   m_nLastReadVersion;
 
 protected:
-// [properties]         fuer all Editierfelder
+// [properties]         for all EditingFields
     ::com::sun::star::uno::Any  m_aDefault;
     ::rtl::OUString             m_aDefaultText;             // default value
     sal_Bool                    m_bEmptyIsNull : 1;         // empty string will be interepreted as NULL when committing
