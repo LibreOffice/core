@@ -164,13 +164,13 @@ class SwColumnPage : public SfxTabPage
     DECL_LINK( GapModify, PercentField * );
     DECL_LINK( EdModify, PercentField * );
     DECL_LINK( AutoWidthHdl, CheckBox * );
-    DECL_LINK(Timeout, void *);
     DECL_LINK( SetDefaultsHdl, ValueSet * );
 
     DECL_LINK(Up, void *);
     DECL_LINK(Down, void *);
-    void            Apply(Button *);
     DECL_LINK( UpdateColMgr, void* );
+    void Apply(Button *);
+    void Timeout();
 
     void            Update();
     void            UpdateCols();

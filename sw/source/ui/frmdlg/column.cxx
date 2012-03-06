@@ -1056,7 +1056,7 @@ IMPL_LINK( SwColumnPage, GapModify, PercentField *, pFld )
 IMPL_LINK( SwColumnPage, EdModify, PercentField *, pField )
 {
     pModifiedField = pField;
-    Timeout(0);
+    Timeout();
     return 0;
 }
 
@@ -1115,7 +1115,7 @@ IMPL_LINK_NOARG(SwColumnPage, Down)
                 handler; triggered by an alteration of the column width
                 or the column gap.
 ------------------------------------------------------------------------*/
-IMPL_LINK_NOARG(SwColumnPage, Timeout)
+void SwColumnPage::Timeout()
 {
     DBG_PROFSTART(columnhdl) ;
     if(pModifiedField)
@@ -1156,7 +1156,6 @@ IMPL_LINK_NOARG(SwColumnPage, Timeout)
     }
     Update();
     DBG_PROFSTOP(columnhdl) ;
-    return 0;
 }
 
 /*------------------------------------------------------------------------
@@ -1312,7 +1311,7 @@ IMPL_LINK( SwColumnPage, SetDefaultsHdl, ValueSet *, pVS )
             pModifiedField = &aEd1;
         }
         bLockUpdate = sal_False;
-        Timeout(0);
+        Timeout();
 
     }
     return 0;
