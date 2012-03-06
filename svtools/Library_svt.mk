@@ -128,9 +128,6 @@ $(eval $(call gb_Library_add_exception_objects,svt,\
     svtools/source/control/stdctrl \
     svtools/source/control/stdmenu \
     svtools/source/control/tabbar \
-    svtools/source/control/taskbox \
-    svtools/source/control/taskmisc \
-    svtools/source/control/taskstat \
     svtools/source/control/toolbarmenu \
     svtools/source/control/toolbarmenuacc \
     svtools/source/control/urlcontrol \

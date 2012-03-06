@@ -38,7 +38,6 @@
 #include <vcl/wrkwin.hxx>
 #include <vcl/mnemonic.hxx>
 #include <tools/shl.hxx>
-#include <svtools/taskbar.hxx>
 #include <sfx2/bindings.hxx>
 #include <sfx2/dispatch.hxx>
 
