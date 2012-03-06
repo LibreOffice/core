@@ -520,7 +520,7 @@ void ScGridWindow::DPLaunchFieldPopupMenu(
         }
     }
 
-    sal_Bool bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL( pViewData->GetTabNo() );
+    bool bLayoutRTL = pViewData->GetDocument()->IsLayoutRTL(pViewData->GetTabNo());
 
     Rectangle aCellRect(rScrPos, rScrSize);
     const Size& rPopupSize = mpDPFieldPopup->getWindowSize();
