@@ -74,7 +74,6 @@ LibreOffice
             GLOBALFILEGID gid_File_Lib_Vcl
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
-            SETSTATICPATH 1
             OOODOWNLOADNAME 1
             XPDINSTALLER 0
             BETAUPGRADECODE
@@ -137,7 +136,6 @@ LibreOffice_Dev
             GLOBALFILEGID gid_File_Lib_Vcl
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
-            SETSTATICPATH 1
             OOODOWNLOADNAME 1
             XPDINSTALLER 0
             BETAUPGRADECODE
@@ -181,7 +179,6 @@ URE
             LONG_PRODUCTEXTENSION
             SHORT_PRODUCTEXTENSION alpha0
             LICENSENAME LGPL
-            SETSTATICPATH 1
             NOVERSIONINDIRNAME 1
             PCPFILENAME ure.pcp
             GLOBALFILEGID gid_File_Dl_Cppu
@@ -415,7 +412,6 @@ OxygenOffice
             GLOBALFILEGID gid_File_Lib_Vcl
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
-            SETSTATICPATH 1
             OOODOWNLOADNAME 1
             XPDINSTALLER 0
             BETAUPGRADECODE
