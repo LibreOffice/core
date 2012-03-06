@@ -2263,6 +2263,11 @@ void SwBaseShell::ExecBckCol(SfxRequest& rReq)
                     aBrushItem.SetColor( rNewColor );
                     GetView().GetViewFrame()->GetBindings().SetState(rNewColorItem);
                 }
+                else
+                {
+                    aBrushItem.SetColor( COL_TRANSPARENT );
+                    rReq.AppendItem( SvxColorItem( Color( COL_TRANSPARENT ), nSlot ) );
+                }
             }
             break;
 
