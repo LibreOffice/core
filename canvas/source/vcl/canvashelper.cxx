@@ -514,6 +514,7 @@ namespace vclcanvas
                 }
                 else
                 {
+                    mp2ndOutDev->getOutDev().SetFillColor( COL_BLACK );
                     mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
                 }
             }
