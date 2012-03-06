@@ -570,7 +570,6 @@ void ScDPDateGroupHelper::SetGroupDim(long nDim)
 void ScDPDateGroupHelper::FillColumnEntries(
     SCCOL nSourceDim, ScDPCache* pCache, std::vector<SCROW>& rEntries, const std::vector<SCROW>& rOriginal) const
 {
-    stack_printer __stack_printer__("ScDPDateGroupHelper::FillColumnEntries");
     // auto min/max is only used for "Years" part, but the loop is always needed
     double fSourceMin = 0.0;
     double fSourceMax = 0.0;
@@ -877,109 +876,109 @@ void ScDPNumGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, long 
 const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
     SCCOL nSourceDim, const ScDPCache* pCache, const std::vector<SCROW>& rOriginal) const
 {
-    if ( maMemberEntries.empty() )
+    if (!maMemberEntries.empty())
+        return maMemberEntries;
+
+    SvNumberFormatter* pFormatter = pCache->GetDoc()->GetFormatTable();
+
+    if ( pDateHelper )
+        pDateHelper->FillColumnEntries(
+            nSourceDim, const_cast<ScDPCache*>(pCache), maMemberEntries, rOriginal);
+    else
     {
-        SvNumberFormatter* pFormatter = pCache->GetDoc()->GetFormatTable();
+        // Copy textual entries.
+        // Also look through the source entries for non-integer numbers, minimum and maximum.
+        // GetNumEntries (GetColumnEntries) must be called before accessing the groups
+        // (this in ensured by calling ScDPLevel::GetMembersObject for all column/row/page
+        // dimensions before iterating over the values).
 
-        if ( pDateHelper )
-            pDateHelper->FillColumnEntries(
-                nSourceDim, const_cast<ScDPCache*>(pCache), maMemberEntries, rOriginal);
-        else
+        cDecSeparator = ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0);
+
+        // non-integer GroupInfo values count, too
+        bHasNonInteger = ( !aGroupInfo.mbAutoStart && !IsInteger( aGroupInfo.mfStart ) ) ||
+                         ( !aGroupInfo.mbAutoEnd   && !IsInteger( aGroupInfo.mfEnd   ) ) ||
+                         !IsInteger( aGroupInfo.mfStep );
+        double fSourceMin = 0.0;
+        double fSourceMax = 0.0;
+        bool bFirst = true;
+
+        size_t  nOriginalCount = rOriginal.size();
+        for (size_t  nOriginalPos=0; nOriginalPos<nOriginalCount; nOriginalPos++)
         {
-            // Copy textual entries.
-            // Also look through the source entries for non-integer numbers, minimum and maximum.
-            // GetNumEntries (GetColumnEntries) must be called before accessing the groups
-            // (this in ensured by calling ScDPLevel::GetMembersObject for all column/row/page
-            // dimensions before iterating over the values).
+           const  ScDPItemData* pItemData = pCache->GetItemDataById( nSourceDim , rOriginal[nOriginalPos] );
 
-            cDecSeparator = ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0);
-
-            // non-integer GroupInfo values count, too
-            bHasNonInteger = ( !aGroupInfo.mbAutoStart && !IsInteger( aGroupInfo.mfStart ) ) ||
-                             ( !aGroupInfo.mbAutoEnd   && !IsInteger( aGroupInfo.mfEnd   ) ) ||
-                             !IsInteger( aGroupInfo.mfStep );
-            double fSourceMin = 0.0;
-            double fSourceMax = 0.0;
-            bool bFirst = true;
-
-            size_t  nOriginalCount = rOriginal.size();
-            for (size_t  nOriginalPos=0; nOriginalPos<nOriginalCount; nOriginalPos++)
-            {
-               const  ScDPItemData* pItemData = pCache->GetItemDataById( nSourceDim , rOriginal[nOriginalPos] );
-
-               if ( pItemData && pItemData ->HasStringData() )
+           if ( pItemData && pItemData ->HasStringData() )
+           {
+               lcl_Insert( nSourceDim, pCache, maMemberEntries,  rOriginal[nOriginalPos] );
+           }
+           else
+           {
+               double fSourceValue = pItemData->GetValue();
+               if ( bFirst )
                {
-                   lcl_Insert( nSourceDim, pCache, maMemberEntries,  rOriginal[nOriginalPos] );
+                   fSourceMin = fSourceMax = fSourceValue;
+                   bFirst = false;
                }
                else
                {
-                   double fSourceValue = pItemData->GetValue();
-                   if ( bFirst )
-                   {
-                       fSourceMin = fSourceMax = fSourceValue;
-                       bFirst = false;
-                   }
-                   else
-                   {
-                       if ( fSourceValue < fSourceMin )
-                           fSourceMin = fSourceValue;
-                       if ( fSourceValue > fSourceMax )
-                           fSourceMax = fSourceValue;
-                   }
-                   if ( !bHasNonInteger && !IsInteger( fSourceValue ) )
-                   {
-                       // if any non-integer numbers are involved, the group labels are
-                       // shown including their upper limit
-                       bHasNonInteger = true;
-                   }
+                   if ( fSourceValue < fSourceMin )
+                       fSourceMin = fSourceValue;
+                   if ( fSourceValue > fSourceMax )
+                       fSourceMax = fSourceValue;
                }
-            }
-
-            if ( aGroupInfo.mbDateValues )
-            {
-                // special handling for dates: always integer, round down limits
-                bHasNonInteger = false;
-                fSourceMin = rtl::math::approxFloor( fSourceMin );
-                fSourceMax = rtl::math::approxFloor( fSourceMax ) + 1;
-            }
-
-            if ( aGroupInfo.mbAutoStart )
-                const_cast<ScDPNumGroupDimension*>(this)->aGroupInfo.mfStart = fSourceMin;
-            if ( aGroupInfo.mbAutoEnd )
-                const_cast<ScDPNumGroupDimension*>(this)->aGroupInfo.mfEnd = fSourceMax;
-
-            //! limit number of entries?
-
-            long nLoopCount = 0;
-            double fLoop = aGroupInfo.mfStart;
-
-            // Use "less than" instead of "less or equal" for the loop - don't create a group
-            // that consists only of the end value. Instead, the end value is then included
-            // in the last group (last group is bigger than the others).
-            // The first group has to be created nonetheless. GetNumGroupForValue has corresponding logic.
-
-            bool bFirstGroup = true;
-            while ( bFirstGroup || ( fLoop < aGroupInfo.mfEnd && !rtl::math::approxEqual( fLoop, aGroupInfo.mfEnd ) ) )
-            {
-                String aName = lcl_GetNumGroupName( fLoop, aGroupInfo, bHasNonInteger, cDecSeparator, pFormatter );
-                // create a numerical entry to ensure proper sorting
-                // (in FillMemberResults this needs special handling)
-                lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aName, fLoop );
-                ++nLoopCount;
-                fLoop = aGroupInfo.mfStart + nLoopCount * aGroupInfo.mfStep;
-                bFirstGroup = false;
-
-                // ScDPItemData values are compared with approxEqual
-            }
-
-            String aFirstName = lcl_GetSpecialNumGroupName( aGroupInfo.mfStart, true, cDecSeparator, aGroupInfo.mbDateValues, pFormatter );
-            lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aFirstName,  aGroupInfo.mfStart - aGroupInfo.mfStep );
-
-            String aLastName = lcl_GetSpecialNumGroupName( aGroupInfo.mfEnd, false, cDecSeparator, aGroupInfo.mbDateValues, pFormatter );
-            lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aLastName,  aGroupInfo.mfEnd + aGroupInfo.mfStep );
-
-            fprintf(stdout, "ScDPNumGroupDimension::GetNumEntries:   FIXME\n");
+               if ( !bHasNonInteger && !IsInteger( fSourceValue ) )
+               {
+                   // if any non-integer numbers are involved, the group labels are
+                   // shown including their upper limit
+                   bHasNonInteger = true;
+               }
+           }
         }
+
+        if ( aGroupInfo.mbDateValues )
+        {
+            // special handling for dates: always integer, round down limits
+            bHasNonInteger = false;
+            fSourceMin = rtl::math::approxFloor( fSourceMin );
+            fSourceMax = rtl::math::approxFloor( fSourceMax ) + 1;
+        }
+
+        if ( aGroupInfo.mbAutoStart )
+            const_cast<ScDPNumGroupDimension*>(this)->aGroupInfo.mfStart = fSourceMin;
+        if ( aGroupInfo.mbAutoEnd )
+            const_cast<ScDPNumGroupDimension*>(this)->aGroupInfo.mfEnd = fSourceMax;
+
+        //! limit number of entries?
+
+        long nLoopCount = 0;
+        double fLoop = aGroupInfo.mfStart;
+
+        // Use "less than" instead of "less or equal" for the loop - don't create a group
+        // that consists only of the end value. Instead, the end value is then included
+        // in the last group (last group is bigger than the others).
+        // The first group has to be created nonetheless. GetNumGroupForValue has corresponding logic.
+
+        bool bFirstGroup = true;
+        while ( bFirstGroup || ( fLoop < aGroupInfo.mfEnd && !rtl::math::approxEqual( fLoop, aGroupInfo.mfEnd ) ) )
+        {
+            String aName = lcl_GetNumGroupName( fLoop, aGroupInfo, bHasNonInteger, cDecSeparator, pFormatter );
+            // create a numerical entry to ensure proper sorting
+            // (in FillMemberResults this needs special handling)
+            lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aName, fLoop );
+            ++nLoopCount;
+            fLoop = aGroupInfo.mfStart + nLoopCount * aGroupInfo.mfStep;
+            bFirstGroup = false;
+
+            // ScDPItemData values are compared with approxEqual
+        }
+
+        String aFirstName = lcl_GetSpecialNumGroupName( aGroupInfo.mfStart, true, cDecSeparator, aGroupInfo.mbDateValues, pFormatter );
+        lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aFirstName,  aGroupInfo.mfStart - aGroupInfo.mfStep );
+
+        String aLastName = lcl_GetSpecialNumGroupName( aGroupInfo.mfEnd, false, cDecSeparator, aGroupInfo.mbDateValues, pFormatter );
+        lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aLastName,  aGroupInfo.mfEnd + aGroupInfo.mfStep );
+
+        fprintf(stdout, "ScDPNumGroupDimension::GetNumEntries:   FIXME\n");
     }
     return maMemberEntries;
 }
