@@ -758,6 +758,7 @@ public:
     bool IsNamedItem(SCROW nIndex) const;
 
     SC_DLLPUBLIC const ::rtl::OUString* GetLayoutName() const;
+    long GetDim() const;
 
     sal_Int32               Compare( const ScDPMember& rOther ) const;      // visible order
 

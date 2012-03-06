@@ -106,6 +106,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/dpdimsave \
 	sc/source/core/data/dpgroup \
 	sc/source/core/data/dpitemdata \
+	sc/source/core/data/dpnumgroupinfo \
 	sc/source/core/data/dpobject \
 	sc/source/core/data/dpoutput \
 	sc/source/core/data/dpoutputgeometry \

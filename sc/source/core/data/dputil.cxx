@@ -28,6 +28,7 @@
 
 #include "dputil.hxx"
 #include "global.hxx"
+#include "dpitemdata.hxx"
 
 #include "comphelper/string.hxx"
 #include "unotools/localedatawrapper.hxx"
@@ -43,12 +44,28 @@ namespace {
 
 const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
 
-String getTwoDigitString( sal_Int32 nValue )
+rtl::OUString getTwoDigitString(sal_Int32 nValue)
 {
     String aRet = String::CreateFromInt32( nValue );
     if ( aRet.Len() < 2 )
         aRet.Insert( (sal_Unicode)'0', 0 );
     return aRet;
+}
+
+void appendDateStr(rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter)
+{
+    sal_uLong nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
+    rtl::OUString aString;
+    pFormatter->GetInputLineString(fValue, nFormat, aString);
+    rBuffer.append(aString);
+}
+
+rtl::OUString getSpecialDateName(double fValue, bool bFirst, SvNumberFormatter* pFormatter)
+{
+    rtl::OUStringBuffer aBuffer;
+    aBuffer.append(sal_Unicode(bFirst ? '<' : '>'));
+    appendDateStr(aBuffer, fValue, pFormatter);
+    return aBuffer.makeStringAndClear();
 }
 
 }
@@ -80,8 +97,14 @@ rtl::OUString ScDPUtil::createDuplicateDimensionName(const rtl::OUString& rOrigi
 }
 
 rtl::OUString ScDPUtil::getDateGroupName(
-        sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter)
+        sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter,
+        double fStart, double fEnd)
 {
+    if (nValue == ScDPItemData::DateFirst)
+        return getSpecialDateName(fStart, true, pFormatter);
+    if (nValue == ScDPItemData::DateLast)
+        return getSpecialDateName(fEnd, false, pFormatter);
+
     switch ( nDatePart )
     {
         case sheet::DataPilotFieldGroupBy::YEARS:
@@ -122,7 +145,7 @@ rtl::OUString ScDPUtil::getDateGroupName(
             OSL_FAIL("invalid date part");
     }
 
-    return rtl::OUString();
+    return rtl::OUString::createFromAscii("FIXME: unhandled value");
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

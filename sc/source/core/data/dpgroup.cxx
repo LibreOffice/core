@@ -110,14 +110,6 @@ private:
 
 const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calculations
 
-// part values for the extra "<" and ">" entries (same for all parts)
-const sal_Int32 SC_DP_DATE_FIRST = -1;
-const sal_Int32 SC_DP_DATE_LAST = 10000;
-
-ScDPNumGroupInfo::ScDPNumGroupInfo() :
-    mbEnable(false), mbDateValues(false), mbAutoStart(false), mbAutoEnd(false),
-    mfStart(0.0), mfEnd(0.0), mfStep(0.0) {}
-
 namespace {
 
 sal_Bool lcl_Search( SCCOL nSourceDim, const ScDPCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
@@ -355,10 +347,10 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
     // is included, while an end date with a time value is not.)
 
     if ( rCellData.GetValue() < mpNumInfo->mfStart && !approxEqual(rCellData.GetValue(), mpNumInfo->mfStart) )
-        return static_cast<sal_Int32>(mfMatchValue) == SC_DP_DATE_FIRST;
+        return static_cast<sal_Int32>(mfMatchValue) == ScDPItemData::DateFirst;
 
     if ( rCellData.GetValue() > mpNumInfo->mfEnd && !approxEqual(rCellData.GetValue(), mpNumInfo->mfEnd) )
-        return static_cast<sal_Int32>(mfMatchValue) == SC_DP_DATE_LAST;
+        return static_cast<sal_Int32>(mfMatchValue) == ScDPItemData::DateLast;
 
     if (mnDatePart == DataPilotFieldGroupBy::HOURS || mnDatePart == DataPilotFieldGroupBy::MINUTES ||
         mnDatePart == DataPilotFieldGroupBy::SECONDS)
@@ -459,9 +451,9 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
     if ( pNumInfo )
     {
         if ( fValue < pNumInfo->mfStart && !rtl::math::approxEqual( fValue, pNumInfo->mfStart ) )
-            return SC_DP_DATE_FIRST;
+            return ScDPItemData::DateFirst;
         if ( fValue > pNumInfo->mfEnd && !rtl::math::approxEqual( fValue, pNumInfo->mfEnd ) )
-            return SC_DP_DATE_LAST;
+            return ScDPItemData::DateLast;
     }
 
     sal_Int32 nResult = 0;
@@ -522,14 +514,6 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
     return nResult;
 }
 
-String lcl_GetSpecialDateName( double fValue, bool bFirst, SvNumberFormatter* pFormatter )
-{
-    rtl::OUStringBuffer aBuffer;
-    aBuffer.append((sal_Unicode)( bFirst ? '<' : '>' ));
-    lcl_AppendDateStr( aBuffer, fValue, pFormatter );
-    return aBuffer.makeStringAndClear();
-}
-
 bool isDateInGroup(const ScDPItemData& rGroupItem, const ScDPItemData& rChildItem)
 {
     stack_printer __stack_printer__("::isDateInGroup");
@@ -544,8 +528,8 @@ bool isDateInGroup(const ScDPItemData& rGroupItem, const ScDPItemData& rChildIte
     fprintf(stdout, "isDateInGroup:   group part = %d  group values = %d  child part = %d  child value = %d\n",
             nGroupPart, nGroupValue, nChildPart, nChildValue);
 
-    if (nGroupValue == SC_DP_DATE_FIRST || nGroupValue == SC_DP_DATE_LAST ||
-        nChildValue == SC_DP_DATE_FIRST || nChildValue == SC_DP_DATE_LAST)
+    if (nGroupValue == ScDPItemData::DateFirst || nGroupValue == ScDPItemData::DateLast ||
+        nChildValue == ScDPItemData::DateFirst || nChildValue == ScDPItemData::DateLast)
     {
         // first/last entry matches only itself
         return nGroupValue == nChildValue;
@@ -652,30 +636,21 @@ void ScDPDateGroupHelper::FillColumnEntries(
             OSL_FAIL("invalid date part");
     }
 
-    pCache->ResetGroupItems(mnGroupDim);
+    pCache->ResetGroupItems(mnGroupDim, aNumInfo);
 
     fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   source dim = %d  group dim = %d\n",
             nSourceDim, mnGroupDim);
     for ( sal_Int32 nValue = nStart; nValue <= nEnd; nValue++ )
     {
-        rtl::OUString aName = ScDPUtil::getDateGroupName( nDatePart, nValue, pFormatter );
-        fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   name = '%s'\n",
-                rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
         SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, nValue));
         rEntries.push_back(nId);
     }
 
     // add first/last entry (min/max)
-    rtl::OUString aFirstName = lcl_GetSpecialDateName( aNumInfo.mfStart, true, pFormatter );
-    fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   first = '%s'\n",
-            rtl::OUStringToOString(aFirstName, RTL_TEXTENCODING_UTF8).getStr());
-    SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, SC_DP_DATE_LAST));
+    SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, ScDPItemData::DateFirst));
     rEntries.push_back(nId);
 
-    rtl::OUString aLastName = lcl_GetSpecialDateName( aNumInfo.mfEnd, false, pFormatter );
-    fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   last = '%s'\n",
-            rtl::OUStringToOString(aLastName, RTL_TEXTENCODING_UTF8).getStr());
-    nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, SC_DP_DATE_LAST));
+    nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, ScDPItemData::DateLast));
     rEntries.push_back(nId);
 
     std::vector<SCROW>::const_iterator it = rEntries.begin(), itEnd = rEntries.end();
@@ -1396,10 +1371,12 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
             if ( pData ->IsValue() )
             {
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
+                const ScDPNumGroupInfo& rNumInfo = pDateHelper->GetNumInfo();
                 sal_Int32 nPartValue = lcl_GetDatePartValue(
                     pData->GetValue(), pDateHelper->GetDatePart(), pFormatter,
-                    &pDateHelper->GetNumInfo() );
-                rtl::OUString aName = ScDPUtil::getDateGroupName(pDateHelper->GetDatePart(), nPartValue, pFormatter);
+                    &rNumInfo);
+                rtl::OUString aName = ScDPUtil::getDateGroupName(
+                    pDateHelper->GetDatePart(), nPartValue, pFormatter, rNumInfo.mfStart, rNumInfo.mfEnd);
                 fprintf(stdout, "ScDPGroupTableData::FillGroupValues:   column = %d  source dim = %d  group by = %d  value = %d  name = '%s'\n",
                         nColumn, nSourceDim,
                         pDateHelper->GetDatePart(), nPartValue,

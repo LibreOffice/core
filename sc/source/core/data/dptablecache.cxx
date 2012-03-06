@@ -38,6 +38,7 @@
 #include "docoptio.hxx"
 #include "dpitemdata.hxx"
 #include "dputil.hxx"
+#include "dpnumgroupinfo.hxx"
 
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
@@ -220,9 +221,11 @@ ScDPItemData* lcl_GetItemValue(
 
 }
 
-// -----------------------------------------------------------------------
-//class ScDPTableDataCache
-//To cache the pivot table data source
+ScDPCache::GroupItems::GroupItems() :
+    mfStart(0.0), mfEnd(0.0) {}
+
+ScDPCache::GroupItems::GroupItems(const ScDPNumGroupInfo& rInfo) :
+    mfStart(rInfo.mfStart), mfEnd(rInfo.mfEnd) {}
 
 bool ScDPCache::operator== ( const ScDPCache& r ) const
 {
@@ -694,6 +697,21 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
     return true;
 }
 
+const ScDPCache::GroupItems* ScDPCache::GetGroupItems(long nDim) const
+{
+    if (nDim < 0)
+        return NULL;
+
+    long nSourceCount = static_cast<long>(maFields.size());
+    if (nDim < nSourceCount)
+        return maFields[nDim].mpGroup.get();
+
+    nDim -= nSourceCount;
+    if (nDim < static_cast<long>(maGroupFields.size()))
+        return &maGroupFields[nDim];
+
+    return NULL;
+}
 
 rtl::OUString ScDPCache::GetDimensionName( sal_uInt16 nColumn ) const
 {
@@ -1018,21 +1036,13 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
     return -1;
 }
 
-rtl::OUString ScDPCache::GetFormattedString(const ScDPItemData& rItem) const
-{
-    if (rItem.GetType() == ScDPItemData::GroupValue)
-    {
-        ScDPItemData::GroupValueAttr aAttr = rItem.GetGroupValue();
-        return ScDPUtil::getDateGroupName(
-            aAttr.mnGroupType, aAttr.mnValue, mpDoc->GetFormatTable());
-    }
-
-    return rItem.GetString();
-}
-
 rtl::OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem) const
 {
-    if (rItem.IsValue())
+    if (nDim < 0)
+        return rItem.GetString();
+
+    ScDPItemData::Type eType = rItem.GetType();
+    if (eType == ScDPItemData::Value)
     {
         // Format value using the stored number format.
         sal_uLong nNumFormat = GetNumberFormat(nDim);
@@ -1046,15 +1056,29 @@ rtl::OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem
         }
     }
 
-    return GetFormattedString(rItem);
+    if (eType == ScDPItemData::GroupValue)
+    {
+        ScDPItemData::GroupValueAttr aAttr = rItem.GetGroupValue();
+        double fStart = 0.0, fEnd = 0.0;
+        const GroupItems* p = GetGroupItems(nDim);
+        if (p)
+        {
+            fStart = p->mfStart;
+            fEnd = p->mfEnd;
+        }
+        return ScDPUtil::getDateGroupName(
+            aAttr.mnGroupType, aAttr.mnValue, mpDoc->GetFormatTable(), fStart, fEnd);
+    }
+
+    return rItem.GetString();
 }
 
 void ScDPCache::AppendGroupField()
 {
-    maGroupFields.push_back(new GroupField);
+    maGroupFields.push_back(new GroupItems);
 }
 
-void ScDPCache::ResetGroupItems(long nDim)
+void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo)
 {
     if (nDim < 0)
         return;
@@ -1062,13 +1086,18 @@ void ScDPCache::ResetGroupItems(long nDim)
     long nSourceCount = static_cast<long>(maFields.size());
     if (nDim < nSourceCount)
     {
-        maFields.at(nDim).mpGroup.reset(new GroupItems);
+        maFields.at(nDim).mpGroup.reset(new GroupItems(rNumInfo));
         return;
     }
 
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
-        maGroupFields[nDim].maItems.clear();
+    {
+        GroupItems& rGI = maGroupFields[nDim];
+        rGI.maItems.clear();
+        rGI.mfStart = rNumInfo.mfStart;
+        rGI.mfEnd = rNumInfo.mfEnd;
+    }
 }
 
 SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)

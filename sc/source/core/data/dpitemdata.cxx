@@ -34,6 +34,9 @@
 #include "globstr.hrc"
 #include "dptabdat.hxx"
 
+const sal_Int32 ScDPItemData::DateFirst = -1;
+const sal_Int32 ScDPItemData::DateLast  = 10000;
+
 sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
 {
     if (rA.meType != rB.meType)

@@ -26,26 +26,22 @@
  * instead of those above.
  */
 
-#ifndef __SC_DPUTIL_HXX__
-#define __SC_DPUTIL_HXX__
+#ifndef __SC_DPNUMGROUPINFO_HXX__
+#define __SC_DPNUMGROUPINFO_HXX__
 
-#include "rtl/ustring.hxx"
 #include "scdllapi.h"
 
-class SvNumberFormatter;
-
-class ScDPUtil
+struct ScDPNumGroupInfo
 {
-public:
-    static bool isDuplicateDimension(const rtl::OUString& rName);
+    bool mbEnable:1;
+    bool mbDateValues:1;
+    bool mbAutoStart:1;
+    bool mbAutoEnd:1;
+    double mfStart;
+    double mfEnd;
+    double mfStep;
 
-    SC_DLLPUBLIC static rtl::OUString getSourceDimensionName(const rtl::OUString& rName);
-
-    static rtl::OUString createDuplicateDimensionName(const rtl::OUString& rOriginal, size_t nDupCount);
-
-    static rtl::OUString getDateGroupName(
-        sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter,
-        double fStart, double fEnd);
+    SC_DLLPUBLIC ScDPNumGroupInfo();
 };
 
 #endif

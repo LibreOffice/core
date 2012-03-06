@@ -26,28 +26,10 @@
  * instead of those above.
  */
 
-#ifndef __SC_DPUTIL_HXX__
-#define __SC_DPUTIL_HXX__
+#include "dpnumgroupinfo.hxx"
 
-#include "rtl/ustring.hxx"
-#include "scdllapi.h"
-
-class SvNumberFormatter;
-
-class ScDPUtil
-{
-public:
-    static bool isDuplicateDimension(const rtl::OUString& rName);
-
-    SC_DLLPUBLIC static rtl::OUString getSourceDimensionName(const rtl::OUString& rName);
-
-    static rtl::OUString createDuplicateDimensionName(const rtl::OUString& rOriginal, size_t nDupCount);
-
-    static rtl::OUString getDateGroupName(
-        sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter,
-        double fStart, double fEnd);
-};
-
-#endif
+ScDPNumGroupInfo::ScDPNumGroupInfo() :
+    mbEnable(false), mbDateValues(false), mbAutoStart(false), mbAutoEnd(false),
+    mfStart(0.0), mfEnd(0.0), mfStep(0.0) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

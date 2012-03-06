@@ -36,22 +36,10 @@
 #include "dptabdat.hxx"
 #include "scdllapi.h"
 #include "dpitemdata.hxx"
+#include "dpnumgroupinfo.hxx"
 
 class ScDocument;
 class SvNumberFormatter;
-
-struct ScDPNumGroupInfo
-{
-    bool mbEnable:1;
-    bool mbDateValues:1;
-    bool mbAutoStart:1;
-    bool mbAutoEnd:1;
-    double mfStart;
-    double mfEnd;
-    double mfStep;
-
-    SC_DLLPUBLIC ScDPNumGroupInfo();
-};
 
 //  ScDPDateGroupHelper is used as part of ScDPGroupDimension (additional dim.)
 //  or ScDPNumGroupDimension (innermost, replaces the original dim.).

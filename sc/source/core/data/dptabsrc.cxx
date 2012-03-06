@@ -2625,9 +2625,14 @@ const OUString* ScDPMember::GetLayoutName() const
     return mpLayoutName.get();
 }
 
+long ScDPMember::GetDim() const
+{
+    return nDim;
+}
+
 rtl::OUString ScDPMember::GetNameStr() const
 {
-    return pSource->GetData()->GetFormattedString(GetItemData());
+    return pSource->GetData()->GetFormattedString(nDim, GetItemData());
 }
 
 ::rtl::OUString SAL_CALL ScDPMember::getName() throw(uno::RuntimeException)

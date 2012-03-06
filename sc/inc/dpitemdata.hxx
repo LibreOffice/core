@@ -51,6 +51,9 @@ class SC_DLLPUBLIC ScDPItemData
 public:
     enum Type { GroupValue = 0, Value = 1, String = 2, Error = 3, Empty = 4 };
 
+    static const sal_Int32 DateFirst;
+    static const sal_Int32 DateLast;
+
     struct GroupValueAttr
     {
         sal_Int32 mnGroupType;

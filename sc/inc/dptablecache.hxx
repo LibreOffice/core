@@ -45,8 +45,8 @@
 
 struct ScQueryParam;
 class ScDPObject;
-class ScDPItemDataPool;
 class ScDPItemData;
+struct ScDPNumGroupInfo;
 
 /**
  * This class represents the cached data part of the datapilot cache table
@@ -63,6 +63,11 @@ public:
     struct GroupItems : boost::noncopyable
     {
         DataListType maItems;
+        double mfStart;
+        double mfEnd;
+
+        GroupItems();
+        GroupItems(const ScDPNumGroupInfo& rInfo);
     };
 
     struct Field : boost::noncopyable
@@ -107,13 +112,8 @@ private:
      */
     mutable ObjectSetType maRefObjects;
 
-    struct GroupField : boost::noncopyable
-    {
-        DataListType maItems; /// Unique values in the field.
-    };
-
     typedef boost::ptr_vector<Field> FieldsType;
-    typedef boost::ptr_vector<GroupField> GroupFieldsType;
+    typedef boost::ptr_vector<GroupItems> GroupFieldsType;
 
     FieldsType maFields;
     GroupFieldsType maGroupFields;
@@ -130,10 +130,9 @@ public:
 
     SCROW GetIdByItemData(long nDim, const rtl::OUString& sItemData) const;
     SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
-    rtl::OUString GetFormattedString(const ScDPItemData& rItem) const;
     rtl::OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
     void AppendGroupField();
-    void ResetGroupItems(long nDim);
+    void ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo);
     SCROW SetGroupItem(long nDim, const ScDPItemData& rData);
     void ClearGroupFields();
 
@@ -172,6 +171,7 @@ private:
     void Clear();
     void AddLabel(const rtl::OUString& rLabel);
     bool AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat);
+    const GroupItems* GetGroupItems(long nDim) const;
 };
 
 #endif
