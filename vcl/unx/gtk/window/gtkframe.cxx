@@ -3941,7 +3941,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
 
     pThis->m_aInputFlags = std::vector<sal_uInt16>( std::max( 1, (int)pThis->m_aInputEvent.maText.Len() ), 0 );
 
-    PangoAttrIterator   *iter       = pango_attr_list_get_iterator (pAttrs);
+    PangoAttrIterator *iter = pango_attr_list_get_iterator(pAttrs);
     do
     {
         GSList *attr_list = NULL;
@@ -3996,8 +3996,9 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
             pThis->m_aInputFlags[i] |= sal_attr;
         }
     } while (pango_attr_iterator_next (iter));
+    pango_attr_iterator_destroy(iter);
 
-    pThis->m_aInputEvent.mpTextAttr         = &pThis->m_aInputFlags[0];
+    pThis->m_aInputEvent.mpTextAttr = &pThis->m_aInputFlags[0];
 
     g_free( pText );
     pango_attr_list_unref( pAttrs );
