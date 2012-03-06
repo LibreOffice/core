@@ -1,4 +1,4 @@
-dnl -*- Mode: Autoconf; tab-width: 8; indent-tabs-mode: nil -*-
+dnl -*- Mode: Autoconf; tab-width: 4; indent-tabs-mode: nil -*-
 dnl configure.in serves as input for the GNU autoconf package
 dnl in order to create a configure script.
 
@@ -11123,6 +11123,5 @@ run: make help
 for details
 
 _EOF
-
 
 dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
