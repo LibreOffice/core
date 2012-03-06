@@ -217,8 +217,8 @@ OGridColumn::OGridColumn( const comphelper::ComponentContext& _rContext, const :
 {
     DBG_CTOR(OGridColumn,NULL);
 
-    // Anlegen des UnoControlModels
-    if ( !m_aModelName.isEmpty() )    // is there a to-be-aggregated model?
+    // Create the UnoControlModel
+    if ( !m_aModelName.isEmpty() ) // is there a to-be-aggregated model?
     {
         increment( m_refCount );
 
@@ -232,7 +232,7 @@ OGridColumn::OGridColumn( const comphelper::ComponentContext& _rContext, const :
             m_xAggregate->setDelegator( static_cast< ::cppu::OWeakObject* >( this ) );
         }
 
-        // Refcount wieder bei NULL
+        // Set refcount back to zero
         decrement( m_refCount );
     }
 }
@@ -275,7 +275,7 @@ OGridColumn::~OGridColumn()
         dispose();
     }
 
-    // freigeben der Agg
+    // Free the aggregate
     if (m_xAggregate.is())
     {
         InterfaceRef  xIface;
@@ -483,11 +483,11 @@ Reference< XCloneable > SAL_CALL OGridColumn::createClone(  ) throw (RuntimeExce
     return pNewColumn;
 }
 
-//XPersistObject
+// XPersistObject
 //------------------------------------------------------------------------------
 void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStream)
 {
-    // 1. Schreiben des UnoControls
+    // 1. Write the UnoControl
     Reference<XMarkableStream>  xMark(_rxOutStream, UNO_QUERY);
     sal_Int32 nMark = xMark->createMark();
 
@@ -498,14 +498,14 @@ void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStr
     if (query_aggregation(m_xAggregate, xPersist))
         xPersist->write(_rxOutStream);
 
-    // feststellen der Laenge
+    // Calculate the length
     nLen = xMark->offsetToMark(nMark) - 4;
     xMark->jumpToMark(nMark);
     _rxOutStream->writeLong(nLen);
     xMark->jumpToFurthest();
     xMark->deleteMark(nMark);
 
-    // 2. Schreiben einer VersionsNummer
+    // 2. Write a version number
     _rxOutStream->writeShort(0x0002);
 
     sal_uInt16 nAnyMask = 0;
@@ -535,7 +535,7 @@ void SAL_CALL OGridColumn::write(const Reference<XObjectOutputStream>& _rxOutStr
 //------------------------------------------------------------------------------
 void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream)
 {
-    // 1. Lesen des UnoControls
+    // 1. Read the UnoControl
     sal_Int32 nLen = _rxInStream->readLong();
     if (nLen)
     {
@@ -550,7 +550,7 @@ void SAL_CALL OGridColumn::read(const Reference<XObjectInputStream>& _rxInStream
         xMark->deleteMark(nMark);
     }
 
-    // 2. Lesen des Versionsnummer
+    // 2. Write a version number
     sal_uInt16 nVersion = _rxInStream->readShort(); (void)nVersion;
     sal_uInt16 nAnyMask = _rxInStream->readShort();
 

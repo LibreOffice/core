@@ -61,13 +61,13 @@ class OComponentEventThread
     DECLARE_STL_VECTOR(sal_Bool,    ThreadBools);
 
     ::osl::Mutex                    m_aMutex;
-    ::osl::Condition                m_aCond;            // Queue gefuellt?
-    ThreadEvents                    m_aEvents;          // Event-Queue
-    ThreadObjects                   m_aControls;        // Control fuer Submit
-    ThreadBools                     m_aFlags;           // Flags fuer Submit/Reset
+    ::osl::Condition                m_aCond;            // Queue filled?
+    ThreadEvents                    m_aEvents;          // EventQueue
+    ThreadObjects                   m_aControls;        // Control for Submit
+    ThreadBools                     m_aFlags;           // Flags for Submit/Reset
 
-    ::cppu::OComponentHelper*                   m_pCompImpl;    // Implementierung des Controls
-    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>   m_xComp;        // ::com::sun::star::lang::XComponent des Controls
+    ::cppu::OComponentHelper*                   m_pCompImpl;    // Implementation of the Control
+    ::com::sun::star::uno::Reference< ::com::sun::star::lang::XComponent>   m_xComp; // ::com::sun::star::lang::XComponent of the Control
 
 protected:
 
@@ -77,16 +77,14 @@ protected:
     virtual void SAL_CALL kill();
     virtual void SAL_CALL onTerminated();
 
-    // Die folgende Methode wird gerufen um das Event unter Beruecksichtigung
-    // seines Typs zu duplizieren.
+    // The following method is called to duplicate the Event while respecting it's type.
     virtual ::com::sun::star::lang::EventObject* cloneEvent(const ::com::sun::star::lang::EventObject* _pEvt) const = 0;
 
-    // Ein Event bearbeiten. Der Mutex ist dabei nicht gelockt, pCompImpl
-    // bleibt aber in jedem Fall gueltig. Bei pEvt kann es sich auch um
-    // einen abgeleiteten Typ handeln, naemlich den, den cloneEvent
-    // zurueckgibt. rControl ist nur gesetzt, wenn beim addEvent ein
-    // Control uebergeben wurde. Da das Control nur als WeakRef gehalten
-    // wird kann es auch zwischenzeitlich verschwinden.
+    // Edit an Event:
+    // The mutex is not locked, but pCompImpl stays valid in any case.
+    // pEvt can be a derrived type, namely the one that cloneEvent returns.
+    // rControl is only set, if a Control has been passed in addEvent.
+    // Because the Control is only held as a WeakRef, it can disappear in the meantime.
     virtual void processEvent( ::cppu::OComponentHelper* _pCompImpl,
                                const ::com::sun::star::lang::EventObject* _pEvt,
                                const ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControl>& _rControl,

@@ -236,7 +236,7 @@ void OComboBoxModel::setFastPropertyValue_NoBroadcast(sal_Int32 _nHandle, const 
             DBG_ASSERT(_rValue.getValueType().getTypeClass() == TypeClass_STRING,
                 "OComboBoxModel::setFastPropertyValue_NoBroadcast : invalid type !" );
             _rValue >>= m_aListSource;
-            // die ListSource hat sich geaendert -> neu laden
+            // The ListSource has changed -> reload
             if (ListSourceType_VALUELIST != m_eListSourceType)
             {
                 if ( m_xCursor.is() && !hasField() && !hasExternalListSource() )
@@ -411,7 +411,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
         return;
     }
 
-    // Maskierung fuer any
+    // Masking for any
     sal_uInt16 nAnyMask;
     _rxInStream >> nAnyMask;
 
@@ -453,8 +453,8 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     if (nVersion > 0x0003)  // nVersion == 4
         _rxInStream >> m_aDefaultText;
 
-    // Stringliste muss geleert werden, wenn eine Listenquelle gesetzt ist
-    // dieses kann der Fall sein wenn im alive modus gespeichert wird
+    // StringList must be emptied if a ListSource is set.
+    // This can be the case if we save in alive mode.
     if  (   !m_aListSource.isEmpty()
         &&  !hasExternalListSource()
         )
@@ -468,7 +468,7 @@ void SAL_CALL OComboBoxModel::read(const Reference<stario::XObjectInputStream>& 
     if (nVersion > 0x0005)
         readCommonProperties(_rxInStream);
 
-    // Nach dem Lesen die Defaultwerte anzeigen
+    // After reading in, display the default values
     if ( !getControlSource().isEmpty() )
     {
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
@@ -485,7 +485,7 @@ void OComboBoxModel::loadData( bool _bForce )
     if ( hasExternalListSource() )
         return;
 
-    // Connection holen
+    // Get Connection
     Reference<XRowSet> xForm(m_xCursor, UNO_QUERY);
     if (!xForm.is())
         return;
@@ -625,7 +625,7 @@ void OComboBoxModel::loadData( bool _bForce )
             case ListSourceType_TABLE:
             case ListSourceType_QUERY:
             {
-                // die XDatabaseVAriant der ersten Spalte
+                // The XDatabaseVariant of the first column
                 Reference<XColumnsSupplier> xSupplyCols(xListCursor, UNO_QUERY);
                 DBG_ASSERT(xSupplyCols.is(), "OComboBoxModel::loadData : cursor supports the row set service but is no column supplier?!");
                 Reference<XIndexAccess> xColumns;
@@ -642,10 +642,10 @@ void OComboBoxModel::loadData( bool _bForce )
 
                 ::dbtools::FormattedColumnValue aValueFormatter( getContext(), xForm, xDataField );
 
-                // Listen fuellen
+                // Fill Lists
                 sal_Int16 i = 0;
-                // per definitionem the list cursor is positioned _before_ the first row at the moment
-                while (xListCursor->next() && (i++<SHRT_MAX)) // max anzahl eintraege
+                // At the moment by definition the list cursor is positioned _before_ the first row
+                while (xListCursor->next() && (i++<SHRT_MAX)) // Set max. count
                 {
                     aStringList.push_back( aValueFormatter.getFormattedValue() );
                 }
@@ -681,13 +681,13 @@ void OComboBoxModel::loadData( bool _bForce )
         return;
     }
 
-        // String-Sequence fuer ListBox erzeugen
+    // Create StringSequence for ListBox
     StringSequence aStringSeq(aStringList.size());
     ::rtl::OUString* pStringAry = aStringSeq.getArray();
     for (sal_Int32 i = 0; i<aStringSeq.getLength(); ++i)
         pStringAry[i] = aStringList[i];
 
-    // String-Sequence an ListBox setzen
+    // Set String-Sequence at ListBox
     setFastPropertyValue( PROPERTY_ID_STRINGITEMLIST, makeAny( aStringSeq ) );
 }
 
@@ -699,7 +699,7 @@ void OComboBoxModel::onConnectedDbColumn( const Reference< XInterface >& _rxForm
         m_pValueFormatter.reset( new ::dbtools::FormattedColumnValue( getContext(), Reference< XRowSet >( _rxForm, UNO_QUERY ), xField ) );
     getPropertyValue( PROPERTY_STRINGITEMLIST ) >>= m_aDesignModeStringItems;
 
-    // Daten nur laden, wenn eine Listenquelle angegeben wurde
+    // Only load data if a ListSource was supplied
     if ( !m_aListSource.isEmpty() && m_xCursor.is() && !hasExternalListSource() )
         loadData( false );
 }
