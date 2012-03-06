@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl -w # -*- Mode: Perl; tab-width: 4; indent-tabs-mode: nil -*-
 
 my @global_list = ();
 my %global_hash = ();
@@ -151,3 +151,5 @@ for my $icon (@global_list) {
 }
 
 close $output if (!$stdout_out);
+
+# dnl vim:set shiftwidth=4 softtabstop=4 expandtab:
