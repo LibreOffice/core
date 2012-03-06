@@ -1613,6 +1613,10 @@ void ScTextWnd::Command( const CommandEvent& rCEvt )
                 rBindings.Invalidate( SID_ATTR_CHAR_FONTHEIGHT );
             }
         }
+        else if ( nCommand == COMMAND_WHEEL )
+        {
+            //don't call InputChanged for COMMAND_WHEEL
+        }
         else
             SC_MOD()->InputChanged( pEditView );
     }
