@@ -49,6 +49,7 @@ endif
 $(call gb_Executable_get_target,osl_process_child): $(WORKDIR)/LinkTarget/Executable/$(BATCH_FILE)
 
 $(WORKDIR)/LinkTarget/Executable/$(BATCH_FILE): $(SRCDIR)/sal/qa/osl/process/$(BATCH_FILE)
+	mkdir -p $(dir $@) && \
 	$(call gb_Deliver_deliver,$<,$@)
 
 $(call gb_Executable_get_clean_target,osl_process_child): 
