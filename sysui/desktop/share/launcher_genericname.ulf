@@ -24,3 +24,6 @@ en-US = "Small Device Format Importer"
 
 [binfilter]
 en-US = "Legacy StarOffice 5 Binary Format Importer"
+
+[xsltfilter]
+en-US = "XSLT based filters"

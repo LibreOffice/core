@@ -98,6 +98,7 @@ Module gid_Module_Root_Brand
              gid_Brand_File_Share_Xdg_QStart,
              gid_Brand_File_Share_Xdg_StartCenter,
              gid_Brand_File_Share_Xdg_Writer,
+             gid_Brand_File_Share_Xdg_XsltFilter,
              gid_Brand_File_Txt_Package,
 	     gid_License_Txt,
 	     git_License_Odt,
@@ -787,6 +788,15 @@ File gid_Brand_File_Share_Xdg_BinFilter
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Share_Xdg;
     Name = "binfilter.desktop";
+    Styles = (PACKED,SCPZIP_REPLACE);
+End
+#endif
+
+#if defined UNX && ! defined MACOSX
+File gid_Brand_File_Share_Xdg_XsltFilter
+    TXT_FILE_BODY;
+    Dir = gid_Brand_Dir_Share_Xdg;
+    Name = "xsltfilter.desktop";
     Styles = (PACKED,SCPZIP_REPLACE);
 End
 #endif
