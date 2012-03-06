@@ -778,17 +778,12 @@ void BackingWindow::Resize()
     // #i93631# squeeze controls so they fit into the box
     // this can be necessary due to application font height which has small deviations
     // from the size set
-    const long nWDelta    = 0;
-    const long nW2Delta   = 0;
-    const long nPDelta    = 0;
     const long nBDelta    = maButtonImageSize.Height() + 10;
     const long nB2Delta   = 3*maButtonImageSize.Height()/2;
     const long nLastDelta = maButtonImageSize.Height();
     long nDiff = 0;
-    while( ( maControlRect.Top()   +
-                 (nWDelta - nDiff) +
-                 (nW2Delta- nDiff) +
-                 (nPDelta - nDiff) +
+    while( ( maControlRect.Top()   -
+             3 * nDiff +
              3 * (nBDelta - nDiff) +
                  (nB2Delta- nDiff) +
                  nLastDelta
@@ -797,15 +792,7 @@ void BackingWindow::Resize()
         nDiff++;
     }
 
-    long nYPos = maControlRect.Top();
-    nYPos += nW2Delta - nDiff;
-
-    nYPos += nWDelta - nDiff;
-    nYPos += nPDelta - nDiff;
-
-    nYPos += nWDelta/2 - nDiff;
-
-    nYPos = maControlRect.Top() + mnBtnTop;
+    long nYPos = maControlRect.Top() + mnBtnTop;
 
     maWriterButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos, nYPos ), Size( mnTextColumnWidth[0], maButtonImageSize.Height() ) );
     maDrawButton.SetPosSizePixel( Point( maControlRect.Left() + mnBtnPos + mnColumnWidth[0], nYPos ), Size( mnTextColumnWidth[1], maButtonImageSize.Height() ) );
