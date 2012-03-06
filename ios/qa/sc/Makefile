@@ -1,8 +1,21 @@
 include ../../../config_host.mk
 
+APP=lo-qa-sc-filters-test
+
+# If run from Xcode, check the CURRENT_ARCH env var for which platform we are
+# building, device or simulator
+
+ifeq ($(CURRENT_ARCH),i386)
+PLATFORM=iphonesimulator
+else
+PLATFORM=iphoneos
+endif
+
+APPDIR=build/Debug-$(PLATFORM)/$(APP).app
+
 # Stuff lifted from solenv/gbuild/platform/IOS_ARM_GCC.mk
 
-gb_OBJC_OBJCXX_COMMON_FLAGS := -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300
+gb_OBJC_OBJCXX_COMMON_FLAGS := -fobjc-abi-version=2 -fobjc-legacy-dispatch -D__IPHONE_OS_VERSION_MIN_REQUIRED=40300 -g
 gb_OBJCFLAGS := -x objective-c $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 gb_OBJCXXFLAGS := -x objective-c++ $(gb_OBJC_OBJCXX_COMMON_FLAGS)
 
@@ -12,9 +25,6 @@ gb_Library__FRAMEWORKS := \
     CoreGraphics \
     CoreText \
     UIKit \
-
-APP=lo-qa-sc-filters-test
-APPDIR=$(APP).app
 
 SRCS = filters-test.m
 
