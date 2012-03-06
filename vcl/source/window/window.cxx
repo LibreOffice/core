@@ -5324,14 +5324,6 @@ void Window::RemoveUserEvent( sal_uLong nUserEvent )
 
 // -----------------------------------------------------------------------
 
-IMPL_LINK( Window, ImplAsyncStateChangedHdl, void*, pState )
-{
-    StateChanged( (StateChangedType)(sal_uLong)pState );
-    return 0;
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Window::IsLocked( sal_Bool bChildren ) const
 {
     if ( mpWindowImpl->mnLockCount != 0 )
