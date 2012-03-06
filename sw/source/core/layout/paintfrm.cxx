@@ -198,7 +198,7 @@ SV_DECL_VARARR( SwLRects, SwLineRect, 100 )
 
 class SwLineRects : public SwLRects
 {
-    sal_uInt16 nLastCount;  //avoid unnecessary cycles in PainLines
+    sal_uInt16 nLastCount;  //avoid unnecessary cycles in PaintLines
 public:
     SwLineRects() : nLastCount( 0 ) {}
     void AddLineRect( const SwRect& rRect,  const Color *pColor, const SvxBorderStyle nStyle,
@@ -224,7 +224,7 @@ public:
 static ViewShell *pGlobalShell = 0;
 
 //Only repaint the Fly content as well as the background of the Fly content if
-//a metafile is subtracted from the Fly.
+//a metafile is taken of the Fly.
 static sal_Bool bFlyMetafile = sal_False;
 static OutputDevice *pFlyMetafileOut = 0;
 
@@ -1374,7 +1374,7 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
         //For character bound Flys only examine those Flys in which it is not
         //anchored itself.
         //Why only for character bound ones you may ask? It never makes sense to
-        //subtract borders in which it is anchored itself right?
+        //subtract frames in which it is anchored itself right?
         if ( pSelfFly && pSelfFly->IsLowerOf( pFly ) )
             continue;
 
@@ -1400,14 +1400,14 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
             {
                 if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
-                    //In the same layer we only observe those how are overhead.
+                    //In the same layer we only observe those that are above.
                     continue;
             }
             else
             {
                 if ( !bLowerOfSelf && !pFly->GetFmt()->GetOpaque().GetValue() )
                     //From other layers we are only interested in non
-                    //transparent ones or those how are internal
+                    //transparent ones or those that are internal
                     continue;
                 bStopOnHell = sal_False;
             }
@@ -1418,14 +1418,14 @@ void MA_FASTCALL lcl_SubtractFlys( const SwFrm *pFrm, const SwPageFrm *pPage,
             if ( pSdrObj->GetLayer() == pTmp->GetLayer() )
             {
                 if ( pSdrObj->GetOrdNumDirect() < pTmp->GetOrdNumDirect() )
-                    //In the same layer we only observe those how are overhead.
+                    //In the same layer we only observe those that are above.
                     continue;
             }
             else
             {
                 if ( !pFly->IsLowerOf( pRetoucheFly ) && !pFly->GetFmt()->GetOpaque().GetValue() )
                     //From other layers we are only interested in non
-                    //transparent ones or those how are internal
+                    //transparent ones or those that are internal
                     continue;
                 bStopOnHell = sal_False;
             }
@@ -2751,11 +2751,11 @@ namespace
 |*
 |*  Description
 |*      Paint once for every visible page which is touched by Rect.
-|*      1. Paint frames and backgrounds.
-|*      2. Paint the draw layer (frames and drawing objects) which are located
-|*         under the document (hell).
+|*      1. Paint borders and backgrounds.
+|*      2. Paint the draw layer (frames and drawing objects) that is
+|*         below the document (hell).
 |*      3. Paint the document content (text)
-|*      4. Paint the draw layer which are located above the document.
+|*      4. Paint the draw layer that is above the document.
 |*************************************************************************/
 
 void
@@ -3224,8 +3224,8 @@ void SwLayoutFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                 //This could lead to the situation, that other parts of the
                 //paragraph won't be repainted at all. The only solution seems
                 //to be an invalidation of the window.
-                //To not make it to severe the rectangle is limited by
-                //repainting the desired part and only invalidating the
+                //To not make it too severe the rectangle is limited by
+                //painting the desired part and only invalidating the
                 //remaining paragraph parts.
                 if ( aPaintRect.Left()  == rRect.Left() &&
                      aPaintRect.Right() == rRect.Right() )
@@ -3631,7 +3631,7 @@ sal_Bool SwFlyFrm::IsPaint( SdrObject *pObj, const ViewShell *pSh )
 
             //Try to avoid displaying the intermediate stage, Flys which don't
             //overlap with the page on which they are anchored won't be
-            //repainted.
+            //painted.
             //HACK: exception: printing of frames in tables, those can overlap
             //a page once in a while when dealing with oversized tables (HTML).
             SwPageFrm *pPage = pFly->FindPageFrm();
@@ -3718,8 +3718,8 @@ void MA_FASTCALL lcl_PaintLowerBorders( const SwLayoutFrm *pLay,
 void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
 {
     //because of the overlapping of frames and drawing objects the flys have to
-    //paint their frames (and those of the internal ones) directly.
-    //i.e. #33066#
+    //paint their borders (and those of the internal ones) directly.
+    //e.g. #33066#
     pLines->LockLines(sal_True);
 
     SwRect aRect( rRect );
@@ -3831,7 +3831,7 @@ void SwFlyFrm::Paint(SwRect const& rRect, SwPrintData const*const) const
                      ( pNoTxt && !bIsGraphicTransparent ) )
                 {
                     //What we actually want to paint is the small stripe between
-                    //PrtArea and outer frame.
+                    //PrtArea and outer border.
                     SwRect aTmp( Prt() ); aTmp += Frm().Pos();
                     aRegion -= aTmp;
                 }
@@ -6026,7 +6026,7 @@ void SwFrm::PaintBackground( const SwRect &rRect, const SwPageFrm *pPage,
     delete pTmpBackBrush;
 
     //Now process lower and his neighbour.
-    //We end this as soon as a Frn leaves the chain and therefore is not a lower
+    //We end this as soon as a Frm leaves the chain and therefore is not a lower
     //of me anymore
     const SwFrm *pFrm = GetLower();
     if ( pFrm )
@@ -6194,7 +6194,7 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
         //fly.
         //The end point moves to the start if the end point lies in a fly or we
         //have a fly between starting point and end point.
-        //Using this, every position is outputted one by one.
+        // In this way, every position is output one by one.
 
         //If I'm a fly I'll only avoid those flys which are places 'above' me;
         //this means those who are behind me in the array.
@@ -6220,7 +6220,7 @@ void MA_FASTCALL lcl_RefreshLine( const SwLayoutFrm *pLay,
             const SwFlyFrm *pFly = pObj ? pObj->GetFlyFrm() : 0;
 
             //I certainly won't avoid myself, even if I'm placed _inside_ the
-            //fly I won't avoid.
+            //fly I won't avoid it.
             if ( !pFly || (pFly == pLay || pFly->IsAnLower( pLay )) )
             {
                 aIter.Next();
@@ -6597,8 +6597,8 @@ void SwLayoutFrm::PaintSubsidiaryLines( const SwPageFrm *pPage,
 |*  SwPageFrm::RefreshExtraData(), SwLayoutFrm::RefreshExtraData()
 |*
 |* Description          Refreshes all extra data (line breaks a.s.o) of the
-|*                      page. Basically only those objects are considered who
-|*                      edgewise loom inside the Rect.
+|*                      page. Basically only those objects are considered which
+|*                      horizontally overlap the Rect.
 |*
 |*************************************************************************/
 
@@ -6723,7 +6723,7 @@ const Font& SwPageFrm::GetEmptyPageFont()
 |*    Description       Retouch for a section.
 |*      Retouch will only be done, if the Frm is the last one in his chain.
 |*      The whole area of the upper which is located below the Frm will be
-|*      using PainBackground cleared.
+|*      cleared using PaintBackground.
 |*************************************************************************/
 
 void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
@@ -6755,8 +6755,8 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
 
             GetUpper()->PaintBaBo( rRetouche, pPage, sal_True );
 
-            //Hell and Heaven needs to be refreshed too.
-            //To avoid recursion my retouch flag needs to be reseted first!
+            //Hell and Heaven need to be refreshed too.
+            //To avoid recursion my retouch flag needs to be reset first!
             ResetRetouche();
             SwRect aRetouchePart( rRetouche );
             if ( aRetouchePart.HasArea() )
@@ -6803,7 +6803,7 @@ void SwFrm::Retouche( const SwPageFrm * pPage, const SwRect &rRect ) const
         of the frame transparency is considered and its color is not "no fill"/"auto fill"
     ---- old description in german:
     Description         Returns the Backgroundbrush for the area of the Frm.
-        The Brush is defined from it self or from an upper, the first Brush is
+        The Brush is defined by the Frm or by an upper, the first Brush is
         used. If no Brush is defined for a Frm, sal_False is returned.
 
     @param rpBrush

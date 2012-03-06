@@ -581,7 +581,7 @@ void SwFrm::InsertBefore( SwLayoutFrm* pParent, SwFrm* pBehind )
     pUpper = pParent;
     pNext = pBehind;
     if( pBehind )
-    {   //Inert before pBehind.
+    {   //Insert before pBehind.
         if( 0 != (pPrev = pBehind->pPrev) )
             pPrev->pNext = this;
         else
@@ -643,18 +643,19 @@ void SwFrm::InsertBehind( SwLayoutFrm *pParent, SwFrm *pBefore )
 |*
 |*  Description         A chain of SwFrms gets inserted in an existing structure
 |*
-|*  Until now this is used to insert a SectionFrame which may has some siblings
-|*  into an existing structure.
+|*  Until now this is used to insert a SectionFrame (which may have some
+|*  siblings) into an existing structure.
 |*
 |*  If the third parameter is NULL, this method is (besides handling the
 |*  siblings) equal to SwFrm::InsertBefore(..)
 |*
 |*  If the third parameter is passed, the following happens:
 |*  - this becomes pNext of pParent
-|*  - pSct becomes pNext of the last on in the this-chains
+|*  - pSct becomes pNext of the last one in the this-chain
 |*  - pBehind is reconnected from pParent to pSct
-|*  This leads to: a SectionFrm (pParent) won't be connected, but pParent get
-|*  split up into two siblings (pParent+pSect) and inserted between.
+|*  The purpose is: a SectionFrm (this) won't become a child of another
+|*  SectionFrm (pParent), but pParent gets split into two siblings
+|*  (pParent+pSect) and this is inserted between.
 |*
 |*************************************************************************/
 void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
@@ -694,7 +695,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
             pLast->pUpper = GetUpper();
         }
         if( pBehind )
-        {   //Insert befor pBehind.
+        {   // Insert before pBehind.
             if( pBehind->GetPrev() )
                 pBehind->GetPrev()->pNext = NULL;
             else
@@ -733,7 +734,7 @@ void SwFrm::InsertGroupBefore( SwFrm* pParent, SwFrm* pBehind, SwFrm* pSct )
         }
         pLast->pNext = pBehind;
         if( pBehind )
-        {   //Insert befor pBehind.
+        {   // Insert before pBehind.
             if( 0 != (pPrev = pBehind->pPrev) )
                 pPrev->pNext = this;
             else
@@ -838,8 +839,10 @@ void SwCntntFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
         {
             if ( GetPrev()->Frm().Height() !=
                  GetPrev()->Prt().Height() + GetPrev()->Prt().Top() )
-                //Take the frame into account?
+            {
+                // Take the border into account?
                 GetPrev()->_InvalidatePrt();
+            }
             // OD 18.02.2003 #104989# - force complete paint of previous frame,
             // if frame is inserted at the end of a section frame, in order to
             // get subsidiary lines repainted for the section.
@@ -933,9 +936,8 @@ void SwCntntFrm::Cut()
 
     if( 0 != (pFrm = GetIndNext()) )
     {
-        //The old follower may calculated a gap to the predecessor which now
-        //becomes obsolete or different respectively as it becomes the first
-        //one itself.
+        // The old follow may have calculated a gap to the predecessor which
+        // now becomes obsolete or different as it becomes the first one itself
         pFrm->_InvalidatePrt();
         pFrm->_InvalidatePos();
         pFrm->InvalidatePage( pPage );
@@ -971,8 +973,8 @@ void SwCntntFrm::Cut()
             pFrm->_InvalidatePos();
             pFrm->InvalidatePage( pPage );
         }
-        //If I'm (was) the only CntntFrm in my upper, he has to do the
-        //retouching.
+        // If I'm (was) the only CntntFrm in my upper, it has to do the
+        // retouching. Also, perhaps a page became empty.
         else
         {   SwRootFrm *pRoot = getRootFrm();
             if ( pRoot )
@@ -1045,7 +1047,7 @@ void SwCntntFrm::Cut()
                          ( pUp->IsFtnFrm() && pUp->IsColLocked() ) )
                     {
                         pSct->DelEmpty( sal_False );
-                        // If a loosened area may not be deleted then at least
+                        // If a locked section may not be deleted then at least
                         // its size became invalid after removing its last
                         // content.
                         pSct->_InvalidateSize();
@@ -1153,7 +1155,7 @@ void SwLayoutFrm::Paste( SwFrm* pParent, SwFrm* pSibling)
     if( (Frm().*fnRect->fnGetHeight)() )
     {
         // AdjustNeighbourhood is now also called in columns which are not
-        // placed inside the frame
+        // placed inside a frame
         sal_uInt8 nAdjust = GetUpper()->IsFtnBossFrm() ?
                 ((SwFtnBossFrm*)GetUpper())->NeighbourhoodAdjustment( this )
                 : NA_GROW_SHRINK;
@@ -1190,7 +1192,7 @@ void SwLayoutFrm::Cut()
     SwLayoutFrm *pUp = GetUpper();
 
     // AdjustNeighbourhood is now also called in columns which are not
-    // placed inside the frame
+    // placed inside a frame
 
     // Remove must not be called before a AdjustNeighbourhood, but it has to
     // be called before the upper-shrink-call, if the upper-shrink takes care
@@ -1338,9 +1340,9 @@ SwTwips SwFrm::Shrink( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*       below a footnote boss (page/column) and its size changed.
 |*       There's always a frame which takes the maximum possible space (the
 |*       frame which contains the Body.Text) and zero or more frames which
-|*       only take the space needed (header/footer area, footnote).
-|*       If one of frames changed, the body-text-frame has to grow or shrink
-|*       accordingly; even tough it's fixed.
+|*       only take the space needed (header/footer area, footnote container).
+|*       If one of these frames changes, the body-text-frame has to grow or
+|*       shrink accordingly, even tough it's fixed.
 |*       !! Is it possible to do this in a generic way and not restrict it to
 |*       the page and a distinct frame which takes the maximum space (controlled
 |*       using the FrmSize attribute)? Problems: What if multiple frames taking
@@ -1364,7 +1366,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
     const ViewShell *pSh = getRootFrm()->GetCurrShell();
     const sal_Bool bBrowse = pSh && pSh->GetViewOptions()->getBrowseMode();
 
-    //The (Page-)Body only changes in BrwoseMode, but only if it does not
+    //The (Page-)Body only changes in BrowseMode, but only if it does not
     //contain columns.
     if ( IsPageBodyFrm() && (!bBrowse ||
           (((SwLayoutFrm*)this)->Lower() &&
@@ -1426,7 +1428,7 @@ SwTwips SwFrm::AdjustNeighbourhood( SwTwips nDiff, sal_Bool bTst )
             if ( pViewShell && !pUp->GetPrev() &&
                  pUp->Frm().Height() + nDiff < pViewShell->VisArea().Height() )
             {
-                //This means, that we have to invalidate adequate.
+                // This means that we have to invalidate adequately.
                 nChg = pViewShell->VisArea().Height() - pUp->Frm().Height();
                 nInvaAdd = -(nDiff - nChg);
             }
@@ -2649,7 +2651,7 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
             {
                 if( IsTabFrm() )
                     ((SwTabFrm*)this)->SetComplete();
-                if ( Lower() )  //Can also be in the Join an be empty!
+                if ( Lower() )  // Can also be in the Join and be empty!
                     InvalidateNextPos();
             }
         }
@@ -2695,8 +2697,8 @@ SwTwips SwLayoutFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
 |*  Description          Changes the size of the directly subsidiary Frm's
 |*      which have a fixed size, proportionally to the size change of the
 |*      PrtArea of the Frm's.
-|*      The variable Frm's are also proportionally adapted; they will grow/shrink
-|*      again oneself.
+|*      The variable Frms are also proportionally adapted; they will
+|*      grow/shrink again by themselves.
 |*
 |*************************************************************************/
 void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
@@ -3056,7 +3058,7 @@ void SwLayoutFrm::ChgLowersProp( const Size& rOldSize )
         if ( !pLowerFrm->GetNext() && pLowerFrm->IsRetoucheFrm() )
         {
             //If a growth took place and the subordinate elements can retouch
-            //oneself (currently Tabs, Sections and Cntnt) we trigger it.
+            //itself (currently Tabs, Sections and Cntnt) we trigger it.
             if ( rOldSize.Height() < Prt().SSize().Height() ||
                  rOldSize.Width() < Prt().SSize().Width() )
                 pLowerFrm->SetRetouche();
@@ -3129,7 +3131,7 @@ void SwLayoutFrm::Format( const SwBorderAttrs *pAttrs )
             {   bValidSize = sal_True;
 
                 //The size in VarSize is calculated using the content plus the
-                //frames.
+                // borders.
                 SwTwips nRemaining = 0;
                 SwFrm *pFrm = Lower();
                 while ( pFrm )
@@ -3350,11 +3352,11 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
 {
     //If there are columns involved, the size is adjusted using the last column.
     //1. Format content.
-    //2. Calculate height of the last column if it's too big, the Fly has to
+    //2. Calculate height of the last column: if it's too big, the Fly has to
     //   grow. The amount by which the Fly grows is not the amount of the
-    //   overhang because we have to act on the assumption that some bulk floats
+    //   overhang because we have to act on the assumption that some text flows
     //   back which will generate some more space.
-    //   In the first paragraph the amount which we grow by equals the overhang
+    //   The amount which we grow by equals the overhang
     //   divided by the amount of columns or the overhang itself if it's smaller
     //   than the amount of columns.
     //3. Go back to 1. until everything is stable.
@@ -3377,10 +3379,10 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         // In column based sections nMaximum starts at the maximum value which
         // the surrounding defines, this can certainly be a value on which
         // content still juts out.
-        // If content still juts out, the columns are formated and nMinimum is
-        // adjusted accordingly, then the growth is done, at least by uMinDiff
-        // but not over a certain nMaximum. If no content juts out but there is
-        // still some space left in the column, shrinking is done accordingly, at
+        // The columns are formatted. If content still juts out, nMinimum is
+        // adjusted accordingly, then we grow, at least by uMinDiff but not
+        // over a certain nMaximum. If no content juts out but there is still
+        // some space left in the column, shrinking is done accordingly, at
         // least by nMindIff but not below the nMinimum.
         // Cancel as soon as no content juts out and the difference from minimum
         // to maximum is less than MinDiff or the maximum which was defined by
@@ -3392,7 +3394,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
         // handles such situations the code contains a few checks concerning
         // minimum and maximum which probably are never triggered.
         // 2. We use the same nMinDiff for shrinking and growing, but nMinDiff
-        // is more or less the smallest first line height and doesn't fit ideal
+        // is more or less the smallest first line height and doesn't seem ideal
         // as minimum value.
 
         long nMinimum = nMinHeight;
@@ -3484,7 +3486,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
             for ( sal_uInt16 i = 0; i < nNumCols; ++i )
             {
                 pCol->Calc();
-                // ColumnFrms have a BodyFrm now, which need to be calculated too
+                // ColumnFrms have a BodyFrm now, which needs to be calculated
                 pCol->Lower()->Calc();
                 if( pCol->Lower()->GetNext() )
                     pCol->Lower()->GetNext()->Calc();  // SwFtnCont
@@ -3570,7 +3572,7 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                         nMaximum = nPrtHeight;  // Robust, but will this ever happen?
                     if( !nDiff ) // If only Flys jut over, we grow by nMinDiff
                         nDiff = nMinDiff;
-                    // If we should grow more than by nMindDiff we split it over
+                    // If we should grow more than by nMinDiff we split it over
                     // the columns
                     if ( Abs(nDiff - nMinDiff) > nNumCols && nDiff > (long)nNumCols )
                         nDiff /= nNumCols;
@@ -3598,7 +3600,8 @@ void SwLayoutFrm::FormatWidthCols( const SwBorderAttrs &rAttrs,
                     long nPrtHeight = (Prt().*fnRect->fnGetHeight)();
                     if ( nMaximum < nPrtHeight )
                         nDiff = nMaximum - nPrtHeight; // We grew over a working
-                        // height and shrink back it, but will this ever happen?
+                        // height and shrink back to it, but will this ever
+                        // happen?
                     else
                     {   // We have a new maximum, a size which fits for the content.
                         nMaximum = nPrtHeight;
@@ -3773,11 +3776,10 @@ void lcl_InvalidateCntnt( SwCntntFrm *pCnt, sal_uInt8 nInv )
             {
                 // To not call FindTabFrm() for each CntntFrm of a table and
                 // then invalidate the table, we remember the last CntntFrm of
-                // the table and stop to react to IsInTab() until we passed it
-                // up.
-                // When entering the table, LastSctCnt is set to null, so areas
-                // inside the table are correctly invalidated.
-                // If the table itself is placed in such an area the
+                // the table and ignore IsInTab() until we are past it.
+                // When entering the table, LastSctCnt is set to null, so
+                // sections inside the table are correctly invalidated.
+                // If the table itself is in a section the
                 // invalidation is done three times, which is acceptable.
                 if( !pLastTabCnt )
                 {
@@ -3862,7 +3864,7 @@ void SwRootFrm::InvalidateAllCntnt( sal_uInt8 nInv )
         pPage = (SwPageFrm*)(pPage->GetNext());
     }
 
-    //Invalidate the whole document content and the drawn Flys here.
+    //Invalidate the whole document content and the character bound Flys here.
     ::lcl_InvalidateCntnt( ContainsCntnt(), nInv );
 
     if( nInv & INV_PRTAREA )

@@ -178,10 +178,10 @@ void DelHFFormat( SwClient *pToRemove, SwFrmFmt *pFmt )
         return;
     }
 
-    // Are the only frms registred?
+    // Anything other than frames registered?
     sal_Bool bDel = sal_True;
     {
-        // Brace, because the DTOR of SwClientIter resets the flag bTreeChg.
+        // nested scope because DTOR of SwClientIter resets the flag bTreeChg.
         // It's suboptimal if the format is deleted beforehand.
         SwClientIter aIter( *pFmt );        // TODO
         SwClient *pLast = aIter.GoStart();
@@ -773,7 +773,7 @@ bool SwFmtPageDesc::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
         case MID_PAGEDESC_PAGEDESCNAME:
             /* Doesn't work, because the attribute doesn't need the name but a
              * pointer to the PageDesc (it's a client of it). The pointer can
-             * only be requested using the name of the document.
+             * only be requested from the document using the name.
              */
         default:
             OSL_ENSURE( !this, "unknown MemberId" );
@@ -982,7 +982,7 @@ void SwFmtCol::Calc( sal_uInt16 nGutterWidth, sal_uInt16 nAct )
     if(!GetNumCols())
         return;
     //First set the column widths with the current width, then calculate the
-    //column's with using the requested total width.
+    //column's requested width using the requested total width.
 
     const sal_uInt16 nGutterHalf = nGutterWidth ? nGutterWidth / 2 : 0;
 
@@ -2535,7 +2535,7 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
     SwFrm *pFrm = 0;
     if( ISA( SwSectionFmt ) )
     {
-        // get the frame::Frame using Node2Layout
+        // get the Frame using Node2Layout
         SwSectionNode* pSectNd = ((SwSectionFmt*)this)->GetSectionNode();
         if( pSectNd )
         {
@@ -2544,9 +2544,9 @@ SwRect SwFrmFmt::FindLayoutRect( const sal_Bool bPrtArea, const Point* pPoint,
 
             if( pFrm && !pFrm->KnowsFormat(*this) )
             {
-                // the section doesn't have his own frame::Frame, so if someone
+                // the Section doesn't have his own Frame, so if someone
                 // needs the real size, we have to implement this by requesting
-                // frame::Frame from the end.
+                // the matching Frame from the end.
                 // PROBLEM: what happens if SectionFrames overlaps multiple
                 //          pages?
                 if( bPrtArea )
@@ -2707,11 +2707,11 @@ SwFlyFrmFmt::~SwFlyFrmFmt()
 }
 
 //Creates the Frms if the format describes a paragraph-bound frame.
-//MA: 1994-02-14, creates the Frms also for page-bound borders.
+//MA: 1994-02-14, creates the Frms also for frames anchored at page.
 
 void SwFlyFrmFmt::MakeFrms()
 {
-    // does a layout even exists?
+    // is there a layout?
     if( !GetDoc()->GetCurrentViewShell() )
         return; //swmod 071108//swmod 071225
 
@@ -2733,8 +2733,8 @@ void SwFlyFrmFmt::MakeFrms()
         if( aAnchorAttr.GetCntntAnchor() )
         {
             //First search in the content because this is O(1)
-            //This can go wrong for linked borders because in this case it's
-            //possible, that no frame::Frame exists for this content.
+            //This can go wrong for linked frames because in this case it's
+            //possible, that no Frame exists for this content.
             //In such a situation we also need to search from StartNode to
             //FrameFormat.
             SwNodeIndex aIdx( aAnchorAttr.GetCntntAnchor()->nNode );

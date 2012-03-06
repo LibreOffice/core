@@ -176,7 +176,7 @@ sal_Bool SwPageDesc::GetInfo( SfxPoolItem & rInfo ) const
 |*
 |*                SwPageDesc::SetRegisterFmtColl()
 |*
-|*    Description       sets the template for the grid alignment
+|*    Description       sets the style for the grid alignment
 |*
 *************************************************************************/
 
@@ -198,7 +198,7 @@ void SwPageDesc::SetRegisterFmtColl( const SwTxtFmtColl* pFmt )
 |*
 |*                SwPageDesc::GetRegisterFmtColl()
 |*
-|*    Description       retrieves the template for the grid alignment
+|*    Description       retrieves the style for the grid alignment
 |*
 *************************************************************************/
 
@@ -258,8 +258,7 @@ void SwPageDesc::RegisterChange()
 |*
 |*                SwPageDesc::Modify()
 |*
-|*    Description       acts particularly if the template of the grid alignment
-|*                      changes
+|*    special handling if the style of the grid alignment changes
 |*
 *************************************************************************/
 

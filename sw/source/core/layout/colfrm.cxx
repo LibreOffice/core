@@ -374,7 +374,7 @@ void SwLayoutFrm::AdjustColumns( const SwFmtCol *pAttr, sal_Bool bAdjustAttribut
 
             // With this, the ColumnBodyFrms from page columns gets adjusted and
             // their bFixHeight flag is set so they won't shrink/grow.
-            // Don't use the flag with border columns because BodyFrms in border
+            // Don't use the flag with frame columns because BodyFrms in frame
             // columns can grow/shrink.
             if( IsBodyFrm() )
                 ((SwLayoutFrm*)pCol)->Lower()->ChgSize( aColSz );

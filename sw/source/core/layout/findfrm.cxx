@@ -87,11 +87,11 @@ SwCntntFrm *SwPageFrm::FindLastBodyCntnt()
 
 const SwCntntFrm *SwLayoutFrm::ContainsCntnt() const
 {
-    //Search downwards the layout sheet and if there is no content, jump to the
-    //next sheet until content is found or "this" is leaved.
+    //Search downwards the layout leaf and if there is no content, jump to the
+    //next leaf until content is found or we leave "this".
     //Sections: Cntnt next to sections would not be found this way (empty
-    //sections directely next to CntntFrm) therefore we need to recursively
-    //search form them even if it's more complex.
+    //sections directly next to CntntFrm) therefore we need to recursively
+    //search for them even if it's more complex.
 
     const SwLayoutFrm *pLayLeaf = this;
     do
@@ -148,8 +148,8 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
 |*
 |*  SwLayoutFrm::ContainsAny
 |*
-|*  Description      like CotainsCntnt, but does not only return CntnFrms but
-|*  also ranges and tables.
+|*  like ComtainsCntnt, but does not only return CntntFrms but
+|*  also sections and tables.
 |*************************************************************************/
 
 // #130797#
@@ -157,8 +157,8 @@ const SwCellFrm *SwLayoutFrm::FirstCell() const
 // content of footnotes for sections.
 const SwFrm *SwLayoutFrm::ContainsAny( const bool _bInvestigateFtnForSections ) const
 {
-    //Search downwards the layout sheet and if there is no content, jump to the
-    //next sheet until content is found, "this" is leaved or until we found
+    //Search downwards the layout leaf and if there is no content, jump to the
+    //next leaf until content is found, we leave "this" or until we found
     //a SectionFrm or a TabFrm.
 
     const SwLayoutFrm *pLayLeaf = this;
@@ -380,7 +380,7 @@ const SwLayoutFrm *SwFrm::ImplGetNextLayoutLeaf( bool bFwd ) const
 |*
 |*      Walk back inside the tree: grab the subordinate Frm if one exists and
 |*      the last step was not moving up a level (this would lead to an infinite
-|*      up/down loop!). With this we get sure that during walking back we search
+|*      up/down loop!). With this we ensure that during walking back we search
 |*      through all sub trees. If we walked downwards we have to go to the end
 |*      of the chain first because we go backwards from the last Frm inside
 |*      another Frm. Walking forward works the same.
@@ -460,8 +460,8 @@ SwPageFrm* SwFrm::FindPageFrm()
 SwFtnBossFrm* SwFrm::FindFtnBossFrm( sal_Bool bFootnotes )
 {
     SwFrm *pRet = this;
-    // Footnoteboses can't exists inside a table; also column based sections
-    // don't contain footnote textes there
+    // Footnote bosses can't exist inside a table; also sections with columns
+    // don't contain footnote texts there
     if( pRet->IsInTab() )
         pRet = pRet->FindTabFrm();
     while ( pRet && !pRet->IsFtnBossFrm() )
@@ -642,11 +642,11 @@ const SwAttrSet* SwFrm::GetAttrSet() const
 |*         _FindNextCnt() visits tables and sections and only returns SwCntntFrms.
 |*
 |*  Description         Invalidates the position of the next frame.
-|*      This is the direct succesor or when talking about CntntFrms the next
+|*      This is the direct successor or in case of CntntFrms the next
 |*      CntntFrm which sits in the same flow as I do:
 |*      - body,
 |*      - footnote,
-|*      - in head-/footnote sections the notification only needs to be forwarded
+|*      - in headers/footers the notification only needs to be forwarded
 |*        inside the section
 |*      - same for Flys
 |*      - Cntnts in tabs remain only inside their cell
@@ -806,10 +806,7 @@ SwFrm *SwFrm::_FindNext()
     if( pRet && pRet->IsInSct() )
     {
         SwSectionFrm* pSct = pRet->FindSctFrm();
-        //Fussnoten in spaltigen Rahmen duerfen nicht den Bereich
-        //liefern, der die Fussnoten umfasst
-
-        //Footnotes in column frames must not return the section which
+        //Footnotes in frames with columns must not return the section which
         //contains the footnote
         if( !pSct->IsAnLower( this ) &&
             (!bFtn || pSct->IsInFtn() ) )
@@ -1128,7 +1125,7 @@ SwFrm *SwFrm::_FindPrev()
                                             : (SwFrm*)pPrvCnt;
                 return pRet;
             }
-            else    //foot-/or head section or Fly
+            else // footer or header or Fly
             {
                 const SwFrm *pUp = pThis->GetUpper();
                 const SwFrm *pCntUp = pPrvCnt->GetUpper();
@@ -1174,11 +1171,9 @@ void SwFrm::ImplInvalidateNextPos( sal_Bool bNoFtn )
             if( pFrm )
             {
                 if ( pFrm->IsSctFrm())
-                { // Damit der Inhalt eines Bereichs die Chance erhaelt,
-                  // die Seite zu wechseln, muss er ebenfalls invalidiert werden.
-
-                  // We need to invalidate a sections content so it gets the
-                  // chance to change the page.
+                {
+                    // We need to invalidate the section's content so it gets
+                    // the chance to flow to a different page.
                     SwFrm* pTmp = ((SwSectionFrm*)pFrm)->ContainsAny();
                     if( pTmp )
                         pTmp->InvalidatePos();
@@ -1251,8 +1246,8 @@ void SwFrm::InvalidateNextPrtArea()
 |*
 |*    lcl_IsInColSect()
 |*
-|*      returns sal_True, if the frame _directly_ sits in a column section but
-|*      not if it sits in a table which itself sits in a column section.
+|* returns true if the frame _directly_ sits in a section with columns
+|* but not if it sits in a table which itself sits in a section with columns.
 |*************************************************************************/
 
 sal_Bool lcl_IsInColSct( const SwFrm *pUp )

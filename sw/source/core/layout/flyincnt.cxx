@@ -154,7 +154,7 @@ void SwFlyInCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 |*
 |*  SwFlyInCntFrm::Format()
 |*
-|*  Description:        Here the content gets formated initially.
+|*  Here the content gets formatted initially.
 |*
 |*************************************************************************/
 void SwFlyInCntFrm::Format( const SwBorderAttrs *pAttrs )

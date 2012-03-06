@@ -118,9 +118,8 @@ void SwFlyAtCntFrm::Modify( const SfxPoolItem* pOld, const SfxPoolItem *pNew )
 
         const sal_Bool bBodyFtn = (pCntnt->IsInDocBody() || pCntnt->IsInFtn());
 
-        //Search the new anchor usind the NodeIdx, based on the old and new
-        //NodeIdx can also be discovered in which direction searching has to be
-        //done.
+        // Search the new anchor using the NodeIdx; the relation between old
+        // and new NodeIdx determines the search direction
         const SwNodeIndex aNewIdx( pAnch->GetCntntAnchor()->nNode );
         SwNodeIndex aOldIdx( *pCntnt->GetNode() );
 
@@ -499,10 +498,10 @@ void SwFlyAtCntFrm::MakeAll()
                 if ( bExtra && Lower() && !Lower()->GetValidPosFlag() )
                 {
                     // If a multi column frame leaves invalid columns because of
-                    // a position change, we loop once more and formate
+                    // a position change, we loop once more and format
                     // our content using FormatWidthCols again.
-                        _InvalidateSize();
-                    bExtra = sal_False; // Get sure to only make one additional loop run
+                    _InvalidateSize();
+                    bExtra = sal_False; // Ensure only one additional loop run
                 }
             } while ( !IsValid() && !bOsz &&
                       // #i3317#
@@ -587,7 +586,7 @@ const SwFrm * MA_FASTCALL lcl_CalcDownDist( SwDistance &rRet,
                                          const SwCntntFrm *pCnt )
 {
     rRet.nSub = 0;
-    //If the point stays inside the Cnt everything is clear already; the Cntn
+    //If the point stays inside the Cnt everything is clear already; the Cntnt
     //automatically has a distance of 0.
     if ( pCnt->Frm().IsInside( rPt ) )
     {
@@ -901,7 +900,7 @@ sal_uLong MA_FASTCALL lcl_FindCntDiff( const Point &rPt, const SwLayoutFrm *pLay
                           const SwCntntFrm *& rpCnt,
                           const sal_Bool bBody, const sal_Bool bFtn )
 {
-    //Searches the nearest Cnt to the point belows pLay. The reference point of
+    // Searches below pLay the nearest Cnt to the point. The reference point of
     //the Cntnts is always the left upper corner.
     //The Cnt should preferably be above the point.
 
@@ -971,7 +970,7 @@ const SwCntntFrm * MA_FASTCALL lcl_FindCnt( const Point &rPt, const SwCntntFrm *
 
     //First the nearest Cntnt inside the page which contains the Cntnt is
     //searched. Starting from this page the pages in both directions need to
-    //take into account. If possible a Cntnt is returned whose Y-position is
+    //be considered. If possible a Cntnt is returned whose Y-position is
     //above the point.
     const SwCntntFrm  *pRet, *pNew;
     const SwLayoutFrm *pLay = pCnt->FindPageFrm();
@@ -1064,7 +1063,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
                               const sal_Bool bBodyOnly )
 {
     //Search the nearest Cnt around the given document position in the text
-    //flow. The omited anchor is the starting Frm.
+    //flow. The given anchor is the starting Frm.
     const SwCntntFrm* pCnt;
     if ( pOldAnch->IsCntntFrm() )
     {
@@ -1090,7 +1089,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
     Point aNew( rNew );
     if ( bBody )
     {
-        //#38848 drag from page border into the body.
+        //#38848 drag from page margin into the body.
         const SwFrm *pPage = pCnt->FindPageFrm();
         ::lcl_PointToPrt( aNew, pPage->GetUpper() );
         SwRect aTmp( aNew, Size( 0, 0 ) );
@@ -1102,8 +1101,8 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
         return pCnt;
     else if ( pOldAnch->IsInDocBody() || pOldAnch->IsPageFrm() )
     {
-        //Maybe the selected anchor is on the same page like the current anchor.
-        //Whit this we won't run into problems with the columns.
+        // Maybe the selected anchor is on the same page as the current anchor.
+        // With this we won't run into problems with the columns.
         Point aTmp( aNew );
         const SwCntntFrm *pTmp = pCnt->FindPageFrm()->
                                         GetCntntPos( aTmp, sal_False, sal_True, sal_False );
@@ -1196,7 +1195,7 @@ const SwCntntFrm *FindAnchor( const SwFrm *pOldAnch, const Point &rNew,
 
     //If we couldn't find one in both directions, we'll search the Cntnt whose
     //left upper corner is the nearest to the point. Such a situation may
-    //happen, if the point doesn't lay in the text flow but in any border.
+    //happen, if the point doesn't lay in the text flow but in any margin.
     if ( nDownLst.nMain == LONG_MAX && nUpLst.nMain == LONG_MAX )
     {
         // If an OLE objects, which is contained in a fly frame
@@ -1246,7 +1245,7 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     if ( pCnt->IsInDocBody() )
     {
-        //#38848 drag from page border into the body.
+        //#38848 drag from page margin into the body.
         pTmpPage = pCnt->FindPageFrm();
         ::lcl_PointToPrt( aNew, pTmpPage->GetUpper() );
         SwRect aTmp( aNew, Size( 0, 0 ) );
@@ -1297,8 +1296,8 @@ void SwFlyAtCntFrm::SetAbsPos( const Point &rNew )
 
     if ( pCnt->IsFollow() )
     {
-        //Flys are never attached to the flow but always to the master which
-        //we're going to search now.
+        // Flys are never attached to the follow but always to the master,
+        // which we're going to search now.
         const SwCntntFrm *pOriginal = pCnt;
         const SwCntntFrm *pFollow = pCnt;
         while ( pCnt->IsFollow() )
