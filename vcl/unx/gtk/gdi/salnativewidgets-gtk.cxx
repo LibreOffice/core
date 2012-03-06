@@ -467,7 +467,6 @@ void GtkData::initNWF( void )
  *********************************************************/
 void GtkData::deInitNWF( void )
 {
-
     for( unsigned int i = 0; i < gWidgetData.size(); i++ )
     {
         // free up global widgets

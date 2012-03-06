@@ -550,6 +550,11 @@ GtkData::~GtkData()
     osl_destroyMutex( m_aDispatchMutex );
 }
 
+void GtkData::Dispose()
+{
+    deInitNWF();
+}
+
 void GtkData::Yield( bool bWait, bool bHandleAllCurrentEvents )
 {
     /* #i33212# only enter g_main_context_iteration in one thread at any one
