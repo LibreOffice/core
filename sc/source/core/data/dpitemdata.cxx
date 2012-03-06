@@ -42,7 +42,7 @@ sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
     if (rA.meType != rB.meType)
     {
         // group value, value and string in this order.
-        return rA.meType < rB.meType;
+        return rA.meType < rB.meType ? -1 : 1;
     }
 
     switch (rA.meType)
@@ -54,10 +54,10 @@ sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
                 if (rA.maGroupValue.mnValue == rB.maGroupValue.mnValue)
                     return 0;
 
-                return rA.maGroupValue.mnValue < rB.maGroupValue.mnValue;
+                return rA.maGroupValue.mnValue < rB.maGroupValue.mnValue ? -1 : 1;
             }
 
-            return rA.maGroupValue.mnGroupType < rB.maGroupValue.mnGroupType;
+            return rA.maGroupValue.mnGroupType < rB.maGroupValue.mnGroupType ? -1 : 1;
         }
         case Value:
         {
