@@ -368,7 +368,7 @@ namespace cairocanvas
     case BMP_FORMAT_8BIT_PAL:
         pReadScan = pAlphaReadAcc->GetScanline( nY );
         for( nX = 0; nX < nWidth; nX++ ) {
-        nAlpha = data[ nOff ] = 255 - ( pAlphaReadAcc->GetPaletteColor( *pReadScan++ ).GetBlue() );
+            nAlpha = data[ nOff ] = 255 - ( pAlphaReadAcc->GetPaletteColor( *pReadScan++ ).GetIndex() );
         if( nAlpha != 255 )
             bIsAlpha = true;
         nOff += 4;
@@ -377,7 +377,7 @@ namespace cairocanvas
     default:
         OSL_TRACE( "fallback to GetColor for alpha - slow, format: %d", pAlphaReadAcc->GetScanlineFormat() );
         for( nX = 0; nX < nWidth; nX++ ) {
-        nAlpha = data[ nOff ] = 255 - pAlphaReadAcc->GetColor( nY, nX ).GetBlue();
+        nAlpha = data[ nOff ] = 255 - pAlphaReadAcc->GetColor( nY, nX ).GetIndex();
         if( nAlpha != 255 )
             bIsAlpha = true;
         nOff += 4;
@@ -541,7 +541,7 @@ namespace cairocanvas
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff++ ];
                             else
-                                nAlpha = data[ nOff++ ] = pReadScan[ 3 ];
+                                nAlpha = data[ nOff++ ] = 255;
                             data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 2 ] ) )/255 );
                             data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 1 ] ) )/255 );
                             data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( pReadScan[ 0 ] ) )/255 );
@@ -550,7 +550,7 @@ namespace cairocanvas
                             if( pAlphaReadAcc )
                                 nAlpha = data[ nOff + 3 ];
                             else
-                                nAlpha = data[ nOff + 3 ] = pReadScan[ 3 ];
+                                nAlpha = data[ nOff + 3 ] = 255;
                             data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
                             data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
                             data[ nOff++ ] = sal::static_int_cast<unsigned char>(( nAlpha*( *pReadScan++ ) )/255 );
