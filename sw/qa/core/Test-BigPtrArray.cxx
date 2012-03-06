@@ -82,7 +82,7 @@ namespace /* private */
     sal_Bool AddToCount(const ElementPtr& rElem, void* pArgs)
     {
         BigPtrEntryMock* const pbem = static_cast<BigPtrEntryMock* const>(rElem);
-        pbem->setCount(pbem->getCount() + *((int*)pArgs));
+        pbem->setCount(pbem->getCount() + *((sal_uLong*)pArgs));
         return true;
     }
 
@@ -655,7 +655,7 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        int addCount = 1;
+        sal_uLong addCount = 1;
         bparr.ForEach(AddToCount, &addCount);
 
         for (sal_uLong i = 0; i < NUM_ENTRIES; i++)
@@ -715,7 +715,7 @@ public:
         fillBigPtrArray(bparr, NUM_ENTRIES);
         dumpBigPtrArray(bparr);
 
-        int addCount = 1;
+        sal_uLong addCount = 1;
         bparr.ForEach(NUM_ENTRIES / 2, NUM_ENTRIES, AddToCount, &addCount);
 
         sal_uLong i = 0;
