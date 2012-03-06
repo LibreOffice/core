@@ -322,299 +322,293 @@ void OutputDevice::DrawTransparent( const PolyPolygon& rPolyPoly,
     if( bDrawn )
         return;
 
-    if( 1 )
+    VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
+
+    // #110958# Disable alpha VDev, we perform the necessary
+    // operation explicitly further below.
+    if( mpAlphaVDev )
+        mpAlphaVDev = NULL;
+
+    GDIMetaFile* pOldMetaFile = mpMetaFile;
+    mpMetaFile = NULL;
+
+    if( OUTDEV_PRINTER == meOutDevType )
     {
-        VirtualDevice* pOldAlphaVDev = mpAlphaVDev;
-
-        // #110958# Disable alpha VDev, we perform the necessary
-        // operation explicitly further below.
-        if( mpAlphaVDev )
-            mpAlphaVDev = NULL;
-
-        GDIMetaFile* pOldMetaFile = mpMetaFile;
-        mpMetaFile = NULL;
-
-        if( OUTDEV_PRINTER == meOutDevType )
+        if(100 <= nTransparencePercent)
         {
-            if(100 <= nTransparencePercent)
-            {
-                // #i112959# 100% transparent, draw nothing
-                return;
-            }
+            // #i112959# 100% transparent, draw nothing
+            return;
+        }
 
-            Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
-            const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
-            const long      nBaseExtent = Max( FRound( aDPISize.Width() / 300. ), 1L );
-            long            nMove;
-            const sal_uInt16    nTrans = ( nTransparencePercent < 13 ) ? 0 :
-                                     ( nTransparencePercent < 38 ) ? 25 :
-                                     ( nTransparencePercent < 63 ) ? 50 :
-                                     ( nTransparencePercent < 88 ) ? 75 : 100;
+        Rectangle       aPolyRect( LogicToPixel( rPolyPoly ).GetBoundRect() );
+        const Size      aDPISize( LogicToPixel( Size( 1, 1 ), MAP_INCH ) );
+        const long      nBaseExtent = Max( FRound( aDPISize.Width() / 300. ), 1L );
+        long            nMove;
+        const sal_uInt16    nTrans = ( nTransparencePercent < 13 ) ? 0 :
+            ( nTransparencePercent < 38 ) ? 25 :
+            ( nTransparencePercent < 63 ) ? 50 :
+            ( nTransparencePercent < 88 ) ? 75 : 100;
 
-            switch( nTrans )
-            {
-                case( 25 ): nMove = nBaseExtent * 3; break;
-                case( 50 ): nMove = nBaseExtent * 4; break;
-                case( 75 ): nMove = nBaseExtent * 6; break;
+        switch( nTrans )
+        {
+            case( 25 ): nMove = nBaseExtent * 3; break;
+            case( 50 ): nMove = nBaseExtent * 4; break;
+            case( 75 ): nMove = nBaseExtent * 6; break;
 
                 // #i112959#  very transparent (88 < nTransparencePercent <= 99)
-                case( 100 ): nMove = nBaseExtent * 8; break;
+            case( 100 ): nMove = nBaseExtent * 8; break;
 
                 // #i112959# not transparent (nTransparencePercent < 13)
-                default:    nMove = 0; break;
-            }
+            default:    nMove = 0; break;
+        }
 
-            Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
-            IntersectClipRegion( rPolyPoly );
-            SetLineColor( GetFillColor() );
-            const sal_Bool bOldMap = mbMap;
-            EnableMapMode( sal_False );
+        Push( PUSH_CLIPREGION | PUSH_LINECOLOR );
+        IntersectClipRegion( rPolyPoly );
+        SetLineColor( GetFillColor() );
+        const sal_Bool bOldMap = mbMap;
+        EnableMapMode( sal_False );
 
-            if(nMove)
+        if(nMove)
+        {
+            Rectangle aRect( aPolyRect.TopLeft(), Size( aPolyRect.GetWidth(), nBaseExtent ) );
+            while( aRect.Top() <= aPolyRect.Bottom() )
             {
-                Rectangle aRect( aPolyRect.TopLeft(), Size( aPolyRect.GetWidth(), nBaseExtent ) );
-                while( aRect.Top() <= aPolyRect.Bottom() )
-                {
-                    DrawRect( aRect );
-                    aRect.Move( 0, nMove );
-                }
-
-                aRect = Rectangle( aPolyRect.TopLeft(), Size( nBaseExtent, aPolyRect.GetHeight() ) );
-                while( aRect.Left() <= aPolyRect.Right() )
-                {
-                    DrawRect( aRect );
-                    aRect.Move( nMove, 0 );
-                }
+                DrawRect( aRect );
+                aRect.Move( 0, nMove );
             }
-            else
+
+            aRect = Rectangle( aPolyRect.TopLeft(), Size( nBaseExtent, aPolyRect.GetHeight() ) );
+            while( aRect.Left() <= aPolyRect.Right() )
             {
-                // #i112959# if not transparent, draw full rectangle in clip region
-                DrawRect( aPolyRect );
+                DrawRect( aRect );
+                aRect.Move( nMove, 0 );
             }
-
-            EnableMapMode( bOldMap );
-            Pop();
         }
         else
         {
-             PolyPolygon    aPolyPoly( LogicToPixel( rPolyPoly ) );
-            Rectangle       aPolyRect( aPolyPoly.GetBoundRect() );
-            Point           aPoint;
-            Rectangle       aDstRect( aPoint, GetOutputSizePixel() );
+            // #i112959# if not transparent, draw full rectangle in clip region
+            DrawRect( aPolyRect );
+        }
 
-            aDstRect.Intersection( aPolyRect );
+        EnableMapMode( bOldMap );
+        Pop();
+    }
+    else
+    {
+        PolyPolygon    aPolyPoly( LogicToPixel( rPolyPoly ) );
+        Rectangle       aPolyRect( aPolyPoly.GetBoundRect() );
+        Point           aPoint;
+        Rectangle       aDstRect( aPoint, GetOutputSizePixel() );
 
-            if( OUTDEV_WINDOW == meOutDevType )
+        aDstRect.Intersection( aPolyRect );
+
+        if( OUTDEV_WINDOW == meOutDevType )
+        {
+            const Region aPaintRgn( ( (Window*) this )->GetPaintRegion() );
+
+            if( !aPaintRgn.IsNull() )
+                aDstRect.Intersection( LogicToPixel( aPaintRgn ).GetBoundRect() );
+        }
+
+        if( !aDstRect.IsEmpty() )
+        {
+            // #i66849# Added fast path for exactly rectangular
+            // polygons
+            // #i83087# Naturally, system alpha blending cannot
+            // work with separate alpha VDev
+            if( !mpAlphaVDev && !pDisableNative && aPolyPoly.IsRect() )
             {
-                const Region aPaintRgn( ( (Window*) this )->GetPaintRegion() );
+                // setup Graphics only here (other cases delegate
+                // to basic OutDev methods)
+                if ( mbInitClipRegion )
+                    ImplInitClipRegion();
+                if ( mbInitLineColor )
+                    ImplInitLineColor();
+                if ( mbInitFillColor )
+                    ImplInitFillColor();
 
-                if( !aPaintRgn.IsNull() )
-                    aDstRect.Intersection( LogicToPixel( aPaintRgn ).GetBoundRect() );
+                Rectangle aLogicPolyRect( rPolyPoly.GetBoundRect() );
+                Rectangle aPixelRect( ImplLogicToDevicePixel( aLogicPolyRect ) );
+
+                if( !mbOutputClipped )
+                {
+                    bDrawn = mpGraphics->DrawAlphaRect(
+                        aPixelRect.Left(), aPixelRect.Top(),
+                        // #i98405# use methods with small g, else one pixel too much will be painted.
+                        // This is because the source is a polygon which when painted would not paint
+                        // the rightmost and lowest pixel line(s), so use one pixel less for the
+                        // rectangle, too.
+                        aPixelRect.getWidth(), aPixelRect.getHeight(),
+                        sal::static_int_cast<sal_uInt8>(nTransparencePercent),
+                        this );
+                }
+                else
+                    bDrawn = true;
             }
 
-            if( !aDstRect.IsEmpty() )
+            if( !bDrawn )
             {
-                // #i66849# Added fast path for exactly rectangular
-                // polygons
-                // #i83087# Naturally, system alpha blending cannot
-                // work with separate alpha VDev
-                if( !mpAlphaVDev && !pDisableNative && aPolyPoly.IsRect() )
+                VirtualDevice   aVDev( *this, 1 );
+                const Size      aDstSz( aDstRect.GetSize() );
+                const sal_uInt8     cTrans = (sal_uInt8) MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 );
+
+                if( aDstRect.Left() || aDstRect.Top() )
+                    aPolyPoly.Move( -aDstRect.Left(), -aDstRect.Top() );
+
+                if( aVDev.SetOutputSizePixel( aDstSz ) )
                 {
-                    // setup Graphics only here (other cases delegate
-                    // to basic OutDev methods)
-                    if( 1 )
+                    const sal_Bool bOldMap = mbMap;
+
+                    EnableMapMode( sal_False );
+
+                    aVDev.SetLineColor( COL_BLACK );
+                    aVDev.SetFillColor( COL_BLACK );
+                    aVDev.DrawPolyPolygon( aPolyPoly );
+
+                    Bitmap              aPaint( GetBitmap( aDstRect.TopLeft(), aDstSz ) );
+                    Bitmap              aPolyMask( aVDev.GetBitmap( Point(), aDstSz ) );
+
+                    // #107766# check for non-empty bitmaps before accessing them
+                    if( !!aPaint && !!aPolyMask )
                     {
-                        if ( mbInitClipRegion )
-                            ImplInitClipRegion();
-                        if ( mbInitLineColor )
-                            ImplInitLineColor();
-                        if ( mbInitFillColor )
-                            ImplInitFillColor();
+                        BitmapWriteAccess*  pW = aPaint.AcquireWriteAccess();
+                        BitmapReadAccess*   pR = aPolyMask.AcquireReadAccess();
 
-                        Rectangle aLogicPolyRect( rPolyPoly.GetBoundRect() );
-                        Rectangle aPixelRect( ImplLogicToDevicePixel( aLogicPolyRect ) );
-
-                        if( !mbOutputClipped )
+                        if( pW && pR )
                         {
-                            bDrawn = mpGraphics->DrawAlphaRect(
-                               aPixelRect.Left(), aPixelRect.Top(),
-                               // #i98405# use methods with small g, else one pixel too much will be painted.
-                               // This is because the source is a polygon which when painted would not paint
-                               // the rightmost and lowest pixel line(s), so use one pixel less for the
-                               // rectangle, too.
-                               aPixelRect.getWidth(), aPixelRect.getHeight(),
-                               sal::static_int_cast<sal_uInt8>(nTransparencePercent),
-                               this );
-                        }
-                        else
-                            bDrawn = true;
-                    }
-                }
+                            BitmapColor         aPixCol;
+                            const BitmapColor   aFillCol( GetFillColor() );
+                            const BitmapColor   aWhite( pR->GetBestMatchingColor( Color( COL_WHITE ) ) );
+                            const BitmapColor   aBlack( pR->GetBestMatchingColor( Color( COL_BLACK ) ) );
+                            const long          nWidth = pW->Width(), nHeight = pW->Height();
+                            const long          nR = aFillCol.GetRed(), nG = aFillCol.GetGreen(), nB = aFillCol.GetBlue();
+                            long                nX, nY;
 
-                if( !bDrawn )
-                {
-                    VirtualDevice   aVDev( *this, 1 );
-                    const Size      aDstSz( aDstRect.GetSize() );
-                    const sal_uInt8     cTrans = (sal_uInt8) MinMax( FRound( nTransparencePercent * 2.55 ), 0, 255 );
-
-                    if( aDstRect.Left() || aDstRect.Top() )
-                        aPolyPoly.Move( -aDstRect.Left(), -aDstRect.Top() );
-
-                    if( aVDev.SetOutputSizePixel( aDstSz ) )
-                    {
-                        const sal_Bool bOldMap = mbMap;
-
-                        EnableMapMode( sal_False );
-
-                        aVDev.SetLineColor( COL_BLACK );
-                        aVDev.SetFillColor( COL_BLACK );
-                        aVDev.DrawPolyPolygon( aPolyPoly );
-
-                        Bitmap              aPaint( GetBitmap( aDstRect.TopLeft(), aDstSz ) );
-                        Bitmap              aPolyMask( aVDev.GetBitmap( Point(), aDstSz ) );
-
-                        // #107766# check for non-empty bitmaps before accessing them
-                        if( !!aPaint && !!aPolyMask )
-                        {
-                            BitmapWriteAccess*  pW = aPaint.AcquireWriteAccess();
-                            BitmapReadAccess*   pR = aPolyMask.AcquireReadAccess();
-
-                            if( pW && pR )
+                            if( aPaint.GetBitCount() <= 8 )
                             {
-                                BitmapColor         aPixCol;
-                                const BitmapColor   aFillCol( GetFillColor() );
-                                const BitmapColor   aWhite( pR->GetBestMatchingColor( Color( COL_WHITE ) ) );
-                                const BitmapColor   aBlack( pR->GetBestMatchingColor( Color( COL_BLACK ) ) );
-                                const long          nWidth = pW->Width(), nHeight = pW->Height();
-                                const long          nR = aFillCol.GetRed(), nG = aFillCol.GetGreen(), nB = aFillCol.GetBlue();
-                                long                nX, nY;
+                                const BitmapPalette&    rPal = pW->GetPalette();
+                                const sal_uInt16            nCount = rPal.GetEntryCount();
+                                BitmapColor*            pMap = (BitmapColor*) new sal_uInt8[ nCount * sizeof( BitmapColor ) ];
 
-                                if( aPaint.GetBitCount() <= 8 )
+                                for( sal_uInt16 i = 0; i < nCount; i++ )
                                 {
-                                    const BitmapPalette&    rPal = pW->GetPalette();
-                                    const sal_uInt16            nCount = rPal.GetEntryCount();
-                                    BitmapColor*            pMap = (BitmapColor*) new sal_uInt8[ nCount * sizeof( BitmapColor ) ];
+                                    BitmapColor aCol( rPal[ i ] );
+                                    pMap[ i ] = BitmapColor( (sal_uInt8) rPal.GetBestIndex( aCol.Merge( aFillCol, cTrans ) ) );
+                                }
 
-                                    for( sal_uInt16 i = 0; i < nCount; i++ )
+                                if( pR->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
+                                    pW->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
+                                {
+                                    const sal_uInt8 cBlack = aBlack.GetIndex();
+
+                                    for( nY = 0; nY < nHeight; nY++ )
                                     {
-                                        BitmapColor aCol( rPal[ i ] );
-                                        pMap[ i ] = BitmapColor( (sal_uInt8) rPal.GetBestIndex( aCol.Merge( aFillCol, cTrans ) ) );
-                                    }
+                                        Scanline    pWScan = pW->GetScanline( nY );
+                                        Scanline    pRScan = pR->GetScanline( nY );
+                                        sal_uInt8       cBit = 128;
 
-                                    if( pR->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
-                                        pW->GetScanlineFormat() == BMP_FORMAT_8BIT_PAL )
-                                    {
-                                        const sal_uInt8 cBlack = aBlack.GetIndex();
-
-                                        for( nY = 0; nY < nHeight; nY++ )
+                                        for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan++ )
                                         {
-                                            Scanline    pWScan = pW->GetScanline( nY );
-                                            Scanline    pRScan = pR->GetScanline( nY );
-                                            sal_uInt8       cBit = 128;
+                                            if( !cBit )
+                                                cBit = 128, pRScan++;
 
-                                            for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan++ )
-                                            {
-                                                if( !cBit )
-                                                    cBit = 128, pRScan++;
-
-                                                if( ( *pRScan & cBit ) == cBlack )
-                                                    *pWScan = (sal_uInt8) pMap[ *pWScan ].GetIndex();
-                                            }
+                                            if( ( *pRScan & cBit ) == cBlack )
+                                                *pWScan = (sal_uInt8) pMap[ *pWScan ].GetIndex();
                                         }
                                     }
-                                    else
-                                    {
-                                        for( nY = 0; nY < nHeight; nY++ )
-                                            for( nX = 0; nX < nWidth; nX++ )
-                                                if( pR->GetPixel( nY, nX ) == aBlack )
-                                                    pW->SetPixel( nY, nX, pMap[ pW->GetPixel( nY, nX ).GetIndex() ] );
-                                    }
-
-                                    delete[] (sal_uInt8*) pMap;
                                 }
                                 else
                                 {
-                                    if( pR->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
-                                        pW->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR )
+                                    for( nY = 0; nY < nHeight; nY++ )
+                                        for( nX = 0; nX < nWidth; nX++ )
+                                            if( pR->GetPixel( nY, nX ) == aBlack )
+                                                pW->SetPixel( nY, nX, pMap[ pW->GetPixel( nY, nX ).GetIndex() ] );
+                                }
+
+                                delete[] (sal_uInt8*) pMap;
+                            }
+                            else
+                            {
+                                if( pR->GetScanlineFormat() == BMP_FORMAT_1BIT_MSB_PAL &&
+                                    pW->GetScanlineFormat() == BMP_FORMAT_24BIT_TC_BGR )
+                                {
+                                    const sal_uInt8 cBlack = aBlack.GetIndex();
+
+                                    for( nY = 0; nY < nHeight; nY++ )
                                     {
-                                        const sal_uInt8 cBlack = aBlack.GetIndex();
+                                        Scanline    pWScan = pW->GetScanline( nY );
+                                        Scanline    pRScan = pR->GetScanline( nY );
+                                        sal_uInt8       cBit = 128;
 
-                                        for( nY = 0; nY < nHeight; nY++ )
+                                        for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan += 3 )
                                         {
-                                            Scanline    pWScan = pW->GetScanline( nY );
-                                            Scanline    pRScan = pR->GetScanline( nY );
-                                            sal_uInt8       cBit = 128;
+                                            if( !cBit )
+                                                cBit = 128, pRScan++;
 
-                                            for( nX = 0; nX < nWidth; nX++, cBit >>= 1, pWScan += 3 )
+                                            if( ( *pRScan & cBit ) == cBlack )
                                             {
-                                                if( !cBit )
-                                                    cBit = 128, pRScan++;
-
-                                                if( ( *pRScan & cBit ) == cBlack )
-                                                {
-                                                    pWScan[ 0 ] = COLOR_CHANNEL_MERGE( pWScan[ 0 ], nB, cTrans );
-                                                    pWScan[ 1 ] = COLOR_CHANNEL_MERGE( pWScan[ 1 ], nG, cTrans );
-                                                    pWScan[ 2 ] = COLOR_CHANNEL_MERGE( pWScan[ 2 ], nR, cTrans );
-                                                }
+                                                pWScan[ 0 ] = COLOR_CHANNEL_MERGE( pWScan[ 0 ], nB, cTrans );
+                                                pWScan[ 1 ] = COLOR_CHANNEL_MERGE( pWScan[ 1 ], nG, cTrans );
+                                                pWScan[ 2 ] = COLOR_CHANNEL_MERGE( pWScan[ 2 ], nR, cTrans );
                                             }
                                         }
                                     }
-                                    else
+                                }
+                                else
+                                {
+                                    for( nY = 0; nY < nHeight; nY++ )
                                     {
-                                        for( nY = 0; nY < nHeight; nY++ )
+                                        for( nX = 0; nX < nWidth; nX++ )
                                         {
-                                            for( nX = 0; nX < nWidth; nX++ )
+                                            if( pR->GetPixel( nY, nX ) == aBlack )
                                             {
-                                                if( pR->GetPixel( nY, nX ) == aBlack )
-                                                {
-                                                    aPixCol = pW->GetColor( nY, nX );
-                                                    pW->SetPixel( nY, nX, aPixCol.Merge( aFillCol, cTrans ) );
-                                                }
+                                                aPixCol = pW->GetColor( nY, nX );
+                                                pW->SetPixel( nY, nX, aPixCol.Merge( aFillCol, cTrans ) );
                                             }
                                         }
                                     }
                                 }
                             }
+                        }
 
-                            aPolyMask.ReleaseAccess( pR );
-                            aPaint.ReleaseAccess( pW );
+                        aPolyMask.ReleaseAccess( pR );
+                        aPaint.ReleaseAccess( pW );
 
-                            DrawBitmap( aDstRect.TopLeft(), aPaint );
+                        DrawBitmap( aDstRect.TopLeft(), aPaint );
 
-                            EnableMapMode( bOldMap );
+                        EnableMapMode( bOldMap );
 
-                            if( mbLineColor )
-                            {
-                                Push( PUSH_FILLCOLOR );
-                                SetFillColor();
-                                DrawPolyPolygon( rPolyPoly );
-                                Pop();
-                            }
+                        if( mbLineColor )
+                        {
+                            Push( PUSH_FILLCOLOR );
+                            SetFillColor();
+                            DrawPolyPolygon( rPolyPoly );
+                            Pop();
                         }
                     }
-                    else
-                        DrawPolyPolygon( rPolyPoly );
                 }
+                else
+                    DrawPolyPolygon( rPolyPoly );
             }
         }
+    }
 
-        mpMetaFile = pOldMetaFile;
+    mpMetaFile = pOldMetaFile;
 
-        // #110958# Restore disabled alpha VDev
-        mpAlphaVDev = pOldAlphaVDev;
+    // #110958# Restore disabled alpha VDev
+    mpAlphaVDev = pOldAlphaVDev;
 
-        // #110958# Apply alpha value also to VDev alpha channel
-        if( mpAlphaVDev )
-        {
-            const Color aFillCol( mpAlphaVDev->GetFillColor() );
-            mpAlphaVDev->SetFillColor( Color(sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
-                                             sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
-                                             sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100)) );
+    // #110958# Apply alpha value also to VDev alpha channel
+    if( mpAlphaVDev )
+    {
+        const Color aFillCol( mpAlphaVDev->GetFillColor() );
+        mpAlphaVDev->SetFillColor( Color(sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
+                                         sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100),
+                                         sal::static_int_cast<sal_uInt8>(255*nTransparencePercent/100)) );
 
-            mpAlphaVDev->DrawTransparent( rPolyPoly, nTransparencePercent );
+        mpAlphaVDev->DrawTransparent( rPolyPoly, nTransparencePercent );
 
-            mpAlphaVDev->SetFillColor( aFillCol );
-        }
+        mpAlphaVDev->SetFillColor( aFillCol );
     }
 }
 

@@ -2373,24 +2373,22 @@ bool PDFSalLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( bRightToLeft )
             cChar = static_cast<sal_Unicode>(GetMirroredChar( cChar ));
 
-        if( 1 ) // TODO: shortcut for ASCII?
-        {
-            sal_Char aBuf[4];
-            sal_uInt32 nInfo;
-            sal_Size nSrcCvtChars;
+        sal_Char aBuf[4];
+        sal_uInt32 nInfo;
+        sal_Size nSrcCvtChars;
 
-            sal_Size nConv = rtl_convertUnicodeToText( aConv,
-                                                       NULL,
-                                                       &cChar, 1,
-                                                       aBuf, sizeof(aBuf)/sizeof(*aBuf),
-                                                       RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
-                                                       &nInfo, &nSrcCvtChars );
-            // check whether conversion was possible
-            // else fallback font is needed as the standard fonts
-            // are handled via WinAnsi encoding
-            if( nConv > 0 )
-                cChar = ((sal_Unicode)aBuf[0]) & 0x00ff;
-        }
+        sal_Size nConv = rtl_convertUnicodeToText( aConv,
+                                                   NULL,
+                                                   &cChar, 1,
+                                                   aBuf, sizeof(aBuf)/sizeof(*aBuf),
+                                                   RTL_UNICODETOTEXT_FLAGS_UNDEFINED_ERROR,
+                                                   &nInfo, &nSrcCvtChars );
+        // check whether conversion was possible
+        // else fallback font is needed as the standard fonts
+        // are handled via WinAnsi encoding
+        if( nConv > 0 )
+            cChar = ((sal_Unicode)aBuf[0]) & 0x00ff;
+
         if( cChar & 0xff00 )
         {
             cChar = 0;   // NotDef glyph
