@@ -4144,11 +4144,11 @@
           <value/>
         </prop>
         <prop
-            oor:name="StartCenterLayoutStyle" oor:type="xs:int"
+            oor:name="StartCenterHideExternalLinks" oor:type="xs:int"
             oor:nillable="false">
           <info>
-            <desc>Contains a number deciding the layout style of the start
-            center</desc>
+            <desc>Contains a number deciding whether to show or hide buttons
+            with external links</desc>
           </info>
           <value>0</value>
         </prop>

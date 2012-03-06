@@ -36,8 +36,8 @@ Globals
             WINDOWSPATCHLEVEL 8
             OOOVENDOR The Document Foundation
             OOODOWNLOADNAME 1
-            STARTCENTER_LAYOUT_STYLE 0
             BUILDIDCWS {buildidcws}
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
     }
 }
@@ -87,8 +87,8 @@ LibreOffice
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active          1
         compression     5
@@ -152,8 +152,8 @@ LibreOffice_Dev
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active          1
         compression     5
@@ -190,10 +190,10 @@ URE
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             PACKAGEMAP package_names_ext.txt
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
         compression 5
@@ -234,8 +234,8 @@ LibreOffice_SDK
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
         compression 5
@@ -282,8 +282,8 @@ LibreOffice_Dev_SDK
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
         compression 5
@@ -324,8 +324,8 @@ LibreOffice_Test
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
         compression 5
@@ -372,8 +372,8 @@ LibreOffice_Dev_Test
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active 1
         compression 5
@@ -432,8 +432,8 @@ OxygenOffice
             STARTCENTER_ADDFEATURE_URL http://extensions.libreoffice.org/
             STARTCENTER_INFO_URL http://www.libreoffice.org/
             STARTCENTER_TEMPLREP_URL http://templates.libreoffice.org/
-            STARTCENTER_LAYOUT_STYLE 0
             DICT_REPO_URL http://extensions.libreoffice.org/dictionaries/
+            STARTCENTER_HIDE_EXTERNAL_LINKS 0
         }
         active          1
         compression     5
