@@ -34,6 +34,7 @@ ast \
 be \
 bg \
 bn \
+bn-IN \
 bo \
 br \
 brx \

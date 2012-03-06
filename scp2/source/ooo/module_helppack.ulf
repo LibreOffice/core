@@ -254,10 +254,16 @@ en-US = "Northern Sotho"
 en-US = "Installs Northern Sotho help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_BN]
-en-US = "Bengali"
+en-US = "Bengali (Bangladesh)"
 
 [STR_DESC_MODULE_HELPPACK_BN]
-en-US = "Installs Bengali help in %PRODUCTNAME %PRODUCTVERSION"
+en-US = "Installs Bengali (Bangladesh) help in %PRODUCTNAME %PRODUCTVERSION"
+
+[STR_NAME_MODULE_HELPPACK_BN_IN]
+en-US = "Bengali (India)"
+
+[STR_DESC_MODULE_HELPPACK_BN_IN]
+en-US = "Installs Bengali (India) help in %PRODUCTNAME %PRODUCTVERSION"
 
 [STR_NAME_MODULE_HELPPACK_OR]
 en-US = "Oriya"
