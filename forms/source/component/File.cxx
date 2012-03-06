@@ -250,7 +250,7 @@ void OFileControlModel::read(const Reference<stario::XObjectInputStream>& _rxInS
             m_sDefaultValue = ::rtl::OUString();
     }
 
-    // Nach dem Lesen die Defaultwerte anzeigen
+    // Display default values after read
 //  _reset();
 }
 
@@ -266,7 +266,7 @@ void SAL_CALL OFileControlModel::reset() throw ( ::com::sun::star::uno::RuntimeE
     if (bContinue)
     {
         {
-            // Wenn Models threadSave
+            // If Models are threadSave
             ::osl::MutexGuard aGuard(m_aMutex);
             _reset();
         }
