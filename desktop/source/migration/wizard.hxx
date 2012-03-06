@@ -77,8 +77,6 @@ private:
 
     void storeAcceptDate();
     void setPatchLevel();
-    void disableWizard();
-    void enableQuickstart();
 
     DECL_LINK(DeclineHdl, PushButton*);
 

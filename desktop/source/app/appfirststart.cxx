@@ -106,24 +106,8 @@ OUString Desktop::GetLicensePath()
 /* Check if we need to accept license. */
 sal_Bool Desktop::LicenseNeedsAcceptance()
 {
-    // Don't show a license
+    // permissive licences like ALv2 don't need end user license approval
     return sal_False;
-/*
-    sal_Bool bShowLicense = sal_True;
-    sal_Int32 nOpenSourceContext = 0;
-    try
-    {
-        ::utl::ConfigManager::GetDirectConfigProperty(
-            ::utl::ConfigManager::OPENSOURCECONTEXT ) >>= nOpenSourceContext;
-    }
-    catch( const ::com::sun::star::uno::Exception& ) {}
-
-    // open source needs no license
-    if ( nOpenSourceContext > 0 )
-        bShowLicense = sal_False;
-
-    return bShowLicense;
-*/
 }
 
 /* Local function - get access to the configuration */
@@ -264,6 +248,46 @@ sal_Bool Desktop::IsFirstStartWizardNeeded()
     return impl_isFirstStart() || !impl_isLicenseAccepted();
 }
 
+void Desktop::FinishFirstStart()
+{
+#if 0 // most platforms no longer benefit from the quickstarter, TODO: are the other benefits worth it?
+#ifndef OS2 // cannot enable quickstart on first startup, see shutdownicon.cxx comments.
+        EnableQuickstart();
+#endif
+#endif
+
+    try {
+        Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
+        // get configuration provider
+        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
+        xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
+        Sequence< Any > theArgs(1);
+        NamedValue v(OUString::createFromAscii("NodePath"),
+            makeAny(OUString::createFromAscii("org.openoffice.Setup/Office")));
+        theArgs[0] <<= v;
+        Reference< XPropertySet > pset = Reference< XPropertySet >(
+            theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
+        pset->setPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("FirstStartWizardCompleted")), makeAny(sal_True));
+        Reference< util::XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
+    } catch (const uno::Exception&) {
+        // ignore the exception as it is not critical enough to prevent office from starting
+    }
+}
+
+void Desktop::EnableQuickstart()
+{
+    sal_Bool bQuickstart( sal_True );
+    sal_Bool bAutostart( sal_True );
+    Sequence< Any > aSeq( 2 );
+    aSeq[0] <<= bQuickstart;
+    aSeq[1] <<= bAutostart;
+
+    Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
+        OUString( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.Quickstart"))), UNO_QUERY );
+    if ( xQuickstart.is() )
+        xQuickstart->initialize( aSeq );
+}
+
 void Desktop::DoRestartActionsIfNecessary( sal_Bool bQuickStart )
 {
     if ( bQuickStart )
@@ -311,4 +335,3 @@ void Desktop::SetRestartState()
     }
 
 }
-

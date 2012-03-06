@@ -360,17 +360,7 @@ sal_Bool FirstStartWizard::leaveState(WizardState)
 
 sal_Bool FirstStartWizard::onFinish()
 {
-    // return sal_True;
-    if ( svt::RoadmapWizard::onFinish() )
-    {
-#ifndef OS2 // cannot enable quickstart on first startup, see shutdownicon.cxx comments.
-        enableQuickstart();
-#endif
-        disableWizard();
-        return sal_True;
-    }
-    else
-        return sal_False;
+    return svt::RoadmapWizard::onFinish();
 }
 
 short FirstStartWizard::Execute()
@@ -510,44 +500,6 @@ void FirstStartWizard::cleanOldOfficeRegKeys()
         }
     }
 #endif
-}
-
-void FirstStartWizard::disableWizard()
-{
-
-    try {
-        Reference < XMultiServiceFactory > xFactory = ::comphelper::getProcessServiceFactory();
-        // get configuration provider
-        Reference< XMultiServiceFactory > theConfigProvider = Reference< XMultiServiceFactory >(
-        xFactory->createInstance(sConfigSrvc), UNO_QUERY_THROW);
-        Sequence< Any > theArgs(1);
-        NamedValue v(OUString::createFromAscii("NodePath"),
-            makeAny(OUString::createFromAscii("org.openoffice.Setup/Office")));
-        theArgs[0] <<= v;
-        Reference< XPropertySet > pset = Reference< XPropertySet >(
-            theConfigProvider->createInstanceWithArguments(sAccessSrvc, theArgs), UNO_QUERY_THROW);
-        pset->setPropertyValue(OUString::createFromAscii("FirstStartWizardCompleted"), makeAny(sal_True));
-        Reference< XChangesBatch >(pset, UNO_QUERY_THROW)->commitChanges();
-    } catch (const Exception&)
-    {
-    }
-
-}
-
-
-void FirstStartWizard::enableQuickstart()
-{
-    sal_Bool bQuickstart( sal_True );
-    sal_Bool bAutostart( sal_True );
-    Sequence< Any > aSeq( 2 );
-    aSeq[0] <<= bQuickstart;
-    aSeq[1] <<= bAutostart;
-
-    Reference < XInitialization > xQuickstart( ::comphelper::getProcessServiceFactory()->createInstance(
-        OUString::createFromAscii( "com.sun.star.office.Quickstart" )),UNO_QUERY );
-    if ( xQuickstart.is() )
-        xQuickstart->initialize( aSeq );
-
 }
 
 sal_Bool FirstStartWizard::showOnlineUpdatePage()

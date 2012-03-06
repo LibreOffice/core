@@ -131,6 +131,8 @@ class Desktop : public Application
         static sal_Bool         LicenseNeedsAcceptance();
         static sal_Bool         IsFirstStartWizardNeeded();
         static sal_Bool         CheckExtensionDependencies();
+        static void             EnableQuickstart();
+        static void             FinishFirstStart();
 
         static void             DoRestartActionsIfNecessary( sal_Bool bQuickStart );
         static void             SetRestartState();

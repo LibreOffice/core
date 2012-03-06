@@ -1838,9 +1838,6 @@ void Desktop::Main()
         tools::InitTestToolLib();
         RTL_LOGFILE_CONTEXT_TRACE( aLog, "} tools::InitTestToolLib" );
 
-        // process non-pre-registered extensions
-        installBundledExtensionBlobs();
-
         // Check if bundled or shared extensions were added /removed
         // and process those extensions (has to be done before checking
         // the extension dependencies!
@@ -1882,6 +1879,12 @@ void Desktop::Main()
                         return;
                     }
 #endif // license acceptance is not needed for ASL
+
+                   // process non-pre-registered extensions
+                   installBundledExtensionBlobs();
+
+                   // mark first start as done
+                   FinishFirstStart();
                 }
             }
 
