@@ -3249,6 +3249,7 @@ if test "$cross_compiling" = "yes"; then
     test -n "$PKG_CONFIG_FOR_BUILD" && export PKG_CONFIG="$PKG_CONFIG_FOR_BUILD"
     cd CONF-FOR-BUILD
     sub_conf_opts=""
+    test -n "$enable_ccache" && sub_conf_opts="$sub_conf_opts --enable-ccache=$enable_ccache"
     test -n "$with_ant_home" && sub_conf_opts="$sub_conf_opts --with-ant-home=$with_ant_home"
     test $with_java = no && sub_conf_opts="$sub_conf_opts --without-java"
     test $with_junit = no && sub_conf_opts="$sub_conf_opts --without-junit"
