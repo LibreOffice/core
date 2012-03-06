@@ -1012,7 +1012,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
     const ScDPSaveGroupDimension* pExistingGroup = pDimData->GetGroupDimForBase( aBaseDimName );
     while ( pExistingGroup )
     {
-        const rtl::OUString& aGroupDimName = pExistingGroup->GetGroupDimName();
+        rtl::OUString aGroupDimName = pExistingGroup->GetGroupDimName();
         pDimData->RemoveGroupDimension( aGroupDimName );     // pExistingGroup is deleted
 
         // also remove SaveData settings for the dimension that no longer exists
