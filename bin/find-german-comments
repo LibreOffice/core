@@ -40,6 +40,8 @@ class Parser:
         op.set_usage("%prog [options] <rootdir>\n\n" +
             "Searches for german comments in cxx/hxx source files inside a given root\n" +
             "directory recursively.")
+        op.add_option("-f", "--filenames-only", action="store_true", dest="filenames_only", default=False,
+            help="Only print the filenames of files containing German comments")
         op.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False,
             help="Turn on verbose mode (print progress to stderr)")
         self.options, args = op.parse_args()
@@ -139,9 +141,19 @@ class Parser:
         """
         checks each comment in a file
         """
-        for linenum, s in self.get_comments(path):
-            if self.is_german(s):
-                print "%s:%s: %s" % (path, linenum, s)
+        if not self.options.filenames_only:
+            for linenum, s in self.get_comments(path):
+                if self.is_german(s):
+                    print "%s:%s: %s" % (path, linenum, s)
+        else:
+            fnames = set([])
+            for linenum, s in self.get_comments(path):
+                if self.is_german(s):
+                    # Make sure we print each filename only once
+                    fnames.add(path)
+            # Print the filenames
+            for f in fnames:
+                print f
 
     def check_source_files(self, dir):
         """
