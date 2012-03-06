@@ -309,7 +309,7 @@ sal_Bool ScNameDefDlg::IsRefInputMode() const
 void ScNameDefDlg::RefInputDone( sal_Bool bForced)
 {
     ScAnyRefDlg::RefInputDone(bForced);
-    EdModifyHdl(&maEdRange);
+    IsNameValid();
 }
 
 void ScNameDefDlg::SetReference( const ScRange& rRef, ScDocument* pDocP )
@@ -393,15 +393,9 @@ IMPL_LINK_NOARG(ScNameDefDlg, NameModifyHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(ScNameDefDlg, EdModifyHdl)
-{
-    IsNameValid();
-    return 0;
-}
-
 IMPL_LINK_NOARG(ScNameDefDlg, AssignGetFocusHdl)
 {
-    EdModifyHdl( &maEdRange );
+    IsNameValid();
     return 0;
 }
 
