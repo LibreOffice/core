@@ -199,10 +199,6 @@ OUString XMLFilterTabPageXSLT::GetURL( SvtURLBox& rURLBox )
     return aURL;
 }
 
-IMPL_LINK_NOARG(XMLFilterTabPageXSLT, ToggleXSLTImplHdl) {
-    return (0L);
-}
-
 IMPL_LINK ( XMLFilterTabPageXSLT, ClickBrowseHdl_Impl, PushButton *, pButton )
 {
     SvtURLBox* pURLBox;
