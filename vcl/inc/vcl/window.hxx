@@ -624,7 +624,6 @@ public:
     sal_Bool                PostUserEvent( sal_uLong& rEventId, sal_uLong nEvent, void* pEventData = NULL );
     sal_Bool                PostUserEvent( sal_uLong& rEventId, const Link& rLink, void* pCaller = NULL );
     void                RemoveUserEvent( sal_uLong nUserEvent );
-    void                PostStateChanged( StateChangedType nState );
 
     void                IncrementLockCount();
     void                DecrementLockCount();

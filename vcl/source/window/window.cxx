@@ -5332,15 +5332,6 @@ IMPL_LINK( Window, ImplAsyncStateChangedHdl, void*, pState )
 
 // -----------------------------------------------------------------------
 
-void Window::PostStateChanged( StateChangedType nState )
-{
-    DBG_CHKTHIS( Window, ImplDbgCheckWindow );
-
-    PostUserEvent( LINK( this, Window, ImplAsyncStateChangedHdl ), (void*)(sal_uLong)nState );
-}
-
-// -----------------------------------------------------------------------
-
 sal_Bool Window::IsLocked( sal_Bool bChildren ) const
 {
     if ( mpWindowImpl->mnLockCount != 0 )
