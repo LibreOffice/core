@@ -69,8 +69,6 @@ class FuncData
     sal_uInt16      nParamCount;
     ParamType   eAsyncType;
     ParamType   eParamType[MAXFUNCPARAM];
-private:
-    FuncData(const rtl::OUString& rIName);
 public:
     FuncData(const ModuleData*pModule,
              const rtl::OUString& rIName,

@@ -101,17 +101,6 @@ public:
     void            FreeInstance() { delete pInstance; pInstance = 0; }
 };
 
-FuncData::FuncData(const rtl::OUString& rIName) :
-    pModuleData     (NULL),
-    aInternalName   (rIName),
-    nNumber         (0),
-    nParamCount     (0),
-    eAsyncType      (NONE)
-{
-    for (sal_uInt16 i = 0; i < MAXFUNCPARAM; i++)
-        eParamType[i] = PTR_DOUBLE;
-}
-
 //------------------------------------------------------------------------
 
 FuncData::FuncData(const ModuleData*pModule,

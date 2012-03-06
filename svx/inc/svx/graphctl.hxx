@@ -91,7 +91,6 @@ protected:
 
 public:
 
-                        GraphCtrl( Window* pParent, const WinBits nWinBits = 0 );
                         GraphCtrl( Window* pParent, const ResId& rResId );
                         ~GraphCtrl();
 
