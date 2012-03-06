@@ -500,27 +500,21 @@ namespace vclcanvas
 
             if( mp2ndOutDev )
             {
-                if( !nTransparency || bSourceAlpha )
+                // HACK. Normally, CanvasHelper does not care
+                // about actually what mp2ndOutDev is...
+                // well, here we do & assume a 1bpp target.
+                if( nTransparency > 127 )
                 {
-                    // HACK. Normally, CanvasHelper does not care
-                    // about actually what mp2ndOutDev is...
-                    if( bSourceAlpha && nTransparency == 255 )
-                    {
-                        mp2ndOutDev->getOutDev().SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
-                                                              DRAWMODE_WHITEGRADIENT | DRAWMODE_WHITEBITMAP );
-                        mp2ndOutDev->getOutDev().SetFillColor( COL_WHITE );
-                        mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
-                        mp2ndOutDev->getOutDev().SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
-                                                              DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
-                    }
-                    else
-                    {
-                        mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
-                    }
+                    mp2ndOutDev->getOutDev().SetDrawMode( DRAWMODE_WHITELINE | DRAWMODE_WHITEFILL | DRAWMODE_WHITETEXT |
+                                                          DRAWMODE_WHITEGRADIENT | DRAWMODE_WHITEBITMAP );
+                    mp2ndOutDev->getOutDev().SetFillColor( COL_WHITE );
+                    mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
+                    mp2ndOutDev->getOutDev().SetDrawMode( DRAWMODE_BLACKLINE | DRAWMODE_BLACKFILL | DRAWMODE_BLACKTEXT |
+                                                          DRAWMODE_BLACKGRADIENT | DRAWMODE_BLACKBITMAP );
                 }
                 else
                 {
-                    mp2ndOutDev->getOutDev().DrawTransparent( aPolyPoly, (sal_uInt16)nTransPercent );
+                    mp2ndOutDev->getOutDev().DrawPolyPolygon( aPolyPoly );
                 }
             }
         }
