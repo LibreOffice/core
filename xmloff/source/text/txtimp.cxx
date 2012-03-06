@@ -85,7 +85,6 @@
 #include "XMLAutoMarkFileContext.hxx"
 
 #include "XMLCalculationSettingsContext.hxx"
-#include <xmloff/formsimp.hxx>
 #include "XMLNumberStylesImport.hxx"
 // XML import: reconstrution of assignment of paragraph style to outline levels (#i69629#)
 #include <com/sun/star/beans/XPropertyState.hpp>

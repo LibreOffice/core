@@ -45,25 +45,6 @@ XWindowItem::XWindowItem() :
 }
 
 
-XWindowItem::XWindowItem( sal_uInt16 nWhichId, Window * pWin ) :
-    SfxPoolItem( nWhichId )
-{
-    if (pWin)
-    {
-        m_xWin = uno::Reference< awt::XWindow >( pWin->GetComponentInterface(), uno::UNO_QUERY );
-        // the assertion can't possibly fails since VCLXWindow implements XWindow...
-        DBG_ASSERT( m_xWin.is(), "failed to get XWindow" );
-    }
-}
-
-
-XWindowItem::XWindowItem( sal_uInt16 nWhichId, uno::Reference< awt::XWindow > & rxWin ) :
-    SfxPoolItem( nWhichId ),
-    m_xWin( rxWin )
-{
-}
-
-
 XWindowItem::XWindowItem( const XWindowItem &rItem ) :
     SfxPoolItem( Which() ),
     m_xWin( rItem.m_xWin )

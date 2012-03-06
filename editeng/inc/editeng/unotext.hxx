@@ -423,14 +423,11 @@ protected:
 public:
     SvxUnoTextBase( ) throw();
     SvxUnoTextBase( const SvxItemPropertySet* _pSet ) throw();
-    SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet ) throw();
     SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, ::com::sun::star::uno::Reference < ::com::sun::star::text::XText > xParent ) throw();
     SvxUnoTextBase( const SvxUnoTextBase& rText ) throw();
     virtual ~SvxUnoTextBase() throw();
 
     UNO3_GETIMPLEMENTATION_DECL( SvxUnoTextBase )
-
-    ESelection InsertField( const SvxFieldItem& rField ) throw();
 
     ::com::sun::star::uno::Reference< ::com::sun::star::text::XTextCursor > createTextCursorBySelection( const ESelection& rSel );
 

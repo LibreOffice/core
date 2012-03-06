@@ -75,7 +75,6 @@ $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/dllapi.h,xmloff/dllapi.h
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/families.hxx,xmloff/families.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/formlayerexport.hxx,xmloff/formlayerexport.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/formlayerimport.hxx,xmloff/formlayerimport.hxx))
-$(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/formsimp.hxx,xmloff/formsimp.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/i18nmap.hxx,xmloff/i18nmap.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/maptype.hxx,xmloff/maptype.hxx))
 $(eval $(call gb_Package_add_file,xmloff_inc,inc/xmloff/nmspmap.hxx,xmloff/nmspmap.hxx))

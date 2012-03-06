@@ -1581,14 +1581,6 @@ SvxUnoTextBase::SvxUnoTextBase( const SvxItemPropertySet* _pSet  ) throw()
 {
 }
 
-SvxUnoTextBase::SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet  ) throw()
-: SvxUnoTextBase_Base( pSource, _pSet )
-{
-    ESelection aSelection;
-    ::GetSelection( aSelection, GetEditSource()->GetTextForwarder() );
-    SetSelection( aSelection );
-}
-
 SvxUnoTextBase::SvxUnoTextBase( const SvxEditSource* pSource, const SvxItemPropertySet* _pSet, uno::Reference < text::XText > xParent ) throw()
 : SvxUnoTextBase_Base( pSource, _pSet )
 {
@@ -1606,25 +1598,6 @@ SvxUnoTextBase::SvxUnoTextBase( const SvxUnoTextBase& rText ) throw()
 
 SvxUnoTextBase::~SvxUnoTextBase() throw()
 {
-}
-
-// Internal
-ESelection SvxUnoTextBase::InsertField( const SvxFieldItem& rField ) throw()
-{
-    SvxTextForwarder* pForwarder = GetEditSource() ? GetEditSource()->GetTextForwarder() : NULL;
-    if( pForwarder )
-    {
-        pForwarder->QuickInsertField( rField, GetSelection() );
-        GetEditSource()->UpdateData();
-
-        //  Adapt selection
-        //! It would be easier if the EditEngine would return the selection
-        //! on QuickInsertText...
-        CollapseToStart();
-        GoRight( 1, sal_True );  // Field is always 1 character
-    }
-
-    return GetSelection();  // Selection with the field
 }
 
 uno::Reference< text::XTextCursor > SvxUnoTextBase::createTextCursorBySelection( const ESelection& rSel )

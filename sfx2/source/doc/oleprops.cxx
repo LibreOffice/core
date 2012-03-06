@@ -146,9 +146,6 @@ public:
     explicit            SfxOleStringPropertyBase(
                             sal_Int32 nPropId, sal_Int32 nPropType,
                             rtl_TextEncoding eTextEnc );
-    explicit            SfxOleStringPropertyBase(
-                            sal_Int32 nPropId, sal_Int32 nPropType,
-                            rtl_TextEncoding eTextEnc, const String& rValue );
 
     inline const String& GetValue() const { return maValue; }
     inline void         SetValue( const String& rValue ) { maValue = rValue; }
@@ -526,14 +523,6 @@ SfxOleStringPropertyBase::SfxOleStringPropertyBase(
         sal_Int32 nPropId, sal_Int32 nPropType, rtl_TextEncoding eTextEnc ) :
     SfxOlePropertyBase( nPropId, nPropType ),
     SfxOleStringHelper( eTextEnc )
-{
-}
-
-SfxOleStringPropertyBase::SfxOleStringPropertyBase(
-        sal_Int32 nPropId, sal_Int32 nPropType, rtl_TextEncoding eTextEnc, const String& rValue ) :
-    SfxOlePropertyBase( nPropId, nPropType ),
-    SfxOleStringHelper( eTextEnc ),
-    maValue( rValue )
 {
 }
 

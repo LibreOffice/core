@@ -297,13 +297,6 @@ public:
             sal_uInt32 nIdx = 0 ) const;
 };
 
-class XMLPagePropertySetMapper : public XMLPropertySetMapper
-{
-public:
-    XMLPagePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef);
-    ~XMLPagePropertySetMapper();
-};
-
 class XMLPageExportPropertyMapper : public SvXMLExportPropertyMapper
 {
 private:

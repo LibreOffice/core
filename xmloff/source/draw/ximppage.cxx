@@ -40,7 +40,6 @@
 #include "ximpshap.hxx"
 #include "animimp.hxx"
 #include "XMLStringBufferImportContext.hxx"
-#include <xmloff/formsimp.hxx>
 #include <xmloff/xmlictxt.hxx>
 #include "ximpstyl.hxx"
 #include <xmloff/prstylei.hxx>

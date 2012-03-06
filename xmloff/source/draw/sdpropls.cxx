@@ -1572,17 +1572,6 @@ void XMLShapeExportPropertyMapper::handleElementItem(
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-
-XMLPagePropertySetMapper::XMLPagePropertySetMapper(const UniReference< XMLPropertyHandlerFactory >& rFactoryRef)
-: XMLPropertySetMapper( aXMLSDPresPageProps, rFactoryRef )
-{
-}
-
-XMLPagePropertySetMapper::~XMLPagePropertySetMapper()
-{
-}
-
 // ----------------------------------------
 
 XMLPageExportPropertyMapper::XMLPageExportPropertyMapper( const UniReference< XMLPropertySetMapper >& rMapper, SvXMLExport& rExport ) :
