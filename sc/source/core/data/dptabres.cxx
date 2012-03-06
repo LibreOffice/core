@@ -974,7 +974,6 @@ bool ScDPResultData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex
 bool ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
                                 const ScDPItemData& rBaseData, long nBaseIndex ) const
 {
-    fprintf(stdout, "ScDPResultData::IsInGroup:   group dim = %d  group item id = %d\n", nGroupIndex, nGroupDataId);
     const ScDPItemData* pGroupData = pSource->GetItemDataById( nGroupIndex , nGroupDataId);
     if ( pGroupData )
         return pSource->GetData()->IsInGroup( *pGroupData, nGroupIndex, rBaseData , nBaseIndex );
@@ -1268,9 +1267,6 @@ long ScDPResultMember::GetSize(long nMeasure) const
 
 sal_Bool ScDPResultMember::IsVisible() const
 {
-//  fprintf(stdout, "ScDPResultMember::IsVisible:   initialized = %d  valid = %d  has elements = %d\n",
-//          bInitialized, IsValid(), bHasElements);
-
     if (!bInitialized)
         return false;
 
@@ -1450,9 +1446,6 @@ void ScDPResultMember::FillMemberResults( uno::Sequence<sheet::MemberResult>* pS
         ScDPItemData::Type eType = aItemData.GetType();
         bIsNumeric = eType == ScDPItemData::Value || ScDPItemData::GroupValue;
     }
-
-//  fprintf(stdout, "ScDPResultMember::FillMemberResults:   name = '%s' numeric = %d\n",
-//          rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr(), bIsNumeric);
 
     const ScDPDimension*        pParentDim = GetParentDim();
     if ( bIsNumeric && pParentDim && pResultData->IsNumOrDateGroup( pParentDim->GetDimension() ) )
@@ -2738,13 +2731,9 @@ ScDPGroupCompare::ScDPGroupCompare( const ScDPResultData* pData, const ScDPInitS
 
 sal_Bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
 {
-    stack_printer __stack_printer__("ScDPGroupCompare::TestIncluded");
-    fprintf(stdout, "ScDPGroupCompare::TestIncluded:   dim source = %d  group base = %d\n",
-            nDimSource, nGroupBase);
     bool bInclude = true;
     if ( bIsBase )
     {
-        fprintf(stdout, "ScDPGroupCompare::TestIncluded:   case 2 (source dim)\n");
         // need to check all previous groups
         //! get array of groups (or indexes) before loop?
         ScDPItemData aMemberData;
@@ -2752,10 +2741,7 @@ sal_Bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
         long nInitCount = rInitState.GetCount();
         const long* pInitSource = rInitState.GetSource();
         const SCROW* pInitNames = rInitState.GetNameIds();
-        for (long nInitPos=0; nInitPos<nInitCount; nInitPos++)
-        {
-            fprintf(stdout, "ScDPGroupCompare::TestIncluded:   source = %d  name id = %d\n", pInitSource[nInitPos], pInitNames[nInitPos]);
-        }
+
         for (long nInitPos=0; nInitPos<nInitCount && bInclude; nInitPos++)
         {
             if ( pResultData->GetGroupBase( pInitSource[nInitPos] ) == nDimSource )
@@ -2767,7 +2753,6 @@ sal_Bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
     }
     else if ( nGroupBase >= 0 )
     {
-        fprintf(stdout, "ScDPGroupCompare::TestIncluded:   case 3 (group dim?)\n");
         // base isn't used in preceding fields
         // -> look for other groups using the same base
 
@@ -2814,23 +2799,11 @@ ScDPResultDimension::~ScDPResultDimension()
 
 ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
 {
-//  stack_printer __stack_printer__("ScDPResultDimension::FindMember");
-//  fprintf(stdout, "ScDPResultDimension::FindMember:   iData = %d\n", iData);
     if( bIsDataLayout )
         return maMemberArray[0];
 
-//  fprintf(stdout, "ScDPResultDimension::FindMember:   hash size = %d\n", maMemberHash.size());
-//  {
-//      MemberHash::const_iterator i = maMemberHash.begin(), ie = maMemberHash.end();
-//      for (; i != ie; ++i)
-//      {
-//          printf("%d ", i->first);
-//      }
-//      printf("\n");
-//  }
     MemberHash::const_iterator aRes = maMemberHash.find( iData );
     if( aRes != maMemberHash.end()) {
-//      fprintf(stdout, "ScDPResultDimension::FindMember:   in hash\n");
            if ( aRes->second->IsNamedItem( iData ) )
             return aRes->second;
         OSL_FAIL("problem!  hash result is not the same as IsNamedItem");
@@ -2838,19 +2811,13 @@ ScDPResultMember *ScDPResultDimension::FindMember(  SCROW  iData ) const
 
     unsigned int i;
     unsigned int nCount = maMemberArray.size();
-//  fprintf(stdout, "ScDPResultDimension::FindMember:   member size = %d\n", nCount);
     ScDPResultMember* pResultMember;
     for( i = 0; i < nCount ; i++ )
     {
         pResultMember = maMemberArray[i];
-//      fprintf(stdout, "ScDPResultDimension::FindMember:   pResultMember = %p\n", pResultMember);
         if ( pResultMember->IsNamedItem( iData ) )
-        {
-//          fprintf(stdout, "ScDPResultDimension::FindMember:   not in hash but found it.\n");
             return pResultMember;
-        }
     }
-//  fprintf(stdout, "ScDPResultDimension::FindMember:   total fail\n");
     return NULL;
 }
 
@@ -3058,18 +3025,13 @@ long ScDPResultDimension::GetSize(long nMeasure) const
     }
     return nTotal;
 }
-//#include <iostream>
+
 bool ScDPResultDimension::IsValidEntry( const vector< SCROW >& aMembers ) const
 {
-//  stack_printer __stack_printer__("ScDPResultDimension::IsValidEntry");
-//  fprintf(stdout, "ScDPResultDimension::IsValidEntry:   dim name = '%s'\n", rtl::OUStringToOString(aDimensionName, RTL_TEXTENCODING_UTF8).getStr());
     if (aMembers.empty())
         return false;
 
-//  std::copy(aMembers.begin(),aMembers.end(), std::ostream_iterator<SCROW>(std::cout, " "));std::cout << std::endl;
-
     const ScDPResultMember* pMember = FindMember( aMembers[0] );
-//  fprintf(stdout, "ScDPResultDimension::IsValidEntry:   pMember = %p  id = %d\n", pMember, aMembers[0]);
     if ( NULL != pMember )
         return pMember->IsValidEntry( aMembers );
 #if OSL_DEBUG_LEVEL > 1
@@ -3126,11 +3088,8 @@ void ScDPResultDimension::FillMemberResults( uno::Sequence<sheet::MemberResult>*
         }
         else if ( pMember->IsVisible() )
         {
-//          fprintf(stdout, "ScDPResultDimension::FillMemberResults:   member visible\n");
             pMember->FillMemberResults( pSequences, nPos, nMeasure, false, NULL, NULL );
         }
-//      else
-//          fprintf(stdout, "ScDPResultDimension::FillMemberResults:   member not visible\n");
         // nPos is modified
     }
 }
@@ -4019,7 +3978,6 @@ SCROW ScDPResultMember::GetDataId( ) const
 
 ScDPResultMember* ScDPResultDimension::AddMember(const ScDPParentDimData &aData )
 {
-//  fprintf(stdout, "ScDPResultDimension::AddMember:   dim name = '%s'\n", rtl::OUStringToOString(aDimensionName, RTL_TEXTENCODING_UTF8).getStr());
     ScDPResultMember* pMember = new ScDPResultMember( pResultData, aData, false );
     SCROW   nDataIndex = pMember->GetDataId();
     maMemberArray.push_back( pMember );
@@ -4031,11 +3989,9 @@ ScDPResultMember* ScDPResultDimension::AddMember(const ScDPParentDimData &aData 
 
 ScDPResultMember* ScDPResultDimension::InsertMember(ScDPParentDimData *pMemberData)
 {
-    fprintf(stdout, "ScDPResultDimension::InsertMember:   dim name = '%s'\n", rtl::OUStringToOString(aDimensionName, RTL_TEXTENCODING_UTF8).getStr());
     SCROW  nInsert = 0;
     if ( !lcl_SearchMember( maMemberArray, pMemberData->mnOrder , nInsert ) )
     {
-        fprintf(stdout, "ScDPResultDimension::InsertMember:   member doesn't exist\n");
         ScDPResultMember* pNew = new ScDPResultMember( pResultData, *pMemberData, false );
         maMemberArray.insert( maMemberArray.begin()+nInsert, pNew );
 
@@ -4044,8 +4000,6 @@ ScDPResultMember* ScDPResultDimension::InsertMember(ScDPParentDimData *pMemberDa
             maMemberHash.insert( std::pair< SCROW, ScDPResultMember *>( nDataIndex, pNew ) );
         return pNew;
     }
-    else
-        fprintf(stdout, "ScDPResultDimension::InsertMember:   member exists.  no insert.\n");
     return maMemberArray[ nInsert ];
 }
 
@@ -4061,7 +4015,6 @@ void ScDPResultDimension::InitWithMembers(
 
     if (pThisDim && pThisLevel)
     {
-        stack_printer __stack_printer__("ScDPResultDimension::InitWithMembers");
         long nDimSource = pThisDim->GetDimension();     //! check GetSourceDim?
 
         //  create all members at the first call (preserve order)
@@ -4076,11 +4029,7 @@ void ScDPResultDimension::InitWithMembers(
 
         if ( pResultMember == NULL )
         { //only insert found item
-            fprintf(stdout, "ScDPResultDimension::InitWithMembers:   insert (dim name = '%s'; id = %d)\n",
-                    rtl::OUStringToOString(aDimensionName, RTL_TEXTENCODING_UTF8).getStr(), nDataID);
             ScDPParentDimData* pMemberData = pMembers->FindMember( nDataID );
-            fprintf(stdout, "ScDPResultDimension::InitWithMembers:   included = %d\n",
-                    aCompare.IsIncluded(*pMemberData->mpMemberDesc));
             if ( pMemberData && aCompare.IsIncluded( *( pMemberData->mpMemberDesc ) ) )
                 pResultMember = InsertMember( pMemberData );
         }

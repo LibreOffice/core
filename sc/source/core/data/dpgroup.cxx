@@ -516,7 +516,6 @@ sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberForm
 
 bool isDateInGroup(const ScDPItemData& rGroupItem, const ScDPItemData& rChildItem)
 {
-    stack_printer __stack_printer__("::isDateInGroup");
     if (rGroupItem.GetType() != ScDPItemData::GroupValue || rChildItem.GetType() != ScDPItemData::GroupValue)
         return false;
 
@@ -524,9 +523,6 @@ bool isDateInGroup(const ScDPItemData& rGroupItem, const ScDPItemData& rChildIte
     sal_Int32 nGroupValue = rGroupItem.GetGroupValue().mnValue;
     sal_Int32 nChildPart = rChildItem.GetGroupValue().mnGroupType;
     sal_Int32 nChildValue = rChildItem.GetGroupValue().mnValue;
-
-    fprintf(stdout, "isDateInGroup:   group part = %d  group values = %d  child part = %d  child value = %d\n",
-            nGroupPart, nGroupValue, nChildPart, nChildValue);
 
     if (nGroupValue == ScDPItemData::DateFirst || nGroupValue == ScDPItemData::DateLast ||
         nChildValue == ScDPItemData::DateFirst || nChildValue == ScDPItemData::DateLast)
@@ -638,8 +634,6 @@ void ScDPDateGroupHelper::FillColumnEntries(
 
     pCache->ResetGroupItems(mnGroupDim, aNumInfo);
 
-    fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   source dim = %d  group dim = %d\n",
-            nSourceDim, mnGroupDim);
     for ( sal_Int32 nValue = nStart; nValue <= nEnd; nValue++ )
     {
         SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, nValue));
@@ -652,10 +646,6 @@ void ScDPDateGroupHelper::FillColumnEntries(
 
     nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, ScDPItemData::DateLast));
     rEntries.push_back(nId);
-
-    std::vector<SCROW>::const_iterator it = rEntries.begin(), itEnd = rEntries.end();
-    for (; it != itEnd; ++it)
-        fprintf(stdout, "ScDPDateGroupHelper::FillColumnEntries:   id = %d\n", *it);
 }
 
 // -----------------------------------------------------------------------
@@ -1019,8 +1009,6 @@ void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )
     aGroupNames.insert(aNewGroup.GetName());
     ScDPCache* pCache = const_cast<ScDPCache*>(GetCacheTable().getCache());
     pCache->AppendGroupField();
-    fprintf(stdout, "ScDPGroupTableData::AddGroupDimension:   name = '%s'  group count = %d\n",
-            rtl::OUStringToOString(aNewGroup.GetName(), RTL_TEXTENCODING_UTF8).getStr(), aGroups.size());
 }
 
 void ScDPGroupTableData::SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup )
@@ -1377,19 +1365,9 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
                     &rNumInfo);
                 rtl::OUString aName = ScDPUtil::getDateGroupName(
                     pDateHelper->GetDatePart(), nPartValue, pFormatter, rNumInfo.mfStart, rNumInfo.mfEnd);
-                fprintf(stdout, "ScDPGroupTableData::FillGroupValues:   column = %d  source dim = %d  group by = %d  value = %d  name = '%s'\n",
-                        nColumn, nSourceDim,
-                        pDateHelper->GetDatePart(), nPartValue,
-                        rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+
                 ScDPItemData aItem(pDateHelper->GetDatePart(), nPartValue);
                 pItemDataIndex[nDim] = GetCacheTable().getCache()->GetIdByItemData(nColumn, aItem);
-                const ScDPItemData* pTest = GetCacheTable().getCache()->GetItemDataById(nColumn, pItemDataIndex[nDim]);
-                fprintf(stdout, "ScDPGroupTableData::FillGroupValues:   id = %d\n", pItemDataIndex[nDim]);
-                if (pTest)
-                    fprintf(stdout, "ScDPGroupTableData::FillGroupValues:   test str = '%s'\n", rtl::OUStringToOString(pTest->GetString(), RTL_TEXTENCODING_UTF8).getStr());
-//              sal_uInt8 nFlag = ScDPItemData::MK_DATA | ScDPItemData::MK_VAL;
-//              ScDPItemData aItemData(rtl::OUString(), static_cast<double>(nPartValue), nFlag);
-//              pItemDataIndex[nDim] = GetCacheTable().getCache()->GetAdditionalItemID( aItemData );
             }
         }
     }
@@ -1442,8 +1420,6 @@ sal_Bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
 sal_Bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
                                     const ScDPItemData& rBaseData, long nBaseIndex ) const
 {
-    stack_printer __stack_printer__("ScDPGroupTableData::IsInGroup");
-    fprintf(stdout, "ScDPGroupTableData::IsInGroup:   group dim = %d  base dim = %d\n", nGroupIndex, nBaseIndex);
     for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
     {
         const ScDPGroupDimension& rDim = *aIter;

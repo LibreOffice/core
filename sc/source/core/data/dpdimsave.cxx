@@ -351,9 +351,6 @@ ScDPSaveNumGroupDimension::~ScDPSaveNumGroupDimension()
 
 void ScDPSaveNumGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 {
-    stack_printer __stack_printer__("ScDPSaveNumGroupDimension::AddToData");
-    fprintf(stdout, "ScDPSaveNumGroupDimension::AddToData:   dim name = '%s'\n",
-            rtl::OUStringToOString(aDimensionName, RTL_TEXTENCODING_UTF8).getStr());
     long nSource = rData.GetDimensionIndex( aDimensionName );
     if ( nSource >= 0 )
     {

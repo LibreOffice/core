@@ -796,13 +796,8 @@ SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty)
 
 const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
 {
-//  stack_printer __stack_printer__("ScDPCache::GetItemDataById");
-//  fprintf(stdout, "ScDPCache::GetItemDataById:   dim = %d  id = %d\n", nDim, nId);
     if (nDim < 0 || nId < 0)
-    {
-        fprintf(stdout, "ScDPCache::GetItemDataById:   negative ID\n");
         return NULL;
-    }
 
     long nSourceCount = static_cast<long>(maFields.size());
     if (nDim < nSourceCount)
@@ -810,46 +805,28 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
         // source field.
         const Field& rField = maFields[nDim];
         if (nId < rField.maItems.size())
-        {
-//          fprintf(stdout, "ScDPCache::GetItemDataById:   s = '%s' (source)\n",
-//                  rtl::OUStringToOString(rField.maItems[nId].GetString(), RTL_TEXTENCODING_UTF8).getStr());
             return &rField.maItems[nId];
-        }
 
         if (!rField.mpGroup)
-        {
-            fprintf(stdout, "ScDPCache::GetItemDataById:   fail (%d)\n", __LINE__);
             return NULL;
-        }
 
         nId -= rField.maItems.size();
         const DataListType& rGI = rField.mpGroup->maItems;
         if (nId >= rGI.size())
-        {
-            fprintf(stdout, "ScDPCache::GetItemDataById:   fail (%d)\n", __LINE__);
             return NULL;
-        }
-//      fprintf(stdout, "ScDPCache::GetItemDataById:   s = '%s' (grouped source field)\n",
-//              rtl::OUStringToOString(rGI[nId].GetString(), RTL_TEXTENCODING_UTF8).getStr());
+
         return &rGI[nId];
     }
 
     // Try group fields.
     nDim -= nSourceCount;
     if (nDim >= maGroupFields.size())
-    {
-        fprintf(stdout, "ScDPCache::GetItemDataById:   fail (%d)\n", __LINE__);
         return NULL;
-    }
 
     const DataListType& rGI = maGroupFields[nDim].maItems;
     if (nId >= rGI.size())
-    {
-        fprintf(stdout, "ScDPCache::GetItemDataById:   fail (%d)\n", __LINE__);
         return NULL;
-    }
-//  fprintf(stdout, "ScDPCache::GetItemDataById:   s = '%s' (group field)\n",
-//          rtl::OUStringToOString(rGI[nId].GetString(), RTL_TEXTENCODING_UTF8).getStr());
+
     return &rGI[nId];
 }
 
@@ -946,9 +923,6 @@ const ScDPCache::ObjectSetType& ScDPCache::GetAllReferences() const
 
 SCROW ScDPCache::GetIdByItemData(long nDim, const rtl::OUString& sItemData) const
 {
-//  stack_printer __stack_printer__("ScDPCache::GetIdByItemData");
-//  fprintf(stdout, "ScDPCache::GetIdByItemData:   dim = %ld  s = '%s'\n",
-//          nDim, rtl::OUStringToOString(sItemData, RTL_TEXTENCODING_UTF8).getStr());
     if (nDim < 0)
         return -1;
 
@@ -958,7 +932,6 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const rtl::OUString& sItemData) cons
         const DataListType& rItems = maFields[nDim].maItems;
         for (size_t i = 0, n = rItems.size(); i < n; ++i)
         {
-//          fprintf(stdout, "ScDPCache::GetIdByItemData:   source item = '%s'\n", rtl::OUStringToOString(rItems[i].GetString(), RTL_TEXTENCODING_UTF8).getStr());
             if (rItems[i].GetString() == sItemData)
                 return i;
         }
@@ -970,7 +943,6 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const rtl::OUString& sItemData) cons
         const DataListType& rGI = maFields[nDim].mpGroup->maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
         {
-//          fprintf(stdout, "ScDPCache::GetIdByItemData:   grouped source item = '%s'\n", rtl::OUStringToOString(rGI[i].GetString(), RTL_TEXTENCODING_UTF8).getStr());
             if (rGI[i].GetString() == sItemData)
                 return rItems.size() + i;
         }
@@ -984,7 +956,6 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const rtl::OUString& sItemData) cons
         const DataListType& rGI = maGroupFields[nDim].maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
         {
-//          fprintf(stdout, "ScDPCache::GetIdByItemData:   grouped item = '%s'\n", rtl::OUStringToOString(rGI[i].GetString(), RTL_TEXTENCODING_UTF8).getStr());
             if (rGI[i].GetString() == sItemData)
                 return i;
         }
