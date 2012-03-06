@@ -709,6 +709,12 @@ void OfficeIPCThread::execute()
 #endif
                 continue;
             }
+
+#ifdef UNX
+            if (aCmdLineArgs->HasUnknown() || aCmdLineArgs->IsVersion() || aCmdLineArgs->IsHelp())
+                continue;
+#endif
+
             const CommandLineArgs &rCurrentCmdLineArgs = Desktop::GetCommandLineArgs();
 
             if ( aCmdLineArgs->IsQuickstart() )

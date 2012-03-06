@@ -71,6 +71,10 @@ extern "C" int DESKTOP_DLLPUBLIC soffice_main()
         desktop::displayVersion();
         return EXIT_SUCCESS;
     }
+    else if ( rCmdLineArgs.HasUnknown() )
+    {
+        return EXIT_FAILURE;
+    }
 #endif
     return SVMain();
 #ifdef ANDROID

@@ -304,6 +304,15 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     {
                         bConversionOutEvent = true;
                     }
+#if defined UNX
+                    else
+                    {
+                        printf("Unknown option %s\n",
+                            rtl::OUStringToOString(aArg, osl_getThreadTextEncoding()).getStr());
+                        printf("Run 'soffice --help' to see a full list of available command line options.\n");
+                        SetBoolParam_Impl( CMD_BOOLPARAM_UNKNOWN, sal_True );
+                    }
+#endif
                 }
                 else
                 {
@@ -640,7 +649,7 @@ sal_Bool CommandLineArgs::InterpretCommandLineParameter( const ::rtl::OUString& 
 
     if (bDeprecated)
     {
-        rtl::OString sArg(rtl::OUStringToOString(aArg, RTL_TEXTENCODING_UTF8));
+        rtl::OString sArg(rtl::OUStringToOString(aArg, osl_getThreadTextEncoding()));
         fprintf(stderr, "Warning: %s is deprecated.  Use -%s instead.\n", sArg.getStr(), sArg.getStr());
     }
     return sal_True;
@@ -849,6 +858,12 @@ sal_Bool CommandLineArgs::IsVersion() const
 {
     osl::MutexGuard  aMutexGuard( m_aMutex );
     return m_aBoolParams[ CMD_BOOLPARAM_VERSION ];
+}
+
+sal_Bool CommandLineArgs::HasUnknown() const
+{
+    osl::MutexGuard  aMutexGuard( m_aMutex );
+    return m_aBoolParams[ CMD_BOOLPARAM_UNKNOWN ];
 }
 
 sal_Bool CommandLineArgs::HasModuleParam() const
