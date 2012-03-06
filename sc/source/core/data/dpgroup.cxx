@@ -579,12 +579,7 @@ void ScDPDateGroupHelper::FillColumnEntries(
     for (size_t nOriginalPos=0; nOriginalPos<nOriginalCount; nOriginalPos++)
     {
         const  ScDPItemData* pItemData = pCache->GetItemDataById( nSourceDim, rOriginal[nOriginalPos] );
-        if ( pItemData->HasStringData() )
-        {
-            // string data: just copy
-            lcl_Insert( nSourceDim, pCache , rEntries,  rOriginal[nOriginalPos] );
-        }
-        else
+        if (pItemData->GetType() == ScDPItemData::Value)
         {
             double fSourceValue = pItemData->GetValue();
             if ( bFirst )
