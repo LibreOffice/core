@@ -912,26 +912,26 @@ void SvxAreaTabPage::ActivatePage( const SfxItemSet& rSet )
                     case PT_GRADIENT:
                         aTypeLB.SelectEntryPos( XFILL_GRADIENT );
                         aLbGradient.SelectEntryPos( _nPos );
-                        ClickGradientHdl_Impl( this );
+                        ClickGradientHdl_Impl();
                     break;
 
                     case PT_HATCH:
                         aTypeLB.SelectEntryPos( XFILL_HATCH );
                         aLbHatching.SelectEntryPos( _nPos );
-                        ClickHatchingHdl_Impl( this );
+                        ClickHatchingHdl_Impl();
                     break;
 
                     case PT_BITMAP:
                         aTypeLB.SelectEntryPos( XFILL_BITMAP );
                         aLbBitmap.SelectEntryPos( _nPos );
-                        ClickBitmapHdl_Impl( this );
+                        ClickBitmapHdl_Impl();
                     break;
 
                     case PT_COLOR:
                         aTypeLB.SelectEntryPos( XFILL_SOLID );
                         aLbColor.SelectEntryPos( _nPos );
                         aLbHatchBckgrdColor.SelectEntryPos( _nPos );
-                        ClickColorHdl_Impl( this );
+                        ClickColorHdl_Impl();
                     break;
                 }
             }
@@ -1444,7 +1444,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
         switch( eXFS )
         {
             case XFILL_NONE:
-                ClickInvisibleHdl_Impl( this );
+                ClickInvisibleHdl_Impl();
             break;
 
             case XFILL_SOLID:
@@ -1456,7 +1456,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
                     aLbColor.SelectEntry( aColorItem.GetColorValue() );
                     aLbHatchBckgrdColor.SelectEntry( aColorItem.GetColorValue() );
                 }
-                ClickColorHdl_Impl( this );
+                ClickColorHdl_Impl();
 
             break;
 
@@ -1470,7 +1470,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
 
                     aLbGradient.SelectEntryByList( pGradientList, aString, aGradient );
                 }
-                ClickGradientHdl_Impl( this );
+                ClickGradientHdl_Impl();
             break;
 
             case XFILL_HATCH:
@@ -1479,7 +1479,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
                     aLbHatching.SelectEntry( ( ( const XFillHatchItem& )
                                     rAttrs.Get( XATTR_FILLHATCH ) ).GetName() );
                 }
-                ClickHatchingHdl_Impl( this );
+                ClickHatchingHdl_Impl();
 
                 if ( SFX_ITEM_DONTCARE != rAttrs.GetItemState ( XATTR_FILLBACKGROUND ) )
                 {
@@ -1506,7 +1506,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
                     String aString( aBitmapItem.GetName() );
                     aLbBitmap.SelectEntry( aString );
                 }
-                ClickBitmapHdl_Impl( this );
+                ClickBitmapHdl_Impl();
             }
             break;
 
@@ -1717,7 +1717,7 @@ void SvxAreaTabPage::Reset( const SfxItemSet& rAttrs )
 
     // Erst hier, damit Tile und Stretch mit beruecksichtigt wird
     if( aTypeLB.GetSelectEntryPos() == XFILL_BITMAP )
-        ClickBitmapHdl_Impl( NULL );
+        ClickBitmapHdl_Impl();
 
     // Werte sichern
     aTypeLB.SaveValue();
@@ -1758,17 +1758,17 @@ IMPL_LINK_NOARG(SvxAreaTabPage, SelectDialogTypeHdl_Impl)
 {
     switch( (XFillStyle)aTypeLB.GetSelectEntryPos() )
     {
-        case XFILL_NONE: ClickInvisibleHdl_Impl( this ); break;
-        case XFILL_SOLID: ClickColorHdl_Impl( this ); break;
-        case XFILL_GRADIENT: ClickGradientHdl_Impl( this ); break;
-        case XFILL_HATCH: ClickHatchingHdl_Impl( this ); break;
-        case XFILL_BITMAP: ClickBitmapHdl_Impl( this ); break;
+        case XFILL_NONE: ClickInvisibleHdl_Impl(); break;
+        case XFILL_SOLID: ClickColorHdl_Impl(); break;
+        case XFILL_GRADIENT: ClickGradientHdl_Impl(); break;
+        case XFILL_HATCH: ClickHatchingHdl_Impl(); break;
+        case XFILL_BITMAP: ClickBitmapHdl_Impl(); break;
     }
 
     return 0;
 }
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ClickInvisibleHdl_Impl)
+void SvxAreaTabPage::ClickInvisibleHdl_Impl()
 {
     aTsbTile.Hide();
     aTsbStretch.Hide();
@@ -1811,13 +1811,11 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ClickInvisibleHdl_Impl)
 
     aCtlXRectPreview.Invalidate();
     aCtlBitmapPreview.Invalidate();
-
-    return( 0L );
 }
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ClickColorHdl_Impl)
+void SvxAreaTabPage::ClickColorHdl_Impl()
 {
     aTsbTile.Hide();
     aTsbStretch.Hide();
@@ -1872,7 +1870,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ClickColorHdl_Impl)
         aString += String(aURL.getBase());
 
     ModifyColorHdl_Impl( this );
-    return( 0L );
 }
 
 //------------------------------------------------------------------------
@@ -1905,7 +1902,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyColorHdl_Impl)
 }
 //------------------------------------------------------------------------
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ClickGradientHdl_Impl)
+void SvxAreaTabPage::ClickGradientHdl_Impl()
 {
     aTsbTile.Hide();
     aTsbStretch.Hide();
@@ -1963,7 +1960,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ClickGradientHdl_Impl)
 
     ModifyGradientHdl_Impl( this );
     ModifyStepCountHdl_Impl( &aTsbStepCount );
-    return( 0L );
 }
 
 //------------------------------------------------------------------------
@@ -1997,7 +1993,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ModifyGradientHdl_Impl)
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ClickHatchingHdl_Impl)
+void SvxAreaTabPage::ClickHatchingHdl_Impl()
 {
     aLbColor.Hide();
     aLbGradient.Hide();
@@ -2056,8 +2052,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ClickHatchingHdl_Impl)
     ModifyHatchingHdl_Impl( this );
     ModifyHatchBckgrdColorHdl_Impl( this );
     ToggleHatchBckgrdColorHdl_Impl( this );
-
-    return( 0L );
 }
 
 //------------------------------------------------------------------------
@@ -2141,7 +2135,7 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ToggleHatchBckgrdColorHdl_Impl)
 
 //------------------------------------------------------------------------
 
-IMPL_LINK_NOARG(SvxAreaTabPage, ClickBitmapHdl_Impl)
+void SvxAreaTabPage::ClickBitmapHdl_Impl()
 {
     aLbColor.Hide();
     aLbGradient.Hide();
@@ -2216,7 +2210,6 @@ IMPL_LINK_NOARG(SvxAreaTabPage, ClickBitmapHdl_Impl)
 
     ModifyBitmapHdl_Impl( this );
     ModifyTileHdl_Impl( &aTsbOriginal );
-    return( 0L );
 }
 
 //------------------------------------------------------------------------
