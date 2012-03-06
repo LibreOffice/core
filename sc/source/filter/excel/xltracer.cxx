@@ -36,8 +36,9 @@ using ::rtl::OUString;
 using ::com::sun::star::uno::Sequence;
 using ::com::sun::star::beans::PropertyValue;
 
-XclTracer::XclTracer( const String& rDocUrl ) :
-    maFirstTimes(eTraceLength,true)
+XclTracer::XclTracer( const String& rDocUrl )
+    : mbEnabled(false)
+    , maFirstTimes(eTraceLength,true)
 {
     Sequence< PropertyValue > aConfigData( 1 );
     aConfigData[ 0 ].Name = CREATE_OUSTRING( "DocumentURL" );
