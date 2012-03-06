@@ -45,16 +45,18 @@
 #include <boost/ptr_container/ptr_map.hpp>
 #include <boost/shared_ptr.hpp>
 
-namespace com { namespace sun { namespace star { namespace sheet {
+namespace com { namespace sun { namespace star {
 
-    struct DataPilotTablePositionData;
-    struct DataPilotTableHeaderData;
+    namespace container {
+        class XIndexAccess;
+    }
 
-}}}}
-
-namespace com { namespace sun { namespace star { namespace sheet {
-    struct DataPilotFieldFilter;
-}}}}
+    namespace sheet {
+        struct DataPilotTablePositionData;
+        struct DataPilotTableHeaderData;
+        struct DataPilotFieldFilter;
+    }
+}}}
 
 class Rectangle;
 class SvStream;
@@ -111,6 +113,8 @@ private:
     SC_DLLPRIVATE ScDPTableData*    GetTableData();
     SC_DLLPRIVATE void              CreateObjects();
     SC_DLLPRIVATE void              CreateOutput();
+
+    bool FillLabelDataForDimension(const com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& xDims, sal_Int32 nDim, ScDPLabelData& rLabelData);
 
 public:
     ScDPObject(ScDocument* pD);
@@ -197,6 +201,7 @@ public:
     void                ToggleDetails(const ::com::sun::star::sheet::DataPilotTableHeaderData& rElemDesc, ScDPObject* pDestObj);
 
     bool                FillOldParam(ScPivotParam& rParam) const;
+    bool                FillLabelData(sal_Int32 nDim, ScDPLabelData& Labels);
     bool                FillLabelData(ScPivotParam& rParam);
     void                InitFromOldPivot(const ScPivot& rOld, ScDocument* pDoc, sal_Bool bSetSource);
 

@@ -1967,6 +1967,79 @@ void lcl_FillLabelData( ScDPLabelData& rData, const uno::Reference< beans::XProp
     }
 }
 
+bool ScDPObject::FillLabelDataForDimension(
+    const uno::Reference<container::XIndexAccess>& xDims, sal_Int32 nDim, ScDPLabelData& rLabelData)
+{
+    uno::Reference<uno::XInterface> xIntDim =
+        ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
+    uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
+    uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
+
+    if (!xDimName.is() || !xDimProp.is())
+        return false;
+
+    bool bData = ScUnoHelpFunctions::GetBoolProperty(
+        xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)));
+    //! error checking -- is "IsDataLayoutDimension" property required??
+
+    sal_Int32 nOrigPos = -1;
+    rtl::OUString aFieldName;
+    try
+    {
+        aFieldName = xDimName->getName();
+        uno::Any aOrigAny = xDimProp->getPropertyValue(
+                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL_POS)));
+        aOrigAny >>= nOrigPos;
+    }
+    catch(uno::Exception&)
+    {
+    }
+
+    OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
+        xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_LAYOUTNAME)), OUString());
+
+    OUString aSubtotalName = ScUnoHelpFunctions::GetStringProperty(
+        xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FIELD_SUBTOTALNAME)), OUString());
+
+    bool bIsValue = true;                               //! check
+    aFieldName = ScDPUtil::getSourceDimensionName(aFieldName);
+
+    rLabelData.maName = aFieldName;
+    rLabelData.mnCol = static_cast<SCCOL>(nDim);
+    rLabelData.mbDataLayout = bData;
+    rLabelData.mbIsValue = bIsValue;
+
+    if (!bData)
+    {
+        rLabelData.mnOriginalDim = static_cast<long>(nOrigPos);
+        rLabelData.maLayoutName = aLayoutName;
+        rLabelData.maSubtotalName = aSubtotalName;
+        GetHierarchies(nDim, rLabelData.maHiers);
+        GetMembers(nDim, GetUsedHierarchy(nDim), rLabelData.maMembers);
+        lcl_FillLabelData(rLabelData, xDimProp);
+        rLabelData.mnFlags = ScUnoHelpFunctions::GetLongProperty(
+            xDimProp, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FLAGS)), 0);
+    }
+    return true;
+}
+
+bool ScDPObject::FillLabelData(sal_Int32 nDim, ScDPLabelData& rLabels)
+{
+    CreateObjects();
+    if (!xSource.is())
+        return false;
+
+    uno::Reference<container::XNameAccess> xDimsName = xSource->getDimensions();
+    uno::Reference<container::XIndexAccess> xDims = new ScNameToIndexAccess( xDimsName );
+    sal_Int32 nDimCount = xDims->getCount();
+    if ( nDimCount > SC_DP_MAX_FIELDS )
+        nDimCount = SC_DP_MAX_FIELDS;
+    if (!nDimCount || nDim >= nDimCount)
+        return false;
+
+    return FillLabelDataForDimension(xDims, nDim, rLabels);
+}
+
 bool ScDPObject::FillLabelData(ScPivotParam& rParam)
 {
     rParam.maLabelArray.clear();
@@ -1985,55 +2058,8 @@ bool ScDPObject::FillLabelData(ScPivotParam& rParam)
 
     for (sal_Int32 nDim = 0; nDim < nDimCount; ++nDim)
     {
-        rtl::OUString aFieldName;
-        uno::Reference<uno::XInterface> xIntDim =
-            ScUnoHelpFunctions::AnyToInterface( xDims->getByIndex(nDim) );
-        uno::Reference<container::XNamed> xDimName( xIntDim, uno::UNO_QUERY );
-        uno::Reference<beans::XPropertySet> xDimProp( xIntDim, uno::UNO_QUERY );
-
-        if (!xDimName.is() || !xDimProp.is())
-            continue;
-
-        bool bData = ScUnoHelpFunctions::GetBoolProperty( xDimProp,
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ISDATALAYOUT)) );
-        //! error checking -- is "IsDataLayoutDimension" property required??
-
-        sal_Int32 nOrigPos = -1;
-        try
-        {
-            aFieldName = xDimName->getName();
-            uno::Any aOrigAny = xDimProp->getPropertyValue(
-                        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_ORIGINAL_POS)));
-            aOrigAny >>= nOrigPos;
-        }
-        catch(uno::Exception&)
-        {
-        }
-
-        OUString aLayoutName = ScUnoHelpFunctions::GetStringProperty(
-            xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_LAYOUTNAME)), OUString());
-
-        OUString aSubtotalName = ScUnoHelpFunctions::GetStringProperty(
-            xDimProp, OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FIELD_SUBTOTALNAME)), OUString());
-
-        bool bIsValue = true;                               //! check
-        aFieldName = ScDPUtil::getSourceDimensionName(aFieldName);
-
-        std::auto_ptr<ScDPLabelData> pNewLabel(
-            new ScDPLabelData(aFieldName, static_cast<SCCOL>(nDim), bIsValue));
-        pNewLabel->mbDataLayout = bData;
-
-        if (!bData)
-        {
-            pNewLabel->mnOriginalDim = static_cast<long>(nOrigPos);
-            pNewLabel->maLayoutName = aLayoutName;
-            pNewLabel->maSubtotalName = aSubtotalName;
-            GetHierarchies(nDim, pNewLabel->maHiers);
-            GetMembers(nDim, GetUsedHierarchy(nDim), pNewLabel->maMembers);
-            lcl_FillLabelData(*pNewLabel, xDimProp);
-            pNewLabel->mnFlags = ScUnoHelpFunctions::GetLongProperty( xDimProp,
-                                    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(SC_UNO_DP_FLAGS)), 0 );
-        }
+        std::auto_ptr<ScDPLabelData> pNewLabel(new ScDPLabelData);
+        FillLabelDataForDimension(xDims, nDim, *pNewLabel);
         rParam.maLabelArray.push_back(pNewLabel);
     }
 

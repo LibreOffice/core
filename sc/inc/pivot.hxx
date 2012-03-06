@@ -162,6 +162,7 @@ struct ScDPLabelData
     ::com::sun::star::sheet::DataPilotFieldLayoutInfo   maLayoutInfo;   /// Layout info.
     ::com::sun::star::sheet::DataPilotFieldAutoShowInfo maShowInfo;     /// AutoShow info.
 
+    ScDPLabelData();
     explicit ScDPLabelData(const rtl::OUString& rName, SCCOL nCol, bool bIsValue);
 
     /**
