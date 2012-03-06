@@ -138,7 +138,7 @@ UNAME=$(shell uname)
 
 .IF "$(COM)"=="GCC"
 PATCH_FILES=opensslmingw.patch
-CONFIGURE_ACTION=$(PERL) configure
+CONFIGURE_ACTION=$(PERL) Configure
 CONFIGURE_FLAGS=mingw shared 
 INSTALL_ACTION=mv libcrypto.a libcrypto_static.a && mv libcrypto.dll.a libcrypto.a && mv libssl.a libssl_static.a && mv libssl.dll.a libssl.a
 OUT2LIB = libcrypto_static.*
