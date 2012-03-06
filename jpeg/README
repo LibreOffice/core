@@ -1,1 +1,6 @@
-Support for jpeg-format. (Which library, where used ???)
+External library for reading/writing jpegs
+
+This is only used by the svtools jpeg import filter that is provided
+for use by VCL see [[svtools/source/filter/jpeg]]
+
+
