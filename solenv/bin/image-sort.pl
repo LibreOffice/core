@@ -15,8 +15,8 @@ sub read_icons($)
     }
     open ($fileh, "$base_path/$fname") || die "Can't open $base_path/$fname: $!";
     while (<$fileh>) {
-    m/xlink:href=\"\.uno:(\S+)\"\s+/ || next;
-    push @images, lc($1);
+        m/xlink:href=\"\.uno:(\S+)\"\s+/ || next;
+        push @images, lc($1);
     }
     close ($fileh);
 
@@ -32,12 +32,12 @@ sub read_new_icons($$)
     my @new_icons;
     my %new_icons;
     for my $icon (@images) {
-    my $iname = "cmd/" . $prefix . $icon . ".png";
-    if (!defined $global_hash{$iname} &&
-        !defined $new_icons{$iname}) {
-        push @new_icons, $iname;
-        $new_icons{$iname} = 1;
-    }
+        my $iname = "cmd/" . $prefix . $icon . ".png";
+        if (!defined $global_hash{$iname} &&
+            !defined $new_icons{$iname}) {
+            push @new_icons, $iname;
+            $new_icons{$iname} = 1;
+        }
     }
     return @new_icons;
 }
@@ -51,22 +51,22 @@ sub process_group($@)
 
 # a very noddy sorting algorithm
     for my $uiconfig (@uiconfigs) {
-    my @images = read_new_icons ($uiconfig, $prefix);
-    my $prev = '';
-    for my $icon (@images) {
-        if (!defined $group{$icon}) {
-        if (!defined $group{$prev}) {
-            $group{$icon} = $cur_max;
-            $cur_max += 1.0;
-        } else {
-            $group{$icon} = $group{$prev} + (1.0 - 0.5 / $cur_max);
+        my @images = read_new_icons ($uiconfig, $prefix);
+        my $prev = '';
+        for my $icon (@images) {
+            if (!defined $group{$icon}) {
+                if (!defined $group{$prev}) {
+                    $group{$icon} = $cur_max;
+                    $cur_max += 1.0;
+                } else {
+                    $group{$icon} = $group{$prev} + (1.0 - 0.5 / $cur_max);
+                }
+            } # else a duplicate
         }
-        } # else a duplicate
-    }
     }
     for my $icon (sort { $group{$a} <=> $group{$b} } keys %group) {
-    push @global_list, $icon;
-    $global_hash{$icon} = 1;
+        push @global_list, $icon;
+        $global_hash{$icon} = 1;
     }
 }
 
@@ -75,8 +75,8 @@ sub process_file($$)
     my @images = read_new_icons (shift, shift);
 
     for my $icon (@images) {
-    push @global_list, $icon;
-    $global_hash{$icon} = 1;
+        push @global_list, $icon;
+        $global_hash{$icon} = 1;
     }
 }
 
@@ -87,37 +87,43 @@ sub chew_controlfile($)
     my @list;
     open ($fileh, $fname) || die "Can't open $fname: $!";
     while (<$fileh>) {
-    /^\#/ && next;
-    s/[\r\n]*$//;
-    /^\s*$/ && next;
+        /^\#/ && next;
+        s/[\r\n]*$//;
+        /^\s*$/ && next;
 
-    my $line = $_;
-    if ($line =~ s/^-- (\S+)\s*//) {
-        # control code
-        my $code = $1;
-        my $small = (lc ($line) eq 'small');
-        if (lc($code) eq 'group') {
-        if (!$small) { process_group ("lc_", @list); }
-        process_group ("sc_", @list);
-        } elsif (lc ($code) eq 'ordered') {
-        if (!$small) {
-            for my $file (@list) { process_file ($file, "lc_"); }
-        }
-        for my $file (@list) { process_file ($file, "sc_"); }
-        } elsif (lc ($code) eq 'literal') {
-        for my $file (@list) {
-            if (!defined $global_hash{$file}) {
-            push @global_list, $file;
-            $global_hash{$file} = 1;
+        my $line = $_;
+        if ($line =~ s/^-- (\S+)\s*//) {
+            # control code
+            my $code = $1;
+            my $small = (lc ($line) eq 'small');
+            if (lc($code) eq 'group') {
+                if (!$small) {
+                    process_group ("lc_", @list);
+                }
+                process_group ("sc_", @list);
+            } elsif (lc ($code) eq 'ordered') {
+                if (!$small) {
+                    for my $file (@list) {
+                        process_file ($file, "lc_");
+                    }
+                }
+                for my $file (@list) {
+                    process_file ($file, "sc_");
+                }
+            } elsif (lc ($code) eq 'literal') {
+                for my $file (@list) {
+                    if (!defined $global_hash{$file}) {
+                        push @global_list, $file;
+                        $global_hash{$file} = 1;
+                    }
+                }
+            } else {
+                die ("Unknown code '$code'");
             }
-        }
+            @list = ();
         } else {
-        die ("Unknown code '$code'");
+            push @list, $line;
         }
-        @list = ();
-    } else {
-        push @list, $line;
-    }
     }
     close ($fileh);
 }
