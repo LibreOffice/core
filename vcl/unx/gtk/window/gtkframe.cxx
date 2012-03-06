@@ -3987,7 +3987,9 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         for (int i = start; i < end; ++i)
         {
             SAL_WARN_IF(i >= static_cast<int>(pThis->m_aInputFlags.size()),
-                "vcl.gtk", "pango attrib out of range?");
+                "vcl.gtk", "pango attrib out of range. Broken range: "
+                << start << "," << end << " Legal range: 0,"
+                << pThis->m_aInputFlags.size());
             if (i >= static_cast<int>(pThis->m_aInputFlags.size()))
                 continue;
             pThis->m_aInputFlags[i] |= sal_attr;
