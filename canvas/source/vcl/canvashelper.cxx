@@ -1270,21 +1270,21 @@ namespace vclcanvas
                 p2ndOutDev->SetClipRegion( aClipRegion );
         }
 
+        Color aColor( COL_WHITE );
+
+        if( renderState.DeviceColor.getLength() > 2 )
+        {
+            aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(
+                renderState.DeviceColor );
+        }
+
+        // extract alpha, and make color opaque
+        // afterwards. Otherwise, OutputDevice won't draw anything
+        nTransparency = aColor.GetTransparency();
+        aColor.SetTransparency(0);
+
         if( eColorType != IGNORE_COLOR )
         {
-            Color aColor( COL_WHITE );
-
-            if( renderState.DeviceColor.getLength() > 2 )
-            {
-                aColor = ::vcl::unotools::stdColorSpaceSequenceToColor(
-                    renderState.DeviceColor );
-            }
-
-            // extract alpha, and make color opaque
-            // afterwards. Otherwise, OutputDevice won't draw anything
-            nTransparency = aColor.GetTransparency();
-            aColor.SetTransparency(0);
-
             switch( eColorType )
             {
                 case LINE_COLOR:
