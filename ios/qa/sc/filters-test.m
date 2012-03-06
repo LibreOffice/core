@@ -35,7 +35,7 @@
 
 extern "C" {
     extern CppUnitTestPlugIn *cppunitTestPlugIn(void);
-    extern int lo_main(int argc, char **argv);
+    extern int lo_main(int argc, const char **argv);
 }
 
 int 
@@ -70,9 +70,16 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
   CppUnitTestPlugIn *iface = cppunitTestPlugIn();
   iface->initialize(&CppUnit::TestFactoryRegistry::getRegistry(), CppUnit::PlugInParameters());
 
-  // Temporarily until we actualy get this to link, then
-  // add actual args needed by cppunittester
-  lo_main(0, NULL);
+  const char *argv[] = {
+      "lo-qa-sc-filters-test",
+      "dummy-testlib",
+      "--headless",
+      "--protector",
+      "dummy-libunoexceptionprotector",
+      "dummy-unoexceptionprotector"
+  };
+
+  lo_main(sizeof(argv)/sizeof(*argv), argv);
 
   [self.window makeKeyAndVisible];
   return YES;
