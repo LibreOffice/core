@@ -341,12 +341,19 @@ ifneq ($(filter-out clean distclean,$(MAKECMDGOALS)),)
 # but I couldn't find a way to get make to
 # restart after an autogen. and we _have_ to
 # restart since autogen can have changed
-# config_host.k which is included in this
+# config_host.mk which is included in this
 # Makefile
-Makefile: $(SRCDIR)/config_host.mk
+
+ifeq ($(OS_FOR_BUILD),WNT)
+CONFIG_HOST_MK=$(shell cygpath -u $(SRCDIR))/config_host.mk
+else
+CONFIG_HOST_MK=$(SRCDIR)/config_host.mk
+endif
+
+Makefile: $(CONFIG_HOST_MK)
 	touch $@
 
-$(SRCDIR)/config_host.mk : config_host.mk.in bin/repo-list.in ooo.lst.in configure.in autogen.lastrun
+$(CONFIG_HOST_MK) : config_host.mk.in bin/repo-list.in ooo.lst.in configure.in autogen.lastrun
 	./autogen.sh
 
 autogen.lastrun:
