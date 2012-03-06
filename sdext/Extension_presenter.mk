@@ -151,4 +151,8 @@ $(eval $(call gb_Extension_localize_help,presenter-screen,\
     help/lang/com.sun.PresenterScreen-$(sdext_PLATFORM)/presenter.xhp,\
     $(WORKDIR)/CustomTarget/sdext/source/presenter/help/en-US/com.sun.PresenterScreen/presenter.xhp))
 
+# this file is created by a custom target, but we depend on it: ensure
+# make knows about it
+$(WORKDIR)/CustomTarget/sdext/source/presenter/help/en-US/com.sun.PresenterScreen/presenter.xhp :| $(gb_Helper_DUMMY)
+
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
