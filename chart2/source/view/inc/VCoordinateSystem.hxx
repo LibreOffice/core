@@ -45,6 +45,7 @@
 #include<map>
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/scoped_ptr.hpp>
 
 //.............................................................................
 namespace chart
@@ -201,7 +202,7 @@ private:
     tFullExplicitScaleMap       m_aSecondaryExplicitScales;
     tFullExplicitIncrementMap   m_aSecondaryExplicitIncrements;
 
-    ::std::auto_ptr< ExplicitCategoriesProvider > m_apExplicitCategoriesProvider;
+    boost::scoped_ptr< ExplicitCategoriesProvider > m_apExplicitCategoriesProvider;
 };
 
 //.............................................................................

@@ -34,6 +34,7 @@
 #include "macros.hxx"
 
 #include <memory>
+#include <boost/scoped_ptr.hpp>
 
 //.............................................................................
 namespace chart
@@ -167,7 +168,7 @@ void VAxisBase::setExplicitScaleAndIncrement(
 
 void VAxisBase::createAllTickInfos( ::std::vector< ::std::vector< TickInfo > >& rAllTickInfos )
 {
-    std::auto_ptr< TickFactory > apTickFactory( this->createTickFactory() );
+    boost::scoped_ptr< TickFactory > apTickFactory( this->createTickFactory() );
     if( m_aScale.ShiftedCategoryPosition )
         apTickFactory->getAllTicksShifted( rAllTickInfos );
     else
