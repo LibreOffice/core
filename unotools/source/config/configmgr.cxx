@@ -227,10 +227,6 @@ utl::ConfigManager::addConfigItem(utl::ConfigItem & item) {
 }
 
 void utl::ConfigManager::removeConfigItem(utl::ConfigItem & item) {
-    static int hack = 0;
-    fprintf(stderr, "remove %d of %p\n", hack, &item);
-    ++hack;
-
     for (std::list< ConfigItem * >::iterator i(items_.begin());
          i != items_.end(); ++i)
     {
@@ -243,9 +239,6 @@ void utl::ConfigManager::removeConfigItem(utl::ConfigItem & item) {
 
 void utl::ConfigManager::registerConfigItem(utl::ConfigItem * item) {
     OSL_ASSERT(item != 0);
-    static int hack = 0;
-    fprintf(stderr, "add %d is %p\n", hack, item);
-    ++hack;
     items_.push_back(item);
 }
 

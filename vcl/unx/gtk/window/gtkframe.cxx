@@ -3925,6 +3925,7 @@ void GtkSalFrame::IMHandler::signalIMPreeditChanged( GtkIMContext*, gpointer im_
         if( pThis->m_aInputEvent.maText.Len() == 0 )
         {
             g_free( pText );
+            pango_attr_list_unref( pAttrs );
             return;
         }
     }
