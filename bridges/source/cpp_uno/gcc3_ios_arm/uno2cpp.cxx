@@ -112,8 +112,6 @@ namespace arm
     }
 }
 
-#endif
-
 void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * pReturnType, sal_uInt32* pRegisterReturn)
 {
     switch( pReturnType->eTypeClass )
@@ -160,6 +158,8 @@ void MapReturn(sal_uInt32 r0, sal_uInt32 r1, typelib_TypeDescriptionReference * 
     }
 }
 
+#endif
+
 namespace
 {
 
@@ -200,7 +200,7 @@ void callVirtualMethod(
 
 #else
     volatile long edx = 0, eax = 0; // for register returns
-    void * stackptr;
+    void * stackptr = 0;
     asm volatile (
         "mov   %%esp, %6\n\t"
         "mov   %0, %%eax\n\t"
