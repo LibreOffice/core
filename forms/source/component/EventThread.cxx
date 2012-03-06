@@ -46,13 +46,13 @@ OComponentEventThread::OComponentEventThread( ::cppu::OComponentHelper* pCompImp
 
     increment(m_refCount);
 
-    // Eine Referenz des Controls halten
+    // Hold a reference of the Control
     {
         InterfaceRef xIFace(static_cast<XWeak*>(pCompImpl));
         query_interface(xIFace, m_xComp);
     }
 
-    // und uns an dem Control anmelden
+    // and add us at the Control
     {
         Reference<XEventListener> xEvtLstnr = static_cast<XEventListener*>(this);
         m_xComp->addEventListener( xEvtLstnr );
@@ -66,7 +66,7 @@ OComponentEventThread::~OComponentEventThread()
     DBG_DTOR( OComponentEventThread, NULL );
 
     DBG_ASSERT( m_aEvents.empty(),
-        "OComponentEventThread::~OComponentEventThread: Kein dispose gerufen?" );
+        "OComponentEventThread::~OComponentEventThread: Didn't call dispose?" );
 
     impl_clearEventQueue();
 }
@@ -102,19 +102,19 @@ void OComponentEventThread::disposing( const EventObject& evt ) throw ( ::com::s
     {
         ::osl::MutexGuard aGuard( m_aMutex );
 
-        // Event-Listener abmelden
+        // Remove EventListener
         Reference<XEventListener>  xEvtLstnr = static_cast<XEventListener*>(this);
         m_xComp->removeEventListener( xEvtLstnr );
 
-        // Event-Queue loeschen
+        // Clear EventQueue
         impl_clearEventQueue();
 
-        // Das Control loslassen und pCompImpl auf 0 setzen, damit der
-        // Thread weiss, dass er sich beenden soll.
+        // Free the Control and set pCompImpl to 0,
+        // so that the thread knows, that it should terminate.
         m_xComp = 0;
         m_pCompImpl = 0;
 
-        // Den Thread aufwecken und beenden.
+        // Wake up the thread and terminate
         m_aCond.set();
         terminate();
     }
@@ -132,7 +132,7 @@ void OComponentEventThread::addEvent( const EventObject* _pEvt,
 {
     ::osl::MutexGuard aGuard( m_aMutex );
 
-    // Daten in die Queue stellen
+    // Put data into the queue
     m_aEvents.push_back( cloneEvent( _pEvt ) );
 
     Reference<XWeak>        xWeakControl(rControl, UNO_QUERY);
@@ -141,7 +141,7 @@ void OComponentEventThread::addEvent( const EventObject* _pEvt,
 
     m_aFlags.push_back( bFlag );
 
-    // Thread aufwecken
+    // Wake up thread
     m_aCond.set();
 }
 
@@ -174,8 +174,7 @@ void OComponentEventThread::run()
 {
     implStarted( );
 
-    // uns selbst festhalten, damit wir nicht geloescht werden,
-    // wenn zwischendrinne mal ein dispose gerufen wird.
+    // Hold on to ourselves, so that we're not deleted if a dispose is called at some point in time
     InterfaceRef xThis(static_cast<XWeak*>(this));
 
     do
@@ -184,8 +183,7 @@ void OComponentEventThread::run()
 
         while( m_aEvents.size() > 0 )
         {
-            // Das Control holen und festhalten, damit es waehrend des
-            // actionPerformed nicht geloescht werden kann.
+            // Get the Control and hold on to it so that it cannot be deleted during actionPerformed
             Reference<XComponent>  xComp = m_xComp;
             ::cppu::OComponentHelper *pCompImpl = m_pCompImpl;
 
@@ -203,8 +201,8 @@ void OComponentEventThread::run()
 
             {
                 MutexRelease aReleaseOnce(m_aMutex);
-                // Weil ein queryHardRef eine Exception schmeissen kann sollte
-                // es nicht bei gelocktem Mutex aufgerufen werden.
+                // Because a queryHardRef can throw an Exception, it shoudln't be called when
+                // the mutex is locked.
                 Reference<XControl>  xControl;
                 if ( xControlAdapter.is() )
                     query_interface(xControlAdapter->queryAdapted(), xControl);
@@ -216,17 +214,16 @@ void OComponentEventThread::run()
             delete pEvt;
         };
 
-        // Nach einem dispose kennen wir das Control nicht mehr. Dann darf
-        // auch nicht gewartet werden.
+        // After a Dispose, we do not know the Control anymore.
+        // Thus, we must not wait either.
         if( !m_xComp.is() )
             return;
 
-        // Warte-Bedingung zuruecksetzen
+        // Reset waiting condition
         m_aCond.reset();
         {
             MutexRelease aReleaseOnce(m_aMutex);
-            // und warten ... falls nicht zwischenzeitlich doch noch ein
-            // Event eingetroffen ist.
+            // And wait ... if, in the meantime, an Event came in after all
             m_aCond.wait();
         }
     }

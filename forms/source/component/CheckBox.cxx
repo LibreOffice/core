@@ -205,7 +205,7 @@ void SAL_CALL OCheckBoxModel::read(const Reference<stario::XObjectInputStream>& 
     setReferenceValue( sReferenceValue );
     setDefaultChecked( static_cast< ToggleState >( nDefaultChecked ) );
 
-    // Nach dem Lesen die Defaultwerte anzeigen
+    // After reading in, display the default values
     if ( !getControlSource().isEmpty() )
         // (not if we don't have a control source - the "State" property acts like it is persistent, then
         resetNoBroadcast();
@@ -217,7 +217,7 @@ Any OCheckBoxModel::translateDbColumnToControlValue()
     Any aValue;
 
     //////////////////////////////////////////////////////////////////
-    // Wert an ControlModel setzen
+    // Set value in ControlModel
     sal_Bool bValue = m_xColumn->getBoolean();
     if ( m_xColumn->wasNull() )
     {

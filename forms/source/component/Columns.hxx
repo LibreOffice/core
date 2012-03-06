@@ -75,7 +75,7 @@ protected:
     ::rtl::OUString                 m_aModelName;
 
 // [properties]
-    ::rtl::OUString             m_aLabel;                   // Name der Spalte
+    ::rtl::OUString             m_aLabel;                   // Column name
 // [properties]
 
 public:
@@ -83,7 +83,7 @@ public:
     OGridColumn(const OGridColumn* _pOriginal );
     virtual ~OGridColumn();
 
-    // UNO Anbindung
+    // UNO binding
     DECLARE_UNO3_AGG_DEFAULTS(OGridControlModel, OGridColumn_BASE);
     virtual ::com::sun::star::uno::Any SAL_CALL queryAggregation( const ::com::sun::star::uno::Type& _rType ) throw (::com::sun::star::uno::RuntimeException);
 
@@ -198,7 +198,7 @@ OGridColumn* ClassName::createCloneColumn() const \
 #define TYPE_TEXTFIELD      8
 #define TYPE_TIMEFIELD      9
 
-// liste aller bekannten columns
+// List of all known columns
 const StringSequence& getColumnTypes();
 sal_Int32 getColumnTypeByModelName(const ::rtl::OUString& aModelName);
 
