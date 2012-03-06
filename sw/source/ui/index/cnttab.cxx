@@ -3851,7 +3851,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, AssignHdl)
         aLevelLB.RemoveEntry(nLevPos);
         aLevelLB.InsertEntry(aStr, nLevPos);
         aLevelLB.SelectEntry(aStr);
-        ModifyHdl(0);
+        Modify();
     }
     return 0;
 }
@@ -3868,7 +3868,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, StdHdl)
         aLevelLB.InsertEntry(aStr, nPos);
         aLevelLB.SelectEntry(aStr);
         m_pCurrentForm->SetTemplate(nPos, aEmptyStr);
-        ModifyHdl(0);
+        Modify();
     }
     return 0;
 }
@@ -3901,7 +3901,7 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, EnableSelectHdl)
     return 0;
 }
 
-IMPL_LINK_NOARG(SwTOXStylesTabPage, ModifyHdl)
+void SwTOXStylesTabPage::Modify()
 {
     SwMultiTOXTabDialog* pTOXDlg = (SwMultiTOXTabDialog*)GetTabDialog();
     if(pTOXDlg)
@@ -3909,7 +3909,6 @@ IMPL_LINK_NOARG(SwTOXStylesTabPage, ModifyHdl)
         GetForm() = *m_pCurrentForm;
         pTOXDlg->CreateOrUpdateExample(pTOXDlg->GetCurrentTOXType().eType, TOX_PAGE_STYLES);
     }
-    return 0;
 }
 
 #define ITEM_SEARCH         1

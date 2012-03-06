@@ -489,7 +489,7 @@ class SwTOXStylesTabPage : public SfxTabPage
     DECL_LINK(EnableSelectHdl, void *);
     DECL_LINK(DoubleClickHdl, void *);
     DECL_LINK(AssignHdl, void *);
-    DECL_LINK( ModifyHdl, void*);
+    void Modify();
 
     SwForm&     GetForm()
         {
