@@ -162,20 +162,20 @@ const sal_Char sDetector[] = "draft.com.sun.star.i18n.ScriptTypeDetector";
 rtl::OUString SAL_CALL
 ScriptTypeDetector::getImplementationName() throw( ::com::sun::star::uno::RuntimeException )
 {
-    return ::rtl::OUString::createFromAscii(sDetector);
+    return rtl::OUString(sDetector);
 }
 
 sal_Bool SAL_CALL
 ScriptTypeDetector::supportsService(const rtl::OUString& ServiceName) throw( ::com::sun::star::uno::RuntimeException )
 {
-    return !ServiceName.compareToAscii(sDetector);
+    return ServiceName != sDetector;
 }
 
 ::com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
 ScriptTypeDetector::getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException )
 {
     ::com::sun::star::uno::Sequence< ::rtl::OUString > aRet(1);
-    aRet[0] = ::rtl::OUString::createFromAscii(sDetector);
+    aRet[0] = sDetector;
     return aRet;
 }
 
