@@ -375,7 +375,7 @@ sal_Bool SAL_CALL osl_flushProfile(oslProfile Profile)
     }
 
     pFile = pProfile->m_pFile;
-    if ( !( pFile != 0 && pFile->m_Handle >= 0 ) )
+    if ( pFile == 0 || pFile->m_Handle == INVALID_HANDLE_VALUE )
     {
 #ifdef TRACE_OSL_PROFILE
         OSL_TRACE("Out osl_flushProfile() [invalid file]");
@@ -1366,7 +1366,7 @@ static sal_Bool putLine(osl_TFile* pFile, const sal_Char *pszLine)
 {
     unsigned int Len = strlen(pszLine);
 
-    if ( pFile == 0 || pFile->m_Handle < 0 )
+    if ( pFile == 0 || pFile->m_Handle == INVALID_HANDLE_VALUE )
     {
         return (sal_False);
     }
