@@ -72,10 +72,6 @@
 #include <unotools/internaloptions.hxx>
 
 
-#define DEFINE_CONST_OUSTRING(CONSTASCII)       OUString(RTL_CONSTASCII_USTRINGPARAM(CONSTASCII))
-
-#define DESKTOP_TEMPDIRNAME                     "soffice.tmp"
-
 using namespace desktop;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;
