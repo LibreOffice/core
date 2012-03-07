@@ -717,8 +717,8 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
         ULONGGuard aGuard( &m_nCallsOnStack ); // avoid reentrance problem
         if ( SUCCEEDED( hr ) && pOleObject )
         {
-            HRESULT hr = pOleObject->SetClientSite( pSite );
-            if ( SUCCEEDED( hr ) )
+            HRESULT hr2 = pOleObject->SetClientSite( pSite );
+            if ( SUCCEEDED( hr2 ) )
             {
                 m_pClientSite = pSite;
 
@@ -733,7 +733,7 @@ STDMETHODIMP InprocEmbedDocument_Impl::SetClientSite( IOleClientSite* pSite )
                     m_pOleContainer->LockContainer( TRUE );
             }
 
-            return hr;
+            return hr2;
         }
     }
 
