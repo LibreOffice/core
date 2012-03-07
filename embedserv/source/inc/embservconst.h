@@ -43,9 +43,6 @@ const sal_Int32 nConstBufferSize = 32000;
 
 #define SUPPORTED_FACTORIES_NUM 10
 
-#ifdef __MINGW32__
-#define DECLSPEC_SELECTANY
-#endif
 #if defined(__MINGW32__) && !defined(INITGUID)
 EXTERN_C const GUID DECLSPEC_SELECTANY OID_WriterTextServer;
 EXTERN_C const GUID DECLSPEC_SELECTANY OID_WriterOASISTextServer;
