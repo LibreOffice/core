@@ -144,39 +144,11 @@ sal_Bool lcl_Search( SCCOL nSourceDim, const ScDPCache* pCache , const std::vect
     return bFound;
 }
 
-void  lcl_Insert( SCCOL nSourceDim, const ScDPCache* pCache ,  std::vector< SCROW >& vIdx, SCROW nNew )
+void lcl_Insert( SCCOL nSourceDim, const ScDPCache* pCache ,  std::vector< SCROW >& vIdx, SCROW nNew )
 {
     SCROW nIndex = 0;
     if ( !lcl_Search( nSourceDim, pCache, vIdx, nNew ,nIndex ) )
         vIdx.insert( vIdx.begin()+nIndex, nNew  );
-}
-
-template<bool bUpdateData>
-SCROW lcl_InsertValue(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData);
-
-template<>
-SCROW lcl_InsertValue<false>(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
-{
-    SCROW nNewID = pCache->GetAdditionalItemID(rData);
-    lcl_Insert(nSourceDim, pCache, vIdx, nNewID);
-    return nNewID;
-}
-
-template<>
-SCROW lcl_InsertValue<true>(SCCOL nSourceDim, const ScDPCache* pCache, std::vector<SCROW>& vIdx, const ScDPItemData & rData)
-{
-    SCROW nItemId = lcl_InsertValue<false>( nSourceDim, pCache, vIdx, rData );
-
-    if( const ScDPItemData *pData = pCache->GetItemDataById( nSourceDim, nItemId ) )
-        const_cast<ScDPItemData&>(*pData) = rData;
-
-    return nItemId;
-}
-
-template<bool bUpdateData>
-void lcl_InsertValue ( SCCOL nSourceDim, const ScDPCache* pCache,  std::vector< SCROW >& vIdx, const String&  rString, const double& fValue )
-{
-    lcl_InsertValue<bUpdateData>(nSourceDim, pCache, vIdx, ScDPItemData(fValue));
 }
 
 void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
