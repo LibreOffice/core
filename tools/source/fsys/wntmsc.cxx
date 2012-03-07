@@ -675,11 +675,13 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
                 ( pTop->eFlag == FSYS_FLAG_ABSROOT ||
                 pTop->eFlag == FSYS_FLAG_RELROOT ||
                 pTop->eFlag == FSYS_FLAG_VOLUME ) )
+        {
             if ( aName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:")) ||
                  aName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) )
                 bAccess = sal_False;
             else
                 OSL_TRACE( "FSys: will access removable device!" );
+        }
         if ( bAccess && ( aName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:")) ||
                           aName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) ) )
         {
