@@ -1194,7 +1194,13 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_string_getToken(
     its value should be 0x00.  Depending on where this macro is used, the nature
     of the supplied expression might be further restricted.
 */
-#define RTL_CONSTASCII_STRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)SAL_N_ELEMENTS(constAsciiStr)-1)
+// The &foo[0] trick is intentional, it makes sure the type is char* or const char*
+// (plain cast to const char* would not work with non-const char foo[]="a", which seems to be allowed).
+// This is to avoid mistaken use with functions that accept string literals
+// (i.e. const char (&)[N]) where usage of this macro otherwise could match
+// the argument and a following int argument with a default value (e.g. OString::match()).
+#define RTL_CONSTASCII_STRINGPARAM( constAsciiStr ) (&(constAsciiStr)[0]), \
+    ((sal_Int32)SAL_N_ELEMENTS(constAsciiStr)-1)
 
 /** Supply the length of an ASCII string literal.
 

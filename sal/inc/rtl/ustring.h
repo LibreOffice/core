@@ -1682,7 +1682,13 @@ SAL_DLLPUBLIC sal_Int32 SAL_CALL rtl_uString_getToken(
     its value should be 0x00.  Depending on where this macro is used, the nature
     of the supplied expression might be further restricted.
 */
-#define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) constAsciiStr, ((sal_Int32)(SAL_N_ELEMENTS(constAsciiStr)-1)), RTL_TEXTENCODING_ASCII_US
+// The &foo[0] trick is intentional, it makes sure the type is char* or const char*
+// (plain cast to const char* would not work with non-const char foo[]="a", which seems to be allowed).
+// This is to avoid mistaken use with functions that accept string literals
+// (i.e. const char (&)[N]) where usage of this macro otherwise could match
+// the argument and a following int argument with a default value (e.g. OUString::match()).
+#define RTL_CONSTASCII_USTRINGPARAM( constAsciiStr ) (&(constAsciiStr)[0]), \
+    ((sal_Int32)(SAL_N_ELEMENTS(constAsciiStr)-1)), RTL_TEXTENCODING_ASCII_US
 
 /* ======================================================================= */
 
