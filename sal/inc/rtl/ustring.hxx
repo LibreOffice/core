@@ -515,6 +515,27 @@ public:
                                                            str.pData->buffer, str.pData->length ) == 0;
     }
 
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since 3.6
+    */
+    template< int N >
+    sal_Bool equalsIgnoreAsciiCase( const char (&literal)[ N ] ) const SAL_THROW(())
+    {
+        if ( pData->length != N - 1 )
+            return sal_False;
+
+        return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, literal ) == 0;
+    }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N >
+    sal_Bool equalsIgnoreAsciiCase( char (&literal)[ N ] ) const SAL_THROW(());
+
    /**
       Match against a substring appearing in this string.
 
@@ -535,6 +556,25 @@ public:
         return rtl_ustr_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                      str.pData->buffer, str.pData->length, str.pData->length ) == 0;
     }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since 3.6
+    */
+    template< int N >
+    sal_Bool match( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                           literal, N - 1 ) == 0;
+    }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N >
+    sal_Bool match( char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(());
 
     /**
       Match against a substring appearing in this string, ignoring the case of
@@ -560,6 +600,25 @@ public:
                                                                     str.pData->buffer, str.pData->length,
                                                                     str.pData->length ) == 0;
     }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since 3.6
+    */
+    template< int N >
+    sal_Bool matchIgnoreAsciiCase( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        return rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                                          literal, N - 1 ) == 0;
+    }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N >
+    sal_Bool matchIgnoreAsciiCase( char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(());
 
     /**
       Compares two strings.
@@ -841,6 +900,27 @@ public:
     }
 
     /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since 3.6
+    */
+    template< int N >
+    bool endsWith( const char (&literal)[ N ] ) const
+    {
+        return N - 1 <= pData->length
+            && rtl_ustr_asciil_reverseEquals_WithLength(
+                pData->buffer + pData->length - ( N - 1 ), literal,
+                N - 1);
+    }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N >
+    bool endsWith( char (&literal)[ N ] ) const;
+
+    /**
       Check whether this string ends with a given ASCII string.
 
       @param asciiStr a sequence of at least asciiStrLength ASCII characters
@@ -1061,6 +1141,26 @@ public:
     }
 
     /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since 3.6
+    */
+    template< int N >
+    sal_Int32 indexOf( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        sal_Int32 ret = rtl_ustr_indexOfAscii_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex, literal, N - 1);
+        return ret < 0 ? ret : ret + fromIndex;
+    }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N >
+    sal_Int32 indexOf( char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(());
+
+    /**
        Returns the index within this string of the first occurrence of the
        specified ASCII substring, starting at the specified index.
 
@@ -1143,6 +1243,25 @@ public:
         return rtl_ustr_lastIndexOfStr_WithLength( pData->buffer, fromIndex,
                                                    str.pData->buffer, str.pData->length );
     }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since 3.6
+    */
+    template< int N >
+    sal_Int32 lastIndexOf( const char (&literal)[ N ] ) const SAL_THROW(())
+    {
+        return rtl_ustr_lastIndexOfAscii_WithLength(
+            pData->buffer, pData->length, literal, N - 1);
+    }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N >
+    sal_Int32 lastIndexOf( char (&literal)[ N ] ) const SAL_THROW(());
 
     /**
        Returns the index within this string of the last occurrence of the
