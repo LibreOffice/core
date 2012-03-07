@@ -31,7 +31,7 @@ File gid_File_Lib_Updchk
     BIN_FILE_BODY;
     Styles = (PACKED);
     Dir = gid_Brand_Dir_Program;
-    Name = "updchk.dll";
+    Name = SPECIAL_NAME(updchk);
     ComponentCondition="ISCHECKFORPRODUCTUPDATES=1";
 End
 
