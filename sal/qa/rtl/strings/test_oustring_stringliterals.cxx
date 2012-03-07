@@ -48,7 +48,7 @@ private:
     void testcall( const char str[] );
     // invalid conversions will trigger templated OUString ctor that creates an empty string
     // (see RTL_STRING_UNITTEST)
-    bool validConversion( const rtl::OUString& str ) { return !str.isEmpty(); }
+    bool validConversion( const rtl::OUString& str ) { return str != "!!br0ken!!"; }
 
 CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);

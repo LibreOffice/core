@@ -212,8 +212,8 @@ public:
 #else
     {
         (void) value; // unused
-        pData = 0; // for the unittest create an empty string
-        rtl_uString_new( &pData );
+        pData = 0;
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10 ); // set to garbage
     }
 #endif
 
@@ -226,7 +226,7 @@ public:
     OUString( T )
     {
         pData = 0;
-        rtl_uString_new( &pData );
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10 ); // set to garbage
     }
 #endif
 
