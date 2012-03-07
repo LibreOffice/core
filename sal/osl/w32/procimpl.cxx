@@ -517,7 +517,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
 
     startup_info.cb        = sizeof(STARTUPINFO);
     startup_info.dwFlags   = STARTF_USESHOWWINDOW;
-    startup_info.lpDesktop = L"";
+    startup_info.lpDesktop = const_cast<LPWSTR>(L"");
 
     /* Create pipes for redirected IO */
     HANDLE hInputRead  = NULL;
