@@ -551,12 +551,12 @@ enum SwWw8ControlType
     WW8_CT_DROPDOWN
 };
 
-class WW8FormulaControl
+class WW8FormulaControl : private ::boost::noncopyable
 {
 protected:
     SwWW8ImplReader &rRdr;
 public:
-    WW8FormulaControl(const String& rN, SwWW8ImplReader &rR)
+    WW8FormulaControl(const rtl::OUString& rN, SwWW8ImplReader &rR)
         : rRdr(rR), fUnknown(0), fDropdownIndex(0),
         fToolTip(0), fNoMark(0), fUseSize(0), fNumbersOnly(0), fDateOnly(0),
         fUnused(0), nSize(0), hpsCheckBox(20), nChecked(0), sName( rN )
@@ -576,12 +576,12 @@ public:
     sal_uInt16 nChecked;
     sal_uInt16 nDefaultChecked;
 
-    String sTitle;
-    String sDefault;
-    String sFormatting;
-    String sHelp;
-    String sToolTip;
-    std::vector<String> maListEntries;
+    rtl::OUString sTitle;
+    rtl::OUString sDefault;
+    rtl::OUString sFormatting;
+    rtl::OUString sHelp;
+    rtl::OUString sToolTip;
+    std::vector<rtl::OUString> maListEntries;
     virtual ~WW8FormulaControl() {}
     void FormulaRead(SwWw8ControlType nWhich,SvStream *pD);
     virtual sal_Bool Import(const com::sun::star::uno::Reference <
@@ -589,11 +589,7 @@ public:
         com::sun::star::uno::Reference <
         com::sun::star::form::XFormComponent> &rFComp,
         com::sun::star::awt::Size &rSz) = 0;
-    UniString sName;
-private:
-    //No copying
-    WW8FormulaControl(const WW8FormulaControl&);
-    WW8FormulaControl& operator=(const WW8FormulaControl&);
+    rtl::OUString sName;
 };
 
 class WW8FormulaCheckBox : public WW8FormulaControl

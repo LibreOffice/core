@@ -139,7 +139,7 @@ void SwFldDokInfPage::Reset(const SfxItemSet& )
         nSelEntryData = static_cast< sal_uInt16 >(sVal.ToInt32());
     }
 
-    std::vector<String> aLst;
+    std::vector<rtl::OUString> aLst;
     GetFldMgr().GetSubTypes(nTypeId, aLst);
     for(size_t i = 0; i < aLst.size(); ++i)
     {

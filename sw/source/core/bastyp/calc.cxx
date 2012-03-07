@@ -591,7 +591,7 @@ SwCalcExp* SwCalc::VarLook( const String& rStr, sal_uInt16 ins )
             if( 0 != ( pFnd = Find( sDBNum, VarTable, TBLSZ ) ) )
                 nTmpRec = ((SwCalcExp*)pFnd)->nValue.GetULong();
 
-            String sResult;
+            rtl::OUString sResult;
             double nNumber = DBL_MAX;
 
             long nLang = SvxLocaleToLanguage( pLclData->getLocale() );

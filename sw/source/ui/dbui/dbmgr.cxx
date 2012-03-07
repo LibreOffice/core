@@ -286,7 +286,7 @@ sal_Bool lcl_MoveAbsolute(SwDSParam* pParam, long nAbsPos)
 }
 
 sal_Bool lcl_GetColumnCnt(SwDSParam* pParam,
-    const String& rColumnName, long nLanguage, String& rResult, double* pNumber)
+    const String& rColumnName, long nLanguage, rtl::OUString& rResult, double* pNumber)
 {
     uno::Reference< XColumnsSupplier > xColsSupp( pParam->xResultSet, UNO_QUERY );
     uno::Reference<XNameAccess> xCols;
@@ -1757,7 +1757,7 @@ sal_Bool    SwNewDBMgr::IsDataSourceOpen(const String& rDataSource,
 sal_Bool SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTableName,
                             const String& rColumnName, sal_uInt32 nAbsRecordId,
                             long nLanguage,
-                            String& rResult, double* pNumber)
+                            rtl::OUString& rResult, double* pNumber)
 {
     sal_Bool bRet = sal_False;
     SwDSParam* pFound = 0;
@@ -1822,11 +1822,11 @@ sal_Bool SwNewDBMgr::GetColumnCnt(const String& rSourceName, const String& rTabl
 
 // reads the column data at the current position
 sal_Bool    SwNewDBMgr::GetMergeColumnCnt(const String& rColumnName, sal_uInt16 nLanguage,
-                                String &rResult, double *pNumber, sal_uInt32 * /*pFormat*/)
+                                rtl::OUString &rResult, double *pNumber, sal_uInt32 * /*pFormat*/)
 {
     if(!pImpl->pMergeData || !pImpl->pMergeData->xResultSet.is() || pImpl->pMergeData->bAfterSelection )
     {
-        rResult.Erase();
+        rResult = rtl::OUString();
         return sal_False;
     }
 

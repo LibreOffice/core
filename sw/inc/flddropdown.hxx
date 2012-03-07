@@ -69,27 +69,27 @@ class SW_DLLPUBLIC SwDropDownField : public SwField
     /**
        the possible values (aka items) of the dropdown box
     */
-    std::vector<String> aValues;
+    std::vector<rtl::OUString> aValues;
 
     /**
       the selected item
     */
-    String aSelectedItem;
+    rtl::OUString aSelectedItem;
 
     /**
       the name of the field
     */
-    String aName;
+    rtl::OUString aName;
 
     /**
        help text
      */
-    String aHelp;
+    rtl::OUString aHelp;
 
     /**
        tool tip string
      */
-    String aToolTip;
+    rtl::OUString aToolTip;
 
     /**
        Expands the field.
@@ -135,14 +135,14 @@ public:
 
        @return the selected value
     */
-    virtual const String & GetPar1() const;
+    virtual const rtl::OUString & GetPar1() const;
 
     /**
        Returns the name of the field.
 
        @return the name of the field
     */
-    virtual String GetPar2() const;
+    virtual rtl::OUString GetPar2() const;
 
     /**
        Sets the selected value.
@@ -151,14 +151,14 @@ public:
        selected. Otherwise no item will be selected, i.e. the
        resulting selection will be empty.
     */
-    virtual void SetPar1(const String & rStr);
+    virtual void SetPar1(const rtl::OUString & rStr);
 
     /**
        Sets the name of the field.
 
        @param rStr the new name of the field
     */
-    virtual void SetPar2(const String & rStr);
+    virtual void SetPar2(const rtl::OUString & rStr);
 
     /**
        Sets the items of the dropdown box.
@@ -167,7 +167,7 @@ public:
 
        @param rItems the new items
     */
-    void SetItems(const std::vector<String> & rItems);
+    void SetItems(const std::vector<rtl::OUString> & rItems);
 
     /**
        Sets the items of the dropdown box.
@@ -190,28 +190,28 @@ public:
 
        @return the selected item
     */
-    const String & GetSelectedItem() const;
+    const rtl::OUString & GetSelectedItem() const;
 
     /**
        Returns the name of the field.
 
        @return the name of the field
     */
-    const String & GetName() const;
+    const rtl::OUString & GetName() const;
 
     /**
        Returns the help text of the field.
 
        @return the help text of the field
     */
-    const String & GetHelp() const;
+    const rtl::OUString & GetHelp() const;
 
     /**
        Returns the tool tip of the field.
 
        @return the tool tip of the field
      */
-    const String & GetToolTip() const;
+    const rtl::OUString & GetToolTip() const;
 
     /**
        Sets the selected item.
@@ -224,28 +224,28 @@ public:
        @retval sal_True the selected item was successfully set
        @retval sal_True failure (empty selection)
     */
-    sal_Bool SetSelectedItem(const String & rItem);
+    sal_Bool SetSelectedItem(const rtl::OUString & rItem);
 
     /**
        Sets the name of the field.
 
        @param rName the new name of the field
     */
-    void SetName(const String & rName);
+    void SetName(const rtl::OUString & rName);
 
     /**
        Sets the help text of the field.
 
        @param rHelp    the help text
     */
-    void SetHelp(const String & rHelp);
+    void SetHelp(const rtl::OUString & rHelp);
 
     /**
        Sets the tool tip of the field.
 
        @param rToolTip  the tool tip
     */
-    void SetToolTip(const String & rToolTip);
+    void SetToolTip(const rtl::OUString & rToolTip);
 
     /**
        API: Gets a property value from the dropdown field.

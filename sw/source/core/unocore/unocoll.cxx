@@ -1961,7 +1961,7 @@ uno::Sequence< OUString > SwXReferenceMarks::getElementNames(void) throw( uno::R
     uno::Sequence<OUString> aRet;
     if(IsValid())
     {
-        std::vector<String> aStrings;
+        std::vector<rtl::OUString> aStrings;
         sal_uInt16 nCount = GetDoc()->GetRefMarks( &aStrings );
         aRet.realloc(nCount);
         OUString* pNames = aRet.getArray();

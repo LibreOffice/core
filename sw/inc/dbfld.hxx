@@ -43,7 +43,7 @@ class SwFrm;
 class SW_DLLPUBLIC SwDBFieldType : public SwValueFieldType
 {
     SwDBData    aDBData;        //
-    String      sName;          // only used in ::GetName() !
+    rtl::OUString sName;          // only used in ::GetName() !
     String      sColumn;
     long        nRefCnt;
 
@@ -52,7 +52,7 @@ public:
     SwDBFieldType(SwDoc* pDocPtr, const String& rColumnName, const SwDBData& rDBData);
     ~SwDBFieldType();
 
-    virtual const String& GetName() const;
+    virtual const rtl::OUString& GetName() const;
     virtual SwFieldType*  Copy() const;
 
     inline void     AddRef() { nRefCnt++; }
@@ -72,8 +72,8 @@ public:
 
 class SW_DLLPUBLIC SwDBField : public SwValueField
 {
-    String  aContent;
-    String  sFieldCode; // contains Word's field code
+    rtl::OUString aContent;
+    rtl::OUString sFieldCode; // contains Word's field code
     sal_uInt16  nSubType;
     sal_Bool    bIsInBodyTxt    : 1;
     sal_Bool    bValidValue     : 1;
@@ -114,13 +114,11 @@ public:
     inline void         SetInitialized()        { bInitialized = sal_True; }
 
     // Get name.
-    virtual const String& GetPar1() const;
+    virtual const rtl::OUString& GetPar1() const;
 
     // access to the command string
-    const String&       GetFieldCode()   const
-                        { return sFieldCode;}
-    void                SetFieldCode(const String& rStr)
-                        { sFieldCode = rStr; }
+    const rtl::OUString& GetFieldCode() const { return sFieldCode;}
+    void                SetFieldCode(const rtl::OUString& rStr) { sFieldCode = rStr; }
 
     // DBName
     inline const SwDBData&  GetDBData() const { return ((SwDBFieldType*)GetTyp())->GetDBData(); }
@@ -183,7 +181,7 @@ public:
 
 class SW_DLLPUBLIC SwDBNextSetField : public SwDBNameInfField
 {
-    String  aCond;
+    rtl::OUString  aCond;
     sal_Bool    bCondValid;
 
 public:
@@ -198,8 +196,8 @@ public:
     inline sal_Bool             IsCondValid() const;
 
     // Condition
-    virtual const String&   GetPar1() const;
-    virtual void            SetPar1(const String& rStr);
+    virtual const rtl::OUString&   GetPar1() const;
+    virtual void        SetPar1(const rtl::OUString& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
@@ -229,7 +227,7 @@ public:
 
 class SwDBNumSetField : public SwDBNameInfField
 {
-    String  aCond;
+    rtl::OUString  aCond;
     String  aPar2;
     sal_Bool    bCondValid;
 
@@ -244,12 +242,12 @@ public:
     void                    Evaluate(SwDoc*);
 
     // Condition
-    virtual const String&   GetPar1() const;
-    virtual void            SetPar1(const String& rStr);
+    virtual const rtl::OUString&   GetPar1() const;
+    virtual void            SetPar1(const rtl::OUString& rStr);
 
     // Number of data record.
-    virtual String          GetPar2()   const;
-    virtual void            SetPar2(const String& rStr);
+    virtual rtl::OUString   GetPar2()   const;
+    virtual void            SetPar2(const rtl::OUString& rStr);
 
     // Number of data record is in nFormat!!
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;

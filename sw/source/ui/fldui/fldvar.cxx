@@ -602,7 +602,7 @@ void SwFldVarPage::UpdateSubType()
     aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
 
-    std::vector<String> aList;
+    std::vector<rtl::OUString> aList;
     GetFldMgr().GetSubTypes(nTypeId, aList);
     size_t nCount = aList.size();
     size_t nPos;
@@ -632,7 +632,7 @@ void SwFldVarPage::UpdateSubType()
                         break;
 
                     case TYP_GETFLD:
-                        if (aList[i] == ((SwFormulaField*)GetCurField())->GetFormula())
+                        if (aList[i].equals(((const SwFormulaField*)GetCurField())->GetFormula()))
                             bInsert = sal_True;
                         break;
 

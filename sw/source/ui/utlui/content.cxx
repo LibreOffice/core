@@ -658,10 +658,10 @@ void    SwContentType::FillMemberList(sal_Bool* pbLevelOrVisibiblityChanged)
         break;
         case CONTENT_TYPE_REFERENCE:
         {
-            std::vector<String> aRefMarks;
+            std::vector<rtl::OUString> aRefMarks;
             nMemberCount = pWrtShell->GetRefMarks( &aRefMarks );
 
-            for(std::vector<String>::const_iterator i = aRefMarks.begin(); i != aRefMarks.end(); ++i)
+            for(std::vector<rtl::OUString>::const_iterator i = aRefMarks.begin(); i != aRefMarks.end(); ++i)
             {
                 //Referenzen nach Alphabet sortiert
                 SwContent* pCnt = new SwContent(this, *i, 0);

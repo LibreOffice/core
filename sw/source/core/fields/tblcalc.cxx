@@ -168,13 +168,13 @@ void SwTblField::SetValue( const double& rVal )
  --------------------------------------------------------------------*/
 
 
-String SwTblField::GetPar2() const
+rtl::OUString SwTblField::GetPar2() const
 {
     return SwTableFormula::GetFormula();
 }
 
 
-void SwTblField::SetPar2(const String& rStr)
+void SwTblField::SetPar2(const rtl::OUString& rStr)
 {
     SetFormula( rStr );
 }

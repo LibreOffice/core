@@ -397,12 +397,12 @@ void SwGetExpField::ChangeExpansion( const SwFrm& rFrm, const SwTxtFld& rFld )
     }
 }
 
-String SwGetExpField::GetPar2() const
+rtl::OUString SwGetExpField::GetPar2() const
 {
     return GetFormula();
 }
 
-void SwGetExpField::SetPar2(const String& rStr)
+void SwGetExpField::SetPar2(const rtl::OUString& rStr)
 {
     SetFormula(rStr);
 }
@@ -524,7 +524,7 @@ SwFieldType* SwSetExpFieldType::Copy() const
     return pNew;
 }
 
-const String& SwSetExpFieldType::GetName() const
+const rtl::OUString& SwSetExpFieldType::GetName() const
 {
     return sName;
 }
@@ -951,12 +951,12 @@ xub_StrLen SwGetExpField::GetReferenceTextPos( const SwFmtFld& rFmt, SwDoc& rDoc
     Beschreibung: Parameter setzen
  --------------------------------------------------------------------*/
 
-const String& SwSetExpField::GetPar1() const
+const rtl::OUString& SwSetExpField::GetPar1() const
 {
-    return ((SwSetExpFieldType*)GetTyp())->GetName();
+    return ((const SwSetExpFieldType*)GetTyp())->GetName();
 }
 
-String SwSetExpField::GetPar2() const
+rtl::OUString SwSetExpField::GetPar2() const
 {
     sal_uInt16 nType = ((SwSetExpFieldType*)GetTyp())->GetType();
 
@@ -965,11 +965,11 @@ String SwSetExpField::GetPar2() const
     return GetExpandedFormula();
 }
 
-void SwSetExpField::SetPar2(const String& rStr)
+void SwSetExpField::SetPar2(const rtl::OUString& rStr)
 {
     sal_uInt16 nType = ((SwSetExpFieldType*)GetTyp())->GetType();
 
-    if( !(nType & nsSwGetSetExpType::GSE_SEQ) || rStr.Len() )
+    if( !(nType & nsSwGetSetExpType::GSE_SEQ) || !rStr.isEmpty() )
     {
         if (nType & nsSwGetSetExpType::GSE_STRING)
             SetFormula(rStr);
@@ -1071,7 +1071,7 @@ bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-         ::GetString( rAny, aContent );
+         rAny >>= aContent;
         break;
     case FIELD_PROP_PAR2:
         ::GetString( rAny, aPText );
@@ -1091,12 +1091,12 @@ bool SwInputField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     Beschreibung: Bedingung setzen
  --------------------------------------------------------------------*/
 
-void SwInputField::SetPar1(const String& rStr)
+void SwInputField::SetPar1(const rtl::OUString& rStr)
 {
     aContent = rStr;
 }
 
-const String& SwInputField::GetPar1() const
+const rtl::OUString& SwInputField::GetPar1() const
 {
     return aContent;
 }
@@ -1105,12 +1105,12 @@ const String& SwInputField::GetPar1() const
     Beschreibung: True/False Text
  --------------------------------------------------------------------*/
 
-void SwInputField::SetPar2(const String& rStr)
+void SwInputField::SetPar2(const rtl::OUString& rStr)
 {
     aPText = rStr;
 }
 
-String SwInputField::GetPar2() const
+rtl::OUString SwInputField::GetPar2() const
 {
     return aPText;
 }

@@ -519,7 +519,7 @@ const SwFmtRefMark* SwEditShell::GetRefMark( const String& rName ) const
 }
 
     // returne die Namen aller im Doc gesetzten Referenzen
-sal_uInt16 SwEditShell::GetRefMarks( std::vector<String>* pStrings ) const
+sal_uInt16 SwEditShell::GetRefMarks( std::vector<rtl::OUString>* pStrings ) const
 {
     return GetDoc()->GetRefMarks( pStrings );
 }

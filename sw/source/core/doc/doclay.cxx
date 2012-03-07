@@ -1176,7 +1176,7 @@ lcl_InsertLabel(SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     {
         for( sal_uInt16 i = pTxtFmtCollTbl->Count(); i; )
         {
-            if( (*pTxtFmtCollTbl)[ --i ]->GetName() == pType->GetName() )
+            if( (*pTxtFmtCollTbl)[ --i ]->GetName().Equals(pType->GetName()) )
             {
                 pColl = (*pTxtFmtCollTbl)[i];
                 break;
@@ -1532,7 +1532,7 @@ lcl_InsertDrawLabel( SwDoc & rDoc, SwTxtFmtColls *const pTxtFmtCollTbl,
     {
         for( sal_uInt16 i = pTxtFmtCollTbl->Count(); i; )
         {
-            if( (*pTxtFmtCollTbl)[ --i ]->GetName() == pType->GetName() )
+            if( (*pTxtFmtCollTbl)[ --i ]->GetName().Equals(pType->GetName()) )
             {
                 pColl = (*pTxtFmtCollTbl)[i];
                 break;

@@ -433,12 +433,14 @@ SwCaptionOptPage::SwCaptionOptPage( Window* pParent, const SfxItemSet& rSet )
         nCount = pMgr->GetFldTypeCount();
         SwFieldType* pFldType;
         for ( i = nCount; i; )
-            if( ( pFldType = pMgr->GetFldType(USHRT_MAX, --i))->GetName() ==
-                aCategoryBox.GetText() )
+        {
+            pFldType = pMgr->GetFldType(USHRT_MAX, --i);
+            if (pFldType->GetName().equals(aCategoryBox.GetText()))
             {
                 nSelFmt = (sal_uInt16)((SwSetExpFieldType*)pFldType)->GetSeqFormat();
                 break;
             }
+        }
 
         ::FillCharStyleListBox( aCharStyleLB, pSh->GetView().GetDocShell(), sal_True, sal_True );
     }

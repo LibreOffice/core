@@ -272,7 +272,7 @@ SwFieldType* SwDDEFieldType::Copy() const
     return pType;
 }
 
-const String& SwDDEFieldType::GetName() const
+const rtl::OUString& SwDDEFieldType::GetName() const
 {
     return aName;
 }
@@ -420,21 +420,21 @@ SwField* SwDDEField::Copy() const
     Beschreibung: Parameter des Typen erfragen
                   Name
  --------------------------------------------------------------------*/
-const String& SwDDEField::GetPar1() const
+const rtl::OUString& SwDDEField::GetPar1() const
 {
-    return ((SwDDEFieldType*)GetTyp())->GetName();
+    return ((const SwDDEFieldType*)GetTyp())->GetName();
 }
 
 /*--------------------------------------------------------------------
     Beschreibung: Parameter des Typen erfragen
                   Commando
  --------------------------------------------------------------------*/
-String SwDDEField::GetPar2() const
+rtl::OUString SwDDEField::GetPar2() const
 {
-    return ((SwDDEFieldType*)GetTyp())->GetCmd();
+    return ((const SwDDEFieldType*)GetTyp())->GetCmd();
 }
 
-void SwDDEField::SetPar2(const String& rStr)
+void SwDDEField::SetPar2(const rtl::OUString& rStr)
 {
     ((SwDDEFieldType*)GetTyp())->SetCmd(rStr);
 }

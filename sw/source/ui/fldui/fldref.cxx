@@ -629,7 +629,7 @@ void SwFldRefPage::UpdateSubType()
     }
     else
     {
-        std::vector<String> aLst;
+        std::vector<rtl::OUString> aLst;
         GetFldMgr().GetSubTypes(nTypeId, aLst);
         for(size_t i = 0; i < aLst.size(); ++i)
             aSelectionLB.InsertEntry(aLst[i]);

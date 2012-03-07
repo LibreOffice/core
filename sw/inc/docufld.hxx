@@ -180,10 +180,10 @@ public:
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
-    virtual String      GetPar2() const;
-    virtual void        SetPar2(const String& rStr);
+    virtual rtl::OUString GetPar2() const;
+    virtual void        SetPar2(const rtl::OUString& rStr);
 
-    virtual sal_uInt16      GetSubType() const;
+    virtual sal_uInt16  GetSubType() const;
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
@@ -352,11 +352,11 @@ public:
 
 class SwHiddenTxtField : public SwField
 {
-    String  aTRUETxt;           // Text if condition sal_True.
-    String  aFALSETxt;          // If condition false.
-    String  aContent;           // Evaluated DB-text.
+    rtl::OUString aTRUETxt;     // Text if condition sal_True.
+    rtl::OUString aFALSETxt;    // If condition false.
+    rtl::OUString aContent;     // Evaluated DB-text.
 
-    String  aCond;              // Condition.
+    rtl::OUString aCond;              // Condition.
     sal_uInt16  nSubType;
 
     sal_Bool    bCanToggle : 1;     // Can field be toggled alone?
@@ -389,12 +389,12 @@ public:
     String              GetDBName(const String& rName, SwDoc *pDoc);
 
     // Condition
-    virtual void        SetPar1(const String& rStr);
-    virtual const String& GetPar1() const;
+    virtual void        SetPar1(const rtl::OUString& rStr);
+    virtual const rtl::OUString& GetPar1() const;
 
     // True/False - String
-    virtual void        SetPar2(const String& rStr);
-    virtual String      GetPar2() const;
+    virtual void        SetPar2(const rtl::OUString& rStr);
+    virtual rtl::OUString GetPar2() const;
 
 
     virtual sal_uInt16      GetSubType() const;
@@ -421,7 +421,7 @@ public:
 
 class SwHiddenParaField : public SwField
 {
-    String              aCond;
+    rtl::OUString           aCond;
     sal_Bool                bIsHidden:1;
 public:
     // Direct input, delete old value.
@@ -434,8 +434,8 @@ public:
     sal_Bool                IsHidden() const            { return bIsHidden;    }
 
     //Query, set condition.
-    virtual const String& GetPar1() const;
-    virtual void        SetPar1(const String& rStr);
+    virtual const rtl::OUString& GetPar1() const;
+    virtual void        SetPar1(const rtl::OUString& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 };
@@ -460,8 +460,8 @@ public:
 
 class SW_DLLPUBLIC SwMacroField : public SwField
 {
-    String  aMacro;
-    String  aText;
+    rtl::OUString aMacro;
+    rtl::OUString aText;
     sal_Bool      bIsScriptURL;
 
     virtual String   Expand() const;
@@ -472,7 +472,7 @@ public:
     SwMacroField( SwMacroFieldType*, const String& rLibAndName,
                   const String& rTxt);
 
-    inline const String& GetMacro() const { return aMacro; }
+    inline const rtl::OUString& GetMacro() const { return aMacro; }
     String           GetLibName() const;
     String           GetMacroName() const;
     SvxMacro         GetSvxMacro() const;
@@ -480,16 +480,16 @@ public:
     virtual String   GetFieldName() const;
 
     // Library and FileName
-    virtual const String& GetPar1() const;
-    virtual void    SetPar1(const String& rStr);
+    virtual const rtl::OUString& GetPar1() const;
+    virtual void    SetPar1(const rtl::OUString& rStr);
 
     // Macrotext
-    virtual String  GetPar2() const;
-    virtual void    SetPar2(const String& rStr);
+    virtual rtl::OUString  GetPar2() const;
+    virtual void    SetPar2(const rtl::OUString& rStr);
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
 
-    static void CreateMacroString( String& rMacro,
+    static void CreateMacroString( rtl::OUString& rMacro,
                                    const String& rMacroName,
                                    const String& rLibraryName );
 
@@ -518,8 +518,8 @@ public:
 
 class SW_DLLPUBLIC SwPostItField : public SwField
 {
-    String      sTxt;
-    String      sAuthor;
+    rtl::OUString sTxt;
+    rtl::OUString sAuthor;
     DateTime    aDateTime;
     OutlinerParaObject* mpText;
     SwTextAPIObject* m_pTextObject;
@@ -537,13 +537,13 @@ public:
     inline const Time       GetTime() const                 { return aDateTime.GetTime(); }
 
     // Author
-    virtual const String&   GetPar1() const;
-    virtual void            SetPar1(const String& rStr);
+    virtual const rtl::OUString& GetPar1() const;
+    virtual void            SetPar1(const rtl::OUString& rStr);
 
     // Text
-    virtual String          GetPar2() const;
-    virtual void            SetPar2(const String& rStr);
-    const String&           GetTxt() const { return sTxt; }
+    virtual rtl::OUString   GetPar2() const;
+    virtual void            SetPar2(const rtl::OUString& rStr);
+    const rtl::OUString&    GetTxt() const { return sTxt; }
 
     const OutlinerParaObject*   GetTextObject() const;
     void SetTextObject( OutlinerParaObject* pText );
@@ -662,8 +662,8 @@ public:
     virtual String      Expand() const;
     virtual SwField*    Copy() const;
 
-    virtual String  GetPar2() const;
-    virtual void    SetPar2(const String& rStr);
+    virtual rtl::OUString  GetPar2() const;
+    virtual void    SetPar2(const rtl::OUString& rStr);
 
     sal_Bool IsOn() const               { return bOn; }
 
@@ -731,7 +731,7 @@ public:
 
 class SwJumpEditField : public SwField
 {
-    String sTxt, sHelp;
+    rtl::OUString sTxt, sHelp;
 public:
     SwJumpEditField( SwJumpEditFieldType*, sal_uInt32 nFormat,
                     const String& sText, const String& sHelp );
@@ -740,12 +740,12 @@ public:
     virtual SwField*    Copy() const;
 
     // Placeholder-Text
-    virtual const String& GetPar1() const;
-    virtual void    SetPar1(const String& rStr);
+    virtual const rtl::OUString& GetPar1() const;
+    virtual void    SetPar1(const rtl::OUString& rStr);
 
     // Hint-Text
-    virtual String  GetPar2() const;
-    virtual void    SetPar2(const String& rStr);
+    virtual rtl::OUString  GetPar2() const;
+    virtual void    SetPar2(const rtl::OUString& rStr);
 
     SwCharFmt* GetCharFmt() const
         { return ((SwJumpEditFieldType*)GetTyp())->GetCharFmt(); }
@@ -772,11 +772,11 @@ public:
 
 class SwScriptField : public SwField
 {
-    String  sType;      // Type of Code (Java/VBScript/...)
-    String  sCode;      // Code as text.
-                        // Code as JavaCode ?
+    rtl::OUString sType; // Type of Code (Java/VBScript/...)
+    rtl::OUString sCode; // Code as text.
+                         // Code as JavaCode ?
 
-    sal_Bool    bCodeURL;   // Code contains URL of a script.
+    sal_Bool    bCodeURL;// Code contains URL of a script.
 
 public:
     SwScriptField( SwScriptFieldType*, const String& rType,
@@ -788,11 +788,11 @@ public:
     virtual SwField*        Copy() const;
 
     // Type
-    virtual const String&   GetPar1() const;
-    virtual void            SetPar1(const String& rStr);
+    virtual const rtl::OUString&   GetPar1() const;
+    virtual void            SetPar1(const rtl::OUString& rStr);
     // Text
-    virtual String          GetPar2() const;
-    virtual void            SetPar2(const String& rStr);
+    virtual rtl::OUString   GetPar2() const;
+    virtual void            SetPar2(const rtl::OUString& rStr);
 
     sal_Bool                    IsCodeURL() const { return bCodeURL; }
     void                    SetCodeURL( sal_Bool bURL ) { bCodeURL = bURL; }
@@ -820,7 +820,7 @@ public:
 
 class SW_DLLPUBLIC SwCombinedCharField : public SwField
 {
-    String  sCharacters;    // combine these characters
+    rtl::OUString sCharacters;    // combine these characters
 
 public:
     SwCombinedCharField( SwCombinedCharFieldType*, const String& rChars );
@@ -829,8 +829,8 @@ public:
     virtual SwField*        Copy() const;
 
     // Characters
-    virtual const String&   GetPar1() const;
-    virtual void            SetPar1(const String& rStr);
+    virtual const rtl::OUString&   GetPar1() const;
+    virtual void        SetPar1(const rtl::OUString& rStr);
 
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );

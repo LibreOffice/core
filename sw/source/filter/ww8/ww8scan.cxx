@@ -4155,9 +4155,9 @@ String WW8PLCFx_Book::GetBookmark(long nStart,long nEnd, sal_uInt16 &nIndex)
     return bFound ? aBookNames[i] : aEmptyStr;
 }
 
-String WW8PLCFx_Book::GetUniqueBookmarkName(String &suggestedName)
+String WW8PLCFx_Book::GetUniqueBookmarkName(const rtl::OUString &rSuggestedName)
 {
-    String aRet=(suggestedName.Len()==0?String::CreateFromAscii("Unnamed"):suggestedName);
+    String aRet=(rSuggestedName.isEmpty() ? rtl::OUString("Unnamed") : rSuggestedName);
     unsigned int i=0;
     while(i<aBookNames.size()) {
         String &s=aBookNames[i];

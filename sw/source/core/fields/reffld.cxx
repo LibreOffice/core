@@ -276,7 +276,7 @@ String SwGetRefField::Expand() const
 
 String SwGetRefField::GetFieldName() const
 {
-    if ( GetTyp()->GetName().Len() > 0 || sSetRefName.Len() > 0 )
+    if ( GetTyp()->GetName().getLength() > 0 || sSetRefName.getLength() > 0 )
     {
         String aStr(GetTyp()->GetName());
         aStr += ' ';
@@ -563,19 +563,19 @@ SwField* SwGetRefField::Copy() const
  --------------------------------------------------------------------*/
 
 
-const String& SwGetRefField::GetPar1() const
+const rtl::OUString& SwGetRefField::GetPar1() const
 {
     return sSetRefName;
 }
 
 
-void SwGetRefField::SetPar1( const String& rName )
+void SwGetRefField::SetPar1( const rtl::OUString& rName )
 {
     sSetRefName = rName;
 }
 
 
-String SwGetRefField::GetPar2() const
+rtl::OUString SwGetRefField::GetPar2() const
 {
     return Expand();
 }
@@ -1092,11 +1092,13 @@ void SwGetRefFieldType::MergeWithOtherDoc( SwDoc& rDestDoc )
                 {
                     _RefIdsMap* pMap = 0;
                     for( sal_uInt16 n = aFldMap.Count(); n; )
-                        if( aFldMap[ --n ]->GetName() == rRefFld.GetSetRefName() )
+                    {
+                        if( aFldMap[ --n ]->GetName().Equals(rRefFld.GetSetRefName()) )
                         {
                             pMap = aFldMap[ n ];
                             break;
                         }
+                    }
                     if( !pMap )
                     {
                         pMap = new _RefIdsMap( rRefFld.GetSetRefName() );

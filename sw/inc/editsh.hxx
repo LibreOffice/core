@@ -740,7 +740,7 @@ public:
 
     //  Return names of all references set in document.
     //  If ArrayPointer == 0 then return only whether a RefMark is set in document.
-    sal_uInt16 GetRefMarks( std::vector<String>* = 0 ) const;
+    sal_uInt16 GetRefMarks( std::vector<rtl::OUString>* = 0 ) const;
 
     // Call AutoCorrect
     void AutoCorrect( SvxAutoCorrect& rACorr, sal_Bool bInsertMode = sal_True,

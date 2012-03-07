@@ -66,8 +66,8 @@ private:
     ImageButton         aNextBtn;
     HelpButton          aHelpBtn;
 
-    String              aText;
-    String              aType;
+    rtl::OUString       aText;
+    rtl::OUString       aType;
 
     sal_Bool                bNew;
     sal_Bool                bIsUrl;
@@ -97,9 +97,9 @@ public:
     SwJavaEditDialog(Window* pParent, SwWrtShell* pWrtSh);
     ~SwJavaEditDialog();
 
-    String              GetText() { return aText; }
+    rtl::OUString       GetText() { return aText; }
 
-    String              GetType() { return aType; }
+    rtl::OUString       GetType() { return aType; }
 
     sal_Bool                IsUrl() { return bIsUrl; }
     sal_Bool                IsNew() { return bNew; }

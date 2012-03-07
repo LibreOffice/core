@@ -90,7 +90,7 @@ public:
 class SW_DLLPUBLIC SwGetRefField : public SwField
 {
 private:
-    String sSetRefName;
+    rtl::OUString sSetRefName;
     String sTxt;
     sal_uInt16 nSubType;
     sal_uInt16 nSeqNo;
@@ -111,7 +111,7 @@ public:
 
     virtual String      GetFieldName() const;
 
-    const String&       GetSetRefName() const { return sSetRefName; }
+    const rtl::OUString& GetSetRefName() const { return sSetRefName; }
 
     // #i81002#
     // The <SwTxtFld> instance, which represents the text attribute for the
@@ -141,10 +141,10 @@ public:
     void                SetSeqNo( sal_uInt16 n )    { nSeqNo = n; }
 
     // Name of reference.
-    virtual const String& GetPar1() const;
-    virtual void        SetPar1(const String& rStr);
+    virtual const rtl::OUString& GetPar1() const;
+    virtual void        SetPar1(const rtl::OUString& rStr);
 
-    virtual String      GetPar2() const;
+    virtual rtl::OUString GetPar2() const;
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );
 

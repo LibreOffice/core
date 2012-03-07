@@ -593,10 +593,10 @@ public:
     const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
 
     /// Find the reference.
-    bool HasRefToObject( sal_uInt16 nTyp, const String* pName, sal_uInt16 nSeqNo );
+    bool HasRefToObject( sal_uInt16 nTyp, const rtl::OUString* pName, sal_uInt16 nSeqNo );
 
     /// Find the bookmark name.
-    String GetBookmarkName( sal_uInt16 nTyp, const String* pName, sal_uInt16 nSeqNo );
+    String GetBookmarkName( sal_uInt16 nTyp, const rtl::OUString* pName, sal_uInt16 nSeqNo );
 
     /// Add a bookmark converted to a Word name.
     void AppendWordBookmark( const String& rName );

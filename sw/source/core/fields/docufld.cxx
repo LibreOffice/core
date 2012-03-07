@@ -229,14 +229,14 @@ SwField* SwPageNumberField::Copy() const
     return pTmp;
 }
 
-String SwPageNumberField::GetPar2() const
+rtl::OUString SwPageNumberField::GetPar2() const
 {
-    return String::CreateFromInt32(nOffset);
+    return rtl::OUString::valueOf(static_cast<sal_Int32>(nOffset));
 }
 
-void SwPageNumberField::SetPar2(const String& rStr)
+void SwPageNumberField::SetPar2(const rtl::OUString& rStr)
 {
-    nOffset = (short)rStr.ToInt32();
+    nOffset = (short)rStr.toInt32();
 }
 
 sal_uInt16 SwPageNumberField::GetSubType() const
@@ -1361,7 +1361,7 @@ SwHiddenTxtField::SwHiddenTxtField( SwHiddenTxtFieldType* pFldType,
     : SwField( pFldType ), aTRUETxt(rTrue), aFALSETxt(rFalse), aCond(rCond), nSubType(nSub),
       bIsHidden(sal_True), bValid(sal_False)
 {
-    bCanToggle  = aCond.Len() > 0;
+    bCanToggle  = aCond.getLength() > 0;
 }
 
 String SwHiddenTxtField::Expand() const
@@ -1484,13 +1484,13 @@ SwField* SwHiddenTxtField::Copy() const
     Beschreibung: Bedingung setzen
  --------------------------------------------------------------------*/
 
-void SwHiddenTxtField::SetPar1(const String& rStr)
+void SwHiddenTxtField::SetPar1(const rtl::OUString& rStr)
 {
     aCond = rStr;
-    bCanToggle = aCond.Len() > 0;
+    bCanToggle = aCond.getLength() > 0;
 }
 
-const String& SwHiddenTxtField::GetPar1() const
+const rtl::OUString& SwHiddenTxtField::GetPar1() const
 {
     return aCond;
 }
@@ -1499,21 +1499,24 @@ const String& SwHiddenTxtField::GetPar1() const
     Beschreibung: True/False Text
  --------------------------------------------------------------------*/
 
-void SwHiddenTxtField::SetPar2(const String& rStr)
+void SwHiddenTxtField::SetPar2(const rtl::OUString& rStr)
 {
-    if(nSubType == TYP_CONDTXTFLD)
+    if (nSubType == TYP_CONDTXTFLD)
     {
-        sal_uInt16 nPos = rStr.Search('|');
-        aTRUETxt = rStr.Copy(0, nPos);
-
-        if(nPos != STRING_NOTFOUND)
-            aFALSETxt = rStr.Copy(nPos + 1);
+        sal_Int32 nPos = rStr.indexOf('|');
+        if (nPos == STRING_NOTFOUND)
+            aTRUETxt = rStr;
+        else
+        {
+            aTRUETxt = rStr.copy(0, nPos);
+            aFALSETxt = rStr.copy(nPos + 1);
+        }
     }
     else
         aTRUETxt = rStr;
 }
 
-String SwHiddenTxtField::GetPar2() const
+rtl::OUString SwHiddenTxtField::GetPar2() const
 {
     String aRet(aTRUETxt);
     if(nSubType == TYP_CONDTXTFLD)
@@ -1531,7 +1534,7 @@ sal_uInt16 SwHiddenTxtField::GetSubType() const
 
 bool SwHiddenTxtField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
 {
-    const String* pOut = 0;
+    const rtl::OUString* pOut = 0;
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
@@ -1556,7 +1559,7 @@ bool SwHiddenTxtField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
         OSL_FAIL("illegal property");
     }
     if( pOut )
-        rAny <<= OUString( *pOut );
+        rAny <<= *pOut;
     return true;
 }
 
@@ -1566,21 +1569,22 @@ bool SwHiddenTxtField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     {
     case FIELD_PROP_PAR1:
         {
-            String sVal;
-            SetPar1(::GetString( rAny, sVal ));
+            rtl::OUString sVal;
+            rAny >>= sVal;
+            SetPar1(sVal);
         }
         break;
     case FIELD_PROP_PAR2:
-        ::GetString( rAny, aTRUETxt );
+        rAny >>= aTRUETxt;
         break;
     case FIELD_PROP_PAR3:
-        ::GetString( rAny, aFALSETxt );
+        rAny >>= aFALSETxt;
         break;
     case FIELD_PROP_BOOL1:
         bIsHidden = *(sal_Bool*)rAny.getValue();
         break;
     case FIELD_PROP_PAR4:
-        ::GetString( rAny, aContent);
+        rAny >>= aContent;
         bValid = sal_True;
     break;
     default:
@@ -1686,7 +1690,7 @@ bool SwHiddenParaField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch ( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        ::GetString( rAny, aCond );
+        rAny >>= aCond;
         break;
     case FIELD_PROP_BOOL1:
         bIsHidden = *(sal_Bool*)rAny.getValue();
@@ -1702,12 +1706,12 @@ bool SwHiddenParaField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     Beschreibung: Bedingung setzen
  --------------------------------------------------------------------*/
 
-void SwHiddenParaField::SetPar1(const String& rStr)
+void SwHiddenParaField::SetPar1(const rtl::OUString& rStr)
 {
     aCond = rStr;
 }
 
-const String& SwHiddenParaField::GetPar1() const
+const rtl::OUString& SwHiddenParaField::GetPar1() const
 {
     return aCond;
 }
@@ -1771,12 +1775,12 @@ SwField* SwPostItField::Copy() const
     Beschreibung: Author setzen
  --------------------------------------------------------------------*/
 
-void SwPostItField::SetPar1(const String& rStr)
+void SwPostItField::SetPar1(const rtl::OUString& rStr)
 {
     sAuthor = rStr;
 }
 
-const String& SwPostItField::GetPar1() const
+const rtl::OUString& SwPostItField::GetPar1() const
 {
     return sAuthor;
 }
@@ -1785,12 +1789,12 @@ const String& SwPostItField::GetPar1() const
     Beschreibung: Text fuers PostIt setzen
  --------------------------------------------------------------------*/
 
-void SwPostItField::SetPar2(const String& rStr)
+void SwPostItField::SetPar2(const rtl::OUString& rStr)
 {
     sTxt = rStr;
 }
 
-String SwPostItField::GetPar2() const
+rtl::OUString SwPostItField::GetPar2() const
 {
         return sTxt;
 }
@@ -1876,10 +1880,10 @@ bool SwPostItField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
     switch( nWhichId )
     {
     case FIELD_PROP_PAR1:
-        ::GetString( rAny, sAuthor );
+        rAny >>= sAuthor;
         break;
     case FIELD_PROP_PAR2:
-        ::GetString( rAny, sTxt );
+        rAny >>= sTxt;
         //#i100374# new string via api, delete complex text object so SwPostItNote picks up the new string
         if (mpText)
         {
@@ -2090,14 +2094,14 @@ SwField* SwRefPageSetField::Copy() const
     return new SwRefPageSetField( (SwRefPageSetFieldType*)GetTyp(), nOffset, bOn );
 }
 
-String SwRefPageSetField::GetPar2() const
+rtl::OUString SwRefPageSetField::GetPar2() const
 {
-    return String::CreateFromInt32( GetOffset() );
+    return rtl::OUString::valueOf(static_cast<sal_Int32>(GetOffset()));
 }
 
-void SwRefPageSetField::SetPar2(const String& rStr)
+void SwRefPageSetField::SetPar2(const rtl::OUString& rStr)
 {
-    SetOffset( (short) rStr.ToInt32() );
+    SetOffset( (short) rStr.toInt32() );
 }
 
 bool SwRefPageSetField::QueryValue( uno::Any& rAny, sal_uInt16 nWhichId ) const
@@ -2434,24 +2438,24 @@ SwField* SwJumpEditField::Copy() const
 
 // Platzhalter-Text
 
-const String& SwJumpEditField::GetPar1() const
+const rtl::OUString& SwJumpEditField::GetPar1() const
 {
     return sTxt;
 }
 
-void SwJumpEditField::SetPar1(const String& rStr)
+void SwJumpEditField::SetPar1(const rtl::OUString& rStr)
 {
     sTxt = rStr;
 }
 
 // HinweisText
 
-String SwJumpEditField::GetPar2() const
+rtl::OUString SwJumpEditField::GetPar2() const
 {
     return sHelp;
 }
 
-void SwJumpEditField::SetPar2(const String& rStr)
+void SwJumpEditField::SetPar2(const rtl::OUString& rStr)
 {
     sHelp = rStr;
 }
@@ -2509,10 +2513,10 @@ bool SwJumpEditField::PutValue( const uno::Any& rAny, sal_uInt16 nWhichId )
         }
         break;
     case FIELD_PROP_PAR1 :
-        ::GetString( rAny, sHelp );
+        rAny >>= sHelp;
         break;
     case FIELD_PROP_PAR2 :
-         ::GetString( rAny, sTxt);
+         rAny >>= sTxt;
          break;
     default:
         OSL_FAIL("illegal property");
@@ -2555,14 +2559,14 @@ SwField* SwCombinedCharField::Copy() const
                                         sCharacters );
 }
 
-const String& SwCombinedCharField::GetPar1() const
+const rtl::OUString& SwCombinedCharField::GetPar1() const
 {
     return sCharacters;
 }
 
-void SwCombinedCharField::SetPar1(const String& rStr)
+void SwCombinedCharField::SetPar1(const rtl::OUString& rStr)
 {
-    sCharacters = rStr.Copy( 0, MAX_COMBINED_CHARACTERS );
+    sCharacters = rStr.copy(0, std::min(rStr.getLength(), MAX_COMBINED_CHARACTERS));
 }
 
 bool SwCombinedCharField::QueryValue( uno::Any& rAny,
@@ -2584,11 +2588,15 @@ bool SwCombinedCharField::PutValue( const uno::Any& rAny,
 {
     switch( nWhichId )
     {
-    case FIELD_PROP_PAR1:
-        ::GetString( rAny, sCharacters ).Erase( MAX_COMBINED_CHARACTERS );
+        case FIELD_PROP_PAR1:
+        {
+            rtl::OUString sTmp;
+            rAny >>= sTmp;
+            SetPar1(sTmp);
+        }
         break;
-    default:
-        OSL_FAIL("illegal property");
+        default:
+            OSL_FAIL("illegal property");
     }
     return true;
 }

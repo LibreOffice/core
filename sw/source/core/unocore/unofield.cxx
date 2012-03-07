@@ -1642,7 +1642,7 @@ void SwXTextField::attachToRange(
             case SW_SERVICE_FIELDTYPE_MACRO:
             {
                 SwFieldType* pFldType = pDoc->GetSysFldType(RES_MACROFLD);
-                String aName;
+                rtl::OUString aName;
 
                 // support for Scripting Framework macros
                 if (m_pProps->sPar4.Len() != 0)

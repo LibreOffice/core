@@ -119,8 +119,8 @@ public:
 
         virtual double          GetValue() const;
 
-        virtual void            SetPar2(const String& rStr);
-        virtual String          GetPar2() const;
+        virtual void            SetPar2(const rtl::OUString& rStr);
+        virtual rtl::OUString   GetPar2() const;
 
         inline sal_Bool             IsDate() const
                                 { return (nSubType & DATEFLD) != 0; }

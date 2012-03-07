@@ -215,7 +215,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
         if (nTypeId != USHRT_MAX)
         {
-            std::vector<String> aLst;
+            std::vector<rtl::OUString> aLst;
             GetFldMgr().GetSubTypes(nTypeId, aLst);
 
             if (nTypeId != TYP_AUTHORFLD)
@@ -347,7 +347,7 @@ IMPL_LINK_NOARG(SwFldDokPage, TypeHdl)
 
                     if(SVX_NUM_CHAR_SPECIAL != nTmp)
                     {
-                        sal_Int32 nOff = GetCurField()->GetPar2().ToInt32();
+                        sal_Int32 nOff = GetCurField()->GetPar2().toInt32();
                         if( TYP_NEXTPAGEFLD == nTypeId && 1 != nOff )
                             aValueED.SetText(
                                 String::CreateFromInt32(nOff - 1) );

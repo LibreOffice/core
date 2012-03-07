@@ -233,13 +233,14 @@ SwCaptionDialog::SwCaptionDialog( Window *pParent, SwView &rV ) :
     nCount = pMgr->GetFldTypeCount();
     SwFieldType* pFldType;
     for ( i = nCount; i; )
-        if( ( pFldType = pMgr->GetFldType(USHRT_MAX, --i))->GetName() ==
-            aCategoryBox.GetText() )
+    {
+        pFldType = pMgr->GetFldType(USHRT_MAX, --i);
+        if( pFldType->GetName().equals(aCategoryBox.GetText()) )
         {
             nSelFmt = (sal_uInt16)((SwSetExpFieldType*)pFldType)->GetSeqFormat();
             break;
         }
-
+    }
 
     nCount = pMgr->GetFormatCount(TYP_SEQFLD, sal_False);
     for ( i = 0; i < nCount; ++i )

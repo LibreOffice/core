@@ -232,7 +232,7 @@ void SwJavaEditDialog::SetFld()
     if( bIsUrl )
     {
         aText = aUrlED.GetText();
-        if(aText.Len())
+        if (!aText.isEmpty())
         {
             SfxMedium* pMedium = pSh->GetView().GetDocShell()->GetMedium();
             INetURLObject aAbs;
@@ -246,8 +246,8 @@ void SwJavaEditDialog::SetFld()
     else
         aText = aEditED.GetText();
 
-    if( !aType.Len() )
-        aType = String::CreateFromAscii("JavaScript");
+    if( aType.isEmpty() )
+        aType = "JavaScript";
 }
 
 sal_Bool SwJavaEditDialog::IsUpdate()

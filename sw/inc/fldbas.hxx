@@ -254,7 +254,7 @@ public:
     static  const String&   GetTypeStr( sal_uInt16 nTypeId );
 
     // Only in derived classes.
-    virtual const String&   GetName() const;
+    virtual const rtl::OUString&   GetName() const;
     virtual SwFieldType*    Copy()    const = 0;
     virtual bool QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhich ) const;
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhich );
@@ -332,14 +332,14 @@ public:
 
     // Query parameters for dialog and for BASIC.
     inline sal_uInt32   GetFormat() const;
-    virtual const String& GetPar1() const;
-    virtual String      GetPar2()   const;
+    virtual const rtl::OUString& GetPar1() const;
+    virtual rtl::OUString GetPar2()   const;
 
     virtual String      GetFormula() const;
 
     virtual void        ChangeFormat(sal_uInt32 n);
-    virtual void        SetPar1(const String& rStr);
-    virtual void        SetPar2(const String& rStr);
+    virtual void        SetPar1(const rtl::OUString& rStr);
+    virtual void        SetPar2(const rtl::OUString& rStr);
 
     virtual bool        QueryValue( com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId ) const;
     virtual bool        PutValue( const com::sun::star::uno::Any& rVal, sal_uInt16 nWhichId );

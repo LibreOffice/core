@@ -444,9 +444,9 @@ Writer& OutHTML_SwFmtFld( Writer& rWrt, const SfxPoolItem& rHt )
         (nsSwGetSetExpType::GSE_STRING & pFld->GetSubType()) )
     {
         int bOn = sal_False;
-        if( pFldTyp->GetName().EqualsAscii("HTML_ON" ) )
+        if (pFldTyp->GetName() == "HTML_ON")
             bOn = sal_True;
-        else if( !pFldTyp->GetName().EqualsAscii( "HTML_OFF" ) )
+        else if (pFldTyp->GetName() != "HTML_OFF")
             return rWrt;
 
         String rTxt( pFld->GetPar2() );

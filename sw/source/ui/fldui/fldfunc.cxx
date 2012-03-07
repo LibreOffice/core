@@ -338,8 +338,8 @@ IMPL_LINK_NOARG(SwFldFuncPage, TypeHdl)
                 aNameED.SetDropEnable(sal_True);
                 if (IsFldEdit())
                 {
-                    aCond1ED.SetText(GetCurField()->GetPar2().GetToken(0, '|'));
-                    aCond2ED.SetText(GetCurField()->GetPar2().GetToken(1, '|'));
+                    aCond1ED.SetText(GetCurField()->GetPar2().getToken(0, '|'));
+                    aCond2ED.SetText(GetCurField()->GetPar2().getToken(1, '|'));
                 }
 
                 bName = bValue = sal_True;
@@ -500,7 +500,7 @@ void SwFldFuncPage::UpdateSubType()
     aSelectionLB.SetUpdateMode(sal_False);
     aSelectionLB.Clear();
 
-    std::vector<String> aLst;
+    std::vector<rtl::OUString> aLst;
     GetFldMgr().GetSubTypes(nTypeId, aLst);
     size_t nCount = aLst.size();
 

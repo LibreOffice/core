@@ -2396,15 +2396,15 @@ sal_Bool WW8FormulaListBox::Import(const uno::Reference <
     uno::Reference<beans::XPropertySet> xPropSet(xCreate, uno::UNO_QUERY);
 
     uno::Any aTmp;
-    if (sTitle.Len())
-        aTmp <<= rtl::OUString(sTitle);
+    if (!sTitle.isEmpty())
+        aTmp <<= sTitle;
     else
-        aTmp <<= rtl::OUString(sName);
+        aTmp <<= sName;
     xPropSet->setPropertyValue(C2U("Name"), aTmp );
 
-    if (sToolTip.Len())
+    if (!sToolTip.isEmpty())
     {
-        aTmp <<= rtl::OUString(sToolTip);
+        aTmp <<= sToolTip;
         xPropSet->setPropertyValue(C2U("HelpText"), aTmp );
     }
 
@@ -2492,19 +2492,19 @@ sal_Bool WW8FormulaCheckBox::Import(const uno::Reference <
     rSz.Height = 16 * hpsCheckBox;
 
     uno::Any aTmp;
-    if (sTitle.Len())
-        aTmp <<= rtl::OUString(sTitle);
+    if (!sTitle.isEmpty())
+        aTmp <<= sTitle;
     else
-        aTmp <<= rtl::OUString(sName);
+        aTmp <<= sName;
     xPropSet->setPropertyValue(C2U("Name"), aTmp );
 
     aTmp <<= (sal_Int16)nChecked;
     xPropSet->setPropertyValue(C2U("DefaultState"), aTmp);
 
-    if( sToolTip.Len() )
+    if (!sToolTip.isEmpty())
         lcl_AddToPropertyContainer(xPropSet, C2U("HelpText"), sToolTip);
 
-    if( sHelp.Len() )
+    if (!sHelp.isEmpty())
         lcl_AddToPropertyContainer(xPropSet, C2U("HelpF1Text"), sHelp);
 
     return sal_True;

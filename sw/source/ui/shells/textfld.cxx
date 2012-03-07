@@ -496,7 +496,7 @@ void SwTextShell::ExecField(SfxRequest &rReq)
 
             case FN_JAVAEDIT:
             {
-                String aType, aText;
+                rtl::OUString aType, aText;
                 sal_Bool bIsUrl=sal_False;
                 sal_Bool bNew=sal_False, bUpdate=sal_False;
                 SwFldMgr* pMgr = new SwFldMgr;
