@@ -86,7 +86,11 @@ $(eval $(call gb_Library_add_defs,npsoplugin,\
 	-DENGLISH \
 ))
 
-$(eval $(call gb_Library_add_nativeres,npsoplugin,npsoplugin_res))
+# Trick to get rid of the default.res to avoid duplicate VERSION
+# resource: Set NATIVERES for npsoplugin to be *only* npsoplugin_res
+
+$(eval $(call gb_LinkTarget_get_target,npsoplugin) : $(call gb_WinResTarget_get_target,npsoplugin_res))
+$(eval $(call gb_LinkTarget_get_target,npsoplugin) : NATIVERES := $(call gb_WinResTarget_get_target,npsoplugin_res))
 
 endif # GUI=WNT
 
