@@ -37,6 +37,7 @@ extern bool rtl_string_unittest_const_literal; // actually unused here
 #include <cppunit/extensions/HelperMacros.h>
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
+#include "rtl/oustringostreaminserter.hxx"
 
 namespace test { namespace oustring {
 
@@ -44,6 +45,8 @@ class StringLiterals: public CppUnit::TestFixture
 {
 private:
     void checkCtors();
+    void checkExtraIntArgument();
+    void checkNonconstChar();
 
     void testcall( const char str[] );
     // invalid conversions will trigger templated OUString ctor that creates an empty string
@@ -52,6 +55,8 @@ private:
 
 CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);
+CPPUNIT_TEST(checkExtraIntArgument);
+CPPUNIT_TEST(checkNonconstChar);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -90,6 +95,31 @@ void test::oustring::StringLiterals::checkCtors()
 void test::oustring::StringLiterals::testcall( const char str[] )
 {
     CPPUNIT_ASSERT( !validConversion( rtl::OUString( str )));
+}
+
+void test::oustring::StringLiterals::checkExtraIntArgument()
+{
+    // This makes sure that using by mistake RTL_CONSTASCII_STRINGPARAM does not trigger a different
+    // overload, i.e. the second argument to match() in this case is the indexFrom argument,
+    // but with the macro it would contain the length of the string. Therefore
+    // match( RTL_CONSTASCII_STRINGPARAM( "bar" )) would be match( "bar", 3 ), which would be
+    // true when called for OUString( "foobar" ). But this should not happen because of the
+    // &foo[0] trick in the RTL_CONSTASCII_STRINGPARAM macro.
+    CPPUNIT_ASSERT( !rtl::OUString("foobar").match( "bar" ));
+    CPPUNIT_ASSERT( !rtl::OUString("foobar").match( RTL_CONSTASCII_STRINGPARAM( "bar" )));
+}
+
+void test::oustring::StringLiterals::checkNonconstChar()
+{ // check that non-const char[] data do not trigger string literal overloads
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foobar" ), rtl::OUString( "footest" ).replaceAll( "test", "bar" ));
+    char test[] = "test";
+    char bar[] = "bar";
+    const char consttest[] = "test";
+    const char constbar[] = "bar";
+    CPPUNIT_ASSERT( !validConversion( rtl::OUString( "footest" ).replaceAll( test, bar )));
+    CPPUNIT_ASSERT( !validConversion( rtl::OUString( "footest" ).replaceAll( consttest, bar )));
+    CPPUNIT_ASSERT( !validConversion( rtl::OUString( "footest" ).replaceAll( test, constbar )));
+    CPPUNIT_ASSERT( rtl::OUString( "foobar" ) == rtl::OUString( "footest" ).replaceAll( consttest, constbar ));
 }
 
 }} // namespace
