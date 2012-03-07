@@ -151,13 +151,13 @@ String DirEntry::GetVolume() const
 
     String aRet;
     const DirEntry *pTop = ImpGetTopPtr();
-    rtl::OString aName = rtl::OString(pTop->aName).toAsciiLowerCase();
+    rtl::OString aTopName = rtl::OString(pTop->aName).toAsciiLowerCase();
 
     if ( ( pTop->eFlag == FSYS_FLAG_ABSROOT ||
            pTop->eFlag == FSYS_FLAG_RELROOT ||
            pTop->eFlag == FSYS_FLAG_VOLUME )
-         && !aName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:"))
-         && !aName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) && Exists() )
+         && !aTopName.equalsL(RTL_CONSTASCII_STRINGPARAM("a:"))
+         && !aTopName.equalsL(RTL_CONSTASCII_STRINGPARAM("b:")) && Exists() )
     {
         char sFileSysName[256];
         char sVolumeName[256];
