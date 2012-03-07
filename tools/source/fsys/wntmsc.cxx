@@ -771,9 +771,9 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
                 }
 
                 // UNC-Volume?
-                DirEntry *pTop = aAbsEntry.ImpGetTopPtr();
-                if ( pTop->GetFlag() == FSYS_FLAG_ABSROOT &&
-                     ( pTop->aName.getLength() > 1 && (pTop->aName[1] != ':' )) )
+                DirEntry *pTop2 = aAbsEntry.ImpGetTopPtr();
+                if ( pTop2->GetFlag() == FSYS_FLAG_ABSROOT &&
+                     ( pTop2->aName.getLength() > 1 && (pTop2->aName[1] != ':' )) )
                 {
                     if ( bForceAccess )
                     {
