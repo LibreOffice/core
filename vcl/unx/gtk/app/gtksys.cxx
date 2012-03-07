@@ -240,10 +240,7 @@ rtl::OUString GtkSalSystem::GetDisplayScreenName(unsigned int nScreen)
 // convert ~ to indicate mnemonic to '_'
 static rtl::OString MapToGtkAccelerator(const rtl::OUString &rStr)
 {
-    const rtl::OUString aRep(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "_" )));
-    return rtl::OUStringToOString(
-            rStr.replaceFirstAsciiL(RTL_CONSTASCII_STRINGPARAM( "~" ), aRep),
-            RTL_TEXTENCODING_UTF8);
+    return rtl::OUStringToOString(rStr.replaceFirst("~", "_"), RTL_TEXTENCODING_UTF8);
 }
 
 int GtkSalSystem::ShowNativeDialog (const rtl::OUString& rTitle, const rtl::OUString& rMessage,

@@ -763,8 +763,7 @@ void CopyTableWizard::impl_checkForUnsupportedSettings_throw( const Reference< X
     {
         ::rtl::OUString sMessage(
             rtl::OUString(String(ModuleRes(STR_CTW_ERROR_UNSUPPORTED_SETTING))).
-            replaceFirstAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("$name$"), sUnsupportedSetting));
+            replaceFirst("$name$", sUnsupportedSetting));
         throw IllegalArgumentException(
             sMessage,
             *const_cast< CopyTableWizard* >( this ),

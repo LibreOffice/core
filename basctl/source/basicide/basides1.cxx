@@ -177,9 +177,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                             nFound = ((ModulWindow*)pCurWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem );
 
                         ::rtl::OUString aReplStr(ResId::toString(IDEResId(RID_STR_SEARCHREPLACES)));
-                        aReplStr = aReplStr.replaceAllAsciiL(
-                            RTL_CONSTASCII_STRINGPARAM("XX"),
-                            rtl::OUString::valueOf(nFound));
+                        aReplStr = aReplStr.replaceAll("XX", rtl::OUString::valueOf(nFound));
                         InfoBox( pCurWin, aReplStr ).Execute();
                     }
                     else

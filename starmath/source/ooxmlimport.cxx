@@ -84,12 +84,10 @@ OUString SmOoxmlImport::handleStream()
     stream.ensureClosingTag( M_TOKEN( oMath ));
     // Placeholders are written out as nothing (i.e. nothing inside e.g. the <e> element),
     // which will result in "{}" in the formula text. Fix this up.
-    ret = ret.replaceAllAsciiLAsciiL(
-        RTL_CONSTASCII_STRINGPARAM("{}"), RTL_CONSTASCII_STRINGPARAM("<?>"));
+    ret = ret.replaceAll( "{}", "<?>" );
     // And as a result, empty parts of the formula that are not placeholders are written out
     // as a single space, so fix that up too.
-    ret = ret.replaceAllAsciiLAsciiL(
-        RTL_CONSTASCII_STRINGPARAM("{ }"), RTL_CONSTASCII_STRINGPARAM("{}"));
+    ret = ret.replaceAll( "{ }", "{}" );
     SAL_INFO( "starmath.ooxml", "Formula: " << ret );
     return ret;
 }

@@ -762,8 +762,7 @@ bool QueryDel( const ::rtl::OUString& rName, const ResId& rId, Window* pParent )
     ::rtl::OUStringBuffer aNameBuf( rName );
     aNameBuf.append('\'');
     aNameBuf.insert(sal_Int32(0), sal_Unicode('\''));
-    aQuery = aQuery.replaceAllAsciiL(
-        RTL_CONSTASCII_STRINGPARAM("XX"), aNameBuf.makeStringAndClear());
+    aQuery = aQuery.replaceAll("XX", aNameBuf.makeStringAndClear());
     QueryBox aQueryBox( pParent, WB_YES_NO | WB_DEF_YES, aQuery );
     return ( aQueryBox.Execute() == RET_YES );
 }
@@ -808,8 +807,7 @@ bool QueryPassword( const Reference< script::XLibraryContainer >& xLibContainer,
         if ( bNewTitle )
         {
             ::rtl::OUString aTitle(ResId::toString(IDEResId(RID_STR_ENTERPASSWORD)));
-            aTitle = aTitle.replaceAllAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("XX"), rLibName);
+            aTitle = aTitle.replaceAll("XX", rLibName);
             pDlg->SetText( aTitle );
         }
 

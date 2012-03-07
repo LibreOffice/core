@@ -134,212 +134,189 @@ void Test::stringReplaceAll() {
 
 void Test::ustringReplaceFirst() {
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("otherbarfoo")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).replaceFirst(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other"))));
+        rtl::OUString("otherbarfoo"),
+        rtl::OUString("foobarfoo").replaceFirst(
+            rtl::OUString("foo"),
+            rtl::OUString("other")));
 
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).replaceFirst(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bars")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other"))));
+        rtl::OUString("foobarfoo"),
+        rtl::OUString("foobarfoo").replaceFirst(
+            rtl::OUString("bars"),
+            rtl::OUString("other")));
 
     {
         sal_Int32 n = 0;
         CPPUNIT_ASSERT_EQUAL(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("otherbarfoo")),
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
+            rtl::OUString("otherbarfoo"),
+            (rtl::OUString("foobarfoo").
              replaceFirst(
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo")),
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other")), &n)));
+                 rtl::OUString("foo"),
+                 rtl::OUString("other"), &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), n);
     }
 
     {
         sal_Int32 n = 1;
         CPPUNIT_ASSERT_EQUAL(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarother")),
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
+            rtl::OUString("foobarother"),
+            (rtl::OUString("foobarfoo").
              replaceFirst(
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo")),
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other")), &n)));
+                 rtl::OUString("foo"),
+                 rtl::OUString("other"), &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), n);
     }
 
     {
         sal_Int32 n = 4;
         CPPUNIT_ASSERT_EQUAL(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")),
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
+            rtl::OUString("foobarfoo"),
+            (rtl::OUString("foobarfoo").
              replaceFirst(
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bar")),
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other")), &n)));
+                 rtl::OUString("bar"),
+                 rtl::OUString("other"), &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
     }
 }
 
 void Test::ustringReplaceFirstAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("otherbarfoo")),
-        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-         replaceFirstAsciiL(
-             RTL_CONSTASCII_STRINGPARAM("foo"),
-             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other")))));
+        rtl::OUString("otherbarfoo"),
+        (rtl::OUString("foobarfoo").
+         replaceFirst("foo",
+             rtl::OUString("other"))));
 
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")),
-        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-         replaceFirstAsciiL(
-             RTL_CONSTASCII_STRINGPARAM("bars"),
-             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other")))));
+        rtl::OUString("foobarfoo"),
+        (rtl::OUString("foobarfoo").
+         replaceFirst("bars",
+             rtl::OUString("other"))));
 
     {
         sal_Int32 n = 0;
         CPPUNIT_ASSERT_EQUAL(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("otherbarfoo")),
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-             replaceFirstAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("foo"),
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other")), &n)));
+            rtl::OUString("otherbarfoo"),
+            (rtl::OUString("foobarfoo").
+             replaceFirst("foo",
+                 rtl::OUString("other"), &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), n);
     }
 
     {
         sal_Int32 n = 1;
         CPPUNIT_ASSERT_EQUAL(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarother")),
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-             replaceFirstAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("foo"),
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other")), &n)));
+            rtl::OUString("foobarother"),
+            (rtl::OUString("foobarfoo").
+             replaceFirst("foo",
+                 rtl::OUString("other"), &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), n);
     }
 
     {
         sal_Int32 n = 4;
         CPPUNIT_ASSERT_EQUAL(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")),
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-             replaceFirstAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("bar"),
-                 rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other")), &n)));
+            rtl::OUString("foobarfoo"),
+            (rtl::OUString("foobarfoo").
+             replaceFirst("bar",
+                 rtl::OUString("other"), &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
     }
 }
 
 void Test::ustringReplaceFirstAsciiLAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("otherbarfoo")),
-        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-         replaceFirstAsciiLAsciiL(
-             RTL_CONSTASCII_STRINGPARAM("foo"),
-             RTL_CONSTASCII_STRINGPARAM("other"))));
+        rtl::OUString("otherbarfoo"),
+        (rtl::OUString("foobarfoo").
+         replaceFirst("foo", "other")));
 
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")),
-        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-         replaceFirstAsciiLAsciiL(
-             RTL_CONSTASCII_STRINGPARAM("bars"),
-             RTL_CONSTASCII_STRINGPARAM("other"))));
+        rtl::OUString("foobarfoo"),
+        (rtl::OUString("foobarfoo").
+         replaceFirst("bars", "other")));
 
     {
         sal_Int32 n = 0;
         CPPUNIT_ASSERT_EQUAL(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("otherbarfoo")),
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-             replaceFirstAsciiLAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("foo"),
-                 RTL_CONSTASCII_STRINGPARAM("other"), &n)));
+            rtl::OUString("otherbarfoo"),
+            (rtl::OUString("foobarfoo").
+             replaceFirst("foo", "other", &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(0), n);
     }
 
     {
         sal_Int32 n = 1;
         CPPUNIT_ASSERT_EQUAL(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarother")),
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-             replaceFirstAsciiLAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("foo"),
-                 RTL_CONSTASCII_STRINGPARAM("other"), &n)));
+            rtl::OUString("foobarother"),
+            (rtl::OUString("foobarfoo").
+             replaceFirst("foo", "other", &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(6), n);
     }
 
     {
         sal_Int32 n = 4;
         CPPUNIT_ASSERT_EQUAL(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")),
-            (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-             replaceFirstAsciiLAsciiL(
-                 RTL_CONSTASCII_STRINGPARAM("bar"),
-                 RTL_CONSTASCII_STRINGPARAM("other"), &n)));
+            rtl::OUString("foobarfoo"),
+            (rtl::OUString("foobarfoo").
+             replaceFirst("bar", "other", &n)));
         CPPUNIT_ASSERT_EQUAL(sal_Int32(-1), n);
     }
 }
 
 void Test::ustringReplaceAll() {
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("otherbarother")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).replaceAll(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foo")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other"))));
+        rtl::OUString("otherbarother"),
+        rtl::OUString("foobarfoo").replaceAll(
+            rtl::OUString("foo"),
+            rtl::OUString("other")));
 
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).replaceAll(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bars")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other"))));
+        rtl::OUString("foobarfoo"),
+        rtl::OUString("foobarfoo").replaceAll(
+            rtl::OUString("bars"),
+            rtl::OUString("other")));
 
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xxa")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xaa")).replaceAll(
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xa")),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xx"))));
+        rtl::OUString("xxa"),
+        rtl::OUString("xaa").replaceAll(
+            rtl::OUString("xa"),
+            rtl::OUString("xx")));
 }
 
 void Test::ustringReplaceAllAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("otherbarother")),
-        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-         replaceAllAsciiL(
-             RTL_CONSTASCII_STRINGPARAM("foo"),
-             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other")))));
+        rtl::OUString("otherbarother"),
+        (rtl::OUString("foobarfoo").
+         replaceAll("foo",
+             rtl::OUString("other"))));
 
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")),
-        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-         replaceAllAsciiL(
-             RTL_CONSTASCII_STRINGPARAM("bars"),
-             rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("other")))));
+        rtl::OUString("foobarfoo"),
+        (rtl::OUString("foobarfoo").
+         replaceAll("bars",
+             rtl::OUString("other"))));
 
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xxa")),
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xaa")).replaceAllAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("xa"),
-            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xx"))));
+        rtl::OUString("xxa"),
+        rtl::OUString("xaa").replaceAll(
+            "xa",
+            rtl::OUString("xx")));
 }
 
 void Test::ustringReplaceAllAsciiLAsciiL() {
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("otherbarother")),
-        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-         replaceAllAsciiLAsciiL(
-             RTL_CONSTASCII_STRINGPARAM("foo"),
-             RTL_CONSTASCII_STRINGPARAM("other"))));
+        rtl::OUString("otherbarother"),
+        (rtl::OUString("foobarfoo").
+         replaceAll("foo", "other")));
 
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")),
-        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("foobarfoo")).
-         replaceAllAsciiLAsciiL(
-             RTL_CONSTASCII_STRINGPARAM("bars"),
-             RTL_CONSTASCII_STRINGPARAM("other"))));
+        rtl::OUString("foobarfoo"),
+        (rtl::OUString("foobarfoo").
+         replaceAll("bars", "other")));
 
     CPPUNIT_ASSERT_EQUAL(
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xxa")),
-        (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("xaa")).
-         replaceAllAsciiLAsciiL(
-             RTL_CONSTASCII_STRINGPARAM("xa"),
-             RTL_CONSTASCII_STRINGPARAM("xx"))));
+        rtl::OUString("xxa"),
+        (rtl::OUString("xaa").
+         replaceAll("xa", "xx")));
 }
 
 }

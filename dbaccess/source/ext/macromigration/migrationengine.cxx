@@ -257,9 +257,7 @@ namespace dbmm
                 ResId::toString(
                     MacroMigrationResId(
                         _rDocument.eType == eForm ? STR_FORM : STR_REPORT)).
-                replaceFirstAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("$name$"),
-                    _rDocument.sHierarchicalName));
+                replaceFirst("$name$", _rDocument.sHierarchicalName));
             return sObjectName;
         }
 
@@ -1031,9 +1029,7 @@ namespace dbmm
         sal_Int32 nOverallRange( m_aSubDocs.size() );
         rtl::OUString sProgressSkeleton(
             ResId::toString(MacroMigrationResId( STR_OVERALL_PROGRESS)).
-            replaceFirstAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("$overall$"),
-                rtl::OUString::valueOf(nOverallRange)));
+            replaceFirst("$overall$", rtl::OUString::valueOf(nOverallRange)));
 
         m_rProgress.start( nOverallRange );
 
@@ -1045,8 +1041,7 @@ namespace dbmm
             sal_Int32 nOverallProgressValue( doc - m_aSubDocs.begin() + 1 );
             // update overall progress text
             ::rtl::OUString sOverallProgress(
-                sProgressSkeleton.replaceFirstAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("$current$"),
+                sProgressSkeleton.replaceFirst("$current$",
                     ::rtl::OUString::valueOf(nOverallProgressValue)));
             m_rProgress.setOverallProgressText( sOverallProgress );
 
@@ -1938,14 +1933,12 @@ namespace dbmm
         // a human-readable description of the affected library
         ::rtl::OUString sLibraryDescription(
             ResId::toString(MacroMigrationResId(STR_LIBRARY_TYPE_AND_NAME)).
-            replaceFirstAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("$type$"),
+            replaceFirst("$type$",
                 getScriptTypeDisplayName(_eScriptType)).
-            replaceFirstAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("$library$"), _rLibraryName));
-            //TODO: probably broken if first replaceFirstAsciiL can produce
+            replaceFirst("$library$", _rLibraryName));
+            //TODO: probably broken if first replaceFirst can produce
             // fresh instance of "$library$" in subject string of second
-            // replaceFirstAsciiL
+            // replaceFirst
 
         InteractionHandler aHandler( m_aContext, m_xDocumentModel );
         ::rtl::OUString sPassword;

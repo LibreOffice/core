@@ -359,8 +359,7 @@ static bool sendAFax( const OUString& rFaxNumber, const OUString& rFileName, con
             OUString aFaxNumber( aFaxNumbers.front() );
             aFaxNumbers.pop_front();
             OUString aCmdLine(
-                rCommand.replaceAllAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("(PHONE)"), aFaxNumber));
+                rCommand.replaceAll("(PHONE)", aFaxNumber));
 #if OSL_DEBUG_LEVEL > 1
             fprintf( stderr, "sending fax to \"%s\"\n", OUStringToOString( aFaxNumber, osl_getThreadTextEncoding() ).getStr() );
 #endif
@@ -384,8 +383,7 @@ static bool createPdf( const OUString& rToFile, const OUString& rFromFile, const
 {
 #if defined( UNX )
     OUString aCommandLine(
-        rCommandLine.replaceAllAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("(OUTFILE)"), rToFile));
+        rCommandLine.replaceAll("(OUTFILE)", rToFile));
 
     return passFileToCommandLine( rFromFile, aCommandLine );
 #else

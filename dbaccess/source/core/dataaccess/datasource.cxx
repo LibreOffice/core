@@ -747,8 +747,7 @@ Reference< XConnection > ODatabaseSource::buildLowLevelConnection(const ::rtl::O
 
         SQLContext aContext;
         aContext.Message = DBACORE_RESSTRING(RID_STR_CONNECTION_REQUEST).
-            replaceFirstAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("$name$"), m_pImpl->m_sConnectURL);
+            replaceFirst("$name$", m_pImpl->m_sConnectURL);
 
         throwGenericSQLException( sMessage, static_cast< XDataSource* >( this ), makeAny( aContext ) );
     }

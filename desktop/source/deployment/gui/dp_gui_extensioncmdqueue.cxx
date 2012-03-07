@@ -893,8 +893,7 @@ void ExtensionCmdQueue::Thread::_addExtension( ::rtl::Reference< ProgressCmdEnv 
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle(
-        m_sAddingPackages.replaceAllAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("%EXTENSION_NAME"), sName));
+        m_sAddingPackages.replaceAll("%EXTENSION_NAME", sName));
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
     try
@@ -922,8 +921,7 @@ void ExtensionCmdQueue::Thread::_removeExtension( ::rtl::Reference< ProgressCmdE
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle(
-        m_sRemovingPackages.replaceAllAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("%EXTENSION_NAME"),
+        m_sRemovingPackages.replaceAll("%EXTENSION_NAME",
             xPackage->getDisplayName()));
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
@@ -1008,8 +1006,7 @@ void ExtensionCmdQueue::Thread::_enableExtension( ::rtl::Reference< ProgressCmdE
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle(
-        m_sEnablingPackages.replaceAllAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("%EXTENSION_NAME"),
+        m_sEnablingPackages.replaceAll("%EXTENSION_NAME",
             xPackage->getDisplayName()));
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
@@ -1033,8 +1030,7 @@ void ExtensionCmdQueue::Thread::_disableExtension( ::rtl::Reference< ProgressCmd
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle(
-        m_sDisablingPackages.replaceAllAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("%EXTENSION_NAME"),
+        m_sDisablingPackages.replaceAll("%EXTENSION_NAME",
             xPackage->getDisplayName()));
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 
@@ -1058,8 +1054,7 @@ void ExtensionCmdQueue::Thread::_acceptLicense( ::rtl::Reference< ProgressCmdEnv
     uno::Reference< deployment::XExtensionManager > xExtMgr = m_pManager->getExtensionManager();
     uno::Reference< task::XAbortChannel > xAbortChannel( xExtMgr->createAbortChannel() );
     OUString sTitle(
-        m_sAcceptLicense.replaceAllAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("%EXTENSION_NAME"),
+        m_sAcceptLicense.replaceAll("%EXTENSION_NAME",
             xPackage->getDisplayName()));
     rCmdEnv->progressSection( sTitle, xAbortChannel );
 

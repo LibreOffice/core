@@ -121,7 +121,7 @@ void ManageLanguageDialog::Init()
     ::rtl::OUString sLibName = pIDEShell->GetCurLibName();
     // set dialog title with library name
     ::rtl::OUString sText = GetText();
-    sText = sText.replaceAllAsciiL(RTL_CONSTASCII_STRINGPARAM("$1"), sLibName);
+    sText = sText.replaceAll("$1", sLibName);
     SetText( sText );
     // set handler
     m_aAddPB.SetClickHdl( LINK( this, ManageLanguageDialog, AddHdl ) );

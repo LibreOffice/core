@@ -93,8 +93,7 @@ bool satisfiesMaximalVersion(
 rtl::OUString produceErrorText(
     rtl::OUString const & reason, rtl::OUString const & version)
 {
-    return reason.replaceFirstAsciiL(
-        RTL_CONSTASCII_STRINGPARAM("%VERSION"),
+    return reason.replaceFirst("%VERSION",
         (version.isEmpty()
          ? ResId::toString(
              dp_misc::getResId(RID_DEPLOYMENT_DEPENDENCIES_UNKNOWN))

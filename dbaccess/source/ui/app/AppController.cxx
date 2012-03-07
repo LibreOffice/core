@@ -2966,9 +2966,7 @@ void SAL_CALL OApplicationController::removeSelectionChangeListener( const Refer
                 ::rtl::OUString sMessage(
                     rtl::OUString(
                         String(ModuleRes(RID_STR_UNSUPPORTED_OBJECT_TYPE))).
-                    replaceFirstAsciiL(
-                        RTL_CONSTASCII_STRINGPARAM("$type$"),
-                        ::rtl::OUString::valueOf(sal_Int32(pObject->Type))));
+                    replaceFirst("$type$", ::rtl::OUString::valueOf(sal_Int32(pObject->Type))));
                 throw IllegalArgumentException(sMessage, *this, sal_Int16( pObject - aSelectedObjects.getConstArray() ));
             }
         }

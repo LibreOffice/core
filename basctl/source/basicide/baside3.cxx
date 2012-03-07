@@ -1063,8 +1063,7 @@ sal_Bool implImportDialog( Window* pWin, const ::rtl::OUString& rCurPath, const 
             {
                 ::rtl::OUString aQueryBoxTitle(ResId::toString(IDEResId(RID_STR_DLGIMP_CLASH_TITLE)));
                 ::rtl::OUString aQueryBoxText(ResId::toString(IDEResId(RID_STR_DLGIMP_CLASH_TEXT)));
-                aQueryBoxText = aQueryBoxText.replaceAllAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("$(ARG1)"), aXmlDlgName);
+                aQueryBoxText = aQueryBoxText.replaceAll("$(ARG1)", aXmlDlgName);
 
                 NameClashQueryBox aQueryBox( pWin, aQueryBoxTitle, aQueryBoxText );
                 sal_uInt16 nRet = aQueryBox.Execute();

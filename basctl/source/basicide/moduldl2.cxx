@@ -962,9 +962,7 @@ void LibPage::InsertLib()
                                          ( xDlgLibContainer.is() && xDlgLibContainer->hasByName( aLibName ) && xDlgLibContainer->isLibraryReadOnly( aLibName ) && !xDlgLibContainer->isLibraryLink( aLibName ) ) )
                                     {
                                         ::rtl::OUString aErrStr( ResId::toString( IDEResId( RID_STR_REPLACELIB ) ) );
-                                        aErrStr = aErrStr.replaceAllAsciiL(
-                                            RTL_CONSTASCII_STRINGPARAM("XX"),
-                                            aLibName);
+                                        aErrStr = aErrStr.replaceAll("XX", aLibName);
                                         aErrStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
                                         aErrStr += ResId::toString( IDEResId( RID_STR_LIBISREADONLY ) );
                                         ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
@@ -981,9 +979,7 @@ void LibPage::InsertLib()
                                         aErrStr = ResId::toString( IDEResId( RID_STR_REFNOTPOSSIBLE ) );
                                     else
                                         aErrStr = ResId::toString( IDEResId( RID_STR_IMPORTNOTPOSSIBLE ) );
-                                    aErrStr = aErrStr.replaceAllAsciiL(
-                                        RTL_CONSTASCII_STRINGPARAM("XX"),
-                                        aLibName);
+                                    aErrStr = aErrStr.replaceAll("XX", aLibName);
                                     aErrStr += ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("\n"));
                                     aErrStr += ResId::toString( IDEResId( RID_STR_SBXNAMEALLREADYUSED ) );
                                     ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
@@ -1004,9 +1000,7 @@ void LibPage::InsertLib()
                                     if ( !bOK )
                                     {
                                         ::rtl::OUString aErrStr( ResId::toString( IDEResId( RID_STR_NOIMPORT ) ) );
-                                        aErrStr = aErrStr.replaceAllAsciiL(
-                                            RTL_CONSTASCII_STRINGPARAM("XX"),
-                                            aLibName);
+                                        aErrStr = aErrStr.replaceAll("XX", aLibName);
                                         ErrorBox( this, WB_OK | WB_DEF_OK, aErrStr ).Execute();
                                         continue;
                                     }

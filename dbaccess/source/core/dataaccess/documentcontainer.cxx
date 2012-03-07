@@ -542,8 +542,7 @@ Reference< XComponent > SAL_CALL ODocumentContainer::loadComponentFromURL( const
         if ( !lcl_queryContent(_sURL,xNameContainer,aContent,sName) )
         {
             ::rtl::OUString sMessage(
-                DBA_RES(RID_STR_NAME_NOT_FOUND).replaceFirstAsciiL(
-                    RTL_CONSTASCII_STRINGPARAM("$name$"), _sURL));
+                DBA_RES(RID_STR_NAME_NOT_FOUND).replaceFirst("$name$", _sURL));
             throw IllegalArgumentException( sMessage, *this, 1 );
         }
 
@@ -613,8 +612,7 @@ void SAL_CALL ODocumentContainer::insertByHierarchicalName( const ::rtl::OUStrin
     {
         sal_Int32 index = sName.getLength();
         ::rtl::OUString sMessage(
-            DBA_RES(RID_STR_NO_SUB_FOLDER).replaceFirstAsciiL(
-                RTL_CONSTASCII_STRINGPARAM("$folder$"),
+            DBA_RES(RID_STR_NO_SUB_FOLDER).replaceFirst("$folder$",
                 _sName.getToken(0,'/',index)));
         throw IllegalArgumentException( sMessage, *this, 1 );
     }

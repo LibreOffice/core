@@ -3510,8 +3510,7 @@ void AutoRecovery::impl_showFullDiscError()
 
     ErrorBox dlgError(
         0, WB_OK,
-        sMsg.replaceAllAsciiL(
-            RTL_CONSTASCII_STRINGPARAM("%PATH"), sBackupPath));
+        sMsg.replaceAll("%PATH", sBackupPath));
     dlgError.SetButtonText(dlgError.GetButtonId(0), sBtn);
     dlgError.Execute();
 }

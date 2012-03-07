@@ -50,8 +50,7 @@ bool lcl_ParseText(rtl::OUString const &rText, size_t& rLineNr )
     // number n.  (Maybe it would be better to ignore all whitespace instead
     // of just spaces.)
     rtl::OUString aText(
-        rText.replaceAllAsciiL(
-            RTL_CONSTASCII_STRINGPARAM(" "), rtl::OUString()));
+        rText.replaceAll(" ", rtl::OUString()));
     sal_Unicode cFirst = aText[0];
     if (cFirst != '#' && !(cFirst >= '0' && cFirst <= '9'))
         return false;
