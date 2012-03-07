@@ -2449,16 +2449,10 @@ void ScXMLExport::_ExportAutoStyles()
                     {
                         sal_Int32 nRows(pDoc->GetLastChangedRow(sal::static_int_cast<SCTAB>(nTable)));
                         pSharedData->SetLastRow(nTable, nRows);
-                        table::CellRangeAddress aCellAddress(GetEndAddress(xTable, nTable));
-                        if (aCellAddress.EndRow > nRows)
-                        {
-                            ++nRows;
-                            pRowStyles->AddNewTable(nTable, aCellAddress.EndRow);
-                        }
-                        else
-                            pRowStyles->AddNewTable(nTable, nRows);
+
+                        pRowStyles->AddNewTable(nTable, MAXROW);
                         sal_Int32 nRow = 0;
-                        while (nRow <= nRows && nRow <= MAXROW)
+                        while (nRow <= MAXROW)
                         {
                             sal_Int32 nIndex = 0;
                             Reference <beans::XPropertySet> xRowProperties(xTableRows->getByIndex(nRow), uno::UNO_QUERY);
@@ -2471,11 +2465,6 @@ void ScXMLExport::_ExportAutoStyles()
                             nRow = pDoc->GetNextDifferentChangedRow(sal::static_int_cast<SCTAB>(nTable), static_cast<SCROW>(nRow), false);
                             if (nRow > nOld + 1)
                                 pRowStyles->AddFieldStyleName(nTable, nOld + 1, nIndex, nRow - 1);
-                        }
-                        if (aCellAddress.EndRow > nRows)
-                        {
-                            sal_Int32 nIndex(pRowStyles->GetStyleNameIndex(nTable, nRows));
-                            pRowStyles->AddFieldStyleName(nTable, nRows + 1, nIndex, aCellAddress.EndRow);
                         }
                     }
                 }
