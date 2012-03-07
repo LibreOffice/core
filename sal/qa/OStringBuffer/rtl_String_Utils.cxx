@@ -30,21 +30,11 @@
 #include <math.h>
 #include <stdlib.h>
 
-#ifndef _SAL_TYPES_H_
-    #include <sal/types.h>
-#endif
+#include <sal/types.h>
 
-#ifndef _RTL_USTRING_H_
-    #include <rtl/ustring.h>
-#endif
-
-#ifndef _RTL_STRING_HXX_
-    #include <rtl/string.hxx>
-#endif
-
-#ifndef _RTL_STRING_UTILS_CONST_H_
-    #include <rtl_String_Utils_Const.h>
-#endif
+#include <rtl/ustring.h>
+#include <rtl/string.hxx>
+#include <rtl_String_Utils_Const.h>
 
 using ::rtl::OString;
 sal_uInt32 AStringLen( const sal_Char *pAStr )
