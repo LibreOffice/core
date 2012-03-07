@@ -1099,9 +1099,10 @@ sal_Bool WMFReader::ReadHeader()
         return false;
     if (nMetaKey != 0x00090001)
     {
-        sal_uInt16 aNextWord;
+        sal_uInt16 aNextWord(0);
         *pWMF >> aNextWord;
-        if (aNextWord != 0x09) {
+        if (aNextWord != 0x09)
+        {
             pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
             return false;
         }
