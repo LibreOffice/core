@@ -355,7 +355,7 @@ namespace /* private */
             osl_searchFileURL(exe_name.pData, NULL, &exe_url.pData);
 
         rtl::OUString exe_path;
-        if (osl_File_E_None != osl::FileBase::getSystemPathFromFileURL(exe_url, exe_path))
+        if (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(exe_url, exe_path))
             return rtl::OUString();
 
         exe_path = getShortPath(exe_path, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(".exe")));
@@ -504,7 +504,7 @@ oslProcessError SAL_CALL osl_executeProcess_WithRedirectedIO(
     }
 
     rtl::OUString cwd;
-    if (ustrDirectory && ustrDirectory->length && (osl_File_E_None != osl::FileBase::getSystemPathFromFileURL(ustrDirectory, cwd)))
+    if (ustrDirectory && ustrDirectory->length && (osl::FileBase::E_None != osl::FileBase::getSystemPathFromFileURL(ustrDirectory, cwd)))
            return osl_Process_E_InvalidError;
 
     LPCWSTR p_cwd = (cwd.getLength()) ? reinterpret_cast<LPCWSTR>(cwd.getStr()) : NULL;
