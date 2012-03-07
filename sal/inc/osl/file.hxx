@@ -730,6 +730,60 @@ public:
         return (_aStatus.uValidFields & osl_FileStatus_Mask_Type) ?  (Type) _aStatus.eType : Unknown;
     }
 
+    /** Is it a file?
+        This method returns True for both regular files, and links.
+
+        @return
+        True if it's a file, False otherwise.
+
+        @see getFileType
+        @see isRegular
+        @see isLink
+    */
+    inline sal_Bool isFile() const
+    {
+        return ( getFileType() == Regular || getFileType() == Link );
+    }
+
+    /** Is it a directory?
+        This method returns True for both directories, and volumes.
+
+        @return
+        True if it's a directory, False otherwise.
+
+        @see getFileType
+    */
+    inline sal_Bool isDirectory() const
+    {
+        return ( getFileType() == Directory || getFileType() == Volume );
+    }
+
+    /** Is it a regular file?
+
+        @return
+        True if it's a regular file, False otherwise.
+
+        @see getFileType
+        @see isFile
+        @see isLink
+    */
+    inline sal_Bool isRegular() const
+    {
+        return ( getFileType() == Regular );
+    }
+
+    /** Is it a link?
+
+        @return
+        True if it's a link, False otherwise.
+
+        @see getFileType
+    */
+    inline sal_Bool isLink() const
+    {
+        return ( getFileType() == Link );
+    }
+
     /** Get the file attributes.
 
         @return
