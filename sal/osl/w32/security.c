@@ -679,7 +679,7 @@ void SAL_CALL osl_unloadUserProfile(oslSecurity Security)
             }
         }
 
-        ((oslSecurityImpl*)Security)->m_hProfile;
+        ((oslSecurityImpl*)Security)->m_hProfile = NULL;
 
         if (hAccessToken && (hAccessToken != ((oslSecurityImpl*)Security)->m_hToken))
         {
