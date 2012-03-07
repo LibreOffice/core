@@ -245,7 +245,7 @@ sal_Bool SAL_CALL osl_isAdministrator(oslSecurity Security)
     {
         HANDLE                      hImpersonationToken = NULL;
         PSID                        psidAdministrators;
-        SID_IDENTIFIER_AUTHORITY    siaNtAuthority = SECURITY_NT_AUTHORITY;
+        SID_IDENTIFIER_AUTHORITY    siaNtAuthority = { SECURITY_NT_AUTHORITY };
         sal_Bool                    bSuccess = sal_False;
 
 
