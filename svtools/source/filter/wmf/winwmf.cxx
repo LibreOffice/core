@@ -1099,8 +1099,12 @@ sal_Bool WMFReader::ReadHeader()
         return false;
     if (nMetaKey != 0x00090001)
     {
-        pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
-        return false;
+        sal_uInt16 aNextWord;
+        *pWMF >> aNextWord;
+        if (aNextWord != 0x09) {
+            pWMF->SetError( SVSTREAM_FILEFORMAT_ERROR );
+            return false;
+        }
     }
 
     pWMF->SeekRel( 2 ); // Version (von Windows)
