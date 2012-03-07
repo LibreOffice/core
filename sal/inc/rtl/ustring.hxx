@@ -1427,11 +1427,7 @@ public:
       Returns a new string resulting from replacing the first occurrence of a
       given substring with another substring.
 
-      @param from  pointer to the substring to be replaced; must not be null and
-      must point to memory of at least \p fromLength ASCII bytes
-
-      @param fromLength  the length of the \p from substring; must be
-      non-negative
+      @param from  ASCII string literal, the substring to be replaced
 
       @param to  the replacing substring
 
@@ -1445,31 +1441,32 @@ public:
 
       @since LibreOffice 3.6
     */
-    OUString replaceFirstAsciiL(
-        char const * from, sal_Int32 fromLength, rtl::OUString const & to,
-        sal_Int32 * index = 0) const
+    template< int N >
+    OUString replaceFirst( const char (&from)[ N ], rtl::OUString const & to,
+                           sal_Int32 * index = 0) const
     {
         rtl_uString * s = 0;
         sal_Int32 i = 0;
         rtl_uString_newReplaceFirstAsciiL(
-            &s, pData, from, fromLength, to.pData, index == 0 ? &i : index);
+            &s, pData, from, N - 1, to.pData, index == 0 ? &i : index);
         return OUString(s, SAL_NO_ACQUIRE);
     }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N >
+    OUString replaceFirst( char (&literal)[ N ], rtl::OUString const & to,
+                           sal_Int32 * index = 0) const;
 
     /**
       Returns a new string resulting from replacing the first occurrence of a
       given substring with another substring.
 
-      @param from  pointer to the substring to be replaced; must not be null and
-      must point to memory of at least \p fromLength ASCII bytes
+      @param from  ASCII string literal, the substring to be replaced
 
-      @param fromLength  the length of the \p from substring; must be
-      non-negative
-
-      @param to  pointer to the substring to be replaced; must not be null and
-      must point to memory of at least \p toLength ASCII bytes
-
-      @param toLength  the length of the \p to substring; must be non-negative
+      @param to  ASCII string literal, the substring to be replaced
 
       @param[in,out] index  pointer to a start index; if the pointer is
       non-null: upon entry to the function, its value is the index into the this
@@ -1481,16 +1478,26 @@ public:
 
       @since LibreOffice 3.6
     */
-    OUString replaceFirstAsciiLAsciiL(
-        char const * from, sal_Int32 fromLength, char const * to,
-        sal_Int32 toLength, sal_Int32 * index = 0) const
+    template< int N1, int N2 >
+    OUString replaceFirst( const char (&from)[ N1 ], const char (&to)[ N2 ],
+                           sal_Int32 * index = 0) const
     {
         rtl_uString * s = 0;
         sal_Int32 i = 0;
         rtl_uString_newReplaceFirstAsciiLAsciiL(
-            &s, pData, from, fromLength, to, toLength, index == 0 ? &i : index);
+            &s, pData, from, N1 - 1, to, N2 - 1, index == 0 ? &i : index);
         return OUString(s, SAL_NO_ACQUIRE);
     }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N1, int N2 >
+    OUString replaceFirst( char (&from)[ N1 ], char (&to)[ N2 ],
+                           sal_Int32 * index = 0) const;
+    // it is enough to just have a char+char overload, e.g. char+const char will
+    // be caught by it as well
 
     /**
       Returns a new string resulting from replacing all occurrences of a given
@@ -1518,23 +1525,26 @@ public:
       Replacing subsequent occurrences picks up only after a given replacement.
       That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
 
-      @param from  pointer to the substring to be replaced; must not be null and
-      must point to memory of at least \p fromLength ASCII bytes
-
-      @param fromLength  the length of the \p from substring; must be
-      non-negative
+      @param from ASCII string literal, the substring to be replaced
 
       @param to  the replacing substring
 
       @since LibreOffice 3.6
     */
-    OUString replaceAllAsciiL(
-        char const * from, sal_Int32 fromLength, OUString const & to) const
+    template< int N >
+    OUString replaceAll( const char (&from)[ N ], OUString const & to) const
     {
         rtl_uString * s = 0;
-        rtl_uString_newReplaceAllAsciiL(&s, pData, from, fromLength, to.pData);
+        rtl_uString_newReplaceAllAsciiL(&s, pData, from, N - 1, to.pData);
         return OUString(s, SAL_NO_ACQUIRE);
     }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N >
+    OUString replaceAll( char (&literal)[ N ], OUString const & to) const;
 
     /**
       Returns a new string resulting from replacing all occurrences of a given
@@ -1543,28 +1553,69 @@ public:
       Replacing subsequent occurrences picks up only after a given replacement.
       That is, replacing from "xa" to "xx" in "xaa" results in "xxa", not "xxx".
 
-      @param from  pointer to the substring to be replaced; must not be null and
-      must point to memory of at least \p fromLength ASCII bytes
+      @param from  ASCII string literal, the substring to be replaced
 
-      @param fromLength  the length of the \p from substring; must be
-      non-negative
-
-      @param to  pointer to the substring to be replaced; must not be null and
-      must point to memory of at least \p toLength ASCII bytes
-
-      @param toLength  the length of the \p to substring; must be non-negative
+      @param to  ASCII string literal, the substring to be replaced
 
       @since LibreOffice 3.6
     */
-    OUString replaceAllAsciiLAsciiL(
-        char const * from, sal_Int32 fromLength, char const * to,
-        sal_Int32 toLength) const
+    template< int N1, int N2 >
+    OUString replaceAll( const char (&from)[ N1 ], const char (&to)[ N2 ] ) const
     {
         rtl_uString * s = 0;
         rtl_uString_newReplaceAllAsciiLAsciiL(
-            &s, pData, from, fromLength, to, toLength);
+            &s, pData, from, N1 - 1, to, N2 - 1);
         return OUString(s, SAL_NO_ACQUIRE);
     }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N1, int N2 >
+    OUString replaceAll( char (&from)[ N1 ], char (&to)[ N2 ] ) const
+#ifndef RTL_STRING_UNITTEST
+        ; // intentionally not implemented
+#else
+    {
+        (void) from; // unused
+        (void) to; // unused
+        rtl_uString_newFromLiteral( &const_cast<OUString*>(this)->pData, "!!br0ken!!", 10 ); // set to garbage
+        return *this;
+    }
+#endif
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N1, int N2 >
+    OUString replaceAll( char (&from)[ N1 ], const char (&to)[ N2 ] ) const
+#ifndef RTL_STRING_UNITTEST
+        ; // intentionally not implemented
+#else
+    {
+        (void) from; // unused
+        (void) to; // unused
+        rtl_uString_newFromLiteral( &const_cast<OUString*>(this)->pData, "!!br0ken!!", 10 ); // set to garbage
+        return *this;
+    }
+#endif
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N1, int N2 >
+    OUString replaceAll( const char (&from)[ N1 ], char (&to)[ N2 ] ) const
+#ifndef RTL_STRING_UNITTEST
+        ; // intentionally not implemented
+#else
+    {
+        (void) from; // unused
+        (void) to; // unused
+        rtl_uString_newFromLiteral( &const_cast<OUString*>(this)->pData, "!!br0ken!!", 10 ); // set to garbage
+        return *this;
+    }
+#endif
 
     /**
       Converts from this string all ASCII uppercase characters (65-90)
