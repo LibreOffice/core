@@ -80,8 +80,8 @@ def get_from_bug_url_via_xml(url, mimetype, prefix, suffix):
                     f = open(download, 'w')
                     f.write(base64.b64decode(node.firstChild.nodeValue))
                     f.close()
-                    attachmentid += 1
                     break
+            attachmentid += 1
 
 def get_through_rpc_query(rpcurl, showurl, mimetype, prefix, suffix):
     try:
