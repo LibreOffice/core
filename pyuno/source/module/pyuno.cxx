@@ -641,8 +641,15 @@ static PyObject* PyUNO_cmp( PyObject *self, PyObject *that, int op )
     {
         raisePyExceptionWithAny( makeAny( e ) );
     }
-    return Py_False;
+    return (op == Py_EQ ? Py_False : Py_True);
 }
+
+/* Python 2 has a tp_flags value for rich comparisons.  Python 3 does not (on by default) */
+#ifdef Py_TPFLAGS_HAVE_RICHCOMPARE
+#define TP_FLAGS (Py_TPFLAGS_HAVE_RICHCOMPARE)
+#else
+#define TP_FLAGS 0
+#endif
 
 static PyTypeObject PyUNOType =
 {
@@ -654,7 +661,7 @@ static PyTypeObject PyUNOType =
     (printfunc) 0,
     (getattrfunc) PyUNO_getattr,
     (setattrfunc) PyUNO_setattr,
-    0,
+    (cmpfunc) 0,
     (reprfunc) PyUNO_repr,
     0,
     0,
@@ -665,7 +672,7 @@ static PyTypeObject PyUNOType =
     (getattrofunc)0,
     (setattrofunc)0,
     NULL,
-    0,
+    TP_FLAGS,
     NULL,
     (traverseproc)0,
     (inquiry)0,
