@@ -260,9 +260,8 @@ typedef sal_uInt16 StateChangedType;
 #define STATE_CHANGE_CONTROLFOREGROUND  ((StateChangedType)14)
 #define STATE_CHANGE_CONTROLBACKGROUND  ((StateChangedType)15)
 #define STATE_CHANGE_READONLY           ((StateChangedType)16)
-#define STATE_CHANGE_FORMAT             ((StateChangedType)17)
-#define STATE_CHANGE_EXTENDEDSTYLE      ((StateChangedType)18)
-#define STATE_CHANGE_MIRRORING          ((StateChangedType)19)
+#define STATE_CHANGE_EXTENDEDSTYLE      ((StateChangedType)17)
+#define STATE_CHANGE_MIRRORING          ((StateChangedType)18)
 #define STATE_CHANGE_USER               ((StateChangedType)10000)
 
 // GetFocusFlags
