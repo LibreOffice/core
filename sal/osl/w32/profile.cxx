@@ -2504,16 +2504,16 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
                             }
                             else
                             {
-                                ::osl::LongPathBuffer< sal_Char > aTmpPath( MAX_LONG_PATH );
+                                ::osl::LongPathBuffer< sal_Char > aTmpPath2( MAX_LONG_PATH );
                                 int n;
 
                                 if ((n = WideCharToMultiByte(
-                                         CP_ACP,0, ::osl::mingw_reinterpret_cast<LPCWSTR>(aPath), -1, aTmpPath,
-                                         aTmpPath.getBufSizeInSymbols(), NULL, NULL))
+                                         CP_ACP,0, ::osl::mingw_reinterpret_cast<LPCWSTR>(aPath), -1, aTmpPath2,
+                                         aTmpPath2.getBufSizeInSymbols(), NULL, NULL))
                                     > 0)
                                 {
-                                    strcpy(aTmpPath + n, SVERSION_USER);
-                                    if (access(aTmpPath, 0) >= 0)
+                                    strcpy(aTmpPath2 + n, SVERSION_USER);
+                                    if (access(aTmpPath2, 0) >= 0)
                                     {
                                         dwPathLen += MultiByteToWideChar(
                                             CP_ACP, 0, SVERSION_USER, -1,
