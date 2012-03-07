@@ -127,7 +127,7 @@ private:
 
     SAL_DLLPRIVATE SfxPopupWindow(SfxPopupWindow &); // not defined
     SAL_DLLPRIVATE void operator =(SfxPopupWindow &); // not defined
-    DECL_DLLPRIVATE_LINK( Delete, void * );
+    void Delete();
 
 protected:
     virtual void            PopupModeEnd();

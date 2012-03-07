@@ -290,22 +290,6 @@ bool SbxDecimal::getDouble( double& rVal )
     return bRet;
 }
 
-bool SbxDecimal::getInt( int& rVal )
-{
-    sal_Int32 TmpVal;
-    bool bRet = getLong( TmpVal );
-    rVal = TmpVal;
-    return bRet;
-}
-
-bool SbxDecimal::getUInt( unsigned int& rVal )
-{
-    sal_uInt32 TmpVal;
-    bool bRet = getULong( TmpVal );
-    rVal = TmpVal;
-    return bRet;
-}
-
 #else
 // !WIN32
 
@@ -369,8 +353,6 @@ bool SbxDecimal::getUShort( sal_uInt16& rVal )      { (void)rVal; return false; 
 bool SbxDecimal::getULong( sal_uInt32& rVal )       { (void)rVal; return false; }
 bool SbxDecimal::getSingle( float& rVal )       { (void)rVal; return false; }
 bool SbxDecimal::getDouble( double& rVal )      { (void)rVal; return false; }
-bool SbxDecimal::getInt( int& rVal )            { (void)rVal; return false; }
-bool SbxDecimal::getUInt( unsigned int& rVal )  { (void)rVal; return false; }
 
 #endif
 

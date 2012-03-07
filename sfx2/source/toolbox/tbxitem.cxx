@@ -1291,7 +1291,7 @@ sal_Bool SfxPopupWindow::Close()
     m_bFloating = sal_False;
     FloatingWindow::Close();
 
-    Delete(0);
+    Delete();
     return sal_True;
 }
 
@@ -1319,7 +1319,7 @@ void SfxPopupWindow::DeleteFloatingWindow()
     if ( m_bFloating )
     {
         Hide();
-        Delete(0);
+        Delete();
     }
 }
 
@@ -1403,12 +1403,11 @@ void SfxPopupWindow::StateChanged(
 
 //--------------------------------------------------------------------
 
-IMPL_LINK_NOARG(SfxPopupWindow, Delete)
+void SfxPopupWindow::Delete()
 {
     if ( m_aDeleteLink.IsSet() )
         m_aDeleteLink.Call( this );
     delete this;
-    return 0;
 }
 
 //--------------------------------------------------------------------
