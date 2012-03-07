@@ -37,13 +37,6 @@
 
 extern "C" {
 
-/* defines for shutdown */
-#ifdef GCC
-#   define SD_RECEIVE 0
-#   define SD_SEND 1
-#   define SD_BOTH 2
-#endif
-
 /*
     oslSocketAddr is a pointer to a Berkeley struct sockaddr.
     I refrained from using sockaddr_in because of possible further
