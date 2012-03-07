@@ -39,6 +39,8 @@ End
 STD_LIB_FILE( gid_File_Lib_Ado, ado)
 #endif
 
+#ifndef DISABLE_SCRIPTING
+
 STD_LIB_FILE( gid_File_Lib_Basctl, basctl)
 
 File gid_File_Lib_Basprov
@@ -62,6 +64,8 @@ File gid_File_Lib_Vbaevent
     Name = STRING(CONCAT3(vbaevents,.uno,.dll));
   #endif
 End
+
+#endif
 
 STD_LIB_FILE( gid_File_Lib_Bib , bib)
 
@@ -309,6 +313,8 @@ File gid_File_Lib_Textconv_Dict
     Styles = (PACKED);
 End
 
+#ifndef DISABLE_SCRIPTING
+
 File gid_File_Lib_Dlgprov
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -320,6 +326,8 @@ File gid_File_Lib_Dlgprov
   #endif
 End
 
+#endif
+
 File gid_File_Lib_Stringresource
     LIB_FILE_BODY;
     Styles = (PACKED);
@@ -330,6 +338,8 @@ File gid_File_Lib_Stringresource
     Name = STRING(CONCAT3(stringresource,.uno,.dll));
   #endif
 End
+
+#ifndef DISABLE_SCRIPTING
 
 File gid_File_Lib_Vbaobj
     LIB_FILE_BODY;
@@ -375,6 +385,7 @@ File gid_File_Lib_Vbahelper
   #endif
 End
 
+#endif
 
 #ifdef WNT
 
