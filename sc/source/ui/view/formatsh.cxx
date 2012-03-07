@@ -1435,6 +1435,15 @@ void ScFormatShell::ExecuteAttr( SfxRequest& rReq )
                 pTabViewShell->ExecuteCellFormatDlg( rReq, TP_FONT );       // wenn ToolBar vertikal
                 break;
 
+            case SID_BACKGROUND_COLOR:
+                {
+                    SvxBrushItem aBrushItem( (const SvxBrushItem&)
+                                     pTabViewShell->GetSelectionPattern()->GetItem( ATTR_BACKGROUND ) );
+                    aBrushItem.SetColor( COL_TRANSPARENT );
+                    pTabViewShell->ApplyAttr( aBrushItem );
+                }
+                break;
+
             case SID_ATTR_ALIGN_LINEBREAK:                  // ohne Parameter als Toggle
                 {
                     const ScPatternAttr* pAttrs = pTabViewShell->GetSelectionPattern();

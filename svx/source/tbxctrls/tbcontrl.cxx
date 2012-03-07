@@ -2250,6 +2250,10 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
     switch( nSlotId )
     {
         case SID_ATTR_CHAR_COLOR:
+            addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Color" )));
+            nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
+            break;
+
         case SID_ATTR_CHAR_COLOR2:
             addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharColorExt" )));
             nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
