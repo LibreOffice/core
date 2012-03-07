@@ -75,7 +75,7 @@ void PrintMessage( rtl::OString const & aType, rtl::OString const & aMsg, rtl::O
                    rtl::OString const & aContext, sal_Bool bPrintContext, std::size_t nLine, rtl::OString aUniqueId = rtl::OString() )
 /*****************************************************************************/
 {
-    fprintf( stdout, "%s %s, Line %zu", aType.getStr(), aPrefix.getStr(), nLine );
+    fprintf( stdout, "%s %s, Line %u", aType.getStr(), aPrefix.getStr(), static_cast<unsigned>( nLine ) );
     if ( !aUniqueId.isEmpty() )
         fprintf( stdout, ", UniqueID %s", aUniqueId.getStr() );
     fprintf( stdout, ": %s", aMsg.getStr() );
