@@ -45,10 +45,6 @@
 
 int Sys2SolarError_Impl( int nSysErr );
 
-static sal_Bool   bLastCaseSensitive    = sal_False;
-
-//--------------------------------------------------------------------
-
 rtl::OString Upper_Impl(const rtl::OString &rStr)
 {
     std::vector<sal_Char> aBuffer(rStr.getLength());
