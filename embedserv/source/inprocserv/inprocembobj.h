@@ -29,7 +29,9 @@
 #ifndef _INPROCEMBOBJ_HXX_
 #define _INPROCEMBOBJ_HXX_
 
+#if defined _MSC_VER
 #pragma warning(disable : 4668)
+#endif
 
 #include <windows.h>
 #include <oleidl.h>
