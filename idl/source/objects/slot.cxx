@@ -702,7 +702,7 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
         rOutStm << ';' << endl;
     }
 
-    rtl::OString aDel(RTL_CONSTASCII_STRINGPARAM(", "));
+    rtl::OString aDel(", ");
     rtl::OStringBuffer aOut;
     if( aVolatile )
         aOut.append(aVolatile.GetSvIdlString( SvHash_Volatile() ));
@@ -715,15 +715,15 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( aToggle )
     {
         aOut.append(aDel).append(aToggle.GetSvIdlString( SvHash_Toggle() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
     if( aAutoUpdate )
     {
         aOut.append(aDel).append(aAutoUpdate.GetSvIdlString( SvHash_AutoUpdate() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
 
-    rtl::OString aDel1(RTL_CONSTASCII_STRINGPARAM(", "));
+    rtl::OString aDel1(", ");
     if( aAsynchron )
         aOut.append(aDel).append(aAsynchron.GetSvIdlString( SvHash_Asynchron() ));
     else if( !aSynchron )
@@ -734,7 +734,7 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     else
         aDel1 = aDel;
 
-    aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+    aDel = ", ";
     if( aRecordManual )
         aOut.append(aDel1).append(aRecordManual.GetSvIdlString( SvHash_RecordManual() ));
     else if( aNoRecord )
@@ -750,53 +750,53 @@ void SvMetaSlot::WriteAttributesSvIdl( SvIdlDataBase & rBase,
     if( aRecordAbsolute )
     {
         aOut.append(aDel).append(aRecordAbsolute.GetSvIdlString( SvHash_RecordAbsolute() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
     if( aHasDialog )
     {
         aOut.append(aDel).append(aHasDialog.GetSvIdlString( SvHash_HasDialog() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
     if( aMenuConfig )
     {
         aOut.append(aDel).append(aMenuConfig.GetSvIdlString( SvHash_MenuConfig() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
     if( aToolBoxConfig )
     {
         aOut.append(aDel).append(aToolBoxConfig.GetSvIdlString( SvHash_ToolBoxConfig() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
     if( aStatusBarConfig )
     {
         aOut.append(aDel).append(aStatusBarConfig.GetSvIdlString( SvHash_StatusBarConfig() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
     if( aAccelConfig )
     {
         aOut.append(aDel).append(aAccelConfig.GetSvIdlString( SvHash_AccelConfig() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
     if( aFastCall )
     {
         aOut.append(aDel).append(aFastCall.GetSvIdlString( SvHash_FastCall() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
     if( aContainer )
     {
         aOut.append(aDel).append(aContainer.GetSvIdlString( SvHash_Container() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
     if( aImageRotation )
     {
         aOut.append(aDel).append(aImageRotation.GetSvIdlString( SvHash_ImageRotation() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
 
     if( aImageReflection )
     {
         aOut.append(aDel).append(aImageReflection.GetSvIdlString( SvHash_ImageReflection() ));
-        aDel = rtl::OString(RTL_CONSTASCII_STRINGPARAM(", "));
+        aDel = ", ";
     }
 
     if( aOut.getLength() )

@@ -578,31 +578,31 @@ rtl::OUString Gallery::GetThemeName( sal_uIntPtr nThemeId ) const
         switch( nThemeId )
         {
             case( GALLERY_THEME_3D ):
-                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("3D"));
+                aFallback = "3D";
                 break;
             case( GALLERY_THEME_BULLETS ):
-                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("Bullets"));
+                aFallback = "Bullets";
                 break;
             case( GALLERY_THEME_HOMEPAGE ):
-                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("Homepage"));
+                aFallback = "Homepage";
                 break;
             case( GALLERY_THEME_HTMLBUTTONS ):
-                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("private://gallery/hidden/HtmlExportButtons"));
+                aFallback = "private://gallery/hidden/HtmlExportButtons";
                 break;
             case( GALLERY_THEME_POWERPOINT ):
-                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("private://gallery/hidden/imgppt"));
+                aFallback = "private://gallery/hidden/imgppt";
                 break;
             case( GALLERY_THEME_FONTWORK ):
-                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("private://gallery/hidden/fontwork"));
+                aFallback = "private://gallery/hidden/fontwork";
                 break;
             case( GALLERY_THEME_FONTWORK_VERTICAL ):
-                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("private://gallery/hidden/fontworkvertical"));
+                aFallback = "private://gallery/hidden/fontworkvertical";
                 break;
             case( GALLERY_THEME_RULERS ):
-                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("Rulers"));
+                aFallback = "Rulers";
                 break;
             case( GALLERY_THEME_SOUNDS ):
-                aFallback = rtl::OString(RTL_CONSTASCII_STRINGPARAM("Sounds"));
+                aFallback = "Sounds";
                 break;
             default:
                 break;

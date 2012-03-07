@@ -869,7 +869,7 @@ void SvMetaType::SetType( int nT )
     nType = nT;
     if( nType == TYPE_ENUM )
     {
-        aOdlName.setString(rtl::OString(RTL_CONSTASCII_STRINGPARAM("short")));
+        aOdlName.setString("short");
     }
     else if( nType == TYPE_CLASS )
     {
@@ -1090,7 +1090,7 @@ sal_Bool SvMetaType::ReadHeaderSvIdl( SvIdlDataBase & rBase,
         }
         else
         {
-            rtl::OString aStr(RTL_CONSTASCII_STRINGPARAM("wrong typedef: "));
+            rtl::OString aStr("wrong typedef: ");
             rBase.SetError( aStr, rInStm.GetToken() );
             rBase.WriteError( rInStm );
         }
@@ -1806,7 +1806,7 @@ void SvMetaEnumValue::Write( SvIdlDataBase &, SvStream & rOutStm, sal_uInt16,
 SV_IMPL_META_FACTORY1( SvMetaTypeEnum, SvMetaType );
 SvMetaTypeEnum::SvMetaTypeEnum()
 {
-    SetBasicName(rtl::OString(RTL_CONSTASCII_STRINGPARAM("Integer")));
+    SetBasicName("Integer");
 }
 
 void SvMetaTypeEnum::Load( SvPersistStream & rStm )
