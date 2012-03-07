@@ -160,7 +160,7 @@ WCHAR * resolveLink(WCHAR * path) {
                        ((c == 0xE0 &&
                          static_cast< unsigned char >(p1[i]) >= 0xA0 &&
                          static_cast< unsigned char >(p1[i]) <= 0xBF) ||
-                        ((c >= 0xE1 && c <= 0xEC || c >= 0xEE && c <= 0xEF) &&
+                        (((c >= 0xE1 && c <= 0xEC) || (c >= 0xEE && c <= 0xEF)) &&
                          static_cast< unsigned char >(p1[i]) >= 0x80 &&
                          static_cast< unsigned char >(p1[i]) <= 0xBF) ||
                         (c == 0xED &&
