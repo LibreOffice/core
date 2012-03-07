@@ -564,7 +564,7 @@ void MyTestPlugInImpl::initialize( CPPUNIT_NS::TestFactoryRegistry *,
     strUserID = ::rtl::OUString::createFromAscii( Ident );
 
     free(Ident);
-     delete pSid;
+    delete [] reinterpret_cast<BYTE*>(pSid);
     delete [] wszDomainName;
 
 
