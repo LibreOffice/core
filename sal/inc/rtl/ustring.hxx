@@ -930,7 +930,7 @@ public:
     /**
      * Compare string to an ASCII string literal.
      *
-     * This operator is equal to calling equalsAsciiL().
+     * This operator is equal to calling !equalsAsciiL().
      *
      * @since 3.6
      */
@@ -942,7 +942,7 @@ public:
     /**
      * Compare string to an ASCII string literal.
      *
-     * This operator is equal to calling equalsAsciiL().
+     * This operator is equal to calling !equalsAsciiL().
      *
      * @since 3.6
      */
@@ -952,25 +952,25 @@ public:
         return !string.equalsAsciiL( literal, N - 1 );
     }
     /**
-     * It is an error to call this overload. Strings cannot be directly assigned non-const char[].
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
      * @internal
      */
     template< int N >
     friend inline bool operator==( const OUString& string, char (&literal)[ N ] ); // not implemented
     /**
-     * It is an error to call this overload. Strings cannot be directly assigned non-const char[].
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
      * @internal
      */
     template< int N >
     friend inline bool operator==( char (&literal)[ N ], const OUString& string ); // not implemented
     /**
-     * It is an error to call this overload. Strings cannot be directly assigned non-const char[].
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
      * @internal
      */
     template< int N >
     friend inline bool operator!=( const OUString& string, char (&literal)[ N ] ); // not implemented
     /**
-     * It is an error to call this overload. Strings cannot be directly assigned non-const char[].
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
      * @internal
      */
     template< int N >
