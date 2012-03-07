@@ -387,7 +387,7 @@ static HANDLE WINAPI OpenDirectory( rtl_uString* pPath)
         sal_uInt32 nLen = rtl_uString_getLength( pPath );
         if ( nLen )
         {
-            TCHAR* pSuffix = 0;
+            const TCHAR* pSuffix = 0;
             sal_uInt32 nSuffLen = 0;
 
             if ( pPath->buffer[nLen - 1] != L'\\' )
