@@ -2394,7 +2394,7 @@ static sal_Bool lookupProfile(const sal_Unicode *strPath, const sal_Unicode *str
 
             if (((access(aTmpPath, 0) < 0) && (nPos != -1)) || (*strPath == 0))
             {
-                static sal_Char *SubDirs[] = SVERSION_DIRS;
+                static const sal_Char *SubDirs[] = SVERSION_DIRS;
 
                 int i = 0;
                 pStr = aTmpPath + nPos;
