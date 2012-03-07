@@ -43,6 +43,8 @@
 #include <tools/fsys.hxx>
 #include <vector>
 
+#define INIT_WIN32_FIND_DATAA { 0, { 0, 0 }, { 0, 0 }, { 0, 0 }, 0, 0, 0, 0, { 0 }, { 0 } }
+
 int Sys2SolarError_Impl( int nSysErr );
 
 rtl::OString Upper_Impl(const rtl::OString &rStr)
@@ -730,7 +732,7 @@ sal_Bool FileStat::Update( const DirEntry& rDirEntry, sal_Bool bForceAccess )
 
         // Statusinformation vom Betriebssystem holen
         HANDLE h; //()
-        _WIN32_FIND_DATAA aEntry = {};
+        _WIN32_FIND_DATAA aEntry = INIT_WIN32_FIND_DATAA;
         DirEntry aAbsEntry( aDirEntry );
         if ( bAccess && aAbsEntry.ToAbs() )
         {
