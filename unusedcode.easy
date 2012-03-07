@@ -982,8 +982,6 @@ oox::xls::CellBlock::CellBlock(oox::xls::WorksheetHelper const&, oox::ValueRange
 oox::xls::CellBlock::isBefore(oox::ValueRange const&) const
 oox::xls::CellBlock::isExpandable(oox::ValueRange const&) const
 oox::xls::CellBlock::startNextRow()
-pdfi::createOdfEmitter(com::sun::star::uno::Reference<com::sun::star::io::XOutputStream> const&)
-psp::GetCommandLineTokenCount(rtl::OString const&)
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
 psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterColor&)
 psp::PrinterGfx::GetGlyphBoundRect(unsigned short, Rectangle&)

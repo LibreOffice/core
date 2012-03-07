@@ -271,57 +271,6 @@ int GetCommandLineTokenCount(const rtl::OUString& rLine)
     return nTokenCount;
 }
 
-int GetCommandLineTokenCount(const rtl::OString& rLine)
-{
-    if (rLine.isEmpty())
-        return 0;
-
-    int nTokenCount = 0;
-    const char *pRun = rLine.getStr();
-
-
-    while( *pRun )
-    {
-        while( *pRun && isSpace( *pRun ) )
-            pRun++;
-        if( ! *pRun )
-            break;
-        while( *pRun && ! isSpace( *pRun ) )
-        {
-            if( *pRun == '\\' )
-            {
-                // escapement
-                pRun++;
-                if( *pRun )
-                    pRun++;
-            }
-            else if( *pRun == '`' )
-            {
-                do pRun++; while( *pRun && *pRun != '`' );
-                if( *pRun )
-                    pRun++;
-            }
-            else if( *pRun == '\'' )
-            {
-                do pRun++; while( *pRun && *pRun != '\'' );
-                if( *pRun )
-                    pRun++;
-            }
-            else if( *pRun == '"' )
-            {
-                do pRun++; while( *pRun && *pRun != '"' );
-                if( *pRun )
-                    pRun++;
-            }
-            else
-                pRun++;
-        }
-        nTokenCount++;
-    }
-
-    return nTokenCount;
-}
-
 String WhitespaceToSpace( const String& rLine, sal_Bool bProtect )
 {
     int nLen = rLine.Len();
