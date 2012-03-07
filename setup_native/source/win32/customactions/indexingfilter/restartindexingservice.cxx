@@ -63,7 +63,7 @@ OpenService_t OpenService_ = NULL;
 QueryServiceStatus_t QueryServiceStatus_ = NULL;
 StartService_t StartService_ = NULL;
 
-const LPTSTR INDEXING_SERVICE_NAME = TEXT("cisvc");
+const TCHAR* const INDEXING_SERVICE_NAME = TEXT("cisvc");
 
 bool StopIndexingService(SC_HANDLE hService)
 {
