@@ -2183,7 +2183,7 @@ void WW8FormulaControl::FormulaRead(SwWw8ControlType nWhich,
         {
             if ( iRes != 25 )
                 nChecked = iRes;
-            sDefault = ( wDef == 0 ) ? "0" : "1";
+            sDefault = ( wDef == 0 ) ? rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("0") ) :  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("1") );
         }
     }
     // xstzTextFormat
