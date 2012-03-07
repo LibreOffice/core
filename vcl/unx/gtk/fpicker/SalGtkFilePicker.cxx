@@ -75,9 +75,9 @@ static void expandexpanders(GtkContainer *pWidget)
     GList *pChildren = gtk_container_get_children(pWidget);
     for( GList *p = pChildren; p; p = p->next )
     {
-        if GTK_IS_CONTAINER(GTK_WIDGET(p->data))
+        if (GTK_IS_CONTAINER(GTK_WIDGET(p->data)))
             expandexpanders(GTK_CONTAINER(GTK_WIDGET(p->data)));
-        if GTK_IS_EXPANDER(GTK_WIDGET(p->data))
+        if (GTK_IS_EXPANDER(GTK_WIDGET(p->data)))
             gtk_expander_set_expanded(GTK_EXPANDER(GTK_WIDGET(p->data)), sal_True);
     }
     g_list_free(pChildren);
