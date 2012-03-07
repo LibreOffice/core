@@ -1652,6 +1652,7 @@ sub build_dependent {
             };
 
             if (defined $modules_with_errors{$dependencies_hash}) {
+                push(@broken_modules_names, $module_by_hash{$dependencies_hash});
                 cancel_build();
             }
             mp_success_exit();
