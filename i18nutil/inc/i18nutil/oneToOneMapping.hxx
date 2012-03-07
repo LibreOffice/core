@@ -29,6 +29,7 @@
 #define INCLUDED_I18NUTIL_TRANSLITERATION_ONETOONEMAPPING_HXX
 
 #include <utility>
+#include <boost/noncopyable.hpp>
 #include <rtl/ustring.hxx>
 #include "i18nutildllapi.h"
 
@@ -69,14 +70,10 @@ protected:
     size_t                  mnSize;
 };
 
-class I18NUTIL_DLLPUBLIC oneToOneMappingWithFlag : public oneToOneMapping
+class I18NUTIL_DLLPUBLIC oneToOneMappingWithFlag : private boost::noncopyable, public oneToOneMapping
 {
     friend class widthfolding;
 
-private:
-    // no copy, no substitution
-    I18NUTIL_DLLPRIVATE oneToOneMappingWithFlag( const oneToOneMappingWithFlag& );
-    I18NUTIL_DLLPRIVATE oneToOneMappingWithFlag& operator=( const oneToOneMappingWithFlag& );
 public:
     oneToOneMappingWithFlag( UnicodePairWithFlag *rpTableWF, const size_t rnSize, const UnicodePairFlag rnFlag );
     virtual ~oneToOneMappingWithFlag();
