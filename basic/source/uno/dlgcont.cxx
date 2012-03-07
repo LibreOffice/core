@@ -74,8 +74,6 @@ using ::rtl::OUString;
 
 using com::sun::star::uno::Reference;
 
-#define GRAPHOBJ_URLPREFIX "vnd.sun.star.GraphicObject:"
-
 //============================================================================
 // Implementation class SfxDialogLibraryContainer
 

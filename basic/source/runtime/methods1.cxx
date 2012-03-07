@@ -38,11 +38,6 @@
 #include <tools/fsys.hxx>
 #include <tools/urlobj.hxx>
 #include <osl/file.hxx>
-
-#ifndef CLK_TCK
-#define CLK_TCK CLOCKS_PER_SEC
-#endif
-
 #include <vcl/jobset.hxx>
 #include <basic/sbobjmod.hxx>
 
