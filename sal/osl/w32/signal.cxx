@@ -186,7 +186,7 @@ static BOOL ReportCrash( LPEXCEPTION_POINTERS lpEP )
 
 
         sntprintf( szBuffer, SAL_N_ELEMENTS(szBuffer),
-            _T("%s -p %u -excp 0x%p -t %u%s"),
+            _T("%s -p %lu -excp 0x%p -t %lu%s"),
             static_cast<sal_Char*>( aPath ),
             GetCurrentProcessId(),
             lpEP,
