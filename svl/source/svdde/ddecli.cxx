@@ -371,7 +371,8 @@ void DdeTransaction::Data( const DdeData* p )
 
 void DdeTransaction::Done( sal_Bool bDataValid )
 {
-    aDone.Call( (void*)bDataValid );
+    const sal_uIntPtr nDataValid(bDataValid);
+    aDone.Call( reinterpret_cast<void*>(nDataValid) );
 }
 
 // --- DdeLink::DdeLink() ------------------------------------------
