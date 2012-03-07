@@ -1423,9 +1423,9 @@ PDFFileImplData* PDFFile::impl_getData() const
                             PDFNumber* pNum = dynamic_cast<PDFNumber*>(p_ent->second);
                             if( pNum )
                                 m_pData->m_nPEntry = static_cast<sal_uInt32>(static_cast<sal_Int32>(pNum->m_fValue));
-                            #if OSL_DEBUG_LEVEL > 1
-                            fprintf( stderr, "p entry is %p\n", (void*)m_pData->m_nPEntry );
-                            #endif
+                        #if OSL_DEBUG_LEVEL > 1
+                            fprintf( stderr, "p entry is %" SAL_PRIxUINT32 "\n", m_pData->m_nPEntry );
+                        #endif
                         }
                         #if OSL_DEBUG_LEVEL > 1
                         fprintf( stderr, "Encryption dict: sec handler: %s, version = %d, revision = %d, key length = %d\n",
