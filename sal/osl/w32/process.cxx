@@ -268,7 +268,7 @@ static struct CommandArgs_Impl g_command_args =
 #pragma warning( push )
 #pragma warning( disable: 4100 )
 #endif
-static rtl_uString ** osl_createCommandArgs_Impl (int argc, char ** argv)
+static rtl_uString ** osl_createCommandArgs_Impl (int argc, char **)
 {
     rtl_uString ** ppArgs =
         (rtl_uString**)rtl_allocateZeroMemory (argc * sizeof(rtl_uString*));
