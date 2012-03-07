@@ -28,7 +28,7 @@
 
 // activate the extra needed ctor
 #define RTL_STRING_UNITTEST
-extern bool rtl_string_unittest_const_literal; // actually unused here
+bool rtl_string_unittest_const_literal;
 
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
@@ -36,9 +36,9 @@ extern bool rtl_string_unittest_const_literal; // actually unused here
 #include <cppunit/TestFixture.h>
 #include <cppunit/extensions/HelperMacros.h>
 #include "rtl/string.h"
-#include "rtl/ustring.hxx"
+#include "rtl/string.hxx"
 
-namespace test { namespace oustring {
+namespace test { namespace ostring {
 
 class StringLiterals: public CppUnit::TestFixture
 {
@@ -46,54 +46,67 @@ private:
     void checkCtors();
 
     void testcall( const char str[] );
-    // invalid conversions will trigger templated OUString ctor that creates an empty string
-    // (see RTL_STRING_UNITTEST)
-    bool validConversion( const rtl::OUString& str ) { return !str.isEmpty(); }
 
 CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);
 CPPUNIT_TEST_SUITE_END();
 };
 
-void test::oustring::StringLiterals::checkCtors()
-{
-    CPPUNIT_ASSERT( validConversion( rtl::OUString( "test" )));
-    const char good1[] = "test";
-    CPPUNIT_ASSERT( validConversion( rtl::OUString( good1 )));
+// reset the flag, call OString ctor with the given argument and return
+// whether the string literal ctor was used
+#define CONST_CTOR_USED( argument ) \
+    ( \
+    rtl_string_unittest_const_literal = false, \
+    ( void ) rtl::OString( argument ), \
+    rtl_string_unittest_const_literal )
 
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( (const char*) "test" )));
+void test::ostring::StringLiterals::checkCtors()
+{
+    CPPUNIT_ASSERT( CONST_CTOR_USED( "test" ));
+    const char good1[] = "test";
+    CPPUNIT_ASSERT( CONST_CTOR_USED( good1 ));
+
+    CPPUNIT_ASSERT( !CONST_CTOR_USED( (const char*) "test" ));
     const char* bad1 = good1;
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( bad1 )));
+    CPPUNIT_ASSERT( !CONST_CTOR_USED( bad1 ));
     char bad2[] = "test";
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( bad2 )));
+    CPPUNIT_ASSERT( !CONST_CTOR_USED( bad2 ));
     char* bad3 = bad2;
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( bad3 )));
+    CPPUNIT_ASSERT( !CONST_CTOR_USED( bad3 ));
     const char* bad4[] = { "test1" };
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( bad4[ 0 ] )));
+    CPPUNIT_ASSERT( !CONST_CTOR_USED( bad4[ 0 ] ));
     testcall( good1 );
 
 // This one is technically broken, since the first element is 6 characters test\0\0,
 // but there does not appear a way to detect this by compile time (runtime will complain).
 // RTL_CONSTASCII_USTRINGPARAM() has the same flaw.
     const char bad5[][ 6 ] = { "test", "test2" };
-//    CPPUNIT_ASSERT( validConversion( rtl::OUString( bad5[ 0 ] )));
-    CPPUNIT_ASSERT( validConversion( rtl::OUString( bad5[ 1 ] )));
+    CPPUNIT_ASSERT( CONST_CTOR_USED( bad5[ 0 ] ));
+    CPPUNIT_ASSERT( CONST_CTOR_USED( bad5[ 1 ] ));
 
-// Check that contents are correct and equal to the case when RTL_CONSTASCII_USTRINGPARAM is used.
-// Also check that embedded \0 is included.
-    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" )) == rtl::OUString( "" ));
-    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\0" )) == rtl::OUString( "\0" ));
-    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ab" )) == rtl::OUString( "ab" ));
-    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "a\0b" )) == rtl::OUString( "a\0b" ));
+// Check that contents are correct and equal to the case when const char* ctor is used.
+    CPPUNIT_ASSERT( rtl::OString( (const char*)"" ) == rtl::OString( "" ));
+    CPPUNIT_ASSERT( rtl::OString( (const char*)"ab" ) == rtl::OString( "ab" ));
+
+// Check that contents are correct and equal to the case when RTL_CONSTASCII_STRINGPARAM is used.
+// Check also that embedded \0 is included (RTL_CONSTASCII_STRINGPARAM does the same,
+// const char* ctor does not, but it seems to make more sense to include it when
+// it's explicitly mentioned in the string literal).
+    CPPUNIT_ASSERT( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "" )) == rtl::OString( "" ));
+    CPPUNIT_ASSERT( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "\0" )) == rtl::OString( "\0" ));
+    CPPUNIT_ASSERT( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "ab" )) == rtl::OString( "ab" ));
+    CPPUNIT_ASSERT( rtl::OString( RTL_CONSTASCII_STRINGPARAM( "a\0b" )) == rtl::OString( "a\0b" ));
 }
 
-void test::oustring::StringLiterals::testcall( const char str[] )
+void test::ostring::StringLiterals::testcall( const char str[] )
 {
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( str )));
+    CPPUNIT_ASSERT( !CONST_CTOR_USED( str ));
 }
+
+#undef CONST_CTOR_USED
 
 }} // namespace
 
-CPPUNIT_TEST_SUITE_REGISTRATION(test::oustring::StringLiterals);
+CPPUNIT_TEST_SUITE_REGISTRATION(test::ostring::StringLiterals);
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

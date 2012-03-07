@@ -239,6 +239,7 @@ UDK_3_0_0 {
         rtl_string_newConcat;
         rtl_string_newFromStr;
         rtl_string_newFromStr_WithLength;
+        rtl_string_newFromLiteral;
         rtl_string_newFromString;
         rtl_string_newReplace;
         rtl_string_newReplaceStrAt;

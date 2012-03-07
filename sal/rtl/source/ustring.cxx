@@ -499,41 +499,6 @@ void SAL_CALL rtl_uString_newFromAscii( rtl_uString** ppThis,
     }
 }
 
-// Used when creating from string literals.
-// Intentionally copies also embedded \0's if present.
-void SAL_CALL rtl_uString_newFromLiteral( rtl_uString** ppThis,
-                                        const sal_Char* pCharStr,
-                                        sal_Int32 nLen )
-    SAL_THROW_EXTERN_C()
-{
-    if ( !nLen )
-    {
-        IMPL_RTL_STRINGNAME( new )( ppThis );
-        return;
-    }
-
-    if ( *ppThis )
-        IMPL_RTL_STRINGNAME( release )( *ppThis );
-
-    *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
-    OSL_ASSERT(*ppThis != NULL);
-    if ( (*ppThis) )
-    {
-        IMPL_RTL_STRCODE* pBuffer = (*ppThis)->buffer;
-        sal_Int32 nCount;
-        for( nCount = nLen; nCount > 0; --nCount )
-        {
-            /* Check ASCII range */
-            SAL_WARN_IF( ((unsigned char)*pCharStr) > 127, "rtl.string",
-                        "rtl_uString_newFromLiteral - Found char > 127" );
-
-            *pBuffer = *pCharStr;
-            pBuffer++;
-            pCharStr++;
-        }
-    }
-}
-
 void SAL_CALL rtl_uString_newFromCodePoints(
     rtl_uString ** newString, sal_uInt32 const * codePoints,
     sal_Int32 codePointCount) SAL_THROW_EXTERN_C()

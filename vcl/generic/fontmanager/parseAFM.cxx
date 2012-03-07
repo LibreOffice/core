@@ -366,7 +366,7 @@ static int parseGlobals( FileInputStream* fp, register GlobalFontInfo* gfi )
 {
     bool cont = true, save = (gfi != NULL);
     int error = ok;
-    register char *keyword;
+    char *keyword;
     int direction = -1;
     int tokenlen;
 
@@ -883,7 +883,7 @@ static int parseTrackKernData( FileInputStream* fp, register FontInfo* fi)
 {
     bool cont = true, save = (fi->tkd != NULL);
     int pos = 0, error = ok, tcount = 0, tokenlen;
-    register char *keyword;
+    char *keyword;
 
     while (cont)
     {

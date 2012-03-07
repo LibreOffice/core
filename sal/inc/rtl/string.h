@@ -886,6 +886,11 @@ SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromStr( rtl_String ** newStr, const s
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromStr_WithLength( rtl_String ** newStr, const sal_Char * value, sal_Int32 len ) SAL_THROW_EXTERN_C();
 
+/**
+ @internal
+*/
+SAL_DLLPUBLIC void SAL_CALL rtl_string_newFromLiteral( rtl_String ** newStr, const sal_Char * value, sal_Int32 len ) SAL_THROW_EXTERN_C();
+
 /** Assign a new value to a string.
 
     First releases any value str might currently hold, then acquires

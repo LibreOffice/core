@@ -43,8 +43,21 @@
 #include <new>
 #endif
 
+// The unittest uses slightly different code to help check that the proper
+// calls are made. The class is put into a different namespace to make
+// sure the compiler generates a different (if generating also non-inline)
+// copy of the function and does not merge them together. The class
+// is "brought" into the proper rtl namespace by a typedef below.
+#ifdef RTL_STRING_UNITTEST
+#define rtl rtlunittest
+#endif
+
 namespace rtl
 {
+
+#ifdef RTL_STRING_UNITTEST
+#undef rtl
+#endif
 
 /* ======================================================================= */
 
@@ -71,6 +84,29 @@ namespace rtl
   and so more people should have fewer understanding problems when they
   use this class.
 */
+
+namespace internal
+{
+// This template is used for SFINAE (Substitution failure is not an error), to detect that
+// the template types used in the OString ctor actually are only either char* or const char*.
+// Using a template appears to be the only way to distinguish char* and char[], since
+// using char*(&) does not work with something explicitly cast to char*.
+struct Dummy {};
+template< typename T >
+struct CharPtrDetector
+{
+};
+template<>
+struct CharPtrDetector< const char* >
+{
+    typedef Dummy Type;
+};
+template<>
+struct CharPtrDetector< char* >
+{
+    typedef Dummy Type;
+};
+}
 
 class OString
 {
@@ -143,10 +179,45 @@ public:
     /**
       New string from a character buffer array.
 
+      Note: The argument type is always either char* or const char*. The template is
+      used only for technical reasons, as is the second argument.
+
       @param    value       a NULL-terminated character array.
     */
-    OString( const sal_Char * value ) SAL_THROW(())
+    template< typename T >
+    OString( const T& value, typename internal::CharPtrDetector< T >::Type = internal::Dummy() ) SAL_THROW(())
     {
+        pData = 0;
+        rtl_string_newFromStr( &pData, value );
+    }
+
+    /**
+      New string from a string literal.
+
+      Note that embedded \0's are included in the string if explicitly present
+      in the string literal.
+
+      @param    literal       a string literal
+    */
+    template< int N >
+    OString( const char (&literal)[ N ] ) SAL_THROW(())
+    {
+        pData = 0;
+        rtl_string_newFromLiteral( &pData, literal, N - 1 );
+#ifdef RTL_STRING_UNITTEST
+        rtl_string_unittest_const_literal = true;
+#endif
+    }
+
+    /**
+      @overload
+      New string from a non-const char array.
+
+      @param value non-const char array
+    */
+    template< int N >
+    OString( char (&value)[ N ] ) SAL_THROW(())
+    { // the array is not const, so its size may not match the string length - 1
         pData = 0;
         rtl_string_newFromStr( &pData, value );
     }
@@ -538,7 +609,7 @@ public:
 
       @since LibreOffice 3.6
     */
-    bool endsWith(rtl::OString const & str) const {
+    bool endsWith(OString const & str) const {
         return str.getLength() <= getLength()
             && match(str, getLength() - str.getLength());
     }
@@ -1196,13 +1267,20 @@ struct OStringHash
         a hash code for the string.  This hash code should not be stored
         persistently, as its computation may change in later revisions.
      */
-    size_t operator()( const rtl::OString& rString ) const
+    size_t operator()( const OString& rString ) const
         { return (size_t)rString.hashCode(); }
 };
 
 /* ======================================================================= */
 
 } /* Namespace */
+
+#ifdef RTL_STRING_UNITTEST
+namespace rtl
+{
+typedef rtlunittest::OString OString;
+}
+#endif
 
 #endif /* _RTL_STRING_HXX_ */
 
