@@ -127,9 +127,9 @@ typedef ::std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
 
 class SC_DLLPUBLIC ScDPNumGroupDimension
 {
-    ScDPNumGroupInfo            aGroupInfo;         // settings
+    mutable ScDPNumGroupInfo    aGroupInfo;         // settings
     ScDPDateGroupHelper*        pDateHelper;
-    mutable  ::std::vector< SCROW >            maMemberEntries;
+    mutable std::vector<SCROW>  maMemberEntries;
     mutable bool                bHasNonInteger;     // initialized in GetNumEntries
     mutable sal_Unicode         cDecSeparator;      // initialized in GetNumEntries
 
@@ -148,8 +148,7 @@ public:
     const ScDPDateGroupHelper* GetDateHelper() const    { return pDateHelper; }
 
     const std::vector<SCROW>& GetNumEntries(
-        SCCOL nSourceDim, const ScDPCache* pCache,
-        const std::vector< SCROW >& rOriginal) const;
+        SCCOL nSourceDim, ScDPCache* pCache, const std::vector<SCROW>& rOriginal) const;
 
     void MakeDateHelper( const ScDPNumGroupInfo& rInfo, long nDim, sal_Int32 nPart );
 

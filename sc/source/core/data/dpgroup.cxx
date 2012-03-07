@@ -865,11 +865,11 @@ void ScDPNumGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, long 
     delete pDateHelper;
     pDateHelper = new ScDPDateGroupHelper(rInfo, nDim, nPart);
 
-    aGroupInfo.mbEnable = sal_True;   //! or query both?
+    aGroupInfo.mbEnable = true;   //! or query both?
 }
 
 const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
-    SCCOL nSourceDim, const ScDPCache* pCache, const std::vector<SCROW>& rOriginal) const
+    SCCOL nSourceDim, ScDPCache* pCache, const std::vector<SCROW>& rOriginal) const
 {
     if (!maMemberEntries.empty())
         return maMemberEntries;
@@ -898,40 +898,34 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
     double fSourceMax = 0.0;
     bool bFirst = true;
 
-    size_t  nOriginalCount = rOriginal.size();
-    for (size_t  nOriginalPos=0; nOriginalPos<nOriginalCount; nOriginalPos++)
+    for (size_t i = 0, n = rOriginal.size(); i < n; ++i)
     {
-       const  ScDPItemData* pItemData = pCache->GetItemDataById( nSourceDim , rOriginal[nOriginalPos] );
+       const ScDPItemData* pItemData = pCache->GetItemDataById(nSourceDim, rOriginal[i]);
+       if (pItemData->GetType() != ScDPItemData::Value)
+           continue;
 
-       if ( pItemData && pItemData ->HasStringData() )
+       double fSourceValue = pItemData->GetValue();
+       if (bFirst)
        {
-           lcl_Insert( nSourceDim, pCache, maMemberEntries,  rOriginal[nOriginalPos] );
+           fSourceMin = fSourceMax = fSourceValue;
+           bFirst = false;
+           continue;
        }
-       else
+
+       if (fSourceValue < fSourceMin)
+           fSourceMin = fSourceValue;
+       if (fSourceValue > fSourceMax)
+           fSourceMax = fSourceValue;
+
+       if (!bHasNonInteger && !IsInteger(fSourceValue))
        {
-           double fSourceValue = pItemData->GetValue();
-           if ( bFirst )
-           {
-               fSourceMin = fSourceMax = fSourceValue;
-               bFirst = false;
-           }
-           else
-           {
-               if ( fSourceValue < fSourceMin )
-                   fSourceMin = fSourceValue;
-               if ( fSourceValue > fSourceMax )
-                   fSourceMax = fSourceValue;
-           }
-           if ( !bHasNonInteger && !IsInteger( fSourceValue ) )
-           {
-               // if any non-integer numbers are involved, the group labels are
-               // shown including their upper limit
-               bHasNonInteger = true;
-           }
+           // if any non-integer numbers are involved, the group labels are
+           // shown including their upper limit
+           bHasNonInteger = true;
        }
     }
 
-    if ( aGroupInfo.mbDateValues )
+    if (aGroupInfo.mbDateValues)
     {
         // special handling for dates: always integer, round down limits
         bHasNonInteger = false;
@@ -939,15 +933,18 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
         fSourceMax = rtl::math::approxFloor( fSourceMax ) + 1;
     }
 
-    if ( aGroupInfo.mbAutoStart )
-        const_cast<ScDPNumGroupDimension*>(this)->aGroupInfo.mfStart = fSourceMin;
-    if ( aGroupInfo.mbAutoEnd )
-        const_cast<ScDPNumGroupDimension*>(this)->aGroupInfo.mfEnd = fSourceMax;
+    if (aGroupInfo.mbAutoStart)
+        aGroupInfo.mfStart = fSourceMin;
+    if (aGroupInfo.mbAutoEnd)
+        aGroupInfo.mfEnd = fSourceMax;
 
     //! limit number of entries?
 
     long nLoopCount = 0;
     double fLoop = aGroupInfo.mfStart;
+
+    // Num group always share the same dimension ID as the source dimension.
+    pCache->ResetGroupItems(nSourceDim, aGroupInfo);
 
     // Use "less than" instead of "less or equal" for the loop - don't create a group
     // that consists only of the end value. Instead, the end value is then included
@@ -956,12 +953,13 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
 
     bool bFirstGroup = true;
     SvNumberFormatter* pFormatter = pCache->GetDoc()->GetFormatTable();
-    while ( bFirstGroup || ( fLoop < aGroupInfo.mfEnd && !rtl::math::approxEqual( fLoop, aGroupInfo.mfEnd ) ) )
+    while (bFirstGroup || (fLoop < aGroupInfo.mfEnd && !rtl::math::approxEqual(fLoop, aGroupInfo.mfEnd)))
     {
-        String aName = lcl_GetNumGroupName( fLoop, aGroupInfo, bHasNonInteger, cDecSeparator, pFormatter );
-        // create a numerical entry to ensure proper sorting
-        // (in FillMemberResults this needs special handling)
-        lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aName, fLoop );
+        rtl::OUString aName = lcl_GetNumGroupName(
+            fLoop, aGroupInfo, bHasNonInteger, cDecSeparator, pFormatter);
+        // TODO: create a numerical entry to ensure proper sorting
+        SCROW nId = pCache->SetGroupItem(nSourceDim, ScDPItemData(aName));
+        maMemberEntries.push_back(nId);
         ++nLoopCount;
         fLoop = aGroupInfo.mfStart + nLoopCount * aGroupInfo.mfStep;
         bFirstGroup = false;
@@ -969,13 +967,16 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
         // ScDPItemData values are compared with approxEqual
     }
 
-    String aFirstName = lcl_GetSpecialNumGroupName( aGroupInfo.mfStart, true, cDecSeparator, aGroupInfo.mbDateValues, pFormatter );
-    lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aFirstName,  aGroupInfo.mfStart - aGroupInfo.mfStep );
+    rtl::OUString aFirstName = lcl_GetSpecialNumGroupName(
+        aGroupInfo.mfStart, true, cDecSeparator, aGroupInfo.mbDateValues, pFormatter);
+    SCROW nId = pCache->SetGroupItem(nSourceDim, ScDPItemData(aFirstName));
+    maMemberEntries.push_back(nId);
 
-    String aLastName = lcl_GetSpecialNumGroupName( aGroupInfo.mfEnd, false, cDecSeparator, aGroupInfo.mbDateValues, pFormatter );
-    lcl_InsertValue<true>( nSourceDim,  pCache,  maMemberEntries, aLastName,  aGroupInfo.mfEnd + aGroupInfo.mfStep );
+    rtl::OUString aLastName = lcl_GetSpecialNumGroupName(
+        aGroupInfo.mfEnd, false, cDecSeparator, aGroupInfo.mbDateValues, pFormatter);
+    nId = pCache->SetGroupItem(nSourceDim, ScDPItemData(aLastName));
+    maMemberEntries.push_back(nId);
 
-    fprintf(stdout, "ScDPNumGroupDimension::GetNumEntries:   FIXME\n");
     return maMemberEntries;
 }
 
@@ -1069,7 +1070,9 @@ const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( long  nColumn 
     {
         // dimension number is unchanged for numerical groups
         const  std::vector< SCROW >& rOriginal = pSourceData->GetColumnEntries( nColumn );
-        return pNumGroups[nColumn].GetNumEntries( (SCCOL)nColumn, GetCacheTable().getCache(), rOriginal );
+        return pNumGroups[nColumn].GetNumEntries(
+            static_cast<SCCOL>(nColumn),
+            const_cast<ScDPCache*>(GetCacheTable().getCache()), rOriginal);
     }
 
     return pSourceData->GetColumnEntries( nColumn );
@@ -1303,11 +1306,10 @@ const ScDPCacheTable& ScDPGroupTableData::GetCacheTable() const
 
 void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, const long* pDims)
 {
-    stack_printer __stack_printer__("ScDPGroupTableData::FillGroupValues");
     long nGroupedColumns = aGroups.size();
 
     const ScDPCache* pCache = GetCacheTable().getCache();
-    for (long nDim=0; nDim<nCount; nDim++)
+    for (long nDim = 0; nDim < nCount; ++nDim)
     {
         const ScDPDateGroupHelper* pDateHelper = NULL;
 
@@ -1318,31 +1320,33 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
             const ScDPGroupDimension& rGroupDim = aGroups[nColumn - nSourceCount];
             nSourceDim= rGroupDim.GetSourceDim();
             pDateHelper = rGroupDim.GetDateHelper();
-            if ( !pDateHelper )                         // date is handled below
+            if (!pDateHelper)                         // date is handled below
             {
-                 const ScDPGroupItem* pGroupItem = rGroupDim.GetGroupForData( *GetMemberById( nSourceDim, pItemDataIndex[nDim] ));
-              if ( pGroupItem )
-                      pItemDataIndex[nDim] = pCache->GetAdditionalItemID(  pGroupItem->GetName() );
+                const ScDPGroupItem* pGroupItem =
+                    rGroupDim.GetGroupForData(*GetMemberById(nSourceDim, pItemDataIndex[nDim]));
+
+                if (pGroupItem)
+                    pItemDataIndex[nDim] =
+                        pCache->GetIdByItemData(nColumn, ScDPItemData(pGroupItem->GetName()));
             }
         }
         else if ( IsNumGroupDimension( nColumn ) )
         {
             pDateHelper = pNumGroups[nColumn].GetDateHelper();
-            if ( !pDateHelper )                         // date is handled below
+            if (!pDateHelper)                         // date is handled below
             {
-                 const ScDPItemData* pData = pCache->GetItemDataById( (SCCOL)nSourceDim, pItemDataIndex[nDim]);
-                if ( pData ->IsValue() )
+                const ScDPItemData* pData = pCache->GetItemDataById(nSourceDim, pItemDataIndex[nDim]);
+                if (pData->GetType() == ScDPItemData::Value)
                 {
-                    // TODO: This needs fixing.
                     ScDPNumGroupInfo aNumInfo;
                     bool bHasNonInteger = false;
                     sal_Unicode cDecSeparator = 0;
                     GetNumGroupInfo( nColumn, aNumInfo, bHasNonInteger, cDecSeparator );
                     double fGroupValue;
-                    String aGroupName = lcl_GetNumGroupForValue( pData->GetValue(),
-                             aNumInfo, bHasNonInteger, cDecSeparator, fGroupValue, pDoc );
+                    rtl::OUString aGroupName = lcl_GetNumGroupForValue(
+                        pData->GetValue(), aNumInfo, bHasNonInteger, cDecSeparator, fGroupValue, pDoc);
                     ScDPItemData aItemData(aGroupName);
-                    pItemDataIndex[nDim] = pCache->GetAdditionalItemID(aItemData);
+                    pItemDataIndex[nDim] = pCache->GetIdByItemData(nSourceDim, aItemData);
                 }
                 // else (textual) keep original value
             }
@@ -1350,8 +1354,9 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
 
         if ( pDateHelper )
         {
-            const ScDPItemData* pData  = GetCacheTable().getCache()->GetItemDataById( (SCCOL)nSourceDim, pItemDataIndex[nDim]);
-            if ( pData ->IsValue() )
+            const ScDPItemData* pData  =
+                GetCacheTable().getCache()->GetItemDataById(nSourceDim, pItemDataIndex[nDim]);
+            if (pData->GetType() == ScDPItemData::Value)
             {
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 const ScDPNumGroupInfo& rNumInfo = pDateHelper->GetNumInfo();
