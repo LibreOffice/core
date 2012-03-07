@@ -95,7 +95,7 @@ namespace {
         return 38;
     }
 
-    HRESULT WriteLibraryToRegistry( char* pLibrary, DWORD nLen )
+    HRESULT WriteLibraryToRegistry( const char* pLibrary, DWORD nLen )
     {
         HRESULT hRes = E_FAIL;
         if ( pLibrary && nLen )
@@ -105,7 +105,9 @@ namespace {
             hRes = S_OK;
             for ( int nInd = 0; nInd < SUPPORTED_FACTORIES_NUM; nInd++ )
             {
-                char* pSubKey = "Software\\Classes\\CLSID\\.....................................\\InprocHandler32";
+                const char pSubKeyTemplate[] = "Software\\Classes\\CLSID\\.....................................\\InprocHandler32";
+                char pSubKey[SAL_N_ELEMENTS(pSubKeyTemplate)];
+                strncpy(pSubKey, pSubKeyTemplate, SAL_N_ELEMENTS(pSubKeyTemplate));
 
                 int nGuidLen = GetStringFromClassID( *guidList[nInd], &pSubKey[23], 38 );
 
