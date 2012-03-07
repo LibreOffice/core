@@ -1309,17 +1309,21 @@ PlaceholderShape.prototype.setTextContent = function( sText )
 
 PlaceholderShape.prototype.setVisibility = function( nVisibility )
 {
+    if( !this.element )
+    {
+        return;
+    }
     this.element.setAttribute( 'visibility', aVisibilityAttributeValue[nVisibility] );
 };
 
 PlaceholderShape.prototype.show = function()
 {
-    this.element.setAttribute( 'visibility', 'visible' );
+    this.setVisibility( VISIBLE );
 };
 
 PlaceholderShape.prototype.hide = function()
 {
-    this.element.setAttribute( 'visibility', 'hidden' );
+    this.setVisibility( HIDDEN );
 };
 
 /* private methods */
