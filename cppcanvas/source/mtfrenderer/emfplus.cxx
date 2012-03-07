@@ -717,7 +717,7 @@ namespace cppcanvas
             Graphic graphic;
 
 
-            void Read (SvMemoryStream &s)
+            void Read (SvMemoryStream &s, sal_Bool bUseWholeStream)
             {
                 sal_uInt32 header, unknown;
 
@@ -742,13 +742,19 @@ namespace cppcanvas
                     EMFP_DEBUG (printf ("EMF+\tmetafile type: %d dataSize: %d\n", mfType, mfSize));
 
                     GraphicFilter filter;
-                    SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), mfSize, STREAM_READ);
+                    // workaround buggy metafiles, which have wrong mfSize set (n#705956 for example)
+                    SvMemoryStream mfStream (((char *)s.GetData()) + s.Tell(), bUseWholeStream ? s.remainingSize() : mfSize, STREAM_READ);
 
                     filter.ImportGraphic (graphic, String (), mfStream);
 
                     // debug code - write the stream to debug file /tmp/emf-stream.emf
                     EMFP_DEBUG(mfStream.Seek(0);
-                               SvFileStream file( UniString::CreateFromAscii( "/tmp/emf-embedded-stream.emf" ), STREAM_WRITE | STREAM_TRUNC );
+                               static int emfp_debug_stream_numnber = 0;
+                               UniString emfp_debug_filename = UniString::CreateFromAscii( "/tmp/emf-embedded-stream" );
+                               emfp_debug_filename.Append( UniString::CreateFromInt32( emfp_debug_stream_numnber++ ));
+                               emfp_debug_filename.Append( UniString::CreateFromAscii( ".emf" ));
+
+                               SvFileStream file( emfp_debug_filename, STREAM_WRITE | STREAM_TRUNC );
 
                                mfStream >> file;
                                file.Flush();
@@ -1087,7 +1093,7 @@ namespace cppcanvas
             }
         }
 
-        void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags)
+        void ImplRenderer::processObjectRecord(SvMemoryStream& rObjectStream, sal_uInt16 flags, sal_Bool bUseWholeStream)
         {
             sal_uInt32 index;
 
@@ -1142,7 +1148,7 @@ namespace cppcanvas
                 {
                     EMFPImage *image;
                     aObjects [index] = image = new EMFPImage ();
-                    image->Read (rObjectStream);
+                    image->Read (rObjectStream, bUseWholeStream);
 
                     break;
                 }
@@ -1193,7 +1199,7 @@ namespace cppcanvas
                     if (mbMultipart) {
                         EMFP_DEBUG (printf ("EMF+ multipart record flags: %04hx\n", mMFlags));
                         mMStream.Seek (0);
-                        processObjectRecord (mMStream, mMFlags);
+                        processObjectRecord (mMStream, mMFlags, sal_True);
                     }
                     mbMultipart = false;
                 }
