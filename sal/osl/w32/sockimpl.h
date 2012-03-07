@@ -89,13 +89,6 @@ typedef struct osl_socket_dialup_impl_st
     DWORD                     m_dwFlags;
 } oslSocketDialupImpl;
 
-static oslSocketDialupImpl* __osl_createSocketDialupImpl (void);
-static void __osl_initSocketDialupImpl (oslSocketDialupImpl *pImpl);
-static void __osl_destroySocketDialupImpl (oslSocketDialupImpl *pImpl);
-
-static sal_Bool __osl_querySocketDialupImpl (void);
-static sal_Bool __osl_attemptSocketDialupImpl (void);
-
 /*****************************************************************************/
 /* The End */
 /*****************************************************************************/
