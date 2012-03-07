@@ -37,7 +37,6 @@
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/ScriptDirection.hpp>
 #include <com/sun/star/i18n/ScriptType.hpp>
-#include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <com/sun/star/text/XTextField.hpp>
 #include <com/sun/star/text/XTextRange.hpp>
@@ -46,19 +45,19 @@
 #include <com/sun/star/style/ParagraphAdjust.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 
-#include <svl/languageoptions.hxx>
-#include <sfx2/app.hxx>
+#include <comphelper/processfactory.hxx>
 #include <editeng/svxenum.hxx>
 #include <editeng/frmdir.hxx>
+#include <i18nutil/scripttypedetector.hxx>
+#include <sfx2/app.hxx>
+#include <svl/languageoptions.hxx>
+#include <oox/export/drawingml.hxx> // for SubstituteBullet
 #include <unotools/fontcvt.hxx>
 #include <vcl/metric.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <comphelper/processfactory.hxx>
-#include <oox/export/drawingml.hxx> // for SubstituteBullet
 
 com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xPPTBreakIter;
-com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector > xScriptTypeDetector;
 
 PortionObj::PortionObj( const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet > & rXPropSet,
                 FontCollection& rFontCollection ) :
@@ -1339,7 +1338,6 @@ FontCollection::~FontCollection()
 {
     delete pVDev;
     xPPTBreakIter = NULL;
-    xScriptTypeDetector = NULL;
 }
 
 FontCollection::FontCollection() :
@@ -1352,21 +1350,11 @@ FontCollection::FontCollection() :
     if ( xInterface.is() )
         xPPTBreakIter = com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator >
             ( xInterface, com::sun::star::uno::UNO_QUERY );
-
-    xInterface = xMSF->createInstance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.ScriptTypeDetector" ) ) );
-    if ( xInterface.is() )
-        xScriptTypeDetector = com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector >
-            ( xInterface, com::sun::star::uno::UNO_QUERY );
 }
 
-short FontCollection::GetScriptDirection( const String& rString ) const
+short FontCollection::GetScriptDirection( const rtl::OUString& rString ) const
 {
-    short nRet = com::sun::star::i18n::ScriptDirection::NEUTRAL;
-    if ( xScriptTypeDetector.is() )
-    {
-        const rtl::OUString sT( rString );
-        nRet = xScriptTypeDetector->getScriptDirection( sT, 0, com::sun::star::i18n::ScriptDirection::NEUTRAL );
-    }
+    short nRet = ScriptTypeDetector::getScriptDirection( rString, 0, com::sun::star::i18n::ScriptDirection::NEUTRAL );
     return nRet;
 }
 

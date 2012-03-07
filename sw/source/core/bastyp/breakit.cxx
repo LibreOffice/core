@@ -74,16 +74,13 @@ SwBreakIt::~SwBreakIt()
     delete m_pLocale;
     delete m_pForbidden;
 }
+
 void SwBreakIt::createBreakIterator() const
 {
     if ( m_xMSF.is() && !xBreak.is() )
         xBreak.set(m_xMSF->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.i18n.BreakIterator"))),uno::UNO_QUERY);
 }
-void SwBreakIt::createScriptTypeDetector()
-{
-    if ( m_xMSF.is() && !xCTLDetect.is() )
-        xCTLDetect.set(m_xMSF->createInstance(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.i18n.ScriptTypeDetector" ))),uno::UNO_QUERY);
-}
+
 void SwBreakIt::_GetLocale( const LanguageType aLang )
 {
     aLast = aLang;

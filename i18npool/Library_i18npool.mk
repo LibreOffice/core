@@ -79,7 +79,7 @@ $(eval $(call gb_Library_add_exception_objects,i18npool,\
 	i18npool/source/characterclassification/cclass_unicode \
 	i18npool/source/characterclassification/cclass_unicode_parser \
 	i18npool/source/characterclassification/characterclassificationImpl \
-	i18npool/source/characterclassification/scripttypedetector \
+	i18npool/source/characterclassification/unoscripttypedetector \
 	i18npool/source/collator/chaptercollator \
 	i18npool/source/collator/collatorImpl \
 	i18npool/source/collator/collator_unicode \

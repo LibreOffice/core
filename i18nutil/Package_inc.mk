@@ -30,6 +30,7 @@ $(eval $(call gb_Package_Package,i18nutil_inc,$(SRCDIR)/i18nutil/inc))
 $(eval $(call gb_Package_add_file,i18nutil_inc,inc/i18nutil/i18nutildllapi.h,i18nutil/i18nutildllapi.h))
 $(eval $(call gb_Package_add_file,i18nutil_inc,inc/i18nutil/casefolding.hxx,i18nutil/casefolding.hxx))
 $(eval $(call gb_Package_add_file,i18nutil_inc,inc/i18nutil/oneToOneMapping.hxx,i18nutil/oneToOneMapping.hxx))
+$(eval $(call gb_Package_add_file,i18nutil_inc,inc/i18nutil/scripttypedetector.hxx,i18nutil/scripttypedetector.hxx))
 $(eval $(call gb_Package_add_file,i18nutil_inc,inc/i18nutil/unicode.hxx,i18nutil/unicode.hxx))
 $(eval $(call gb_Package_add_file,i18nutil_inc,inc/i18nutil/widthfolding.hxx,i18nutil/widthfolding.hxx))
 

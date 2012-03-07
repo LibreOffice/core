@@ -49,8 +49,6 @@ class SW_DLLPUBLIC SwBreakIt
 {
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xMSF;
     mutable com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xBreak;
-    com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector > xCTLDetect;
-
 
     com::sun::star::lang::Locale * m_pLocale;
     com::sun::star::i18n::ForbiddenCharacters * m_pForbidden;
@@ -87,12 +85,6 @@ public:
     {
         createBreakIterator();
         return xBreak;
-    }
-
-    com::sun::star::uno::Reference< com::sun::star::i18n::XScriptTypeDetector > GetScriptTypeDetector()
-    {
-        createScriptTypeDetector();
-        return xCTLDetect;
     }
 
     const com::sun::star::lang::Locale& GetLocale( const LanguageType aLang )

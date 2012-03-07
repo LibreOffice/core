@@ -25,8 +25,8 @@
  * for a copy of the LGPLv3 License.
  *
  ************************************************************************/
-#ifndef _I18N_SCRIPTTYPEDETECTOR_HXX_
-#define _I18N_SCRIPTTYPEDETECTOR_HXX_
+#ifndef _I18N_UNOSCRIPTTYPEDETECTOR_HXX_
+#define _I18N_UNOSCRIPTTYPEDETECTOR_HXX_
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 
@@ -34,18 +34,15 @@
 #include <cppuhelper/implbase2.hxx> // helper for implementations
 
 //  ----------------------------------------------------
-//  class ScriptTypeDetector
+//  class UnoScriptTypeDetector
 //  ----------------------------------------------------
-class ScriptTypeDetector : public cppu::WeakImplHelper2
+class UnoScriptTypeDetector : public cppu::WeakImplHelper2
 <
     ::com::sun::star::i18n::XScriptTypeDetector,
     ::com::sun::star::lang::XServiceInfo
 >
 {
 public:
-    ScriptTypeDetector();
-    virtual ~ScriptTypeDetector();
-
     // Methods
     virtual sal_Int32 SAL_CALL beginOfScriptDirection( const ::rtl::OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) throw (::com::sun::star::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL endOfScriptDirection( const ::rtl::OUString& Text, sal_Int32 nPos, sal_Int16 scriptDirection ) throw (::com::sun::star::uno::RuntimeException);

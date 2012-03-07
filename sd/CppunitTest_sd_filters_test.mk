@@ -43,6 +43,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sd_filters_test, \
     editeng \
     fileacc \
     i18nisolang1 \
+    i18nutil \
     msfilter \
     oox \
     sal \
