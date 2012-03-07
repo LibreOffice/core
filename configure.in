@@ -4589,6 +4589,7 @@ if test "$with_java" != "no"; then
     if test "$DISABLE_SCRIPTING" = TRUE; then
         AC_MSG_RESULT([no, overridden by --disable-scripting])
         SOLAR_JAVA=""
+        with_java=no
     else
         AC_MSG_RESULT([yes])
         SOLAR_JAVA="TRUE"
