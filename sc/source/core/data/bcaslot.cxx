@@ -24,7 +24,7 @@
 // MARKER(update_precomp.py): autogen include statement, do not remove
 #include "precompiled_sc.hxx"
 
-
+#include <boost/mem_fn.hpp>
 
 #include <sfx2/objsh.hxx>
 #include <svl/listener.hxx>
@@ -279,15 +279,25 @@ sal_Bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
     if (aBroadcastAreaTbl.empty())
         return sal_False;
     sal_Bool bIsBroadcasted = sal_False;
+
+    // issue 118012
+    // do not iterate on <aBoardcastAreaTbl> as its reveals that its iterators
+    // are destroyed during notification.
+    std::vector< ScBroadcastArea* > aCopyForIteration( aBroadcastAreaTbl.begin(), aBroadcastAreaTbl.end() );
+    std::for_each( aCopyForIteration.begin(), aCopyForIteration.end(), boost::mem_fn( &ScBroadcastArea::IncRef ) );
+
     const ScAddress& rAddress = rHint.GetAddress();
-    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
-            aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
+    const std::vector< ScBroadcastArea* >::const_iterator aEnd( aCopyForIteration.end() );
+    std::vector< ScBroadcastArea* >::const_iterator aIter;
+    for ( aIter = aCopyForIteration.begin(); aIter != aEnd; ++aIter )
     {
         ScBroadcastArea* pArea = *aIter;
-        // A Notify() during broadcast may call EndListeningArea() and thus
-        // dispose this area if it was the last listener, which would
-        // invalidate the iterator, hence increment before call.
-        ++aIter;
+        // check, if copied item has been already removed from <aBroadcastAreaTbl>
+        if ( aBroadcastAreaTbl.find( pArea ) == aBroadcastAreaTbl.end() )
+        {
+            continue;
+        }
+
         const ScRange& rAreaRange = pArea->GetRange();
         if (rAreaRange.In( rAddress))
         {
@@ -298,6 +308,17 @@ sal_Bool ScBroadcastAreaSlot::AreaBroadcast( const ScHint& rHint) const
             }
         }
     }
+
+    // delete no longer referenced <ScBroadcastArea> instances
+    for ( aIter = aCopyForIteration.begin(); aIter != aEnd; ++aIter )
+    {
+        ScBroadcastArea* pArea = *aIter;
+        if ( !pArea->DecRef() )
+        {
+            delete pArea;
+        }
+    }
+
     return bIsBroadcasted;
 }
 
@@ -308,14 +329,24 @@ sal_Bool ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
     if (aBroadcastAreaTbl.empty())
         return sal_False;
     sal_Bool bIsBroadcasted = sal_False;
-    for (ScBroadcastAreas::const_iterator aIter( aBroadcastAreaTbl.begin());
-            aIter != aBroadcastAreaTbl.end(); /* increment in body */ )
+
+    // issue 118012
+    // do not iterate on <aBoardcastAreaTbl> as its reveals that its iterators
+    // are destroyed during notification.
+    std::vector< ScBroadcastArea* > aCopyForIteration( aBroadcastAreaTbl.begin(), aBroadcastAreaTbl.end() );
+    std::for_each( aCopyForIteration.begin(), aCopyForIteration.end(), boost::mem_fn( &ScBroadcastArea::IncRef ) );
+
+    const std::vector< ScBroadcastArea* >::const_iterator aEnd( aCopyForIteration.end() );
+    std::vector< ScBroadcastArea* >::const_iterator aIter;
+    for ( aIter = aCopyForIteration.begin(); aIter != aEnd; ++aIter )
     {
         ScBroadcastArea* pArea = *aIter;
-        // A Notify() during broadcast may call EndListeningArea() and thus
-        // dispose this area if it was the last listener, which would
-        // invalidate the iterator, hence increment before call.
-        ++aIter;
+        // check, if copied item has been already removed from <aBroadcastAreaTbl>
+        if ( aBroadcastAreaTbl.find( pArea ) == aBroadcastAreaTbl.end() )
+        {
+            continue;
+        }
+
         const ScRange& rAreaRange = pArea->GetRange();
         if (rAreaRange.Intersects( rRange ))
         {
@@ -326,6 +357,17 @@ sal_Bool ScBroadcastAreaSlot::AreaBroadcastInRange( const ScRange& rRange,
             }
         }
     }
+
+    // delete no longer referenced <ScBroadcastArea> instances
+    for ( aIter = aCopyForIteration.begin(); aIter != aEnd; ++aIter )
+    {
+        ScBroadcastArea* pArea = *aIter;
+        if ( !pArea->DecRef() )
+        {
+            delete pArea;
+        }
+    }
+
     return bIsBroadcasted;
 }
 
