@@ -68,9 +68,6 @@ static sal_Bool InitSignal(void)
     hFaultRep = LoadLibrary( "faultrep.dll" );
     if ( hFaultRep )
     {
-#ifdef __MINGW32__
-typedef BOOL (WINAPI *pfn_ADDEREXCLUDEDAPPLICATIONW)(LPCWSTR);
-#endif
         pfn_ADDEREXCLUDEDAPPLICATIONW       pfn = (pfn_ADDEREXCLUDEDAPPLICATIONW)GetProcAddress( hFaultRep, "AddERExcludedApplicationW" );
         if ( pfn )
             pfn( L"SOFFICE.EXE" );
