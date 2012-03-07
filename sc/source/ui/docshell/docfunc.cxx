@@ -2811,8 +2811,6 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         pUndoData = new ScRefUndoData( pDoc );
     }
 
-    rtl::OUString sCodeName;
-    sal_Bool bHasCodeName = pDoc->GetCodeName( nTab, sCodeName );
     if (pDoc->DeleteTab( nTab, pUndoDoc ))
     {
         if (bRecord)
@@ -2825,7 +2823,8 @@ sal_Bool ScDocFunc::DeleteTable( SCTAB nTab, sal_Bool bRecord, sal_Bool /* bApi 
         //  Views updaten:
         if( bVbaEnabled )
         {
-            if( bHasCodeName )
+            rtl::OUString sCodeName;
+            if( pDoc->GetCodeName( nTab, sCodeName ) )
             {
                 VBA_DeleteModule( rDocShell, sCodeName );
             }
