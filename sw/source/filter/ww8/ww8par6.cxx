@@ -270,13 +270,10 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     if (eType != GRID_NONE)
         rDoc.set(IDocumentSettingAccess::ADD_EXT_LEADING, false);
 
-   //force to set document as standard page mode
+    //force to set document as standard page mode
     sal_Bool bSquaredMode = sal_False;
     rDoc.SetDefaultPageMode( bSquaredMode );
     aGrid.SetSquaredMode( bSquaredMode );
-
-    //sep.dyaLinePitch
-    sal_Int32 nLinePitch = rSection.maSep.dyaLinePitch;
 
     //Get the size of word's default styles font
     sal_uInt32 nCharWidth=240;
@@ -306,8 +303,14 @@ void SwWW8ImplReader::SetDocumentGrid(SwFrmFmt &rFmt, const wwSection &rSection)
     }
 
     aGrid.SetBaseWidth( writer_cast<sal_uInt16>(nCharWidth));
-    aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
-    aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nLinePitch));
+
+    //sep.dyaLinePitch
+    sal_Int32 nLinePitch = rSection.maSep.dyaLinePitch;
+    if (nLinePitch >= 1 && nLinePitch <= 31680)
+    {
+        aGrid.SetLines(writer_cast<sal_uInt16>(nTextareaHeight/nLinePitch));
+        aGrid.SetBaseHeight(writer_cast<sal_uInt16>(nLinePitch));
+    }
 
     sal_Int32 nRubyHeight = 0;
     aGrid.SetRubyHeight(writer_cast<sal_uInt16>(nRubyHeight));
