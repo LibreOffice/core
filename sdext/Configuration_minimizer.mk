@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Configuration_Configuration_nozip,presentation-minimizer))
+$(eval $(call gb_Configuration_Configuration,presentation-minimizer,nodeliver))
 
 $(eval $(call gb_Configuration_add_schemas,presentation-minimizer,sdext/source/minimizer/registry/schema,\
     org/openoffice/Office/extension/SunPresentationMinimizer.xcs \

@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Configuration_Configuration_nozip,presenter-screen))
+$(eval $(call gb_Configuration_Configuration,presenter-screen,nodeliver))
 
 $(eval $(call gb_Configuration_add_schemas,presenter-screen,sdext/source/presenter/registry/schema,\
     org/openoffice/Office/extension/PresenterScreen.xcs \
