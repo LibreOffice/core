@@ -59,6 +59,7 @@ $(eval $(call gb_Library_use_externals,cdrimport,\
 	wpd \
 	wpg \
 	cdr \
+	lcms2 \
 	zlib \
 ))
 
