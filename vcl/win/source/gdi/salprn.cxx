@@ -1790,7 +1790,7 @@ SalGraphics* WinSalPrinter::StartPage( ImplJobSetup* pSetupData, sal_Bool bNewJo
         if ( pDevModeW != pOrgDevModeW )
             rtl_freeMemory( pDevModeW );
     }
-    int nRet = 0;
+    volatile int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;
     nRet = ::StartPage( hDC );
     CATCH_DRIVER_EX_END( "exception in StartPage", this );
@@ -1829,7 +1829,7 @@ sal_Bool WinSalPrinter::EndPage()
     if( ! isValid() )
         return FALSE;
 
-    int nRet = 0;
+    volatile int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;
     nRet = ::EndPage( hDC );
     CATCH_DRIVER_EX_END( "exception in EndPage", this );
