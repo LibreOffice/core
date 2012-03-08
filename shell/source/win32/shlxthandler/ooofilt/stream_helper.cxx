@@ -57,12 +57,11 @@ IStream* PrepareIStream( IStream* pStream, zlib_filefunc_def &zFileFunc )
     // These next few lines work around the "Seek pointer" bug found on Vista.
     char cBuf[20];
     unsigned long nCount;
-    HRESULT hr;
     ULARGE_INTEGER nNewPosition;
     LARGE_INTEGER nMove;
     nMove.QuadPart = 0;
-    hr = pStream->Seek( nMove, STREAM_SEEK_SET, &nNewPosition );
-    hr = pStream->Read( cBuf, 20, &nCount );
+    pStream->Seek( nMove, STREAM_SEEK_SET, &nNewPosition );
+    pStream->Read( cBuf, 20, &nCount );
 
     fill_stream_filefunc( &zFileFunc );
     zFileFunc.opaque = (void*)pStream;
