@@ -461,13 +461,13 @@ static sal_Bool ImplUpdateSalJobSetup( WinSalInfoPrinter* pPrinter, ImplJobSetup
     if( ((LPDEVMODEW)pOutDevMode)->dmSize >= 64 )
     {
         sal_Int32 nLen = rtl_ustr_getLength( (const sal_Unicode*)((LPDEVMODEW)pOutDevMode)->dmDeviceName );
-        if ( nLen < SAL_N_ELEMENTS( ((LPDEVMODEW)pOutDevMode)->dmDeviceName ) )
+        if ( sal::static_int_cast<size_t>(nLen) < SAL_N_ELEMENTS( ((LPDEVMODEW)pOutDevMode)->dmDeviceName ) )
             memset( ((LPDEVMODEW)pOutDevMode)->dmDeviceName+nLen, 0, sizeof( ((LPDEVMODEW)pOutDevMode)->dmDeviceName )-(nLen*sizeof(sal_Unicode)) );
     }
     if( ((LPDEVMODEW)pOutDevMode)->dmSize >= 166 )
     {
         sal_Int32 nLen = rtl_ustr_getLength( (const sal_Unicode*)((LPDEVMODEW)pOutDevMode)->dmFormName );
-        if ( nLen < SAL_N_ELEMENTS( ((LPDEVMODEW)pOutDevMode)->dmFormName ) )
+        if ( sal::static_int_cast<size_t>(nLen) < SAL_N_ELEMENTS( ((LPDEVMODEW)pOutDevMode)->dmFormName ) )
             memset( ((LPDEVMODEW)pOutDevMode)->dmFormName+nLen, 0, sizeof( ((LPDEVMODEW)pOutDevMode)->dmFormName )-(nLen*sizeof(sal_Unicode)) );
     }
 
@@ -1217,7 +1217,7 @@ int WinSalInfoPrinter::GetLandscapeAngle( const ImplJobSetup* pSetupData )
 {
     int nRet = ImplDeviceCaps( this, DC_ORIENTATION, NULL, pSetupData );
 
-    if( nRet != GDI_ERROR )
+    if( nRet != sal::static_int_cast<int>( GDI_ERROR ) )
         return nRet * 10;
     else
         return 900; // guess
