@@ -2526,6 +2526,7 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                     aName = rtl::OUString::valueOf(nVal);
 
                 // TODO: This needs fixing.
+                fprintf(stdout, "ScDPMembers::getByIndex:   FIXME\n");
                 ScDPItemData aData(nVal);
                 pNew = new ScDPMember(
                     pSource, nDim, nHier, nLev, pSource->GetCache()->GetAdditionalItemID(aData));

@@ -112,45 +112,6 @@ const sal_uInt16 SC_DP_LEAPYEAR = 1648;     // arbitrary leap year for date calc
 
 namespace {
 
-sal_Bool lcl_Search( SCCOL nSourceDim, const ScDPCache* pCache , const std::vector< SCROW >& vIdx, SCROW nNew , SCROW& rIndex)
-{
-    rIndex = vIdx.size();
-    sal_Bool bFound = false;
-    SCROW nLo = 0;
-    SCROW nHi = vIdx.size() - 1;
-    SCROW nIndex;
-    long nCompare;
-    while (nLo <= nHi)
-    {
-        nIndex = (nLo + nHi) / 2;
-
-        const ScDPItemData* pData  = pCache->GetItemDataById( nSourceDim, vIdx[nIndex] );
-        const ScDPItemData* pDataInsert = pCache->GetItemDataById( nSourceDim, nNew );
-
-        nCompare = ScDPItemData::Compare( *pData, *pDataInsert );
-        if (nCompare < 0)
-            nLo = nIndex + 1;
-        else
-        {
-            nHi = nIndex - 1;
-            if (nCompare == 0)
-            {
-                bFound = sal_True;
-                nLo = nIndex;
-            }
-        }
-    }
-    rIndex = nLo;
-    return bFound;
-}
-
-void lcl_Insert( SCCOL nSourceDim, const ScDPCache* pCache ,  std::vector< SCROW >& vIdx, SCROW nNew )
-{
-    SCROW nIndex = 0;
-    if ( !lcl_Search( nSourceDim, pCache, vIdx, nNew ,nIndex ) )
-        vIdx.insert( vIdx.begin()+nIndex, nNew  );
-}
-
 inline bool IsInteger( double fValue )
 {
     return rtl::math::approxEqual( fValue, rtl::math::approxFloor(fValue) );
@@ -613,21 +574,28 @@ const std::vector<SCROW>& ScDPGroupDimension::GetColumnEntries(
         return maMemberEntries;
     }
 
+    ScDPCache* pCache = const_cast<ScDPCache*>(rCacheTable.getCache());
     for (size_t i = 0, n = rOriginal.size(); i < n;  ++i)
     {
-        const ScDPItemData* pItemData = rCacheTable.getCache()->GetItemDataById(nSourceDim, rOriginal[i]);
-        if (!pItemData || !GetGroupForData(*pItemData))
+        const ScDPItemData* pItemData = pCache->GetItemDataById(nSourceDim, rOriginal[i]);
+        if (!pItemData)
+            // This shouldn't happen.  Something is terribly wrong.
+            continue;
+
+        if (!GetGroupForData(*pItemData))
         {
             // not in any group -> add as its own group
-            maMemberEntries.push_back(rOriginal[i]);
+            SCROW nId = pCache->SetGroupItem(nGroupDim, *pItemData);
+            maMemberEntries.push_back(nId);
         }
     }
 
     for (size_t i = 0, n = aItems.size(); i < n; ++i)
     {
-        SCROW nNew = rCacheTable.getCache()->GetAdditionalItemID(aItems[i].GetName());
-        lcl_Insert ( (SCCOL)GetSourceDim(), rCacheTable.getCache(), maMemberEntries, nNew  );
+        SCROW nId = pCache->SetGroupItem(nGroupDim, aItems[i].GetName());
+        maMemberEntries.push_back(nId);
     }
+
     return maMemberEntries;
 }
 
@@ -1157,12 +1125,15 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
             pDateHelper = rGroupDim.GetDateHelper();
             if (!pDateHelper)                         // date is handled below
             {
-                const ScDPGroupItem* pGroupItem =
-                    rGroupDim.GetGroupForData(*GetMemberById(nSourceDim, pItemDataIndex[nDim]));
-
+                const ScDPItemData& rItem = *GetMemberById(nSourceDim, pItemDataIndex[nDim]);
+                const ScDPGroupItem* pGroupItem = rGroupDim.GetGroupForData(rItem);
                 if (pGroupItem)
+                {
                     pItemDataIndex[nDim] =
-                        pCache->GetIdByItemData(nColumn, ScDPItemData(pGroupItem->GetName()));
+                        pCache->GetIdByItemData(nColumn, pGroupItem->GetName());
+                }
+                else
+                    pItemDataIndex[nDim] = pCache->GetIdByItemData(nColumn, rItem);
             }
         }
         else if ( IsNumGroupDimension( nColumn ) )
