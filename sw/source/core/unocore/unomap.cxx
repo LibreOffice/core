@@ -209,6 +209,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
         { SW_PROP_NMID(UNO_NAME_PARA_REGISTER_MODE_ACTIVE), RES_PARATR_REGISTER,CPPU_E2T(CPPUTYPE_BOOLEAN)  ,           PropertyAttribute::MAYBEVOID, 0},                                                                 \
         { SW_PROP_NMID(UNO_NAME_PARA_TOP_MARGIN), RES_UL_SPACE,             CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_UP_MARGIN|CONVERT_TWIPS},                                  \
         { SW_PROP_NMID(UNO_NAME_PARA_BOTTOM_MARGIN), RES_UL_SPACE,          CPPU_E2T(CPPUTYPE_INT32),           PropertyAttribute::MAYBEVOID, MID_LO_MARGIN|CONVERT_TWIPS},                                 \
+        { SW_PROP_NMID(UNO_NAME_PARA_CONTEXT_MARGIN), RES_UL_SPACE,          CPPU_E2T(CPPUTYPE_BOOLEAN),           PropertyAttribute::MAYBEVOID, MID_CTX_MARGIN},                                 \
         { SW_PROP_NMID(UNO_NAME_CHAR_BACK_TRANSPARENT), RES_CHRATR_BACKGROUND, CPPU_E2T(CPPUTYPE_BOOLEAN),              PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT        },                                                \
         { SW_PROP_NMID(UNO_NAME_PARA_BACK_TRANSPARENT), RES_BACKGROUND, CPPU_E2T(CPPUTYPE_BOOLEAN),                 PropertyAttribute::MAYBEVOID ,MID_GRAPHIC_TRANSPARENT        },                                                \
         { SW_PROP_NMID(UNO_NAME_NUMBERING_STYLE_NAME), RES_PARATR_NUMRULE,  CPPU_E2T(CPPUTYPE_OUSTRING),         PropertyAttribute::MAYBEVOID,   0},                                                           \
@@ -427,6 +428,7 @@ SwUnoPropertyMapProvider::~SwUnoPropertyMapProvider()
                     { SW_PROP_NMID(UNO_NAME_PARA_REGISTER_MODE_ACTIVE), RES_PARATR_REGISTER,    CPPU_E2T(CPPUTYPE_BOOLEAN)  ,       PROPERTY_NONE, 0},\
                     { SW_PROP_NMID(UNO_NAME_PARA_TOP_MARGIN), RES_UL_SPACE,             CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_UP_MARGIN|CONVERT_TWIPS},\
                     { SW_PROP_NMID(UNO_NAME_PARA_BOTTOM_MARGIN), RES_UL_SPACE,          CPPU_E2T(CPPUTYPE_INT32), PROPERTY_NONE, MID_LO_MARGIN|CONVERT_TWIPS},\
+                    { SW_PROP_NMID(UNO_NAME_PARA_CONTEXT_MARGIN), RES_UL_SPACE,          CPPU_E2T(CPPUTYPE_BOOLEAN), PROPERTY_NONE, MID_CTX_MARGIN},\
                     { SW_PROP_NMID(UNO_NAME_PARA_TOP_MARGIN_RELATIVE), RES_UL_SPACE,        CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, MID_UP_REL_MARGIN},\
                     { SW_PROP_NMID(UNO_NAME_PARA_BOTTOM_MARGIN_RELATIVE), RES_UL_SPACE,         CPPU_E2T(CPPUTYPE_INT16), PROPERTY_NONE, MID_LO_REL_MARGIN},\
                     TABSTOPS_MAP_ENTRY\

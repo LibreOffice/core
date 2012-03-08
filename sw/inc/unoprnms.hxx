@@ -812,7 +812,9 @@ enum SwPropNameIds
 /* 0747 */  UNO_NAME_LINE_STYLE,
 /* 0748 */  UNO_NAME_LINE_WIDTH,
 
-/* 0749 */  SW_PROPNAME_END
+/* 0749 */  UNO_NAME_PARA_CONTEXT_MARGIN,
+
+/* 0750 */  SW_PROPNAME_END
 
 // new items in this array must match SwPropNameTab aPropNameTab
 };

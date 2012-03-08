@@ -152,6 +152,15 @@ published service ParagraphProperties
      */
     [property] long ParaBottomMargin;
 
+    /** determines if contextual spacing is used.
+
+        @since LibreOffice 3.6
+
+        <p>If true, the top and bottom margins of the paragraph should not be
+        applied when the previous and next paragraphs have the same style.</p>
+     */
+    [optional, property] boolean ParaContextMargin;
+
     //-------------------------------------------------------------------------
 
     /** determines if the paragraph is included in the

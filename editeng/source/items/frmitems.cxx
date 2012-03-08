@@ -837,6 +837,7 @@ bool    SvxULSpaceItem::QueryValue( uno::Any& rVal, sal_uInt8 nMemberId ) const
         }
         case MID_UP_MARGIN: rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(nUpper) : nUpper); break;
         case MID_LO_MARGIN: rVal <<= (sal_Int32)(bConvert ? TWIP_TO_MM100_UNSIGNED(nLower) : nLower); break;
+        case MID_CTX_MARGIN: rVal <<= bContext; break;
         case MID_UP_REL_MARGIN: rVal <<= (sal_Int16) nPropUpper; break;
         case MID_LO_REL_MARGIN: rVal <<= (sal_Int16) nPropLower; break;
     }
@@ -849,6 +850,7 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
     sal_Bool bConvert = 0!=(nMemberId&CONVERT_TWIPS);
     nMemberId &= ~CONVERT_TWIPS;
     sal_Int32 nVal = 0;
+    sal_Bool bVal = 0;
     switch( nMemberId )
     {
         case 0:
@@ -875,6 +877,11 @@ bool SvxULSpaceItem::PutValue( const uno::Any& rVal, sal_uInt8 nMemberId )
             if(!(rVal >>= nVal) || nVal < 0)
                 return false;
             SetLower((sal_uInt16)(bConvert ? MM100_TO_TWIP(nVal) : nVal));
+            break;
+        case MID_CTX_MARGIN :
+            if (!(rVal >>= bVal))
+                return false;
+            SetContextValue(bVal);
             break;
         case MID_UP_REL_MARGIN:
         case MID_LO_REL_MARGIN:
@@ -907,6 +914,7 @@ int SvxULSpaceItem::operator==( const SfxPoolItem& rAttr ) const
 
     return ( nUpper == ( (SvxULSpaceItem&)rAttr ).nUpper &&
              nLower == ( (SvxULSpaceItem&)rAttr ).nLower &&
+             bContext == ( (SvxULSpaceItem&)rAttr ).bContext &&
              nPropUpper == ( (SvxULSpaceItem&)rAttr ).nPropUpper &&
              nPropLower == ( (SvxULSpaceItem&)rAttr ).nPropLower );
 }
