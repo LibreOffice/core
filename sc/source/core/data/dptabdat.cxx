@@ -281,7 +281,7 @@ const ScDPItemData* ScDPTableData::GetMemberByIndex( long nDim, long nIndex )
 const ScDPItemData* ScDPTableData::GetMemberById( long nDim, long nId)
 {
 
-    return GetCacheTable().getCache()->GetItemDataById( (SCCOL) nDim, (SCROW)nId);
+    return GetCacheTable().getCache()->GetItemDataById(nDim, static_cast<SCROW>(nId));
 }
 
 SCROW   ScDPTableData::GetIdOfItemData( long  nDim, const ScDPItemData& rData )

@@ -2734,24 +2734,15 @@ const ScDPItemData& ScDPMember::GetItemData() const
 
 const ScDPItemData* ScDPSource::GetItemDataById(long nDim, long nId)
 {
-    long nSrcDim = GetSourceDim( nDim );
-    const ScDPItemData* pItemData = GetData()->GetMemberById(  nSrcDim,  nId );
-    if ( !pItemData )
-   { //todo:
-           ScDPItemData item;
-           nId = GetCache()->GetAdditionalItemID( item );
-        pItemData = GetData()->GetMemberById(  nSrcDim,  nId );
-    }
-   return pItemData;
+    return GetData()->GetMemberById(nDim, nId);
 }
 
-SCROW  ScDPSource::GetMemberId(  long  nDim, const ScDPItemData& rData )
+SCROW ScDPSource::GetMemberId(long nDim, const ScDPItemData& rData)
 {
-    long nSrcDim = GetSourceDim( nDim );
-       return  GetCache()->GetIdByItemData(  nSrcDim, rData );
+    return GetCache()->GetIdByItemData(nDim, rData);
 }
 
-const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex( SCROW nIndex)
+const ScDPItemData* ScDPMembers::GetSrcItemDataByIndex(SCROW nIndex)
 {
     const std::vector< SCROW >& memberIds = pSource->GetData()->GetColumnEntries( nDim );
     if ( nIndex >= (long )(memberIds.size()) || nIndex < 0 )

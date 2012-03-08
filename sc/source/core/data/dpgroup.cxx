@@ -599,34 +599,34 @@ void ScDPGroupDimension::SetGroupDim( long nDim )
     if (pDateHelper)
         pDateHelper->SetGroupDim(nDim);
 }
-const std::vector< SCROW >&  ScDPGroupDimension::GetColumnEntries( const ScDPCacheTable&  rCacheTable, const std::vector< SCROW >& rOriginal  )  const
-{
-    if ( maMemberEntries.empty() )
-    {
-        if ( pDateHelper )
-        {
-            pDateHelper->FillColumnEntries(
-                GetSourceDim(), const_cast<ScDPCache*>(rCacheTable.getCache()), maMemberEntries, rOriginal);
-        }
-        else
-        {
-            for (size_t  i =0; i < rOriginal.size( );  i ++)
-            {
-                const  ScDPItemData* pItemData = rCacheTable.getCache()->GetItemDataById( (SCCOL)GetSourceDim(), rOriginal[i] );
-                if ( !pItemData || !GetGroupForData( *pItemData ) )
-                {
-                    // not in any group -> add as its own group
-                    maMemberEntries.push_back( rOriginal[i] );
-                }
-            }
 
-            long nCount = aItems.size();
-            for (long i=0; i<nCount; i++)
-            {
-                SCROW nNew = rCacheTable.getCache()->GetAdditionalItemID(  aItems[i].GetName() );
-                lcl_Insert ( (SCCOL)GetSourceDim(), rCacheTable.getCache(), maMemberEntries, nNew  );
-            }
+const std::vector<SCROW>& ScDPGroupDimension::GetColumnEntries(
+    const ScDPCacheTable& rCacheTable, const std::vector<SCROW>& rOriginal) const
+{
+    if (!maMemberEntries.empty())
+        return maMemberEntries;
+
+    if (pDateHelper)
+    {
+        pDateHelper->FillColumnEntries(
+            GetSourceDim(), const_cast<ScDPCache*>(rCacheTable.getCache()), maMemberEntries, rOriginal);
+        return maMemberEntries;
+    }
+
+    for (size_t i = 0, n = rOriginal.size(); i < n;  ++i)
+    {
+        const ScDPItemData* pItemData = rCacheTable.getCache()->GetItemDataById(nSourceDim, rOriginal[i]);
+        if (!pItemData || !GetGroupForData(*pItemData))
+        {
+            // not in any group -> add as its own group
+            maMemberEntries.push_back(rOriginal[i]);
         }
+    }
+
+    for (size_t i = 0, n = aItems.size(); i < n; ++i)
+    {
+        SCROW nNew = rCacheTable.getCache()->GetAdditionalItemID(aItems[i].GetName());
+        lcl_Insert ( (SCCOL)GetSourceDim(), rCacheTable.getCache(), maMemberEntries, nNew  );
     }
     return maMemberEntries;
 }
@@ -635,8 +635,8 @@ const std::vector< SCROW >&  ScDPGroupDimension::GetColumnEntries( const ScDPCac
 
 const ScDPGroupItem* ScDPGroupDimension::GetGroupForData( const ScDPItemData& rData ) const
 {
-    for ( ScDPGroupItemVec::const_iterator aIter(aItems.begin()); aIter != aItems.end(); aIter++ )
-        if ( aIter->HasElement( rData ) )
+    for (ScDPGroupItemVec::const_iterator aIter = aItems.begin(); aIter != aItems.end(); ++aIter)
+        if (aIter->HasElement(rData))
             return &*aIter;
 
     return NULL;
