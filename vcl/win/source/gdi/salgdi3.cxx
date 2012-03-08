@@ -2649,7 +2649,7 @@ sal_Bool WinSalGraphics::CreateFontSubset( const rtl::OUString& rToFile,
     }
 
     // get raw font file data
-    const RawFontData xRawFontData( mhDC, NULL );
+    const RawFontData xRawFontData( mhDC, 0 );
     if( !xRawFontData.get() )
         return FALSE;
 
