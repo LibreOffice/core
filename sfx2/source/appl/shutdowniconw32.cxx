@@ -122,7 +122,7 @@ static void addMenuItem( HMENU hMenu, UINT id, UINT iconId, const OUString& text
     memset( &mi, 0, sizeof( MENUITEMINFOW ) );
 
     mi.cbSize = sizeof( MENUITEMINFOW );
-    if( id == -1 )
+    if( id == static_cast<UINT>( -1 ) )
     {
         mi.fMask=MIIM_TYPE;
         mi.fType=MFT_SEPARATOR;
