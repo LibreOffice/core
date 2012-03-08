@@ -215,7 +215,7 @@ Sequence< sal_Int8 > SAL_CALL WinDIBToOOBMP( const Sequence< sal_Int8 >& aWinDIB
     else if( ( BI_BITFIELDS == pBmpInfoHdr->biCompression ) && ( ( 16 == pBmpInfoHdr->biBitCount ) || ( 32 == pBmpInfoHdr->biBitCount ) ) )
         nOffset += 12;
 
-    pBmpFileHdr->bfType      = 'MB';
+    pBmpFileHdr->bfType      = ('M' << 8) | 'B';
     pBmpFileHdr->bfSize      = 0; // maybe: nMemSize + sizeof(BITMAPFILEHEADER)
     pBmpFileHdr->bfReserved1 = 0;
     pBmpFileHdr->bfReserved2 = 0;
