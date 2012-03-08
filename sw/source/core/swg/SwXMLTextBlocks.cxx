@@ -218,7 +218,13 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, con
             String aNewStreamName( aPackageName ); aNewStreamName += sExt;
 
             xRoot = xBlkRoot->openStorageElement( aOldName, embed::ElementModes::READWRITE );
-            xRoot->renameElement ( aOldStreamName, aNewStreamName );
+            try
+            {
+                xRoot->renameElement ( aOldStreamName, aNewStreamName );
+            }
+            catch(const container::ElementExistException&)
+            {
+            }
             uno::Reference < embed::XTransactedObject > xTrans( xRoot, uno::UNO_QUERY );
             if ( xTrans.is() )
                 xTrans->commit();
