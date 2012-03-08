@@ -2721,7 +2721,7 @@ void UniscribeLayout::Justify( long nNewWidth )
                 nItemWidth += mpCharWidths[ i ];
             nItemWidth = (int)((fStretch - 1.0) * nItemWidth + 0.5);
 
-            HRESULT nRC = (*pScriptJustify) (
+            (*pScriptJustify) (
                 mpVisualAttrs + rVisualItem.mnMinGlyphPos,
                 mpGlyphAdvances + rVisualItem.mnMinGlyphPos,
                 rVisualItem.mnEndGlyphPos - rVisualItem.mnMinGlyphPos,
