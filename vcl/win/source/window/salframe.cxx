@@ -420,10 +420,10 @@ SalFrame* ImplSalCreateFrame( WinSalInstance* pInst,
             {
                 // Document Windows are also maximized, if the current Document Window
                 // is also maximized
-                HWND hWnd = GetForegroundWindow();
-                if ( hWnd && IsMaximized( hWnd ) &&
-                     (GetWindowInstance( hWnd ) == pInst->mhInst) &&
-                     ((GetWindowStyle( hWnd ) & (WS_POPUP | WS_MAXIMIZEBOX | WS_THICKFRAME)) == (WS_MAXIMIZEBOX | WS_THICKFRAME)) )
+                HWND hWnd2 = GetForegroundWindow();
+                if ( hWnd2 && IsMaximized( hWnd2 ) &&
+                     (GetWindowInstance( hWnd2 ) == pInst->mhInst) &&
+                     ((GetWindowStyle( hWnd2 ) & (WS_POPUP | WS_MAXIMIZEBOX | WS_THICKFRAME)) == (WS_MAXIMIZEBOX | WS_THICKFRAME)) )
                     pFrame->mnShowState = SW_SHOWMAXIMIZED;
             }
         }
@@ -1433,18 +1433,18 @@ void WinSalFrame::SetPosSize( long nX, long nY, long nWidth, long nHeight,
         {
             POINT pt;
             GetCursorPos( &pt );
-            RECT aRect;
-            aRect.left = pt.x;
-            aRect.top = pt.y;
-            aRect.right = pt.x+2;
-            aRect.bottom = pt.y+2;
+            RECT aRect2;
+            aRect2.left = pt.x;
+            aRect2.top = pt.y;
+            aRect2.right = pt.x+2;
+            aRect2.bottom = pt.y+2;
 
             // dualmonitor support:
             // Get screensize of the monitor whith the mouse pointer
-            ImplSalGetWorkArea( mhWnd, &aRect, &aRect );
+            ImplSalGetWorkArea( mhWnd, &aRect2, &aRect2 );
 
-            nX = ((aRect.right-aRect.left)-nWidth)/2 + aRect.left;
-            nY = ((aRect.bottom-aRect.top)-nHeight)/2 + aRect.top;
+            nX = ((aRect2.right-aRect2.left)-nWidth)/2 + aRect2.left;
+            nY = ((aRect2.bottom-aRect2.top)-nHeight)/2 + aRect2.top;
         }
 
 
@@ -5259,10 +5259,10 @@ static sal_Bool ImplHandleIMECompositionInput( WinSalFrame* pFrame,
 
             if ( pAttrBuf )
             {
-                xub_StrLen nTextLen = aEvt.maText.Len();
-                pSalAttrAry = new sal_uInt16[nTextLen];
-                memset( pSalAttrAry, 0, nTextLen*sizeof( sal_uInt16 ) );
-                for ( xub_StrLen i = 0; (i < nTextLen) && (i < nAttrLen); i++ )
+                xub_StrLen nTextLen2 = aEvt.maText.Len();
+                pSalAttrAry = new sal_uInt16[nTextLen2];
+                memset( pSalAttrAry, 0, nTextLen2*sizeof( sal_uInt16 ) );
+                for ( xub_StrLen i = 0; (i < nTextLen2) && (i < nAttrLen); i++ )
                 {
                     BYTE nWinAttr = pAttrBuf[i];
                     sal_uInt16   nSalAttr;
@@ -5456,8 +5456,8 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
             pFrame->mbCandidateMode = TRUE;
             ImplHandleIMEComposition( hWnd, GCS_CURSORPOS );
 
-            HWND hWnd = pFrame->mhWnd;
-            HIMC hIMC = ImmGetContext( hWnd );
+            HWND hWnd2 = pFrame->mhWnd;
+            HIMC hIMC = ImmGetContext( hWnd2 );
             if ( hIMC )
             {
                 LONG nBufLen = ImmGetCompositionStringW( hIMC, GCS_COMPSTR, 0, 0 );
@@ -5479,7 +5479,7 @@ static void ImplHandleIMENotify( HWND hWnd, WPARAM wParam )
                     ImmSetCandidateWindow( hIMC, &aForm );
                 }
 
-                ImmReleaseContext( hWnd, hIMC );
+                ImmReleaseContext( hWnd2, hIMC );
             }
         }
 
@@ -5845,7 +5845,6 @@ LRESULT CALLBACK SalFrameWndProc( HWND hWnd, UINT nMsg, WPARAM wParam, LPARAM lP
 
                 if( !wParam )
                 {
-                    ImplSVData* pSVData = ImplGetSVData();
                     pSVData->maAppData.mnModalMode++;
 
                     ImplHideSplash();
