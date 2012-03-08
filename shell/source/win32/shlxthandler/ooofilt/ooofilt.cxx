@@ -1223,10 +1223,11 @@ namespace /* private */
             *pChar = *( pChar+1 ) ='\0';
 
             HKEY hSubKey;
+            char dummy[] = "";
             int rc = RegCreateKeyExA(HKEY_LOCAL_MACHINE,
                                     INDEXING_FILTER_DLLSTOREGISTER,
                                     0,
-                                    "",
+                                    dummy,
                                     REG_OPTION_NON_VOLATILE,
                                     KEY_WRITE,
                                     0,
