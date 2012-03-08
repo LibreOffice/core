@@ -2013,16 +2013,16 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly,
     (rFly.*fnRect->fnSetLeft)( nLeft );
 }
 
-/*************************************************************************
- *                      SwTxtFly::FlyToRect()
- *
- * IN:  dokumentglobal  (rRect)
- * OUT: dokumentglobal  (return-Wert)
- * Liefert zu einem SwFlyFrm das von ihm in Anspruch genommene Rechteck
- * unter Beruecksichtigung der eingestellten Attribute fuer den Abstand
- * zum Text zurueck.
- *************************************************************************/
 // #i68520#
+/**
+  Computes the bounds of an anchored object. This takes the
+  object wrapping and contour into account.
+
+  @param pAnchoredObj the object for which to get the bounds
+  @param rLine the bounds of the line to format
+
+  @return the flying object bounds
+  */
 SwRect SwTxtFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
                             const SwRect &rLine ) const
 {
@@ -2044,15 +2044,15 @@ SwRect SwTxtFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
                                  // des Rahmens waechst.
     SwAnchoredObjList::size_type nFlyPos = GetPos( pAnchoredObj );
 
-    // Bei LEFT und RIGHT vergroessern wir das Rechteck.
-    // Hier gibt es einige Probleme, wenn mehrere Frames zu sehen sind.
-    // Zur Zeit wird nur der einfachste Fall angenommen:
-    // LEFT bedeutet, dass der Text links vom Frame fliessen soll,
-    // d.h. der Frame blaeht sich bis zum rechten Rand der Printarea
-    // oder bis zum naechsten Frame auf.
-    // Bei RIGHT ist es umgekehrt.
-    // Ansonsten wird immer der eingestellte Abstand zwischen Text
-    // und Frame aufaddiert.
+    // LEFT and RIGHT, we grow the rectangle.
+    // We have some problems, when several frames are to be seen.
+    // At the moment, only the easier case is assumed:
+    //  + LEFT means that the text muss flaw on the left of the frame,
+    //    that is that the trame expands to the right edge of the
+    //    print area or to the the next frame.
+    //  + RIGHT is the opposite.
+    // Otherwise the set distance between text and frame is always
+    // added up.
     switch( _GetSurroundForTextWrap( pAnchoredObj ) )
     {
         case SURROUND_LEFT :
