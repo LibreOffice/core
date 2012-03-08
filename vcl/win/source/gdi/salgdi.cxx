@@ -1645,7 +1645,7 @@ static sal_Bool ImplGetBoundingBox( double* nNumb, BYTE* pSource, sal_uLong nSiz
             sal_Bool    bNegative = FALSE;
             sal_Bool    bValid = TRUE;
 
-            while ( ( --nSizeLeft ) && ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) pDest++;
+            while ( ( --nSizeLeft ) && ( ( *pDest == ' ' ) || ( *pDest == 0x9 ) ) ) pDest++;
             BYTE nByte = *pDest;
             while ( nSizeLeft && ( nByte != ' ' ) && ( nByte != 0x9 ) && ( nByte != 0xd ) && ( nByte != 0xa ) )
             {
