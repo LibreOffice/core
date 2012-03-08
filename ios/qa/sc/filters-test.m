@@ -27,6 +27,8 @@
  * instead of those above.
  */
 
+#include <stdlib.h>
+
 #import <UIKit/UIKit.h>
 
 #include "cppunit/extensions/TestFactoryRegistry.h"
@@ -66,6 +68,11 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
   uiw.backgroundColor = [UIColor redColor];
   self.window = uiw;
   [uiw release];
+
+  // See unotest/source/cpp/bootstrapfixturebase.cxx
+  const char *app_root = [[[NSBundle mainBundle] bundlePath] UTF8String];
+  setenv("SRC_ROOT", app_root, 1);
+  setenv("OUTDIR_FOR_BUILD", app_root, 1);
 
   CppUnitTestPlugIn *iface = cppunitTestPlugIn();
   iface->initialize(&CppUnit::TestFactoryRegistry::getRegistry(), CppUnit::PlugInParameters());
