@@ -429,10 +429,14 @@ ScDPTableData* ScDPObject::GetTableData()
     if (!mpTableData)
     {
         shared_ptr<ScDPTableData> pData;
+        const ScDPDimensionSaveData* pDimData = NULL;
+        if (pSaveData)
+            pDimData = pSaveData->GetExistingDimensionData();
+
         if ( pImpDesc )
         {
             // database data
-            const ScDPCache* pCache = pImpDesc->CreateCache();
+            const ScDPCache* pCache = pImpDesc->CreateCache(pDimData);
             if (pCache)
             {
                 pCache->AddReference(this);
@@ -453,7 +457,7 @@ ScDPTableData* ScDPObject::GetTableData()
                 // GETPIVOTDATA called onto itself from within the source
                 // range.
                 DisableGetPivotData aSwitch(*this, mbEnableGetPivotData);
-                const ScDPCache* pCache = pSheetDesc->CreateCache();
+                const ScDPCache* pCache = pSheetDesc->CreateCache(pDimData);
                 if (pCache)
                 {
                     pCache->AddReference(this);
@@ -463,10 +467,10 @@ ScDPTableData* ScDPObject::GetTableData()
         }
 
         // grouping (for cell or database data)
-        if (pData && pSaveData && pSaveData->GetExistingDimensionData())
+        if (pData && pDimData)
         {
             shared_ptr<ScDPGroupTableData> pGroupData(new ScDPGroupTableData(pData, pDoc));
-            pSaveData->GetExistingDimensionData()->WriteToData(*pGroupData);
+            pDimData->WriteToData(*pGroupData);
             pData = pGroupData;
         }
 
@@ -2491,7 +2495,7 @@ bool ScDPCollection::SheetCaches::hasCache(const ScRange& rRange) const
     return itCache != maCaches.end();
 }
 
-const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange)
+const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData)
 {
     RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
     if (it != maRanges.end())
@@ -2513,6 +2517,8 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange)
     ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     pCache->InitFromDoc(mpDoc, rRange);
+    if (pDimData)
+        pDimData->WriteToCache(*pCache);
 
     // Get the smallest available range index.
     it = std::find_if(maRanges.begin(), maRanges.end(), FindInvalidRange());
@@ -2573,7 +2579,8 @@ void ScDPCollection::SheetCaches::updateReference(
     }
 }
 
-void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs)
+void ScDPCollection::SheetCaches::updateCache(
+    const ScRange& rRange, const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs)
 {
     RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
     if (it == maRanges.end())
@@ -2594,6 +2601,9 @@ void ScDPCollection::SheetCaches::updateCache(const ScRange& rRange, std::set<Sc
 
     ScDPCache& rCache = *itCache->second;
     rCache.InitFromDoc(mpDoc, rRange);
+    if (pDimData)
+        pDimData->WriteToCache(rCache);
+
     std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
     rRefs.swap(aRefs);
 }
@@ -2621,7 +2631,8 @@ bool ScDPCollection::NameCaches::hasCache(const OUString& rName) const
     return maCaches.count(rName) != 0;
 }
 
-const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName, const ScRange& rRange)
+const ScDPCache* ScDPCollection::NameCaches::getCache(
+    const OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData)
 {
     CachesType::const_iterator itr = maCaches.find(rName);
     if (itr != maCaches.end())
@@ -2632,6 +2643,9 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(const OUString& rName, con
     ::std::auto_ptr<ScDPCache> pCache(new ScDPCache(mpDoc));
     SAL_WNODEPRECATED_DECLARATIONS_POP
     pCache->InitFromDoc(mpDoc, rRange);
+    if (pDimData)
+        pDimData->WriteToCache(*pCache);
+
     const ScDPCache* p = pCache.get();
     maCaches.insert(rName, pCache);
     return p;
@@ -2642,7 +2656,9 @@ size_t ScDPCollection::NameCaches::size() const
     return maCaches.size();
 }
 
-void ScDPCollection::NameCaches::updateCache(const OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs)
+void ScDPCollection::NameCaches::updateCache(
+    const OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData,
+    std::set<ScDPObject*>& rRefs)
 {
     CachesType::iterator itr = maCaches.find(rName);
     if (itr == maCaches.end())
@@ -2653,6 +2669,9 @@ void ScDPCollection::NameCaches::updateCache(const OUString& rName, const ScRang
 
     ScDPCache& rCache = *itr->second;
     rCache.InitFromDoc(mpDoc, rRange);
+    if (pDimData)
+        pDimData->WriteToCache(rCache);
+
     std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
     rRefs.swap(aRefs);
 }
@@ -2688,7 +2707,9 @@ bool ScDPCollection::DBCaches::hasCache(sal_Int32 nSdbType, const OUString& rDBN
     return itr != maCaches.end();
 }
 
-const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand)
+const ScDPCache* ScDPCollection::DBCaches::getCache(
+    sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
+    const ScDPDimensionSaveData* pDimData)
 {
     DBType aType(nSdbType, rDBName, rCommand);
     CachesType::const_iterator itr = maCaches.find(aType);
@@ -2705,6 +2726,9 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(sal_Int32 nSdbType, const OU
     SAL_WNODEPRECATED_DECLARATIONS_POP
     SvNumberFormatter aFormat(mpDoc->GetServiceManager(), ScGlobal::eLnge);
     pCache->InitFromDataBase(xRowSet, *aFormat.GetNullDate());
+    if (pDimData)
+        pDimData->WriteToCache(*pCache);
+
     ::comphelper::disposeComponent(xRowSet);
     const ScDPCache* p = pCache.get();
     maCaches.insert(aType, pCache);
@@ -2776,7 +2800,8 @@ uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
 }
 
 void ScDPCollection::DBCaches::updateCache(
-    sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand, std::set<ScDPObject*>& rRefs)
+    sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand,
+    const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs)
 {
     DBType aType(nSdbType, rDBName, rCommand);
     CachesType::iterator it = maCaches.find(aType);
@@ -2803,6 +2828,8 @@ void ScDPCollection::DBCaches::updateCache(
         rRefs.clear();
         return;
     }
+    if (pDimData)
+        pDimData->WriteToCache(rCache);
 
     comphelper::disposeComponent(xRowSet);
     std::set<ScDPObject*> aRefs(rCache.GetAllReferences());
@@ -2865,6 +2892,14 @@ public:
 
 sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)
 {
+    if (!pDPObj)
+        return STR_ERR_DATAPILOTSOURCE;
+
+    const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    const ScDPDimensionSaveData* pDimData = NULL;
+    if (pSaveData)
+        pDimData = pSaveData->GetExistingDimensionData();
+
     if (pDPObj->IsSheetData())
     {
         // data source is internal sheet.
@@ -2881,7 +2916,7 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
             // cache by named range
             ScDPCollection::NameCaches& rCaches = GetNameCaches();
             if (rCaches.hasCache(pDesc->GetRangeName()))
-                rCaches.updateCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), rRefs);
+                rCaches.updateCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), pDimData, rRefs);
             else
             {
                 // Not cached yet.  Collect all tables that use this named
@@ -2894,7 +2929,7 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
             // cache by cell range
             ScDPCollection::SheetCaches& rCaches = GetSheetCaches();
             if (rCaches.hasCache(pDesc->GetSourceRange()))
-                rCaches.updateCache(pDesc->GetSourceRange(), rRefs);
+                rCaches.updateCache(pDesc->GetSourceRange(), pDimData, rRefs);
             else
             {
                 // Not cached yet.  Collect all tables that use this range as
@@ -2913,7 +2948,7 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
         ScDPCollection::DBCaches& rCaches = GetDBCaches();
         if (rCaches.hasCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject))
             rCaches.updateCache(
-                pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, rRefs);
+                pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, pDimData, rRefs);
         else
         {
             // Not cached yet.  Collect all tables that use this range as

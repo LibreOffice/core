@@ -44,6 +44,7 @@ namespace com { namespace sun { namespace star { namespace sheet {
 
 class ScDPDimension;
 class ScDPItemData;
+class ScDPDimensionSaveData;
 
 /**
  * This class contains authoritative information on the internal reference
@@ -78,7 +79,7 @@ public:
     const ScQueryParam& GetQueryParam() const;
 
     bool operator== ( const ScSheetSourceDesc& rOther ) const;
-    SC_DLLPUBLIC const ScDPCache* CreateCache() const;
+    SC_DLLPUBLIC const ScDPCache* CreateCache(const ScDPDimensionSaveData* pDimData) const;
 
     /**
      * Check the sanity of the data source range.

@@ -1058,6 +1058,7 @@ rtl::OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem
 void ScDPCache::AppendGroupField()
 {
     maGroupFields.push_back(new GroupItems);
+    fprintf(stdout, "ScDPCache::AppendGroupField:   added; new count = %d\n", maGroupFields.size());
 }
 
 void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo)

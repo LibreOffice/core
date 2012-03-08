@@ -39,6 +39,7 @@
 class ScDPGroupTableData;
 class ScDPGroupDimension;
 class ScDPObject;
+class ScDPCache;
 class SvNumberFormatter;
 
 class ScDPSaveGroupDimension;
@@ -162,6 +163,8 @@ public:
     bool    operator==( const ScDPDimensionSaveData& r ) const;
 
     void    WriteToData( ScDPGroupTableData& rData ) const;
+
+    void WriteToCache(ScDPCache& rCache) const;
 
     rtl::OUString CreateGroupDimName(
         const rtl::OUString& rSourceName, const ScDPObject& rObject, bool bAllowSource,

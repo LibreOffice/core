@@ -39,6 +39,7 @@
 class ScDPCacheTable;
 class ScDocument;
 class ScDPCache;
+class ScDPDimensionSaveData;
 
 struct ScImportSourceDesc
 {
@@ -58,7 +59,7 @@ struct ScImportSourceDesc
                 mpDoc == rOther.mpDoc; }
 
     sal_Int32 GetCommandType() const;
-    const ScDPCache* CreateCache() const;
+    const ScDPCache* CreateCache(const ScDPDimensionSaveData* pDimData) const;
 };
 
 /**

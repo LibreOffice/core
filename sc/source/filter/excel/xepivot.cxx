@@ -538,7 +538,12 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
     if( const ScSheetSourceDesc* pSrcDesc = rDPObj.GetSheetDesc() )
     {
         // get the string collection with original source elements
-        const ScDPCache* pCache = pSrcDesc->CreateCache();
+        const ScDPSaveData* pSaveData = rDPObj.GetSaveData();
+        const ScDPDimensionSaveData* pDimData = NULL;
+        if (pSaveData)
+            pDimData = pSaveData->GetExistingDimensionData();
+
+        const ScDPCache* pCache = pSrcDesc->CreateCache(pDimData);
         if (!pCache)
             return;
 

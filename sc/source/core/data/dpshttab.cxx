@@ -299,7 +299,7 @@ bool ScSheetSourceDesc::operator== (const ScSheetSourceDesc& rOther) const
         maQueryParam  == rOther.maQueryParam;
 }
 
-const ScDPCache* ScSheetSourceDesc::CreateCache() const
+const ScDPCache* ScSheetSourceDesc::CreateCache(const ScDPDimensionSaveData* pDimData) const
 {
     if (!mpDoc)
         return NULL;
@@ -317,11 +317,11 @@ const ScDPCache* ScSheetSourceDesc::CreateCache() const
     {
         // Name-based data source.
         ScDPCollection::NameCaches& rCaches = pDPs->GetNameCaches();
-        return rCaches.getCache(GetRangeName(), GetSourceRange());
+        return rCaches.getCache(GetRangeName(), GetSourceRange(), pDimData);
     }
 
     ScDPCollection::SheetCaches& rCaches = pDPs->GetSheetCaches();
-    return rCaches.getCache(GetSourceRange());
+    return rCaches.getCache(GetSourceRange(), pDimData);
 }
 
 sal_uLong ScSheetSourceDesc::CheckSourceRange() const

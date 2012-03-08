@@ -63,7 +63,7 @@ sal_Int32 ScImportSourceDesc::GetCommandType() const
     return nSdbType;
 }
 
-const ScDPCache* ScImportSourceDesc::CreateCache() const
+const ScDPCache* ScImportSourceDesc::CreateCache(const ScDPDimensionSaveData* pDimData) const
 {
     if (!mpDoc)
         return NULL;
@@ -73,7 +73,7 @@ const ScDPCache* ScImportSourceDesc::CreateCache() const
         return NULL;
 
     ScDPCollection::DBCaches& rCaches = mpDoc->GetDPCollection()->GetDBCaches();
-    return rCaches.getCache(nSdbType, aDBName, aObject);
+    return rCaches.getCache(nSdbType, aDBName, aObject, pDimData);
 }
 
 ScDatabaseDPData::ScDatabaseDPData(

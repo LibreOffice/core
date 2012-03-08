@@ -70,6 +70,7 @@ class ScSheetSourceDesc;
 struct PivotField;
 class ScDPCacheTable;
 class ScDPTableData;
+class ScDPDimensionSaveData;
 
 struct ScDPServiceDesc
 {
@@ -276,14 +277,14 @@ public:
     public:
         SheetCaches(ScDocument* pDoc);
         bool hasCache(const ScRange& rRange) const;
-        const ScDPCache* getCache(const ScRange& rRange);
+        const ScDPCache* getCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
         size_t size() const;
 
         void updateReference(
             UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
 
     private:
-        void updateCache(const ScRange& rRange, std::set<ScDPObject*>& rRefs);
+        void updateCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
     };
 
@@ -299,10 +300,13 @@ public:
     public:
         NameCaches(ScDocument* pDoc);
         bool hasCache(const rtl::OUString& rName) const;
-        const ScDPCache* getCache(const ::rtl::OUString& rName, const ScRange& rRange);
+        const ScDPCache* getCache(
+            const ::rtl::OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
         size_t size() const;
     private:
-        void updateCache(const rtl::OUString& rName, const ScRange& rRange, std::set<ScDPObject*>& rRefs);
+        void updateCache(
+            const rtl::OUString& rName, const ScRange& rRange,
+            const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
     };
 
@@ -335,14 +339,16 @@ public:
     public:
         DBCaches(ScDocument* pDoc);
         bool hasCache(sal_Int32 nSdbType, const rtl::OUString& rDBName, const rtl::OUString& rCommand) const;
-        const ScDPCache* getCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+        const ScDPCache* getCache(
+            sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
+            const ScDPDimensionSaveData* pDimData);
 
     private:
         com::sun::star::uno::Reference<com::sun::star::sdbc::XRowSet> createRowSet(
             sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
 
         void updateCache(sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand,
-                         std::set<ScDPObject*>& rRefs);
+                         const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
     };
 

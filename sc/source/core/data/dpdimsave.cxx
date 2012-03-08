@@ -468,6 +468,10 @@ void ScDPDimensionSaveData::WriteToData( ScDPGroupTableData& rData ) const
         aIt->second.AddToData( rData );
 }
 
+void ScDPDimensionSaveData::WriteToCache(ScDPCache& rCache) const
+{
+}
+
 const ScDPSaveGroupDimension* ScDPDimensionSaveData::GetGroupDimForBase( const rtl::OUString& rBaseDimName ) const
 {
     return const_cast< ScDPDimensionSaveData* >( this )->GetGroupDimAccForBase( rBaseDimName );
