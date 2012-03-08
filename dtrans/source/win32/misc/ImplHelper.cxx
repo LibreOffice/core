@@ -183,8 +183,8 @@ sal_Bool SAL_CALL IsOEMCP( sal_uInt32 codepage )
                               861, 862, 863, 864, 865, 866,
                               869, 874, 932, 936, 949, 950, 1361 };
 
-    for ( sal_Int8 i = 0; i < ( SAL_N_ELEMENTS( arrOEMCP ) ); ++i )
-        if ( (sal_uInt32) arrOEMCP[i] == codepage )
+    for ( size_t i = 0; i < SAL_N_ELEMENTS( arrOEMCP ); ++i )
+        if ( arrOEMCP[i] == codepage )
             return sal_True;
 
     return sal_False;
