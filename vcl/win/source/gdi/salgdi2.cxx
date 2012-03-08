@@ -624,7 +624,7 @@ bool WinSalGraphics::drawAlphaRect( long nX, long nY, long nWidth,
     BLENDFUNCTION aFunc = {
         AC_SRC_OVER,
         0,
-        255 - 255L*nTransparency/100,
+        sal::static_int_cast<sal_uInt8>(255 - 255L*nTransparency/100),
         0
     };
 
