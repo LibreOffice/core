@@ -31,12 +31,11 @@
 #include <boost/unordered_map.hpp>
 #include "tools/toolsdllapi.h"
 
-#include <tools/table.hxx>
-
 #include <tools/unqidx.hxx>
 #include <tools/ref.hxx>
 #include <tools/rtti.hxx>
 #include <tools/stream.hxx>
+#include <map>
 
 #define ERRCODE_IO_NOFACTORY ERRCODE_IO_WRONGFORMAT
 
@@ -150,6 +149,8 @@ SV_IMPL_PERSIST_LIST(ClassName,EntryName)
 
 DECLARE_UNIQUEINDEX( SvPersistUIdx,SvPersistBase *)
 
+typedef std::map<SvPersistBase*, sal_uIntPtr> PersistBaseMap;
+
 //=========================================================================
 class SvStream;
 class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
@@ -191,7 +192,7 @@ class TOOLS_DLLPUBLIC SvPersistStream : public SvStream
 {
     SvClassManager &        rClassMgr;
     SvStream *              pStm;
-    Table                   aPTable; // Pointer und Key gedreht
+    PersistBaseMap          aPTable; // Pointer und Key gedreht
     SvPersistUIdx           aPUIdx;
     sal_uIntPtr                   nStartIdx;
     const SvPersistStream * pRefStm;

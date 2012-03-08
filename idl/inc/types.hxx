@@ -31,6 +31,7 @@
 
 #include <rtl/strbuf.hxx>
 #include <tools/ref.hxx>
+#include <tools/table.hxx>
 #include <basobj.hxx>
 
 struct SvSlotElement;

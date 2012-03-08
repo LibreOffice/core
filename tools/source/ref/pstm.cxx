@@ -315,10 +315,15 @@ void SvPersistStream::FlushData()
 *************************************************************************/
 sal_uIntPtr SvPersistStream::GetIndex( SvPersistBase * pObj ) const
 {
-    sal_uIntPtr nId = (sal_uIntPtr)aPTable.Get( (sal_uIntPtr)pObj );
-    if( !nId && pRefStm )
-        return pRefStm->GetIndex( pObj );
-    return nId;
+    PersistBaseMap::const_iterator it = aPTable.find( pObj );
+    if( it == aPTable.end() )
+    {
+        if ( pRefStm )
+            return pRefStm->GetIndex( pObj );
+        else
+            return 0;
+    }
+    return it->second;
 }
 
 /*************************************************************************
@@ -653,7 +658,7 @@ SvPersistStream& SvPersistStream::WritePointer
         else
         {
             nId = aPUIdx.Insert( pObj );
-            aPTable.Insert( (sal_uIntPtr)pObj, (void *)nId );
+            aPTable[ pObj ] = nId;
             nP |= P_OBJ;
         }
         WriteId( *this, nP, nId, pObj->GetClassId() );
@@ -722,7 +727,7 @@ sal_uInt32 SvPersistStream::ReadObj
                 // unbedingt erst in Tabelle eintragen
                 sal_uIntPtr nNewId = aPUIdx.Insert( rpObj );
                 // um den gleichen Zustand, wie nach dem Speichern herzustellen
-                aPTable.Insert( (sal_uIntPtr)rpObj, (void *)nNewId );
+                aPTable[ rpObj ] = nNewId;
                 DBG_ASSERT( !(nHdr & P_DBGUTIL) || nId == nNewId,
                             "read write id conflict: not the same" );
             }
@@ -835,7 +840,7 @@ SvStream& operator >>
 
             // Die Id eines Objektes wird nie modifiziert
             rThis.aPUIdx.Insert( nId, pEle );
-            rThis.aPTable.Insert( (sal_uIntPtr)pEle, (void *)nId );
+            rThis.aPTable[ pEle ] = nId;
         }
     }
     else
