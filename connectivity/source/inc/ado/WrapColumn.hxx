@@ -42,7 +42,7 @@ namespace connectivity
         {
         public:
             WpADOColumn(_ADOColumn* pInt=NULL)  :   WpOLEBase<_ADOColumn>(pInt){}
-            WpADOColumn(const WpADOColumn& rhs){operator=(rhs);}
+            WpADOColumn(const WpADOColumn& rhs) : WpOLEBase<_ADOColumn>(rhs) {}
 
             void Create();
 

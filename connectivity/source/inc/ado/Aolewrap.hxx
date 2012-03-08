@@ -103,8 +103,9 @@ namespace connectivity
             }
 
             WpOLEBase(const WpOLEBase<T>& aWrapper)
+                : WpBase(aWrapper)
+                , pInterface(aWrapper.pInterface)
             {
-                operator=(aWrapper);
             }
 
             virtual ~WpOLEBase()
@@ -145,7 +146,7 @@ namespace connectivity
             // Ctors, operator=
             // They only call the superclass
             WpOLECollection(Ts* pInt=NULL):WpOLEBase<Ts>(pInt){}
-            WpOLECollection(const WpOLECollection& rhs){operator=(rhs);}
+            WpOLECollection(const WpOLECollection& rhs) : WpOLEBase<Ts>(rhs) {}
             inline WpOLECollection& operator=(const WpOLECollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
 
@@ -220,7 +221,7 @@ namespace connectivity
             // They only call the superclass
             using WpOLEBase<Ts>::pInterface;
             WpOLEAppendCollection(Ts* pInt=NULL):WpOLECollection<Ts,T,WrapT>(pInt){}
-            WpOLEAppendCollection(const WpOLEAppendCollection& rhs){ operator=(rhs); }
+            WpOLEAppendCollection(const WpOLEAppendCollection& rhs) : WpOLEAppendCollection<Ts, T, WrapT>(rhs) {}
             inline WpOLEAppendCollection& operator=(const WpOLEAppendCollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
             //////////////////////////////////////////////////////////////////////

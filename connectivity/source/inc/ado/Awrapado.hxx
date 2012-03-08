@@ -63,7 +63,7 @@ namespace connectivity
 
             WpADOConnection(ADOConnection* pInt)    :   WpOLEBase<ADOConnection>(pInt){}
 
-            WpADOConnection(const WpADOConnection& rhs){operator=(rhs);}
+            WpADOConnection(const WpADOConnection& rhs) : WpOLEBase<ADOConnection>(rhs) {}
 
              WpADOConnection& operator=(const WpADOConnection& rhs)
                 {WpOLEBase<ADOConnection>::operator=(rhs); return *this;}
@@ -156,7 +156,7 @@ namespace connectivity
             // They only call the superclass
             WpADOCommand(ADOCommand* pInt)  :   WpOLEBase<ADOCommand>(pInt){}
 
-            WpADOCommand(const WpADOCommand& rhs){operator=(rhs);}
+            WpADOCommand(const WpADOCommand& rhs) : WpOLEBase<ADOCommand>(rhs) {}
 
              WpADOCommand& operator=(const WpADOCommand& rhs)
             {
@@ -195,7 +195,7 @@ namespace connectivity
             // They only call the superclass
             WpADOError(ADOError* pInt):WpOLEBase<ADOError>(pInt){}
 
-            WpADOError(const WpADOError& rhs){operator=(rhs);}
+            WpADOError(const WpADOError& rhs) : WpOLEBase<ADOError>(rhs) {}
 
              WpADOError& operator=(const WpADOError& rhs)
                 {WpOLEBase<ADOError>::operator=(rhs); return *this;}
@@ -220,7 +220,7 @@ namespace connectivity
             // Ctors, operator=
             // They only call the superclass
             WpADOField(ADOField* pInt=NULL):WpOLEBase<ADOField>(pInt){}
-            WpADOField(const WpADOField& rhs){operator=(rhs);}
+            WpADOField(const WpADOField& rhs) : WpOLEBase<ADOField>(rhs) {}
 
              WpADOField& operator=(const WpADOField& rhs)
                 {WpOLEBase<ADOField>::operator=(rhs); return *this;}
@@ -268,7 +268,7 @@ namespace connectivity
             // Ctors, operator=
             // They only call the superclass
             WpADOProperty(ADOProperty* pInt=NULL):WpOLEBase<ADOProperty>(pInt){}
-            WpADOProperty(const WpADOProperty& rhs){operator=(rhs);}
+            WpADOProperty(const WpADOProperty& rhs) : WpOLEBase<ADOProperty>(rhs) {}
              WpADOProperty& operator=(const WpADOProperty& rhs)
                 {WpOLEBase<ADOProperty>::operator=(rhs); return *this;}
             //////////////////////////////////////////////////////////////////////
@@ -290,7 +290,7 @@ namespace connectivity
             // Ctors, operator=
             // They only call the superclass
             WpADORecordset(ADORecordset* pInt=NULL):WpOLEBase<ADORecordset>(pInt){}
-            WpADORecordset(const WpADORecordset& rhs){operator=(rhs);}
+            WpADORecordset(const WpADORecordset& rhs) : WpOLEBase<ADORecordset>() {operator=(rhs);}
              WpADORecordset& operator=(const WpADORecordset& rhs)
             {
                 WpOLEBase<ADORecordset>::operator=(rhs);

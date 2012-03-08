@@ -38,7 +38,7 @@ namespace connectivity
         {
         public:
             WpADOCatalog(_ADOCatalog* pInt = NULL)  :   WpOLEBase<_ADOCatalog>(pInt){}
-            WpADOCatalog(const WpADOCatalog& rhs){operator=(rhs);}
+            WpADOCatalog(const WpADOCatalog& rhs) : WpOLEBase<_ADOCatalog>(rhs) {}
 
             inline WpADOCatalog& operator=(const WpADOCatalog& rhs)
                 {WpOLEBase<_ADOCatalog>::operator=(rhs); return *this;}
