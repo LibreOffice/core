@@ -1526,6 +1526,7 @@ void WinSalPrinter::markInvalid()
 // since SEH does not mix with standard exception handling's cleanup
 static int lcl_StartDocW( HDC hDC, DOCINFOW* pInfo, WinSalPrinter* pPrt )
 {
+    (void) pPrt;
     int nRet = 0;
     CATCH_DRIVER_EX_BEGIN;
     nRet = ::StartDocW( hDC, pInfo );
