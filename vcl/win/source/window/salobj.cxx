@@ -87,11 +87,11 @@ WinSalFrame* ImplFindSalObjectFrame( HWND hWnd )
     if ( pObject )
     {
         // Dazugehoerenden Frame suchen
-        HWND hWnd = ::GetParent( pObject->mhWnd );
+        HWND hWnd2 = ::GetParent( pObject->mhWnd );
         pFrame = GetSalData()->mpFirstFrame;
         while ( pFrame )
         {
-            if ( pFrame->mhWnd == hWnd )
+            if ( pFrame->mhWnd == hWnd2 )
                 break;
 
             pFrame = pFrame->mpNextFrame;
