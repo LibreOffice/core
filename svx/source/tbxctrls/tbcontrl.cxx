@@ -2261,6 +2261,11 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
             addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharBackgroundExt" )));
             nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
             break;
+
+        case SID_FRAME_LINECOLOR:
+            addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FrameLineColor" )));
+            nMode = 0;
+            break;
     }
 
     pBtnUpdater = new ::svx::ToolboxButtonColorUpdater( nSlotId, nId, &GetToolBox(), nMode );
@@ -2302,6 +2307,10 @@ SfxPopupWindow* SvxColorExtToolBoxControl::CreatePopupWindow()
         case SID_BACKGROUND_COLOR :
             pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_BACKGROUND ) );
             break;
+
+        case SID_FRAME_LINECOLOR:
+            pColorWin->SetText( SVX_RESSTR( RID_SVXSTR_FRAME_COLOR ) );
+            break;
     }
 
     pColorWin->StartPopupMode( &GetToolBox(),
@@ -2338,6 +2347,22 @@ void SvxColorExtToolBoxControl::StateChanged(
                     mLastColor = pItem->GetValue();
                 }
                 break;
+
+            case SID_FRAME_LINECOLOR :
+                ToolBox& rTbx = GetToolBox();
+                rTbx.EnableItem( nSID, SFX_ITEM_DISABLED != eState );
+                rTbx.SetItemState( nSID, ( SFX_ITEM_DONTCARE == eState ) ? STATE_DONTKNOW : STATE_NOCHECK );
+
+                if ( SFX_ITEM_DONTCARE != eState )
+                {
+                    pItem = PTR_CAST( SvxColorItem, pState );
+                    if ( pItem )
+                    {
+                        pBtnUpdater->Update( pItem->GetValue());
+                        mLastColor = pItem->GetValue();
+                    }
+                }
+                break;
         }
     }
 }
@@ -2372,6 +2397,11 @@ void SvxColorExtToolBoxControl::Select( sal_Bool )
             bNoArgs     = sal_True;
             aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharBackgroundExt" ));
             aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "CharBackgroundExt" ));
+            break;
+
+        case SID_FRAME_LINECOLOR  :
+            aCommand    = OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FrameLineColor" ));
+            aParamName  = OUString( RTL_CONSTASCII_USTRINGPARAM( "FrameLineColor" ));
             break;
     }
 

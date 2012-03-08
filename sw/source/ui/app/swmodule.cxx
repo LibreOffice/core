@@ -355,7 +355,7 @@ void SwDLL::RegisterControls()
     SvxColorExtToolBoxControl::RegisterControl( SID_BACKGROUND_COLOR, pMod );
     SvxFrameToolBoxControl::RegisterControl(SID_ATTR_BORDER, pMod );
     SvxFrameLineStyleToolBoxControl::RegisterControl(SID_FRAME_LINESTYLE, pMod );
-    SvxFrameLineColorToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
+    SvxColorExtToolBoxControl::RegisterControl(SID_FRAME_LINECOLOR, pMod );
 
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME_INTERACT, pMod );
     SvxColumnsToolBoxControl::RegisterControl(FN_INSERT_FRAME, pMod );
