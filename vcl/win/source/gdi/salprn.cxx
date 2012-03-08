@@ -1705,7 +1705,7 @@ sal_Bool WinSalPrinter::EndJob()
         sal_uLong nAcquire = pSalData->mpFirstInstance->ReleaseYieldMutex();
         CATCH_DRIVER_EX_BEGIN;
         if( ::EndDoc( hDC ) <= 0 )
-            DWORD err = GetLastError();
+            GetLastError();
         CATCH_DRIVER_EX_END( "exception in EndDoc", this );
 
         pSalData->mpFirstInstance->AcquireYieldMutex( nAcquire );
