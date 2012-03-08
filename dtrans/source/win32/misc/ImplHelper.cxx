@@ -407,17 +407,17 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
 
             if ( nMatch == FORMATETC_EXACT_MATCH || nMatch == FORMATETC_PARTIAL_MATCH )
             {
-            if ( pFetcLhs->tymed == pFetcRhs->tymed )
-                // same medium flags; equal
-                ;
-            else if ( ( pFetcLhs->tymed & ~pFetcRhs->tymed ) != 0 )
-            {
-                // left not subset of medium flags of right; not equal
-                nMatch = FORMATETC_NO_MATCH;
-            }
-            else
-                // left subset of right
-                nMatch = FORMATETC_PARTIAL_MATCH;
+                if ( pFetcLhs->tymed == pFetcRhs->tymed )
+                    // same medium flags; equal
+                    ;
+                else if ( ( pFetcLhs->tymed & ~pFetcRhs->tymed ) != 0 )
+                {
+                    // left not subset of medium flags of right; not equal
+                    nMatch = FORMATETC_NO_MATCH;
+                }
+                else
+                    // left subset of right
+                    nMatch = FORMATETC_PARTIAL_MATCH;
             }
         }
     }
