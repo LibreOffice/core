@@ -50,21 +50,8 @@ struct SchXMLCell
     SchXMLCellType eType;
     rtl::OUString aRangeId;
 
-    SchXMLCell() : aComplexString(), fValue( 0.0 ), eType( SCH_CELL_TYPE_UNKNOWN )
+    SchXMLCell(): fValue( 0.0 ), eType( SCH_CELL_TYPE_UNKNOWN )
     {}
-
-    SchXMLCell( const SchXMLCell& rOther )
-        : aString( rOther.aString )
-        , aComplexString( rOther.aComplexString )
-        , fValue( rOther.fValue )
-        , eType( rOther.eType )
-        , aRangeId( rOther.aRangeId )
-    {}
-
-    ~SchXMLCell()
-    {
-
-    }
 };
 
 struct SchXMLTable
