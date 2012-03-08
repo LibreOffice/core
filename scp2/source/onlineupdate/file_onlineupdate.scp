@@ -29,9 +29,9 @@
 
 File gid_File_Lib_Updchk
     BIN_FILE_BODY;
-	Styles = (PACKED);
-	Dir = gid_Brand_Dir_Program;
-	Name = "updchk.uno.dll";
+    Styles = (PACKED);
+    Dir = gid_Brand_Dir_Program;
+    Name = SPECIAL_COMPONENT_LIB_NAME(updchk.uno);
     ComponentCondition="ISCHECKFORPRODUCTUPDATES=1";
 End 
 
