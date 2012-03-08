@@ -67,8 +67,8 @@ list_view_builder::list_view_builder(
     HWND hwnd_list_view,
     const std::wstring& column1_title,
     const std::wstring& column2_title) :
-    hwnd_list_view_(hwnd_list_view),
     row_index_(-1),
+    hwnd_list_view_(hwnd_list_view),
     column1_title_(column1_title),
     column2_title_(column2_title)
 {
