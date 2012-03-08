@@ -208,22 +208,23 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, con
     String aOldName (aNames[ nIdx ]->aPackageName);
     aShort = rNewShort;
     GeneratePackageName( aShort, aPackageName );
-    if (IsOnlyTextBlock ( nIdx ) )
-    {
-        String sExt( String::CreateFromAscii( ".xml" ));
-        String aOldStreamName( aOldName ); aOldStreamName += sExt;
-        String aNewStreamName( aPackageName ); aNewStreamName += sExt;
-
-        xRoot = xBlkRoot->openStorageElement( aOldName, embed::ElementModes::READWRITE );
-        xRoot->renameElement ( aOldStreamName, aNewStreamName );
-        uno::Reference < embed::XTransactedObject > xTrans( xRoot, uno::UNO_QUERY );
-        if ( xTrans.is() )
-            xTrans->commit();
-        xRoot = 0;
-    }
 
     if(aOldName != aPackageName)
     {
+        if (IsOnlyTextBlock ( nIdx ) )
+        {
+            String sExt( String::CreateFromAscii( ".xml" ));
+            String aOldStreamName( aOldName ); aOldStreamName += sExt;
+            String aNewStreamName( aPackageName ); aNewStreamName += sExt;
+
+            xRoot = xBlkRoot->openStorageElement( aOldName, embed::ElementModes::READWRITE );
+            xRoot->renameElement ( aOldStreamName, aNewStreamName );
+            uno::Reference < embed::XTransactedObject > xTrans( xRoot, uno::UNO_QUERY );
+            if ( xTrans.is() )
+                xTrans->commit();
+            xRoot = 0;
+        }
+
         try
         {
             xBlkRoot->renameElement ( aOldName, aPackageName );
