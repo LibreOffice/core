@@ -314,8 +314,7 @@ sal_uLong SwXMLTextBlocks::GetBlockText( const String& rShort, String& rText )
 {
     sal_uLong n = 0;
     sal_Bool bTextOnly = sal_True;
-    String aFolderName;
-    GeneratePackageName ( rShort, aFolderName );
+    String aFolderName = GeneratePackageName ( rShort );
     String aStreamName = aFolderName + (OUString) String::CreateFromAscii(".xml");
     rText.Erase();
 

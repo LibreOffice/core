@@ -29,9 +29,10 @@
 
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/XTransactedObject.hpp>
-#include <tools/urlobj.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 #include <sot/stg.hxx>
 #include <sfx2/docfile.hxx>
+#include <tools/urlobj.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <unotools/ucbstreamhelper.hxx>
 
@@ -156,7 +157,7 @@ void SwXMLTextBlocks::AddName( const String& rShort, const String& rLong, sal_Bo
     if( nIdx != (sal_uInt16) -1 )
         aNames.DeleteAndDestroy( nIdx );
 
-    GeneratePackageName( rShort, aPackageName );
+    aPackageName = GeneratePackageName( rShort );
     pNew = new SwBlockName( rShort, rLong, aPackageName );
 
     pNew->bIsOnlyTxtFlagInit = sal_True;
@@ -205,17 +206,17 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, con
     OSL_ENSURE( xBlkRoot.is(), "No storage set" );
     if(!xBlkRoot.is())
         return 0;
-    String aOldName (aNames[ nIdx ]->aPackageName);
+    rtl::OUString aOldName (aNames[ nIdx ]->aPackageName);
     aShort = rNewShort;
-    GeneratePackageName( aShort, aPackageName );
+    aPackageName = GeneratePackageName( aShort );
 
     if(aOldName != aPackageName)
     {
         if (IsOnlyTextBlock ( nIdx ) )
         {
-            String sExt( String::CreateFromAscii( ".xml" ));
-            String aOldStreamName( aOldName ); aOldStreamName += sExt;
-            String aNewStreamName( aPackageName ); aNewStreamName += sExt;
+            rtl::OUString sExt(".xml");
+            rtl::OUString aOldStreamName( aOldName ); aOldStreamName += sExt;
+            rtl::OUString aNewStreamName( aPackageName ); aNewStreamName += sExt;
 
             xRoot = xBlkRoot->openStorageElement( aOldName, embed::ElementModes::READWRITE );
             try
@@ -224,6 +225,7 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, con
             }
             catch(const container::ElementExistException&)
             {
+                SAL_WARN("sw", "Couldn't rename " << aOldStreamName << " to " << aNewStreamName);
             }
             uno::Reference < embed::XTransactedObject > xTrans( xRoot, uno::UNO_QUERY );
             if ( xTrans.is() )
@@ -237,6 +239,7 @@ sal_uLong SwXMLTextBlocks::Rename( sal_uInt16 nIdx, const String& rNewShort, con
         }
         catch(const container::ElementExistException&)
         {
+            SAL_WARN("sw", "Couldn't rename " << aOldName << " to " << aPackageName);
         }
     }
     uno::Reference < embed::XTransactedObject > xTrans( xBlkRoot, uno::UNO_QUERY );
@@ -325,7 +328,7 @@ sal_uLong SwXMLTextBlocks::BeginPutDoc( const String& rShort, const String& rLon
     // In der Basisklasse ablegen!
     aShort = rShort;
     aLong = rLong;
-    GeneratePackageName( rShort, aPackageName );
+    aPackageName = GeneratePackageName( rShort );
     SetIsTextOnly( rShort, sal_False);
     return StartPutBlock (rShort, aPackageName);
 }
@@ -559,18 +562,19 @@ short SwXMLTextBlocks::GetFileType ( void ) const
     return SWBLK_XML;
 }
 
-void SwXMLTextBlocks::GeneratePackageName ( const String& rShort, String& rPackageName )
+rtl::OUString SwXMLTextBlocks::GeneratePackageName ( const String& rShort )
 {
-    rPackageName = rShort;
+    String aRet = rShort;
     xub_StrLen nPos = 0;
     sal_Unicode pDelims[] = { '!', '/', ':', '.', '\\', 0 };
-    rtl::OString sByte(rtl::OUStringToOString(rPackageName, RTL_TEXTENCODING_UTF7));
-    rPackageName = String (sByte, RTL_TEXTENCODING_ASCII_US);
-    while( STRING_NOTFOUND != ( nPos = rPackageName.SearchChar( pDelims, nPos )))
+    rtl::OString sByte(rtl::OUStringToOString(aRet, RTL_TEXTENCODING_UTF7));
+    aRet = String (sByte, RTL_TEXTENCODING_ASCII_US);
+    while( STRING_NOTFOUND != ( nPos = aRet.SearchChar( pDelims, nPos )))
     {
-        rPackageName.SetChar( nPos, '_' );
+        aRet.SetChar( nPos, '_' );
         ++nPos;
     }
+    return aRet;
 }
 
 sal_uLong SwXMLTextBlocks::PutText( const String& rShort, const String& rName,
@@ -581,7 +585,7 @@ sal_uLong SwXMLTextBlocks::PutText( const String& rShort, const String& rName,
     aLong = rName;
     aCur = rText;
     SetIsTextOnly( aShort, sal_True );
-    GeneratePackageName( rShort, aPackageName );
+    aPackageName = GeneratePackageName( rShort );
     ClearDoc();
     nRes = PutBlockText( rShort, rName, rText, aPackageName );
     return nRes;

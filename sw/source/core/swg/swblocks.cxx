@@ -193,11 +193,11 @@ const String& SwImpBlocks::GetLongName( sal_uInt16 n ) const
     return aEmptyStr;
 }
 
-const String& SwImpBlocks::GetPackageName( sal_uInt16 n ) const
+rtl::OUString SwImpBlocks::GetPackageName( sal_uInt16 n ) const
 {
     if( n < aNames.Count() )
         return aNames[ n ]->aPackageName;
-    return aEmptyStr;
+    return rtl::OUString();
 }
 
 void SwImpBlocks::AddName( const String& rShort, const String& rLong,
