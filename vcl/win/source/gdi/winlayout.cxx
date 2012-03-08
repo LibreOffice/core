@@ -542,9 +542,9 @@ bool SimpleWinLayout::LayoutText( ImplLayoutArgs& rArgs )
             mpCharWidths[ i ] = 0;
         for( i = 0; i < mnGlyphCount; ++i )
         {
-            int j = mpGlyphs2Chars[ i ] - rArgs.mnMinCharPos;
-            if( j >= 0 )
-                mpCharWidths[ j ] += mpGlyphAdvances[ i ];
+            int k = mpGlyphs2Chars[ i ] - rArgs.mnMinCharPos;
+            if( k >= 0 )
+                mpCharWidths[ k ] += mpGlyphAdvances[ i ];
         }
     }
 
@@ -1448,8 +1448,8 @@ bool UniscribeLayout::LayoutText( ImplLayoutArgs& rArgs )
         if( (rArgs.mnEndCharPos <= rVisualItem.mnMinCharPos)
          || (rArgs.mnMinCharPos >= rVisualItem.mnEndCharPos) )
         {
-            for( int i = rVisualItem.mnMinCharPos; i < rVisualItem.mnEndCharPos; ++i )
-                mpLogClusters[i] = sal::static_int_cast<WORD>(~0U);
+            for( int j = rVisualItem.mnMinCharPos; j < rVisualItem.mnEndCharPos; ++j )
+                mpLogClusters[j] = sal::static_int_cast<WORD>(~0U);
             continue;
         }
 
