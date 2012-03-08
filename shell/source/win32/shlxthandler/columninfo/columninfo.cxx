@@ -36,6 +36,10 @@
 #include <sal/macros.h>
 #include <malloc.h>
 
+#if defined GCC
+#pragma GCC diagnostic warning "-Wmissing-braces"
+#endif
+
 //----------------------------
 
 namespace /* private */
