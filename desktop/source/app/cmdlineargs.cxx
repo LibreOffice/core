@@ -306,10 +306,16 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     }
 #if defined UNX
                     else
+                    // because it's impossible to filter these options that
+                    // are handled in the soffice shell script with the
+                    // primitive tools that /bin/sh offers, ignore them here
+                    if (!oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("backtrace")) &&
+                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("strace")) &&
+                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("valgrind")))
                     {
-                        printf("Unknown option %s\n",
+                        fprintf(stderr, "Unknown option %s\n",
                             rtl::OUStringToOString(aArg, osl_getThreadTextEncoding()).getStr());
-                        printf("Run 'soffice --help' to see a full list of available command line options.\n");
+                        fprintf(stderr, "Run 'soffice --help' to see a full list of available command line options.\n");
                         SetBoolParam_Impl( CMD_BOOLPARAM_UNKNOWN, sal_True );
                     }
 #endif
