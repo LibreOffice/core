@@ -1701,14 +1701,13 @@ sal_Bool WinSalPrinter::EndJob()
         // it should be safe to release the yield mutex over the EndDoc
         // call, however the real solution is supposed to be the threading
         // framework yet to come.
-        SalData* pSalData = GetSalData();
-        sal_uLong nAcquire = pSalData->mpFirstInstance->ReleaseYieldMutex();
+        volatile sal_uLong nAcquire = GetSalData()->mpFirstInstance->ReleaseYieldMutex();
         CATCH_DRIVER_EX_BEGIN;
         if( ::EndDoc( hDC ) <= 0 )
             GetLastError();
         CATCH_DRIVER_EX_END( "exception in EndDoc", this );
 
-        pSalData->mpFirstInstance->AcquireYieldMutex( nAcquire );
+        GetSalData()->mpFirstInstance->AcquireYieldMutex( nAcquire );
         DeleteDC( hDC );
         mhDC = 0;
     }
