@@ -49,112 +49,106 @@ class ImplCFieldFloatWin;
 
 /*************************************************************************
 
-Beschreibung
+Description
 ============
 
 class Calendar
 
-Diese Klasse erlaubt die Auswahl eines Datum. Der Datumsbereich der
-angezeigt wird, ist der, der durch die Klasse Date vorgegeben ist.
-Es werden soviele Monate angezeigt, wie die Ausgabeflaeche des
-Controls vorgibt. Der Anwender kann zwischen den Monaten ueber ein
-ContextMenu (Bei Click auf den Monatstitel) oder durch 2 ScrollButtons
-zwischen den Monaten wechseln.
+This class allows for the selection of a date. The displayed date range is
+the one specified by the Date class. We display as many months as we have
+space in the control. The user can switch between months using a ContextMenu
+(clicking on the month's name) or via two ScrollButtons in-between the months.
 
 --------------------------------------------------------------------------
 
 WinBits
 
-WB_BORDER                   Um das Fenster wird ein Border gezeichnet.
-WB_TABSTOP                  Tastatursteuerung ist moeglich. Der Focus wird
-                            sich geholt, wenn mit der Maus in das
-                            Control geklickt wird.
-WB_QUICKHELPSHOWSDATEINFO   DateInfo auch bei QuickInfo als BalloonHelp zeigen
-WB_BOLDTEXT                 Formatiert wird nach fetten Texten und
-                            DIB_BOLD wird bei AddDateInfo() ausgewertet
-WB_FRAMEINFO                Formatiert wird so, das Frame-Info angezeigt
-                            werden kann und die FrameColor bei AddDateInfo()
-                            ausgewertet wird
-WB_RANGESELECT              Es koennen mehrere Tage selektiert werden, die
-                            jedoch alle zusammenhaengend sein muessen
-WB_MULTISELECT              Es koennen mehrere Tage selektiert werden
-WB_WEEKNUMBER               Es werden die Wochentage mit angezeigt
+WB_BORDER                   We draw a border around the window.
+WB_TABSTOP                  Keyboard control is possible. We get the focus, when
+                            the user clicks in the Control.
+WB_QUICKHELPSHOWSDATEINFO   Show DateInfo as BallonHelp even if QuickInfo is enabled
+WB_BOLDTEXT                 We format by bold texts and DIB_BOLD is evaluated by
+                            AddDateInfo()
+WB_FRAMEINFO                We format in a way, so that FrameInfo can be displayed
+                            and the FrameColor is evaluated by AddDateInfo()
+WB_RANGESELECT              The user can select multiple days, which need to be
+                            consecutive
+WB_MULTISELECT              The user can select multiple days
+WB_WEEKNUMBER               We also display the weekdays
 
 --------------------------------------------------------------------------
 
-Mit SetCurDate() / GetCurDate() wird das ausgewaehlte Datum gesetzt und
-abgefragt. Wenn der Anwnder ein Datum selektiert hat, wird Select()
-gerufen. Bei einem Doppelklick auf ein Datum wird DoubleClick() gerufen.
+We set and get the selected date by SetCurDate()/GetCurDate().
+If the user selects a date Select() is called. If the user double clicks
+DoubleClick() is called.
 
 --------------------------------------------------------------------------
 
-Mit CalcWindowSizePixel() kann die Groesse des Fensters in Pixel fuer
-die Darstellung einer bestimmte Anzahl von Monaten berechnet werden.
+CalcWindowSizePixel() calculates the window size in pixel that is needed
+to display a certain number of months.
 
 --------------------------------------------------------------------------
 
-Mit SetSaturdayColor() kann eine spezielle Farbe fuer Sonnabende gesetzt
-werden und mit SetSundayColor() eine fuer Sonntage. Mit AddDateInfo()
-koennen Tage speziell gekennzeichnet werden. Dabei kann man einem
-einzelnen Datum eine andere Farbe geben (zum Beispiel fuer Feiertage)
-oder diese Umranden (zum Beispiel fuer Termine). Wenn beim Datum
-kein Jahr angegeben wird, wird der Tag in jedem Jahr benutzt. Mit
-AddDateInfo() kann auch jedem Datum ein Text mitgegeben werden, der
-dann angezeigt wird, wenn Balloon-Hilfe an ist. Um nicht alle Jahre
-mit entsprechenden Daten zu versorgen, wird der RequestDateInfo()-
-Handler gerufen, wenn ein neues Jahr angezeigt wird. Es kann dann
-im Handler mit GetRequestYear() das Jahr abgefragt werden.
+SetSaturdayColor() and SetSundayColor() set a special color for Saturdays
+and Sundays.
+AddDateInfo() marks special days. With that we can set e.g. public holidays
+to another color or encircle them (for e.g. appointments).
+If we do not supply a year in the date, the day is used in EVERY year.
+
+AddDateInfo() can also add text for every date, which is displayed if the
+BalloonHelp is enabled.
+In order to not have to supply all years with the relevant data, we call
+the RequestDateInfo() handler if a new year is displayed. We can then query
+the year in the handler with GetRequestYear().
 
 --------------------------------------------------------------------------
 
-Um ein ContextMenu zu einem Datum anzuzeigen, muss man den Command-Handler
-ueberlagern. Mit GetDate() kann zur Mouse-Position das Datum ermittelt
-werden. Bei Tastaturausloesung sollte das aktuelle Datum genommen werden.
-Wenn ein ContextMenu angezeigt wird, darf der Handler der Basisklasse nicht
-gerufen werden.
+In order to display a ContextMenu for a date, we need to override the
+Command handler. GetDate() can infer the date from the mouse's position.
+If we use the keyboard, the current date should be use.
+
+If a ContextMenu is displayed, the baseclass' handler must not be called.
 
 --------------------------------------------------------------------------
 
-Bei Mehrfachselektion WB_RANGESELECT oder WB_MULTISELECT kann mit
-SelectDate()/SelectDateRange() Datumsbereiche selektiert/deselektiert
-werden. SelectDateRange() gilt inkl. EndDatum. Mit SetNoSelection() kann
-alles deselektiert werden. SetCurDate() selektiert bei Mehrfachselektion
-jedoch nicht das Datum mit, sondern gibt nur das Focus-Rechteck vor.
+For multiple selection (WB_RANGESELECT or WB_MULTISELECT) SelectDate(),
+SelectDateRange() can select date ranges. SelectDateRange() selects
+including the end date.
+SetNoSelection() deselects everything.
+SetCurDate() does not select the current date, but only defines the focus
+rectangle.
+GetSelectDateCount()/GetSelectDate() query the selected range.
+IsDateSelected() queries for the status of a date.
 
-Den selektierten Bereich kann man mit GetSelectDateCount()/GetSelectDate()
-abgefragt werden oder der Status von einem Datum kann mit IsDateSelected()
-abgefragt werden.
+The SelectionChanging() handler is being called while a user selects a
+date. In it, we can change the selected range. E.g. if we want to limit
+or extend the selected range. The selected range is realised via SelectDate()
+and SelectDateRange() and queried with GetSelectDateCount()/GetSelectDate().
 
-Waehrend der Anwender am selektieren ist, wird der SelectionChanging()-
-Handler gerufen. In diesem kann der selektierte Bereich angepasst werden,
-wenn man beispielsweise den Bereich eingrenzen oder erweitern will. Der
-Bereich wird mit SelectDate()/SelectDateRange() umgesetzt und mit
-GetSelectDateCount()/GetSelectDate() abgefragt. Wenn man wissen moechte,
-in welche Richtung selektiert wird, kann dies ueber IsSelectLeft()
-abgefragt werden. sal_True bedeutet eine Selektion nach links oder oben,
-sal_False eine Selektion nach rechts oder unten.
+IsSelectLeft() returns the direction of the selection:
+sal_True is a selection to the left or up
+sal_False is a selection to the right or down
 
 --------------------------------------------------------------------------
 
-Wenn sich der Date-Range-Bereich anpasst und man dort die Selektion
-uebernehmen will, sollte dies nur gemacht werden, wenn
-IsScrollDateRangeChanged() sal_True zurueckliefert. Denn diese Methode liefert
-sal_True zurueck, wenn der Bereich durch Betaetigung von den Scroll-Buttons
-ausgeloest wurde. Bei sal_False wurde dies durch Resize(), Methoden-Aufrufen
-oder durch Beendigung einer Selektion ausgeloest.
+If the DateRange area changes and we want to take over the selection, we
+should only do this is if IsScrollDateRangeChanged() retruns sal_True.
+This method returns sal_True if the area change was triggered by using the
+ScrollButtons and sal_False if it was triggered by Resize(), other method
+calls or by ending a selection.
 
 *************************************************************************/
 
 // ------------------
-// - Calendar-Types -
+// - Calendar types -
 // ------------------
 
 #define WB_QUICKHELPSHOWSDATEINFO   ((WinBits)0x00004000)
 #define WB_BOLDTEXT                 ((WinBits)0x00008000)
 #define WB_FRAMEINFO                ((WinBits)0x00010000)
 #define WB_WEEKNUMBER               ((WinBits)0x00020000)
-// Muss mit den WinBits beim TabBar uebereinstimmen oder mal
-// nach \vcl\inc\wintypes.hxx verlagert werden
+// Needs to in agreement with the WinBits in the TabBar or
+// we move it to \vcl\inc\wintypes.hxx
 #ifndef WB_RANGESELECT
 #define WB_RANGESELECT              ((WinBits)0x00200000)
 #endif
@@ -374,43 +368,39 @@ inline const Color& Calendar::GetSundayColor() const
 
 /*************************************************************************
 
-Beschreibung
+Description
 ============
 
 class CalendarField
 
-Bei dieser Klasse handelt es sich um ein DateField, wo ueber einen
-DropDown-Button ueber das Calendar-Control ein Datum ausgewaehlt werden
-kann.
+This class is a DateField with which one can select a date via a DropDownButton
+and the CalendarControl.
 
 --------------------------------------------------------------------------
 
 WinBits
 
-Siehe DateField
+See DateField
 
-Die Vorgaben fuer das CalendarControl koennen ueber SetCalendarStyle()
-gesetzt werden.
-
---------------------------------------------------------------------------
-
-Mit EnableToday()/EnableNone() kann ein Today-Button und ein None-Button
-enabled werden.
+The preferences for the CalendarControl can be set via SetCalendarStyle().
 
 --------------------------------------------------------------------------
 
-Wenn mit SetCalendarStyle() WB_RANGESELECT gesetzt wird, koennen im
-Calendar auch mehrere Tage selektiert werden. Da immer nur das Start-Datum
-in das Feld uebernommen wird, sollte dann im Select-Handler mit
-GetCalendar() der Calendar abgefragt werden und an dem mit
-GetSelectDateCount()/GetSelectDate() der selektierte Bereich abgefragt
-werden, um beispielsweise diese dann in ein weiteres Feld zu uebernehmen.
+With EnableToday()/EnableNone() we can enable a TodayButton and a NoneButton.
 
 --------------------------------------------------------------------------
 
-Wenn ein abgeleiteter Calendar verwendet werden soll, kann am
-CalendarField die Methode CreateCalendar() ueberlagert werden und
-dort ein eigener Calendar erzeugt werden.
+If we set WB_RANGESELECT with SetCalendarStyle(), we can select multiple days
+in the Calendar.
+
+Because we only take over the start date into the field, we should query
+with GetCalendar() in the SelectHandler and with GetSelectDateCount()/GetSelectDate()
+the selected range. We then can e.g. take over that value to another field.
+
+--------------------------------------------------------------------------
+
+If a derived Calendar should be used, we can override the CreateCalendar()
+method in CalendarField and create an own calendar there ourselves.
 
 *************************************************************************/
 
