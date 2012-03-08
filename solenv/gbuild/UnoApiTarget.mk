@@ -56,7 +56,7 @@ endef
 define gb_UnoApiTarget_UnoApiTarget
 $$(eval $$(call gb_Module_register_target,$(call gb_UnoApiOutTarget_get_target,$(1)),$(call gb_UnoApiOutTarget_get_clean_target,$(1))))
 $(call gb_UnoApiOutTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1)) \
-	| $(dir $(call gb_UnoApiOutTarget_get_target,$(1)))
+	| $(dir $(call gb_UnoApiOutTarget_get_target,$(1))).dir
 $(call gb_UnoApiOutTarget_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
 $(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_DEPS :=
@@ -74,7 +74,7 @@ define gb_UnoApiTarget__add_idlfile
 $(call gb_UnoApiPartTarget_get_target,$(2)/idl.done) : \
 	$(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd)
 $(call gb_UnoApiPartTarget_get_target,$(2)/$(3).urd) :| \
-	$(call gb_UnoApiPartTarget_get_target,$(2)/)
+	$(call gb_UnoApiPartTarget_get_target,$(2)/.dir)
 gb_UnoApiTarget_IDLFILES_$(1) += $(2)/$(3).idl
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -202,8 +202,9 @@ $(call gb_UnoApiTarget_get_clean_target,%) :
 # invoked with the .idl file corresponding to the .urd in that case.
 # Touch the .urd file, so it is newer than the .done file, causing that to
 # be rebuilt and overwriting the .urd file again.
-$(call gb_UnoApiPartTarget_get_target,%/) :
-	mkdir -p $@
+# the .dir is for make 3.81, which ignores trailing /
+$(dir $(call gb_UnoApiPartTarget_get_target,))%/.dir :
+	$(if $(realpath $(dir $@)),,mkdir -p $(dir $@))
 
 $(call gb_UnoApiPartTarget_get_target,%.urd) :
 	touch $@
