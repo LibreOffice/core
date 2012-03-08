@@ -139,19 +139,6 @@ void implSetZoom( const uno::Reference< frame::XModel >& xModel, sal_Int16 nZoom
     pViewSh->GetViewData()->SetZoom( aFract, aFract, nTabs );
     pViewSh->RefreshZoom();
 }
-bool isInPrintPreview( SfxViewFrame* pView )
-{
-    sal_uInt16 nViewNo = SID_VIEWSHELL1 - SID_VIEWSHELL0;
-    if ( pView->GetObjectShell()->GetFactory().GetViewFactoryCount() >
-nViewNo && !pView->GetObjectShell()->IsInPlaceActive() )
-    {
-        SfxViewFactory &rViewFactory =
-            pView->GetObjectShell()->GetFactory().GetViewFactory(nViewNo);
-        if (  pView->GetCurViewId() == rViewFactory.GetOrdinal() )
-            return true;
-    }
-    return false;
-}
 
 const ::rtl::OUString REPLACE_CELLS_WARNING(  RTL_CONSTASCII_USTRINGPARAM( "ReplaceCellsWarning"));
 
@@ -319,15 +306,6 @@ getCurrentBestViewShell(  const uno::Reference< uno::XComponentContext >& xConte
 {
     uno::Reference< frame::XModel > xModel = getCurrentExcelDoc( xContext );
     return getBestViewShell( xModel );
-}
-
-SfxViewFrame*
-getViewFrame( const uno::Reference< frame::XModel >& xModel )
-{
-    ScTabViewShell* pViewShell = getBestViewShell( xModel );
-    if ( pViewShell )
-        return pViewShell->GetViewFrame();
-    return NULL;
 }
 
 sal_Bool IsR1C1ReferFormat( ScDocument* pDoc, const rtl::OUString& sRangeStr )

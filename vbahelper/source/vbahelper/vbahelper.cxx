@@ -97,13 +97,6 @@ namespace vba
 
 namespace { const double factor =  2540.0 / 72.0; }
 
-css::uno::Reference< css::uno::XInterface > createVBAUnoAPIService( SfxObjectShell* pShell, const sal_Char* _pAsciiName ) throw (css::uno::RuntimeException)
-{
-    OSL_PRECOND( pShell, "createVBAUnoAPIService: no shell!" );
-    ::rtl::OUString sVarName( ::rtl::OUString::createFromAscii( _pAsciiName ) );
-    return getVBAServiceFactory( pShell )->createInstance( sVarName );
-}
-
 // helper method to determine if the view ( calc ) is in print-preview mode
 bool isInPrintPreview( SfxViewFrame* pView )
 {
@@ -501,11 +494,6 @@ sal_Int32 extractIntFromAny( const uno::Any& rAny ) throw (uno::RuntimeException
     throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid type, cannot convert to integer." ) ), 0 );
 }
 
-sal_Int32 extractIntFromAny( const uno::Any& rAny, sal_Int32 nDefault ) throw (uno::RuntimeException)
-{
-    return rAny.hasValue() ? extractIntFromAny( rAny ) : nDefault;
-}
-
 bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
 {
     switch( rAny.getValueType().getTypeClass() )
@@ -525,11 +513,6 @@ bool extractBoolFromAny( const uno::Any& rAny ) throw (uno::RuntimeException)
         default:;
     }
     throw uno::RuntimeException( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "Invalid type, cannot convert to boolean." ) ), 0 );
-}
-
-bool extractBoolFromAny( const uno::Any& rAny, bool bDefault ) throw (uno::RuntimeException)
-{
-    return rAny.hasValue() ? extractBoolFromAny( rAny ) : bDefault;
 }
 
 ::rtl::OUString extractStringFromAny( const uno::Any& rAny, bool bUppercaseBool ) throw (uno::RuntimeException)
@@ -1179,28 +1162,14 @@ Millimeter::Millimeter():m_nMillimeter(0) {}
 
 Millimeter::Millimeter(double mm):m_nMillimeter(mm) {}
 
-void Millimeter::set(double mm) { m_nMillimeter = mm; }
 void Millimeter::setInPoints(double points)
 {
     m_nMillimeter = points * factor / 100.0;
 }
 
-void Millimeter::setInHundredthsOfOneMillimeter(double hmm)
-{
-    m_nMillimeter = hmm / 100;
-}
-
-double Millimeter::get()
-{
-    return m_nMillimeter;
-}
 double Millimeter::getInHundredthsOfOneMillimeter()
 {
     return m_nMillimeter * 100;
-}
-double Millimeter::getInPoints()
-{
-    return m_nMillimeter / factor * 100.0;
 }
 
 sal_Int32 Millimeter::getInHundredthsOfOneMillimeter(double points)

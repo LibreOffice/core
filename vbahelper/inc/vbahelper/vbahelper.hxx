@@ -75,7 +75,6 @@ namespace ooo
         VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getVBADocument( const css::uno::Reference< css::frame::XModel >& xModel );
         VBAHELPER_DLLPUBLIC css::uno::Reference< XHelperInterface > getUnoDocModule( const String& aModName, SfxObjectShell* pShell );
         VBAHELPER_DLLPUBLIC SfxObjectShell* getSfxObjShell( const css::uno::Reference< css::frame::XModel >& xModel ) throw ( css::uno::RuntimeException);
-        VBAHELPER_DLLPUBLIC css::uno::Reference< css::uno::XInterface > createVBAUnoAPIService( SfxObjectShell* pShell,  const sal_Char* _pAsciiName ) throw (css::uno::RuntimeException);
 
         css::uno::Reference< css::frame::XModel > getCurrentDoc( const rtl::OUString& sKey ) throw (css::uno::RuntimeException);
         VBAHELPER_DLLPUBLIC css::uno::Reference< css::frame::XModel > getThisExcelDoc( const css::uno::Reference< css::uno::XComponentContext >& xContext ) throw (css::uno::RuntimeException);
@@ -103,16 +102,10 @@ namespace ooo
         /** Extracts a 32-bit integer value from the passed Any, which may contain an integer or floating-point value.
             Throws, if the Any is empty or contains an incompatible type. */
         VBAHELPER_DLLPUBLIC sal_Int32 extractIntFromAny( const css::uno::Any& rAny ) throw (css::uno::RuntimeException);
-        /** Extracts a 32-bit integer value from the passed Any, which may contain an integer or floating-point value.
-            Returns nDefault, if rAny is empty. Throws, if the Any contains an incompatible type. */
-        VBAHELPER_DLLPUBLIC sal_Int32 extractIntFromAny( const css::uno::Any& rAny, sal_Int32 nDefault ) throw (css::uno::RuntimeException);
 
         /** Extracts a boolean value from the passed Any, which may contain a Boolean or an integer or floating-point value.
             Throws, if the Any is empty or contains an incompatible type. */
         VBAHELPER_DLLPUBLIC bool extractBoolFromAny( const css::uno::Any& rAny ) throw (css::uno::RuntimeException);
-        /** Extracts a boolean value from the passed Any, which may contain a Boolean or an integer or floating-point value.
-            Returns bDefault, if rAny is empty. Throws, if the Any contains an incompatible type. */
-        VBAHELPER_DLLPUBLIC bool extractBoolFromAny( const css::uno::Any& rAny, bool bDefault ) throw (css::uno::RuntimeException);
 
         /** Extracts a string from the passed Any, which may contain a Boolean, a value, or a string.
             Throws, if the Any is empty or contains an incompatible type. */
@@ -147,12 +140,8 @@ public:
 
     Millimeter(double mm);
 
-    void set(double mm);
     void setInPoints(double points) ;
-    void setInHundredthsOfOneMillimeter(double hmm);
-    double get();
     double getInHundredthsOfOneMillimeter();
-    double getInPoints();
     static sal_Int32 getInHundredthsOfOneMillimeter(double points);
     static double getInPoints(int _hmm);
 };

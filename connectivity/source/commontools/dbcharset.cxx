@@ -154,12 +154,6 @@ namespace dbtools
     {
     }
 
-    //-------------------------------------------------------------------------
-    CharsetIteratorDerefHelper::CharsetIteratorDerefHelper()
-        :m_eEncoding(RTL_TEXTENCODING_DONTKNOW)
-    {
-    }
-
     //=========================================================================
     //= OCharsetMap::CharsetIterator
     //=========================================================================
