@@ -1,0 +1,3 @@
+For windows we need the VC redistributasbles.
+Copy vcredist_x86.exe and vcredist_x64.exe in this directory.
+You can download them from http://www.microsoft.com/download/en/search.aspx?q=redistributable%20package
