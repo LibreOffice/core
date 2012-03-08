@@ -908,10 +908,14 @@ extern "C" SCODE STDMETHODCALLTYPE DllGetClassObject(
     void **    ppvObj
 )
 {
+    COooFilterCF* pImpl = 0;
     IUnknown *pResult = 0;
 
     if ( CLSID_COooFilter == cid )
-        pResult = (IUnknown *) new COooFilterCF;
+    {
+        pImpl = new COooFilterCF;
+        pResult = (IUnknown *) pImpl;
+    }
     else
         return CLASS_E_CLASSNOTAVAILABLE;
     if ( 0 != pResult )
@@ -921,7 +925,7 @@ extern "C" SCODE STDMETHODCALLTYPE DllGetClassObject(
             pResult->Release();
         else
         {
-            delete pResult;
+            delete pImpl;
             return E_UNEXPECTED;
         }
     }
