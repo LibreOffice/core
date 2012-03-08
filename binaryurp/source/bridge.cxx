@@ -242,6 +242,12 @@ void Bridge::start() {
     writer_->launch();
     reader_.set(new Reader(this));
     reader_->launch();
+        // it is important to call reader_->launch() last here; both
+        // Writer::execute and Reader::execute can call Bridge::terminate, but
+        // Writer::execute is initially blocked in unblocked_.wait() until
+        // Reader::execute has called bridge_->sendRequestChangeRequest(), so
+        // effectively only reader_->launch() can lead to an early call to
+        // Bridge::terminate
 }
 
 void Bridge::terminate() {
