@@ -90,7 +90,6 @@ DropTarget::~DropTarget()
 // the IDropTarget object will live on. MEMORY LEAK
 void SAL_CALL DropTarget::disposing()
 {
-    HRESULT hr= S_OK;
     if( m_threadIdTarget)
     {
         // Call RevokeDragDrop and wait for the OLE thread to die;
@@ -101,7 +100,7 @@ void SAL_CALL DropTarget::disposing()
     }
     else
     {
-        hr= RevokeDragDrop( m_hWnd);
+        RevokeDragDrop( m_hWnd);
         m_hWnd= 0;
     }
     if( m_pDropTarget)
