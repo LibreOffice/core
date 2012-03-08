@@ -3482,10 +3482,9 @@ LanguageType WinSalFrame::GetInputLanguage()
 sal_Bool WinSalFrame::MapUnicodeToKeyCode( sal_Unicode aUnicode, LanguageType aLangType, KeyCode& rKeyCode )
 {
     sal_Bool bRet = FALSE;
-    HKL hkl = 0;
-
+    sal_IntPtr nLangType = aLangType;
     // just use the passed language identifier, do not try to load additional keyboard support
-    hkl = (HKL) aLangType;
+    HKL hkl = (HKL) nLangType;
 
     if( hkl )
     {
