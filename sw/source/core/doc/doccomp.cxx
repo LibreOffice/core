@@ -1536,14 +1536,17 @@ void SwCompareData::ShowDelete( const CompareData& rData, sal_uLong nStt,
         ((SwCompareLine*)rData.GetLine( nEnd-1 ))->GetEndNode(), 1 );
 
     sal_uInt16 nOffset = 0;
-    const CompareLine* pLine;
-    if( GetLineCount() == nInsPos )
+    const CompareLine* pLine = 0;
+    if( nInsPos >= 1 )
     {
-        pLine = GetLine( nInsPos-1 );
-        nOffset = 1;
+        if( GetLineCount() == nInsPos )
+        {
+            pLine = GetLine( nInsPos-1 );
+            nOffset = 1;
+        }
+        else
+            pLine = GetLine( nInsPos );
     }
-    else
-        pLine = GetLine( nInsPos );
 
     const SwNode* pLineNd;
     if( pLine )
