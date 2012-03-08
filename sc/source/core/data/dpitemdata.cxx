@@ -33,6 +33,7 @@
 #include "cell.hxx"
 #include "globstr.hrc"
 #include "dptabdat.hxx"
+#include "rtl/math.hxx"
 
 const sal_Int32 ScDPItemData::DateFirst = -1;
 const sal_Int32 ScDPItemData::DateLast  = 10000;
@@ -60,6 +61,7 @@ sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
             return rA.maGroupValue.mnGroupType < rB.maGroupValue.mnGroupType ? -1 : 1;
         }
         case Value:
+        case RangeStart:
         {
             if (rA.mfValue == rB.mfValue)
                 return 0;
@@ -88,6 +90,7 @@ ScDPItemData::ScDPItemData(const ScDPItemData& r) :
             mpString = new rtl::OUString(*r.mpString);
         break;
         case Value:
+        case RangeStart:
             mfValue = r.mfValue;
         break;
         case GroupValue:
@@ -98,6 +101,12 @@ ScDPItemData::ScDPItemData(const ScDPItemData& r) :
         default:
             mfValue = 0.0;
     }
+}
+
+void ScDPItemData::DisposeString()
+{
+    if (meType == String || meType == Error)
+        delete mpString;
 }
 
 ScDPItemData::ScDPItemData(const rtl::OUString& rStr) :
@@ -115,8 +124,7 @@ ScDPItemData::ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue) :
 
 ScDPItemData::~ScDPItemData()
 {
-    if (meType == String)
-        delete mpString;
+    DisposeString();
 }
 
 ScDPItemData::Type ScDPItemData::GetType() const
@@ -126,25 +134,42 @@ ScDPItemData::Type ScDPItemData::GetType() const
 
 void ScDPItemData::SetString(const rtl::OUString& rS)
 {
-    if (meType == String)
-        delete mpString;
+    DisposeString();
     mpString = new rtl::OUString(rS);
     meType = String;
 }
 
 void ScDPItemData::SetValue(double fVal)
 {
-    if (meType == String)
-        delete mpString;
+    DisposeString();
     mfValue = fVal;
     meType = Value;
 }
 
+void ScDPItemData::SetRangeStart(double fVal)
+{
+    DisposeString();
+    mfValue = fVal;
+    meType = RangeStart;
+}
+
+void ScDPItemData::SetRangeFirst()
+{
+    DisposeString();
+    rtl::math::setInf(&mfValue, true);
+    meType = RangeStart;
+}
+
+void ScDPItemData::SetRangeLast()
+{
+    DisposeString();
+    rtl::math::setInf(&mfValue, false);
+    meType = RangeStart;
+}
+
 void ScDPItemData::SetGroupValue(sal_Int32 nGroupType, sal_Int32 nValue)
 {
-    if (meType == String)
-        delete mpString;
-
+    DisposeString();
     maGroupValue.mnGroupType = nGroupType;
     maGroupValue.mnValue = nValue;
     meType = GroupValue;
@@ -186,12 +211,17 @@ bool ScDPItemData::operator== (const ScDPItemData& r) const
     if (meType != r.meType)
         return false;
 
-    if (meType == Value)
-        return (r.meType == Value) ? rtl::math::approxEqual(mfValue, r.mfValue) : false;
-
-    if (meType == GroupValue)
-        return maGroupValue.mnGroupType == r.maGroupValue.mnGroupType &&
-            maGroupValue.mnValue == r.maGroupValue.mnValue;
+    switch (meType)
+    {
+        case Value:
+        case RangeStart:
+            return rtl::math::approxEqual(mfValue, r.mfValue);
+        case GroupValue:
+            return maGroupValue.mnGroupType == r.maGroupValue.mnGroupType &&
+                maGroupValue.mnValue == r.maGroupValue.mnValue;
+        default:
+            ;
+    }
 
     // need exact equality until we have a safe case insensitive string hash
     return GetString() == r.GetString();
@@ -207,6 +237,7 @@ ScDPItemData& ScDPItemData::operator= (const ScDPItemData& r)
             mpString = new rtl::OUString(*r.mpString);
         break;
         case Value:
+        case RangeStart:
             mfValue = r.mfValue;
         break;
         case GroupValue:
@@ -256,6 +287,8 @@ void ScDPItemData::Dump(const char* msg) const
         case Value:
             printf("value: %g\n", mfValue);
         break;
+        case RangeStart:
+            printf("range start: %g\n", mfValue);
         default:
             printf("unknown type\n");
     }
@@ -283,6 +316,7 @@ rtl::OUString ScDPItemData::GetString() const
         case Value:
             return rtl::OUString::valueOf(mfValue);
         case GroupValue:
+        case RangeStart:
             return rtl::OUString::createFromAscii("fail");
         case Empty:
         default:
@@ -294,7 +328,7 @@ rtl::OUString ScDPItemData::GetString() const
 
 double ScDPItemData::GetValue() const
 {
-    if (meType == Value)
+    if (meType == Value || meType == RangeStart)
         return mfValue;
 
     return 0.0;

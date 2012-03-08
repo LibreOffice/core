@@ -33,6 +33,7 @@
 #include "scdllapi.h"
 
 class SvNumberFormatter;
+struct ScDPNumGroupInfo;
 
 class ScDPUtil
 {
@@ -46,6 +47,11 @@ public:
     static rtl::OUString getDateGroupName(
         sal_Int32 nDatePart, sal_Int32 nValue, SvNumberFormatter* pFormatter,
         double fStart, double fEnd);
+
+    static double getNumGroupStartValue(double fValue, const ScDPNumGroupInfo& rInfo);
+
+    static rtl::OUString getNumGroupName(
+        double fValue, const ScDPNumGroupInfo& rInfo, sal_Unicode cDecSep, SvNumberFormatter* pFormatter);
 };
 
 #endif

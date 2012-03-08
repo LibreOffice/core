@@ -42,6 +42,7 @@
 
 #include <rtl/math.hxx>
 #include <unotools/textsearch.hxx>
+#include <unotools/localedatawrapper.hxx>
 
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdbc/XRow.hpp>
@@ -221,11 +222,10 @@ ScDPItemData* lcl_GetItemValue(
 
 }
 
-ScDPCache::GroupItems::GroupItems() :
-    mfStart(0.0), mfEnd(0.0) {}
+ScDPCache::GroupItems::GroupItems() {}
 
 ScDPCache::GroupItems::GroupItems(const ScDPNumGroupInfo& rInfo) :
-    mfStart(rInfo.mfStart), mfEnd(rInfo.mfEnd) {}
+    maInfo(rInfo) {}
 
 bool ScDPCache::operator== ( const ScDPCache& r ) const
 {
@@ -1034,11 +1034,22 @@ rtl::OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem
         const GroupItems* p = GetGroupItems(nDim);
         if (p)
         {
-            fStart = p->mfStart;
-            fEnd = p->mfEnd;
+            fStart = p->maInfo.mfStart;
+            fEnd = p->maInfo.mfEnd;
         }
         return ScDPUtil::getDateGroupName(
             aAttr.mnGroupType, aAttr.mnValue, mpDoc->GetFormatTable(), fStart, fEnd);
+    }
+
+    if (eType == ScDPItemData::RangeStart)
+    {
+        double fVal = rItem.GetValue();
+        const GroupItems* p = GetGroupItems(nDim);
+        if (!p)
+            return rItem.GetString();
+
+        sal_Unicode cDecSep = ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0);
+        return ScDPUtil::getNumGroupName(fVal, p->maInfo, cDecSep, mpDoc->GetFormatTable());
     }
 
     return rItem.GetString();
@@ -1066,8 +1077,7 @@ void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo)
     {
         GroupItems& rGI = maGroupFields[nDim];
         rGI.maItems.clear();
-        rGI.mfStart = rNumInfo.mfStart;
-        rGI.mfEnd = rNumInfo.mfEnd;
+        rGI.maInfo = rNumInfo;
     }
 }
 

@@ -49,7 +49,7 @@ class SC_DLLPUBLIC ScDPItemData
     friend class ScDPCache;
 
 public:
-    enum Type { GroupValue = 0, Value = 1, String = 2, Error = 3, Empty = 4 };
+    enum Type { GroupValue = 0, RangeStart, Value, String, Error, Empty };
 
     static const sal_Int32 DateFirst;
     static const sal_Int32 DateLast;
@@ -70,6 +70,8 @@ private:
 
     Type meType;
 
+    void DisposeString();
+
 public:
     // case insensitive equality
     static sal_Int32 Compare(const ScDPItemData& rA, const ScDPItemData& rB);
@@ -84,6 +86,9 @@ public:
     Type GetType() const;
     void SetString(const rtl::OUString& rS);
     void SetValue(double fVal);
+    void SetRangeStart(double fVal);
+    void SetRangeFirst();
+    void SetRangeLast();
     void SetGroupValue(sal_Int32 nGroupType, sal_Int32 nValue);
     void SetErrorString(const rtl::OUString& rS);
     bool IsCaseInsEqual(const ScDPItemData& r) const;

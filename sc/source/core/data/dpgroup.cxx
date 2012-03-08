@@ -151,125 +151,9 @@ void lcl_Insert( SCCOL nSourceDim, const ScDPCache* pCache ,  std::vector< SCROW
         vIdx.insert( vIdx.begin()+nIndex, nNew  );
 }
 
-void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
-{
-    sal_uLong nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
-    String aString;
-    pFormatter->GetInputLineString( fValue, nFormat, aString );
-    rBuffer.append( aString );
-}
-
-String lcl_GetNumGroupName( double fStartValue, const ScDPNumGroupInfo& rInfo,
-    bool bHasNonInteger, sal_Unicode cDecSeparator, SvNumberFormatter* pFormatter )
-{
-    OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
-
-    double fStep = rInfo.mfStep;
-    double fEndValue = fStartValue + fStep;
-    if ( !bHasNonInteger && ( rInfo.mbDateValues || !rtl::math::approxEqual( fEndValue, rInfo.mfEnd ) ) )
-    {
-        //  The second number of the group label is
-        //  (first number + size - 1) if there are only integer numbers,
-        //  (first number + size) if any non-integer numbers are involved.
-        //  Exception: The last group (containing the end value) is always
-        //  shown as including the end value (but not for dates).
-
-        fEndValue -= 1.0;
-    }
-
-    if ( fEndValue > rInfo.mfEnd && !rInfo.mbAutoEnd )
-    {
-        // limit the last group to the end value
-
-        fEndValue = rInfo.mfEnd;
-    }
-
-    rtl::OUStringBuffer aBuffer;
-    if ( rInfo.mbDateValues )
-    {
-        lcl_AppendDateStr( aBuffer, fStartValue, pFormatter );
-        aBuffer.appendAscii( " - " );   // with spaces
-        lcl_AppendDateStr( aBuffer, fEndValue, pFormatter );
-    }
-    else
-    {
-        rtl::math::doubleToUStringBuffer( aBuffer, fStartValue, rtl_math_StringFormat_Automatic,
-            rtl_math_DecimalPlaces_Max, cDecSeparator, true );
-        aBuffer.append( (sal_Unicode) '-' );
-        rtl::math::doubleToUStringBuffer( aBuffer, fEndValue, rtl_math_StringFormat_Automatic,
-            rtl_math_DecimalPlaces_Max, cDecSeparator, true );
-    }
-
-    return aBuffer.makeStringAndClear();
-}
-
-String lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicode cDecSeparator,
-    bool bDateValues, SvNumberFormatter* pFormatter )
-{
-    OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
-
-    rtl::OUStringBuffer aBuffer;
-    aBuffer.append((sal_Unicode)( bFirst ? '<' : '>' ));
-    if ( bDateValues )
-        lcl_AppendDateStr( aBuffer, fValue, pFormatter );
-    else
-        rtl::math::doubleToUStringBuffer( aBuffer, fValue, rtl_math_StringFormat_Automatic,
-        rtl_math_DecimalPlaces_Max, cDecSeparator, true );
-    return aBuffer.makeStringAndClear();
-}
-
 inline bool IsInteger( double fValue )
 {
     return rtl::math::approxEqual( fValue, rtl::math::approxFloor(fValue) );
-}
-
-String lcl_GetNumGroupForValue( double fValue, const ScDPNumGroupInfo& rInfo, bool bHasNonInteger,
-    sal_Unicode cDecSeparator, double& rGroupValue, ScDocument* pDoc )
-{
-    SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-
-    if ( fValue < rInfo.mfStart && !rtl::math::approxEqual( fValue, rInfo.mfStart ) )
-    {
-        rGroupValue = rInfo.mfStart - rInfo.mfStep;
-        return lcl_GetSpecialNumGroupName( rInfo.mfStart, true, cDecSeparator, rInfo.mbDateValues, pFormatter );
-    }
-
-    if ( fValue > rInfo.mfEnd && !rtl::math::approxEqual( fValue, rInfo.mfEnd ) )
-    {
-        rGroupValue = rInfo.mfEnd + rInfo.mfStep;
-        return lcl_GetSpecialNumGroupName( rInfo.mfEnd, false, cDecSeparator, rInfo.mbDateValues, pFormatter );
-    }
-
-    double fDiff = fValue - rInfo.mfStart;
-    double fDiv = rtl::math::approxFloor( fDiff / rInfo.mfStep );
-    double fGroupStart = rInfo.mfStart + fDiv * rInfo.mfStep;
-
-    if ( rtl::math::approxEqual( fGroupStart, rInfo.mfEnd ) &&
-        !rtl::math::approxEqual( fGroupStart, rInfo.mfStart ) )
-    {
-        if ( !rInfo.mbDateValues )
-        {
-            //  A group that would consist only of the end value is not created,
-            //  instead the value is included in the last group before. So the
-            //  previous group is used if the calculated group start value is the
-            //  selected end value.
-
-            fDiv -= 1.0;
-            fGroupStart = rInfo.mfStart + fDiv * rInfo.mfStep;
-        }
-        else
-        {
-            //  For date values, the end value is instead treated as above the limit
-            //  if it would be a group of its own.
-
-            rGroupValue = rInfo.mfEnd + rInfo.mfStep;
-            return lcl_GetSpecialNumGroupName( rInfo.mfEnd, false, cDecSeparator, rInfo.mbDateValues, pFormatter );
-        }
-    }
-
-    rGroupValue = fGroupStart;
-
-    return lcl_GetNumGroupName( fGroupStart, rInfo, bHasNonInteger, cDecSeparator, pFormatter );
 }
 
 }
@@ -301,8 +185,8 @@ ScDPGroupDateFilter::ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart
     mfMatchValue(fMatchValue),
     mnDatePart(nDatePart)
 {
-
 }
+
 bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
 {
     using namespace ::com::sun::star::sheet;
@@ -783,25 +667,14 @@ void ScDPGroupDimension::DisposeData()
 // -----------------------------------------------------------------------
 
 ScDPNumGroupDimension::ScDPNumGroupDimension() :
-    pDateHelper( NULL ),
-    bHasNonInteger( false ),
-    cDecSeparator( 0 )
-{
-}
+    pDateHelper(NULL) {}
 
 ScDPNumGroupDimension::ScDPNumGroupDimension( const ScDPNumGroupInfo& rInfo ) :
-    aGroupInfo( rInfo ),
-    pDateHelper( NULL ),
-    bHasNonInteger( false ),
-    cDecSeparator( 0 )
-{
-}
+    aGroupInfo(rInfo), pDateHelper(NULL) {}
 
 ScDPNumGroupDimension::ScDPNumGroupDimension( const ScDPNumGroupDimension& rOther ) :
     aGroupInfo( rOther.aGroupInfo ),
-    pDateHelper( NULL ),
-    bHasNonInteger( false ),
-    cDecSeparator( 0 )
+    pDateHelper(NULL)
 {
     if ( rOther.pDateHelper )
         pDateHelper = new ScDPDateGroupHelper( *rOther.pDateHelper );
@@ -817,13 +690,12 @@ ScDPNumGroupDimension& ScDPNumGroupDimension::operator=( const ScDPNumGroupDimen
     else
         pDateHelper = NULL;
 
-    bHasNonInteger = false;
     return *this;
 }
 
 void ScDPNumGroupDimension::DisposeData()
 {
-    bHasNonInteger = false;
+    aGroupInfo = ScDPNumGroupInfo();
     maMemberEntries.clear();
 }
 
@@ -860,12 +732,11 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
     // (this in ensured by calling ScDPLevel::GetMembersObject for all column/row/page
     // dimensions before iterating over the values).
 
-    cDecSeparator = ScGlobal::pLocaleData->getNumDecimalSep().GetChar(0);
-
     // non-integer GroupInfo values count, too
-    bHasNonInteger = ( !aGroupInfo.mbAutoStart && !IsInteger( aGroupInfo.mfStart ) ) ||
+    bool bHasNonInteger = ( !aGroupInfo.mbAutoStart && !IsInteger( aGroupInfo.mfStart ) ) ||
                      ( !aGroupInfo.mbAutoEnd   && !IsInteger( aGroupInfo.mfEnd   ) ) ||
                      !IsInteger( aGroupInfo.mfStep );
+    aGroupInfo.mbIntegerOnly = !bHasNonInteger;
     double fSourceMin = 0.0;
     double fSourceMax = 0.0;
     bool bFirst = true;
@@ -889,18 +760,18 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
        if (fSourceValue > fSourceMax)
            fSourceMax = fSourceValue;
 
-       if (!bHasNonInteger && !IsInteger(fSourceValue))
+       if (aGroupInfo.mbIntegerOnly && !IsInteger(fSourceValue))
        {
            // if any non-integer numbers are involved, the group labels are
            // shown including their upper limit
-           bHasNonInteger = true;
+           aGroupInfo.mbIntegerOnly = false;
        }
     }
 
     if (aGroupInfo.mbDateValues)
     {
         // special handling for dates: always integer, round down limits
-        bHasNonInteger = false;
+        aGroupInfo.mbIntegerOnly = true;
         fSourceMin = rtl::math::approxFloor( fSourceMin );
         fSourceMax = rtl::math::approxFloor( fSourceMax ) + 1;
     }
@@ -924,13 +795,11 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
     // The first group has to be created nonetheless. GetNumGroupForValue has corresponding logic.
 
     bool bFirstGroup = true;
-    SvNumberFormatter* pFormatter = pCache->GetDoc()->GetFormatTable();
     while (bFirstGroup || (fLoop < aGroupInfo.mfEnd && !rtl::math::approxEqual(fLoop, aGroupInfo.mfEnd)))
     {
-        rtl::OUString aName = lcl_GetNumGroupName(
-            fLoop, aGroupInfo, bHasNonInteger, cDecSeparator, pFormatter);
-        // TODO: create a numerical entry to ensure proper sorting
-        SCROW nId = pCache->SetGroupItem(nSourceDim, ScDPItemData(aName));
+        ScDPItemData aItem;
+        aItem.SetRangeStart(fLoop);
+        SCROW nId = pCache->SetGroupItem(nSourceDim, aItem);
         maMemberEntries.push_back(nId);
         ++nLoopCount;
         fLoop = aGroupInfo.mfStart + nLoopCount * aGroupInfo.mfStep;
@@ -939,14 +808,13 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
         // ScDPItemData values are compared with approxEqual
     }
 
-    rtl::OUString aFirstName = lcl_GetSpecialNumGroupName(
-        aGroupInfo.mfStart, true, cDecSeparator, aGroupInfo.mbDateValues, pFormatter);
-    SCROW nId = pCache->SetGroupItem(nSourceDim, ScDPItemData(aFirstName));
+    ScDPItemData aItem;
+    aItem.SetRangeFirst();
+    SCROW nId = pCache->SetGroupItem(nSourceDim, aItem);
     maMemberEntries.push_back(nId);
 
-    rtl::OUString aLastName = lcl_GetSpecialNumGroupName(
-        aGroupInfo.mfEnd, false, cDecSeparator, aGroupInfo.mbDateValues, pFormatter);
-    nId = pCache->SetGroupItem(nSourceDim, ScDPItemData(aLastName));
+    aItem.SetRangeLast();
+    nId = pCache->SetGroupItem(nSourceDim, aItem);
     maMemberEntries.push_back(nId);
 
     return maMemberEntries;
@@ -1007,15 +875,10 @@ bool ScDPGroupTableData::IsNumGroupDimension( long nDimension ) const
     return ( nDimension < nSourceCount && pNumGroups[nDimension].GetInfo().mbEnable );
 }
 
-void ScDPGroupTableData::GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rInfo,
-                                        bool& rNonInteger, sal_Unicode& rDecimal )
+void ScDPGroupTableData::GetNumGroupInfo(long nDimension, ScDPNumGroupInfo& rInfo)
 {
     if ( nDimension < nSourceCount )
-    {
-        rInfo       = pNumGroups[nDimension].GetInfo();
-        rNonInteger = pNumGroups[nDimension].HasNonInteger();
-        rDecimal    = pNumGroups[nDimension].GetDecSeparator();
-    }
+        rInfo = pNumGroups[nDimension].GetInfo();
 }
 long  ScDPGroupTableData::GetMembersCount( long nDim )
 {
@@ -1311,13 +1174,10 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
                 if (pData->GetType() == ScDPItemData::Value)
                 {
                     ScDPNumGroupInfo aNumInfo;
-                    bool bHasNonInteger = false;
-                    sal_Unicode cDecSeparator = 0;
-                    GetNumGroupInfo( nColumn, aNumInfo, bHasNonInteger, cDecSeparator );
-                    double fGroupValue;
-                    rtl::OUString aGroupName = lcl_GetNumGroupForValue(
-                        pData->GetValue(), aNumInfo, bHasNonInteger, cDecSeparator, fGroupValue, pDoc);
-                    ScDPItemData aItemData(aGroupName);
+                    GetNumGroupInfo(nColumn, aNumInfo);
+                    double fGroupValue = ScDPUtil::getNumGroupStartValue(pData->GetValue(), aNumInfo);
+                    ScDPItemData aItemData;
+                    aItemData.SetRangeStart(fGroupValue);
                     pItemDataIndex[nDim] = pCache->GetIdByItemData(nSourceDim, aItemData);
                 }
                 // else (textual) keep original value

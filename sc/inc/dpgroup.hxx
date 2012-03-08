@@ -130,8 +130,6 @@ class SC_DLLPUBLIC ScDPNumGroupDimension
     mutable ScDPNumGroupInfo    aGroupInfo;         // settings
     ScDPDateGroupHelper*        pDateHelper;
     mutable std::vector<SCROW>  maMemberEntries;
-    mutable bool                bHasNonInteger;     // initialized in GetNumEntries
-    mutable sal_Unicode         cDecSeparator;      // initialized in GetNumEntries
 
 public:
                 ScDPNumGroupDimension();
@@ -142,8 +140,6 @@ public:
     ScDPNumGroupDimension&  operator=( const ScDPNumGroupDimension& rOther );
 
     const ScDPNumGroupInfo& GetInfo() const     { return aGroupInfo; }
-    bool        HasNonInteger() const           { return bHasNonInteger; }
-    sal_Unicode GetDecSeparator() const         { return cDecSeparator; }
 
     const ScDPDateGroupHelper* GetDateHelper() const    { return pDateHelper; }
 
@@ -174,8 +170,7 @@ class ScDPGroupTableData : public ScDPTableData
     virtual long                GetSourceDim( long nDim );
 
     bool        IsNumGroupDimension( long nDimension ) const;
-    void        GetNumGroupInfo( long nDimension, ScDPNumGroupInfo& rInfo,
-                                    bool& rNonInteger, sal_Unicode& rDecimal );
+    void GetNumGroupInfo(long nDimension, ScDPNumGroupInfo& rInfo);
 
     void        ModifyFilterCriteria(::std::vector<ScDPCacheTable::Criterion>& rCriteria);
 

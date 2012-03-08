@@ -29,11 +29,13 @@
 #include "dputil.hxx"
 #include "global.hxx"
 #include "dpitemdata.hxx"
+#include "dpnumgroupinfo.hxx"
 
 #include "comphelper/string.hxx"
 #include "unotools/localedatawrapper.hxx"
 #include "unotools/calendarwrapper.hxx"
 #include "svl/zforlist.hxx"
+#include "rtl/math.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
@@ -146,6 +148,146 @@ rtl::OUString ScDPUtil::getDateGroupName(
     }
 
     return rtl::OUString::createFromAscii("FIXME: unhandled value");
+}
+
+double ScDPUtil::getNumGroupStartValue(double fValue, const ScDPNumGroupInfo& rInfo)
+{
+    if (fValue < rInfo.mfStart && !rtl::math::approxEqual(fValue, rInfo.mfStart))
+    {
+        rtl::math::setInf(&fValue, true);
+        return fValue;
+    }
+
+    if (fValue > rInfo.mfEnd && !rtl::math::approxEqual(fValue, rInfo.mfEnd))
+    {
+        rtl::math::setInf(&fValue, false);
+        return fValue;
+    }
+
+    double fDiff = fValue - rInfo.mfStart;
+    double fDiv = rtl::math::approxFloor( fDiff / rInfo.mfStep );
+    double fGroupStart = rInfo.mfStart + fDiv * rInfo.mfStep;
+
+    if (rtl::math::approxEqual(fGroupStart, rInfo.mfEnd) &&
+        !rtl::math::approxEqual(fGroupStart, rInfo.mfStart))
+    {
+        if (!rInfo.mbDateValues)
+        {
+            // A group that would consist only of the end value is not
+            // created, instead the value is included in the last group
+            // before. So the previous group is used if the calculated group
+            // start value is the selected end value.
+
+            fDiv -= 1.0;
+            return rInfo.mfStart + fDiv * rInfo.mfStep;
+        }
+
+        // For date values, the end value is instead treated as above the
+        // limit if it would be a group of its own.
+
+        return rInfo.mfEnd + rInfo.mfStep;
+    }
+
+    return fGroupStart;
+}
+
+namespace {
+
+void lcl_AppendDateStr( rtl::OUStringBuffer& rBuffer, double fValue, SvNumberFormatter* pFormatter )
+{
+    sal_uLong nFormat = pFormatter->GetStandardFormat( NUMBERFORMAT_DATE, ScGlobal::eLnge );
+    rtl::OUString aString;
+    pFormatter->GetInputLineString( fValue, nFormat, aString );
+    rBuffer.append( aString );
+}
+
+rtl::OUString lcl_GetSpecialNumGroupName( double fValue, bool bFirst, sal_Unicode cDecSeparator,
+    bool bDateValues, SvNumberFormatter* pFormatter )
+{
+    OSL_ENSURE( cDecSeparator != 0, "cDecSeparator not initialized" );
+
+    rtl::OUStringBuffer aBuffer;
+    aBuffer.append((sal_Unicode)( bFirst ? '<' : '>' ));
+    if ( bDateValues )
+        lcl_AppendDateStr( aBuffer, fValue, pFormatter );
+    else
+        rtl::math::doubleToUStringBuffer( aBuffer, fValue, rtl_math_StringFormat_Automatic,
+        rtl_math_DecimalPlaces_Max, cDecSeparator, true );
+    return aBuffer.makeStringAndClear();
+}
+
+rtl::OUString lcl_GetNumGroupName(
+    double fStartValue, const ScDPNumGroupInfo& rInfo, sal_Unicode cDecSep,
+    SvNumberFormatter* pFormatter)
+{
+    OSL_ENSURE( cDecSep != 0, "cDecSeparator not initialized" );
+
+    double fStep = rInfo.mfStep;
+    double fEndValue = fStartValue + fStep;
+    if (rInfo.mbIntegerOnly && (rInfo.mbDateValues || !rtl::math::approxEqual(fEndValue, rInfo.mfEnd)))
+    {
+        //  The second number of the group label is
+        //  (first number + size - 1) if there are only integer numbers,
+        //  (first number + size) if any non-integer numbers are involved.
+        //  Exception: The last group (containing the end value) is always
+        //  shown as including the end value (but not for dates).
+
+        fEndValue -= 1.0;
+    }
+
+    if ( fEndValue > rInfo.mfEnd && !rInfo.mbAutoEnd )
+    {
+        // limit the last group to the end value
+
+        fEndValue = rInfo.mfEnd;
+    }
+
+    rtl::OUStringBuffer aBuffer;
+    if ( rInfo.mbDateValues )
+    {
+        lcl_AppendDateStr( aBuffer, fStartValue, pFormatter );
+        aBuffer.appendAscii( " - " );   // with spaces
+        lcl_AppendDateStr( aBuffer, fEndValue, pFormatter );
+    }
+    else
+    {
+        rtl::math::doubleToUStringBuffer( aBuffer, fStartValue, rtl_math_StringFormat_Automatic,
+            rtl_math_DecimalPlaces_Max, cDecSep, true );
+        aBuffer.append( (sal_Unicode) '-' );
+        rtl::math::doubleToUStringBuffer( aBuffer, fEndValue, rtl_math_StringFormat_Automatic,
+            rtl_math_DecimalPlaces_Max, cDecSep, true );
+    }
+
+    return aBuffer.makeStringAndClear();
+}
+
+}
+
+rtl::OUString ScDPUtil::getNumGroupName(
+    double fValue, const ScDPNumGroupInfo& rInfo, sal_Unicode cDecSep, SvNumberFormatter* pFormatter)
+{
+    if ( fValue < rInfo.mfStart && !rtl::math::approxEqual( fValue, rInfo.mfStart ) )
+        return lcl_GetSpecialNumGroupName( rInfo.mfStart, true, cDecSep, rInfo.mbDateValues, pFormatter );
+
+    if ( fValue > rInfo.mfEnd && !rtl::math::approxEqual( fValue, rInfo.mfEnd ) )
+        return lcl_GetSpecialNumGroupName( rInfo.mfEnd, false, cDecSep, rInfo.mbDateValues, pFormatter );
+
+    double fDiff = fValue - rInfo.mfStart;
+    double fDiv = rtl::math::approxFloor( fDiff / rInfo.mfStep );
+    double fGroupStart = rInfo.mfStart + fDiv * rInfo.mfStep;
+
+    if ( rtl::math::approxEqual( fGroupStart, rInfo.mfEnd ) &&
+        !rtl::math::approxEqual( fGroupStart, rInfo.mfStart ) )
+    {
+        if (rInfo.mbDateValues)
+        {
+            //  For date values, the end value is instead treated as above the limit
+            //  if it would be a group of its own.
+            return lcl_GetSpecialNumGroupName( rInfo.mfEnd, false, cDecSep, rInfo.mbDateValues, pFormatter );
+        }
+    }
+
+    return lcl_GetNumGroupName(fGroupStart, rInfo, cDecSep, pFormatter);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

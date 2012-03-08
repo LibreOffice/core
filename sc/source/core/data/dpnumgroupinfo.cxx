@@ -29,7 +29,20 @@
 #include "dpnumgroupinfo.hxx"
 
 ScDPNumGroupInfo::ScDPNumGroupInfo() :
-    mbEnable(false), mbDateValues(false), mbAutoStart(false), mbAutoEnd(false),
+    mbEnable(false),
+    mbDateValues(false),
+    mbAutoStart(false),
+    mbAutoEnd(false),
+    mbIntegerOnly(true),
     mfStart(0.0), mfEnd(0.0), mfStep(0.0) {}
+
+ScDPNumGroupInfo::ScDPNumGroupInfo(const ScDPNumGroupInfo& r) :
+    mbEnable(r.mbEnable),
+    mbDateValues(r.mbDateValues),
+    mbAutoStart(r.mbAutoStart),
+    mbAutoEnd(r.mbAutoEnd),
+    mbIntegerOnly(r.mbIntegerOnly),
+    mfStart(r.mfStart),
+    mfEnd(r.mfEnd), mfStep(r.mfStep) {}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

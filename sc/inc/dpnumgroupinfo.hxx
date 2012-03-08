@@ -37,11 +37,13 @@ struct ScDPNumGroupInfo
     bool mbDateValues:1;
     bool mbAutoStart:1;
     bool mbAutoEnd:1;
+    bool mbIntegerOnly:1;
     double mfStart;
     double mfEnd;
     double mfStep;
 
     SC_DLLPUBLIC ScDPNumGroupInfo();
+    ScDPNumGroupInfo(const ScDPNumGroupInfo& r);
 };
 
 #endif

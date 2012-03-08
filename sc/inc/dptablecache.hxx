@@ -30,6 +30,7 @@
 #define SC_DPTABLECACHE_HXX
 
 #include "global.hxx"
+#include "dpnumgroupinfo.hxx"
 
 #include <svl/zforlist.hxx>
 
@@ -63,8 +64,7 @@ public:
     struct GroupItems : boost::noncopyable
     {
         DataListType maItems;
-        double mfStart;
-        double mfEnd;
+        ScDPNumGroupInfo maInfo;
 
         GroupItems();
         GroupItems(const ScDPNumGroupInfo& rInfo);
