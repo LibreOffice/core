@@ -28,6 +28,7 @@
  */
 
 #include "frame.hxx"
+#include "frmfmt.hxx"
 #include "sectfrm.hxx"
 #include "tabfrm.hxx"
 #include "txtfrm.hxx"
@@ -284,6 +285,10 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
 
         dumpAsXmlAttributes( writer );
 
+        xmlTextWriterStartElement( writer, BAD_CAST( "infos" ) );
+        dumpInfosAsXml( writer );
+        xmlTextWriterEndElement( writer );
+
         // Dump Anchored objects if any
         SwSortedObjs* pAnchored = GetDrawObjs();
         if ( pAnchored && pAnchored->Count( ) > 0 )
@@ -327,13 +332,28 @@ void SwFrm::dumpAsXml( xmlTextWriterPtr writer )
         lcl_freeWriter( writer );
 }
 
+void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer )
+{
+    // output the Frm
+    xmlTextWriterStartElement( writer, BAD_CAST( "bounds" ) );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "left" ), "%ld", Frm().Left() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "top" ), "%ld", Frm().Top() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "width" ), "%ld", Frm().Width() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "height" ), "%ld", Frm().Height() );
+    xmlTextWriterEndElement( writer );
+}
+
 void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
 {
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "next" ), "%p", GetNext() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "prev" ), "%p", GetPrev() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%p", this->GetUpper() );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%p", this->GetLower() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "id" ), "%u", GetFrmId() );
+    if ( GetNext( ) )
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "next" ), "%u", GetNext()->GetFrmId() );
+    if ( GetPrev( ) )
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "prev" ), "%u", GetPrev()->GetFrmId() );
+    if ( GetUpper( ) )
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%u", GetUpper()->GetFrmId() );
+    if ( GetLower( ) )
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%u", GetLower()->GetFrmId() );
     if ( IsTxtFrm(  ) )
     {
         SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) this;
@@ -358,9 +378,7 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer )
         writer = lcl_createDefaultWriter();
 
     xmlTextWriterStartElement( writer, BAD_CAST( getElementName() ) );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
     xmlTextWriterEndElement( writer );
-
 
     if ( bCreateWriter )
         lcl_freeWriter( writer );
@@ -370,30 +388,30 @@ void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
 {
     SwFrm::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%u", GetFollow()->GetFrmId() );
 
     if (m_pPrecede != NULL)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwTxtFrm*)m_pPrecede );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%u", static_cast<SwTxtFrm*>(m_pPrecede)->GetFrmId() );
 }
 
 void SwSectionFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
 {
     SwFrm::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%u", GetFollow()->GetFrmId() );
 
     if (m_pPrecede != NULL)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwSectionFrm*)m_pPrecede );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%u", static_cast<SwSectionFrm*>( m_pPrecede )->GetFrmId() );
 }
 
 void SwTabFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
 {
     SwFrm::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%p", GetFollow() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%u", GetFollow()->GetFrmId() );
 
     if (m_pPrecede != NULL)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%p", (SwTabFrm*)m_pPrecede );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%u", static_cast<SwTabFrm*>( m_pPrecede )->GetFrmId() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
