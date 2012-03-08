@@ -6144,14 +6144,14 @@ sal_Bool ImplWriteLastError( DWORD lastError, const char *szApiCall )
                 if( first )
                 {
                     first = 0;
-                    fprintf( fp, "Process ID: %d (0x%x)\n", GetCurrentProcessId(), GetCurrentProcessId() );
+                    fprintf( fp, "Process ID: %ld (0x%lx)\n", GetCurrentProcessId(), GetCurrentProcessId() );
                 }
                 time_t aclock;
                 time( &aclock );                           // Get time in seconds
                 struct tm *newtime = localtime( &aclock ); // Convert time to struct tm form
                 fprintf( fp, asctime( newtime ) );         // print time stamp
 
-                fprintf( fp, "%s returned %u (0x%x)\n", szApiCall, lastError, lastError );
+                fprintf( fp, "%s returned %lu (0x%lx)\n", szApiCall, lastError, lastError );
                 bSuccess = TRUE;    // may be FormatMessage fails but we wrote at least the error code
 
                 LPVOID lpMsgBuf;
