@@ -5767,6 +5767,32 @@ may have to search Microsoft's website.) Last time it was seen at:
 fi
 
 dnl ===================================================================
+dnl Windows builds need vcredist_x*.exe in external/vcredist/
+dnl ===================================================================
+WITH_VC_REDIST=""
+
+if test "$_os" = "WINNT"; then
+   AC_MSG_CHECKING([for vcredist_x86.exe])
+   if test -x ./external/vcredist/vcredist_x86.exe; then
+      AC_MSG_RESULT([found and executable])
+   else
+      AC_MSG_ERROR([ vcredist_x86.exe is missing in external/vcredist/.
+Get it from the Microsoft site and put it into external/vcredist. You can try 
+to download it from http://www.microsoft.com/download/en/search.aspx?q=redistributable%20package.])
+   fi
+   AC_MSG_CHECKING([for vcredist_x64.exe])
+   if test -x ./external/vcredist/vcredist_x64.exe; then
+      AC_MSG_RESULT([found and executable])
+   else
+      AC_MSG_ERROR([ vcredist_x64.exe is missing in external/vcredist/.
+Get it from the Microsoft site and put it into external/vcredist. You can try 
+to download it from http://www.microsoft.com/download/en/search.aspx?q=redistributable%20package.])
+   fi
+   WITH_VC_REDIST=YES
+   AC_SUBST(WITH_VC_REDIST)
+fi
+
+dnl ===================================================================
 dnl Windows builds - use oowintool to copy CRT dlls and manifest
 dnl ===================================================================
 if test "$_os" = "WINNT" -a "$WITH_MINGWIN" != "yes"; then

@@ -38,6 +38,9 @@ mkdir: %_DEST%\inc%_EXT%\external\mingw\include\sys
 
 ..\unowinreg\unowinreg.dll %_DEST%\bin%_EXT%\unowinreg.dll
 
+..\vcredist\vcredist_x86.exe %_DEST%\bin%_EXT%\vcredist_x86.exe
+..\vcredist\vcredist_x64.exe %_DEST%\bin%_EXT%\vcredist_x64.exe
+
 ..\%__SRC%\bin\mingwm10.dll %_DEST%\bin%_EXT%\mingwm10.dll
 ..\%__SRC%\bin\libgcc*.dll %_DEST%\bin%_EXT%\libgcc*.dll
 ..\%__SRC%\bin\libstdc++*.dll %_DEST%\bin%_EXT%\libstdc++*.dll

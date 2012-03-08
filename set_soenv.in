@@ -2046,6 +2046,7 @@ if ( $platform =~ m/cygwin/ )
    ToFile( "LS",                $WIN_LS,            "e" );
    ToFile( "GNUCOPY",           $WIN_GNUCOPY,       "e" );
    ToFile( "TOUCH",             $WIN_TOUCH,         "e" );
+   ToFile( "WITH_VC_REDIST",    "@WITH_VC_REDIST@", "e" );
 }
 if ( $platform =~ m/os2/ )
 {
