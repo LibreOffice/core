@@ -1496,8 +1496,20 @@ public:
     template< int N1, int N2 >
     OUString replaceFirst( char (&from)[ N1 ], char (&to)[ N2 ],
                            sal_Int32 * index = 0) const;
-    // it is enough to just have a char+char overload, e.g. char+const char will
-    // be caught by it as well
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N1, int N2 >
+    OUString replaceFirst( const char (&from)[ N1 ], char (&to)[ N2 ],
+                           sal_Int32 * index = 0) const;
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N1, int N2 >
+    OUString replaceFirst( char (&from)[ N1 ], const char (&to)[ N2 ],
+                           sal_Int32 * index = 0) const;
 
     /**
       Returns a new string resulting from replacing all occurrences of a given
