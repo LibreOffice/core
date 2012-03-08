@@ -389,7 +389,7 @@ bootstrap: $(WORKDIR_BOOTSTRAP)
 #
 # Build
 #
-build: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
+build-packimages: bootstrap fetch $(if $(filter $(INPATH),$(INPATH_FOR_BUILD)),,cross-toolset)
 ifeq ($(DISABLE_SCRIPTING),TRUE)
 # We must get the headers from vbahelper "delivered" because
 # as we don't link to any libs from there they won't otherwise be, or
@@ -404,6 +404,8 @@ ifeq ($(DISABLE_DBCONNECTIVITY),TRUE)
 endif
 	cd packimages && unset MAKEFLAGS && \
         $(SOLARENV)/bin/build.pl -P$(BUILD_NCPUS) --all -- -P$(GMAKE_PARALLELISM)
+
+build: build-packimages
 ifeq ($(OS_FOR_BUILD),WNT)
 	cd instsetoo_native && unset MAKEFLAGS && $(SOLARENV)/bin/build.pl
 else
@@ -426,7 +428,7 @@ install:
 	echo "Installation finished, you can now execute:" && \
 	echo "$(INSTALLDIR)/program/soffice"
 
-dev-install: build
+dev-install: build-packimages
 	@rm -rf $(OUTDIR)/installation
 	@mkdir $(OUTDIR)/installation
 ifeq ($(DISABLE_LINKOO),TRUE)
