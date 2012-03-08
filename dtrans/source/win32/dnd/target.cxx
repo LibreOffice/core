@@ -67,7 +67,8 @@ DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
     m_bActive(sal_True),
     m_nDefaultActions(ACTION_COPY|ACTION_MOVE|ACTION_LINK|ACTION_DEFAULT),
     m_nCurrentDropAction( ACTION_NONE),
-    m_nLastDropAction(0)
+    m_nLastDropAction(0),
+    m_bDropComplete(false)
 
 
 {
