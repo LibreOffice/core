@@ -56,17 +56,17 @@ extern rtl_StandardModuleCount g_moduleCount;
 DWORD WINAPI DndTargetOleSTAFunc(LPVOID pParams);
 
 DropTarget::DropTarget( const Reference<XMultiServiceFactory>& sf):
-    m_hWnd( NULL),
-    m_serviceFactory( sf),
     WeakComponentImplHelper3<XInitialization,XDropTarget, XServiceInfo>(m_mutex),
-    m_bActive(sal_True),
-    m_nDefaultActions(ACTION_COPY|ACTION_MOVE|ACTION_LINK|ACTION_DEFAULT),
-    m_nCurrentDropAction( ACTION_NONE),
-    m_oleThreadId( 0),
-    m_pDropTarget( NULL),
+    m_hWnd( NULL),
     m_threadIdWindow(0),
     m_threadIdTarget(0),
     m_hOleThread(0),
+    m_oleThreadId( 0),
+    m_pDropTarget( NULL),
+    m_serviceFactory( sf),
+    m_bActive(sal_True),
+    m_nDefaultActions(ACTION_COPY|ACTION_MOVE|ACTION_LINK|ACTION_DEFAULT),
+    m_nCurrentDropAction( ACTION_NONE),
     m_nLastDropAction(0)
 
 
