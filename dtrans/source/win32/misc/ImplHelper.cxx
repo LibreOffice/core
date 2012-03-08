@@ -385,39 +385,40 @@ sal_Int32 SAL_CALL CompareFormatEtc( const FORMATETC* pFetcLhs, const FORMATETC*
     {
 #endif
         if ( pFetcLhs != pFetcRhs )
+        {
+            if ( ( pFetcLhs->cfFormat != pFetcRhs->cfFormat ) ||
+                ( pFetcLhs->lindex   != pFetcRhs->lindex ) ||
+                !CompareTargetDevice( pFetcLhs->ptd, pFetcRhs->ptd ) )
+            {
+                nMatch = FORMATETC_NO_MATCH;
+            }
 
-        if ( ( pFetcLhs->cfFormat != pFetcRhs->cfFormat ) ||
-             ( pFetcLhs->lindex   != pFetcRhs->lindex ) ||
-             !CompareTargetDevice( pFetcLhs->ptd, pFetcRhs->ptd ) )
-        {
-            nMatch = FORMATETC_NO_MATCH;
-        }
+            else if ( pFetcLhs->dwAspect == pFetcRhs->dwAspect )
+                // same aspects; equal
+                ;
+            else if ( ( pFetcLhs->dwAspect & ~pFetcRhs->dwAspect ) != 0 )
+            {
+                // left not subset of aspects of right; not equal
+                nMatch = FORMATETC_NO_MATCH;
+            }
+            else
+                // left subset of right
+                nMatch = FORMATETC_PARTIAL_MATCH;
 
-        else if ( pFetcLhs->dwAspect == pFetcRhs->dwAspect )
-            // same aspects; equal
-            ;
-        else if ( ( pFetcLhs->dwAspect & ~pFetcRhs->dwAspect ) != 0 )
-        {
-            // left not subset of aspects of right; not equal
-            nMatch = FORMATETC_NO_MATCH;
-        }
-        else
-            // left subset of right
-            nMatch = FORMATETC_PARTIAL_MATCH;
-
-        if ( nMatch == FORMATETC_EXACT_MATCH || nMatch == FORMATETC_PARTIAL_MATCH )
-        {
-        if ( pFetcLhs->tymed == pFetcRhs->tymed )
-            // same medium flags; equal
-            ;
-        else if ( ( pFetcLhs->tymed & ~pFetcRhs->tymed ) != 0 )
-        {
-            // left not subset of medium flags of right; not equal
-            nMatch = FORMATETC_NO_MATCH;
-        }
-        else
-            // left subset of right
-            nMatch = FORMATETC_PARTIAL_MATCH;
+            if ( nMatch == FORMATETC_EXACT_MATCH || nMatch == FORMATETC_PARTIAL_MATCH )
+            {
+            if ( pFetcLhs->tymed == pFetcRhs->tymed )
+                // same medium flags; equal
+                ;
+            else if ( ( pFetcLhs->tymed & ~pFetcRhs->tymed ) != 0 )
+            {
+                // left not subset of medium flags of right; not equal
+                nMatch = FORMATETC_NO_MATCH;
+            }
+            else
+                // left subset of right
+                nMatch = FORMATETC_PARTIAL_MATCH;
+            }
         }
     }
 #ifdef __MINGW32__
