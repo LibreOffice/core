@@ -51,7 +51,6 @@ bool IsUnregisterParameter(const char* Param)
 int main(int argc, char* argv[])
 {
     HMODULE hmod;
-    HRESULT hr = E_FAIL;
     lpfnDllRegisterServer   lpfn_register;
     lpfnDllUnregisterServer lpfn_unregister;
 
@@ -65,7 +64,7 @@ int main(int argc, char* argv[])
                 hmod, "DllRegisterServer");
 
             if (lpfn_register)
-                hr = lpfn_register();
+                lpfn_register();
 
             FreeLibrary(hmod);
         }
@@ -80,7 +79,7 @@ int main(int argc, char* argv[])
                 hmod, "DllUnregisterServer");
 
             if (lpfn_unregister)
-                hr = lpfn_unregister();
+                lpfn_unregister();
 
             FreeLibrary(hmod);
         }
