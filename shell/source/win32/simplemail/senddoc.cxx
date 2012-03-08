@@ -155,7 +155,7 @@ void initMapiOriginator(MapiRecipDesc* pMapiOriginator)
     ZeroMemory(pMapiOriginator, sizeof(MapiRecipDesc));
 
     pMapiOriginator->ulRecipClass = MAPI_ORIG;
-    pMapiOriginator->lpszName = "";
+    pMapiOriginator->lpszName = const_cast<char*>("");
     pMapiOriginator->lpszAddress = const_cast<char*>(gFrom.c_str());
 }
 
