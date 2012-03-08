@@ -28,7 +28,7 @@
 
 // activate the extra needed ctor
 #define RTL_STRING_UNITTEST
-extern bool rtl_string_unittest_const_literal; // actually unused here
+extern bool rtl_string_unittest_const_literal;
 
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
@@ -100,24 +100,38 @@ void test::oustring::StringLiterals::testcall( const char str[] )
 }
 
 void test::oustring::StringLiterals::checkUsage()
-{ // simply check that all string literal based calls work as expected
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foo" ), rtl::OUString() = "foo" );
-    CPPUNIT_ASSERT( rtl::OUString( "FoO" ).equalsIgnoreAsciiCase( "fOo" ));
-    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).match( "bar", 3 ));
-    CPPUNIT_ASSERT( rtl::OUString( "foobar" ).match( "foo" ));
-    CPPUNIT_ASSERT( rtl::OUString( "FooBaRfoo" ).matchIgnoreAsciiCase( "bAr", 3 ));
-    CPPUNIT_ASSERT( rtl::OUString( "FooBaR" ).matchIgnoreAsciiCase( "fOo" ));
-    CPPUNIT_ASSERT( rtl::OUString( "foobar" ).endsWith( "bar" ));
-    CPPUNIT_ASSERT( rtl::OUString( "foo" ) == "foo" );
-    CPPUNIT_ASSERT( "foo" == rtl::OUString( "foo" ));
-    CPPUNIT_ASSERT( rtl::OUString( "foo" ) != "bar" );
-    CPPUNIT_ASSERT( "foo" != rtl::OUString( "bar" ));
-    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).indexOf( "foo", 1 ) == 6 );
-    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).lastIndexOf( "foo" ) == 6 );
-    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).replaceFirst( "foo", rtl::OUString( "test" )) == "testbarfoo" );
-    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).replaceFirst( "foo", "test" ) == "testbarfoo" );
-    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).replaceAll( "foo", rtl::OUString( "test" )) == "testbartest" );
-    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).replaceAll( "foo", "test" ) == "testbartest" );
+{
+// simply check that all string literal based calls work as expected
+// also check that they really use string literal overload and do not convert to OUString
+    rtl::OUString foo( "foo" );
+    rtl::OUString FoO( "FoO" );
+    rtl::OUString foobarfoo( "foobarfoo" );
+    rtl::OUString foobar( "foobar" );
+    rtl::OUString FooBaRfoo( "FooBaRfoo" );
+    rtl::OUString FooBaR( "FooBaR" );
+    rtl::OUString bar( "bar" );
+    rtl::OUString test( "test" );
+
+    rtl_string_unittest_const_literal = false; // start checking for OUString conversions
+    CPPUNIT_ASSERT_EQUAL( foo, rtl::OUString() = "foo" );
+    CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( "fOo" ));
+    CPPUNIT_ASSERT( foobarfoo.match( "bar", 3 ));
+    CPPUNIT_ASSERT( foobar.match( "foo" ));
+    CPPUNIT_ASSERT( FooBaRfoo.matchIgnoreAsciiCase( "bAr", 3 ));
+    CPPUNIT_ASSERT( FooBaR.matchIgnoreAsciiCase( "fOo" ));
+    CPPUNIT_ASSERT( foobar.endsWith( "bar" ));
+    CPPUNIT_ASSERT( foo == "foo" );
+    CPPUNIT_ASSERT( "foo" == foo );
+    CPPUNIT_ASSERT( foo != "bar" );
+    CPPUNIT_ASSERT( "foo" != bar );
+    CPPUNIT_ASSERT( foobarfoo.indexOf( "foo", 1 ) == 6 );
+    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( "foo" ) == 6 );
+    CPPUNIT_ASSERT( foobarfoo.replaceFirst( "foo", test ) == "testbarfoo" );
+    CPPUNIT_ASSERT( foobarfoo.replaceFirst( "foo", "test" ) == "testbarfoo" );
+    CPPUNIT_ASSERT( foobarfoo.replaceAll( "foo", test ) == "testbartest" );
+    CPPUNIT_ASSERT( foobarfoo.replaceAll( "foo", "test" ) == "testbartest" );
+    // if this is not true, some of the calls above converted to OUString
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
 }
 
 void test::oustring::StringLiterals::checkExtraIntArgument()

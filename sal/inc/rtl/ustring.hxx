@@ -192,6 +192,9 @@ public:
             throw std::bad_alloc();
 #endif
         }
+#ifdef RTL_STRING_UNITTEST
+        rtl_string_unittest_const_literal = true;
+#endif
     }
 
     /**
