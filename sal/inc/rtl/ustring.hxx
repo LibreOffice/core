@@ -944,6 +944,46 @@ public:
     }
 
     /**
+      Check whether this string ends with a given string, ignoring the case of
+      ASCII letters.
+
+      Character values between 65 and 90 (ASCII A-Z) are interpreted as
+      values between 97 and 122 (ASCII a-z).
+      This function can't be used for language specific comparison.
+
+      @param    str         the object (substring) to be compared.
+      @return true if this string ends with str, ignoring the case of ASCII
+      letters ("A"--"Z" and "a"--"z"); otherwise, false is returned
+      @since 3.6
+    */
+    sal_Bool endsWithIgnoreAsciiCase( const OUString & str ) const SAL_THROW(())
+    {
+        return str.getLength() <= getLength()
+            && matchIgnoreAsciiCase(str, getLength() - str.getLength());
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since 3.6
+    */
+    template< int N >
+    sal_Bool endsWithIgnoreAsciiCase( const char (&literal)[ N ] ) const SAL_THROW(())
+    {
+        return N - 1 <= pData->length
+            && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
+                    pData->buffer + pData->length - ( N - 1 ),
+                    N - 1, literal, N - 1)
+                == 0);
+    }
+
+    /**
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
+     * @internal
+     */
+    template< int N >
+    sal_Bool endsWithIgnoreAsciiCase( char (&literal)[ N ] ) const SAL_THROW(());
+    /**
       Check whether this string ends with a given ASCII string, ignoring the
       case of ASCII letters.
 
