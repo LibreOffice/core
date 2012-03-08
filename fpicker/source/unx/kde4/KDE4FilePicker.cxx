@@ -60,6 +60,8 @@
 #undef SETTINGS_MOUSE
 #define LO_SETTINGS_LOCALE SETTINGS_LOCALE
 #undef SETTINGS_LOCALE
+#define LO_SETTINGS_STYLE SETTINGS_STYLE
+#undef SETTINGS_STYLE
 
 #include <kfiledialog.h>
 #include <kwindowsystem.h>
@@ -77,6 +79,8 @@
 #undef LO_SETTINGS_MOUSE
 #define SETTINGS_LOCALE LO_SETTINGS_LOCALE
 #undef LO_SETTINGS_LOCALE
+#define SETTINGS_STYLE LO_SETTINGS_STYLE
+#undef LO_SETTINGS_STYLE
 
 using namespace ::com::sun::star;
 
