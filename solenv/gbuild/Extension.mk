@@ -183,7 +183,7 @@ endef
 
 define gb_Extension_localize_help_onelang
 $(call gb_Extension_get_target,$(1)) : $(call gb_Extension_get_rootdir,$(1))/$(2)
-$(call gb_Extension_get_rootdir,$(1))/$(2) : SDF := $(gb_Extension_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
+$(call gb_Extension_get_rootdir,$(1))/$(2) : SDF := $(gb_SDFLOCATION)$(subst $(SRCDIR),,$(dir $(3)))localize.sdf
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $$(SDF)
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $(gb_Extension_HELPEXTARGET)
 $(call gb_Extension_get_rootdir,$(1))/$(2) : $(3)
