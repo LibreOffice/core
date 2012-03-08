@@ -57,7 +57,7 @@ static const cppu::ImplementationEntry kImplementations_entries[] =
         NULL,
         0
     },
-    { NULL }
+    { NULL, NULL, NULL, NULL, NULL, 0 }
 } ;
 
 //------------------------------------------------------------------------------
