@@ -990,7 +990,6 @@ namespace /* private */
     const char* GUID_PLACEHOLDER         = "{GUID}";
     const char* GUID_PERSIST_PLACEHOLDER = "{GUIDPERSIST}";
     const char* EXTENSION_PLACEHOLDER    = "{EXT}";
-    const char* FORWARDKEY_PLACEHOLDER   = "{FWDKEY}";
 
     const char* CLSID_GUID_INPROC_ENTRY             = "CLSID\\{GUID}\\InProcServer32";
     const char* CLSID_GUID_ENTRY                    = "CLSID\\{GUID}";
