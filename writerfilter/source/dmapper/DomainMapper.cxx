@@ -3146,7 +3146,7 @@ void DomainMapper::sprmWithProps( Sprm& rSprm, PropertyMapPtr rContext, SprmType
     case NS_ooxml::LN_EG_RPrBase_snapToGrid: // "Use document grid  settings for inter-paragraph spacing"
     break;
     case NS_sprm::LN_PContextualSpacing:
-        //TODO: determines whether top/bottom paragraph spacing is added if equal styles are following - unsupported
+        rContext->Insert(PROP_PARA_CONTEXT_MARGIN, true, uno::makeAny( sal_Bool( nIntValue ) ));
     break;
     case NS_ooxml::LN_EG_SectPrContents_formProt: //section protection, only form editing is enabled - unsupported
     case NS_ooxml::LN_EG_SectPrContents_vAlign:

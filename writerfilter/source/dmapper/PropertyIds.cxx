@@ -123,6 +123,7 @@ const rtl::OUString& PropertyNameSupplier::GetName( PropertyIds eId ) const
             case PROP_PARA_FIRST_LINE_INDENT:    sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaFirstLineIndent")); break;
             case PROP_PARA_KEEP_TOGETHER:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaKeepTogether")); break;
             case PROP_PARA_TOP_MARGIN:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaTopMargin")); break;
+            case PROP_PARA_CONTEXT_MARGIN:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaContextMargin")); break;
             case PROP_PARA_BOTTOM_MARGIN:       sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBottomMargin")); break;
             case PROP_PARA_IS_HYPHENATION:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaIsHyphenation")); break;
             case PROP_PARA_LINE_NUMBER_COUNT:     sName = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaLineNumberCount")); break;
