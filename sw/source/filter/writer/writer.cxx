@@ -464,17 +464,18 @@ sal_uInt16 Writer::GetBookmarks(const SwCntntNode& rNd, xub_StrLen nStt,
     OSL_ENSURE( rArr.empty(), "es sind noch Eintraege vorhanden" );
 
     sal_uLong nNd = rNd.GetIndex();
-    SwBookmarkNodeTable::const_iterator it = m_pImpl->aBkmkNodePos.find( nNd );
-    if( it != m_pImpl->aBkmkNodePos.end() )
+    std::pair<SwBookmarkNodeTable::const_iterator, SwBookmarkNodeTable::const_iterator> aIterPair 
+        = m_pImpl->aBkmkNodePos.equal_range( nNd );
+    if( aIterPair.first != aIterPair.second )
     {
         // there exist some bookmarks, search now all which is in the range
         if( !nStt && nEnd == rNd.Len() )
             // all
-            for( ; it != m_pImpl->aBkmkNodePos.end(); ++it )
+            for( SwBookmarkNodeTable::const_iterator it = aIterPair.first; it != aIterPair.second; ++it )
                 rArr.push_back( it->second );
         else
         {
-            for( ; it != m_pImpl->aBkmkNodePos.end(); ++it )
+            for( SwBookmarkNodeTable::const_iterator it = aIterPair.first; it != aIterPair.second; ++it )
             {
                 const ::sw::mark::IMark& rBkmk = *(it->second);
                 xub_StrLen nCntnt;
