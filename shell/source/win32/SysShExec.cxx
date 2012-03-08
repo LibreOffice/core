@@ -161,7 +161,7 @@ namespace // private
 
     oslFileError _mapError( DWORD dwError )
     {
-        int i;
+        unsigned i;
 
         /* check the table for the OS error code */
         for ( i = 0; i < ERRTABLESIZE; ++i )
