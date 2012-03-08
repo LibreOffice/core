@@ -38,7 +38,7 @@
 #include <svx/pagectrl.hxx>
 #include <svx/frmdirlbox.hxx>
 #include <editeng/svxenum.hxx>
-#include <i18npool/paper.hxx>
+#include <i18nutil/paper.hxx>
 #include <svx/flagsdef.hxx>
 
 // class SvxPageDescPage -------------------------------------------------

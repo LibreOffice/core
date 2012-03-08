@@ -56,7 +56,7 @@ $(eval $(call gb_Library_add_linked_libs,ooxml,\
     cppuhelper \
 	doctok \
 	i18nisolang1 \
-	i18npaper \
+	i18nutil \
     oox \
 	resourcemodel \
     sal \

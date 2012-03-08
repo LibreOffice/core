@@ -151,7 +151,7 @@ $(eval $(call gb_Library_add_linked_libs,editeng,\
     sal \
     salhelper \
     i18nisolang1 \
-    i18npaper \
+    i18nutil \
     $(gb_STDLIBS) \
 ))
 

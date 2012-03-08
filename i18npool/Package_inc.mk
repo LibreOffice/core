@@ -33,6 +33,5 @@ $(eval $(call gb_Package_add_file,i18npool_inc,inc/i18npool/version.mk,../versio
 $(eval $(call gb_Package_add_file,i18npool_inc,inc/i18npool/i18npooldllapi.h,i18npool/i18npooldllapi.h))
 $(eval $(call gb_Package_add_file,i18npool_inc,inc/i18npool/lang.h,i18npool/lang.h))
 $(eval $(call gb_Package_add_file,i18npool_inc,inc/i18npool/mslangid.hxx,i18npool/mslangid.hxx))
-$(eval $(call gb_Package_add_file,i18npool_inc,inc/i18npool/paper.hxx,i18npool/paper.hxx))
 
 # vim: set noet sw=4 ts=4:

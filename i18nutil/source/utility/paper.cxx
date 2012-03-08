@@ -37,7 +37,7 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 
-#include "i18npool/paper.hxx"
+#include "i18nutil/paper.hxx"
 
 #include <utility>
 #include <cstdlib>

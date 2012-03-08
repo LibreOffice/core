@@ -26,12 +26,10 @@
  *
  ************************************************************************/
 
-#ifndef INCLUDED_I18NPOOL_PAPER_HXX
-#define INCLUDED_I18NPOOL_PAPER_HXX
+#ifndef INCLUDED_I18NUTIL_PAPER_HXX
+#define INCLUDED_I18NUTIL_PAPER_HXX
 
-#include <sal/config.h>
-
-#include "i18npool/i18npooldllapi.h"
+#include "i18nutildllapi.h"
 #include <rtl/string.hxx>
 #include <com/sun/star/lang/Locale.hpp>
 
@@ -128,7 +126,7 @@ enum Paper
 // - Paper -
 // ---------
 
-class I18NPAPER_DLLPUBLIC PaperInfo
+class I18NUTIL_DLLPUBLIC PaperInfo
 {
     Paper m_eType;
     long m_nPaperWidth;     // width in 100thMM
@@ -152,6 +150,6 @@ public:
     static long sloppyFitPageDimension(long nDimension);
 };
 
-#endif // INCLUDED_I18NPOOL_PAPER_HXX
+#endif // INCLUDED_I18NUTIL_PAPER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

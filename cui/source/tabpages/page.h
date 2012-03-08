@@ -31,8 +31,8 @@
 // define ----------------------------------------------------------------
 
 //!! the values of the following defines must correspond to the array position
-//!! of the respective paper size in the file i18npool/source/paper/paper.cxx
-//!! There are enums for them in i18npool/inc/i18npool/paper.hxx but unfortunately
+//!! of the respective paper size in the file i18nutil/source/utility/paper.cxx
+//!! There are enums for them in i18npool/inc/i18nutil/paper.hxx but unfortunately
 //!! the resource compiler does not understand enums, thus the enum values need
 //!! to be duplicated here for use in the src file.
 #define PAPERSIZE_A0            0

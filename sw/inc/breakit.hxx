@@ -60,7 +60,6 @@ class SW_DLLPUBLIC SwBreakIt
     void _GetForbidden( const LanguageType  aLang );
 
     void createBreakIterator() const;
-    void createScriptTypeDetector();
 
     // forbidden and not implemented.
     SwBreakIt();

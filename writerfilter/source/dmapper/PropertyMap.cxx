@@ -29,7 +29,7 @@
 #include <ooxml/resourceids.hxx>
 #include <DomainMapper_Impl.hxx>
 #include <ConversionHelper.hxx>
-#include <i18npool/paper.hxx>
+#include <i18nutil/paper.hxx>
 #include <rtl/oustringostreaminserter.hxx>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>

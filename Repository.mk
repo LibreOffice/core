@@ -221,7 +221,6 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     helplinker \
     hwp \
     hyphen \
-    i18npaper \
     i18nregexp \
     icd \
     icg \

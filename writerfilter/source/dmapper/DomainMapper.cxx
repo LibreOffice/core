@@ -33,7 +33,7 @@
 #include <ModelEventListener.hxx>
 #include <MeasureHandler.hxx>
 #include <i18npool/mslangid.hxx>
-#include <i18npool/paper.hxx>
+#include <i18nutil/paper.hxx>
 #include <ooxml/OOXMLFastTokens.hxx>
 #include <com/sun/star/document/XDocumentPropertiesSupplier.hpp>
 #include <com/sun/star/document/XOOXMLDocumentPropertiesImporter.hpp>

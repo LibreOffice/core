@@ -53,7 +53,7 @@ $(eval $(call gb_Library_add_linked_libs,writerfilter,\
     cppuhelper \
 	doctok \
     i18nisolang1 \
-    i18npaper \
+    i18nutil \
     oox \
     ooxml \
     rtftok \

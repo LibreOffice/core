@@ -63,7 +63,6 @@ $(eval $(call gb_Library_add_linked_libs,vclplug_kde,\
     comphelper \
     cppuhelper \
     i18nisolang1 \
-    i18npaper \
     i18nutil \
     jvmaccess \
     cppu \

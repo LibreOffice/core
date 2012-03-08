@@ -51,7 +51,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,editeng_borderline, \
     sal \
     salhelper \
     i18nisolang1 \
-    i18npaper \
+    i18nutil \
     $(gb_STDLIBS) \
 ))
 

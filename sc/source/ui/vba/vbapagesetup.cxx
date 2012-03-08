@@ -38,7 +38,7 @@
 #include <ooo/vba/excel/XlPageOrientation.hpp>
 #include <ooo/vba/excel/XlOrder.hpp>
 #include <ooo/vba/excel/Constants.hpp>
-#include <i18npool/paper.hxx>
+#include <i18nutil/paper.hxx>
 #include <editeng/paperinf.hxx>
 #include <ooo/vba/excel/XlPaperSize.hpp>
 #include <sal/macros.h>

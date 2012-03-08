@@ -33,7 +33,6 @@ $(eval $(call gb_Module_add_targets,i18npool,\
 	Library_dict_ja \
 	Library_dict_zh \
 	Library_i18nisolang1 \
-	Library_i18npaper \
 	Library_i18npool \
 	Library_i18nsearch \
 	Library_index_data \

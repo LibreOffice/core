@@ -42,7 +42,7 @@
 #include "tools/debug.hxx"
 #include "tools/config.hxx"
 
-#include "i18npool/paper.hxx"
+#include "i18nutil/paper.hxx"
 #include <comphelper/string.hxx>
 #include "rtl/strbuf.hxx"
 #include <sal/macros.h>

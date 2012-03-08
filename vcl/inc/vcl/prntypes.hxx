@@ -30,7 +30,7 @@
 #define _SV_PRNTYPES_HXX
 
 #include <vcl/sv.h>
-#include <i18npool/paper.hxx>
+#include <i18nutil/paper.hxx>
 
 // ---------------
 // - Duplex Mode -

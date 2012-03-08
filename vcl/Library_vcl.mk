@@ -73,7 +73,6 @@ $(eval $(call gb_Library_add_linked_libs,vcl,\
     comphelper \
     cppuhelper \
     i18nisolang1 \
-    i18npaper \
     i18nutil \
     cppu \
     sal \
