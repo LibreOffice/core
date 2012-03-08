@@ -2566,8 +2566,7 @@ const rtl::OUString& SwCombinedCharField::GetPar1() const
 
 void SwCombinedCharField::SetPar1(const rtl::OUString& rStr)
 {
-    sCharacters = rStr.copy(0, std::min(rStr.getLength(),
-                static_cast<sal_Int32>(MAX_COMBINED_CHARACTERS)));
+    sCharacters = rStr.copy(0, std::min<sal_Int32>(rStr.getLength(), MAX_COMBINED_CHARACTERS));
 }
 
 bool SwCombinedCharField::QueryValue( uno::Any& rAny,
