@@ -722,7 +722,10 @@ void ScInputHandler::GetFormulaData()
         if ( pFormulaData )
             pFormulaData->clear();
         else
+        {
             pFormulaData = new ScTypedCaseStrSet;
+            miAutoPosFormula = pFormulaData->end();
+        }
 
         if( pFormulaDataPara )
             pFormulaDataPara->clear();
@@ -1524,6 +1527,7 @@ void ScInputHandler::GetColData()
         else
         {
             pColumnData = new ScTypedCaseStrSet;
+            miAutoPosColumn = pColumnData->end();
         }
 
         std::vector<ScTypedStrData> aEntries;
