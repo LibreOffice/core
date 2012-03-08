@@ -246,7 +246,10 @@ void NameContainer::removeByName( const OUString& aName )
     NameContainerNameMap::iterator aIt = mHashMap.find( aName );
     if( aIt == mHashMap.end() )
     {
-        throw NoSuchElementException();
+        rtl::OUString sMessage = rtl::OUStringBuffer().append('"')
+            .append(aName).append("\" not found")
+            .makeStringAndClear();
+        throw NoSuchElementException(sMessage, uno::Reference< uno::XInterface >());
     }
 
     sal_Int32 iHashResult = (*aIt).second;
@@ -1170,16 +1173,15 @@ void SfxLibraryContainer::init_Impl( const OUString& rInitialDocumentURL,
                 mxSFI->kill( aPrevFolder );
             }
         }
-        catch(const Exception& )
+        catch(const Exception& e)
         {
             bCleanUp = true;
+            SAL_WARN("basic", "Upgrade of Basic installation failed somehow: " << e.Message);
         }
 
         // #i93163
         if( bCleanUp )
         {
-            SAL_WARN("basic", "Upgrade of Basic installation failed somehow");
-
             static const char strErrorSavFolderName[] = "__basic_80_err";
             INetURLObject aPrevUserBasicInetObj_Err( aUserBasicInetObj );
             aPrevUserBasicInetObj_Err.removeSegment();
