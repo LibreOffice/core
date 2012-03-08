@@ -45,6 +45,7 @@ class StringLiterals: public CppUnit::TestFixture
 {
 private:
     void checkCtors();
+    void checkUsage();
     void checkExtraIntArgument();
     void checkNonconstChar();
 
@@ -55,6 +56,7 @@ private:
 
 CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);
+CPPUNIT_TEST(checkUsage);
 CPPUNIT_TEST(checkExtraIntArgument);
 CPPUNIT_TEST(checkNonconstChar);
 CPPUNIT_TEST_SUITE_END();
@@ -95,6 +97,27 @@ void test::oustring::StringLiterals::checkCtors()
 void test::oustring::StringLiterals::testcall( const char str[] )
 {
     CPPUNIT_ASSERT( !validConversion( rtl::OUString( str )));
+}
+
+void test::oustring::StringLiterals::checkUsage()
+{ // simply check that all string literal based calls work as expected
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foo" ), rtl::OUString() = "foo" );
+    CPPUNIT_ASSERT( rtl::OUString( "FoO" ).equalsIgnoreAsciiCase( "fOo" ));
+    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).match( "bar", 3 ));
+    CPPUNIT_ASSERT( rtl::OUString( "foobar" ).match( "foo" ));
+    CPPUNIT_ASSERT( rtl::OUString( "FooBaRfoo" ).matchIgnoreAsciiCase( "bAr", 3 ));
+    CPPUNIT_ASSERT( rtl::OUString( "FooBaR" ).matchIgnoreAsciiCase( "fOo" ));
+    CPPUNIT_ASSERT( rtl::OUString( "foobar" ).endsWith( "bar" ));
+    CPPUNIT_ASSERT( rtl::OUString( "foo" ) == "foo" );
+    CPPUNIT_ASSERT( "foo" == rtl::OUString( "foo" ));
+    CPPUNIT_ASSERT( rtl::OUString( "foo" ) != "bar" );
+    CPPUNIT_ASSERT( "foo" != rtl::OUString( "bar" ));
+    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).indexOf( "foo", 1 ) == 6 );
+    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).lastIndexOf( "foo" ) == 6 );
+    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).replaceFirst( "foo", rtl::OUString( "test" )) == "testbarfoo" );
+    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).replaceFirst( "foo", "test" ) == "testbarfoo" );
+    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).replaceAll( "foo", rtl::OUString( "test" )) == "testbartest" );
+    CPPUNIT_ASSERT( rtl::OUString( "foobarfoo" ).replaceAll( "foo", "test" ) == "testbartest" );
 }
 
 void test::oustring::StringLiterals::checkExtraIntArgument()
