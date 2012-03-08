@@ -259,7 +259,7 @@ public:
 
 private:
     unsigned char*  mpRawBytes;
-    int             mnByteCount;
+    unsigned        mnByteCount;
 };
 
 RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
@@ -277,7 +277,7 @@ RawFontData::RawFontData( HDC hDC, DWORD nTableTag )
     mpRawBytes = new unsigned char[ mnByteCount ];
 
     // get raw data in chunks small enough for GetFontData()
-    int nRawDataOfs = 0;
+    unsigned nRawDataOfs = 0;
     DWORD nMaxChunkSize = 0x100000;
     for(;;)
     {
@@ -2096,8 +2096,8 @@ static bool ImplGetFontAttrFromFile( const String& rFontFileURL,
     ::DeleteFileA( aResourceName );
 
     // retrieve font family name from byte offset 0x4F6
-    int i = 0x4F6;
-    int nNameOfs = i;
+    sal_uInt64 i = 0x4F6;
+    sal_uInt64 nNameOfs = i;
     while( (i < nBytesRead) && (aBuffer[i++] != 0) );
     // skip full name
     while( (i < nBytesRead) && (aBuffer[i++] != 0) );
