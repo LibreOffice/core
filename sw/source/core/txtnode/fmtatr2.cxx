@@ -246,28 +246,14 @@ int SwFmtINetFmt::operator==( const SfxPoolItem& rAttr ) const
 
     const SvxMacroTableDtor* pOther = ((SwFmtINetFmt&)rAttr).pMacroTbl;
     if( !pMacroTbl )
-        return ( !pOther || !pOther->Count() );
+        return ( !pOther || pOther->empty() );
     if( !pOther )
-        return 0 == pMacroTbl->Count();
+        return pMacroTbl->empty();
 
     const SvxMacroTableDtor& rOwn = *pMacroTbl;
     const SvxMacroTableDtor& rOther = *pOther;
 
-    // Anzahl unterschiedlich => auf jeden Fall ungleich
-    if( rOwn.Count() != rOther.Count() )
-        return sal_False;
-
-    // einzeln vergleichen; wegen Performance ist die Reihenfolge wichtig
-    for( sal_uInt16 nNo = 0; nNo < rOwn.Count(); ++nNo )
-    {
-        const SvxMacro *pOwnMac = rOwn.GetObject(nNo);
-        const SvxMacro *pOtherMac = rOther.GetObject(nNo);
-        if (    rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
-                pOwnMac->GetLibName() != pOtherMac->GetLibName() ||
-                pOwnMac->GetMacName() != pOtherMac->GetMacName() )
-            return sal_False;
-    }
-    return sal_True;
+    return rOwn == rOther;
 }
 
 
@@ -299,14 +285,7 @@ void SwFmtINetFmt::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
     if( !pMacroTbl )
         pMacroTbl = new SvxMacroTableDtor;
 
-    SvxMacro *pOldMacro;
-    if( 0 != ( pOldMacro = pMacroTbl->Get( nEvent )) )
-    {
-        delete pOldMacro;
-        pMacroTbl->Replace( nEvent, new SvxMacro( rMacro ) );
-    }
-    else
-        pMacroTbl->Insert( nEvent, new SvxMacro( rMacro ) );
+     pMacroTbl->Insert( nEvent, rMacro );
 }
 
 

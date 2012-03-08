@@ -628,9 +628,9 @@ void SwGlossaryHdl::SetMacros(const String& rShortName,
                                   : rStatGlossaries.GetGroupDoc( aCurGrp );
     SvxMacroTableDtor aMacroTbl;
     if( pStart )
-        aMacroTbl.Insert( SW_EVENT_START_INS_GLOSSARY, new SvxMacro(*pStart));
+        aMacroTbl.Insert( SW_EVENT_START_INS_GLOSSARY, *pStart);
     if( pEnd )
-        aMacroTbl.Insert( SW_EVENT_END_INS_GLOSSARY, new SvxMacro(*pEnd));
+        aMacroTbl.Insert( SW_EVENT_END_INS_GLOSSARY, *pEnd);
     sal_uInt16 nIdx = pGlos->GetIndex( rShortName );
     if( !pGlos->SetMacroTable( nIdx, aMacroTbl ) && pGlos->GetError() )
         ErrorHandler::HandleError( pGlos->GetError() );

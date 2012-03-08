@@ -99,20 +99,36 @@ SvxMacro& SvxMacro::operator=( const SvxMacro& rBase )
     return *this;
 }
 
+// -----------------------------------------------------------------------
 
 SvxMacroTableDtor& SvxMacroTableDtor::operator=( const SvxMacroTableDtor& rTbl )
 {
-    DelDtor();
-    SvxMacro* pTmp = ((SvxMacroTableDtor&)rTbl).First();
-    while( pTmp )
-    {
-        SvxMacro *pNew = new SvxMacro( *pTmp );
-        Insert( rTbl.GetCurKey(), pNew );
-        pTmp = ((SvxMacroTableDtor&)rTbl).Next();
-    }
+    aSvxMacroTable.clear();
+    aSvxMacroTable.insert(rTbl.aSvxMacroTable.begin(), rTbl.aSvxMacroTable.end());
     return *this;
 }
 
+int SvxMacroTableDtor::operator==( const SvxMacroTableDtor& rOther ) const
+{
+    // Anzahl unterschiedlich => auf jeden Fall ungleich
+    if ( aSvxMacroTable.size() != rOther.aSvxMacroTable.size() )
+        return sal_False;
+
+    // einzeln verleichen; wegen Performance ist die Reihenfolge wichtig
+    SvxMacroTable::const_iterator it1 = aSvxMacroTable.begin();
+    SvxMacroTable::const_iterator it2 = rOther.aSvxMacroTable.begin();
+    for ( ; it1 != aSvxMacroTable.end(); ++it1, ++it2 )
+    {
+        const SvxMacro& rOwnMac = it1->second;
+        const SvxMacro& rOtherMac = it2->second;
+        if (    it1->first != it2->first ||
+                rOwnMac.GetLibName() != rOtherMac.GetLibName() ||
+                rOwnMac.GetMacName() != rOtherMac.GetMacName() )
+            return sal_False;
+    }
+
+    return sal_True;
+}
 
 SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
 {
@@ -132,16 +148,7 @@ SvStream& SvxMacroTableDtor::Read( SvStream& rStrm, sal_uInt16 nVersion )
         if( SVX_MACROTBL_VERSION40 <= nVersion )
             rStrm >> eType;
 
-        SvxMacro* pNew = new SvxMacro( aMacName, aLibName, (ScriptType)eType );
-
-        SvxMacro *pOld = Get( nCurKey );
-        if( pOld )
-        {
-            delete pOld;
-            Replace( nCurKey, pNew );
-        }
-        else
-            Insert( nCurKey, pNew );
+        aSvxMacroTable.insert( SvxMacroTable::value_type(nCurKey, SvxMacro( aMacName, aLibName, (ScriptType)eType ) ));
     }
     return rStrm;
 }
@@ -156,33 +163,60 @@ SvStream& SvxMacroTableDtor::Write( SvStream& rStream ) const
     if( SVX_MACROTBL_VERSION40 <= nVersion )
         rStream << nVersion;
 
-    rStream << (sal_uInt16)Count();
+    rStream << (sal_uInt16)aSvxMacroTable.size();
 
-    SvxMacro* pMac = ((SvxMacroTableDtor*)this)->First();
-    while( pMac && rStream.GetError() == SVSTREAM_OK )
+    SvxMacroTable::const_iterator it = aSvxMacroTable.begin();
+    while( it != aSvxMacroTable.end() && rStream.GetError() == SVSTREAM_OK )
     {
-        rStream << (short)GetCurKey();
-        SfxPoolItem::writeByteString(rStream, pMac->GetLibName());
-        SfxPoolItem::writeByteString(rStream, pMac->GetMacName());
+        const SvxMacro& rMac = it->second;
+        rStream << it->first;
+        SfxPoolItem::writeByteString(rStream, rMac.GetLibName());
+        SfxPoolItem::writeByteString(rStream, rMac.GetMacName());
 
         if( SVX_MACROTBL_VERSION40 <= nVersion )
-            rStream << (sal_uInt16)pMac->GetScriptType();
-        pMac = ((SvxMacroTableDtor*)this)->Next();
+            rStream << (sal_uInt16)rMac.GetScriptType();
+        ++it;
     }
     return rStream;
 }
 
-// -----------------------------------------------------------------------
-
-void SvxMacroTableDtor::DelDtor()
+// returns NULL if no entry exists, or a pointer to the internal value
+const SvxMacro* SvxMacroTableDtor::Get(sal_uInt16 nEvent) const
 {
-    SvxMacro* pTmp = First();
-    while( pTmp )
+    SvxMacroTable::const_iterator it = aSvxMacroTable.find(nEvent);
+    return it == aSvxMacroTable.end() ? NULL : &(it->second);
+}
+
+// returns NULL if no entry exists, or a pointer to the internal value
+SvxMacro* SvxMacroTableDtor::Get(sal_uInt16 nEvent)
+{
+    SvxMacroTable::iterator it = aSvxMacroTable.find(nEvent);
+    return it == aSvxMacroTable.end() ? NULL : &(it->second);
+}
+
+// return true if the key exists
+bool SvxMacroTableDtor::IsKeyValid(sal_uInt16 nEvent) const
+{
+    SvxMacroTable::const_iterator it = aSvxMacroTable.find(nEvent);
+    return it != aSvxMacroTable.end();
+}
+
+// This stores a copy of the rMacro parameter
+SvxMacro& SvxMacroTableDtor::Insert(sal_uInt16 nEvent, const SvxMacro& rMacro)
+{
+    return aSvxMacroTable.insert( SvxMacroTable::value_type( nEvent, rMacro ) ).first->second;
+}
+
+// If the entry exists, remove it from the map and release it's storage
+sal_Bool SvxMacroTableDtor::Erase(sal_uInt16 nEvent)
+{
+    SvxMacroTable::iterator it = aSvxMacroTable.find(nEvent);
+    if ( it != aSvxMacroTable.end())
     {
-        delete pTmp;
-        pTmp = Next();
+        aSvxMacroTable.erase(it);
+        return sal_True;
     }
-    Clear();
+    return sal_False;
 }
 
 // -----------------------------------------------------------------------
@@ -194,22 +228,7 @@ int SvxMacroItem::operator==( const SfxPoolItem& rAttr ) const
     const SvxMacroTableDtor& rOwn = aMacroTable;
     const SvxMacroTableDtor& rOther = ( (SvxMacroItem&) rAttr ).aMacroTable;
 
-    // Anzahl unterschiedlich => auf jeden Fall ungleich
-    if ( rOwn.Count() != rOther.Count() )
-        return sal_False;
-
-    // einzeln verleichen; wegen Performance ist die Reihenfolge wichtig
-    for ( sal_uInt16 nNo = 0; nNo < rOwn.Count(); ++nNo )
-    {
-        const SvxMacro *pOwnMac = rOwn.GetObject(nNo);
-        const SvxMacro *pOtherMac = rOther.GetObject(nNo);
-        if (    rOwn.GetKey(pOwnMac) != rOther.GetKey(pOtherMac)  ||
-                pOwnMac->GetLibName() != pOtherMac->GetLibName() ||
-                pOwnMac->GetMacName() != pOtherMac->GetMacName() )
-            return sal_False;
-    }
-
-    return sal_True;
+    return rOwn == rOther;
 }
 
 // -----------------------------------------------------------------------
@@ -268,14 +287,7 @@ SfxPoolItem* SvxMacroItem::Create( SvStream& rStrm, sal_uInt16 nVersion ) const
 
 void SvxMacroItem::SetMacro( sal_uInt16 nEvent, const SvxMacro& rMacro )
 {
-    SvxMacro *pMacro;
-    if ( 0 != (pMacro=aMacroTable.Get(nEvent)) )
-    {
-        delete pMacro;
-        aMacroTable.Replace(nEvent, new SvxMacro( rMacro ) );
-    }
-    else
-        aMacroTable.Insert(nEvent, new SvxMacro( rMacro ) );
+    aMacroTable.Insert( nEvent, rMacro);
 }
 
 // -----------------------------------------------------------------------

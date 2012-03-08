@@ -3036,7 +3036,7 @@ Writer& OutHTML_INetFmt( Writer& rWrt, const SwFmtINetFmt& rINetFmt, sal_Bool bO
 
     String aURL( rINetFmt.GetValue() );
     const SvxMacroTableDtor *pMacTable = rINetFmt.GetMacroTbl();
-    sal_Bool bEvents = pMacTable != 0 && pMacTable->Count() > 0;
+    sal_Bool bEvents = pMacTable != 0 && !pMacTable->empty();
 
     // Gibt es ueberhaupt etwas auszugeben?
     if( !aURL.Len() && !bEvents && !rINetFmt.GetName().Len() )

@@ -309,7 +309,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
     {
         SvxMacroTableDtor aTab;
         rtl::OUString sMacro = pInfo->GetMacro();
-        aTab.Insert(SFX_EVENT_MOUSECLICK_OBJECT, new SvxMacro(sMacro, rtl::OUString()));
+        aTab.Insert(SFX_EVENT_MOUSECLICK_OBJECT, SvxMacro(sMacro, rtl::OUString()));
         aItem.SetMacroTable( aTab );
     }
 
@@ -334,7 +334,7 @@ void ScDrawShell::ExecuteMacroAssign( SdrObject* pObj, Window* pWin )
         if( SFX_ITEM_SET == pOutSet->GetItemState( SID_ATTR_MACROITEM, false, &pItem ))
         {
             rtl::OUString sMacro;
-            SvxMacro* pMacro = ((SvxMacroItem*)pItem)->GetMacroTable().Get( SFX_EVENT_MOUSECLICK_OBJECT );
+            const SvxMacro* pMacro = ((SvxMacroItem*)pItem)->GetMacroTable().Get( SFX_EVENT_MOUSECLICK_OBJECT );
             if ( pMacro )
                 sMacro = pMacro->GetMacName();
 

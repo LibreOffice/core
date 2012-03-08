@@ -100,7 +100,7 @@ inline void _SfxMacroTabPage::SetMacroTbl( const SvxMacroTableDtor& rTbl )
 
 inline void _SfxMacroTabPage::ClearMacroTbl()
 {
-    aTbl.DelDtor();
+    aTbl.clear();
 }
 
 class SfxMacroTabPage : public _SfxMacroTabPage

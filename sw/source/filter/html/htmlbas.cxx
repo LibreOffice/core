@@ -342,10 +342,13 @@ void SwHTMLWriter::OutBasicBodyEvents()
     {
         SvxMacro* pMacro = SfxEventConfiguration::ConvertToMacro( xEvents->getByName( ::rtl::OUString::createFromAscii(aEventNames[i]) ), pDocSh, sal_True );
         if ( pMacro )
-            pDocTable->Insert( aBodyEventTable[i].nEvent, pMacro );
+        {
+            pDocTable->Insert( aBodyEventTable[i].nEvent, *pMacro );
+            delete pMacro;
+        }
     }
 
-    if( pDocTable && pDocTable->Count() )
+    if( pDocTable && !pDocTable->empty() )
         HTMLOutFuncs::Out_Events( Strm(), *pDocTable, aBodyEventTable,
                                   bCfgStarBasic, eDestEnc, &aNonConvertableCharacters );
 }

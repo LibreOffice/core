@@ -579,9 +579,8 @@ void SvMacroTableEventDescriptor::copyMacrosIntoTable(
         const sal_uInt16 nEvent = mpSupportedMacroItems[i].mnEvent;
         if (hasByName(nEvent))
         {
-            SvxMacro* pMacro = new SvxMacro(sEmpty, sEmpty);
-            getByName(*pMacro, nEvent);
-            rMacroTable.Insert(nEvent, pMacro);
+            SvxMacro& rMacro = rMacroTable.Insert(nEvent, SvxMacro(sEmpty, sEmpty));
+            getByName(rMacro, nEvent);
         }
     }
 }

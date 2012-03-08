@@ -437,7 +437,7 @@ SwHTMLImageWatcher::SwHTMLImageWatcher(
     OSL_ENSURE( xSrc.is(), "Kein XImageProducerSupplier" );
 
     // Als Event-Listener am Shape anmelden, damit wir es beim dispose
-    // loslassen ko”nnen ...
+    // loslassen koÂ”nnen ...
     uno::Reference< XEventListener > xEvtLstnr = (XEventListener *)this;
     uno::Reference< XComponent > xComp( xShape, UNO_QUERY );
     xComp->addEventListener( xEvtLstnr );
@@ -1293,7 +1293,7 @@ uno::Reference< drawing::XShape > SwHTMLParser::InsertControl(
     // auch schon Fokus-Events verschickt. Damit die nicht evtl. schon
     // vorhendene JavaSCript-Eents rufen, werden die Events nachtraeglich
     // gesetzt.
-    if( rMacroTbl.Count() || !rUnoMacroTbl.empty() )
+    if( !rMacroTbl.empty() || !rUnoMacroTbl.empty() )
     {
         lcl_html_setEvents( pFormImpl->GetControlEventManager(),
                             rFormComps->getCount() - 1,
@@ -1393,8 +1393,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
                 String aScriptType2;
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType2 = rDfltScriptType;
-                aMacroTbl.Insert( nEvent, new SvxMacro( sEvent, aScriptType2,
-                                  eScriptType2 ) );
+                aMacroTbl.Insert( nEvent, SvxMacro( sEvent, aScriptType2, eScriptType2 ) );
             }
         }
     }
@@ -1456,7 +1455,7 @@ void SwHTMLParser::NewForm( sal_Bool bAppend )
         pFormImpl->GetForms();
     Any aAny( &xForm, ::getCppuType((uno::Reference< XForm>*)0) );
     rForms->insertByIndex( rForms->getCount(), aAny );
-    if( aMacroTbl.Count() )
+    if( !aMacroTbl.empty() )
         lcl_html_setEvents( pFormImpl->GetFormEventManager(),
                             rForms->getCount() - 1,
                             aMacroTbl, aUnoMacroTbl, aUnoMacroParamTbl,
@@ -1625,8 +1624,7 @@ void SwHTMLParser::InsertInput()
                 String aScriptType2;
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType2 = rDfltScriptType;
-                aMacroTbl.Insert( nEvent, new SvxMacro( sEvent, aScriptType2,
-                                  eScriptType2 ) );
+                aMacroTbl.Insert( nEvent, SvxMacro( sEvent, aScriptType2, eScriptType2 ) );
             }
         }
     }
@@ -1764,11 +1762,11 @@ void SwHTMLParser::InsertInput()
                     OUString(RTL_CONSTASCII_USTRINGPARAM("DefaultState")), aTmp );
             }
 
-            SvxMacro *pMacro = aMacroTbl.Get( HTML_ET_ONCLICK );
+            const SvxMacro* pMacro = aMacroTbl.Get( HTML_ET_ONCLICK );
             if( pMacro )
             {
-                aMacroTbl.Remove( HTML_ET_ONCLICK );
-                aMacroTbl.Insert( HTML_ET_ONCLICK_ITEM, pMacro );
+                aMacroTbl.Insert( HTML_ET_ONCLICK_ITEM, *pMacro );
+                aMacroTbl.Erase( HTML_ET_ONCLICK );
             }
             // SIZE auszuwerten duerfte hier keinen Sinn machen???
             bMinWidth = bMinHeight = sal_True;
@@ -2091,8 +2089,7 @@ void SwHTMLParser::NewTextArea()
                 sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType = rDfltScriptType;
-                aMacroTbl.Insert( nEvent, new SvxMacro( sEvent, aScriptType,
-                                  eScriptType2 ) );
+                aMacroTbl.Insert( nEvent, SvxMacro( sEvent, aScriptType, eScriptType2 ) );
             }
         }
     }
@@ -2371,8 +2368,7 @@ void SwHTMLParser::NewSelect()
                 sEvent = convertLineEnd(sEvent, GetSystemLineEnd());
                 if( EXTENDED_STYPE==eScriptType2 )
                     aScriptType = rDfltScriptType;
-                aMacroTbl.Insert( nEvent, new SvxMacro( sEvent, aScriptType,
-                                  eScriptType2 ) );
+                aMacroTbl.Insert( nEvent, SvxMacro( sEvent, aScriptType, eScriptType2 ) );
             }
         }
     }

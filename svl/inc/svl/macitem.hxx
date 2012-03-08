@@ -35,8 +35,7 @@
 #include <tools/rtti.hxx>
 #include <tools/debug.hxx>
 #include <tools/string.hxx>
-
-#include <tools/table.hxx>
+#include <map>
 
 class SvStream;
 
@@ -114,34 +113,51 @@ inline SvxMacro::SvxMacro( SjJSbxObjectBase* _pFunctionObject, const ::rtl::OUSt
 
 //Macro Table, zerstoert die Pointer im DTor!
 
-DECLARE_TABLE( _SvxMacroTableDtor, SvxMacro* )
+typedef std::map<sal_uInt16, SvxMacro> SvxMacroTable;
 
 #define SVX_MACROTBL_VERSION31  0
 #define SVX_MACROTBL_VERSION40  1
 
 #define SVX_MACROTBL_AKTVERSION SVX_MACROTBL_VERSION40
 
-class SVL_DLLPUBLIC SvxMacroTableDtor : public _SvxMacroTableDtor
+class SVL_DLLPUBLIC SvxMacroTableDtor
 {
+private:
+    SvxMacroTable aSvxMacroTable;
 public:
-    inline SvxMacroTableDtor( const sal_uInt16 nInitSz = 0, const sal_uInt16 nReSz = 1 );
-    inline SvxMacroTableDtor( const SvxMacroTableDtor &rCpy ) : _SvxMacroTableDtor() { *this = rCpy; }
-    inline ~SvxMacroTableDtor() { DelDtor(); }
+    inline SvxMacroTableDtor() {}
+    inline SvxMacroTableDtor( const SvxMacroTableDtor &rCpy ) : aSvxMacroTable(rCpy.aSvxMacroTable) { }
+
     SvxMacroTableDtor& operator=( const SvxMacroTableDtor &rCpy );
+    int operator==( const SvxMacroTableDtor& rOther ) const;
 
     // loescht alle Eintraege
-    void DelDtor();
+    void clear() { aSvxMacroTable.clear(); }
 
     SvStream&   Read( SvStream &, sal_uInt16 nVersion = SVX_MACROTBL_AKTVERSION );
     SvStream&   Write( SvStream & ) const;
 
     sal_uInt16 GetVersion() const       { return SVX_MACROTBL_AKTVERSION; }
+
+    SvxMacroTable::iterator begin() { return aSvxMacroTable.begin(); }
+    SvxMacroTable::const_iterator begin() const { return aSvxMacroTable.begin(); }
+    SvxMacroTable::iterator end() { return aSvxMacroTable.end(); }
+    SvxMacroTable::const_iterator end () const { return aSvxMacroTable.end(); }
+    SvxMacroTable::size_type size() const { return aSvxMacroTable.size(); }
+    bool empty() const { return aSvxMacroTable.empty(); }
+
+    // returns NULL if no entry exists, or a pointer to the internal value
+    const SvxMacro* Get(sal_uInt16 nEvent) const;
+    // returns NULL if no entry exists, or a pointer to the internal value
+    SvxMacro* Get(sal_uInt16 nEvent);
+    // return true if the key exists
+    bool IsKeyValid(sal_uInt16 nEvent) const;
+    // This stores a copy of the rMacro parameter
+    SvxMacro& Insert(sal_uInt16 nEvent, const SvxMacro& rMacro);
+    // If the entry exists, remove it from the map and release it's storage
+    sal_Bool Erase(sal_uInt16 nEvent);
 };
 
-inline SvxMacroTableDtor::SvxMacroTableDtor( const sal_uInt16 nInitSz,
-                                             const sal_uInt16 nReSz)
-    : _SvxMacroTableDtor( nInitSz, nReSz )
-{}
 
 /*
 [Beschreibung]
@@ -200,9 +216,7 @@ inline const SvxMacro& SvxMacroItem::GetMacro( sal_uInt16 nEvent ) const
 }
 inline sal_Bool SvxMacroItem::DelMacro( sal_uInt16 nEvent )
 {
-    SvxMacro *pMacro = aMacroTable.Remove( nEvent );
-    delete pMacro;
-    return ( pMacro != 0 );
+    return aMacroTable.Erase(nEvent);
 }
 
 #endif

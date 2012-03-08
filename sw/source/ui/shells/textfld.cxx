@@ -740,7 +740,7 @@ void SwTextShell::InsertHyperlink(const SvxHyperlinkItem& rHlnkItem)
                 aINetFmt.SetName(rHlnkItem.GetIntName());
                 if(pMacroTbl)
                 {
-                    SvxMacro *pMacro = pMacroTbl->Get( SFX_EVENT_MOUSEOVER_OBJECT );
+                    const SvxMacro *pMacro = pMacroTbl->Get( SFX_EVENT_MOUSEOVER_OBJECT );
                     if( pMacro )
                         aINetFmt.SetMacro(SFX_EVENT_MOUSEOVER_OBJECT, *pMacro);
                     pMacro = pMacroTbl->Get( SFX_EVENT_MOUSECLICK_OBJECT );

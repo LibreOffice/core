@@ -770,7 +770,7 @@ SvStream& HTMLOutFuncs::Out_ImageMap( SvStream& rStream,
                 }
 
                 const SvxMacroTableDtor& rMacroTab = pObj->GetMacroTable();
-                if( pEventTable && rMacroTab.Count() )
+                if( pEventTable && !rMacroTab.empty() )
                     Out_Events( rStream, rMacroTab, pEventTable,
                                 bOutStarBasic, eDestEnc, pNonConvertableChars );
 

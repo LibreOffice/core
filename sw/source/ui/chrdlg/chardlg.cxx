@@ -298,7 +298,7 @@ sal_Bool SwCharURLPage::FillItemSet(SfxItemSet& rSet)
     aINetFmt.SetINetFmtId( nId );
     aINetFmt.SetINetFmt(nId == RES_POOLCHR_INET_NORMAL ? aEmptyStr : sEntry);
 
-    if( pINetItem && pINetItem->GetMacroTable().Count() )
+    if( pINetItem && !pINetItem->GetMacroTable().empty() )
         aINetFmt.SetMacroTbl( &pINetItem->GetMacroTable() );
 
     if(aVisitedLB.GetSavedValue() != aVisitedLB.GetSelectEntryPos())

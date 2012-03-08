@@ -1087,8 +1087,7 @@ void SwAutoTextEventDescriptor::replaceByName(
             SvxMacroTableDtor aMacroTable;
             if( pBlocks->GetMacroTable( nIndex, aMacroTable ) )
             {
-                SvxMacro* pNewMacro = new SvxMacro(rMacro);
-                aMacroTable.Replace( nEvent, pNewMacro );
+                aMacroTable.Insert( nEvent, rMacro );
                 pBlocks->SetMacroTable( nIndex, aMacroTable );
             }
         }

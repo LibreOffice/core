@@ -781,7 +781,7 @@ IMAGE_SETEVENT:
 
     }
 
-    if( aMacroItem.GetMacroTable().Count() )
+    if( !aMacroItem.GetMacroTable().empty() )
         pFlyFmt->SetFmtAttr( aMacroItem );
 
     // Wenn die Grafik gleich angeforder wird, muss dies geschehen,
@@ -1114,8 +1114,7 @@ ANCHOR_SETEVENT:
                         String sScriptType;
                         if( EXTENDED_STYPE == eScriptType2 )
                             sScriptType = sDfltScriptType;
-                        aMacroTbl.Insert( nEvent,
-                            new SvxMacro( sTmp, sScriptType, eScriptType2 ));
+                        aMacroTbl.Insert( nEvent, SvxMacro( sTmp, sScriptType, eScriptType2 ));
                     }
                 }
                 break;
@@ -1207,7 +1206,7 @@ ANCHOR_SETEVENT:
         SwFmtINetFmt aINetFmt( sHRef, sTarget );
         aINetFmt.SetName( aName );
 
-        if( aMacroTbl.Count() )
+        if( !aMacroTbl.empty() )
             aINetFmt.SetMacroTbl( &aMacroTbl );
 
         // das Default-Attribut setzen
