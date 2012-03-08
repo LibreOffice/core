@@ -2445,7 +2445,7 @@ static void ImplGetKeyNameText( LONG lParam, sal_Unicode* pBuf,
 
 rtl::OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 {
-    static const int nMaxKeyLen = 350;
+    static const UINT nMaxKeyLen = 350;
     sal_Unicode aKeyBuf[ nMaxKeyLen ];
     UINT        nKeyBufLen = 0;
     UINT        nSysCode = 0;
