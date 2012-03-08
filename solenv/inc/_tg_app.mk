@@ -74,16 +74,8 @@ $(APP1TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP1LIBSALCPPRT*=$(LIBSALCPPRT)
 
-.IF "$(GUI)" == "OS2"
-_APP1IMP_ORD = $(APP1STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP1STDLIBS:^"$(LB)/") 
-APP1IMP_ORD = $(foreach,i,$(_APP1IMP_ORD) $(shell @-ls $i))
-.ELSE
-APP1IMP_ORD = 
-.ENDIF
-
 $(APP1TARGETN): $(APP1OBJS) $(APP1LIBS) \
     $(APP1RES) \
-    $(APP1IMP_ORD) \
     $(APP1ICON) $(APP1DEPN) $(USE_APP1DEF)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
@@ -342,16 +334,8 @@ $(APP2TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP2LIBSALCPPRT*=$(LIBSALCPPRT)
 
-.IF "$(GUI)" == "OS2"
-_APP2IMP_ORD = $(APP2STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP2STDLIBS:^"$(LB)/") 
-APP2IMP_ORD = $(foreach,i,$(_APP2IMP_ORD) $(shell @-ls $i))
-.ELSE
-APP2IMP_ORD = 
-.ENDIF
-
 $(APP2TARGETN): $(APP2OBJS) $(APP2LIBS) \
     $(APP2RES) \
-    $(APP2IMP_ORD) \
     $(APP2ICON) $(APP2DEPN) $(USE_APP2DEF)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
@@ -610,16 +594,8 @@ $(APP3TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP3LIBSALCPPRT*=$(LIBSALCPPRT)
 
-.IF "$(GUI)" == "OS2"
-_APP3IMP_ORD = $(APP3STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP3STDLIBS:^"$(LB)/") 
-APP3IMP_ORD = $(foreach,i,$(_APP3IMP_ORD) $(shell @-ls $i))
-.ELSE
-APP3IMP_ORD = 
-.ENDIF
-
 $(APP3TARGETN): $(APP3OBJS) $(APP3LIBS) \
     $(APP3RES) \
-    $(APP3IMP_ORD) \
     $(APP3ICON) $(APP3DEPN) $(USE_APP3DEF)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
@@ -878,16 +854,8 @@ $(APP4TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP4LIBSALCPPRT*=$(LIBSALCPPRT)
 
-.IF "$(GUI)" == "OS2"
-_APP4IMP_ORD = $(APP4STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP4STDLIBS:^"$(LB)/") 
-APP4IMP_ORD = $(foreach,i,$(_APP4IMP_ORD) $(shell @-ls $i))
-.ELSE
-APP4IMP_ORD = 
-.ENDIF
-
 $(APP4TARGETN): $(APP4OBJS) $(APP4LIBS) \
     $(APP4RES) \
-    $(APP4IMP_ORD) \
     $(APP4ICON) $(APP4DEPN) $(USE_APP4DEF)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
@@ -1146,16 +1114,8 @@ $(APP5TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP5LIBSALCPPRT*=$(LIBSALCPPRT)
 
-.IF "$(GUI)" == "OS2"
-_APP5IMP_ORD = $(APP5STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP5STDLIBS:^"$(LB)/") 
-APP5IMP_ORD = $(foreach,i,$(_APP5IMP_ORD) $(shell @-ls $i))
-.ELSE
-APP5IMP_ORD = 
-.ENDIF
-
 $(APP5TARGETN): $(APP5OBJS) $(APP5LIBS) \
     $(APP5RES) \
-    $(APP5IMP_ORD) \
     $(APP5ICON) $(APP5DEPN) $(USE_APP5DEF)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
@@ -1414,16 +1374,8 @@ $(APP6TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP6LIBSALCPPRT*=$(LIBSALCPPRT)
 
-.IF "$(GUI)" == "OS2"
-_APP6IMP_ORD = $(APP6STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP6STDLIBS:^"$(LB)/") 
-APP6IMP_ORD = $(foreach,i,$(_APP6IMP_ORD) $(shell @-ls $i))
-.ELSE
-APP6IMP_ORD = 
-.ENDIF
-
 $(APP6TARGETN): $(APP6OBJS) $(APP6LIBS) \
     $(APP6RES) \
-    $(APP6IMP_ORD) \
     $(APP6ICON) $(APP6DEPN) $(USE_APP6DEF)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
@@ -1682,16 +1634,8 @@ $(APP7TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP7LIBSALCPPRT*=$(LIBSALCPPRT)
 
-.IF "$(GUI)" == "OS2"
-_APP7IMP_ORD = $(APP7STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP7STDLIBS:^"$(LB)/") 
-APP7IMP_ORD = $(foreach,i,$(_APP7IMP_ORD) $(shell @-ls $i))
-.ELSE
-APP7IMP_ORD = 
-.ENDIF
-
 $(APP7TARGETN): $(APP7OBJS) $(APP7LIBS) \
     $(APP7RES) \
-    $(APP7IMP_ORD) \
     $(APP7ICON) $(APP7DEPN) $(USE_APP7DEF)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
@@ -1950,16 +1894,8 @@ $(APP8TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP8LIBSALCPPRT*=$(LIBSALCPPRT)
 
-.IF "$(GUI)" == "OS2"
-_APP8IMP_ORD = $(APP8STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP8STDLIBS:^"$(LB)/") 
-APP8IMP_ORD = $(foreach,i,$(_APP8IMP_ORD) $(shell @-ls $i))
-.ELSE
-APP8IMP_ORD = 
-.ENDIF
-
 $(APP8TARGETN): $(APP8OBJS) $(APP8LIBS) \
     $(APP8RES) \
-    $(APP8IMP_ORD) \
     $(APP8ICON) $(APP8DEPN) $(USE_APP8DEF)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
@@ -2218,16 +2154,8 @@ $(APP9TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP9LIBSALCPPRT*=$(LIBSALCPPRT)
 
-.IF "$(GUI)" == "OS2"
-_APP9IMP_ORD = $(APP9STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP9STDLIBS:^"$(LB)/") 
-APP9IMP_ORD = $(foreach,i,$(_APP9IMP_ORD) $(shell @-ls $i))
-.ELSE
-APP9IMP_ORD = 
-.ENDIF
-
 $(APP9TARGETN): $(APP9OBJS) $(APP9LIBS) \
     $(APP9RES) \
-    $(APP9IMP_ORD) \
     $(APP9ICON) $(APP9DEPN) $(USE_APP9DEF)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
@@ -2486,16 +2414,8 @@ $(APP10TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP10LIBSALCPPRT*=$(LIBSALCPPRT)
 
-.IF "$(GUI)" == "OS2"
-_APP10IMP_ORD = $(APP10STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP10STDLIBS:^"$(LB)/") 
-APP10IMP_ORD = $(foreach,i,$(_APP10IMP_ORD) $(shell @-ls $i))
-.ELSE
-APP10IMP_ORD = 
-.ENDIF
-
 $(APP10TARGETN): $(APP10OBJS) $(APP10LIBS) \
     $(APP10RES) \
-    $(APP10IMP_ORD) \
     $(APP10ICON) $(APP10DEPN) $(USE_APP10DEF)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"

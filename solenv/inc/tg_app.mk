@@ -99,16 +99,8 @@ $(APP$(TNR)TARGETN) : $(LINKINCTARGETS)
 # Allow for target specific LIBSALCPPRT override
 APP$(TNR)LIBSALCPPRT*=$(LIBSALCPPRT)
 
-.IF "$(GUI)" == "OS2"
-_APP$(TNR)IMP_ORD = $(APP$(TNR)STDLIBS:^"$(SOLARVERSION)/$(INPATH)/lib/") $(APP$(TNR)STDLIBS:^"$(LB)/") 
-APP$(TNR)IMP_ORD = $(foreach,i,$(_APP$(TNR)IMP_ORD) $(shell @-ls $i))
-.ELSE
-APP$(TNR)IMP_ORD = 
-.ENDIF
-
 $(APP$(TNR)TARGETN): $(APP$(TNR)OBJS) $(APP$(TNR)LIBS) \
     $(APP$(TNR)RES) \
-    $(APP$(TNR)IMP_ORD) \
     $(APP$(TNR)ICON) $(APP$(TNR)DEPN) $(USE_APP$(TNR)DEF)
     @echo "Making:   " $(@:f)
 .IF "$(GUI)"=="UNX"
