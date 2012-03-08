@@ -29,23 +29,21 @@
 #ifndef _BREAKIT_HXX
 #define _BREAKIT_HXX
 
-#include <tools/solar.h>
-#include <i18npool/lang.h>
+#include <boost/noncopyable.hpp>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/i18n/XBreakIterator.hpp>
 #include <com/sun/star/i18n/XScriptTypeDetector.hpp>
 #include <com/sun/star/i18n/ForbiddenCharacters.hdl>
+#include <i18npool/lang.h>
 #include <swdllapi.h>
-
-class String;
 
 /*************************************************************************
  *                      class SwBreakIt
  *************************************************************************/
 
 
-class SW_DLLPUBLIC SwBreakIt
+class SW_DLLPUBLIC SwBreakIt : private ::boost::noncopyable
 {
     com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > m_xMSF;
     mutable com::sun::star::uno::Reference< com::sun::star::i18n::XBreakIterator > xBreak;
@@ -60,11 +58,6 @@ class SW_DLLPUBLIC SwBreakIt
     void _GetForbidden( const LanguageType  aLang );
 
     void createBreakIterator() const;
-
-    // forbidden and not implemented.
-    SwBreakIt();
-    SwBreakIt( const SwBreakIt &);
-    SwBreakIt & operator= ( const SwBreakIt &);
 
     // private (see @ _Create, _Delete).
     explicit SwBreakIt(
@@ -100,8 +93,8 @@ public:
         return *m_pForbidden;
     }
 
-    sal_uInt16 GetRealScriptOfText( const String& rTxt, xub_StrLen nPos ) const;
-    sal_uInt16 GetAllScriptsOfText( const String& rTxt ) const;
+    sal_uInt16 GetRealScriptOfText( const rtl::OUString& rTxt, sal_Int32 nPos ) const;
+    sal_uInt16 GetAllScriptsOfText( const rtl::OUString& rTxt ) const;
 
     sal_Int32 getGraphemeCount(const rtl::OUString& rStr) const;
 };
