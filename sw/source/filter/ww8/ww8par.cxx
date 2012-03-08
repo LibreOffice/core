@@ -5591,7 +5591,7 @@ sal_Bool SwMSDffManager::GetOLEStorageName(long nOLEId, String& rStorageName,
 {
     bool bRet = false;
 
-    long nPictureId = 0;
+    sal_Int32 nPictureId = 0;
     if (rReader.pStg)
     {
         // dann holen wir uns mal ueber den TextBox-PLCF die richtigen

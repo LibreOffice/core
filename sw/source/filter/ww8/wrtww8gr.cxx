@@ -242,9 +242,16 @@ void WW8Export::OutputOLENode( const SwOLENode& rOLENode )
         if( xObj.is() )
         {
             const embed::XEmbeddedObject *pObj = xObj.get();
-            sal_uInt32 nPictureId = (sal_uInt32)(sal_uIntPtr)pObj;
-            //.second is false when element already existed
-            bool bIsNotDuplicate = GetOLESet().insert(nPictureId).second;
+            WW8OleMap& rPointerToObjId = GetOLEMap();
+            //Don't want to use pointer ids, as is traditional, because we need
+            //to put this into a 32bit value, and on 64bit the bottom bits
+            //might collide and two unrelated ole objects end up considered the
+            //same.  Don't want to simply start at 0 which is a special value
+            sal_Int32 nPictureId = SAL_MAX_INT32 - rPointerToObjId.size();
+            WW8OleMap::value_type entry = std::make_pair(pObj, nPictureId);
+            std::pair<WW8OleMap::iterator, bool> aRes = rPointerToObjId.insert(entry);
+            bool bIsNotDuplicate = aRes.second; //.second is false when element already existed
+            nPictureId = aRes.first->second;
             Set_UInt32(pDataAdr, nPictureId);
             String sStorageName( '_' );
             sStorageName += String::CreateFromInt32( nPictureId );
