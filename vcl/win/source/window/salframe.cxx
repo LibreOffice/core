@@ -2473,7 +2473,7 @@ rtl::OUString WinSalFrame::GetKeyName( sal_uInt16 nKeyCode )
 
     sal_uInt16      nCode = nKeyCode & 0x0FFF;
     sal_uLong       nSysCode2 = 0;
-    sal_Char*   pReplace = NULL;
+    const sal_Char*   pReplace = NULL;
     sal_Unicode cSVCode = 0;
     sal_Char    aFBuf[4];
     nSysCode = 0;
