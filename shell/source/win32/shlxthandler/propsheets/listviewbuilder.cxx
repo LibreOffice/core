@@ -110,7 +110,7 @@ void list_view_builder::setup_list_view()
     HBITMAP    h_bmp = LoadBitmap(GetModuleHandle(MODULE_NAME), MAKEINTRESOURCE(IDB_PROPERTY_IMAGES));
     ImageList_AddMasked(h_ils, h_bmp, RGB(255, 0, 255));
 
-    ListView_SetImageList(hwnd_list_view_, h_ils, LVSIL_SMALL);
+    (void) ListView_SetImageList(hwnd_list_view_, h_ils, LVSIL_SMALL);
 
     std::wstring header = GetResString(IDS_PROPERTY);
 
