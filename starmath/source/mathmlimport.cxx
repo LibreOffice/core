@@ -88,7 +88,7 @@ using namespace ::xmloff::token;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-#define IMPORT_SVC_NAME RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.XMLImportFilter")
+#define IMPORT_SVC_NAME "com.sun.star.xml.XMLImportFilter"
 
 #undef WANTEXCEPT
 
@@ -170,7 +170,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
     // Set base URI
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    OUString sPropName( "BaseURI" );
     xInfoSet->setPropertyValue( sPropName, makeAny( rMedium.GetBaseURL() ) );
 
     sal_Int32 nSteps=3;
@@ -193,7 +193,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
         // TODO/LATER: handle the case of embedded links gracefully
         if ( bEmbedded ) // && !rMedium.GetStorage()->IsRoot() )
         {
-            OUString aName( RTL_CONSTASCII_USTRINGPARAM( "dummyObjName" ) );
+            OUString aName( "dummyObjName" );
             if ( rMedium.GetItemSet() )
             {
                 const SfxStringItem* pDocHierarchItem = static_cast<const SfxStringItem*>(
@@ -204,7 +204,7 @@ sal_uLong SmXMLImportWrapper::Import(SfxMedium &rMedium)
 
             if ( !aName.isEmpty() )
             {
-                sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+                sPropName = "StreamRelPath";
                 xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
             }
         }
@@ -285,7 +285,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
     // get parser
     Reference< xml::sax::XParser > xParser(
         rFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Parser")) ),
+            "com.sun.star.xml.sax.Parser"),
         UNO_QUERY );
     OSL_ENSURE( xParser.is(), "Can't create parser" );
     if ( !xParser.is() )
@@ -398,7 +398,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
 
         // determine if stream is encrypted or not
         uno::Reference < beans::XPropertySet > xProps( xEventsStream, uno::UNO_QUERY );
-        Any aAny = xProps->getPropertyValue( OUString( RTL_CONSTASCII_USTRINGPARAM("Encrypted") ) );
+        Any aAny = xProps->getPropertyValue( "Encrypted" );
         sal_Bool bEncrypted = sal_False;
         if ( aAny.getValueType() == ::getBooleanCppuType() )
             aAny >>= bEncrypted;
@@ -406,7 +406,7 @@ sal_uLong SmXMLImportWrapper::ReadThroughComponent(
         // set Base URL
         if ( rPropSet.is() )
         {
-            OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+            OUString sPropName( "StreamName");
             rPropSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
         }
 
@@ -460,7 +460,7 @@ const uno::Sequence< sal_Int8 > & SmXMLImport::getUnoTunnelId() throw()
 
 OUString SAL_CALL SmXMLImport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLImporter" ) );
+    return OUString( "com.sun.star.comp.Math.XMLImporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLImport_getSupportedServiceNames()
@@ -482,7 +482,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLImport_createInstance(
 
 OUString SAL_CALL SmXMLImportMeta_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLOasisMetaImporter" ) );
+    return OUString( "com.sun.star.comp.Math.XMLOasisMetaImporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLImportMeta_getSupportedServiceNames()
@@ -504,7 +504,7 @@ throw( uno::Exception )
 
 OUString SAL_CALL SmXMLImportSettings_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLOasisSettingsImporter" ) );
+    return OUString( "com.sun.star.comp.Math.XMLOasisSettingsImporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLImportSettings_getSupportedServiceNames()
@@ -797,11 +797,9 @@ void SmXMLContext_Helper::ApplyAttrs()
         {
             if (sFontFamily.equalsIgnoreAsciiCase(GetXMLToken(XML_FIXED)))
                 aToken.eType = TFIXED;
-            else if (sFontFamily.equalsIgnoreAsciiCase(OUString(
-                RTL_CONSTASCII_USTRINGPARAM("sans"))))
+            else if (sFontFamily.equalsIgnoreAsciiCase("sans"))
                 aToken.eType = TSANS;
-            else if (sFontFamily.equalsIgnoreAsciiCase(OUString(
-                RTL_CONSTASCII_USTRINGPARAM("serif"))))
+            else if (sFontFamily.equalsIgnoreAsciiCase("serif"))
                 aToken.eType = TSERIF;
             else //Just give up, we need to extend our font mechanism to be
                 //more general
@@ -1193,8 +1191,7 @@ void SmXMLAnnotationContext_Impl::StartElement(const uno::Reference<
         switch(rAttrTokenMap.Get(nPrefix,aLocalName))
         {
             case XML_TOK_ENCODING:
-                bIsStarMath= sValue.equals(
-                    OUString(RTL_CONSTASCII_USTRINGPARAM("StarMath 5.0")));
+                bIsStarMath= sValue == "StarMath 5.0";
                 break;
             default:
                 break;
@@ -2676,8 +2673,7 @@ SvXMLImportContext *SmXMLImport::CreateContext(sal_uInt16 nPrefix,
         {
             uno::Reference<xml::sax::XDocumentHandler> xDocBuilder(
                 mxServiceFactory->createInstance(
-                    ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                        "com.sun.star.xml.dom.SAXDocumentBuilder"))),
+                    "com.sun.star.xml.dom.SAXDocumentBuilder"),
                     uno::UNO_QUERY_THROW);
             uno::Reference<document::XDocumentPropertiesSupplier> xDPS(
                 GetModel(), uno::UNO_QUERY_THROW);
@@ -2948,24 +2944,24 @@ void SmXMLImport::SetViewSettings(const Sequence<PropertyValue>& aViewProps)
 
     for (sal_Int32 i = 0; i < nCount ; i++)
     {
-        if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaTop" ) ) )
+        if (pValue->Name == "ViewAreaTop" )
         {
             pValue->Value >>= nTmp;
             aRect.setY( nTmp );
         }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaLeft" ) ) )
+        else if (pValue->Name == "ViewAreaLeft" )
         {
             pValue->Value >>= nTmp;
             aRect.setX( nTmp );
         }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaWidth" ) ) )
+        else if (pValue->Name == "ViewAreaWidth" )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
             aSize.Width() = nTmp;
             aRect.SetSize( aSize );
         }
-        else if (pValue->Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM ( "ViewAreaHeight" ) ) )
+        else if (pValue->Name == "ViewAreaHeight" )
         {
             pValue->Value >>= nTmp;
             Size aSize( aRect.GetSize() );
@@ -2989,9 +2985,9 @@ void SmXMLImport::SetConfigurationSettings(const Sequence<PropertyValue>& aConfP
             sal_Int32 nCount = aConfProps.getLength();
             const PropertyValue* pValues = aConfProps.getConstArray();
 
-            const OUString sFormula ( RTL_CONSTASCII_USTRINGPARAM ( "Formula" ) );
-            const OUString sBasicLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "BasicLibraries" ) );
-            const OUString sDialogLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "DialogLibraries" ) );
+            const OUString sFormula ( "Formula" );
+            const OUString sBasicLibraries ( "BasicLibraries" );
+            const OUString sDialogLibraries ( "DialogLibraries" );
             while ( nCount-- )
             {
                 if (pValues->Name != sFormula &&

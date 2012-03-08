@@ -126,80 +126,70 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL sm_component_getFactory( const sal_Char* pIm
         Reference< XSingleServiceFactory >   xFactory                                                                                                ;
         Reference< XMultiServiceFactory >    xServiceManager( reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
 
-        if( SmXMLImport_getImplementationName().equalsAsciiL(
-            pImplementationName, strlen(pImplementationName)) )
+        if( SmXMLImport_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::cppu::createSingleFactory( xServiceManager,
             SmXMLImport_getImplementationName(),
             SmXMLImport_createInstance,
             SmXMLImport_getSupportedServiceNames() );
         }
-        else if( SmXMLExport_getImplementationName().equalsAsciiL(
-            pImplementationName, strlen(pImplementationName)) )
+        else if( SmXMLExport_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::cppu::createSingleFactory( xServiceManager,
             SmXMLExport_getImplementationName(),
             SmXMLExport_createInstance,
             SmXMLExport_getSupportedServiceNames() );
         }
-        else if( SmXMLImportMeta_getImplementationName().equalsAsciiL(
-            pImplementationName, strlen(pImplementationName)) )
+        else if( SmXMLImportMeta_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::cppu::createSingleFactory( xServiceManager,
             SmXMLImportMeta_getImplementationName(),
             SmXMLImportMeta_createInstance,
             SmXMLImportMeta_getSupportedServiceNames() );
         }
-        else if( SmXMLExportMetaOOO_getImplementationName().equalsAsciiL(
-            pImplementationName, strlen(pImplementationName)) )
+        else if( SmXMLExportMetaOOO_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::cppu::createSingleFactory( xServiceManager,
             SmXMLExportMetaOOO_getImplementationName(),
             SmXMLExportMetaOOO_createInstance,
             SmXMLExportMetaOOO_getSupportedServiceNames() );
         }
-        else if( SmXMLExportMeta_getImplementationName().equalsAsciiL(
-            pImplementationName, strlen(pImplementationName)) )
+        else if( SmXMLExportMeta_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::cppu::createSingleFactory( xServiceManager,
             SmXMLExportMeta_getImplementationName(),
             SmXMLExportMeta_createInstance,
             SmXMLExportMeta_getSupportedServiceNames() );
         }
-        else if( SmXMLImportSettings_getImplementationName().equalsAsciiL(
-            pImplementationName, strlen(pImplementationName)) )
+        else if( SmXMLImportSettings_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::cppu::createSingleFactory( xServiceManager,
             SmXMLImportSettings_getImplementationName(),
             SmXMLImportSettings_createInstance,
             SmXMLImportSettings_getSupportedServiceNames() );
         }
-        else if( SmXMLExportSettingsOOO_getImplementationName().equalsAsciiL(
-            pImplementationName, strlen(pImplementationName)) )
+        else if( SmXMLExportSettingsOOO_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::cppu::createSingleFactory( xServiceManager,
             SmXMLExportSettingsOOO_getImplementationName(),
             SmXMLExportSettingsOOO_createInstance,
             SmXMLExportSettingsOOO_getSupportedServiceNames() );
         }
-        else if( SmXMLExportSettings_getImplementationName().equalsAsciiL(
-            pImplementationName, strlen(pImplementationName)) )
+        else if( SmXMLExportSettings_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::cppu::createSingleFactory( xServiceManager,
             SmXMLExportSettings_getImplementationName(),
             SmXMLExportSettings_createInstance,
             SmXMLExportSettings_getSupportedServiceNames() );
         }
-        else if( SmXMLExportContent_getImplementationName().equalsAsciiL(
-            pImplementationName, strlen(pImplementationName)) )
+        else if( SmXMLExportContent_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::cppu::createSingleFactory( xServiceManager,
             SmXMLExportContent_getImplementationName(),
             SmXMLExportContent_createInstance,
             SmXMLExportContent_getSupportedServiceNames() );
         }
-        else if( SmDocument_getImplementationName().equalsAsciiL(
-            pImplementationName, strlen(pImplementationName)) )
+        else if( SmDocument_getImplementationName().equalsAscii( pImplementationName ))
         {
             xFactory = ::sfx2::createSfxModelFactory( xServiceManager,
             SmDocument_getImplementationName(),

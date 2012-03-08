@@ -59,8 +59,6 @@ public:
 
 ////////////////////////////////////////////////////////////
 
-#define A2OU(pText)     rtl::OUString::createFromAscii(pText)
-
 //-----------------------------------------------------------------------------
 class SmModel : public SfxBaseModel,
                 public comphelper::PropertySetHelper,

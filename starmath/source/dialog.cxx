@@ -1870,7 +1870,7 @@ IMPL_LINK_NOARG(SmSymDefineDialog, CharHighlightHdl)
 
     // display Unicode position as symbol name while iterating over characters
     const String aHex(rtl::OUString::valueOf(static_cast<sal_Int64>(cChar), 16 ).toAsciiUpperCase());
-    const String aPattern( A2OU( aHex.Len() > 4 ? "Ux000000" : "Ux0000" ) );
+    const String aPattern( OUString::createFromAscii( aHex.Len() > 4 ? "Ux000000" : "Ux0000" ) );
     String aUnicodePos( aPattern.Copy( 0, aPattern.Len() - aHex.Len() ) );
     aUnicodePos += aHex;
     aSymbols.SetText( aUnicodePos );

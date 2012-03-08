@@ -47,9 +47,6 @@ The primary internal data structure for the formula is the text representation
 #define OPENING( token ) XML_STREAM_OPENING( token )
 #define CLOSING( token ) XML_STREAM_CLOSING( token )
 
-// *sigh*
-#define STR( str ) OUString( RTL_CONSTASCII_USTRINGPARAM( str ))
-
 // TODO create IS_OPENING(), IS_CLOSING() instead of doing 'next == OPENING( next )' ?
 
 SmOoxmlImport::SmOoxmlImport( oox::formulaimport::XmlStream& s )
@@ -78,7 +75,7 @@ OUString SmOoxmlImport::handleStream()
         if( item.isEmpty())
             continue;
         if( !ret.isEmpty())
-            ret += STR( " " );
+            ret += " ";
         ret += item;
     }
     stream.ensureClosingTag( M_TOKEN( oMath ));
@@ -98,7 +95,7 @@ OUString SmOoxmlImport::readOMathArg()
     while( !stream.atEnd() && stream.currentToken() != CLOSING( stream.currentToken()))
     {
         if( !ret.isEmpty())
-            ret += STR( " " );
+            ret += " ";
         switch( stream.currentToken())
         {
             case OPENING( M_TOKEN( acc )):
@@ -192,52 +189,52 @@ OUString SmOoxmlImport::handleAcc()
     switch( accChr )
     {
         case MS_BAR:
-            acc = STR( "bar" );
+            acc = "bar";
             break;
         case MS_CHECK:
-            acc = STR( "check" );
+            acc = "check";
             break;
         case MS_ACUTE:
-            acc = STR( "acute" );
+            acc = "acute";
             break;
         case MS_GRAVE:
-            acc = STR( "grave" );
+            acc = "grave";
             break;
         case MS_BREVE:
-            acc = STR( "breve" );
+            acc = "breve";
             break;
         case MS_CIRCLE:
-            acc = STR( "circle" );
+            acc = "circle";
             break;
         case MS_VEC:
             // prefer wide variants for these 3, .docx can't seem to differentiate
             // between e.g. 'vec' and 'widevec', if whatever the accent is above is short, this
             // shouldn't matter, but short above a longer expression doesn't look right
-            acc = STR( "widevec" );
+            acc = "widevec";
             break;
         case MS_TILDE:
-            acc = STR( "widetilde" );
+            acc = "widetilde";
             break;
         case MS_HAT:
-            acc = STR( "widehat" );
+            acc = "widehat";
             break;
         case MS_DOT:
-            acc = STR( "dot" );
+            acc = "dot";
             break;
         case MS_DDOT:
-            acc = STR( "ddot" );
+            acc = "ddot";
             break;
         case MS_DDDOT:
-            acc = STR( "dddot" );
+            acc = "dddot";
             break;
         default:
-            acc = STR( "acute" );
+            acc = "acute";
             SAL_WARN( "starmath.ooxml", "Unknown m:chr in m:acc \'" << accChr << "\'" );
             break;
     }
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( acc ));
-    return acc + STR( " {" ) + e + STR( "}" );
+    return acc + " {" + e + "}";
 }
 
 OUString SmOoxmlImport::handleBar()
@@ -248,9 +245,9 @@ OUString SmOoxmlImport::handleBar()
     {
         if( XmlStream::Tag pos = stream.checkOpeningTag( M_TOKEN( pos )))
         {
-            if( pos.attribute( M_TOKEN( val )) == STR( "top" ))
+            if( pos.attribute( M_TOKEN( val )) == "top" )
                 topbot = top;
-            else if( pos.attribute( M_TOKEN( val )) == STR( "bot" ))
+            else if( pos.attribute( M_TOKEN( val )) == "bot" )
                 topbot = bot;
             stream.ensureClosingTag( M_TOKEN( pos ));
         }
@@ -259,9 +256,9 @@ OUString SmOoxmlImport::handleBar()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( bar ));
     if( topbot == top )
-        return STR( "overline {" ) + e + STR( "}" );
+        return "overline {" + e + "}";
     else
-        return STR( "underline {" ) + e + STR( "}" );
+        return "underline {" + e + "}";
 }
 
 OUString SmOoxmlImport::handleBox()
@@ -292,7 +289,7 @@ OUString SmOoxmlImport::handleBorderBox()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( borderBox ));
     if( isStrikeH )
-        return STR( "overstrike {" ) + e + STR( "}" );
+        return "overstrike {" + e + "}";
     // LO does not seem to implement anything for handling the other cases
     return e;
 }
@@ -300,9 +297,9 @@ OUString SmOoxmlImport::handleBorderBox()
 OUString SmOoxmlImport::handleD()
 {
     stream.ensureOpeningTag( M_TOKEN( d ));
-    OUString opening = STR( "(" );
-    OUString closing = STR( ")" );
-    OUString separator = STR( "|" );
+    OUString opening = "(";
+    OUString closing = ")";
+    OUString separator = "|";
     if( XmlStream::Tag dPr = stream.checkOpeningTag( M_TOKEN( dPr )))
     {
         if( XmlStream::Tag begChr = stream.checkOpeningTag( M_TOKEN( begChr )))
@@ -322,37 +319,37 @@ OUString SmOoxmlImport::handleD()
         }
         stream.ensureClosingTag( M_TOKEN( dPr ));
     }
-    if( opening == STR( "{" ))
-        opening = STR( "left lbrace " );
-    if( closing == STR( "}" ))
-        closing = STR( " right rbrace" );
+    if( opening == "{" )
+        opening = "left lbrace ";
+    if( closing == "}" )
+        closing = " right rbrace";
     if( opening == OUString( sal_Unicode( 0x27e6 )))
-        opening = STR( "left ldbracket " );
+        opening = "left ldbracket ";
     if( closing == OUString( sal_Unicode( 0x27e7 )))
-        closing = STR( " right rdbracket" );
-    if( opening == STR( "|" ))
-        opening = STR( "left lline " );
-    if( closing == STR( "|" ))
-        closing = STR( " right rline" );
+        closing = " right rdbracket";
+    if( opening == "|" )
+        opening = "left lline ";
+    if( closing == "|" )
+        closing = " right rline";
     if( opening == OUString( sal_Unicode( 0x2225 )))
-        opening = STR( "left ldline " );
+        opening = "left ldline ";
     if( closing == OUString( sal_Unicode( 0x2225 )))
-        closing = STR( " right rdline" );
+        closing = " right rdline";
     if( opening == OUString( sal_Unicode( 0x2329 )))
-        opening = STR( "left langle " );
+        opening = "left langle ";
     if( closing == OUString( sal_Unicode( 0x232a )))
-        closing = STR( " right rangle" );
+        closing = " right rangle";
     // use scalable brackets (the explicit "left" or "right")
-    if( opening == STR( "(" ) || opening == STR( "[" ))
-        opening = STR( "left " ) + opening;
-    if( closing == STR( ")" ) || closing == STR( "]" ))
-        closing = STR( " right " ) + closing;
-    if( separator == STR( "|" )) // plain "|" would be actually "V" (logical or)
-        separator = STR( " mline " );
+    if( opening == "(" || opening == "[" )
+        opening = "left " + opening;
+    if( closing == ")" || closing == "]" )
+        closing = " right " + closing;
+    if( separator == "|" ) // plain "|" would be actually "V" (logical or)
+        separator = " mline ";
     if( opening.isEmpty())
-        opening = STR( "left none " );
+        opening = "left none ";
     if( closing.isEmpty())
-        closing = STR( " right none" );
+        closing = " right none";
     OUStringBuffer ret;
     ret.append( opening );
     bool first = true;
@@ -375,29 +372,29 @@ OUString SmOoxmlImport::handleEqArr()
     do
     { // there must be at least one m:e
         if( !ret.isEmpty())
-            ret += STR( "#" );
-        ret += STR( " " );
+            ret += "#";
+        ret += " ";
         ret += readOMathArgInElement( M_TOKEN( e ));
-        ret += STR( " " );
+        ret += " ";
     } while( !stream.atEnd() && stream.findTag( OPENING( M_TOKEN( e ))));
     stream.ensureClosingTag( M_TOKEN( eqArr ));
-    return STR( "stack {" ) + ret + STR( "}" );
+    return "stack {" + ret + "}";
 }
 
 OUString SmOoxmlImport::handleF()
 {
     stream.ensureOpeningTag( M_TOKEN( f ));
     enum operation_t { bar, lin, noBar } operation = bar;
-    OUString oper = STR( "over" );
+    OUString oper = "over";
     if( stream.checkOpeningTag( M_TOKEN( fPr )))
     {
         if( XmlStream::Tag type = stream.checkOpeningTag( M_TOKEN( type )))
         {
-            if( type.attribute( M_TOKEN( val )) == STR( "bar" ))
+            if( type.attribute( M_TOKEN( val )) == "bar" )
                 operation = bar;
-            else if( type.attribute( M_TOKEN( val )) == STR( "lin" ))
+            else if( type.attribute( M_TOKEN( val )) == "lin" )
                 operation = lin;
-            else if( type.attribute( M_TOKEN( val )) == STR( "noBar" ))
+            else if( type.attribute( M_TOKEN( val )) == "noBar" )
                 operation = noBar;
             stream.ensureClosingTag( M_TOKEN( type ));
         }
@@ -407,12 +404,12 @@ OUString SmOoxmlImport::handleF()
     OUString den = readOMathArgInElement( M_TOKEN( den ));
     stream.ensureClosingTag( M_TOKEN( f ));
     if( operation == bar )
-        return STR( "{" ) + num + STR( "} over {" ) + den + STR( "}" );
+        return "{" + num + "} over {" + den + "}";
     else if( operation == lin )
-        return STR( "{" ) + num + STR( "} / {" ) + den + STR( "}" );
+        return "{" + num + "} / {" + den + "}";
     else // noBar
     {
-        return STR( "binom {" ) + num + STR( "} {" ) + den + STR( "}" );
+        return "binom {" + num + "} {" + den + "}";
     }
 }
 
@@ -422,9 +419,9 @@ OUString SmOoxmlImport::handleFunc()
     stream.ensureOpeningTag( M_TOKEN( func ));
     OUString fname = readOMathArgInElement( M_TOKEN( fName ));
     // fix the various functions
-    if( fname.match( STR( "lim csub {" ), 0 )) // startsWith()
-        fname = STR( "lim from {" ) + fname.copy( 10 );
-    OUString ret = fname + STR( " {" ) + readOMathArgInElement( M_TOKEN( e )) + STR( "}" );
+    if( fname.match( "lim csub {", 0 )) // startsWith()
+        fname = "lim from {" + fname.copy( 10 );
+    OUString ret = fname + " {" + readOMathArgInElement( M_TOKEN( e )) + "}";
     stream.ensureClosingTag( M_TOKEN( func ));
     return ret;
 }
@@ -437,11 +434,11 @@ OUString SmOoxmlImport::handleLimLowUpp( LimLowUpp_t limlowupp )
     OUString lim = readOMathArgInElement( M_TOKEN( lim ));
     stream.ensureClosingTag( token );
     // fix up overbrace/underbrace  (use { }, as {} will be converted to a placeholder)
-    if( limlowupp == LimUpp && e.endsWithAsciiL( RTL_CONSTASCII_STRINGPARAM( " overbrace { }" )))
-        return e.copy( 0, e.getLength() - 2 ) + lim + STR( "}" );
-    if( limlowupp == LimLow && e.endsWithAsciiL( RTL_CONSTASCII_STRINGPARAM( " underbrace { }" )))
-        return e.copy( 0, e.getLength() - 2 ) + lim + STR( "}" );
-    return e + ( limlowupp == LimLow ? STR( " csub {" ) : STR( " csup {" )) + lim + STR( "}" );
+    if( limlowupp == LimUpp && e.endsWith( " overbrace { }" ))
+        return e.copy( 0, e.getLength() - 2 ) + lim + "}";
+    if( limlowupp == LimLow && e.endsWith( " underbrace { }" ))
+        return e.copy( 0, e.getLength() - 2 ) + lim + "}";
+    return e + ( limlowupp == LimLow ? " csub {" : " csup {" ) + lim + "}";
 }
 
 OUString SmOoxmlImport::handleGroupChr()
@@ -458,7 +455,7 @@ OUString SmOoxmlImport::handleGroupChr()
         }
         if( XmlStream::Tag posTag = stream.checkOpeningTag( M_TOKEN( pos )))
         {
-            if( posTag.attribute( M_TOKEN( val ), STR( "bot" )) == STR( "top" ))
+            if( posTag.attribute( M_TOKEN( val ), OUString( "bot" )) == "top" )
                 pos = top;
             stream.ensureClosingTag( M_TOKEN( pos ));
         }
@@ -467,13 +464,13 @@ OUString SmOoxmlImport::handleGroupChr()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( groupChr ));
     if( pos == top && chr == sal_Unicode( 0x23de ))
-        return STR( "{" ) + e + STR( "} overbrace { }" );
+        return "{" + e + "} overbrace { }";
     if( pos == bot && chr == sal_Unicode( 0x23df ))
-        return STR( "{" ) + e + STR( "} underbrace { }" );
+        return "{" + e + "} underbrace { }";
     if( pos == top )
-        return STR( "{" ) + e + STR( "} csup {" ) + OUString( chr ) + STR( "}" );
+        return "{" + e + "} csup {" + OUString( chr ) + "}";
     else
-        return STR( "{" ) + e + STR( "} csub {" ) + OUString( chr ) + STR( "}" );
+        return "{" + e + "} csub {" + OUString( chr ) + "}";
 }
 
 OUString SmOoxmlImport::handleM()
@@ -487,16 +484,16 @@ OUString SmOoxmlImport::handleM()
         do // there must be at least one m:e
         {
             if( !row.isEmpty())
-                row += STR( " # " );
+                row += " # ";
             row += readOMathArgInElement( M_TOKEN( e ));
         } while( !stream.atEnd() && stream.findTag( OPENING( M_TOKEN( e ))));
         if( !allrows.isEmpty())
-            allrows += STR( " ## " );
+            allrows += " ## ";
         allrows += row;
         stream.ensureClosingTag( M_TOKEN( mr ));
     } while( !stream.atEnd() && stream.findTag( OPENING( M_TOKEN( mr ))));
     stream.ensureClosingTag( M_TOKEN( m ));
-    return STR( "matrix {" ) + allrows + STR( "}" );
+    return "matrix {" + allrows + "}";
 }
 
 OUString SmOoxmlImport::handleNary()
@@ -531,41 +528,41 @@ OUString SmOoxmlImport::handleNary()
     switch( chr )
     {
         case MS_INT:
-            ret = STR( "int" );
+            ret = "int";
             break;
         case MS_IINT:
-            ret = STR( "liint" );
+            ret = "liint";
             break;
         case MS_IIINT:
-            ret = STR( "liiint" );
+            ret = "liiint";
             break;
         case MS_LINT:
-            ret = STR( "lint" );
+            ret = "lint";
             break;
         case MS_LLINT:
-            ret = STR( "llint" );
+            ret = "llint";
             break;
         case MS_LLLINT:
-            ret = STR( "lllint" );
+            ret = "lllint";
             break;
         case MS_PROD:
-            ret = STR( "prod" );
+            ret = "prod";
             break;
         case MS_COPROD:
-            ret = STR( "coprod" );
+            ret = "coprod";
             break;
         case MS_SUM:
-            ret = STR( "sum" );
+            ret = "sum";
             break;
         default:
             SAL_WARN( "starmath.ooxml", "Unknown m:nary chr \'" << chr << "\'" );
             break;
     }
     if( !subHide )
-        ret += STR( " from {" ) + sub + STR( "}" );
+        ret += " from {" + sub + "}";
     if( !supHide )
-        ret += STR( " to {" ) + sup + STR( "}" );
-    ret += STR( " {" ) + e + STR( "}" );
+        ret += " to {" + sup + "}";
+    ret += " {" + e + "}";
     stream.ensureClosingTag( M_TOKEN( nary ));
     return ret;
 }
@@ -588,7 +585,7 @@ OUString SmOoxmlImport::handleR()
             case OPENING( M_TOKEN( t )):
             {
                 XmlStream::Tag rtag = stream.ensureOpeningTag( M_TOKEN( t ));
-                if( rtag.attribute( OOX_TOKEN( xml, space )) != STR( "preserve" ))
+                if( rtag.attribute( OOX_TOKEN( xml, space )) != "preserve" )
                     text += rtag.text.trim();
                 else
                     text += rtag.text;
@@ -621,9 +618,9 @@ OUString SmOoxmlImport::handleRad()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( rad ));
     if( degHide )
-        return STR( "sqrt {" ) + e + STR( "}" );
+        return "sqrt {" + e + "}";
     else
-        return STR( "nroot {" ) + deg + STR( "} {" ) + e + STR( "}" );
+        return "nroot {" + deg + "} {" + e + "}";
 }
 
 OUString SmOoxmlImport::handleSpre()
@@ -633,7 +630,7 @@ OUString SmOoxmlImport::handleSpre()
     OUString sup = readOMathArgInElement( M_TOKEN( sup ));
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     stream.ensureClosingTag( M_TOKEN( sPre ));
-    return STR( "{" ) + e + STR( "} lsub {" ) + sub + STR( "} lsup {" ) + sup + STR( "}" );
+    return "{" + e + "} lsub {" + sub + "} lsup {" + sup + "}";
 }
 
 OUString SmOoxmlImport::handleSsub()
@@ -642,7 +639,7 @@ OUString SmOoxmlImport::handleSsub()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     OUString sub = readOMathArgInElement( M_TOKEN( sub ));
     stream.ensureClosingTag( M_TOKEN( sSub ));
-    return STR( "{" ) + e + STR( "} rsub {" ) + sub + STR( "}" );
+    return "{" + e + "} rsub {" + sub + "}";
 }
 
 OUString SmOoxmlImport::handleSsubsup()
@@ -652,7 +649,7 @@ OUString SmOoxmlImport::handleSsubsup()
     OUString sub = readOMathArgInElement( M_TOKEN( sub ));
     OUString sup = readOMathArgInElement( M_TOKEN( sup ));
     stream.ensureClosingTag( M_TOKEN( sSubSup ));
-    return STR( "{" ) + e + STR( "} rsub {" ) + sub + STR( "} rsup {" ) + sup + STR( "}" );
+    return "{" + e + "} rsub {" + sub + "} rsup {" + sup + "}";
 }
 
 OUString SmOoxmlImport::handleSsup()
@@ -661,7 +658,7 @@ OUString SmOoxmlImport::handleSsup()
     OUString e = readOMathArgInElement( M_TOKEN( e ));
     OUString sup = readOMathArgInElement( M_TOKEN( sup ));
     stream.ensureClosingTag( M_TOKEN( sSup ));
-    return STR( "{" ) + e + STR( "} ^ {" ) + sup + STR( "}" );
+    return "{" + e + "} ^ {" + sup + "}";
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

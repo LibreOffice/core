@@ -119,42 +119,42 @@ SmFilterDetect::~SmFilterDetect()
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
         // extract properties
-        if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("URL")) )
+        if( lDescriptor[nProperty].Name == "URL" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( !aURL.Len() && lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FileName")) )
+        else if( !aURL.Len() && lDescriptor[nProperty].Name == "FileName" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aURL = sTemp;
         }
-        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("TypeName")) )
+        else if( lDescriptor[nProperty].Name == "TypeName" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aTypeName = sTemp;
         }
-        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("FilterName")) )
+        else if( lDescriptor[nProperty].Name == "FilterName" )
         {
             lDescriptor[nProperty].Value >>= sTemp;
             aPreselectedFilterName = sTemp;
         }
-        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("InputStream")) )
+        else if( lDescriptor[nProperty].Name == "InputStream" )
             nIndexOfInputStream = nProperty;
-        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("ReadOnly")) )
+        else if( lDescriptor[nProperty].Name == "ReadOnly" )
             nIndexOfReadOnlyFlag = nProperty;
-        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("UCBContent")) )
+        else if( lDescriptor[nProperty].Name == "UCBContent" )
             nIndexOfContent = nProperty;
-        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("AsTemplate")) )
+        else if( lDescriptor[nProperty].Name == "AsTemplate" )
         {
             lDescriptor[nProperty].Value >>= bOpenAsTemplate;
             nIndexOfTemplateFlag = nProperty;
         }
-        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("InteractionHandler")) )
+        else if( lDescriptor[nProperty].Name == "InteractionHandler" )
             lDescriptor[nProperty].Value >>= xInteraction;
-        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("RepairPackage")) )
+        else if( lDescriptor[nProperty].Name == "RepairPackage" )
             lDescriptor[nProperty].Value >>= bRepairPackage;
-        else if( lDescriptor[nProperty].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("DocumentTitle")) )
+        else if( lDescriptor[nProperty].Name == "DocumentTitle" )
             nIndexOfDocumentTitle = nProperty;
     }
 
@@ -206,7 +206,7 @@ SmFilterDetect::~SmFilterDetect()
                     // error during storage creation means _here_ that the medium
                     // is broken, but we can not handle it in medium since unpossibility
                     // to create a storage does not _always_ means that the medium is broken
-                    aMedium.SetError( aMedium.GetLastStorageCreationState(), ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( OSL_LOG_PREFIX ) ) );
+                    aMedium.SetError( aMedium.GetLastStorageCreationState(), OSL_LOG_PREFIX );
                     if ( xInteraction.is() )
                     {
                         OUString empty;
@@ -345,7 +345,7 @@ SmFilterDetect::~SmFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("InputStream"));
+        lDescriptor[nPropertyCount].Name = "InputStream";
         lDescriptor[nPropertyCount].Value <<= xStream;
         nPropertyCount++;
     }
@@ -354,7 +354,7 @@ SmFilterDetect::~SmFilterDetect()
     {
         // if input stream wasn't part of the descriptor, now it should be, otherwise the content would be opend twice
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("UCBContent"));
+        lDescriptor[nPropertyCount].Name = "UCBContent";
         lDescriptor[nPropertyCount].Value <<= xContent;
         nPropertyCount++;
     }
@@ -364,7 +364,7 @@ SmFilterDetect::~SmFilterDetect()
         if ( nIndexOfReadOnlyFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ReadOnly"));
+            lDescriptor[nPropertyCount].Name = "ReadOnly";
             lDescriptor[nPropertyCount].Value <<= bReadOnly;
             nPropertyCount++;
         }
@@ -375,7 +375,7 @@ SmFilterDetect::~SmFilterDetect()
     if ( !bRepairPackage && bRepairAllowed )
     {
         lDescriptor.realloc( nPropertyCount + 1 );
-        lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("RepairPackage"));
+        lDescriptor[nPropertyCount].Name = "RepairPackage";
         lDescriptor[nPropertyCount].Value <<= bRepairAllowed;
         nPropertyCount++;
 
@@ -389,7 +389,7 @@ SmFilterDetect::~SmFilterDetect()
         if ( nIndexOfTemplateFlag == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AsTemplate"));
+            lDescriptor[nPropertyCount].Name = "AsTemplate";
             lDescriptor[nPropertyCount].Value <<= bOpenAsTemplate;
             nPropertyCount++;
         }
@@ -403,7 +403,7 @@ SmFilterDetect::~SmFilterDetect()
         if ( nIndexOfDocumentTitle == -1 )
         {
             lDescriptor.realloc( nPropertyCount + 1 );
-            lDescriptor[nPropertyCount].Name = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DocumentTitle"));
+            lDescriptor[nPropertyCount].Name = "DocumentTitle";
             lDescriptor[nPropertyCount].Value <<= aDocumentTitle;
             nPropertyCount++;
         }
@@ -450,14 +450,14 @@ UNOSEQUENCE< rtl::OUString > SAL_CALL SmFilterDetect::getSupportedServiceNames()
 UNOSEQUENCE< rtl::OUString > SmFilterDetect::impl_getStaticSupportedServiceNames()
 {
     UNOSEQUENCE< rtl::OUString > seqServiceNames( 1 );
-    seqServiceNames.getArray() [0] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ExtendedTypeDetection"  ));
+    seqServiceNames.getArray() [0] = "com.sun.star.frame.ExtendedTypeDetection";
     return seqServiceNames ;
 }
 
 /* Helper for XServiceInfo */
 rtl::OUString SmFilterDetect::impl_getStaticImplementationName()
 {
-    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.math.FormatDetector" ));
+    return rtl::OUString("com.sun.star.comp.math.FormatDetector");
 }
 
 /* Helper for registry */

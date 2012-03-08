@@ -4323,7 +4323,7 @@ bool SwWW8ImplReader::ReadGlobalTemplateSettings( const rtl::OUString& sCreatedF
                 aURL = sGlobalTemplates[ i ];
         else
                 osl::FileBase::getFileURLFromSystemPath( sGlobalTemplates[ i ], aURL );
-        if ( !aURL.endsWithIgnoreAsciiCaseAsciiL( ".dot", 4 ) || ( !sCreatedFrom.isEmpty() && sCreatedFrom.equals( aURL ) ) )
+        if ( !aURL.endsWithIgnoreAsciiCase( ".dot" ) || ( !sCreatedFrom.isEmpty() && sCreatedFrom.equals( aURL ) ) )
             continue; // don't try and read the same document as ourselves
 
         SotStorageRef rRoot = new SotStorage( aURL, STREAM_STD_READWRITE, STORAGE_TRANSACTED );

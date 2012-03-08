@@ -92,7 +92,7 @@ using namespace ::xmloff::token;
 using ::rtl::OUString;
 using ::rtl::OUStringBuffer;
 
-#define EXPORT_SVC_NAME RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.XMLExportFilter")
+#define EXPORT_SVC_NAME "com.sun.star.xml.XMLExportFilter"
 
 #undef WANTEXCEPT
 
@@ -171,14 +171,14 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
                             new comphelper::PropertySetInfo( aInfoMap ) ) );
 
     SvtSaveOptions aSaveOpt;
-    OUString sUsePrettyPrinting(RTL_CONSTASCII_USTRINGPARAM("UsePrettyPrinting"));
+    OUString sUsePrettyPrinting("UsePrettyPrinting");
     sal_Bool bUsePrettyPrinting( bFlat || aSaveOpt.IsPrettyPrinting() );
     Any aAny;
     aAny.setValue( &bUsePrettyPrinting, ::getBooleanCppuType() );
     xInfoSet->setPropertyValue( sUsePrettyPrinting, aAny );
 
     // Set base URI
-    OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("BaseURI") );
+    OUString sPropName( "BaseURI" );
     xInfoSet->setPropertyValue( sPropName, makeAny( rMedium.GetBaseURL( true ) ) );
 
     sal_Int32 nSteps=0;
@@ -203,7 +203,7 @@ sal_Bool SmXMLExportWrapper::Export(SfxMedium &rMedium)
 
             if ( !aName.isEmpty() )
             {
-                sPropName = OUString(RTL_CONSTASCII_USTRINGPARAM("StreamRelPath"));
+                sPropName = "StreamRelPath";
                 xInfoSet->setPropertyValue( sPropName, makeAny( aName ) );
             }
         }
@@ -275,8 +275,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
 
     // get component
     Reference< io::XActiveDataSource > xSaxWriter(
-        rFactory->createInstance(
-            OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.xml.sax.Writer") )),
+        rFactory->createInstance( "com.sun.star.xml.sax.Writer" ),
         UNO_QUERY );
     OSL_ENSURE( xSaxWriter.is(), "can't instantiate XML writer" );
     if (!xSaxWriter.is())
@@ -348,8 +347,8 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
         return sal_False;
     }
 
-    String aPropName( String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("MediaType") ) );
-    OUString aMime( RTL_CONSTASCII_USTRINGPARAM("text/xml") );
+    OUString aPropName( "MediaType" );
+    OUString aMime( "text/xml" );
     uno::Any aAny;
     aAny <<= aMime;
 
@@ -358,14 +357,14 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
 
     if ( !bCompress )
     {
-        aPropName = String::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM("Compressed") );
+        aPropName = "Compressed";
         sal_Bool bFalse = sal_False;
         aAny.setValue( &bFalse, ::getBooleanCppuType() );
         xSet->setPropertyValue( aPropName, aAny );
     }
 
     // even plain stream must be encrypted in encrypted document
-    OUString aTmpPropName( RTL_CONSTASCII_USTRINGPARAM("UseCommonStoragePasswordEncryption") );
+    OUString aTmpPropName( "UseCommonStoragePasswordEncryption" );
     sal_Bool bTrue = sal_True;
     aAny.setValue( &bTrue, ::getBooleanCppuType() );
     xSet->setPropertyValue( aTmpPropName, aAny );
@@ -373,7 +372,7 @@ sal_Bool SmXMLExportWrapper::WriteThroughComponent(
     // set Base URL
     if ( rPropSet.is() )
     {
-        OUString sPropName( RTL_CONSTASCII_USTRINGPARAM("StreamName") );
+        OUString sPropName( "StreamName" );
         rPropSet->setPropertyValue( sPropName, makeAny( sStreamName ) );
     }
 
@@ -420,7 +419,7 @@ const uno::Sequence< sal_Int8 > & SmXMLExport::getUnoTunnelId() throw()
 
 OUString SAL_CALL SmXMLExport_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLExporter" ) );
+    return OUString( "com.sun.star.comp.Math.XMLExporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLExport_getSupportedServiceNames()
@@ -445,7 +444,7 @@ uno::Reference< uno::XInterface > SAL_CALL SmXMLExport_createInstance(
 
 OUString SAL_CALL SmXMLExportMetaOOO_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLMetaExporter" ) );
+    return OUString( "com.sun.star.comp.Math.XMLMetaExporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLExportMetaOOO_getSupportedServiceNames()
@@ -467,7 +466,7 @@ throw( uno::Exception )
 
 OUString SAL_CALL SmXMLExportMeta_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLOasisMetaExporter" ) );
+    return OUString( "com.sun.star.comp.Math.XMLOasisMetaExporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLExportMeta_getSupportedServiceNames()
@@ -489,7 +488,7 @@ throw( uno::Exception )
 
 OUString SAL_CALL SmXMLExportSettingsOOO_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLSettingsExporter" ) );
+    return OUString( "com.sun.star.comp.Math.XMLSettingsExporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLExportSettingsOOO_getSupportedServiceNames()
@@ -511,7 +510,7 @@ throw( uno::Exception )
 
 OUString SAL_CALL SmXMLExportSettings_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLOasisSettingsExporter" ) );
+    return OUString( "com.sun.star.comp.Math.XMLOasisSettingsExporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLExportSettings_getSupportedServiceNames()
@@ -533,7 +532,7 @@ throw( uno::Exception )
 
 OUString SAL_CALL SmXMLExportContent_getImplementationName() throw()
 {
-    return OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.comp.Math.XMLContentExporter" ) );
+    return OUString( "com.sun.star.comp.Math.XMLContentExporter" );
 }
 
 uno::Sequence< OUString > SAL_CALL SmXMLExportContent_getSupportedServiceNames()
@@ -661,7 +660,7 @@ void SmXMLExport::_ExportContent()
         }
 
         AddAttribute(XML_NAMESPACE_MATH, XML_ENCODING,
-            OUString(RTL_CONSTASCII_USTRINGPARAM("StarMath 5.0")));
+            OUString("StarMath 5.0"));
         SvXMLElementExport aAnnotation(*this, XML_NAMESPACE_MATH,
             XML_ANNOTATION, sal_True, sal_False);
         GetDocHandler()->characters(OUString( aText ));
@@ -694,16 +693,15 @@ void SmXMLExport::GetViewSettings( Sequence < PropertyValue >& aProps)
 
     Rectangle aRect( pDocShell->GetVisArea() );
 
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaTop") );
+    pValue[nIndex].Name = "ViewAreaTop";
     pValue[nIndex++].Value <<= aRect.Top();
 
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaLeft") );
+    pValue[nIndex].Name = "ViewAreaLeft";
     pValue[nIndex++].Value <<= aRect.Left();
 
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaWidth") );
     pValue[nIndex++].Value <<= aRect.GetWidth();
 
-    pValue[nIndex].Name = OUString( RTL_CONSTASCII_USTRINGPARAM ( "ViewAreaHeight") );
+    pValue[nIndex].Name = "ViewAreaHeight";
     pValue[nIndex++].Value <<= aRect.GetHeight();
 }
 
@@ -726,10 +724,10 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                     SmConfig *pConfig = SM_MOD()->GetConfig();
                     const bool bUsedSymbolsOnly = pConfig ? pConfig->IsSaveOnlyUsedSymbols() : false;
 
-                    const OUString sFormula ( RTL_CONSTASCII_USTRINGPARAM ( "Formula" ) );
-                    const OUString sBasicLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "BasicLibraries" ) );
-                    const OUString sDialogLibraries ( RTL_CONSTASCII_USTRINGPARAM ( "DialogLibraries" ) );
-                    const OUString sRuntimeUID ( RTL_CONSTASCII_USTRINGPARAM ( "RuntimeUID" ) );
+                    const OUString sFormula ( "Formula" );
+                    const OUString sBasicLibraries ( "BasicLibraries" );
+                    const OUString sDialogLibraries ( "DialogLibraries" );
+                    const OUString sRuntimeUID ( "RuntimeUID" );
                     for (sal_Int32 i = 0; i < nCount; i++, pProps++)
                     {
                         const OUString &rPropName = aProps[i].Name;
@@ -743,8 +741,8 @@ void SmXMLExport::GetConfigurationSettings( Sequence < PropertyValue > & rProps)
                             rtl::OUString aActualName( rPropName );
 
                             // handle 'save used symbols only'
-                            if (bUsedSymbolsOnly && rPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Symbols")))
-                                aActualName = OUString( RTL_CONSTASCII_USTRINGPARAM ( "UserDefinedSymbolsInUse" ) );
+                            if (bUsedSymbolsOnly && rPropName == "Symbols" )
+                                aActualName = "UserDefinedSymbolsInUse";
 
                             pProps->Value = xProps->getPropertyValue( aActualName );
                         }
@@ -1323,7 +1321,7 @@ void SmXMLExport::ExportFont(const SmNode *pNode, int nLevel)
                 {
                     OSL_FAIL( "unexpected case" );
                 }
-                AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, A2OU(pText));
+                AddAttribute(XML_NAMESPACE_MATH, XML_MATHVARIANT, OUString::createFromAscii( pText ));
             }
             break;
         default:
