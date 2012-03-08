@@ -70,21 +70,6 @@ using rtl::OUStringToOString;
 namespace writerfilter {
 namespace rtftok {
 
-static RTFSprms& lcl_getNumPr(std::stack<RTFParserState>& aStates)
-{
-    // insert the numpr sprm if necessary
-    RTFValue::Pointer_t p = aStates.top().aParagraphSprms.find(NS_ooxml::LN_CT_PPrBase_numPr);
-    if (!p.get())
-    {
-        RTFSprms aAttributes;
-        RTFSprms aSprms;
-        RTFValue::Pointer_t pValue(new RTFValue(aAttributes, aSprms));
-        aStates.top().aParagraphSprms->push_back(make_pair(NS_ooxml::LN_CT_PPrBase_numPr, pValue));
-        p = aStates.top().aParagraphSprms.find(NS_ooxml::LN_CT_PPrBase_numPr);
-    }
-    return p->getSprms();
-}
-
 static Id lcl_getParagraphBorder(sal_uInt32 nIndex)
 {
     static const Id aBorderIds[] =
@@ -2337,10 +2322,8 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             }
             break;
         case RTF_ILVL:
-            {
-                RTFSprms& rSprms = lcl_getNumPr(m_aStates);
-                rSprms->push_back(make_pair(NS_sprm::LN_PIlvl, pIntValue));
-            }
+            lcl_putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_numPr, NS_sprm::LN_PIlvl, pIntValue);
+            break;
         case RTF_LISTTEMPLATEID:
             // This one is not referenced anywhere, so it's pointless to store it at the moment.
             break;
@@ -2357,10 +2340,7 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
                 if (m_aStates.top().nDestinationState == DESTINATION_LISTOVERRIDEENTRY)
                     m_aStates.top().aTableAttributes->push_back(make_pair(NS_rtf::LN_LSID, pIntValue));
                 else
-                {
-                    RTFSprms& rSprms = lcl_getNumPr(m_aStates);
-                    rSprms->push_back(make_pair(NS_sprm::LN_PIlfo, pIntValue));
-                }
+                    lcl_putNestedSprm(m_aStates.top().aParagraphSprms, NS_ooxml::LN_CT_PPrBase_tabs, NS_sprm::LN_PIlfo, pIntValue);
             }
             break;
         case RTF_UC:
