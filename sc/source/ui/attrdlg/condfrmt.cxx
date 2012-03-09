@@ -647,6 +647,8 @@ IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond11Hdl)
         aRbCond12.Hide();
         aRbCond11.SetPosPixel( aRBtn1Pos2 );
         aEdtCond11.SetPosSizePixel( aCond1Pos1, aCond1Size1 );
+        aEdtCond11.Show();
+        aRbCond11.Show();
     }
 
     ChangeCond12Hdl( NULL );
@@ -742,6 +744,8 @@ IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond21Hdl)
         aRbCond22.Hide();
         aRbCond21.SetPosPixel( aRBtn2Pos2 );
         aEdtCond21.SetPosSizePixel( aCond2Pos1, aCond2Size1 );
+        aEdtCond21.Show();
+        aRbCond21.Show();
     }
 
     ChangeCond22Hdl( NULL );
@@ -839,6 +843,8 @@ IMPL_LINK_NOARG(ScConditionalFormatDlg, ChangeCond31Hdl)
         aRbCond32.Hide();
         aRbCond31.SetPosPixel( aRBtn3Pos2 );
         aEdtCond31.SetPosSizePixel( aCond3Pos1, aCond3Size1 );
+        aEdtCond31.Show();
+        aRbCond31.Show();
     }
 
     ChangeCond32Hdl( NULL );
