@@ -739,7 +739,7 @@ public:
         @see getFileType
         @see isRegular
         @see isLink
-        @since 3.6
+        @since LibreOffice 3.6
     */
     inline sal_Bool isFile() const
     {
@@ -753,7 +753,7 @@ public:
         True if it's a directory, False otherwise.
 
         @see getFileType
-        @since 3.6
+        @since LibreOffice 3.6
     */
     inline sal_Bool isDirectory() const
     {
@@ -768,7 +768,7 @@ public:
         @see getFileType
         @see isFile
         @see isLink
-        @since 3.6
+        @since LibreOffice 3.6
     */
     inline sal_Bool isRegular() const
     {
@@ -781,7 +781,7 @@ public:
         True if it's a link, False otherwise.
 
         @see getFileType
-        @since 3.6
+        @since LibreOffice 3.6
     */
     inline sal_Bool isLink() const
     {
