@@ -1299,7 +1299,7 @@ void WW8_WrtBookmarks::Write( WW8Export& rWrt )
         std::sort(aBookmarks.begin(), aBookmarks.end());
 
         // First write the Bookmark Name Stringtable
-        std::vector<String> aNames;
+        std::vector<rtl::OUString> aNames;
         aNames.reserve(aBookmarks.size());
         for (BkmIter bIt = aBookmarks.begin(); bIt < aBookmarks.end(); ++bIt)
             aNames.push_back(bIt->name);
@@ -1456,7 +1456,7 @@ sal_uInt16 WW8Export::AddRedlineAuthor( sal_uInt16 nId )
 
 //--------------------------------------------------------------------------
 
-void WW8Export::WriteAsStringTable(const std::vector<String>& rStrings,
+void WW8Export::WriteAsStringTable(const std::vector<rtl::OUString>& rStrings,
     sal_Int32& rfcSttbf, sal_Int32& rlcbSttbf, sal_uInt16 nExtraLen)
 {
     sal_uInt16 n, nCount = static_cast< sal_uInt16 >(rStrings.size());
@@ -1484,7 +1484,8 @@ void WW8Export::WriteAsStringTable(const std::vector<String>& rStrings,
             SwWW8Writer::WriteShort( rStrm, 0 );
             for( n = 0; n < nCount; ++n )
             {
-                const String aNm(rStrings[n].Copy(0, 255));
+                const rtl::OUString &rString = rStrings[n];
+                const String aNm(rString.copy(0, std::min<sal_Int32>(rString.getLength(), 255)));
                 rStrm << (sal_uInt8)aNm.Len();
                 SwWW8Writer::WriteString8(rStrm, aNm, false,
                     RTL_TEXTENCODING_MS_1252);
@@ -2639,15 +2640,14 @@ void WW8Export::WriteFkpPlcUsw()
 
         if ( pSttbfAssoc )                      // #i106057#
         {
-        ::std::vector<String> aStrings;
+        ::std::vector<rtl::OUString> aStrings;
 
         ::ww8::StringVector_t & aSttbStrings = pSttbfAssoc->getStrings();
         ::ww8::StringVector_t::const_iterator aItEnd = aSttbStrings.end();
         for (::ww8::StringVector_t::const_iterator aIt = aSttbStrings.begin();
-             aIt != aItEnd; aIt++)
+             aIt != aItEnd; ++aIt)
         {
-            String aStr(aIt->getStr());
-            aStrings.push_back(aStr);
+            aStrings.push_back(aIt->getStr());
         }
 
         WriteAsStringTable(aStrings, pFib->fcSttbfAssoc,

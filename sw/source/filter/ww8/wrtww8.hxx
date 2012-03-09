@@ -1008,7 +1008,7 @@ public:
     virtual void AppendBookmark( const rtl::OUString& rName, bool bSkip = false );
     void MoveFieldMarks(sal_uLong nFrom, sal_uLong nTo);
 
-    void WriteAsStringTable(const ::std::vector<String>&, sal_Int32& rfcSttbf,
+    void WriteAsStringTable(const ::std::vector<rtl::OUString>&, sal_Int32& rfcSttbf,
         sal_Int32& rlcbSttbf, sal_uInt16 nExtraLen = 0);
 
     virtual sal_uLong ReplaceCr( sal_uInt8 nChar );

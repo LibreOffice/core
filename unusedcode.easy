@@ -904,6 +904,7 @@ nullcanvas::SpriteCanvasHelper::opaqueUpdate(basegfx::B2DConnectedRanges<canvas:
 nullcanvas::SpriteCanvasHelper::scrollUpdate(basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 o3tltests::cow_wrapper_client2::queryUnmodified() const
 o3tltests::cow_wrapper_client3::queryUnmodified() const
+ooo::vba::extractIntFromAny(com::sun::star::uno::Any const&)
 oox::AttributeConversion::decodeHyperHex(rtl::OUString const&)
 oox::AttributeConversion::decodeUnsignedHex(rtl::OUString const&)
 oox::ContainerHelper::insertByIndex(com::sun::star::uno::Reference<com::sun::star::container::XIndexContainer> const&, int, com::sun::star::uno::Any const&)

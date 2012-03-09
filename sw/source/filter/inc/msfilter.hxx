@@ -432,14 +432,14 @@ namespace sw
         class WrtRedlineAuthor : public boost::noncopyable
         {
         protected:
-            std::vector<String> maAuthors;          // Array of Sw - Bookmarknames
+            std::vector<rtl::OUString> maAuthors;          // Array of Sw - Bookmarknames
 
             sal_uInt16 GetPos( const String& rNm );
         public:
             WrtRedlineAuthor() {}
             virtual ~WrtRedlineAuthor() {}
 
-            sal_uInt16 AddName( const String& rNm );
+            sal_uInt16 AddName( const rtl::OUString& rNm );
             virtual void Write(Writer &rWrt) = 0;
             // std::vector<String> GetNames();
         };

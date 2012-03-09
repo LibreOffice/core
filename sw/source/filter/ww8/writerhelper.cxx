@@ -277,7 +277,7 @@ namespace sw
             rObj.AbandonObject();
         }
 
-        bool DrawingOLEAdaptor::TransferToDoc( ::rtl::OUString &rName )
+        bool DrawingOLEAdaptor::TransferToDoc( rtl::OUString &rName )
         {
             OSL_ENSURE(mxIPRef.is(), "Transferring invalid object to doc");
             if (!mxIPRef.is())
@@ -294,7 +294,7 @@ namespace sw
                     ::svt::EmbeddedObjectRef::SetGraphicToContainer( *mpGraphic,
                                                                     mrPers.GetEmbeddedObjectContainer(),
                                                                     rName,
-                                                                    ::rtl::OUString() );
+                                                                    rtl::OUString() );
 
                 mxIPRef = 0;
             }
@@ -457,7 +457,7 @@ namespace sw
             return aStyles;
         }
 
-        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const String& rName)
+        SwTxtFmtColl* GetParaStyle(SwDoc &rDoc, const rtl::OUString& rName)
         {
             // Search first in the Doc-Styles
             SwTxtFmtColl* pColl = rDoc.FindTxtFmtCollByName(rName);
@@ -472,7 +472,7 @@ namespace sw
             return pColl;
         }
 
-        SwCharFmt* GetCharStyle(SwDoc &rDoc, const String& rName)
+        SwCharFmt* GetCharStyle(SwDoc &rDoc, const rtl::OUString& rName)
         {
             SwCharFmt *pFmt = rDoc.FindCharFmtByName(rName);
             if (!pFmt)
@@ -632,11 +632,11 @@ namespace sw
             }
         }
 
-        bool IsStarSymbol(const String &rFontName)
+        bool IsStarSymbol(const rtl::OUString &rFontName)
         {
-            String sFamilyNm(GetFontToken(rFontName, 0));
-            return (sFamilyNm.EqualsIgnoreCaseAscii("starsymbol") ||
-                sFamilyNm.EqualsIgnoreCaseAscii("opensymbol"));
+            rtl::OUString sFamilyNm(GetFontToken(rFontName, 0));
+            return (sFamilyNm.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("starsymbol")) ||
+                sFamilyNm.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("opensymbol")));
         }
 
         Size GetSwappedInSize(const SwNoTxtNode& rNd)
@@ -755,10 +755,10 @@ namespace sw
             std::for_each(maStack.begin(), maStack.end(), SetInDocAndDelete(mrDoc));
         }
 
-        sal_uInt16 WrtRedlineAuthor::AddName( const String& rNm )
+        sal_uInt16 WrtRedlineAuthor::AddName( const rtl::OUString& rNm )
         {
             sal_uInt16 nRet;
-            typedef std::vector<String>::iterator myiter;
+            typedef std::vector<rtl::OUString>::iterator myiter;
             myiter aIter = std::find(maAuthors.begin(), maAuthors.end(), rNm);
             if (aIter != maAuthors.end())
                 nRet = static_cast< sal_uInt16 >(aIter - maAuthors.begin());
