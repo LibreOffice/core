@@ -661,7 +661,7 @@ static PyTypeObject PyUNOType =
     (printfunc) 0,
     (getattrfunc) PyUNO_getattr,
     (setattrfunc) PyUNO_setattr,
-    (cmpfunc) 0,
+    /* this type does not exist in Python 3: (cmpfunc) */ 0,
     (reprfunc) PyUNO_repr,
     0,
     0,
