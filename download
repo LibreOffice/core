@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,6 +25,8 @@
 # for a copy of the LGPLv3 License.
 #
 #*************************************************************************
+
+set -o pipefail
 
 # environment setup yet?
 if [ -z "$TARFILE_LOCATION" ]; then
