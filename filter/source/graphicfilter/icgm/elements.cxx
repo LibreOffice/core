@@ -42,7 +42,6 @@ CGMElements::CGMElements( CGM& rCGM ) :
 
 CGMElements::~CGMElements()
 {
-    DeleteTable( aHatchTable );
     DeleteAllBundles( aLineList );
     DeleteAllBundles( aMarkerList );
     DeleteAllBundles( aEdgeList );
@@ -144,14 +143,7 @@ CGMElements& CGMElements::operator=( CGMElements& rSource )
     eTransparency = rSource.eTransparency;
     nAuxiliaryColor = rSource.nAuxiliaryColor;
 
-    DeleteTable( aHatchTable );
-    HatchEntry* pSource = (HatchEntry*)rSource.aHatchTable.First();
-    while ( pSource )
-    {
-        sal_uInt32  nKey = rSource.aHatchTable.GetKey( pSource );
-        aHatchTable.Insert( nKey, new HatchEntry( *pSource ) );
-        pSource = (HatchEntry*)rSource.aHatchTable.Next();
-    }
+    maHatchMap = rSource.maHatchMap;
     bSegmentCount = rSource.bSegmentCount;
     return (*this);
 }
@@ -304,25 +296,10 @@ void CGMElements::Init()
 
 void CGMElements::ImplInsertHatch( sal_Int32 nKey, int nStyle, long nDistance, long nAngle )
 {
-    HatchEntry*     pHatchEntry;
-    pHatchEntry = new HatchEntry;
-    aHatchTable.Insert( (sal_uInt32)nKey, pHatchEntry );
-    pHatchEntry->HatchStyle = nStyle;
-    pHatchEntry->HatchDistance = nDistance;
-    pHatchEntry->HatchAngle = nAngle;
-}
-
-// ---------------------------------------------------------------
-
-void CGMElements::DeleteTable( Table& rTable )
-{
-    HatchEntry* pPtr = (HatchEntry*)rTable.First();
-    while ( pPtr )
-    {
-        delete pPtr;
-        pPtr = (HatchEntry*)rTable.Next();
-    }
-    rTable.Clear();
+    HatchEntry& rEntry = maHatchMap[nKey];
+    rEntry.HatchStyle = nStyle;
+    rEntry.HatchDistance = nDistance;
+    rEntry.HatchAngle = nAngle;
 }
 
 // ---------------------------------------------------------------

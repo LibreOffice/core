@@ -337,17 +337,17 @@ void CGMImpressOutAct::ImplSetFillBundle()
             aHatch.Color = nFillColor;
         else
             aHatch.Color = nFillColor;
-        HatchEntry*     pHatchEntry = (HatchEntry*)mpCGM->pElement->aHatchTable.Get( nHatchIndex );
-        if ( pHatchEntry )
+        if ( mpCGM->pElement->maHatchMap.find( nHatchIndex ) !=  mpCGM->pElement->maHatchMap.end() )
         {
-            switch ( pHatchEntry->HatchStyle )
+            HatchEntry& rHatchEntry = mpCGM->pElement->maHatchMap[ nHatchIndex ];
+            switch ( rHatchEntry.HatchStyle )
             {
             case 0 : aHatch.Style = drawing::HatchStyle_SINGLE; break;
             case 1 : aHatch.Style = drawing::HatchStyle_DOUBLE; break;
             case 2 : aHatch.Style = drawing::HatchStyle_TRIPLE; break;
             }
-            aHatch.Distance = pHatchEntry->HatchDistance;
-            aHatch.Angle = pHatchEntry->HatchAngle;
+            aHatch.Distance = rHatchEntry.HatchDistance;
+            aHatch.Angle = rHatchEntry.HatchAngle;
         }
         else
         {
