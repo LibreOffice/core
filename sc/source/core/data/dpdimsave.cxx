@@ -466,7 +466,13 @@ void ScDPSaveNumGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 void ScDPSaveNumGroupDimension::AddToCache(ScDPCache& rCache) const
 {
     long nDim = rCache.GetDimensionIndex(aDimensionName);
-    if (aGroupInfo.mbEnable)
+    if (aDateInfo.mbEnable)
+    {
+        // Date grouping
+        SvNumberFormatter* pFormatter = rCache.GetDoc()->GetFormatTable();
+        fillDateGroupDimension(rCache, aDateInfo, nDim, nDim, nDatePart, pFormatter);
+    }
+    else if (aGroupInfo.mbEnable)
     {
         // Number-range grouping
 
@@ -557,12 +563,6 @@ void ScDPSaveNumGroupDimension::AddToCache(ScDPCache& rCache) const
 
         aItem.SetRangeLast();
         rCache.SetGroupItem(nDim, aItem);
-    }
-    else if (aDateInfo.mbEnable)
-    {
-        // Date grouping
-        SvNumberFormatter* pFormatter = rCache.GetDoc()->GetFormatTable();
-        fillDateGroupDimension(rCache, aDateInfo, nDim, nDim, nDatePart, pFormatter);
     }
 }
 
