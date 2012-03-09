@@ -165,7 +165,12 @@ namespace dbaccess
         {
             m_pEventBroadcaster->removeEventsForProcessor( this );
             m_pEventBroadcaster->terminate();
-            m_pEventBroadcaster->join();
+                //TODO: a protocol is missing how to join with the thread before
+                // exit(3), to ensure the thread is no longer relying on any
+                // infrastructure while that infrastructure is being shut down
+                // in atexit handlers; simply calling join here leads to
+                // deadlock, as this thread holds the solar mutex while the
+                // other thread is typically blocked waiting for the solar mutex
             m_pEventBroadcaster.clear();
         }
 
