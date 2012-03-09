@@ -32,6 +32,7 @@
 #include "dp_platform.hxx"
 #include "dp_manager.h"
 #include "dp_identifier.hxx"
+#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/string.hxx"
 #include "rtl/uri.hxx"
@@ -313,11 +314,9 @@ void PackageManagerImpl::initRegistryBackends()
 
 // this overcomes previous rumours that the sal API is misleading
 // as to whether a directory is truly read-only or not
-static bool isMacroURLWriteable( const OUString &rMacro )
+static bool isMacroURLReadOnly( const OUString &rMacro )
 {
-    if (rMacro.getLength() < (sal_Int32)sizeof ("vnd.sun.star.expand:"))
-        return true;
-    rtl::OUString aURL( rMacro.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
+    rtl::OUString aURL( rMacro );
     ::rtl::Bootstrap::expandMacros( aURL );
 
     bool bError;
@@ -334,10 +333,10 @@ static bool isMacroURLWriteable( const OUString &rMacro )
     if (osl::File::remove( aURL ) != ::osl::FileBase::E_None)
         bError = true;
 
-    OSL_TRACE ("local url '%s' -> '%s' %s readonly\n",
-               rtl::OUStringToOString( rMacro, RTL_TEXTENCODING_UTF8 ).getStr(),
-               rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr(),
-               bError ? "is" : "is not");
+    SAL_INFO(
+        "desktop.deployment",
+        "local url '" << rMacro << "' -> '" << aURL << "' "
+            << (bError ? "is" : "is not") << " readonly\n");
     return bError;
 }
 
@@ -350,7 +349,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         xComponentContext, context );
     Reference<deployment::XPackageManager> xPackageManager( that );
 
-    OUString packages, logFile, stampURL;
+    OUString packages, logFile, stamp;
     if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("user") )) {
         that->m_activePackages = OUSTR(
             "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages");
@@ -371,8 +370,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         //using virtualization it appears that he/she can. Then a shared extension can
         //be installed but is only visible for the user (because the extension is in
         //the virtual store).
-        stampURL = OUSTR(
-            "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/stamp.sys");
+        stamp = OUSTR("$UNO_USER_PACKAGES_CACHE/stamp.sys");
     }
     else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") )) {
         that->m_activePackages = OUSTR(
@@ -383,8 +381,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/registry");
         logFile = OUSTR(
             "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/log.txt");
-        stampURL = OUSTR(
-            "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/stamp.sys");
+        stamp = OUSTR("$UNO_SHARED_PACKAGES_CACHE/stamp.sys");
     }
     else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled") )) {
         that->m_activePackages = OUSTR(
@@ -423,8 +420,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             "vnd.sun.star.expand:$TMP_EXTENSIONS");
         that->m_registryCache = OUSTR(
             "vnd.sun.star.expand:$TMP_EXTENSIONS/registry");
-        stampURL = OUSTR(
-            "vnd.sun.star.expand:$TMP_EXTENSIONS/stamp.sys");
+        stamp = OUSTR("$TMP_EXTENSIONS/stamp.sys");
     }
     else if (! context.matchAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") )) {
@@ -436,9 +432,9 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
     Reference<XCommandEnvironment> xCmdEnv;
 
     try {
-        // There is no stampURL for the bundled folder
-        if (!stampURL.isEmpty())
-            that->m_readOnly = !isMacroURLWriteable( stampURL );
+        // There is no stamp for the bundled folder:
+        if (!stamp.isEmpty())
+            that->m_readOnly = isMacroURLReadOnly( stamp );
 
         if (!that->m_readOnly && !logFile.isEmpty())
         {
