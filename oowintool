@@ -109,11 +109,6 @@ sub print_windows_sdk_home()
 	    $key = reg_find_key ('HKEY_LOCAL_MACHINE/SOFTWARE/Microsoft/MicrosoftSDK/InstalledSDKs/*/Install Dir');
 	    $value = reg_get_value ($key);
 	}
-    if (!defined $value)
-    {
-        my $dir = cygpath (find_msvc()->{'product_dir'}, 'w', $output_format);
-		$value = `/bin/find "$dir" -iname platformsdk | head -n 1`;
-    }
 
     defined $value || die "Windows Sdk not found";
 
