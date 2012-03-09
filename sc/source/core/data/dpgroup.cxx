@@ -450,7 +450,7 @@ void ScDPGroupDimension::SetGroupDim( long nDim )
 }
 
 const std::vector<SCROW>& ScDPGroupDimension::GetColumnEntries(
-    const ScDPCacheTable& rCacheTable, const std::vector<SCROW>& rOriginal) const
+    const ScDPCacheTable& rCacheTable) const
 {
     if (!maMemberEntries.empty())
         return maMemberEntries;
@@ -635,10 +635,7 @@ const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( long  nColumn 
         else
         {
             const ScDPGroupDimension& rGroupDim = aGroups[nColumn - nSourceCount];
-            long nSourceDim = rGroupDim.GetSourceDim();
-            // collection is cached at pSourceData, GetColumnEntries can be called every time
-            const  std::vector< SCROW >& rOriginal = pSourceData->GetColumnEntries( nSourceDim );
-            return rGroupDim.GetColumnEntries( GetCacheTable(), rOriginal );
+            return rGroupDim.GetColumnEntries( GetCacheTable() );
         }
     }
 

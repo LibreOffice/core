@@ -626,7 +626,9 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
     OSL_ENSURE( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
 
     // Wrap this instance with scoped pointer to ensure proper deletion.
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<ScDPItemData> p(pData);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
 
     SCROW nIndex = 0;
     Field& rField = maFields[nDim];
@@ -636,7 +638,7 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
         rField.maItems.push_back(p);
         rField.maGlobalOrder.insert(
             rField.maGlobalOrder.begin()+nIndex, rField.maItems.size()-1);
-        OSL_ENSURE(rField.maGlobalOrder[nIndex] == rField.maItems.size()-1, "ScDPTableDataCache::AddData ");
+        OSL_ENSURE(rField.maGlobalOrder[nIndex] == sal::static_int_cast<SCROW>(rField.maItems.size())-1, "ScDPTableDataCache::AddData ");
         rField.maData.push_back(rField.maItems.size()-1);
         rField.maNumFormats.push_back(nNumFormat);
     }
@@ -671,12 +673,12 @@ const ScDPCache::GroupItems* ScDPCache::GetGroupItems(long nDim) const
     return NULL;
 }
 
-rtl::OUString ScDPCache::GetDimensionName(long nDim) const
+rtl::OUString ScDPCache::GetDimensionName(LabelsType::size_type nDim) const
 {
     OSL_ENSURE(nDim < maLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
     OSL_ENSURE(maLabelNames.size() == static_cast <sal_uInt16> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
 
-    if ( static_cast<size_t>(nDim+1) < maLabelNames.size() )
+    if ( nDim+1 < maLabelNames.size() )
     {
         return maLabelNames[nDim+1];
     }
@@ -1099,7 +1101,7 @@ SCROW ScDPCache::GetOrder(long nDim, SCROW nIndex) const
         }
     }
 
-    OSL_ENSURE(nIndex >= 0 && nIndex < rField.maIndexOrder.size() , "ScDPTableDataCache::GetOrder");
+    OSL_ENSURE(nIndex >= 0 && sal::static_int_cast<sal_uInt32>(nIndex) < rField.maIndexOrder.size() , "ScDPTableDataCache::GetOrder");
     return rField.maIndexOrder[nIndex];
 }
 

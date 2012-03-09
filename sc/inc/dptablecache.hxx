@@ -149,7 +149,7 @@ public:
 
     SCROW  GetRowCount() const;
     SCROW  GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
-    rtl::OUString GetDimensionName(long nDim) const;
+    rtl::OUString GetDimensionName(LabelsType::size_type nDim) const;
     bool IsRowEmpty( SCROW nRow ) const;
     bool IsValid() const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;

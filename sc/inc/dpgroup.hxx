@@ -107,7 +107,7 @@ public:
     long        GetGroupDim() const     { return nGroupDim; }
     const      String& GetName() const       { return aGroupName; }
 
-    const std::vector< SCROW >&  GetColumnEntries( const ScDPCacheTable&  rCacheTable, const std::vector< SCROW >& rOriginal ) const;
+    const std::vector< SCROW >&  GetColumnEntries( const ScDPCacheTable&  rCacheTable ) const;
     const ScDPGroupItem* GetGroupForData( const ScDPItemData& rData ) const;  // rData = entry in original dim.
     const ScDPGroupItem* GetGroupForName( const ScDPItemData& rName ) const;  // rName = entry in group dim.
     const ScDPGroupItem* GetGroupByIndex( size_t nIndex ) const;
