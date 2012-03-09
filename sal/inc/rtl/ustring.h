@@ -1249,7 +1249,7 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromAscii(
     length of the string literal is explicitly passed to the function,
     and embedded \0's are included in the string.
 
-    @since 3.6
+    @since LibreOffice 3.6
  */
 SAL_DLLPUBLIC void SAL_CALL rtl_uString_newFromLiteral(
         rtl_uString ** newStr, const sal_Char * value, sal_Int32 len ) SAL_THROW_EXTERN_C();

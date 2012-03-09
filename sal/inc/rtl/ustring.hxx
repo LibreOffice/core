@@ -178,7 +178,7 @@ public:
       @param    literal         the 8-bit ASCII string literal
 
       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
-      @since 3.6
+      @since LibreOffice 3.6
     */
     template< int N >
     OUString( const char (&literal)[ N ] )
@@ -206,7 +206,7 @@ public:
      * It is an error to try to call this overload.
      *
      * @internal
-     * @since 3.6
+     * @since LibreOffice 3.6
      */
     template< int N >
     OUString( char (&value)[ N ] )
@@ -336,7 +336,7 @@ public:
       @param    literal         the 8-bit ASCII string literal
 
       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
-      @since 3.6
+      @since LibreOffice 3.6
     */
     template< int N >
     OUString& operator=( const char (&literal)[ N ] )
@@ -521,7 +521,7 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since 3.6
+     @since LibreOffice 3.6
     */
     template< int N >
     sal_Bool equalsIgnoreAsciiCase( const char (&literal)[ N ] ) const SAL_THROW(())
@@ -563,7 +563,7 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since 3.6
+     @since LibreOffice 3.6
     */
     template< int N >
     sal_Bool match( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
@@ -607,7 +607,7 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since 3.6
+     @since LibreOffice 3.6
     */
     template< int N >
     sal_Bool matchIgnoreAsciiCase( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
@@ -905,7 +905,7 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since 3.6
+     @since LibreOffice 3.6
     */
     template< int N >
     bool endsWith( const char (&literal)[ N ] ) const
@@ -954,7 +954,7 @@ public:
       @param    str         the object (substring) to be compared.
       @return true if this string ends with str, ignoring the case of ASCII
       letters ("A"--"Z" and "a"--"z"); otherwise, false is returned
-      @since 3.6
+      @since LibreOffice 3.6
     */
     sal_Bool endsWithIgnoreAsciiCase( const OUString & str ) const SAL_THROW(())
     {
@@ -965,7 +965,7 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since 3.6
+     @since LibreOffice 3.6
     */
     template< int N >
     sal_Bool endsWithIgnoreAsciiCase( const char (&literal)[ N ] ) const SAL_THROW(())
@@ -1031,7 +1031,7 @@ public:
      *
      * This operator is equal to calling equalsAsciiL().
      *
-     * @since 3.6
+     * @since LibreOffice 3.6
      */
     template< int N >
     friend inline bool operator==( const OUString& string, const char (&literal)[ N ] )
@@ -1043,7 +1043,7 @@ public:
      *
      * This operator is equal to calling equalsAsciiL().
      *
-     * @since 3.6
+     * @since LibreOffice 3.6
      */
     template< int N >
     friend inline bool operator==( const char (&literal)[ N ], const OUString& string )
@@ -1055,7 +1055,7 @@ public:
      *
      * This operator is equal to calling !equalsAsciiL().
      *
-     * @since 3.6
+     * @since LibreOffice 3.6
      */
     template< int N >
     friend inline bool operator!=( const OUString& string, const char (&literal)[ N ] )
@@ -1067,7 +1067,7 @@ public:
      *
      * This operator is equal to calling !equalsAsciiL().
      *
-     * @since 3.6
+     * @since LibreOffice 3.6
      */
     template< int N >
     friend inline bool operator!=( const char (&literal)[ N ], const OUString& string )
@@ -1186,7 +1186,7 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since 3.6
+     @since LibreOffice 3.6
     */
     template< int N >
     sal_Int32 indexOf( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
@@ -1290,7 +1290,7 @@ public:
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
-     @since 3.6
+     @since LibreOffice 3.6
     */
     template< int N >
     sal_Int32 lastIndexOf( const char (&literal)[ N ] ) const SAL_THROW(())
