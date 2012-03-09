@@ -469,7 +469,7 @@ IMPL_LINK_NOARG(ScDbNameDlg, AddBtnHdl)
 
     if ( aNewName.Len() > 0 && aNewArea.Len() > 0 )
     {
-        if ( ScRangeData::IsNameValid( aNewName, pDoc ) )
+        if ( ScRangeData::IsNameValid( aNewName, pDoc ) && !aNewName.EqualsAscii(STR_DB_LOCAL_NONAME) )
         {
             //  weil jetzt editiert werden kann, muss erst geparst werden
             ScRange aTmpRange;
