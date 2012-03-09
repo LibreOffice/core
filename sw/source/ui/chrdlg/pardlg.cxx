@@ -186,7 +186,7 @@ void SwParaDlg::PageCreated(sal_uInt16 nId, SfxTabPage& rPage)
 
         if (!bDrawParaDlg)
         {
-            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x000E));
+            aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,0x001E));
             aSet.Put(SfxUInt32Item(SID_SVXSTDPARAGRAPHTABPAGE_ABSLINEDIST, MM50/10));
 
         }

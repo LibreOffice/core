@@ -282,7 +282,8 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
         }
     }
 
-    if ( aTopDist.IsValueModified() || aBottomDist.IsValueModified() )
+    if ( aTopDist.IsValueModified() || aBottomDist.IsValueModified()
+            || aContextualCB.GetSavedValue() != aContextualCB.IsChecked())
     {
         nWhich = GetWhich( SID_ATTR_ULSPACE );
         SfxMapUnit eUnit = pPool->GetMetric( nWhich );
@@ -314,6 +315,7 @@ sal_Bool SvxStdParagraphTabPage::FillItemSet( SfxItemSet& rOutSet )
             aMargin.SetUpper( (sal_uInt16)GetCoreValue( aTopDist, eUnit ) );
             aMargin.SetLower( (sal_uInt16)GetCoreValue( aBottomDist, eUnit ) );
         }
+        aMargin.SetContextValue(aContextualCB.IsChecked());
         eState = GetItemSet().GetItemState( nWhich );
 
         if ( !pOld || !( *(const SvxULSpaceItem*)pOld == aMargin ) ||
@@ -574,6 +576,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
             SetMetricValue( aTopDist, rOldItem.GetUpper(), eUnit );
             SetMetricValue( aBottomDist, rOldItem.GetLower(), eUnit );
         }
+        aContextualCB.Check(rOldItem.GetContext());
     }
     else
     {
@@ -618,6 +621,7 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
 
     ELRLoseFocusHdl( NULL );
     aAutoCB.SaveValue();
+    aContextualCB.SaveValue();
     aLineDist.SaveValue();
 }
 
@@ -667,6 +671,7 @@ SvxStdParagraphTabPage::SvxStdParagraphTabPage( Window* pParent,
     aTopDist                ( this, CUI_RES( ED_TOPDIST ) ),
     aBottomLabel            ( this, CUI_RES( FT_BOTTOMDIST ) ),
     aBottomDist             ( this, CUI_RES( ED_BOTTOMDIST ) ),
+    aContextualCB           ( this, CUI_RES( CB_CONTEXTUALSPACING ) ),
 
     aLineDistFrm            ( this, CUI_RES( FL_LINEDIST ) ),
     aLineDist               ( this, CUI_RES( LB_LINEDIST ) ),
@@ -959,6 +964,11 @@ void SvxStdParagraphTabPage::EnableRegisterMode()
     aRegisterFL.Show();
 }
 
+void SvxStdParagraphTabPage::EnableContextualMode()
+{
+    aContextualCB.Show();
+}
+
 IMPL_LINK( SvxStdParagraphTabPage, AutoHdl_Impl, CheckBox*, pBox )
 {
     sal_Bool bEnable = !pBox->IsChecked();
@@ -994,6 +1004,7 @@ void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
                         0x0002 --->EnableRegisterMode()
                         0x0004 --->EnableAutoFirstLine()
                         0x0008 --->EnableNegativeMode()
+                        0x0010 --->EnableContextualMode()
             */
     SFX_ITEMSET_ARG (&aSet,pPageWidthItem,SfxUInt16Item,SID_SVXSTDPARAGRAPHTABPAGE_PAGEWIDTH,sal_False);
     SFX_ITEMSET_ARG (&aSet,pFlagSetItem,SfxUInt32Item,SID_SVXSTDPARAGRAPHTABPAGE_FLAGSET,sal_False);
@@ -1021,6 +1032,9 @@ void    SvxStdParagraphTabPage::PageCreated(SfxAllItemSet aSet)
         if  (( 0x0008 & pFlagSetItem->GetValue()) == 0x0008 )
                 EnableNegativeMode();
 
+    if (pFlagSetItem)
+        if  (( 0x0010 & pFlagSetItem->GetValue()) == 0x0010 )
+                EnableContextualMode();
 }
 
 

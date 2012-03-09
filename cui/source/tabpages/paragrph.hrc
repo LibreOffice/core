@@ -42,6 +42,7 @@
 #define FT_BOTTOMDIST           22
 #define ED_BOTTOMDIST           23
 #define FL_DIST                         24
+#define CB_CONTEXTUALSPACING            25
 
 #define BTN_LEFTALIGN           30
 #define BTN_RIGHTALIGN          31

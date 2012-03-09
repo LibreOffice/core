@@ -85,6 +85,7 @@ private:
     SvxRelativeField        aTopDist;
     FixedText               aBottomLabel;
     SvxRelativeField        aBottomDist;
+    CheckBox                aContextualCB;
 
     // Zeilenabstand
     FixedLine               aLineDistFrm;
@@ -132,6 +133,7 @@ public:
     void                    SetPageWidth( sal_uInt16 nPageWidth );
     void                    EnableRelativeMode();
     void                    EnableRegisterMode();
+    void                    EnableContextualMode();
     void                    EnableAutoFirstLine();
     void                    EnableAbsLineDist(long nMinTwip);
     void                    EnableNegativeMode();
