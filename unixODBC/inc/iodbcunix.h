@@ -98,7 +98,7 @@
 #define PASCAL
 #define VOID            void
 #define CALLBACK
-#ifndef OS2
+#if !( defined(OS2) || defined(WNT) )
 #define _cdecl
 #define __stdcall
 #endif
