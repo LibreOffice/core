@@ -62,7 +62,7 @@ endif
 
 endif # GUI=UNX
 
-ifeq ($(GUI),WNT)
+ifeq ($(OS),WNT)
 
 $(eval $(call gb_Library_add_linked_static_libs,npsoplugin,\
 	ooopathutils \
@@ -86,6 +86,29 @@ $(eval $(call gb_Library_add_defs,npsoplugin,\
 	-DENGLISH \
 ))
 
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_ldflags,npsoplugin,\
+	/EXPORT:NPP_GetMIMEDescription \
+	/EXPORT:NPP_Initialize \
+	/EXPORT:NPP_Shutdown \
+	/EXPORT:NPP_New \
+	/EXPORT:NPP_Destroy \
+	/EXPORT:NPP_SetWindow \
+	/EXPORT:NPP_NewStream \
+	/EXPORT:NPP_WriteReady \
+	/EXPORT:NPP_Write \
+	/EXPORT:NPP_DestroyStream \
+	/EXPORT:NPP_StreamAsFile \
+	/EXPORT:NPP_URLNotify \
+	/EXPORT:NPP_Print \
+	/EXPORT:NPP_Shutdown \
+	/EXPORT:NP_GetEntryPoints \
+	/EXPORT:NP_Initialize \
+	/EXPORT:NP_Shutdown \
+	/EXPORT:NP_GetMIMEDescription \
+))
+endif
+
 # Trick to get rid of the default.res to avoid duplicate VERSION
 # resource: Set NATIVERES for npsoplugin to be *only* npsoplugin_res
 
@@ -99,4 +122,4 @@ $(eval $(call gb_Library_add_exception_objects,npsoplugin,\
 	extensions/source/nsplugin/source/npshell \
 ))
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+# vim:set shiftwidth=4 softtabstop=4 noexpandtab:

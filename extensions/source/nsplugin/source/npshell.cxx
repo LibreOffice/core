@@ -80,6 +80,12 @@
 
 #include <comphelper/documentconstants.hxx>
 
+#ifdef _MSC_VER
+#define NP_DLLPUBLIC
+#else
+#define NP_DLLPUBLIC SAL_DLLPUBLIC_EXPORT
+#endif
+
 /***********************************************************************
  *
  * Implementations of plugin API functions
@@ -361,6 +367,7 @@ MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_ASCII ":odp:OpenDocument Presentation;"
 MIMETYPE_OASIS_OPENDOCUMENT_PRESENTATION_TEMPLATE_ASCII ":otp:OpenDocument Presentation Template;"
 MIMETYPE_OASIS_OPENDOCUMENT_FORMULA_ASCII ":odf:OpenDocument Formula;" );
 
+NP_DLLPUBLIC
 #ifndef HAVE_NON_CONST_NPP_GETMIMEDESCRIPTION
 const
 #endif
@@ -372,9 +379,7 @@ NPP_GetMIMEDescription(void)
 }
 
 #ifdef UNIX
-SAL_DLLPUBLIC_EXPORT NPError
-// I am not actually sure wrt this, it ast least compiles with external
-// npapi.h now...
+NP_DLLPUBLIC NPError
 NPP_GetValue(NPP /*instance*/, NPPVariable variable, void *value)
 {
     NPError err = NPERR_NO_ERROR;
@@ -407,7 +412,7 @@ dupMimeType(NPMIMEType type)
 }
 #endif // end of UNIX
 
-SAL_DLLPUBLIC_EXPORT NPError
+NP_DLLPUBLIC NPError
 NPP_Initialize(void)
 {
     debug_fprintf(NSP_LOG_NEW, "NS Plugin begin initialize.\n");
@@ -415,14 +420,14 @@ NPP_Initialize(void)
 }
 
 #ifdef OJI
-jref
+NP_DLLPUBLIC jref
 NPP_GetJavaClass()
 {
     return NULL;
 }
 #endif
 
-SAL_DLLPUBLIC_EXPORT void
+NP_DLLPUBLIC void
 NPP_Shutdown(void)
 {
     PLUGIN_MSG msg;
@@ -438,7 +443,7 @@ NPP_Shutdown(void)
 #endif
 }
 
-NPError NP_LOADDS
+NP_DLLPUBLIC NPError NP_LOADDS
 NPP_New(NPMIMEType pluginType,
     NPP instance,
     uint16_t mode,
@@ -490,7 +495,7 @@ NPP_New(NPMIMEType pluginType,
     return NPERR_NO_ERROR;
 }
 
-NPError NP_LOADDS
+NP_DLLPUBLIC NPError NP_LOADDS
 NPP_Destroy(NPP instance, NPSavedData** /*save*/)
 {
     debug_fprintf(NSP_LOG_APPEND, "print by Nsplugin, enter NPP_Destroy.\n");
@@ -535,7 +540,7 @@ NPP_Destroy(NPP instance, NPSavedData** /*save*/)
 }
 
 
-NPError NP_LOADDS
+NP_DLLPUBLIC NPError NP_LOADDS
 NPP_SetWindow(NPP instance, NPWindow* window)
 {
     PluginInstance* This;
@@ -629,7 +634,7 @@ NPP_SetWindow(NPP instance, NPWindow* window)
 }
 
 
-NPError NP_LOADDS
+NP_DLLPUBLIC NPError NP_LOADDS
 NPP_NewStream(NPP instance,
           NPMIMEType /*type*/,
           NPStream* /*stream*/,
@@ -651,21 +656,21 @@ int32_t STREAMBUFSIZE = 0X0FFFFFFF;
  * mode so we can take any size stream in our
  * write call (since we ignore it) */
 
-int32_t NP_LOADDS
+NP_DLLPUBLIC int32_t NP_LOADDS
 NPP_WriteReady(NPP /*instance*/, NPStream* /*stream*/)
 {
     return STREAMBUFSIZE;
 }
 
 
-int32_t NP_LOADDS
+NP_DLLPUBLIC int32_t NP_LOADDS
 NPP_Write(NPP /*instance*/, NPStream* /*stream*/, int32_t /*offset*/, int32_t len, void* /*buffer*/)
 {
     return len;     /* The number of bytes accepted */
 }
 
 
-NPError NP_LOADDS
+NP_DLLPUBLIC NPError NP_LOADDS
 NPP_DestroyStream(NPP instance, NPStream* /*stream*/, NPError /*reason*/)
 {
     if (instance == NULL)
@@ -674,7 +679,7 @@ NPP_DestroyStream(NPP instance, NPStream* /*stream*/, NPError /*reason*/)
 }
 
 // save fname to another file with the original file name
-void NP_LOADDS
+NP_DLLPUBLIC void NP_LOADDS
 NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
 {
     debug_fprintf(NSP_LOG_APPEND, "Into Stream\n");
@@ -815,14 +820,14 @@ NPP_StreamAsFile(NPP instance, NPStream *stream, const char* fname)
         debug_fprintf(NSP_LOG_APPEND, "NPP_StreamAsFile send SO_SET_WINDOW return failure \n");
 }
 
-void NP_LOADDS
+NP_DLLPUBLIC void NP_LOADDS
 NPP_URLNotify(NPP /*instance*/, const char* /*url*/,
                 NPReason /*reason*/, void* /*notifyData*/)
 {
 }
 
 
-void NP_LOADDS
+NP_DLLPUBLIC void NP_LOADDS
 NPP_Print(NPP instance, NPPrint* printInfo)
 {
     if(printInfo == NULL)
