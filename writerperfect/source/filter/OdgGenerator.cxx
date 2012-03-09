@@ -1481,6 +1481,12 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
                 pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-height", mxStyle["svg:height"]->getStr());
             if (mxStyle["style:repeat"])
                 pStyleGraphicsPropertiesElement->addAttribute("style:repeat", mxStyle["style:repeat"]->getStr());
+            if (mxStyle["draw:fill-image-ref-point"])
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-ref-point", mxStyle["draw:fill-image-ref-point"]->getStr());
+            if (mxStyle["draw:fill-image-ref-point-x"])
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-ref-point-x", mxStyle["draw:fill-image-ref-point"]->getStr());
+            if (mxStyle["draw:fill-image-ref-point-y"])
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-ref-point-y", mxStyle["draw:fill-image-ref-point"]->getStr());
         }
         else
             pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "none");
