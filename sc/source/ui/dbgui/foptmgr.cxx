@@ -196,9 +196,17 @@ void ScFilterOptionsMgr::Init()
             }
         }
 
-        theDbArea.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
-        theDbArea.append(theDbName).append(')');
-        rFtDbArea.SetText( theDbArea.makeStringAndClear() );
+        if ( !theDbName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)) )
+        {
+            theDbArea.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
+            theDbArea.append(theDbName).append(')');
+            rFtDbArea.SetText( theDbArea.makeStringAndClear() );
+        }
+        else
+        {
+            rFtDbAreaLabel.SetText( rtl::OUString() );
+            rFtDbArea.SetText( rtl::OUString() );
+        }
 
         //------------------------------------------------------
         // Kopierposition:
