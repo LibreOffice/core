@@ -57,7 +57,7 @@ struct ScDPNumGroupInfo;
 class SC_DLLPUBLIC ScDPCache : boost::noncopyable
 {
 public:
-    typedef boost::ptr_vector<ScDPItemData> DataListType;
+    typedef std::vector<ScDPItemData> DataListType;
     typedef std::set<ScDPObject*> ObjectSetType;
     typedef std::vector<rtl::OUString> LabelsType;
     typedef std::vector<SCROW> IndexArrayType;
@@ -166,9 +166,10 @@ public:
     ~ScDPCache();
 
 private:
+    void PostInit();
     void Clear();
     void AddLabel(const rtl::OUString& rLabel);
-    bool AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat);
+    bool AddData(long nDim, const ScDPItemData& rData, sal_uLong nNumFormat);
     const GroupItems* GetGroupItems(long nDim) const;
 };
 

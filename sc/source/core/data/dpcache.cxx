@@ -60,8 +60,6 @@ using ::com::sun::star::uno::Exception;
 using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
-using ::std::vector;
-using ::std::auto_ptr;
 
 namespace {
 
@@ -76,7 +74,7 @@ namespace {
  *
  * @return true if the item is found, or false otherwise.
  */
-bool hasItemInDimension(const ScDPCache::DataListType& rArray, const ScDPCache::IndexArrayType& rOrder, const ScDPItemData& item, SCROW& rIndex)
+bool hasItemInDimension(const ScDPCache::DataListType& rArray, const ScDPCache::IndexArrayType& rOrder, const ScDPItemData& rItem, SCROW& rIndex)
 {
     rIndex = rArray.size();
     bool bFound = false;
@@ -86,7 +84,7 @@ bool hasItemInDimension(const ScDPCache::DataListType& rArray, const ScDPCache::
     while (nLo <= nHi)
     {
         SCROW nIndex = (nLo + nHi) / 2;
-        nCompare = ScDPItemData::Compare( rArray[rOrder[nIndex]], item );
+        nCompare = ScDPItemData::Compare(rArray[rOrder[nIndex]], rItem);
         if (nCompare < 0)
             nLo = nIndex + 1;
         else
@@ -103,8 +101,9 @@ bool hasItemInDimension(const ScDPCache::DataListType& rArray, const ScDPCache::
     return bFound;
 }
 
-ScDPItemData* lcl_GetItemValue(
-    const Reference<sdbc::XRow>& xRow, sal_Int32 nType, long nCol, const Date& rNullDate, short& rNumType)
+void getItemValue(
+    ScDPItemData& rData, const Reference<sdbc::XRow>& xRow, sal_Int32 nType,
+    long nCol, const Date& rNullDate, short& rNumType)
 {
     rNumType = NUMBERFORMAT_NUMBER;
     try
@@ -117,7 +116,8 @@ ScDPItemData* lcl_GetItemValue(
             {
                 rNumType = NUMBERFORMAT_LOGICAL;
                 fValue  = xRow->getBoolean(nCol) ? 1 : 0;
-                return new ScDPItemData(fValue);
+                rData.SetValue(fValue);
+                break;
             }
             case sdbc::DataType::TINYINT:
             case sdbc::DataType::SMALLINT:
@@ -131,7 +131,8 @@ ScDPItemData* lcl_GetItemValue(
             {
                 //! do the conversion here?
                 fValue = xRow->getDouble(nCol);
-                return new ScDPItemData(fValue);
+                rData.SetValue(fValue);
+                break;
             }
             case sdbc::DataType::DATE:
             {
@@ -139,7 +140,8 @@ ScDPItemData* lcl_GetItemValue(
 
                 util::Date aDate = xRow->getDate(nCol);
                 fValue = Date(aDate.Day, aDate.Month, aDate.Year) - rNullDate;
-                return new ScDPItemData(fValue);
+                rData.SetValue(fValue);
+                break;
             }
             case sdbc::DataType::TIME:
             {
@@ -148,7 +150,8 @@ ScDPItemData* lcl_GetItemValue(
                 util::Time aTime = xRow->getTime(nCol);
                 fValue = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
                            aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                return new ScDPItemData(fValue);
+                rData.SetValue(fValue);
+                break;
             }
             case sdbc::DataType::TIMESTAMP:
             {
@@ -158,7 +161,8 @@ ScDPItemData* lcl_GetItemValue(
                 fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - rNullDate ) +
                          ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
                            aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                return new ScDPItemData(fValue);
+                rData.SetValue(fValue);
+                break;
             }
             case sdbc::DataType::CHAR:
             case sdbc::DataType::VARCHAR:
@@ -168,14 +172,12 @@ ScDPItemData* lcl_GetItemValue(
             case sdbc::DataType::VARBINARY:
             case sdbc::DataType::LONGVARBINARY:
             default:
-                return new ScDPItemData(xRow->getString(nCol));
+                rData.SetString(xRow->getString(nCol));
         }
     }
     catch (uno::Exception&)
     {
     }
-
-    return NULL;
 }
 
 }
@@ -202,7 +204,7 @@ bool ScDPCache::operator== ( const ScDPCache& r ) const
             {
                 for ( size_t j = 0; j < nMembersCount; j++ )
                 {
-                    if ( GetDimMemberValues(i)[j] == r.GetDimMemberValues(i)[j] )
+                    if (GetDimMemberValues(i)[j] == r.GetDimMemberValues(i)[j])
                         continue;
                     else
                         return false;
@@ -322,6 +324,7 @@ void initFromCell(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, ScDPItem
 bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 {
     Clear();
+
     // Make sure the formula cells within the data range are interpreted
     // during this call, for this method may be called from the interpretation
     // of GETPIVOTDATA, which disables nested formula interpretation without
@@ -342,27 +345,26 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
     maLabelNames.reserve(mnColumnCount+1);
 
-    // Set all rows non-empty first, then only tag empty ones in AddData().
-    maEmptyRows.insert_front(nStartRow, nEndRow+1, false);
-
+    ScDPItemData aData;
     for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
         AddLabel(createLabelString(pDoc, nCol, nStartRow, nDocTab));
         for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
         {
-            std::auto_ptr<ScDPItemData> pData(new ScDPItemData);
             sal_uLong nNumFormat = 0;
-            initFromCell(pDoc, nCol, nRow, nDocTab, *pData, nNumFormat);
-            AddData(nCol - nStartCol, pData.release(), nNumFormat);
+            initFromCell(pDoc, nCol, nRow, nDocTab, aData, nNumFormat);
+            AddData(nCol - nStartCol, aData, nNumFormat);
         }
     }
-    maEmptyRows.build_tree();
+
+    PostInit();
     return true;
 }
 
 bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const Date& rNullDate)
 {
     Clear();
+
     if (!xRowSet.is())
         // Don't even waste time to go any further.
         return false;
@@ -395,26 +397,23 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
         // Now get the data rows.
         Reference<sdbc::XRow> xRow(xRowSet, UNO_QUERY_THROW);
         xRowSet->first();
+        ScDPItemData aData;
         do
         {
             for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
             {
                 short nFormatType = NUMBERFORMAT_UNDEFINED;
-                ScDPItemData* pNew = lcl_GetItemValue(
-                    xRow, aColTypes[nCol], nCol+1, rNullDate, nFormatType);
-                if (pNew)
-                {
-                    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-                    sal_uLong nNumFormat = pFormatter ? pFormatter->GetStandardFormat(nFormatType) : 0;
-                    AddData(nCol, pNew, nNumFormat);
-                }
+                getItemValue(aData, xRow, aColTypes[nCol], nCol+1, rNullDate, nFormatType);
+                SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+                sal_uLong nNumFormat = pFormatter ? pFormatter->GetStandardFormat(nFormatType) : 0;
+                AddData(nCol, aData, nNumFormat);
             }
         }
         while (xRowSet->next());
 
         xRowSet->beforeFirst();
 
-        maEmptyRows.build_tree();
+        PostInit();
         return true;
     }
     catch (const Exception&)
@@ -623,21 +622,16 @@ bool ScDPCache::IsRowEmpty(SCROW nRow) const
     return bEmpty;
 }
 
-bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
+bool ScDPCache::AddData(long nDim, const ScDPItemData& rData, sal_uLong nNumFormat)
 {
     OSL_ENSURE( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
 
-    // Wrap this instance with scoped pointer to ensure proper deletion.
-    SAL_WNODEPRECATED_DECLARATIONS_PUSH
-    auto_ptr<ScDPItemData> p(pData);
-    SAL_WNODEPRECATED_DECLARATIONS_POP
-
     SCROW nIndex = 0;
     Field& rField = maFields[nDim];
-    if (!hasItemInDimension(rField.maItems, rField.maGlobalOrder, *pData, nIndex))
+    if (!hasItemInDimension(rField.maItems, rField.maGlobalOrder, rData, nIndex))
     {
         // This item doesn't exist in the dimension array yet.
-        rField.maItems.push_back(p);
+        rField.maItems.push_back(rData);
         rField.maGlobalOrder.insert(
             rField.maGlobalOrder.begin()+nIndex, rField.maItems.size()-1);
         OSL_ENSURE(rField.maGlobalOrder[nIndex] == sal::static_int_cast<SCROW>(rField.maItems.size())-1, "ScDPTableDataCache::AddData ");
@@ -649,8 +643,8 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
 
     size_t nCurRow = maFields[nDim].maData.size() - 1;
 
-    if (pData->IsEmpty())
-        maEmptyRows.insert_back(nCurRow, nCurRow+1, true);
+    if (!rData.IsEmpty())
+        maEmptyRows.insert_back(nCurRow, nCurRow+1, false);
 
     return true;
 }
@@ -699,6 +693,17 @@ public:
     }
 };
 
+}
+
+void ScDPCache::PostInit()
+{
+    maEmptyRows.build_tree();
+    FieldsType::iterator it = maFields.begin(), itEnd = maFields.end();
+    for (; it != itEnd; ++it)
+    {
+        // Trim excess capacity.
+        DataListType(it->maItems).swap(it->maItems);
+    }
 }
 
 void ScDPCache::Clear()
@@ -997,7 +1002,7 @@ SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
     if (nDim < nSourceCount)
     {
         GroupItems& rGI = *maFields.at(nDim).mpGroup;
-        rGI.maItems.push_back(new ScDPItemData(rData));
+        rGI.maItems.push_back(rData);
         SCROW nId = maFields[nDim].maItems.size() + rGI.maItems.size() - 1;
         return nId;
     }
@@ -1006,7 +1011,7 @@ SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
     if (nDim < static_cast<long>(maGroupFields.size()))
     {
         DataListType& rItems = maGroupFields.at(nDim).maItems;
-        rItems.push_back(new ScDPItemData(rData));
+        rItems.push_back(rData);
         return rItems.size()-1;
     }
 
