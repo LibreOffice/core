@@ -1433,6 +1433,38 @@ const SwFrm* SwFlowFrm::_GetPrevFrmForUpperSpaceCalc( const SwFrm* _pProposedPre
     return pPrevFrm;
 }
 
+/// Compare styles attached to these text frames.
+bool lcl_IdenticalStyles(const SwFrm* pPrevFrm, const SwFrm* pFrm)
+{
+    SwTxtFmtColl *pPrevFmtColl = 0;
+    if (pPrevFrm && pPrevFrm->IsTxtFrm())
+    {
+        SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) pPrevFrm;
+        pPrevFmtColl = dynamic_cast<SwTxtFmtColl*>(pTxtFrm->GetTxtNode()->GetFmtColl());
+    }
+
+    bool bIdenticalStyles = false;
+    if (pFrm && pFrm->IsTxtFrm())
+    {
+        SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) pFrm;
+        SwTxtFmtColl *pFmtColl = dynamic_cast<SwTxtFmtColl*>(pTxtFrm->GetTxtNode()->GetFmtColl());
+        bIdenticalStyles = pPrevFmtColl == pFmtColl;
+    }
+    return bIdenticalStyles;
+}
+
+bool lcl_getContextualSpacing(const SwFrm* pPrevFrm)
+{
+    bool bRet;
+    SwBorderAttrAccess *pAccess = new SwBorderAttrAccess( SwFrm::GetCache(), pPrevFrm );
+    const SwBorderAttrs *pAttrs = pAccess->Get();
+
+    bRet = pAttrs->GetULSpace().GetContext();
+
+    delete pAccess;
+    return bRet;
+}
+
 // OD 2004-03-12 #i11860# - add 3rd parameter <_bConsiderGrid>
 SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
                                    const SwFrm* pPr,
@@ -1591,8 +1623,13 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
         nUpper += _GetUpperSpaceAmountConsideredForPageGrid( nUpper );
     }
 
+    bool bContextualSpacing = pAttrs->GetULSpace().GetContext();
     delete pAccess;
-    return nUpper;
+
+    if (bContextualSpacing && lcl_getContextualSpacing(pPrevFrm) && lcl_IdenticalStyles(pPrevFrm, &rThis))
+        return 0;
+    else
+        return nUpper;
 }
 
 /** method to detemine the upper space amount, which is considered for
