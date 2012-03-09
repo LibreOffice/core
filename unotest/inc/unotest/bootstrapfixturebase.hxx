@@ -81,6 +81,9 @@ public:
   // return a Path to a given c-str path from the source directory
   ::rtl::OUString getPathFromSrc( const char *pPath );
 
+  // return a URL to a given c-str path from the solver directory
+  ::rtl::OUString getURLFromSolver( const char *pPath );
+
   // return a Path to a given c-str path from the solver directory
   ::rtl::OUString getPathFromSolver( const char *pPath );
 
