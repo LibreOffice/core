@@ -53,37 +53,4 @@ SimpleCertificateValidationRequest::SimpleCertificateValidationRequest( const sa
     pCertificate.get();
 }
 
-//=========================================================================
-sal_Int32 SimpleCertificateValidationRequest::getResponse() const
-{
-    rtl::Reference< InteractionContinuation > xSelection = getSelection();
-    if ( xSelection.is() )
-    {
-        InteractionContinuation * pSelection = xSelection.get();
-
-        uno::Reference< task::XInteractionAbort > xAbort(
-                                        pSelection, uno::UNO_QUERY );
-        if ( xAbort.is() )
-            return 1;
-
-        uno::Reference< task::XInteractionRetry > xRetry(
-                                        pSelection, uno::UNO_QUERY );
-        if ( xRetry.is() )
-            return 2;
-
-        uno::Reference< task::XInteractionApprove > xApprove(
-                                        pSelection, uno::UNO_QUERY );
-        if ( xApprove.is() )
-            return 4;
-
-        uno::Reference< task::XInteractionDisapprove > xDisapprove(
-                                        pSelection, uno::UNO_QUERY );
-        if ( xDisapprove.is() )
-            return 8;
-
-        OSL_FAIL( "CertificateValidationRequest - Unknown continuation!" );
-    }
-    return 0;
-}
-
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

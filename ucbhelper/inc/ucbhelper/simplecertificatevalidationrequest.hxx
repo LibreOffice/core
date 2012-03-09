@@ -63,15 +63,6 @@ public:
     SimpleCertificateValidationRequest( const sal_Int32 & lCertificateValidity,
         const com::sun::star::uno::Reference<com::sun::star::security::XCertificate> pCertificate,
         const rtl::OUString & hostname );
-
-    /**
-      * After passing this request to XInteractionHandler::handle, this method
-      * returns the continuation that was choosen by the interaction handler.
-      *
-      * @return the continuation choosen by an interaction handler or
-      *         CONTINUATION_UNKNOWN, if the request was not (yet) handled.
-      */
-    sal_Int32 getResponse() const;
 };
 
 } // namespace ucbhelper

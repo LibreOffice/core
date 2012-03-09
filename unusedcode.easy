@@ -1033,8 +1033,5 @@ sw::util::AuthorInfos::Insert(sw::util::AuthorInfo* const*, unsigned short)
 sw::util::AuthorInfos::Insert(sw::util::AuthorInfos const*, unsigned short, unsigned short)
 sw::util::AuthorInfos::Remove(sw::util::AuthorInfo* const&, unsigned short)
 sw::util::AuthorInfos::Remove(unsigned short, unsigned short)
-ucbhelper::Content::getPropertyValues(com::sun::star::uno::Sequence<int> const&)
-ucbhelper::Content::insertNewContent(rtl::OUString const&, com::sun::star::uno::Sequence<int> const&, com::sun::star::uno::Sequence<com::sun::star::uno::Any> const&, com::sun::star::uno::Reference<com::sun::star::io::XInputStream> const&, ucbhelper::Content&)
-ucbhelper::SimpleCertificateValidationRequest::getResponse() const
 utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
 vcl::PDFWriter::DrawPixel(Polygon const&, Color const*)

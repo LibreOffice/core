@@ -324,20 +324,6 @@ public:
     /**
       * This method can be used to read multiple property values.
       *
-      * @param  nPropertyHandles is a sequence of handles of properties for
-      *         that the values shall be obtained.
-      * @return an XRow interface that can be used to obtain the property
-      *         values.
-      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-    getPropertyValues( const ::com::sun::star::uno::Sequence<
-                                sal_Int32 >& nPropertyHandles )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
-    /**
-      * This method can be used to read multiple property values.
-      *
       * @param  rPropertyNames is a sequence of names of properties for
       *         that the values shall be obtained.
       * @return the property values.
@@ -348,20 +334,7 @@ public:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
-    /**
-      * This method can be used to read multiple property values.
-      *
-      * @param  nPropertyHandles is a sequence of handles of properties for
-      *         that the values shall be obtained.
-      * @return an XRow interface that can be used to obtain the property
-      *         values.
-      */
-    ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRow >
-    getPropertyValuesInterface( const ::com::sun::star::uno::Sequence<
-                                sal_Int32 >& nPropertyHandles )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
+
     /**
       * This method can be used to set multiple property values.
       *
@@ -395,44 +368,6 @@ public:
     ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
     setPropertyValues( const ::com::sun::star::uno::Sequence<
                                 rtl::OUString >& rPropertyNames,
-                       const ::com::sun::star::uno::Sequence<
-                                    ::com::sun::star::uno::Any >& rValues )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
-    /**
-      * This method can be used to set multiple property values.
-      *
-      * @param  nPropertyHandles is a sequence of handles of properties for
-      *         that values shall be set.
-      * @return a sequence of any's which has exactly the same number
-      *         of elements as the number of properties to set. Every
-      *         sequence element contains the status for a property. The
-      *         first sequence elements corresponds to the first element in
-      *         the sequence of property names and so on.
-      *
-      *         An any containing:
-      *         - No value indicates, that the property value was set
-      *           successfully.
-      *         - com::sun::star::beans::UnknownPropertyException indicates,
-      *           that the property is not known to the content implementation.
-      *         - com::sun::star::beans::IllegalTypeException indicates, that
-      *           the data type of the property value is not acceptable.
-      *         - com::sun::star::lang::IllegalAccessException indicates, that
-      *           the property is constant.
-      *         - com::sun::star::lang::IllegalArgumentException indicates,
-      *           that the property value is not acceptable. For instance,
-      *           setting an empty title may be illegal.
-      *         - Any other execption derived from
-      *           com::sun::star::uno::Exception indicates, that the value was
-      *           not set successfully. For example, this can be a
-      *           com::sun:star::ucb::InteractiveAugmentedIOException
-      *           transporting the error code
-      *           com::sun::star::ucb::IOErrorCode::ACCESS_DENIED.
-      */
-    ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any >
-    setPropertyValues( const ::com::sun::star::uno::Sequence<
-                                sal_Int32 >& nPropertyHandles,
                        const ::com::sun::star::uno::Sequence<
                                     ::com::sun::star::uno::Any >& rValues )
         throw( ::com::sun::star::ucb::CommandAbortedException,
@@ -705,44 +640,7 @@ public:
         throw( ::com::sun::star::ucb::CommandAbortedException,
                ::com::sun::star::uno::RuntimeException,
                ::com::sun::star::uno::Exception );
-    /**
-      * This method creates, initializes and inserts (commits) a new content
-      * inside this (the target folder) content. For example, it can be used to
-      * create a new file system file.
-      * Internally this method does a
-      * XCommandProcessor::execute( "createNewContent", ... );
-      * XCommandProcessor::execute( "setPropertyValues", ... );
-      * XCommandProcessor::execute( "insert", ... ); calling sequence.
-      *
-      * @param rContentType is the type for the new UCB content. Each content
-      *        provider implementation may introduce own types for its content
-      *        objects (See queryCreatableContentsInfo()).
-      * @param nPropertyHandes is a sequence of handles of properties for that
-      *        values are to set at the new content before it will be inserted
-      *        ( commited ).
-      *        The order of the handles must correspond to the order of the
-      *        property values.
-      * @param rPropertyValues is a sequence of property values that are to
-      *        set at the new content before it will be inserted ( commited ).
-      *        The order of the values must correspond to the order of the
-      *        property handles.
-      * @param rStream is a stream containing the content data for the new
-      *        content (i.e. the content of a file to create)
-      * @param rNewContent will be filled by the implementation of this method
-      *        with the new content.
-      */
-    sal_Bool
-    insertNewContent( const ::rtl::OUString& rContentType,
-                      const ::com::sun::star::uno::Sequence<
-                        sal_Int32 >& nPropertyHandles,
-                      const ::com::sun::star::uno::Sequence<
-                        ::com::sun::star::uno::Any >& rPropertyValues,
-                      const ::com::sun::star::uno::Reference<
-                                ::com::sun::star::io::XInputStream >& rStream,
-                      Content& rNewContent )
-        throw( ::com::sun::star::ucb::CommandAbortedException,
-               ::com::sun::star::uno::RuntimeException,
-               ::com::sun::star::uno::Exception );
+
     /**
       * This method transfers (copies/moves) a content. It creates a new
       * resource inside this (the target folder) content.
