@@ -41,6 +41,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <mdds/flat_segment_tree.hpp>
 
 #include <vector>
 
@@ -119,7 +120,7 @@ private:
     GroupFieldsType maGroupFields;
 
     LabelsType maLabelNames;    // Stores dimension names.
-    std::vector<bool> maEmptyRows; // Keeps track of empty rows.
+    mdds::flat_segment_tree<SCROW, bool> maEmptyRows;
 
     bool mbDisposing;
 
@@ -150,7 +151,7 @@ public:
     SCROW  GetRowCount() const;
     SCROW  GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
     rtl::OUString GetDimensionName(LabelsType::size_type nDim) const;
-    bool IsRowEmpty( SCROW nRow ) const;
+    bool IsRowEmpty(SCROW nRow) const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;
 
     ScDocument* GetDoc() const;

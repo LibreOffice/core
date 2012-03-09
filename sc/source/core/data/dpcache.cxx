@@ -228,6 +228,7 @@ ScDPCache::Field::Field() {}
 ScDPCache::ScDPCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
     mnColumnCount ( 0 ),
+    maEmptyRows(0, MAXROW, true),
     mbDisposing(false)
 {
 }
@@ -341,6 +342,9 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
 
     maLabelNames.reserve(mnColumnCount+1);
 
+    // Set all rows non-empty first, then only tag empty ones in AddData().
+    maEmptyRows.insert_front(nStartRow, nEndRow+1, false);
+
     for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
         AddLabel(createLabelString(pDoc, nCol, nStartRow, nDocTab));
@@ -352,6 +356,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
             AddData(nCol - nStartCol, pData.release(), nNumFormat);
         }
     }
+    maEmptyRows.build_tree();
     return true;
 }
 
@@ -409,6 +414,7 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
 
         xRowSet->beforeFirst();
 
+        maEmptyRows.build_tree();
         return true;
     }
     catch (const Exception&)
@@ -610,9 +616,11 @@ bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
     return bRet;
 }
 
-bool ScDPCache::IsRowEmpty( SCROW nRow ) const
+bool ScDPCache::IsRowEmpty(SCROW nRow) const
 {
-    return maEmptyRows[nRow];
+    bool bEmpty = true;
+    maEmptyRows.search_tree(nRow, bEmpty);
+    return bEmpty;
 }
 
 bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
@@ -639,14 +647,10 @@ bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
     else
         rField.maData.push_back(rField.maGlobalOrder[nIndex]);
 
-//init empty row tag
     size_t nCurRow = maFields[nDim].maData.size() - 1;
 
-    while (maEmptyRows.size() <= nCurRow)
-        maEmptyRows.push_back(true);
-
-    if (!pData->IsEmpty())
-        maEmptyRows[nCurRow] = false;
+    if (pData->IsEmpty())
+        maEmptyRows.insert_back(nCurRow, nCurRow+1, true);
 
     return true;
 }
