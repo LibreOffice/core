@@ -311,6 +311,36 @@ void PackageManagerImpl::initRegistryBackends()
                          m_xComponentContext ) );
 }
 
+// this overcomes previous rumours that the sal API is misleading
+// as to whether a directory is truly read-only or not
+static bool isMacroURLWriteable( const OUString &rMacro )
+{
+    if (rMacro.getLength() < (sal_Int32)sizeof ("vnd.sun.star.expand:"))
+        return true;
+    rtl::OUString aURL( rMacro.copy( sizeof ("vnd.sun.star.expand:") - 1 ) );
+    ::rtl::Bootstrap::expandMacros( aURL );
+
+    bool bError;
+    sal_uInt64 nWritten = 0;
+    ::osl::File aFile( aURL );
+
+    bError = aFile.open( osl_File_OpenFlag_Read |
+                         osl_File_OpenFlag_Write |
+                         osl_File_OpenFlag_Create ) != ::osl::FileBase::E_None;
+    if (!bError)
+        bError = aFile.write( "1", 1, nWritten ) != ::osl::FileBase::E_None;
+    if (aFile.close() != ::osl::FileBase::E_None)
+        bError = true;
+    if (osl::File::remove( aURL ) != ::osl::FileBase::E_None)
+        bError = true;
+
+    OSL_TRACE ("local url '%s' -> '%s' %s readonly\n",
+               rtl::OUStringToOString( rMacro, RTL_TEXTENCODING_UTF8 ).getStr(),
+               rtl::OUStringToOString( aURL, RTL_TEXTENCODING_UTF8 ).getStr(),
+               bError ? "is" : "is not");
+    return bError;
+}
+
 //______________________________________________________________________________
 Reference<deployment::XPackageManager> PackageManagerImpl::create(
     Reference<XComponentContext> const & xComponentContext,
@@ -406,39 +436,9 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
     Reference<XCommandEnvironment> xCmdEnv;
 
     try {
-        //There is no stampURL for the bundled folder
+        // There is no stampURL for the bundled folder
         if (!stampURL.isEmpty())
-        {
-#define CURRENT_STAMP "1"
-            try {
-                //The osl file API does not allow to find out if one can write
-                //into a folder. Therefore we try to write a file. Then we delete
-                //it, so that it does not hinder uninstallation of OOo
-                // probe writing:
-                ::ucbhelper::Content ucbStamp( stampURL, xCmdEnv );
-                ::rtl::OString stamp(
-                    RTL_CONSTASCII_STRINGPARAM(CURRENT_STAMP) );
-                Reference<io::XInputStream> xData(
-                    ::xmlscript::createInputStream(
-                        ::rtl::ByteSequence(
-                            reinterpret_cast<sal_Int8 const *>(stamp.getStr()),
-                            stamp.getLength() ) ) );
-                ucbStamp.writeStream( xData, true /* replace existing */ );
-                that->m_readOnly = false;
-                erase_path( stampURL, xCmdEnv );
-            }
-            catch (const RuntimeException &) {
-                try {
-                    erase_path( stampURL, xCmdEnv );
-                } catch (...)
-                {
-                }
-                throw;
-            }
-            catch (const Exception &) {
-                that->m_readOnly = true;
-            }
-        }
+            that->m_readOnly = !isMacroURLWriteable( stampURL );
 
         if (!that->m_readOnly && !logFile.isEmpty())
         {
