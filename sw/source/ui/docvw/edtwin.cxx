@@ -4733,7 +4733,7 @@ void SwEditWin::Command( const CommandEvent& rCEvt )
             if (rView.GetPostItMgr()->IsHit(rCEvt.GetMousePosPixel()))
                 return;
 
-            if ( lcl_CheckHeaderFooterClick( rSh,
+            if (rCEvt.IsMouseEvent() && lcl_CheckHeaderFooterClick( rSh,
                         PixelToLogic( rCEvt.GetMousePosPixel() ), 1 ) )
                 return;
 
