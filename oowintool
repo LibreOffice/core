@@ -32,7 +32,7 @@ sub reg_find_key($)
     # depending on OS version, this will de-mangle that
     my $key = shift;
     $key =~ s| |\\ |;
-    $key = `cd /proc/registry/ ; ls $key`;
+    $key = `cd /proc/registry/ ; ls $key 2>/dev/null`;
 
     return $key;
 }
