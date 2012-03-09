@@ -1406,9 +1406,9 @@ namespace cppcanvas
                             if (unknown == 3) { // it probably means number of points defining destination rectangle
                                 float x1, y1, x2, y2, x3, y3;
 
-                                ReadPoint (rMF, x1, y1);
-                                ReadPoint (rMF, x2, y2);
-                                ReadPoint (rMF, x3, y3);
+                                ReadPoint (rMF, x1, y1, flags);
+                                ReadPoint (rMF, x2, y2, flags);
+                                ReadPoint (rMF, x3, y3, flags);
 
                                 BitmapEx aBmp( image.graphic.GetBitmapEx () );
                                 const Rectangle aCropRect (::vcl::unotools::pointFromB2DPoint (Map (sx, sy)),
