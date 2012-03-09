@@ -252,11 +252,6 @@ ScDPCache::~ScDPCache()
     std::for_each(maRefObjects.begin(), maRefObjects.end(), ClearObjectSource());
 }
 
-bool ScDPCache::IsValid() const
-{
-    return !maFields.empty() && mnColumnCount > 0;
-}
-
 namespace {
 
 /**
@@ -622,7 +617,6 @@ bool ScDPCache::IsRowEmpty( SCROW nRow ) const
 
 bool ScDPCache::AddData(long nDim, ScDPItemData* pData, sal_uLong nNumFormat)
 {
-    OSL_ENSURE( IsValid(), "  IsValid() == false " );
     OSL_ENSURE( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
 
     // Wrap this instance with scoped pointer to ensure proper deletion.
@@ -713,7 +707,6 @@ void ScDPCache::Clear()
 
 void ScDPCache::AddLabel(const rtl::OUString& rLabel)
 {
-    OSL_ENSURE( IsValid(), "  IsValid() == false " );
 
     if ( maLabelNames.empty() )
         maLabelNames.push_back(ScGlobal::GetRscString(STR_PIVOT_DATA));
@@ -741,7 +734,6 @@ void ScDPCache::AddLabel(const rtl::OUString& rLabel)
 
 SCROW ScDPCache::GetItemDataId(sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty) const
 {
-    OSL_ENSURE( IsValid(), "  IsValid() == false " );
     OSL_ENSURE(nDim < mnColumnCount, "ScDPTableDataCache::GetItemDataId ");
 
     const Field& rField = maFields[nDim];
@@ -1086,7 +1078,6 @@ void ScDPCache::ClearGroupFields()
 
 SCROW ScDPCache::GetOrder(long nDim, SCROW nIndex) const
 {
-    OSL_ENSURE( IsValid(), "  IsValid() == false " );
     OSL_ENSURE( nDim >=0 && nDim < mnColumnCount, "ScDPTableDataCache::GetOrder : out of bound" );
 
     const Field& rField = maFields[nDim];
