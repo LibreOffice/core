@@ -192,20 +192,6 @@ bool ScDPItemData::IsCaseInsEqual(const ScDPItemData& r) const
     return ScGlobal::GetpTransliteration()->isEqual(GetString(), r.GetString());
 }
 
-size_t ScDPItemData::Hash() const
-{
-    if (meType == Value)
-        return static_cast<size_t>(rtl::math::approxFloor(mfValue));
-
-    // If we do unicode safe case insensitive hash we can drop
-    // ScDPItemData::operator== and use ::IsCasInsEqual
-    rtl::OUString aStr = GetString();
-    if (aStr.isEmpty())
-        return 0;
-
-    return rtl_ustr_hashCode_WithLength(aStr.getStr(), aStr.getLength());
-}
-
 bool ScDPItemData::operator== (const ScDPItemData& r) const
 {
     if (meType != r.meType)

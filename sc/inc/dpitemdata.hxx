@@ -93,8 +93,6 @@ public:
     void SetErrorString(const rtl::OUString& rS);
     bool IsCaseInsEqual(const ScDPItemData& r) const;
 
-    size_t Hash() const;
-
     // exact equality
     bool operator==(const ScDPItemData& r) const;
 
