@@ -138,15 +138,16 @@ class SbUnoProperty : public SbxProperty
     sal_Int32 nId;
 
     bool mbInvocation;      // Property is based on invocation
-
+    SbxDataType mRealType;
     virtual ~SbUnoProperty();
 public:
     TYPEINFO();
-    SbUnoProperty( const rtl::OUString& aName_, SbxDataType eSbxType,
+    SbUnoProperty( const rtl::OUString& aName_, SbxDataType eSbxType, SbxDataType eRealSbxType,
         const ::com::sun::star::beans::Property& aUnoProp_, sal_Int32 nId_, bool bInvocation );
 
     bool isInvocationBased( void )
         { return mbInvocation; }
+    SbxDataType getRealType() { return mRealType; }
 };
 
 // factory class to create uno-structs per DIM AS NEW

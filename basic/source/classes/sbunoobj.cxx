@@ -2616,6 +2616,7 @@ SbUnoProperty::SbUnoProperty
 (
     const rtl::OUString& aName_,
     SbxDataType eSbxType,
+    SbxDataType eRealSbxType,
     const Property& aUnoProp_,
     sal_Int32 nId_,
     bool bInvocation
@@ -2624,6 +2625,7 @@ SbUnoProperty::SbUnoProperty
     , aUnoProp( aUnoProp_ )
     , nId( nId_ )
     , mbInvocation( bInvocation )
+    , mRealType( eRealSbxType )
 {
     // as needed establish an dummy array so that SbiRuntime::CheckArray() works
     static SbxArrayRef xDummyArray = new SbxArray( SbxVARIANT );
@@ -2670,8 +2672,9 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
                 else
                     eSbxType = unoToSbxType( rProp.Type.getTypeClass() );
 
+                SbxDataType eRealSbxType = ( ( rProp.Attributes & PropertyAttribute::MAYBEVOID ) ? unoToSbxType( rProp.Type.getTypeClass() ) : eSbxType );
                 // create the property and superimpose it
-                SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, 0, false );
+                SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, 0, false );
                 QuickInsert( (SbxVariable*)xVarRef );
                 pRes = xVarRef;
             }
@@ -2740,7 +2743,7 @@ SbxVariable* SbUnoObject::Find( const String& rName, SbxClassType t )
                 if( mxInvocation->hasProperty( aUName ) )
                 {
                     // create a property and superimpose it
-                    SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, aDummyProp, 0, true );
+                    SbxVariableRef xVarRef = new SbUnoProperty( aUName, SbxVARIANT, SbxVARIANT, aDummyProp, 0, true );
                     QuickInsert( (SbxVariable*)xVarRef );
                     pRes = xVarRef;
                 }
@@ -2799,15 +2802,15 @@ void SbUnoObject::implCreateDbgProperties( void )
     Property aProp;
 
     // Id == -1: display the implemented interfaces corresponding the ClassProvider
-    SbxVariableRef xVarRef = new SbUnoProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_SUPPORTEDINTERFACES)), SbxSTRING, aProp, -1, false );
+    SbxVariableRef xVarRef = new SbUnoProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_SUPPORTEDINTERFACES)), SbxSTRING, SbxSTRING, aProp, -1, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
     // Id == -2: output the properties
-    xVarRef = new SbUnoProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_PROPERTIES)), SbxSTRING, aProp, -2, false );
+    xVarRef = new SbUnoProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_PROPERTIES)), SbxSTRING, SbxSTRING, aProp, -2, false );
     QuickInsert( (SbxVariable*)xVarRef );
 
     // Id == -3: output the Methods
-    xVarRef = new SbUnoProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_METHODS)), SbxSTRING, aProp, -3, false );
+    xVarRef = new SbUnoProperty( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(ID_DBG_METHODS)), SbxSTRING, SbxSTRING, aProp, -3, false );
     QuickInsert( (SbxVariable*)xVarRef );
 }
 
@@ -2848,8 +2851,9 @@ void SbUnoObject::implCreateAll( void )
         else
             eSbxType = unoToSbxType( rProp.Type.getTypeClass() );
 
+        SbxDataType eRealSbxType = ( ( rProp.Attributes & PropertyAttribute::MAYBEVOID ) ? unoToSbxType( rProp.Type.getTypeClass() ) : eSbxType );
         // Create property and superimpose it
-        SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, rProp, i, false );
+        SbxVariableRef xVarRef = new SbUnoProperty( rProp.Name, eSbxType, eRealSbxType, rProp, i, false );
         QuickInsert( (SbxVariable*)xVarRef );
     }
 
