@@ -300,8 +300,6 @@ clean: clean-host clean-build
 
 clean-host:
 	rm -fr $(SRCDIR)/*/$(INPATH)
-	rm -fr $(SRCDIR)/workdir/*
-	rm -fr $(SRCDIR)/solver/$(INPATH)
 	rm -fr install
 
 clean-build:
