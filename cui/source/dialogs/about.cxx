@@ -163,6 +163,8 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
     aFeaturesLink.SetBackground();
     aFeaturesLink.SetClickHdl( LINK( this, AboutDialog, HandleHyperlink ) );
 
+    aCancelButton.SetClickHdl( LINK( this, AboutDialog, CancelHdl ) );
+
     Color aTextColor( rSettings.GetWindowTextColor() );
     aVersionText.SetControlForeground( aTextColor );
     aCopyrightText.SetControlForeground( aTextColor );
@@ -286,6 +288,13 @@ AboutDialog::AboutDialog( Window* pParent, const ResId& rId) :
 
     // explicit Help-Id
     SetHelpId( CMD_SID_ABOUT );
+}
+
+//-----------------------------------------------------------------------
+IMPL_LINK_NOARG(AboutDialog, CancelHdl)
+{
+    Close();
+    return 0;
 }
 
 // -----------------------------------------------------------------------

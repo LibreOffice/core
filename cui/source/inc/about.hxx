@@ -72,7 +72,8 @@ protected:
 public:
     AboutDialog( Window* pParent, const ResId& rId);
 
-    DECL_LINK( HandleHyperlink, svt::FixedHyperlink * );
+    DECL_LINK(CancelHdl, void *);
+    DECL_LINK(HandleHyperlink, svt::FixedHyperlink *);
 };
 
 #endif // #ifndef _ABOUT_HXX
