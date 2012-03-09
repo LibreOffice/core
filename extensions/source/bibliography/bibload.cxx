@@ -249,7 +249,7 @@ namespace
     static bool lcl_isBaseAvailable()
     {
         Reference< XMultiServiceFactory >  xMgr = comphelper::getProcessServiceFactory();
-        Reference< XAggregation > xAggregate = Reference< XAggregation >( xMgr->createInstance(C2U("com.sun.star.sbd.RowSet")), UNO_QUERY);
+        Reference< XAggregation > xAggregate = Reference< XAggregation >( xMgr->createInstance(C2U("com.sun.star.sdbc.RowSet")), UNO_QUERY);
         return xAggregate.is();
     }
 }
