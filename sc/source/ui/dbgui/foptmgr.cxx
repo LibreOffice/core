@@ -42,6 +42,7 @@
 #include "viewdata.hxx"
 #include "document.hxx"
 #include "queryparam.hxx"
+#include "globalnames.hxx"
 
 #define _FOPTMGR_CXX
 #include "foptmgr.hxx"
@@ -66,7 +67,6 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
                                 FixedText&          refFtDbAreaLabel,
                                 FixedInfo&          refFtDbArea,
                                 FixedLine&          refFlOptions,
-                                const String&       refStrNoName,
                                 const String&       refStrUndefined )
 
     :   pDlg            ( ptrDlg ),
@@ -85,7 +85,6 @@ ScFilterOptionsMgr::ScFilterOptionsMgr(
         rFtDbAreaLabel  ( refFtDbAreaLabel ),
         rFtDbArea       ( refFtDbArea ),
         rFlOptions      ( refFlOptions ),
-        rStrNoName      ( refStrNoName ),
         rStrUndefined   ( refStrUndefined ),
         rQueryData      ( refQueryData )
 {
@@ -136,7 +135,7 @@ void ScFilterOptionsMgr::Init()
 
     if ( pViewData && pDoc )
     {
-        String          theAreaStr;
+        rtl::OUString theAreaStr;
         ScRange         theCurArea ( ScAddress( rQueryData.nCol1,
                                                 rQueryData.nRow1,
                                                 pViewData->GetTabNo() ),
@@ -144,8 +143,8 @@ void ScFilterOptionsMgr::Init()
                                                 rQueryData.nRow2,
                                                 pViewData->GetTabNo() ) );
         ScDBCollection* pDBColl     = pDoc->GetDBCollection();
-        String          theDbArea;
-        String          theDbName   = rStrNoName;
+        rtl::OUStringBuffer theDbArea;
+        rtl::OUString   theDbName(RTL_CONSTASCII_USTRINGPARAM(STR_DB_LOCAL_NONAME));
         const formula::FormulaGrammar::AddressConvention eConv = pDoc->GetAddressConvention();
 
         theCurArea.Format( theAreaStr, SCR_ABS_3D, pDoc, eConv );
@@ -190,17 +189,16 @@ void ScFilterOptionsMgr::Init()
                 rBtnHeader.Check( pDBData->HasHeader() );
                 theDbName = pDBData->GetName();
 
-                if ( theDbName != rStrNoName )
-                {
+                if ( theDbName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)) )
+                    rBtnHeader.Enable();
+                else
                     rBtnHeader.Disable();
-                }
             }
         }
 
-        theDbArea.AppendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
-        theDbArea += theDbName;
-        theDbArea += ')';
-        rFtDbArea.SetText( theDbArea );
+        theDbArea.appendAscii(RTL_CONSTASCII_STRINGPARAM(" ("));
+        theDbArea.append(theDbName).append(')');
+        rFtDbArea.SetText( theDbArea.makeStringAndClear() );
 
         //------------------------------------------------------
         // Kopierposition:

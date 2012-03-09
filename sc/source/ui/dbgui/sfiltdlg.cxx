@@ -87,7 +87,6 @@ ScSpecialFilterDlg::ScSpecialFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Wi
         aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ),
         aFtDbArea       ( this, ScResId( FT_DBAREA ) ),
         aStrUndefined   ( ResId::toString(ScResId(SCSTR_UNDEFINED)) ),
-        aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
         aBtnOk          ( this, ScResId( BTN_OK ) ),
         aBtnCancel      ( this, ScResId( BTN_CANCEL ) ),
         aBtnHelp        ( this, ScResId( BTN_HELP ) ),
@@ -216,7 +215,6 @@ void ScSpecialFilterDlg::Init( const SfxItemSet& rArgSet )
                             aFtDbAreaLabel,
                             aFtDbArea,
                             aFlOptions,
-                            aStrNoName,
                             aStrUndefined );
 
     //  Spezialfilter braucht immer Spaltenkoepfe

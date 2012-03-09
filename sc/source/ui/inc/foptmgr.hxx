@@ -68,7 +68,6 @@ public:
                                 FixedText&          refFtDbAreaLabel,
                                 FixedInfo&          refFtDbArea,
                                 FixedLine&          refFlOptions,
-                                const String&       refStrNoName,
                                 const String&       refStrUndefined );
             ~ScFilterOptionsMgr();
 
@@ -93,7 +92,6 @@ private:
     FixedInfo&      rFtDbArea;
     FixedLine&      rFlOptions;
 
-    const String&   rStrNoName;
     const String&   rStrUndefined;
 
     const ScQueryParam& rQueryData;
