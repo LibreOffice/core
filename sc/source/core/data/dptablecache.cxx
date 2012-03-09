@@ -63,48 +63,6 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::std::vector;
 using ::std::auto_ptr;
 
-#include <stdio.h>
-#include <string>
-#include <sys/time.h>
-
-namespace {
-
-class stack_printer
-{
-public:
-    explicit stack_printer(const char* msg) :
-        msMsg(msg)
-    {
-        fprintf(stdout, "%s: --begin\n", msMsg.c_str());
-        mfStartTime = getTime();
-    }
-
-    ~stack_printer()
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --end (duration: %g sec)\n", msMsg.c_str(), (fEndTime-mfStartTime));
-    }
-
-    void printTime(int line) const
-    {
-        double fEndTime = getTime();
-        fprintf(stdout, "%s: --(%d) (duration: %g sec)\n", msMsg.c_str(), line, (fEndTime-mfStartTime));
-    }
-
-private:
-    double getTime() const
-    {
-        timeval tv;
-        gettimeofday(&tv, NULL);
-        return tv.tv_sec + tv.tv_usec / 1000000.0;
-    }
-
-    ::std::string msMsg;
-    double mfStartTime;
-};
-
-}
-
 namespace {
 
 /**
@@ -799,35 +757,37 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
     if (nDim < 0 || nId < 0)
         return NULL;
 
-    long nSourceCount = static_cast<long>(maFields.size());
-    if (nDim < nSourceCount)
+    size_t nSourceCount = maFields.size();
+    size_t nDimPos = static_cast<size_t>(nDim);
+    size_t nItemId = static_cast<size_t>(nId);
+    if (nDimPos < nSourceCount)
     {
         // source field.
-        const Field& rField = maFields[nDim];
-        if (nId < rField.maItems.size())
-            return &rField.maItems[nId];
+        const Field& rField = maFields[nDimPos];
+        if (nItemId < rField.maItems.size())
+            return &rField.maItems[nItemId];
 
         if (!rField.mpGroup)
             return NULL;
 
-        nId -= rField.maItems.size();
+        nItemId -= rField.maItems.size();
         const DataListType& rGI = rField.mpGroup->maItems;
-        if (nId >= rGI.size())
+        if (nItemId >= rGI.size())
             return NULL;
 
-        return &rGI[nId];
+        return &rGI[nItemId];
     }
 
     // Try group fields.
-    nDim -= nSourceCount;
-    if (nDim >= maGroupFields.size())
+    nDimPos -= nSourceCount;
+    if (nDimPos >= maGroupFields.size())
         return NULL;
 
-    const DataListType& rGI = maGroupFields[nDim].maItems;
-    if (nId >= rGI.size())
+    const DataListType& rGI = maGroupFields[nDimPos].maItems;
+    if (nItemId >= rGI.size())
         return NULL;
 
-    return &rGI[nId];
+    return &rGI[nItemId];
 }
 
 SCROW ScDPCache::GetRowCount() const
@@ -942,7 +902,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const rtl::OUString& sItemData) cons
 
     // group field.
     nDim -= mnColumnCount;
-    if (nDim < maGroupFields.size())
+    if (static_cast<size_t>(nDim) < maGroupFields.size())
     {
         const DataListType& rGI = maGroupFields[nDim].maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
@@ -985,7 +945,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
 
     // group field.
     nDim -= mnColumnCount;
-    if (nDim < maGroupFields.size())
+    if (static_cast<size_t>(nDim) < maGroupFields.size())
     {
         const DataListType& rGI = maGroupFields[nDim].maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)

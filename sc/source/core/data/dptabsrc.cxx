@@ -1022,7 +1022,6 @@ void ScDPSource::FillLevelList( sal_uInt16 nOrientation, std::vector<ScDPLevel*>
         for (long nLev=0; nLev<nLevCount; nLev++)
         {
             ScDPLevel* pLevel = pLevels->getByIndex(nLev);
-//          fprintf(stdout, "ScDPSource::FillLevelList:   level name = '%s'\n", rtl::OUStringToOString(pLevel->getName(), RTL_TEXTENCODING_UTF8).getStr());
             rList.push_back(pLevel);
         }
     }
