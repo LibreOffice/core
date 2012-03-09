@@ -556,7 +556,7 @@ void VCartesianAxis::createAllTickInfos( ::std::vector< ::std::vector< TickInfo 
 TickIter* VCartesianAxis::createLabelTickIterator( sal_Int32 nTextLevel )
 {
     if( nTextLevel>=0 && nTextLevel < static_cast< sal_Int32 >(m_aAllTickInfos.size()) )
-        new PureTickIter( m_aAllTickInfos[nTextLevel] );
+        return new PureTickIter( m_aAllTickInfos[nTextLevel] );
     return NULL;
 }
 
@@ -573,7 +573,7 @@ TickIter* VCartesianAxis::createMaximumLabelTickIterator( sal_Int32 nTextLevel )
             if( !m_aAllTickInfos.empty() )
             {
                 sal_Int32 nLongestLabelIndex = m_bUseTextLabels ? this->getIndexOfLongestLabel( m_aTextLabels ) : 0;
-                new MaxLabelTickIter( m_aAllTickInfos[0], nLongestLabelIndex );
+                return new MaxLabelTickIter( m_aAllTickInfos[0], nLongestLabelIndex );
             }
         }
     }
