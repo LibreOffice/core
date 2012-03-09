@@ -54,7 +54,7 @@ BUILD_DIR=Projects/VC2010/lcms2_DLL
 BUILD_ACTION=MSBuild.exe lcms2_DLL.vcxproj /p:Configuration=Release /p:Platform=Win32
 .ELSE
 BUILD_DIR=Projects/VC2008/lcms2_DLL
-BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe lcms2_DLL.vcproj "Release|Win32"
+BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe /useenv lcms2_DLL.vcproj "Release|Win32"
 .ENDIF
 
 .ELSE #"$(GUI)$(COM)"!="WNTMSC"
