@@ -121,6 +121,10 @@ MINGW_DLL( gid_Brand_File_Lib_Mingw_Libpng,        libpng15-15.dll )
 MINGW_DLL( gid_Brand_File_Lib_Mingw_Libcairo,      libcairo-2.dll )
 #endif
 
+#ifdef SYSTEM_LCMS2
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Liblcms2, liblcms2-2.dll )
+#endif
+
 #if defined(MINGW_GCCDLL)
 
 File gid_Brand_File_Lib_Mingw_GccS

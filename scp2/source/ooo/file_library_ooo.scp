@@ -572,6 +572,29 @@ SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fps_Office, fps_office.uno )
 SPECIAL_COMPONENT_LIB_FILE( gid_File_Lib_Fpicker, fpicker.uno )
 
 
+#ifndef SYSTEM_LCMS2
+
+File gid_File_Lib_Lcms2
+    LIB_FILE_BODY;
+    Styles = (PACKED);
+    Dir = SCP2_OOO_BIN_DIR;
+  #ifdef UNX
+    #ifdef MACOSX
+       Name = STRING(CONCAT3(liblcms2,.2,UNXSUFFIX));
+    #else
+       Name = STRING(CONCAT3(liblcms2,UNXSUFFIX,.2));
+    #endif
+  #elif defined(WNT)
+    #ifdef _gcc3
+       Name = "liblcms2-2.dll";
+    #else
+       Name = "lcms2.dll";
+    #endif
+  #endif
+End
+
+#endif
+
 #ifndef LIBO_HEADLESS
 
 #ifndef SYSTEM_CAIRO
