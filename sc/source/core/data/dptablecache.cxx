@@ -386,7 +386,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     for (size_t i = 0; i < static_cast<size_t>(mnColumnCount); ++i)
         maFields.push_back(new Field);
 
-    maLabelNames.reserve(mnColumnCount);
+    maLabelNames.reserve(mnColumnCount+1);
 
     for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
@@ -423,7 +423,7 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
 
         // Get column titles and types.
         maLabelNames.clear();
-        maLabelNames.reserve(mnColumnCount);
+        maLabelNames.reserve(mnColumnCount+1);
 
         std::vector<sal_Int32> aColTypes(mnColumnCount);
 
@@ -713,14 +713,14 @@ const ScDPCache::GroupItems* ScDPCache::GetGroupItems(long nDim) const
     return NULL;
 }
 
-rtl::OUString ScDPCache::GetDimensionName( sal_uInt16 nColumn ) const
+rtl::OUString ScDPCache::GetDimensionName(long nDim) const
 {
-    OSL_ENSURE(nColumn < maLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
+    OSL_ENSURE(nDim < maLabelNames.size()-1 , "ScDPTableDataCache::GetDimensionName");
     OSL_ENSURE(maLabelNames.size() == static_cast <sal_uInt16> (mnColumnCount+1), "ScDPTableDataCache::GetDimensionName");
 
-    if ( static_cast<size_t>(nColumn+1) < maLabelNames.size() )
+    if ( static_cast<size_t>(nDim+1) < maLabelNames.size() )
     {
-        return maLabelNames[nColumn+1];
+        return maLabelNames[nDim+1];
     }
     else
         return rtl::OUString();
@@ -844,15 +844,6 @@ const ScDPCache::DataListType& ScDPCache::GetDimMemberValues(SCCOL nDim) const
     return maFields[nDim].maItems;
 }
 
-sal_uLong ScDPCache::GetNumType(sal_uLong nFormat) const
-{
-    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-    sal_uLong nType = NUMBERFORMAT_NUMBER;
-    if ( pFormatter )
-        nType = pFormatter->GetType( nFormat );
-    return nType;
-}
-
 sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
 {
     if ( nDim >= mnColumnCount )
@@ -895,7 +886,7 @@ SCCOL ScDPCache::GetDimensionIndex(const rtl::OUString& sName) const
     for (size_t i = 1; i < maLabelNames.size(); ++i)
     {
         if (maLabelNames[i].equals(sName))
-            return (SCCOL)(i-1);
+            return static_cast<SCCOL>(i-1);
     }
     return -1;
 }
@@ -1055,10 +1046,10 @@ rtl::OUString ScDPCache::GetFormattedString(long nDim, const ScDPItemData& rItem
     return rItem.GetString();
 }
 
-void ScDPCache::AppendGroupField()
+long ScDPCache::AppendGroupField()
 {
     maGroupFields.push_back(new GroupItems);
-    fprintf(stdout, "ScDPCache::AppendGroupField:   added; new count = %d\n", maGroupFields.size());
+    return static_cast<long>(maFields.size() + maGroupFields.size() - 1);
 }
 
 void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo)
@@ -1105,6 +1096,55 @@ SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
     }
 
     return -1;
+}
+
+const ScDPCache::DataListType* ScDPCache::GetGroupDimMemberValues(long nDim) const
+{
+    if (nDim < 0)
+        return NULL;
+
+    long nSourceCount = static_cast<long>(maFields.size());
+    if (nDim < nSourceCount)
+    {
+        if (!maFields.at(nDim).mpGroup)
+            return NULL;
+
+        return &maFields[nDim].mpGroup->maItems;
+    }
+
+    nDim -= nSourceCount;
+    if (nDim < static_cast<long>(maGroupFields.size()))
+        return &maGroupFields.at(nDim).maItems;
+
+    return NULL;
+}
+
+void ScDPCache::GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const
+{
+    if (nDim < 0)
+        return;
+
+    long nSourceCount = static_cast<long>(maFields.size());
+    if (nDim < nSourceCount)
+    {
+        if (!maFields.at(nDim).mpGroup)
+            return;
+
+        size_t nOffset = maFields[nDim].maItems.size();
+        const DataListType& rGI = maFields[nDim].mpGroup->maItems;
+        for (size_t i = 0, n = rGI.size(); i < n; ++i)
+            rIds.push_back(static_cast<SCROW>(i + nOffset));
+
+        return;
+    }
+
+    nDim -= nSourceCount;
+    if (nDim < static_cast<long>(maGroupFields.size()))
+    {
+        const DataListType& rGI = maGroupFields.at(nDim).maItems;
+        for (size_t i = 0, n = rGI.size(); i < n; ++i)
+            rIds.push_back(static_cast<SCROW>(i));
+    }
 }
 
 namespace {

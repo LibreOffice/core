@@ -51,7 +51,12 @@ public:
     static double getNumGroupStartValue(double fValue, const ScDPNumGroupInfo& rInfo);
 
     static rtl::OUString getNumGroupName(
-        double fValue, const ScDPNumGroupInfo& rInfo, sal_Unicode cDecSep, SvNumberFormatter* pFormatter);
+        double fValue, const ScDPNumGroupInfo& rInfo, sal_Unicode cDecSep,
+        SvNumberFormatter* pFormatter);
+
+    static sal_Int32 getDatePartValue(
+        double fValue, const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart,
+        SvNumberFormatter* pFormatter);
 };
 
 #endif

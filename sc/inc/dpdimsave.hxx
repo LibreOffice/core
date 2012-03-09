@@ -52,13 +52,14 @@ class ScDPSaveGroupDimension;
 class SC_DLLPUBLIC ScDPSaveGroupItem
 {
     rtl::OUString aGroupName;     // name of group
-    ::std::vector<rtl::OUString> aElements;      // names of items in original dimension
+    std::vector<rtl::OUString> aElements;      // names of items in original dimension
+    mutable std::vector<ScDPItemData> maItems; // items converted from the strings.
 
 public:
     ScDPSaveGroupItem( const rtl::OUString& rName );
     ~ScDPSaveGroupItem();
 
-    void    AddToData( ScDPGroupDimension& rDataDim, SvNumberFormatter* pFormatter ) const;
+    void AddToData(ScDPGroupDimension& rDataDim) const;
 
     void    AddElement( const rtl::OUString& rName );
     void    AddElementsFromGroup( const ScDPSaveGroupItem& rGroup );
@@ -74,6 +75,9 @@ public:
     // remove this group's elements from their groups in rDimension
     // (rDimension must be a different dimension from the one which contains this)
     void    RemoveElementsFromGroups( ScDPSaveGroupDimension& rDimension ) const;
+
+    void ConvertElementsToItems(SvNumberFormatter* pFormatter) const;
+    bool HasInGroup(const ScDPItemData& rItem) const;
 };
 
 typedef ::std::vector<ScDPSaveGroupItem> ScDPSaveGroupItemVec;
@@ -87,7 +91,7 @@ class SC_DLLPUBLIC ScDPSaveGroupDimension
     rtl::OUString           aSourceDim;     // always the real source from the original data
     rtl::OUString           aGroupDimName;
     ScDPSaveGroupItemVec    aGroups;
-    ScDPNumGroupInfo        aDateInfo;
+    mutable ScDPNumGroupInfo aDateInfo;
     sal_Int32               nDatePart;
 
 public:
@@ -96,7 +100,7 @@ public:
                 ~ScDPSaveGroupDimension();
 
     void    AddToData( ScDPGroupTableData& rData ) const;
-
+    void AddToCache(ScDPCache& rCache) const;
     void    SetDateInfo( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
 
     void    AddGroupItem( const ScDPSaveGroupItem& rItem );
@@ -119,18 +123,21 @@ public:
     ScDPSaveGroupItem* GetGroupAccByIndex( long nIndex );
 
     void    Rename( const rtl::OUString& rNewName );
+
+private:
+    bool IsInGroup(const ScDPItemData& rItem) const;
 };
 
 /**
  * Represents a group dimension that introduces a new hierarchy for an
  * existing dimension.  Unlike the ScDPSaveGroupDimension counterpart, it
- * re-uses the source dimension.
+ * re-uses the source dimension name and ID.
  */
 class SC_DLLPUBLIC ScDPSaveNumGroupDimension
 {
     rtl::OUString       aDimensionName;
-    ScDPNumGroupInfo    aGroupInfo;
-    ScDPNumGroupInfo    aDateInfo;
+    mutable ScDPNumGroupInfo aGroupInfo;
+    mutable ScDPNumGroupInfo aDateInfo;
     sal_Int32           nDatePart;
 
 public:
@@ -139,6 +146,7 @@ public:
                 ~ScDPSaveNumGroupDimension();
 
     void        AddToData( ScDPGroupTableData& rData ) const;
+    void AddToCache(ScDPCache& rCache) const;
 
     const rtl::OUString& GetDimensionName() const  { return aDimensionName; }
     const ScDPNumGroupInfo& GetInfo() const { return aGroupInfo; }

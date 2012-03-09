@@ -30,6 +30,7 @@
 #include "dpdimsave.hxx"
 #include "dpgroup.hxx"
 #include "dpobject.hxx"
+#include "dputil.hxx"
 #include "document.hxx"
 
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
@@ -37,6 +38,8 @@
 #include <svl/zforlist.hxx>
 #include <rtl/math.hxx>
 #include <algorithm>
+
+using namespace com::sun::star;
 
 #include <stdio.h>
 #include <string>
@@ -142,25 +145,37 @@ void ScDPSaveGroupItem::RemoveElementsFromGroups( ScDPSaveGroupDimension& rDimen
         rDimension.RemoveFromGroups( *aIter );
 }
 
-void ScDPSaveGroupItem::AddToData( ScDPGroupDimension& rDataDim, SvNumberFormatter* pFormatter ) const
+void ScDPSaveGroupItem::ConvertElementsToItems(SvNumberFormatter* pFormatter) const
 {
-    ScDPGroupItem aGroup(aGroupName);
-    ScDPItemData aData;
-
-    for ( std::vector<rtl::OUString>::const_iterator aIter(aElements.begin()); aIter != aElements.end(); aIter++ )
+    maItems.reserve(aElements.size());
+    std::vector<rtl::OUString>::const_iterator it = aElements.begin(), itEnd = aElements.end();
+    for (; it != itEnd; ++it)
     {
-        sal_uInt32 nFormat = 0;      //! ...
+        sal_uInt32 nFormat = 0;
         double fValue;
-        if ( pFormatter->IsNumberFormat( *aIter, nFormat, fValue ) )
+        ScDPItemData aData;
+        if (pFormatter->IsNumberFormat(*it, nFormat, fValue))
             aData.SetValue(fValue);
         else
-            aData.SetString( *aIter );
+            aData.SetString(*it);
 
-        aGroup.AddElement( aData );
-        //! for numeric data, look at source members?
+        maItems.push_back(aData);
     }
+}
 
-    rDataDim.AddItem( aGroup );
+bool ScDPSaveGroupItem::HasInGroup(const ScDPItemData& rItem) const
+{
+    return std::find(maItems.begin(), maItems.end(), rItem) != maItems.end();
+}
+
+void ScDPSaveGroupItem::AddToData(ScDPGroupDimension& rDataDim) const
+{
+    ScDPGroupItem aGroup(aGroupName);
+    std::vector<ScDPItemData>::const_iterator it = maItems.begin(), itEnd = maItems.end();
+    for (; it != itEnd; ++it)
+        aGroup.AddElement(*it);
+
+    rDataDim.AddItem(aGroup);
 }
 
 // ============================================================================
@@ -303,6 +318,99 @@ void ScDPSaveGroupDimension::Rename( const rtl::OUString& rNewName )
     aGroupDimName = rNewName;
 }
 
+bool ScDPSaveGroupDimension::IsInGroup(const ScDPItemData& rItem) const
+{
+    ScDPSaveGroupItemVec::const_iterator it = aGroups.begin(), itEnd = aGroups.end();
+    for (; it != itEnd; ++it)
+    {
+        if (it->HasInGroup(rItem))
+            return true;
+    }
+    return false;
+}
+
+namespace {
+
+inline bool isInteger(double fValue)
+{
+    return rtl::math::approxEqual(fValue, rtl::math::approxFloor(fValue));
+}
+
+void fillDateGroupDimension(
+    ScDPCache& rCache, ScDPNumGroupInfo& rDateInfo, long nSourceDim, long nGroupDim,
+    sal_Int32 nDatePart, SvNumberFormatter* pFormatter)
+{
+    // Auto min/max is only used for "Years" part, but the loop is always
+    // needed.
+    double fSourceMin = 0.0;
+    double fSourceMax = 0.0;
+    bool bFirst = true;
+
+    const ScDPCache::DataListType& rItems = rCache.GetDimMemberValues(nSourceDim);
+    ScDPCache::DataListType::const_iterator it = rItems.begin(), itEnd = rItems.end();
+    for (; it != itEnd; ++it)
+    {
+        const ScDPItemData& rItem = *it;
+        if (rItem.GetType() != ScDPItemData::Value)
+            continue;
+
+        double fVal = rItem.GetValue();
+        if (bFirst)
+        {
+            fSourceMin = fSourceMax = fVal;
+            bFirst = false;
+        }
+        else
+        {
+            if (fVal < fSourceMin)
+                fSourceMin = fVal;
+            if ( fVal > fSourceMax )
+                fSourceMax = fVal;
+        }
+    }
+
+    // For the start/end values, use the same date rounding as in
+    // ScDPNumGroupDimension::GetNumEntries (but not for the list of
+    // available years).
+    if (rDateInfo.mbAutoStart)
+        rDateInfo.mfStart = rtl::math::approxFloor(fSourceMin);
+    if (rDateInfo.mbAutoEnd)
+        rDateInfo.mfEnd = rtl::math::approxFloor(fSourceMax) + 1;
+
+    //! if not automatic, limit fSourceMin/fSourceMax for list of year values?
+
+    long nStart = 0, nEnd = 0; // end is inclusive
+
+    switch (nDatePart)
+    {
+        case sheet::DataPilotFieldGroupBy::YEARS:
+            nStart = ScDPUtil::getDatePartValue(
+                fSourceMin, rDateInfo, sheet::DataPilotFieldGroupBy::YEARS, pFormatter);
+            nEnd = ScDPUtil::getDatePartValue(fSourceMax, rDateInfo, sheet::DataPilotFieldGroupBy::YEARS, pFormatter);
+            break;
+        case sheet::DataPilotFieldGroupBy::QUARTERS: nStart = 1; nEnd = 4;   break;
+        case sheet::DataPilotFieldGroupBy::MONTHS:   nStart = 1; nEnd = 12;  break;
+        case sheet::DataPilotFieldGroupBy::DAYS:     nStart = 1; nEnd = 366; break;
+        case sheet::DataPilotFieldGroupBy::HOURS:    nStart = 0; nEnd = 23;  break;
+        case sheet::DataPilotFieldGroupBy::MINUTES:  nStart = 0; nEnd = 59;  break;
+        case sheet::DataPilotFieldGroupBy::SECONDS:  nStart = 0; nEnd = 59;  break;
+        default:
+            OSL_FAIL("invalid date part");
+    }
+
+    // Now, populate the group items in the cache.
+    rCache.ResetGroupItems(nGroupDim, rDateInfo);
+
+    for (sal_Int32 nValue = nStart; nValue <= nEnd; ++nValue)
+        rCache.SetGroupItem(nGroupDim, ScDPItemData(nDatePart, nValue));
+
+    // add first/last entry (min/max)
+    rCache.SetGroupItem(nGroupDim, ScDPItemData(nDatePart, ScDPItemData::DateFirst));
+    rCache.SetGroupItem(nGroupDim, ScDPItemData(nDatePart, ScDPItemData::DateLast));
+}
+
+}
+
 void ScDPSaveGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 {
     long nSourceIndex = rData.GetDimensionIndex( aSourceDim );
@@ -319,13 +427,48 @@ void ScDPSaveGroupDimension::AddToData( ScDPGroupTableData& rData ) const
         {
             // normal (manual) grouping
 
-            SvNumberFormatter* pFormatter = rData.GetDocument()->GetFormatTable();
-
-            for ( ScDPSaveGroupItemVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
-                aIter->AddToData( aDim, pFormatter );
+            for (ScDPSaveGroupItemVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); ++aIter)
+                aIter->AddToData(aDim);
         }
 
         rData.AddGroupDimension( aDim );
+    }
+}
+
+void ScDPSaveGroupDimension::AddToCache(ScDPCache& rCache) const
+{
+    long nDim = rCache.AppendGroupField();
+    SvNumberFormatter* pFormatter = rCache.GetDoc()->GetFormatTable();
+
+    if (nDatePart)
+    {
+        long nSourceDim = rCache.GetDimensionIndex(aSourceDim);
+        fillDateGroupDimension(rCache, aDateInfo, nSourceDim, nDim, nDatePart, pFormatter);
+        return;
+    }
+
+    rCache.ResetGroupItems(nDim, aDateInfo);
+    {
+        ScDPSaveGroupItemVec::const_iterator it = aGroups.begin(), itEnd = aGroups.end();
+        for (; it != itEnd; ++it)
+        {
+            const ScDPSaveGroupItem& rGI = *it;
+            rGI.ConvertElementsToItems(pFormatter);
+            rCache.SetGroupItem(nDim, ScDPItemData(rGI.GetGroupName()));
+        }
+    }
+
+    long nSourceDim = rCache.GetDimensionIndex(aSourceDim);
+    const ScDPCache::DataListType& rItems = rCache.GetDimMemberValues(nSourceDim);
+    {
+        ScDPCache::DataListType::const_iterator it = rItems.begin(), itEnd = rItems.end();
+        for (; it != itEnd; ++it)
+        {
+            const ScDPItemData& rItem = *it;
+            if (!IsInGroup(rItem))
+                // Not in any group.  Add as its own group.
+                rCache.SetGroupItem(nDim, rItem);
+        }
     }
 }
 
@@ -359,6 +502,109 @@ void ScDPSaveNumGroupDimension::AddToData( ScDPGroupTableData& rData ) const
             aDim.MakeDateHelper( aDateInfo, nSource, nDatePart );    // date grouping
 
         rData.SetNumGroupDimension( nSource, aDim );
+    }
+}
+
+void ScDPSaveNumGroupDimension::AddToCache(ScDPCache& rCache) const
+{
+    long nDim = rCache.GetDimensionIndex(aDimensionName);
+    if (aGroupInfo.mbEnable)
+    {
+        // Number-range grouping
+
+        // Look through the source entries for non-integer numbers, minimum
+        // and maximum.
+
+        // non-integer GroupInfo values count, too
+        aGroupInfo.mbIntegerOnly =
+            (aGroupInfo.mbAutoStart || isInteger(aGroupInfo.mfStart)) &&
+            (aGroupInfo.mbAutoEnd || isInteger(aGroupInfo.mfEnd)) &&
+            isInteger(aGroupInfo.mfStep);
+
+        double fSourceMin = 0.0;
+        double fSourceMax = 0.0;
+        bool bFirst = true;
+
+        const ScDPCache::DataListType& rItems = rCache.GetDimMemberValues(nDim);
+        ScDPCache::DataListType::const_iterator it = rItems.begin(), itEnd = rItems.end();
+        for (; it != itEnd; ++it)
+        {
+            const ScDPItemData& rItem = *it;
+            if (rItem.GetType() != ScDPItemData::Value)
+                continue;
+
+            double fValue = rItem.GetValue();
+            if (bFirst)
+            {
+                fSourceMin = fSourceMax = fValue;
+                bFirst = false;
+                continue;
+            }
+
+            if (fValue < fSourceMin)
+                fSourceMin = fValue;
+            if (fValue > fSourceMax)
+                fSourceMax = fValue;
+
+            if (aGroupInfo.mbIntegerOnly && !isInteger(fValue))
+            {
+                // If any non-integer numbers are involved, the group labels
+                // are shown including their upper limit.
+                aGroupInfo.mbIntegerOnly = false;
+            }
+        }
+
+        if (aGroupInfo.mbDateValues)
+        {
+            // special handling for dates: always integer, round down limits
+            aGroupInfo.mbIntegerOnly = true;
+            fSourceMin = rtl::math::approxFloor(fSourceMin);
+            fSourceMax = rtl::math::approxFloor(fSourceMax) + 1;
+        }
+
+        if (aGroupInfo.mbAutoStart)
+            aGroupInfo.mfStart = fSourceMin;
+        if (aGroupInfo.mbAutoEnd)
+            aGroupInfo.mfEnd = fSourceMax;
+
+        //! limit number of entries?
+
+        long nLoopCount = 0;
+        double fLoop = aGroupInfo.mfStart;
+
+        rCache.ResetGroupItems(nDim, aGroupInfo);
+
+        // Use "less than" instead of "less or equal" for the loop - don't
+        // create a group that consists only of the end value. Instead, the
+        // end value is then included in the last group (last group is bigger
+        // than the others). The first group has to be created nonetheless.
+        // GetNumGroupForValue has corresponding logic.
+
+        bool bFirstGroup = true;
+        while (bFirstGroup || (fLoop < aGroupInfo.mfEnd && !rtl::math::approxEqual(fLoop, aGroupInfo.mfEnd)))
+        {
+            ScDPItemData aItem;
+            aItem.SetRangeStart(fLoop);
+            rCache.SetGroupItem(nDim, aItem);
+            ++nLoopCount;
+            fLoop = aGroupInfo.mfStart + nLoopCount * aGroupInfo.mfStep;
+            bFirstGroup = false;
+
+            // ScDPItemData values are compared with approxEqual
+        }
+
+        ScDPItemData aItem;
+        aItem.SetRangeFirst();
+        rCache.SetGroupItem(nDim, aItem);
+
+        aItem.SetRangeLast();
+        rCache.SetGroupItem(nDim, aItem);
+    }
+    else if (aDateInfo.mbEnable)
+    {
+        // Date grouping
+        SvNumberFormatter* pFormatter = rCache.GetDoc()->GetFormatTable();
+        fillDateGroupDimension(rCache, aDateInfo, nDim, nDim, nDatePart, pFormatter);
     }
 }
 
@@ -468,8 +714,27 @@ void ScDPDimensionSaveData::WriteToData( ScDPGroupTableData& rData ) const
         aIt->second.AddToData( rData );
 }
 
+namespace {
+
+class AddGroupDimToCache : std::unary_function<ScDPSaveGroupDimension, void>
+{
+    ScDPCache& mrCache;
+public:
+    AddGroupDimToCache(ScDPCache& rCache) : mrCache(rCache) {}
+    void operator() (const ScDPSaveGroupDimension& rDim)
+    {
+        rDim.AddToCache(mrCache);
+    }
+};
+
+}
+
 void ScDPDimensionSaveData::WriteToCache(ScDPCache& rCache) const
 {
+    std::for_each(maGroupDims.begin(), maGroupDims.end(), AddGroupDimToCache(rCache));
+    ScDPSaveNumGroupDimMap::const_iterator it = maNumGroupDims.begin(), itEnd = maNumGroupDims.end();
+    for (; it != itEnd; ++it)
+        it->second.AddToCache(rCache);
 }
 
 const ScDPSaveGroupDimension* ScDPDimensionSaveData::GetGroupDimForBase( const rtl::OUString& rBaseDimName ) const

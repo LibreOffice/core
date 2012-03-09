@@ -384,79 +384,9 @@ void ScDPDateGroupHelper::SetGroupDim(long nDim)
     mnGroupDim = nDim;
 }
 
-void ScDPDateGroupHelper::FillColumnEntries(
-    SCCOL nSourceDim, ScDPCache* pCache, std::vector<SCROW>& rEntries, const std::vector<SCROW>& rOriginal) const
+void ScDPDateGroupHelper::FillColumnEntries(const ScDPCache* pCache, std::vector<SCROW>& rEntries) const
 {
-    // auto min/max is only used for "Years" part, but the loop is always needed
-    double fSourceMin = 0.0;
-    double fSourceMax = 0.0;
-    bool bFirst = true;
-
-    size_t  nOriginalCount = rOriginal.size();
-    for (size_t nOriginalPos=0; nOriginalPos<nOriginalCount; nOriginalPos++)
-    {
-        const  ScDPItemData* pItemData = pCache->GetItemDataById( nSourceDim, rOriginal[nOriginalPos] );
-        if (pItemData->GetType() == ScDPItemData::Value)
-        {
-            double fSourceValue = pItemData->GetValue();
-            if ( bFirst )
-            {
-                fSourceMin = fSourceMax = fSourceValue;
-                bFirst = false;
-            }
-            else
-            {
-                if ( fSourceValue < fSourceMin )
-                    fSourceMin = fSourceValue;
-                if ( fSourceValue > fSourceMax )
-                    fSourceMax = fSourceValue;
-            }
-        }
-    }
-
-    // For the start/end values, use the same date rounding as in ScDPNumGroupDimension::GetNumEntries
-    // (but not for the list of available years):
-    if ( aNumInfo.mbAutoStart )
-        const_cast<ScDPDateGroupHelper*>(this)->aNumInfo.mfStart = rtl::math::approxFloor( fSourceMin );
-    if ( aNumInfo.mbAutoEnd )
-        const_cast<ScDPDateGroupHelper*>(this)->aNumInfo.mfEnd = rtl::math::approxFloor( fSourceMax ) + 1;
-
-    //! if not automatic, limit fSourceMin/fSourceMax for list of year values?
-    SvNumberFormatter* pFormatter = pCache->GetDoc()->GetFormatTable();
-
-    long nStart = 0;
-    long nEnd = 0;          // including
-
-    switch ( nDatePart )
-    {
-        case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS:
-            nStart = lcl_GetDatePartValue( fSourceMin, com::sun::star::sheet::DataPilotFieldGroupBy::YEARS, pFormatter, NULL );
-            nEnd = lcl_GetDatePartValue( fSourceMax, com::sun::star::sheet::DataPilotFieldGroupBy::YEARS, pFormatter, NULL );
-            break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS: nStart = 1; nEnd = 4;   break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:   nStart = 1; nEnd = 12;  break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:     nStart = 1; nEnd = 366; break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::HOURS:    nStart = 0; nEnd = 23;  break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES:  nStart = 0; nEnd = 59;  break;
-        case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS:  nStart = 0; nEnd = 59;  break;
-        default:
-            OSL_FAIL("invalid date part");
-    }
-
-    pCache->ResetGroupItems(mnGroupDim, aNumInfo);
-
-    for ( sal_Int32 nValue = nStart; nValue <= nEnd; nValue++ )
-    {
-        SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, nValue));
-        rEntries.push_back(nId);
-    }
-
-    // add first/last entry (min/max)
-    SCROW nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, ScDPItemData::DateFirst));
-    rEntries.push_back(nId);
-
-    nId = pCache->SetGroupItem(mnGroupDim, ScDPItemData(nDatePart, ScDPItemData::DateLast));
-    rEntries.push_back(nId);
+    pCache->GetGroupDimMemberIds(mnGroupDim, rEntries);
 }
 
 // -----------------------------------------------------------------------
@@ -569,33 +499,11 @@ const std::vector<SCROW>& ScDPGroupDimension::GetColumnEntries(
 
     if (pDateHelper)
     {
-        pDateHelper->FillColumnEntries(
-            GetSourceDim(), const_cast<ScDPCache*>(rCacheTable.getCache()), maMemberEntries, rOriginal);
+        pDateHelper->FillColumnEntries(rCacheTable.getCache(), maMemberEntries);
         return maMemberEntries;
     }
 
-    ScDPCache* pCache = const_cast<ScDPCache*>(rCacheTable.getCache());
-    for (size_t i = 0, n = rOriginal.size(); i < n;  ++i)
-    {
-        const ScDPItemData* pItemData = pCache->GetItemDataById(nSourceDim, rOriginal[i]);
-        if (!pItemData)
-            // This shouldn't happen.  Something is terribly wrong.
-            continue;
-
-        if (!GetGroupForData(*pItemData))
-        {
-            // not in any group -> add as its own group
-            SCROW nId = pCache->SetGroupItem(nGroupDim, *pItemData);
-            maMemberEntries.push_back(nId);
-        }
-    }
-
-    for (size_t i = 0, n = aItems.size(); i < n; ++i)
-    {
-        SCROW nId = pCache->SetGroupItem(nGroupDim, aItems[i].GetName());
-        maMemberEntries.push_back(nId);
-    }
-
+    rCacheTable.getCache()->GetGroupDimMemberIds(nGroupDim, maMemberEntries);
     return maMemberEntries;
 }
 
@@ -681,7 +589,7 @@ void ScDPNumGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, long 
 }
 
 const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
-    SCCOL nSourceDim, ScDPCache* pCache, const std::vector<SCROW>& rOriginal) const
+    SCCOL nSourceDim, const ScDPCache* pCache) const
 {
     if (!maMemberEntries.empty())
         return maMemberEntries;
@@ -689,102 +597,11 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
     if (pDateHelper)
     {
         // Grouped by dates.
-        pDateHelper->FillColumnEntries(
-            nSourceDim, const_cast<ScDPCache*>(pCache), maMemberEntries, rOriginal);
+        pDateHelper->FillColumnEntries(pCache, maMemberEntries);
         return maMemberEntries;
     }
 
-    // Copy textual entries.
-    // Also look through the source entries for non-integer numbers, minimum and maximum.
-    // GetNumEntries (GetColumnEntries) must be called before accessing the groups
-    // (this in ensured by calling ScDPLevel::GetMembersObject for all column/row/page
-    // dimensions before iterating over the values).
-
-    // non-integer GroupInfo values count, too
-    bool bHasNonInteger = ( !aGroupInfo.mbAutoStart && !IsInteger( aGroupInfo.mfStart ) ) ||
-                     ( !aGroupInfo.mbAutoEnd   && !IsInteger( aGroupInfo.mfEnd   ) ) ||
-                     !IsInteger( aGroupInfo.mfStep );
-    aGroupInfo.mbIntegerOnly = !bHasNonInteger;
-    double fSourceMin = 0.0;
-    double fSourceMax = 0.0;
-    bool bFirst = true;
-
-    for (size_t i = 0, n = rOriginal.size(); i < n; ++i)
-    {
-       const ScDPItemData* pItemData = pCache->GetItemDataById(nSourceDim, rOriginal[i]);
-       if (pItemData->GetType() != ScDPItemData::Value)
-           continue;
-
-       double fSourceValue = pItemData->GetValue();
-       if (bFirst)
-       {
-           fSourceMin = fSourceMax = fSourceValue;
-           bFirst = false;
-           continue;
-       }
-
-       if (fSourceValue < fSourceMin)
-           fSourceMin = fSourceValue;
-       if (fSourceValue > fSourceMax)
-           fSourceMax = fSourceValue;
-
-       if (aGroupInfo.mbIntegerOnly && !IsInteger(fSourceValue))
-       {
-           // if any non-integer numbers are involved, the group labels are
-           // shown including their upper limit
-           aGroupInfo.mbIntegerOnly = false;
-       }
-    }
-
-    if (aGroupInfo.mbDateValues)
-    {
-        // special handling for dates: always integer, round down limits
-        aGroupInfo.mbIntegerOnly = true;
-        fSourceMin = rtl::math::approxFloor( fSourceMin );
-        fSourceMax = rtl::math::approxFloor( fSourceMax ) + 1;
-    }
-
-    if (aGroupInfo.mbAutoStart)
-        aGroupInfo.mfStart = fSourceMin;
-    if (aGroupInfo.mbAutoEnd)
-        aGroupInfo.mfEnd = fSourceMax;
-
-    //! limit number of entries?
-
-    long nLoopCount = 0;
-    double fLoop = aGroupInfo.mfStart;
-
-    // Num group always share the same dimension ID as the source dimension.
-    pCache->ResetGroupItems(nSourceDim, aGroupInfo);
-
-    // Use "less than" instead of "less or equal" for the loop - don't create a group
-    // that consists only of the end value. Instead, the end value is then included
-    // in the last group (last group is bigger than the others).
-    // The first group has to be created nonetheless. GetNumGroupForValue has corresponding logic.
-
-    bool bFirstGroup = true;
-    while (bFirstGroup || (fLoop < aGroupInfo.mfEnd && !rtl::math::approxEqual(fLoop, aGroupInfo.mfEnd)))
-    {
-        ScDPItemData aItem;
-        aItem.SetRangeStart(fLoop);
-        SCROW nId = pCache->SetGroupItem(nSourceDim, aItem);
-        maMemberEntries.push_back(nId);
-        ++nLoopCount;
-        fLoop = aGroupInfo.mfStart + nLoopCount * aGroupInfo.mfStep;
-        bFirstGroup = false;
-
-        // ScDPItemData values are compared with approxEqual
-    }
-
-    ScDPItemData aItem;
-    aItem.SetRangeFirst();
-    SCROW nId = pCache->SetGroupItem(nSourceDim, aItem);
-    maMemberEntries.push_back(nId);
-
-    aItem.SetRangeLast();
-    nId = pCache->SetGroupItem(nSourceDim, aItem);
-    maMemberEntries.push_back(nId);
-
+    pCache->GetGroupDimMemberIds(nSourceDim, maMemberEntries);
     return maMemberEntries;
 }
 
@@ -811,8 +628,6 @@ void ScDPGroupTableData::AddGroupDimension( const ScDPGroupDimension& rGroup )
     aNewGroup.SetGroupDim( GetColumnCount() );      // new dimension will be at the end
     aGroups.push_back( aNewGroup );
     aGroupNames.insert(aNewGroup.GetName());
-    ScDPCache* pCache = const_cast<ScDPCache*>(GetCacheTable().getCache());
-    pCache->AppendGroupField();
 }
 
 void ScDPGroupTableData::SetNumGroupDimension( long nIndex, const ScDPNumGroupDimension& rGroup )
@@ -872,10 +687,8 @@ const std::vector< SCROW >& ScDPGroupTableData::GetColumnEntries( long  nColumn 
     if ( IsNumGroupDimension( nColumn ) )
     {
         // dimension number is unchanged for numerical groups
-        const  std::vector< SCROW >& rOriginal = pSourceData->GetColumnEntries( nColumn );
         return pNumGroups[nColumn].GetNumEntries(
-            static_cast<SCCOL>(nColumn),
-            const_cast<ScDPCache*>(GetCacheTable().getCache()), rOriginal);
+            static_cast<SCCOL>(nColumn), GetCacheTable().getCache());
     }
 
     return pSourceData->GetColumnEntries( nColumn );

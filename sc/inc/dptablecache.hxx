@@ -131,15 +131,16 @@ public:
     SCROW GetIdByItemData(long nDim, const rtl::OUString& sItemData) const;
     SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
     rtl::OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
-    void AppendGroupField();
+    long AppendGroupField();
     void ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo);
     SCROW SetGroupItem(long nDim, const ScDPItemData& rData);
+    const DataListType* GetGroupDimMemberValues(long nDim) const;
+    void GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const;
     void ClearGroupFields();
 
     SCROW GetAdditionalItemID( const ScDPItemData& rData ) const;
 
     SCCOL GetDimensionIndex(const rtl::OUString& sName) const;
-    sal_uLong GetNumType ( sal_uLong nFormat ) const;
     sal_uLong GetNumberFormat( long nDim ) const;
     bool  IsDateDimension( long nDim ) const ;
     SCROW GetDimMemberCount( SCCOL nDim ) const;
@@ -151,12 +152,12 @@ public:
 
     SCROW  GetRowCount() const;
     SCROW  GetItemDataId( sal_uInt16 nDim, SCROW nRow, bool bRepeatIfEmpty ) const;
-    rtl::OUString GetDimensionName( sal_uInt16 nColumn ) const;
+    rtl::OUString GetDimensionName(long nDim) const;
     bool IsRowEmpty( SCROW nRow ) const;
     bool IsValid() const;
     bool ValidQuery(SCROW nRow, const ScQueryParam& rQueryParam) const;
 
-    ScDocument* GetDoc() const;//ms-cache-core
+    ScDocument* GetDoc() const;
     long GetColumnCount() const;
     long GetGroupFieldCount() const;
 

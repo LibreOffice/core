@@ -40,6 +40,8 @@
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/i18n/CalendarDisplayIndex.hpp>
 
+#define D_TIMEFACTOR 86400.0
+
 using namespace com::sun::star;
 
 namespace {
@@ -288,6 +290,78 @@ rtl::OUString ScDPUtil::getNumGroupName(
     }
 
     return lcl_GetNumGroupName(fGroupStart, rInfo, cDecSep, pFormatter);
+}
+
+sal_Int32 ScDPUtil::getDatePartValue(
+    double fValue, const ScDPNumGroupInfo& rInfo, sal_Int32 nDatePart,
+    SvNumberFormatter* pFormatter)
+{
+    // Start and end are inclusive
+    // (End date without a time value is included, with a time value it's not)
+
+    if (fValue < rInfo.mfStart && !rtl::math::approxEqual(fValue, rInfo.mfStart))
+        return ScDPItemData::DateFirst;
+    if (fValue > rInfo.mfEnd && !rtl::math::approxEqual(fValue, rInfo.mfEnd))
+        return ScDPItemData::DateLast;
+
+    sal_Int32 nResult = 0;
+
+    if (nDatePart == sheet::DataPilotFieldGroupBy::HOURS ||
+        nDatePart == sheet::DataPilotFieldGroupBy::MINUTES ||
+        nDatePart == sheet::DataPilotFieldGroupBy::SECONDS)
+    {
+        // handle time
+        // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
+
+        double fTime = fValue - rtl::math::approxFloor(fValue);
+        long nSeconds = (long)rtl::math::approxFloor(fTime*D_TIMEFACTOR+0.5);
+
+        switch (nDatePart)
+        {
+            case sheet::DataPilotFieldGroupBy::HOURS:
+                nResult = nSeconds / 3600;
+                break;
+            case sheet::DataPilotFieldGroupBy::MINUTES:
+                nResult = ( nSeconds % 3600 ) / 60;
+                break;
+            case sheet::DataPilotFieldGroupBy::SECONDS:
+                nResult = nSeconds % 60;
+                break;
+        }
+    }
+    else
+    {
+        Date aDate = *(pFormatter->GetNullDate());
+        aDate += (long)::rtl::math::approxFloor(fValue);
+
+        switch ( nDatePart )
+        {
+            case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS:
+                nResult = aDate.GetYear();
+                break;
+            case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS:
+                nResult = 1 + (aDate.GetMonth() - 1) / 3;     // 1..4
+                break;
+            case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
+                nResult = aDate.GetMonth();     // 1..12
+                break;
+            case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
+                {
+                    Date aYearStart(1, 1, aDate.GetYear());
+                    nResult = (aDate - aYearStart) + 1;       // Jan 01 has value 1
+                    if (nResult >= 60 && !aDate.IsLeapYear())
+                    {
+                        // days are counted from 1 to 366 - if not from a leap year, adjust
+                        ++nResult;
+                    }
+                }
+                break;
+            default:
+                OSL_FAIL("invalid date part");
+        }
+    }
+
+    return nResult;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
