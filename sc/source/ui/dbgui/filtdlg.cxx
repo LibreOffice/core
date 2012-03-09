@@ -115,7 +115,6 @@ ScFilterDlg::ScFilterDlg( SfxBindings* pB, SfxChildWindow* pCW, Window* pParent,
         aFtDbAreaLabel  ( this, ScResId( FT_DBAREA_LABEL ) ),
         aFtDbArea       ( this, ScResId( FT_DBAREA ) ),
         aStrUndefined   ( ResId::toString(ScResId(SCSTR_UNDEFINED)) ),
-        aStrNoName      ( ScGlobal::GetRscString(STR_DB_NONAME) ),
         aStrNone        ( ResId::toString(ScResId(SCSTR_NONE)) ),
         aStrEmpty       ( ResId::toString(ScResId(SCSTR_EMPTY)) ),
         aStrNotEmpty    ( ResId::toString(ScResId(SCSTR_NOTEMPTY)) ),
@@ -290,7 +289,6 @@ void ScFilterDlg::Init( const SfxItemSet& rArgSet )
                             aFtDbAreaLabel,
                             aFtDbArea,
                             aFlOptions,
-                            aStrNoName,
                             aStrUndefined );
 
     // Read in field lists and select entries

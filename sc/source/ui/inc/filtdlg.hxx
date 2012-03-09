@@ -126,7 +126,6 @@ private:
     FixedText       aFtDbAreaLabel;
     FixedInfo       aFtDbArea;
     const rtl::OUString aStrUndefined;
-    const rtl::OUString aStrNoName;
     const rtl::OUString aStrNone;
 
     const rtl::OUString aStrEmpty;
