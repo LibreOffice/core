@@ -248,14 +248,19 @@ ScDPItemData& ScDPItemData::operator= (const ScDPItemData& r)
 
 sal_uInt8 ScDPItemData::GetCellType() const
 {
-    if (meType == Error)
-        return SC_VALTYPE_ERROR;
-    else if (meType == Empty)
-        return SC_VALTYPE_EMPTY;
-    else if ( IsValue())
-        return SC_VALTYPE_VALUE;
-    else
-        return SC_VALTYPE_STRING;
+    switch (meType)
+    {
+        case Error:
+            return SC_VALTYPE_ERROR;
+        case Empty:
+            return SC_VALTYPE_EMPTY;
+        case Value:
+            return SC_VALTYPE_VALUE;
+        default:
+            ;
+    }
+
+    return SC_VALTYPE_STRING;
 }
 
 #if DEBUG_DP_ITEM_DATA
@@ -342,7 +347,7 @@ ScDPItemData::GroupValueAttr ScDPItemData::GetGroupValue() const
 
 bool ScDPItemData::HasStringData() const
 {
-    return meType == String;
+    return meType == String || meType == Error;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
