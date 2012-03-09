@@ -923,7 +923,7 @@ void ScTable::CopyToTable(SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW nRow2,
     if (bAddNotes)
     {
         bool bCloneCaption = (nFlags & IDF_NOCAPTIONS) == 0;
-        pDestTab->maNotes.CopyFromClip(maNotes, pDocument, nCol1, nRow1, nCol2, nRow2, 0, 0, pDestTab->nTab, bCloneCaption);
+        pDestTab->maNotes.CopyFromClip(maNotes, pDestTab->pDocument, nCol1, nRow1, nCol2, nRow2, 0, 0, pDestTab->nTab, bCloneCaption);
     }
 
     if (pDBDataNoName)
