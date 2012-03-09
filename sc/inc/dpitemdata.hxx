@@ -40,7 +40,7 @@
 
 #include <boost/unordered_map.hpp>
 
-#define DEBUG_DP_ITEM_DATA 1
+#define DEBUG_DP_ITEM_DATA 0
 
 class ScDocument;
 

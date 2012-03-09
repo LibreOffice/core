@@ -186,8 +186,17 @@ bool ScDPItemData::IsCaseInsEqual(const ScDPItemData& r) const
     if (meType != r.meType)
         return false;
 
-    if (meType == Value)
-        return rtl::math::approxEqual(mfValue, r.mfValue);
+    switch (meType)
+    {
+        case Value:
+        case RangeStart:
+            return rtl::math::approxEqual(mfValue, r.mfValue);
+        case GroupValue:
+            return maGroupValue.mnGroupType == r.maGroupValue.mnGroupType &&
+                maGroupValue.mnValue == r.maGroupValue.mnValue;
+        default:
+            ;
+    }
 
     return ScGlobal::GetpTransliteration()->isEqual(GetString(), r.GetString());
 }
