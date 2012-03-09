@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "AAAAAX///+c\u003d",
+        "filename": "sc/source/ui/app/scdll.cxx",
+        "patchSetId": 2
+      },
+      "lineNbr": 205,
+      "author": {
+        "id": 1000003
+      },
+      "writtenOn": "2012-03-09T01:58:24Z",
+      "side": 1,
+      "message": "it is that easy to add inline comment",
+      "revId": "8f4984950230b60139ddcd134dc28f708116a2db",
+      "serverId": "6622c302-437a-49ad-a91d-55ba7dcf1615",
+      "unresolved": false
+    }
+  ]
+}
