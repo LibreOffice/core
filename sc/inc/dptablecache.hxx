@@ -128,7 +128,6 @@ public:
     void RemoveReference(ScDPObject* pObj) const;
     const ObjectSetType& GetAllReferences() const;
 
-    SCROW GetIdByItemData(long nDim, const rtl::OUString& sItemData) const;
     SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
     rtl::OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
     long AppendGroupField();
@@ -137,8 +136,6 @@ public:
     const DataListType* GetGroupDimMemberValues(long nDim) const;
     void GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const;
     void ClearGroupFields();
-
-    SCROW GetAdditionalItemID( const ScDPItemData& rData ) const;
 
     SCCOL GetDimensionIndex(const rtl::OUString& sName) const;
     sal_uLong GetNumberFormat( long nDim ) const;

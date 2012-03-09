@@ -66,6 +66,7 @@
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/DataPilotFieldAutoShowInfo.hpp>
 #include <com/sun/star/table/CellAddress.hpp>
 
@@ -2490,7 +2491,8 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
             }
             else if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) )
             {
-                long nVal = 0;
+                sal_Int32 nGroupBy = 0;
+                sal_Int32 nVal = 0;
                 rtl::OUString aName;
 
                 if ( nLev == SC_DAPI_LEVEL_YEAR )   // YEAR is in both hierarchies
@@ -2521,14 +2523,33 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                 else
                     nVal = nIndex + 1;          // Quarter, Day, Week are 1-based
 
+                switch (nLev)
+                {
+                    case SC_DAPI_LEVEL_YEAR:
+                        nGroupBy = sheet::DataPilotFieldGroupBy::YEARS;
+                    break;
+                    case SC_DAPI_LEVEL_QUARTER:
+                    case SC_DAPI_LEVEL_WEEK:
+                        nGroupBy = sheet::DataPilotFieldGroupBy::QUARTERS;
+                    break;
+                    case SC_DAPI_LEVEL_MONTH:
+                    case SC_DAPI_LEVEL_WEEKDAY:
+                        nGroupBy = sheet::DataPilotFieldGroupBy::MONTHS;
+                    break;
+                    case SC_DAPI_LEVEL_DAY:
+                        nGroupBy = sheet::DataPilotFieldGroupBy::DAYS;
+                    break;
+                        nGroupBy = sheet::DataPilotFieldGroupBy::YEARS;
+                    break;
+                    default:
+                        ;
+                }
                 if (aName.isEmpty())
                     aName = rtl::OUString::valueOf(nVal);
 
-                // TODO: This needs fixing.
-                fprintf(stdout, "ScDPMembers::getByIndex:   FIXME\n");
-                ScDPItemData aData(nVal);
-                pNew = new ScDPMember(
-                    pSource, nDim, nHier, nLev, pSource->GetCache()->GetAdditionalItemID(aData));
+                ScDPItemData aData(nGroupBy, nVal);
+                SCROW nId = pSource->GetCache()->GetIdByItemData(nDim, aData);
+                pNew = new ScDPMember(pSource, nDim, nHier, nLev, nId);
             }
             else
             {

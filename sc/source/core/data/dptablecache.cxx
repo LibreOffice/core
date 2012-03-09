@@ -872,49 +872,6 @@ const ScDPCache::ObjectSetType& ScDPCache::GetAllReferences() const
     return maRefObjects;
 }
 
-SCROW ScDPCache::GetIdByItemData(long nDim, const rtl::OUString& sItemData) const
-{
-    if (nDim < 0)
-        return -1;
-
-    if (nDim < mnColumnCount)
-    {
-        // source field.
-        const DataListType& rItems = maFields[nDim].maItems;
-        for (size_t i = 0, n = rItems.size(); i < n; ++i)
-        {
-            if (rItems[i].GetString() == sItemData)
-                return i;
-        }
-
-        if (!maFields[nDim].mpGroup)
-            return -1;
-
-        // grouped source field.
-        const DataListType& rGI = maFields[nDim].mpGroup->maItems;
-        for (size_t i = 0, n = rGI.size(); i < n; ++i)
-        {
-            if (rGI[i].GetString() == sItemData)
-                return rItems.size() + i;
-        }
-        return -1;
-    }
-
-    // group field.
-    nDim -= mnColumnCount;
-    if (static_cast<size_t>(nDim) < maGroupFields.size())
-    {
-        const DataListType& rGI = maGroupFields[nDim].maItems;
-        for (size_t i = 0, n = rGI.size(); i < n; ++i)
-        {
-            if (rGI[i].GetString() == sItemData)
-                return i;
-        }
-    }
-
-    return -1;
-}
-
 SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
 {
     if (nDim < 0)
@@ -1124,13 +1081,6 @@ void ScDPCache::ClearGroupFields()
     maGroupFields.clear();
     std::for_each(maFields.begin(), maFields.end(), ClearGroupItems());
 }
-
-SCROW ScDPCache::GetAdditionalItemID(const ScDPItemData&) const
-{
-    fprintf(stdout, "ScDPCache::GetAdditionalItemID:   FIXME\n");
-    return -1;
-}
-
 
 SCROW ScDPCache::GetOrder(long nDim, SCROW nIndex) const
 {

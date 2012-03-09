@@ -60,8 +60,8 @@ namespace com { namespace sun { namespace star { namespace sheet {
 #define SC_DAPI_LEVEL_QUARTER   1
 #define SC_DAPI_LEVEL_MONTH     2
 #define SC_DAPI_LEVEL_DAY       3
-#define SC_DAPI_LEVEL_WEEK      1
-#define SC_DAPI_LEVEL_WEEKDAY   2
+#define SC_DAPI_LEVEL_WEEK      4
+#define SC_DAPI_LEVEL_WEEKDAY   5
 
 
 //
