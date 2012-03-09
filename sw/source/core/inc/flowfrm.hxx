@@ -58,6 +58,7 @@ class SwObjectFormatterTxtFrm;
 
 void MakeFrms( SwDoc *, const SwNodeIndex &, const SwNodeIndex & );
 
+/// Base class for frames that are allowed at page breaks and shall continue on the next page, e.g. paragraphs, tables.
 class SwFlowFrm
 {
     //PrepareMake darf Locken/Unlocken (Robustheit)

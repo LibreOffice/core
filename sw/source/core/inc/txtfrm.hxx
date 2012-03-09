@@ -62,6 +62,7 @@ class SwWrongList;
 #define RUBY_TOP        3
 #define GRID_CELLS      4
 
+/// Represents the visualization of a paragraph.
 class SwTxtFrm: public SwCntntFrm
 {
     friend class SwTxtIter;
