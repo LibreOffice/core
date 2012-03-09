@@ -217,78 +217,6 @@ ScDPDateGroupHelper::~ScDPDateGroupHelper()
 
 namespace {
 
-sal_Int32 lcl_GetDatePartValue( double fValue, sal_Int32 nDatePart, SvNumberFormatter* pFormatter,
-                                const ScDPNumGroupInfo* pNumInfo )
-{
-    // Start and end are inclusive
-    // (End date without a time value is included, with a time value it's not)
-
-    if ( pNumInfo )
-    {
-        if ( fValue < pNumInfo->mfStart && !rtl::math::approxEqual( fValue, pNumInfo->mfStart ) )
-            return ScDPItemData::DateFirst;
-        if ( fValue > pNumInfo->mfEnd && !rtl::math::approxEqual( fValue, pNumInfo->mfEnd ) )
-            return ScDPItemData::DateLast;
-    }
-
-    sal_Int32 nResult = 0;
-
-    if ( nDatePart == com::sun::star::sheet::DataPilotFieldGroupBy::HOURS || nDatePart == com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES || nDatePart == com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS )
-    {
-        // handle time
-        // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
-
-        double fTime = fValue - ::rtl::math::approxFloor(fValue);
-        long nSeconds = (long)::rtl::math::approxFloor(fTime*D_TIMEFACTOR+0.5);
-
-        switch ( nDatePart )
-        {
-            case com::sun::star::sheet::DataPilotFieldGroupBy::HOURS:
-                nResult = nSeconds / 3600;
-                break;
-            case com::sun::star::sheet::DataPilotFieldGroupBy::MINUTES:
-                nResult = ( nSeconds % 3600 ) / 60;
-                break;
-            case com::sun::star::sheet::DataPilotFieldGroupBy::SECONDS:
-                nResult = nSeconds % 60;
-                break;
-        }
-    }
-    else
-    {
-        Date aDate = *(pFormatter->GetNullDate());
-        aDate += (long)::rtl::math::approxFloor( fValue );
-
-        switch ( nDatePart )
-        {
-            case com::sun::star::sheet::DataPilotFieldGroupBy::YEARS:
-                nResult = aDate.GetYear();
-                break;
-            case com::sun::star::sheet::DataPilotFieldGroupBy::QUARTERS:
-                nResult = 1 + ( aDate.GetMonth() - 1 ) / 3;     // 1..4
-                break;
-            case com::sun::star::sheet::DataPilotFieldGroupBy::MONTHS:
-                nResult = aDate.GetMonth();     // 1..12
-                break;
-            case com::sun::star::sheet::DataPilotFieldGroupBy::DAYS:
-                {
-                    Date aYearStart( 1, 1, aDate.GetYear() );
-                    nResult = ( aDate - aYearStart ) + 1;       // Jan 01 has value 1
-                    if ( nResult >= 60 && !aDate.IsLeapYear() )
-                    {
-                        // days are counted from 1 to 366 - if not from a leap year, adjust
-                        ++nResult;
-                    }
-                }
-                break;
-            default:
-                OSL_FAIL("invalid date part");
-        }
-    }
-
-    return nResult;
-}
-
 bool isDateInGroup(const ScDPItemData& rGroupItem, const ScDPItemData& rChildItem)
 {
     if (rGroupItem.GetType() != ScDPItemData::GroupValue || rChildItem.GetType() != ScDPItemData::GroupValue)
@@ -931,9 +859,8 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
             {
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 const ScDPNumGroupInfo& rNumInfo = pDateHelper->GetNumInfo();
-                sal_Int32 nPartValue = lcl_GetDatePartValue(
-                    pData->GetValue(), pDateHelper->GetDatePart(), pFormatter,
-                    &rNumInfo);
+                sal_Int32 nPartValue = ScDPUtil::getDatePartValue(
+                    pData->GetValue(), rNumInfo, pDateHelper->GetDatePart(), pFormatter);
                 rtl::OUString aName = ScDPUtil::getDateGroupName(
                     pDateHelper->GetDatePart(), nPartValue, pFormatter, rNumInfo.mfStart, rNumInfo.mfEnd);
 
