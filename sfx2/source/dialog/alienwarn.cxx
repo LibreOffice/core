@@ -96,49 +96,32 @@ SfxAlienWarningDialog::~SfxAlienWarningDialog()
 
 void SfxAlienWarningDialog::InitSize()
 {
-    // if the button text is too wide, then broaden the button
-    long nTxtW = m_aMoreInfoBtn.GetCtrlTextWidth( m_aMoreInfoBtn.GetText() );
-    long nCtrlW = m_aMoreInfoBtn.GetSizePixel().Width();
-    if ( nTxtW >= nCtrlW )
-    {
-        long nDelta = nTxtW - nCtrlW;
-        nDelta += IMPL_EXTRA_BUTTON_WIDTH;
-        Point aNextPoint = m_aKeepCurrentBtn.GetPosPixel();
-        aNextPoint.X() += m_aKeepCurrentBtn.GetSizePixel().Width();
-        Point aNewPoint = m_aMoreInfoBtn.GetPosPixel();
-        aNewPoint.X() -= nDelta;
-        if ( aNextPoint.X() >= aNewPoint.X() )
-        {
-            long nSpace = aNextPoint.X() - aNewPoint.X();
-            nSpace += 2;
-            nDelta -= nSpace;
-            aNewPoint.X() += nSpace;
-        }
-        Size aNewSize = m_aMoreInfoBtn.GetSizePixel();
-        aNewSize.Width() += nDelta;
-        m_aMoreInfoBtn.SetPosSizePixel( aNewPoint, aNewSize );
-    }
+    const long nExtraButtonWidth = LogicToPixel( Size(IMPL_EXTRA_BUTTON_WIDTH,1), MapMode(MAP_APPFONT) ).getWidth();
+    const long nAwCol2 = LogicToPixel( Size(AW_COL_2,1), MapMode(MAP_APPFONT) ).getWidth();
+    long nTxtW, nCtrlW;
+
+    // layout calculations should be re-done, when More Info button is enabled
+    m_aMoreInfoBtn.Hide();
 
     // recalculate the size and position of the buttons
-    m_aMoreInfoBtn.Hide();
     nTxtW = m_aKeepCurrentBtn.GetCtrlTextWidth( m_aKeepCurrentBtn.GetText() );
-    nTxtW += IMPL_EXTRA_BUTTON_WIDTH;
+    nTxtW += nExtraButtonWidth;
     Size aNewSize = m_aKeepCurrentBtn.GetSizePixel();
     aNewSize.Width() = nTxtW;
     m_aKeepCurrentBtn.SetSizePixel( aNewSize );
     Point aPos = m_aSaveODFBtn.GetPosPixel();
-    aPos.X() = AW_COL_3 + nTxtW;
+    aPos.X() = nAwCol2 + nTxtW + nExtraButtonWidth;
     m_aSaveODFBtn.SetPosPixel( aPos );
     nTxtW = m_aSaveODFBtn.GetCtrlTextWidth( m_aSaveODFBtn.GetText() );
-    nTxtW += IMPL_EXTRA_BUTTON_WIDTH;
+    nTxtW += nExtraButtonWidth;
     aNewSize = m_aSaveODFBtn.GetSizePixel();
     aNewSize.Width() = nTxtW;
     m_aSaveODFBtn.SetSizePixel( aNewSize );
-    long nBtnsWidthSize = m_aKeepCurrentBtn.GetSizePixel().Width() + m_aSaveODFBtn.GetSizePixel().Width() + AW_COL_3 + IMPL_EXTRA_BUTTON_WIDTH;
+    long nBtnsWidthSize = m_aKeepCurrentBtn.GetSizePixel().Width() + m_aSaveODFBtn.GetSizePixel().Width() + nAwCol2 + 2*nExtraButtonWidth;
 
     // resize + text of checkbox too wide -> add new line
     aNewSize = m_aWarningOnBox.GetSizePixel();
-    aNewSize.Width() = nBtnsWidthSize - 4*IMPL_EXTRA_BUTTON_WIDTH;
+    aNewSize.Width() = nBtnsWidthSize - 2*nExtraButtonWidth;
     m_aWarningOnBox.SetSizePixel( aNewSize );
     nTxtW = m_aWarningOnBox.GetCtrlTextWidth( m_aWarningOnBox.GetText() );
     nCtrlW = m_aWarningOnBox.GetSizePixel().Width();
@@ -154,7 +137,7 @@ void SfxAlienWarningDialog::InitSize()
 
     // resize + align the size of the information text control (FixedText) to its content
     aNewSize = m_aInfoText.GetSizePixel();
-    aNewSize.Width() = nBtnsWidthSize - 4*IMPL_EXTRA_BUTTON_WIDTH;
+    aNewSize.Width() = nBtnsWidthSize - 2*nExtraButtonWidth;
     m_aInfoText.SetSizePixel( aNewSize );
     Size aMinSize = m_aInfoText.CalcMinimumSize( m_aInfoText.GetSizePixel().Width() );
     long nTxtH = aMinSize.Height();
