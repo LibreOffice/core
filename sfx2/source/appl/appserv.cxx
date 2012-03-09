@@ -180,6 +180,78 @@ static void showDocument( const char* pBaseName )
     }
 }
 
+namespace
+{
+    class LicenseDialog : public ModalDialog
+    {
+    private:
+        FixedText aText;
+        OKButton aShow;
+        CancelButton aClose;
+
+        DECL_LINK(CancelHdl, void *);
+        DECL_LINK(ShowHdl, void *);
+    public:
+        LicenseDialog(Window *pParent=NULL);
+    };
+
+    LicenseDialog::LicenseDialog(Window *pParent)
+        : ModalDialog(pParent, SfxResId(DLG_HELP_LICENSING))
+        , aText( this )
+        , aShow( this, SfxResId( PB_LICENSING_SHOW ) )
+        , aClose( this, SfxResId( PB_LICENSING_CLOSE ) )
+    {
+        aClose.SetClickHdl( LINK( this, LicenseDialog, CancelHdl ) );
+        aShow.SetClickHdl( LINK( this, LicenseDialog, ShowHdl ) );
+
+        String aLicensing;
+        for ( int i = STR_LICENSING_INFORMATION_1; i <= STR_LICENSING_INFORMATION_5; ++i )
+        {
+            if ( i != STR_LICENSING_INFORMATION_1 )
+                aLicensing += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
+            aLicensing += String( SfxResId( i ) );
+        }
+
+        aText.SetText( aLicensing );
+
+        // positions and sizes are computed to always fit the language
+        Size aTextSize( aText.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+        Size aShowSize( aShow.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+        Size aCloseSize( aClose.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
+
+        long nDelimX = 12;
+        long nDelimY = 12;
+        long nWidth = aTextSize.Width() + 2*nDelimX;
+        long nButtonY = aTextSize.Height() + 2*nDelimY;
+        Size aButtonSize( std::max( aShowSize.Width(), aCloseSize.Width() ) + nDelimX,
+                std::max( aShowSize.Height(), aCloseSize.Height() ) );
+
+        SetSizePixel( Size( nWidth, aTextSize.Height() + 3*nDelimY + aButtonSize.Height() ) );
+        aText.SetPosSizePixel( Point( nDelimX, nDelimY ), aTextSize );
+        aShow.SetPosSizePixel( Point( ( nWidth - nDelimX ) / 2 - aButtonSize.Width(), nButtonY ), aButtonSize );
+        aClose.SetPosSizePixel( Point( aShow.GetPosPixel().X() + aButtonSize.Width() + nDelimX, nButtonY ), aButtonSize );
+
+        aText.Show();
+
+        FreeResource();
+    }
+
+    IMPL_LINK_NOARG(LicenseDialog, CancelHdl)
+    {
+        Close();
+        return 0;
+    }
+
+    IMPL_LINK_NOARG(LicenseDialog, ShowHdl)
+    {
+        EndDialog(RET_OK);
+        showDocument("LICENSE");
+        return 0;
+    }
+
+}
+
+
 void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 {
     bool bDone = false;
@@ -377,43 +449,8 @@ void SfxApplication::MiscExec_Impl( SfxRequest& rReq )
 
         case SID_SHOW_LICENSE:
         {
-            ModalDialog aDialog( NULL, SfxResId( DLG_HELP_LICENSING ) );
-
-            String aLicensing;
-            for ( int i = STR_LICENSING_INFORMATION_1; i <= STR_LICENSING_INFORMATION_5; ++i )
-            {
-                if ( i != STR_LICENSING_INFORMATION_1 )
-                    aLicensing += String( RTL_CONSTASCII_USTRINGPARAM( "\n\n" ) );
-                aLicensing += String( SfxResId( i ) );
-            }
-
-            FixedText aText( &aDialog );
-            aText.SetText( aLicensing );
-            OKButton aShow( &aDialog, SfxResId( PB_LICENSING_SHOW ) );
-            CancelButton aClose( &aDialog, SfxResId( PB_LICENSING_CLOSE ) );
-
-            // positions and sizes are computed to always fit the language
-            Size aTextSize( aText.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
-            Size aShowSize( aShow.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
-            Size aCloseSize( aClose.GetOptimalSize( WINDOWSIZE_PREFERRED ) );
-
-            long nDelimX = 12;
-            long nDelimY = 12;
-            long nWidth = aTextSize.Width() + 2*nDelimX;
-            long nButtonY = aTextSize.Height() + 2*nDelimY;
-            Size aButtonSize( std::max( aShowSize.Width(), aCloseSize.Width() ) + nDelimX,
-                    std::max( aShowSize.Height(), aCloseSize.Height() ) );
-
-            aDialog.SetSizePixel( Size( nWidth, aTextSize.Height() + 3*nDelimY + aButtonSize.Height() ) );
-            aText.SetPosSizePixel( Point( nDelimX, nDelimY ), aTextSize );
-            aShow.SetPosSizePixel( Point( ( nWidth - nDelimX ) / 2 - aButtonSize.Width(), nButtonY ), aButtonSize );
-            aClose.SetPosSizePixel( Point( aShow.GetPosPixel().X() + aButtonSize.Width() + nDelimX, nButtonY ), aButtonSize );
-
-            aText.Show();
-
-            if ( aDialog.Execute() == RET_OK )
-                showDocument( "LICENSE" );
-
+            LicenseDialog aDialog;
+            aDialog.Execute();
             break;
         }
 
