@@ -55,14 +55,6 @@
 /* ********* Hack, but needed because of conflicting types... */
 #define Region QtXRegion
 
-//kde has an enum that uses this...OO does too
-#define LO_SETTINGS_MOUSE SETTINGS_MOUSE
-#undef SETTINGS_MOUSE
-#define LO_SETTINGS_LOCALE SETTINGS_LOCALE
-#undef SETTINGS_LOCALE
-#define LO_SETTINGS_STYLE SETTINGS_STYLE
-#undef SETTINGS_STYLE
-
 #include <kfiledialog.h>
 #include <kwindowsystem.h>
 #include <kapplication.h>
@@ -74,13 +66,6 @@
 #include <QGridLayout>
 
 #undef Region
-
-#define SETTINGS_MOUSE LO_SETTINGS_MOUSE
-#undef LO_SETTINGS_MOUSE
-#define SETTINGS_LOCALE LO_SETTINGS_LOCALE
-#undef LO_SETTINGS_LOCALE
-#define SETTINGS_STYLE LO_SETTINGS_STYLE
-#undef LO_SETTINGS_STYLE
 
 using namespace ::com::sun::star;
 

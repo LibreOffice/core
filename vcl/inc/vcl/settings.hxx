@@ -990,19 +990,19 @@ private:
 // - AllSettings -
 // ---------------
 
-#define SETTINGS_MOUSE              ((sal_uLong)0x00000001)
-#define SETTINGS_STYLE              ((sal_uLong)0x00000002)
-#define SETTINGS_MISC               ((sal_uLong)0x00000004)
-#define SETTINGS_SOUND              ((sal_uLong)0x00000008)
-#define SETTINGS_HELP               ((sal_uLong)0x00000010)
-#define SETTINGS_LOCALE             ((sal_uLong)0x00000020)
-#define SETTINGS_UILOCALE           ((sal_uLong)0x00000040)
-#define SETTINGS_ALLSETTINGS        (SETTINGS_MOUSE |\
-                                     SETTINGS_STYLE | SETTINGS_MISC |\
-                                     SETTINGS_SOUND |\
-                                     SETTINGS_HELP |\
-                                     SETTINGS_LOCALE | SETTINGS_UILOCALE )
-#define SETTINGS_IN_UPDATE_SETTINGS ((sal_uLong)0x00000800)   // this flag indicates that the data changed event was created
+const int SETTINGS_MOUSE = 0x00000001;
+const int SETTINGS_STYLE = 0x00000002;
+const int SETTINGS_MISC = 0x00000004;
+const int SETTINGS_SOUND = 0x00000008;
+const int SETTINGS_HELP = 0x00000010;
+const int SETTINGS_LOCALE = 0x00000020;
+const int SETTINGS_UILOCALE = 0x00000040;
+const int SETTINGS_ALLSETTINGS =   ( SETTINGS_MOUSE |
+                                     SETTINGS_STYLE | SETTINGS_MISC |
+                                     SETTINGS_SOUND |
+                                     SETTINGS_HELP |
+                                     SETTINGS_LOCALE | SETTINGS_UILOCALE );
+const int SETTINGS_IN_UPDATE_SETTINGS = 0x00000800;   // this flag indicates that the data changed event was created
                                                           // in Windows::UpdateSettings probably because of a global
                                                           // settings changed
 
