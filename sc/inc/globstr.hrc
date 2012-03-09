@@ -67,8 +67,6 @@
 #define STR_UNDO_IMPORTDATA         37
 #define STR_UNDO_REPEATDB           38
 
-#define STR_DB_NONAME               39
-
 #define STR_MSSG_DOSUBTOTALS_0      40
 #define STR_MSSG_DOSUBTOTALS_1      41
 #define STR_MSSG_DOSUBTOTALS_2      42

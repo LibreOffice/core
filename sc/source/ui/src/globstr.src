@@ -365,10 +365,6 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "~Change Case";
     };
-    String STR_DB_NONAME
-    {
-        Text [ en-US ] = "unnamed" ;
-    };
     String STR_DBNAME_IMPORT
     {
         Text [ en-US ] = "Import" ;
