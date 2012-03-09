@@ -261,7 +261,7 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
             // set flags that have to be set
             rRec.mpContents[ nRecType ] |= nContent;
             nContentEx |= ( nContent >> 16 );
-            rRec.Replace( nRecType, (void*)(sal_uIntPtr)nContentEx );
+            rRec.maRecordTypes[ nRecType ] = nContentEx;
         }
         else
         {
@@ -320,7 +320,7 @@ SvStream& operator>>( SvStream& rIn, DffPropSet& rRec )
             }
             rRec.mpContents[ nRecType ] = nContent;
             rRec.mpFlags[ nRecType ] = aPropFlag;
-            rRec.Insert( nRecType, (void*)(sal_uIntPtr)nContentEx );
+            rRec.maRecordTypes[ nRecType ] = nContentEx;
         }
     }
     aHd.SeekToEndOfRecord( rIn );
@@ -357,77 +357,59 @@ void DffPropSet::InitializePropSet() const
     everything else)
     */
 
-    memset( ( (DffPropSet*) this )->mpFlags, 0, 0x400 * sizeof(DffPropFlags) );
-    ( (DffPropSet*) this )->Clear();
+    DffPropSet* self = (DffPropSet*) this;
+    memset( self->mpFlags, 0, 0x400 * sizeof(DffPropFlags) );
+    self->maRecordTypes.clear();
 
     DffPropFlags nFlags = { 1, 0, 0, 1 };
 
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_LockAgainstGrouping ] = 0x0000;        //0x01ff0000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_LockAgainstGrouping ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_LockAgainstGrouping, (void*)0xffff0000 );
+    //0x01ff0000;
+    InitializeProp( DFF_Prop_LockAgainstGrouping, 0x0000, nFlags, 0xffff0000 );
+    //0x001f0010;
+    InitializeProp( DFF_Prop_FitTextToShape, 0x0010, nFlags, 0xffff0000 );
+    //0xffff0000;
+    InitializeProp( DFF_Prop_gtextFStrikethrough, 0x0000, nFlags, 0xffff0000 );
+    //0x000f0000;
+    InitializeProp( DFF_Prop_pictureActive, 0x0000, nFlags, 0xffff0000 );
+    //0x003f0039;
+    InitializeProp( DFF_Prop_fFillOK, 0x0039, nFlags, 0xffff0000 );
+    //0x001f001c;
+    InitializeProp( DFF_Prop_fNoFillHitTest, 0x001c, nFlags, 0xffff0000 );
+    //0x001f000e;
+    InitializeProp( DFF_Prop_fNoLineDrawDash, 0x001e, nFlags, 0xffff0000 );
+    //0x00030000;
+    InitializeProp( DFF_Prop_fshadowObscured, 0x0000, nFlags, 0xffff0000 );
+    //0x00010000;
+    InitializeProp( DFF_Prop_fPerspective, 0x0000, nFlags, 0xffff0000 );
+    //0x000f0001;
+    InitializeProp( DFF_Prop_fc3DLightFace, 0x0001, nFlags, 0xffff0000 );
+    //0x001f0016;
+    InitializeProp( DFF_Prop_fc3DFillHarsh, 0x0016, nFlags, 0xffff0000 );
+    //0x001f0000;
+    InitializeProp( DFF_Prop_fBackground, 0x0000, nFlags, 0xffff0000 );
+    //0x00ef0010;
+    InitializeProp( DFF_Prop_fCalloutLengthSpecified, 0x0010, nFlags, 0xffff0000 );
+    //0x00ef0001;
+    InitializeProp( DFF_Prop_fPrint, 0x0001, nFlags, 0xffff0000 );
 
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_FitTextToShape ] = 0x0010;             //0x001f0010;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_FitTextToShape ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_FitTextToShape, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_gtextFStrikethrough ] = 0x0000;        //0xffff0000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_gtextFStrikethrough ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_gtextFStrikethrough, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_pictureActive ] = 0x0000;              //0x000f0000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_pictureActive ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_pictureActive, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fFillOK ] = 0x0039;                    //0x003f0039;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fFillOK ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fFillOK, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fNoFillHitTest ] = 0x001c;             //0x001f001c;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fNoFillHitTest ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fNoFillHitTest, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fNoLineDrawDash ] = 0x001e;            //0x001f000e;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fNoLineDrawDash ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fNoLineDrawDash, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fshadowObscured ] = 0x0000;            //0x00030000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fshadowObscured ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fshadowObscured, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fPerspective ] = 0x0000;               //0x00010000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fPerspective ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fPerspective, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fc3DLightFace ] = 0x0001;              //0x000f0001;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fc3DLightFace ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fc3DLightFace, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fc3DFillHarsh ] = 0x0016;              //0x001f0016;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fc3DFillHarsh ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fc3DFillHarsh, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fBackground ] = 0x0000;                //0x001f0000;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fBackground ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fBackground, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fCalloutLengthSpecified ] = 0x0010;    //0x00ef0010;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fCalloutLengthSpecified ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fCalloutLengthSpecified, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fPrint ] = 0x0001;                     //0x00ef0001;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fPrint ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fPrint, (void*)0xffff0000 );
-
-    ( (DffPropSet*) this )->mpContents[ DFF_Prop_fillColor ] = 0xffffff;
-    ( (DffPropSet*) this )->mpFlags[ DFF_Prop_fillColor ] = nFlags;
-    ( (DffPropSet*) this )->Insert( DFF_Prop_fillColor, (void*)0xffff0000 );
+    InitializeProp( DFF_Prop_fillColor, 0xffffff, nFlags, 0xffff0000 );
 }
+
+void DffPropSet::InitializeProp(sal_uInt32 nKey, sal_uInt32 nContent, DffPropFlags& rFlags, sal_uInt32 nRecordType ) const
+{
+    DffPropSet* self = (DffPropSet*) this;
+    self->mpContents[ nKey ] = nContent;
+    self->mpFlags[ nKey ] = rFlags;
+    self->maRecordTypes[ nKey ] =  nRecordType;
+}
+
 
 void DffPropSet::Merge( DffPropSet& rMaster ) const
 {
-    for ( void* pDummy = rMaster.First(); pDummy; pDummy = rMaster.Next() )
+    for ( RecordTypesMap::const_iterator it = rMaster.maRecordTypes.begin();
+          it != rMaster.maRecordTypes.end(); ++it )
     {
-        sal_uInt32 nRecType = rMaster.GetCurKey();
+        sal_uInt32 nRecType = it->first;
         if ( ( nRecType & 0x3f ) == 0x3f )      // this is something called FLAGS
         {
             sal_uInt32 nCurrentFlags = mpContents[ nRecType ];
@@ -441,10 +423,11 @@ void DffPropSet::Merge( DffPropSet& rMaster ) const
             ( (DffPropSet*) this )->mpContents[ nRecType ] = nCurrentFlags;
 
 
-            sal_uInt32 nNewContentEx = (sal_uInt32)(sal_uIntPtr)rMaster.GetCurObject();
-            if ( ((DffPropSet*)this)->Seek( nRecType ) )
-                nNewContentEx |= (sal_uInt32)(sal_uIntPtr)GetCurObject();
-            ( (DffPropSet*) this )->Replace( nRecType, (void*)(sal_uIntPtr)nNewContentEx );
+            sal_uInt32 nNewContentEx = it->second;
+            RecordTypesMap::const_iterator it2 = maRecordTypes.find( nRecType );
+            if ( it2 != maRecordTypes.end() )
+                nNewContentEx |= it2->second;
+            ( (DffPropSet*) this )->maRecordTypes[ nRecType ] = nNewContentEx;
         }
         else
         {
@@ -454,7 +437,7 @@ void DffPropSet::Merge( DffPropSet& rMaster ) const
                 DffPropFlags nFlags( rMaster.mpFlags[ nRecType ] );
                 nFlags.bSoftAttr = sal_True;
                 ( (DffPropSet*) this )->mpFlags[ nRecType ] = nFlags;
-                ( (DffPropSet*) this )->Insert( nRecType, pDummy );
+                ( (DffPropSet*) this )->maRecordTypes[ nRecType ] = it->second;
             }
         }
     }
@@ -466,9 +449,10 @@ sal_Bool DffPropSet::IsHardAttribute( sal_uInt32 nId ) const
     nId &= 0x3ff;
     if ( ( nId & 0x3f ) >= 48 ) // is this a flag id
     {
-        if ( ((DffPropSet*)this)->Seek( nId | 0x3f ) )
+        RecordTypesMap::const_iterator it = maRecordTypes.find( nId | 0x3f );
+        if ( it != maRecordTypes.end() )
         {
-            sal_uInt32 nContentEx = (sal_uInt32)(sal_uIntPtr)GetCurObject();
+            sal_uInt32 nContentEx = it->second;
             bRetValue = ( nContentEx & ( 1 << ( 0xf - ( nId & 0xf ) ) ) ) != 0;
         }
     }
@@ -525,9 +509,10 @@ sal_Bool DffPropSet::SeekToContent( sal_uInt32 nRecType, SvStream& rStrm ) const
     {
         if ( mpFlags[ nRecType ].bComplex )
         {
-            if ( ((DffPropSet*)this)->Seek( nRecType ) )
+            RecordTypesMap::const_iterator it = maRecordTypes.find( nRecType );
+            if ( it != maRecordTypes.end() )
             {
-                sal_uInt32 nOffset = (sal_uInt32)(sal_uIntPtr)GetCurObject();
+                sal_uInt32 nOffset = it->second;
                 if ( nOffset && ( ( nOffset & 0xffff0000 ) != 0xffff0000 ) )
                 {
                     rStrm.Seek( nOffset );
@@ -2910,9 +2895,9 @@ void DffPropertyReader::ApplyAttributes( SvStream& rIn, SfxItemSet& rSet, const 
 {
     sal_Bool bHasShadow = sal_False;
 
-    for ( void* pDummy = ((DffPropertyReader*)this)->First(); pDummy; pDummy = ((DffPropertyReader*)this)->Next() )
+    for ( RecordTypesMap::const_iterator it = maRecordTypes.begin(); it != maRecordTypes.end(); ++it )
     {
-        sal_uInt32 nRecType = GetCurKey();
+        sal_uInt32 nRecType = it->first;
         sal_uInt32 nContent = mpContents[ nRecType ];
         switch ( nRecType )
         {
@@ -3336,9 +3321,10 @@ sal_Bool SvxMSDffManager::SeekToShape( SvStream& rSt, void* /* pClientData */, s
         sal_uInt32 nShapeId, nSec = ( nId >> 10 ) - 1;
         if ( nSec < mnIdClusters )
         {
-            sal_IntPtr nOfs = (sal_IntPtr)maDgOffsetTable.Get( mpFidcls[ nSec ].dgid );
-            if ( nOfs )
+            OffsetMap::const_iterator it = maDgOffsetTable.find( mpFidcls[ nSec ].dgid );
+            if ( it != maDgOffsetTable.end() )
             {
+                sal_IntPtr nOfs = it->second;
                 rSt.Seek( nOfs );
                 DffRecordHeader aEscherF002Hd;
                 rSt >> aEscherF002Hd;
@@ -5861,7 +5847,7 @@ void SvxMSDffManager::SetDgContainer( SvStream& rSt )
         DffRecordHeader aRecHd;
         rSt >> aRecHd;
         sal_uInt32 nDrawingId = aRecHd.nRecInstance;
-        maDgOffsetTable.Insert( nDrawingId, (void*)(sal_uIntPtr)nFilePos );
+        maDgOffsetTable[ nDrawingId ] = nFilePos;
         rSt.Seek( nFilePos );
     }
 }

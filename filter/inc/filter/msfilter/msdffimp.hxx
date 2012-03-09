@@ -35,7 +35,6 @@
 #include <svl/svarray.hxx>
 #include <tools/color.hxx>
 #include <tools/gen.hxx>
-#include <tools/table.hxx>
 #include <svx/msdffdef.hxx>
 #include <vcl/graph.hxx>
 #include <string.h>
@@ -106,10 +105,17 @@ struct DffPropFlags
 
 class SvxMSDffManager;
 
-class MSFILTER_DLLPUBLIC DffPropSet : public Table
+class MSFILTER_DLLPUBLIC DffPropSet
 {
+private:
+    void InitializeProp(sal_uInt32 nKey, sal_uInt32 nContent,
+            DffPropFlags& rFlags, sal_uInt32 nRecordType) const;
+
 protected:
 
+typedef std::map<sal_uInt32, sal_uInt32> RecordTypesMap;
+
+    RecordTypesMap  maRecordTypes;
     sal_uInt32      mpContents[ 1024 ];
     DffPropFlags    mpFlags[ 1024 ];
 
@@ -466,12 +472,14 @@ class MSFILTER_DLLPUBLIC SvxMSDffManager : public DffPropertyReader
 
 protected :
 
+typedef std::map<sal_uInt32, sal_uInt32> OffsetMap;
+
     String          maBaseURL;
     sal_uInt32      mnCurMaxShapeId;    // we need this information to
     sal_uInt32      mnDrawingsSaved;    // access the right drawing
     sal_uInt32      mnIdClusters;       // while only knowing the shapeid
     FIDCL*          mpFidcls;
-    Table           maDgOffsetTable;    // array of fileoffsets
+    OffsetMap       maDgOffsetTable;    // array of fileoffsets
 
     friend class DffPropertyReader;
 
