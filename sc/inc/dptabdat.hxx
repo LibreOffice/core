@@ -32,7 +32,7 @@
 #include "address.hxx"
 #include "dpoutput.hxx"
 #include "dpcachetable.hxx"
-#include "dptablecache.hxx"
+#include "dpcache.hxx"
 #include <tools/string.hxx>
 
 #include <vector>

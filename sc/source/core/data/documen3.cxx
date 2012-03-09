@@ -74,7 +74,7 @@
 #include "unoreflist.hxx"
 #include "listenercalls.hxx"
 #include "dpshttab.hxx"
-#include "dptablecache.hxx"
+#include "dpcache.hxx"
 #include "tabprotection.hxx"
 #include "formulaparserpool.hxx"
 #include "clipparam.hxx"

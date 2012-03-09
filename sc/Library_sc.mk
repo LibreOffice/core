@@ -114,7 +114,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/core/data/dpsdbtab \
 	sc/source/core/data/dpshttab \
 	sc/source/core/data/dptabdat \
-	sc/source/core/data/dptablecache \
+	sc/source/core/data/dpcache \
 	sc/source/core/data/dptabres \
 	sc/source/core/data/dptabsrc \
 	sc/source/core/data/dputil \

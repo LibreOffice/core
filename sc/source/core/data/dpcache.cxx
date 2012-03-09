@@ -27,7 +27,7 @@
  *
  ************************************************************************/
 
-#include "dptablecache.hxx"
+#include "dpcache.hxx"
 
 #include "document.hxx"
 #include "queryentry.hxx"
