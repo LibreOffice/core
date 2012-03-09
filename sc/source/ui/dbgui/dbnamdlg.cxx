@@ -245,7 +245,6 @@ void ScDbNameDlg::Init()
             pDBData = pDBColl->GetDBAtCursor( nStartCol, nStartRow, nStartTab, sal_True );
             if ( pDBData )
             {
-                ::rtl::OUString theDbName;
                 ScAddress&  rStart = theCurArea.aStart;
                 ScAddress&  rEnd   = theCurArea.aEnd;
                 SCCOL nCol1;
@@ -260,7 +259,9 @@ void ScDbNameDlg::Init()
                     && (rStart.Col() == nCol1) && (rStart.Row() == nRow1)
                     && (rEnd.Col()   == nCol2) && (rEnd.Row()   == nRow2 ) )
                 {
-                    aEdName.SetText(pDBData->GetName());
+                    rtl::OUString aDBName = pDBData->GetName();
+                    if (!aDBName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(STR_DB_LOCAL_NONAME)))
+                        aEdName.SetText(aDBName);
 
                     aBtnHeader.Check( pDBData->HasHeader() );
                     aBtnDoSize.Check( pDBData->IsDoSize() );
