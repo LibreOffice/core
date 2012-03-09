@@ -286,6 +286,7 @@ struct SvxCharNamePage_Impl
 SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     : SvxCharBasePage(pParent, CUI_RES( RID_SVXPAGE_CHAR_NAME ), rInSet)
     , m_aBox(this, false, 7)
+    , m_aGrid(&m_aBox)
     , m_pImpl(new SvxCharNamePage_Impl)
 {
     rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
@@ -302,27 +303,25 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     sal_Bool bShowCTL = aLanguageOptions.IsCTLFontEnabled();
     sal_Bool bShowNonWestern = bShowCJK || bShowCTL;
 
-    m_pGrid = new Grid(&m_aBox);
+    m_aGrid.set_column_spacing(7);
+    m_aGrid.set_row_spacing(2);
 
-    m_pGrid->set_column_spacing(7);
-    m_pGrid->set_row_spacing(2);
-
-    m_pWestLine = new FixedLine(m_pGrid, CUI_RES(FL_WEST));
+    m_pWestLine = new FixedLine(&m_aGrid, CUI_RES(FL_WEST));
     setGridAttach(*m_pWestLine, 0, 0, 4);
 
-    m_pWestFontNameFT = new FixedText(m_pGrid, CUI_RES( bShowNonWestern ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
+    m_pWestFontNameFT = new FixedText(&m_aGrid, CUI_RES( bShowNonWestern ? FT_WEST_NAME : FT_WEST_NAME_NOCJK ) );
     setGridAttach(*m_pWestFontNameFT, 0, 1);
 
-    m_pWestFontNameLB = new FontNameBox(m_pGrid, CUI_RES( bShowNonWestern ? LB_WEST_NAME : LB_WEST_NAME_NOCJK ) );
+    m_pWestFontNameLB = new FontNameBox(&m_aGrid, CUI_RES( bShowNonWestern ? LB_WEST_NAME : LB_WEST_NAME_NOCJK ) );
     setGridAttach(*m_pWestFontNameLB, 0, 2);
 
-    m_pWestFontStyleFT = new FixedText(m_pGrid, CUI_RES( bShowNonWestern ? FT_WEST_STYLE : FT_WEST_STYLE_NOCJK ) );
+    m_pWestFontStyleFT = new FixedText(&m_aGrid, CUI_RES( bShowNonWestern ? FT_WEST_STYLE : FT_WEST_STYLE_NOCJK ) );
     setGridAttach(*m_pWestFontStyleFT, 1, 1);
-    m_pWestFontStyleLB = new FontStyleBox(m_pGrid, CUI_RES( bShowNonWestern ? LB_WEST_STYLE : LB_WEST_STYLE_NOCJK ) );
+    m_pWestFontStyleLB = new FontStyleBox(&m_aGrid, CUI_RES( bShowNonWestern ? LB_WEST_STYLE : LB_WEST_STYLE_NOCJK ) );
     setGridAttach(*m_pWestFontStyleLB, 1, 2);
-    m_pWestFontSizeFT = new FixedText(m_pGrid, CUI_RES( bShowNonWestern ? FT_WEST_SIZE : FT_WEST_SIZE_NOCJK ) );
+    m_pWestFontSizeFT = new FixedText(&m_aGrid, CUI_RES( bShowNonWestern ? FT_WEST_SIZE : FT_WEST_SIZE_NOCJK ) );
     setGridAttach(*m_pWestFontSizeFT, 2, 1);
-    m_pWestFontSizeLB = new FontSizeBox(m_pGrid, CUI_RES( bShowNonWestern ? LB_WEST_SIZE : LB_WEST_SIZE_NOCJK ) );
+    m_pWestFontSizeLB = new FontSizeBox(&m_aGrid, CUI_RES( bShowNonWestern ? LB_WEST_SIZE : LB_WEST_SIZE_NOCJK ) );
     setGridAttach(*m_pWestFontSizeLB, 2, 2);
 
     if( !bShowNonWestern )
@@ -332,9 +331,9 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
         m_pColorLB  = new ColorListBox(&m_aBox, CUI_RES( LB_COLOR2 ) );
     }
 
-    m_pWestFontLanguageFT = new FixedText(m_pGrid, CUI_RES( bShowNonWestern ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
+    m_pWestFontLanguageFT = new FixedText(&m_aGrid, CUI_RES( bShowNonWestern ? FT_WEST_LANG : FT_WEST_LANG_NOCJK ) );
     setGridAttach(*m_pWestFontLanguageFT, bShowNonWestern ? 3 : 1, bShowNonWestern ? 1 : 3);
-    m_pWestFontLanguageLB = new SvxLanguageBox(m_pGrid, CUI_RES( bShowNonWestern ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
+    m_pWestFontLanguageLB = new SvxLanguageBox(&m_aGrid, CUI_RES( bShowNonWestern ? LB_WEST_LANG : LB_WEST_LANG_NOCJK ) );
     setGridAttach(*m_pWestFontLanguageLB, bShowNonWestern ? 3 : 1, bShowNonWestern ? 2 : 4);
 
     if (!bShowNonWestern)
@@ -351,44 +350,44 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
             nHeight);
     }
 
-    m_pEastLine = new FixedLine(m_pGrid, CUI_RES( FL_EAST ) );
+    m_pEastLine = new FixedLine(&m_aGrid, CUI_RES( FL_EAST ) );
     setGridAttach(*m_pEastLine, 0, 3, 4);
 
-    m_pEastFontNameFT = new FixedText(m_pGrid, CUI_RES( FT_EAST_NAME ) );
+    m_pEastFontNameFT = new FixedText(&m_aGrid, CUI_RES( FT_EAST_NAME ) );
     setGridAttach(*m_pEastFontNameFT, 0, 4);
-    m_pEastFontNameLB = new FontNameBox(m_pGrid, CUI_RES( LB_EAST_NAME ) );
+    m_pEastFontNameLB = new FontNameBox(&m_aGrid, CUI_RES( LB_EAST_NAME ) );
     setGridAttach(*m_pEastFontNameLB, 0, 5);
-    m_pEastFontStyleFT = new FixedText(m_pGrid, CUI_RES( FT_EAST_STYLE ) );
+    m_pEastFontStyleFT = new FixedText(&m_aGrid, CUI_RES( FT_EAST_STYLE ) );
     setGridAttach(*m_pEastFontStyleFT, 1, 4);
-    m_pEastFontStyleLB = new FontStyleBox(m_pGrid, CUI_RES( LB_EAST_STYLE ) );
+    m_pEastFontStyleLB = new FontStyleBox(&m_aGrid, CUI_RES( LB_EAST_STYLE ) );
     setGridAttach(*m_pEastFontStyleLB, 1, 5);
-    m_pEastFontSizeFT = new FixedText(m_pGrid, CUI_RES( FT_EAST_SIZE ) );
+    m_pEastFontSizeFT = new FixedText(&m_aGrid, CUI_RES( FT_EAST_SIZE ) );
     setGridAttach(*m_pEastFontSizeFT, 2, 4);
-    m_pEastFontSizeLB = new FontSizeBox(m_pGrid, CUI_RES( LB_EAST_SIZE ) );
+    m_pEastFontSizeLB = new FontSizeBox(&m_aGrid, CUI_RES( LB_EAST_SIZE ) );
     setGridAttach(*m_pEastFontSizeLB, 2, 5);
-    m_pEastFontLanguageFT = new FixedText(m_pGrid, CUI_RES( FT_EAST_LANG ) );
+    m_pEastFontLanguageFT = new FixedText(&m_aGrid, CUI_RES( FT_EAST_LANG ) );
     setGridAttach(*m_pEastFontLanguageFT, 3, 4);
-    m_pEastFontLanguageLB = new SvxLanguageBox(m_pGrid, CUI_RES( LB_EAST_LANG ) );
+    m_pEastFontLanguageLB = new SvxLanguageBox(&m_aGrid, CUI_RES( LB_EAST_LANG ) );
     setGridAttach(*m_pEastFontLanguageLB, 3, 5);
 
-    m_pCTLLine = new FixedLine(m_pGrid, CUI_RES( FL_CTL ) );
+    m_pCTLLine = new FixedLine(&m_aGrid, CUI_RES( FL_CTL ) );
     setGridAttach(*m_pCTLLine, 0, 6, 4);
 
-    m_pCTLFontNameFT = new FixedText(m_pGrid, CUI_RES( FT_CTL_NAME ) );
+    m_pCTLFontNameFT = new FixedText(&m_aGrid, CUI_RES( FT_CTL_NAME ) );
     setGridAttach(*m_pCTLFontNameFT, 0, 7);
-    m_pCTLFontNameLB = new FontNameBox(m_pGrid, CUI_RES( LB_CTL_NAME ) );
+    m_pCTLFontNameLB = new FontNameBox(&m_aGrid, CUI_RES( LB_CTL_NAME ) );
     setGridAttach(*m_pCTLFontNameLB, 0, 8);
-    m_pCTLFontStyleFT = new FixedText(m_pGrid, CUI_RES( FT_CTL_STYLE ) );
+    m_pCTLFontStyleFT = new FixedText(&m_aGrid, CUI_RES( FT_CTL_STYLE ) );
     setGridAttach(*m_pCTLFontStyleFT, 1, 7);
-    m_pCTLFontStyleLB = new FontStyleBox(m_pGrid, CUI_RES( LB_CTL_STYLE ) );
+    m_pCTLFontStyleLB = new FontStyleBox(&m_aGrid, CUI_RES( LB_CTL_STYLE ) );
     setGridAttach(*m_pCTLFontStyleLB, 1, 8);
-    m_pCTLFontSizeFT = new FixedText(m_pGrid, CUI_RES( FT_CTL_SIZE ) );
+    m_pCTLFontSizeFT = new FixedText(&m_aGrid, CUI_RES( FT_CTL_SIZE ) );
     setGridAttach(*m_pCTLFontSizeFT, 2, 7);
-    m_pCTLFontSizeLB = new FontSizeBox(m_pGrid, CUI_RES( LB_CTL_SIZE ) );
+    m_pCTLFontSizeLB = new FontSizeBox(&m_aGrid, CUI_RES( LB_CTL_SIZE ) );
     setGridAttach(*m_pCTLFontSizeLB, 2, 8);
-    m_pCTLFontLanguageFT = new FixedText(m_pGrid, CUI_RES( FT_CTL_LANG ) );
+    m_pCTLFontLanguageFT = new FixedText(&m_aGrid, CUI_RES( FT_CTL_LANG ) );
     setGridAttach(*m_pCTLFontLanguageFT, 3, 7);
-    m_pCTLFontLanguageLB = new SvxLanguageBox(m_pGrid, CUI_RES( LB_CTL_LANG ) );
+    m_pCTLFontLanguageLB = new SvxLanguageBox(&m_aGrid, CUI_RES( LB_CTL_LANG ) );
     setGridAttach(*m_pCTLFontLanguageLB, 3, 8);
 
     if( bShowNonWestern )
@@ -493,8 +492,6 @@ SvxCharNamePage::~SvxCharNamePage()
     delete m_pCTLFontSizeLB;
     delete m_pCTLFontLanguageFT;
     delete m_pCTLFontLanguageLB;
-
-    delete m_pGrid;
 
     delete m_pColorFL;
     delete m_pColorFT;
@@ -2800,42 +2797,63 @@ void SvxCharEffectsPage::PageCreated (SfxAllItemSet aSet)
 
 // class SvxCharPositionPage ---------------------------------------------
 
-SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rInSet ) :
-
-    SvxCharBasePage( pParent, CUI_RES( RID_SVXPAGE_CHAR_POSITION ), rInSet ),
-
-    m_aPositionLine     ( this, CUI_RES( FL_POSITION ) ),
-    m_aHighPosBtn       ( this, CUI_RES( RB_HIGHPOS ) ),
-    m_aNormalPosBtn     ( this, CUI_RES( RB_NORMALPOS ) ),
-    m_aLowPosBtn        ( this, CUI_RES( RB_LOWPOS ) ),
-    m_aHighLowFT        ( this, CUI_RES( FT_HIGHLOW ) ),
-    m_aHighLowEdit      ( this, CUI_RES( ED_HIGHLOW ) ),
-    m_aHighLowRB        ( this, CUI_RES( CB_HIGHLOW ) ),
-    m_aFontSizeFT       ( this, CUI_RES( FT_FONTSIZE ) ),
-    m_aFontSizeEdit     ( this, CUI_RES( ED_FONTSIZE ) ),
-    m_aRotationScalingFL( this, CUI_RES( FL_ROTATION_SCALING ) ),
-    m_aScalingFL        ( this, CUI_RES( FL_SCALING ) ),
-    m_a0degRB           ( this, CUI_RES( RB_0_DEG ) ),
-    m_a90degRB          ( this, CUI_RES( RB_90_DEG ) ),
-    m_a270degRB         ( this, CUI_RES( RB_270_DEG ) ),
-    m_aFitToLineCB      ( this, CUI_RES( CB_FIT_TO_LINE ) ),
-    m_aScaleWidthFT     ( this, CUI_RES( FT_SCALE_WIDTH ) ),
-    m_aScaleWidthMF     ( this, CUI_RES( MF_SCALE_WIDTH ) ),
-
-    m_aKerningLine      ( this, CUI_RES( FL_KERNING2 ) ),
-    m_aKerningLB        ( this, CUI_RES( LB_KERNING2 ) ),
-    m_aKerningFT        ( this, CUI_RES( FT_KERNING2 ) ),
-    m_aKerningEdit      ( this, CUI_RES( ED_KERNING2 ) ),
-    m_aPairKerningBtn   ( this, CUI_RES( CB_PAIRKERNING ) ),
-
-    m_nSuperEsc         ( (short)DFLT_ESC_SUPER ),
-    m_nSubEsc           ( (short)DFLT_ESC_SUB ),
-    m_nScaleWidthItemSetVal ( 100 ),
-    m_nScaleWidthInitialVal ( 100 ),
-    m_nSuperProp        ( (sal_uInt8)DFLT_ESC_PROP ),
-    m_nSubProp          ( (sal_uInt8)DFLT_ESC_PROP )
+SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rInSet )
+    : SvxCharBasePage(pParent, CUI_RES(RID_SVXPAGE_CHAR_POSITION), rInSet)
+    , m_aBox(this, false, 7)
+    , m_aPositionLine(&m_aBox, CUI_RES(FL_POSITION))
+    , m_aPositionGrid(&m_aBox)
+    , m_aHighPosBtn(&m_aPositionGrid, CUI_RES(RB_HIGHPOS))
+    , m_aNormalPosBtn(&m_aPositionGrid, CUI_RES( RB_NORMALPOS))
+    , m_aLowPosBtn(&m_aPositionGrid, CUI_RES(RB_LOWPOS))
+    , m_aHighLowFT(&m_aPositionGrid, CUI_RES(FT_HIGHLOW))
+    , m_aHighLowEdit(&m_aPositionGrid, CUI_RES(ED_HIGHLOW))
+    , m_aHighLowRB(&m_aPositionGrid, CUI_RES(CB_HIGHLOW))
+    , m_aFontSizeFT(&m_aPositionGrid, CUI_RES(FT_FONTSIZE))
+    , m_aFontSizeEdit(&m_aPositionGrid, CUI_RES(ED_FONTSIZE))
+    , m_aRotationScalingFL(&m_aBox, CUI_RES(FL_ROTATION_SCALING))
+    , m_aRotationBox(&m_aBox, false, 7)
+    , m_aScalingFL(&m_aRotationBox, CUI_RES(FL_SCALING))
+    , m_a0degRB(&m_aRotationBox, CUI_RES(RB_0_DEG))
+    , m_a90degRB(&m_aRotationBox, CUI_RES(RB_90_DEG))
+    , m_a270degRB(&m_aRotationBox, CUI_RES(RB_270_DEG))
+    , m_aFitToLineCB(&m_aRotationBox, CUI_RES(CB_FIT_TO_LINE))
+    , m_aScaleBox(&m_aBox, false, 7)
+    , m_aScaleWidthFT(&m_aScaleBox, CUI_RES(FT_SCALE_WIDTH))
+    , m_aScaleWidthMF(&m_aScaleBox, CUI_RES(MF_SCALE_WIDTH))
+    , m_aKerningLine(&m_aBox, CUI_RES(FL_KERNING2))
+    , m_aKerningBox(&m_aBox, false, 7)
+    , m_aKerningLB(&m_aKerningBox, CUI_RES(LB_KERNING2))
+    , m_aKerningFT(&m_aKerningBox, CUI_RES(FT_KERNING2))
+    , m_aKerningEdit(&m_aKerningBox, CUI_RES(ED_KERNING2))
+    , m_aPairKerningBtn(&m_aKerningBox, CUI_RES(CB_PAIRKERNING))
+    , m_nSuperEsc((short)DFLT_ESC_SUPER)
+    , m_nSubEsc((short)DFLT_ESC_SUB)
+    , m_nScaleWidthItemSetVal(100)
+    , m_nScaleWidthInitialVal(100)
+    , m_nSuperProp((sal_uInt8)DFLT_ESC_PROP)
+    , m_nSubProp((sal_uInt8)DFLT_ESC_PROP)
 {
-    makeWidgets(this, CUI_RES(RID_SVXPAGE_CHAR_POSITION), WIN_POS_PREVIEW, FT_POS_FONTTYPE);
+    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
+    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
+
+    m_aBox.setChildProperty(sFill, true);
+    m_aBox.setChildProperty(sExpand, true);
+
+    m_aPositionGrid.set_column_spacing(7);
+    m_aPositionGrid.set_row_spacing(2);
+
+    setGridAttach(m_aHighPosBtn, 0, 0);
+    setGridAttach(m_aHighLowFT, 1, 0);
+    setGridAttach(m_aHighLowEdit, 2, 0);
+    setGridAttach(m_aHighLowRB, 3, 0);
+    setGridAttach(m_aNormalPosBtn, 0, 1);
+    setGridAttach(m_aFontSizeFT, 1, 1);
+    setGridAttach(m_aFontSizeEdit, 2, 1);
+    setGridAttach(m_aLowPosBtn, 0, 2);
+
+    makeWidgets(&m_aBox, CUI_RES(RID_SVXPAGE_CHAR_POSITION), WIN_POS_PREVIEW, FT_POS_FONTTYPE);
+    m_pPreviewWin->setChildProperty(sFill, true);
+    m_pPreviewWin->setChildProperty(sExpand, true);
     FreeResource();
     Initialize();
 }

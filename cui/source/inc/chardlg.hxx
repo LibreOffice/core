@@ -91,7 +91,7 @@ class SvxCharNamePage : public SvxCharBasePage
 
 private:
     VBox m_aBox;
-    Grid *m_pGrid;
+    Grid m_aGrid;
 
     FixedLine*          m_pWestLine;
     FixedText*          m_pWestFontNameFT;
@@ -277,7 +277,11 @@ class SvxCharPositionPage : public SvxCharBasePage
 {
 
 private:
+    VBox m_aBox;
+
     FixedLine           m_aPositionLine;
+
+    Grid m_aPositionGrid;
     RadioButton         m_aHighPosBtn;
     RadioButton         m_aNormalPosBtn;
     RadioButton         m_aLowPosBtn;
@@ -286,16 +290,23 @@ private:
     CheckBox            m_aHighLowRB;
     FixedText           m_aFontSizeFT;
     MetricField         m_aFontSizeEdit;
+
     FixedLine           m_aRotationScalingFL;
+
+    HBox m_aRotationBox;
     FixedLine           m_aScalingFL;
     RadioButton         m_a0degRB;
     RadioButton         m_a90degRB;
     RadioButton         m_a270degRB;
     CheckBox            m_aFitToLineCB;
+
+    HBox m_aScaleBox;
     FixedText           m_aScaleWidthFT;
     MetricField         m_aScaleWidthMF;
 
     FixedLine           m_aKerningLine;
+
+    HBox m_aKerningBox;
     ListBox             m_aKerningLB;
     FixedText           m_aKerningFT;
     MetricField         m_aKerningEdit;
