@@ -4007,6 +4007,10 @@ void DocxAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
                 OString::valueOf( (sal_Int32)rULSpace.GetUpper() ) );
         m_pParagraphSpacingAttrList->add( FSNS( XML_w, XML_after ),
                 OString::valueOf( (sal_Int32)rULSpace.GetLower() ) );
+        if (rULSpace.GetContext())
+            m_pSerializer->singleElementNS( XML_w, XML_contextualSpacing, FSEND );
+        else
+            m_pSerializer->singleElementNS( XML_w, XML_contextualSpacing, FSNS( XML_w, XML_val ), "false", FSEND );
     }
 }
 
