@@ -16,9 +16,7 @@
 #include <com/sun/star/text/PositionAndSpaceMode.hpp>
 #include <com/sun/star/text/XChapterNumberingSupplier.hpp>
 
-#if DEBUG
-#include <stdio.h>
-#endif
+#include <rtl/oustringostreaminserter.hxx>
 
 #include "dmapperLoggers.hxx"
 
@@ -53,11 +51,7 @@ void lcl_printProperties( uno::Sequence< beans::PropertyValue > aProps )
         if ( !( aValue >>= sValue ) && ( aValue >>= nValue ) )
             sValue = OUString::valueOf( nValue );
 
-#if DEBUG
-        fprintf( stderr, "Property %s: %s\n",
-                OUSTR_TO_C( aProps[i].Name ),
-                OUSTR_TO_C( sValue ) );
-#endif
+        SAL_INFO("writerfilter", "Property " << aProps[i].Name << ": " << sValue);
     }
 }
 
@@ -534,7 +528,9 @@ void ListDef::CreateNumberingRules( DomainMapper& rDMapper,
                 // Get the merged level properties
                 uno::Sequence< beans::PropertyValue > aLvlProps = aProps[sal_Int32( nLevel )];
 
+#if DEBUG
                 lcl_printProperties( aLvlProps );
+#endif
 
                 // Get the char style
                 uno::Sequence< beans::PropertyValue > aAbsCharStyleProps = pAbsLevel->GetCharStyleProperties( );
