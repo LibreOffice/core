@@ -48,12 +48,11 @@ TARFILE_MD5=327348d67c979c88c2dec59a23a17d85
 CONFIGURE_DIR=.
 
 CONFIGURE_ACTION =
+BUILD_DIR=Projects/VC2010/lcms2_DLL
 
 .IF "$(CCNUMVER)" >= "001600000000"
-BUILD_DIR=Projects/VC2010/lcms2_DLL
 BUILD_ACTION=MSBuild.exe lcms2_DLL.vcxproj /p:Configuration=Release /p:Platform=Win32
 .ELSE
-BUILD_DIR=Projects/VC2008/lcms2_DLL
 BUILD_ACTION=$(COMPATH)$/vcpackages$/vcbuild.exe /useenv lcms2_DLL.vcproj "Release|Win32"
 .ENDIF
 
