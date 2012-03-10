@@ -2527,8 +2527,6 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
                     case SC_DAPI_LEVEL_DAY:
                         nGroupBy = sheet::DataPilotFieldGroupBy::DAYS;
                     break;
-                        nGroupBy = sheet::DataPilotFieldGroupBy::YEARS;
-                    break;
                     default:
                         ;
                 }
