@@ -126,22 +126,6 @@ namespace utl
             return createNode( ::rtl::OUString::createFromAscii( _pAsciiName ) );
         }
 
-        /** appends a node under a new name
-
-            If the object represents a set node, this method may be used to create a new child. For non-set-nodes, the
-            method will fail.<br/>
-            Unless the respective operations on the pure configuration API, the to-be-created node immediately
-            becomes a part of it's hierarchy, no explicit insertion is necessary.
-            @param      _rName      name for the new child. Must be level-1-depth.
-            @param      _aNewNode   the node which should be appended
-        */
-        OConfigurationNode  appendNode(const ::rtl::OUString& _rName,const OConfigurationNode& _aNewNode) const throw();
-
-        OConfigurationNode  appendNode( const sal_Char* _pAsciiName, const OConfigurationNode& _aNewNode ) const
-        {
-            return appendNode( ::rtl::OUString::createFromAscii( _pAsciiName ), _aNewNode );
-        }
-
         /** remove an existent child nod
 
             If the object represents a set node, this method may be used to delete an existent child. For non-set-nodes,

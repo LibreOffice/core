@@ -77,6 +77,7 @@ ScDPCache::ClearGroupFields()
 ScDPCache::GetGroupDimMemberValues(long) const
 ScDPCache::GetGroupFieldCount() const
 ScDPInitState::GetNameIdForIndex(long) const
+ScDPItemData::ScDPItemData(double)
 ScDPItemData::SetGroupValue(int, int)
 ScDPLabelData::ScDPLabelData(rtl::OUString const&, short, bool)
 ScDPResultData::IsInGroup(ScDPItemData const&, long, long, long) const
@@ -1037,5 +1038,4 @@ sw::util::AuthorInfos::Insert(sw::util::AuthorInfo* const*, unsigned short)
 sw::util::AuthorInfos::Insert(sw::util::AuthorInfos const*, unsigned short, unsigned short)
 sw::util::AuthorInfos::Remove(sw::util::AuthorInfo* const&, unsigned short)
 sw::util::AuthorInfos::Remove(unsigned short, unsigned short)
-utl::OConfigurationNode::appendNode(rtl::OUString const&, utl::OConfigurationNode const&) const
 vcl::PDFWriter::DrawPixel(Polygon const&, Color const*)
