@@ -198,6 +198,12 @@ void SvxCharBasePage::makeWidgets(Window *pParent, const ResId& rResId,
 {
     m_pFontTypeFT = new FixedInfo(pParent, ResId( nResIdFontTypeFT, *rResId.GetResMgr()));
     m_pPreviewWin = new SvxFontPrevWindow(pParent, ResId( nResIdPrewievWin, *rResId.GetResMgr()));
+
+    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
+    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
+
+    m_pPreviewWin->setChildProperty(sFill, true);
+    m_pPreviewWin->setChildProperty(sExpand, true);
 }
 
 // -----------------------------------------------------------------------
@@ -445,8 +451,6 @@ SvxCharNamePage::SvxCharNamePage( Window* pParent, const SfxItemSet& rInSet )
     m_pCTLFontLanguageLB   ->Show( bShowCTL );
 
     makeWidgets(&m_aBox, CUI_RES(RID_SVXPAGE_CHAR_NAME), WIN_CHAR_PREVIEW, FT_CHAR_FONTTYPE);
-    m_pPreviewWin->setChildProperty(sFill, true);
-    m_pPreviewWin->setChildProperty(sExpand, true);
 
     FreeResource();
 
@@ -1576,8 +1580,6 @@ SvxCharEffectsPage::SvxCharEffectsPage( Window* pParent, const SfxItemSet& rInSe
     setGridAttach(m_aPositionLB, 3, 9);
 
     makeWidgets(&m_aBox, CUI_RES(STR_CHARNAME_TRANSPARENT), WIN_EFFECTS_PREVIEW, FT_EFFECTS_FONTTYPE);
-    m_pPreviewWin->setChildProperty(sFill, true);
-    m_pPreviewWin->setChildProperty(sExpand, true);
     FreeResource();
     Initialize();
 }
@@ -1684,6 +1686,13 @@ void SvxCharEffectsPage::Initialize()
         m_aPositionLB.Hide();
     }
 }
+
+SvxCharEffectsPage::~SvxCharEffectsPage()
+{
+    delete m_pPreviewWin, m_pPreviewWin = NULL;
+    delete m_pFontTypeFT, m_pFontTypeFT = NULL;
+}
+
 // -----------------------------------------------------------------------
 
 void SvxCharEffectsPage::UpdatePreview_Impl()
@@ -2852,8 +2861,6 @@ SvxCharPositionPage::SvxCharPositionPage( Window* pParent, const SfxItemSet& rIn
     setGridAttach(m_aLowPosBtn, 0, 2);
 
     makeWidgets(&m_aBox, CUI_RES(RID_SVXPAGE_CHAR_POSITION), WIN_POS_PREVIEW, FT_POS_FONTTYPE);
-    m_pPreviewWin->setChildProperty(sFill, true);
-    m_pPreviewWin->setChildProperty(sExpand, true);
     FreeResource();
     Initialize();
 }
@@ -2899,6 +2906,13 @@ void SvxCharPositionPage::Initialize()
     m_aPairKerningBtn.SetClickHdl( LINK( this, SvxCharPositionPage, PairKerningHdl_Impl ) );
     m_aScaleWidthMF.SetModifyHdl( LINK( this, SvxCharPositionPage, ScaleWidthModifyHdl_Impl ) );
 }
+
+SvxCharPositionPage::~SvxCharPositionPage()
+{
+    delete m_pPreviewWin, m_pPreviewWin = NULL;
+    delete m_pFontTypeFT, m_pFontTypeFT = NULL;
+}
+
 
 // -----------------------------------------------------------------------
 
@@ -3585,24 +3599,46 @@ void SvxCharPositionPage::PageCreated (SfxAllItemSet aSet)
 }
 // class SvxCharTwoLinesPage ------------------------------------------------
 
-SvxCharTwoLinesPage::SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rInSet ) :
-
-    SvxCharBasePage( pParent, CUI_RES( RID_SVXPAGE_CHAR_TWOLINES ), rInSet ),
-
-    m_aSwitchOnLine     ( this, CUI_RES( FL_SWITCHON ) ),
-    m_aTwoLinesBtn      ( this, CUI_RES( CB_TWOLINES ) ),
-
-    m_aEncloseLine      ( this, CUI_RES( FL_ENCLOSE ) ),
-    m_aStartBracketFT   ( this, CUI_RES( FT_STARTBRACKET ) ),
-    m_aStartBracketLB   ( this, CUI_RES( ED_STARTBRACKET ) ),
-    m_aEndBracketFT     ( this, CUI_RES( FT_ENDBRACKET ) ),
-    m_aEndBracketLB     ( this, CUI_RES( ED_ENDBRACKET ) ),
-    m_nStartBracketPosition( 0 ),
-    m_nEndBracketPosition( 0 )
+SvxCharTwoLinesPage::SvxCharTwoLinesPage(Window* pParent, const SfxItemSet& rInSet)
+    : SvxCharBasePage(pParent, CUI_RES(RID_SVXPAGE_CHAR_TWOLINES), rInSet)
+    , m_aBox(this, false, 7)
+    , m_aGrid(&m_aBox)
+    , m_aSwitchOnLine(&m_aGrid, CUI_RES(FL_SWITCHON))
+    , m_aTwoLinesBtn(&m_aGrid, CUI_RES(CB_TWOLINES))
+    , m_aEncloseLine(&m_aGrid, CUI_RES(FL_ENCLOSE))
+    , m_aStartBracketFT(&m_aGrid, CUI_RES(FT_STARTBRACKET))
+    , m_aStartBracketLB(&m_aGrid, CUI_RES(ED_STARTBRACKET))
+    , m_aEndBracketFT(&m_aGrid, CUI_RES(FT_ENDBRACKET))
+    , m_aEndBracketLB(&m_aGrid, CUI_RES(ED_ENDBRACKET))
+    , m_nStartBracketPosition( 0 )
+    , m_nEndBracketPosition( 0 )
 {
-    makeWidgets(this, CUI_RES(RID_SVXPAGE_CHAR_TWOLINES), WIN_TWOLINES_PREVIEW, FT_TWOLINES_FONTTYPE);
+    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
+    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
+
+    m_aBox.setChildProperty(sFill, true);
+    m_aBox.setChildProperty(sExpand, true);
+
+    m_aGrid.set_column_spacing(7);
+    m_aGrid.set_row_spacing(2);
+
+    setGridAttach(m_aSwitchOnLine, 0, 0, 2);
+    setGridAttach(m_aTwoLinesBtn, 0, 1);
+    setGridAttach(m_aEncloseLine, 0, 2, 2);
+    setGridAttach(m_aStartBracketFT, 0, 3);
+    setGridAttach(m_aEndBracketFT, 1, 3);
+    setGridAttach(m_aStartBracketLB, 0, 4);
+    setGridAttach(m_aEndBracketLB, 1, 4);
+
+    makeWidgets(&m_aBox, CUI_RES(RID_SVXPAGE_CHAR_TWOLINES), WIN_TWOLINES_PREVIEW, FT_TWOLINES_FONTTYPE);
     FreeResource();
     Initialize();
+}
+
+SvxCharTwoLinesPage::~SvxCharTwoLinesPage()
+{
+    delete m_pPreviewWin, m_pPreviewWin = NULL;
+    delete m_pFontTypeFT, m_pFontTypeFT = NULL;
 }
 
 // -----------------------------------------------------------------------

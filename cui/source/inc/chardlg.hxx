@@ -239,6 +239,7 @@ private:
     String              m_aTransparentColorName;
 
                         SvxCharEffectsPage( Window* pParent, const SfxItemSet& rSet );
+                        ~SvxCharEffectsPage();
 
     void                Initialize();
     void                UpdatePreview_Impl();
@@ -322,6 +323,7 @@ private:
     sal_uInt8                m_nSubProp;
 
                         SvxCharPositionPage( Window* pParent, const SfxItemSet& rSet );
+                        ~SvxCharPositionPage();
 
     void                Initialize();
     void                UpdatePreview_Impl( sal_uInt8 nProp, sal_uInt8 nEscProp, short nEsc );
@@ -362,6 +364,9 @@ public:
 class SvxCharTwoLinesPage : public SvxCharBasePage
 {
 private:
+    VBox m_aBox;
+    Grid m_aGrid;
+
     FixedLine           m_aSwitchOnLine;
     CheckBox            m_aTwoLinesBtn;
 
@@ -374,7 +379,8 @@ private:
     sal_uInt16              m_nStartBracketPosition;
     sal_uInt16              m_nEndBracketPosition;
 
-                        SvxCharTwoLinesPage( Window* pParent, const SfxItemSet& rSet );
+    SvxCharTwoLinesPage(Window* pParent, const SfxItemSet& rSet);
+    ~SvxCharTwoLinesPage();
 
     void                UpdatePreview_Impl();
     void                Initialize();
