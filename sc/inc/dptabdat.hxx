@@ -34,6 +34,7 @@
 #include "dpcachetable.hxx"
 #include "dpcache.hxx"
 #include <tools/string.hxx>
+#include "svl/zforlist.hxx"
 
 #include <vector>
 #include <set>

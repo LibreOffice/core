@@ -31,12 +31,7 @@
 
 #include "global.hxx"
 #include "dpnumgroupinfo.hxx"
-
-#include <svl/zforlist.hxx>
-
-#include <com/sun/star/sdbc/DataType.hpp>
-#include <com/sun/star/sdbc/XRow.hpp>
-#include <com/sun/star/sdbc/XRowSet.hpp>
+#include "tools/date.hxx"
 
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
@@ -44,6 +39,13 @@
 #include <mdds/flat_segment_tree.hpp>
 
 #include <vector>
+#include <set>
+
+namespace com { namespace sun { namespace star {
+    namespace sdbc {
+        class XRowSet;
+    }
+}}}
 
 struct ScQueryParam;
 class ScDPObject;
