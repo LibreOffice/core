@@ -41,7 +41,7 @@ using namespace com::sun::star::sdbc;
 using namespace com::sun::star::sdbcx;
 
 
-#define MYADOID(l) {l, 0,0x10,0x80,0,0,0xAA,0,0x6D,0x2E,0xA4};
+#define MYADOID(l) {l, 0,0x10,{0x80,0,0,0xAA,0,0x6D,0x2E,0xA4}};
 
 const CLSID ADOS::CLSID_ADOCONNECTION_21    =   MYADOID(0x00000514);
 const IID   ADOS::IID_ADOCONNECTION_21      =   MYADOID(0x00000550);
