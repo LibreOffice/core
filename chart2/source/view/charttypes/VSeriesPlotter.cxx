@@ -929,6 +929,28 @@ void VSeriesPlotter::createErrorBar(
 
 }
 
+void VSeriesPlotter::createErrorBar_X( const drawing::Position3D& rUnscaledLogicPosition
+                            , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
+                            , const uno::Reference< drawing::XShapes >& xTarget
+                            , double* pfScaledLogicX )
+{
+    if(m_nDimension!=2)
+        return;
+    // error bars
+    uno::Reference< beans::XPropertySet > xErrorBarProp(rVDataSeries.getXErrorBarProperties(nPointIndex));
+    if( xErrorBarProp.is())
+    {
+        uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
+            this->getErrorBarsGroupShape(rVDataSeries, xTarget) );
+
+        createErrorBar( xErrorBarsGroup_Shapes
+            , rUnscaledLogicPosition, xErrorBarProp
+            , rVDataSeries, nPointIndex
+            , false /* bYError */
+            , pfScaledLogicX );
+    }
+}
+
 void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogicPosition
                             , VDataSeries& rVDataSeries, sal_Int32 nPointIndex
                             , const uno::Reference< drawing::XShapes >& xTarget
