@@ -3311,7 +3311,7 @@ void HwpReader::makeDateFormat(DateCode * hbox)
     int zero_check = 0;
     hbox->format[DATE_SIZE -1] = 0;
 
-    hchar *fmt = hbox->format[0] ? hbox->format : defaultform;
+    const hchar *fmt = hbox->format[0] ? hbox->format : defaultform;
 
     for( ; *fmt ; fmt++ )
     {
