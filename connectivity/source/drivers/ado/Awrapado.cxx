@@ -369,10 +369,10 @@ sal_Bool WpADOCommand::put_Prepared(VARIANT_BOOL bPrepared) const
     return SUCCEEDED(pInterface->put_Prepared(bPrepared));
 }
 
-sal_Bool WpADOCommand::Execute(OLEVariant& RecordsAffected,OLEVariant& Parameters,long Options, ADORecordset** ppiRset)
+sal_Bool WpADOCommand::Execute(OLEVariant& RecordsAffected,OLEVariant& Params,long Options, ADORecordset** ppiRset)
 {
     OSL_ENSURE(pInterface,"Interface is null!");
-    return SUCCEEDED(pInterface->Execute(&RecordsAffected,&Parameters,Options,ppiRset));
+    return SUCCEEDED(pInterface->Execute(&RecordsAffected,&Params,Options,ppiRset));
 }
 
 ADOParameter* WpADOCommand::CreateParameter(const ::rtl::OUString &_bstr,DataTypeEnum Type,ParameterDirectionEnum Direction,long nSize,const OLEVariant &Value)
