@@ -1996,7 +1996,7 @@ bool ImpEditEngine::SpellSentence(EditView& rEditView,
 
 // Adds one portion to the SpellPortions
 void ImpEditEngine::AddPortion(
-                            const EditSelection rSel,
+                            const EditSelection& rSel,
                             uno::Reference< XSpellAlternatives > xAlt,
                                 ::svx::SpellPortions& rToFill,
                                 bool bIsField)
@@ -2020,7 +2020,7 @@ void ImpEditEngine::AddPortion(
 // Adds one or more portions of text to the SpellPortions depending on language changes
 void ImpEditEngine::AddPortionIterated(
                             EditView& rEditView,
-                            const EditSelection rSel,
+                            const EditSelection& rSel,
                             Reference< XSpellAlternatives > xAlt,
                                 ::svx::SpellPortions& rToFill)
 {

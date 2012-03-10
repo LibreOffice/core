@@ -68,6 +68,7 @@
 
 #include <editeng/unolingu.hxx>
 
+#include <set>
 #include <math.h>
 #include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
@@ -85,9 +86,6 @@ using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::linguistic2;
-
-SV_DECL_VARARR_SORT( SortedPositions, sal_uInt32, 16 )
-SV_IMPL_VARARR_SORT( SortedPositions, sal_uInt32 );
 
 #define CH_HYPH     '-'
 
@@ -2252,14 +2250,14 @@ sal_uInt16 ImpEditEngine::SplitTextPortion( ParaPortion* pPortion, sal_uInt16 nP
     return nSplitPortion;
 }
 
-void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& rStart /* , sal_Bool bCreateBlockPortions */ )
+void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& rStart )
 {
     sal_uInt16 nStartPos = rStart;
     ContentNode* pNode = pParaPortion->GetNode();
     DBG_ASSERT( pNode->Len(), "CreateTextPortions should not be used for empty paragraphs!" );
 
-    SortedPositions aPositions;
-    aPositions.Insert( (sal_uInt32) 0 );
+    ::std::set< sal_uInt32 > aPositions;
+    aPositions.insert( 0 );
 
     sal_uInt16 nAttr = 0;
     EditCharAttrib* pAttrib = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
@@ -2267,23 +2265,23 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
     {
         // Insert Start and End into the Array...
         // The Insert method does not allow for duplicate values....
-        aPositions.Insert( pAttrib->GetStart() );
-        aPositions.Insert( pAttrib->GetEnd() );
+        aPositions.insert( pAttrib->GetStart() );
+        aPositions.insert( pAttrib->GetEnd() );
         nAttr++;
         pAttrib = GetAttrib( pNode->GetCharAttribs().GetAttribs(), nAttr );
     }
-    aPositions.Insert( pNode->Len() );
+    aPositions.insert( pNode->Len() );
 
     if ( pParaPortion->aScriptInfos.empty() )
         ((ImpEditEngine*)this)->InitScriptTypes( GetParaPortions().GetPos( pParaPortion ) );
 
     const ScriptTypePosInfos& rTypes = pParaPortion->aScriptInfos;
     for ( size_t nT = 0; nT < rTypes.size(); nT++ )
-        aPositions.Insert( rTypes[nT].nStartPos );
+        aPositions.insert( rTypes[nT].nStartPos );
 
     const WritingDirectionInfos& rWritingDirections = pParaPortion->aWritingDirectionInfos;
     for ( size_t nD = 0; nD < rWritingDirections.size(); nD++ )
-        aPositions.Insert( rWritingDirections[nD].nStartPos );
+        aPositions.insert( rWritingDirections[nD].nStartPos );
 
     if ( mpIMEInfos && mpIMEInfos->nLen && mpIMEInfos->pAttribs && ( mpIMEInfos->aPos.GetNode() == pNode ) )
     {
@@ -2292,11 +2290,11 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
         {
             if ( mpIMEInfos->pAttribs[n] != nLastAttr )
             {
-                aPositions.Insert( mpIMEInfos->aPos.GetIndex() + n );
+                aPositions.insert( mpIMEInfos->aPos.GetIndex() + n );
                 nLastAttr = mpIMEInfos->pAttribs[n];
             }
         }
-        aPositions.Insert( mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen );
+        aPositions.insert( mpIMEInfos->aPos.GetIndex() + mpIMEInfos->nLen );
     }
 
     // From ... Delete:
@@ -2329,18 +2327,16 @@ void ImpEditEngine::CreateTextPortions( ParaPortion* pParaPortion, sal_uInt16& r
     pParaPortion->GetTextPortions().DeleteFromPortion( nInvPortion );
 
     // A portion may also have been formed by a line break:
-    aPositions.Insert( nPortionStart );
+    aPositions.insert( nPortionStart );
 
-    sal_uInt16 nInvPos;
-#ifdef DBG_UTIL
-    sal_Bool bFound =
-#endif
-                        aPositions.Seek_Entry( nPortionStart, &nInvPos );
+    ::std::set< sal_uInt32 >::iterator nInvPos = aPositions.find(  nPortionStart );
+    DBG_ASSERT( (nInvPos != aPositions.end()), "InvPos ?!" );
 
-    DBG_ASSERT( bFound && ( nInvPos < (aPositions.Count()-1) ), "InvPos ?!" );
-    for ( sal_uInt16 i = nInvPos+1; i < aPositions.Count(); i++ )
+    ::std::set< sal_uInt32 >::iterator i = nInvPos;
+    i++;
+    while ( i != aPositions.end() )
     {
-        TextPortion* pNew = new TextPortion( (sal_uInt16)aPositions[i] - (sal_uInt16)aPositions[i-1] );
+        TextPortion* pNew = new TextPortion( static_cast<sal_uInt16>(*i++) - static_cast<sal_uInt16>(*nInvPos++) );
         pParaPortion->GetTextPortions().Insert( pNew, pParaPortion->GetTextPortions().Count());
     }
 
@@ -3361,12 +3357,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                                 }
                                             }
                                         }
-
-                                        // comment
-
-
-
-
                                     }
 
                                     if ( GetStatus().DoOnlineSpelling() && !pPortion->GetNode()->GetWrongList()->empty() && pTextPortion->GetLen() )
@@ -3391,8 +3381,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                 pOutDev->Pop();
 
-                                if ( pTmpDXArray )
-                                    delete[] pTmpDXArray;
+                                //The C++ language guarantees that delete p will do nothing if p is equal to NULL.
+                                delete[] pTmpDXArray;
 
                                 if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
                                 {

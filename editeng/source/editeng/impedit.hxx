@@ -905,7 +905,7 @@ public:
     LanguageType        GetDefaultLanguage() const { return eDefLanguage; }
 
 
-    LanguageType        GetLanguage( const EditSelection rSelection ) const;
+    LanguageType        GetLanguage( const EditSelection &rSelection ) const;
     LanguageType        GetLanguage( const EditPaM& rPaM, sal_uInt16* pEndPos = NULL ) const;
     ::com::sun::star::lang::Locale GetLocale( const EditPaM& rPaM ) const;
 
@@ -945,12 +945,12 @@ public:
     //adds one or more portions of text to the SpellPortions depending on language changes
     void            AddPortionIterated(
                         EditView& rEditView,
-                        const EditSelection rSel,
+                        const EditSelection &rSel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > xAlt,
                         ::svx::SpellPortions& rToFill);
     //adds one portion to the SpellPortions
     void            AddPortion(
-                        const EditSelection rSel,
+                        const EditSelection &rSel,
                         ::com::sun::star::uno::Reference< ::com::sun::star::linguistic2::XSpellAlternatives > xAlt,
                         ::svx::SpellPortions& rToFill,
                         bool bIsField );
