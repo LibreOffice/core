@@ -42,7 +42,7 @@ namespace comphelper
 
 //==================================================================
 // FmUnoIOStream,
-// Stream to read and write from data read from a file
+// Stream to read and write data, based on File
 //==================================================================
 class COMPHELPER_DLLPUBLIC OSLInputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XInputStream>
 {
@@ -63,7 +63,7 @@ public:
 
 //==================================================================
 // FmUnoOutStream,
-// sync data for the files
+// data sink for the files
 //==================================================================
 class OSLOutputStreamWrapper : public ::cppu::WeakImplHelper1<stario::XOutputStream>
 {

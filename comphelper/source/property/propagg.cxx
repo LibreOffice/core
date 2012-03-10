@@ -301,7 +301,7 @@ sal_Int32 OPropertyArrayAggregationHelper::fillHandles(
             n = n >> 1;
         }
 
-        // Number of the searched properties * the Log2 of the reamining properties
+        // (Number of properties yet to be found) * (Log2 of properties yet to be searched)
         if( (nReqLen - i) * nLog >= pEnd - pCur )
         {
             // linear search is better

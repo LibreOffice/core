@@ -789,7 +789,7 @@ void SAL_CALL ImplEventAttacherManager::write(const Reference< XObjectOutputStre
     // Write out the version
     OutStream->writeShort( 2 );
 
-    // Position the position for length
+    // Remember position for length
     sal_Int32 nObjLenMark = xMarkStream->createMark();
     OutStream->writeLong( 0L );
 
@@ -838,8 +838,8 @@ void SAL_CALL ImplEventAttacherManager::read(const Reference< XObjectInputStream
     // Read in the version
     nVersion = InStream->readShort();
 
-    // Next is the time since version 1.
-    // Should this be deprecated in later versions?
+    // At first there's the data according to version 1 --
+    // this part needs to be kept in later versions.
     sal_Int32 nLen = InStream->readLong();
 
     // Position for comparative purposes

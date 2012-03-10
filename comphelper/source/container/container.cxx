@@ -91,18 +91,18 @@ IndexAccessIterator::~IndexAccessIterator() {}
                     xContainerAccess = ::com::sun::star::uno::Reference< ::com::sun::star::container::XIndexAccess>(xParent, ::com::sun::star::uno::UNO_QUERY);
                     OSL_ENSURE(xContainerAccess.is(), "IndexAccessIterator::Next : a content has an invalid parent !");
 
-                    // Update the search loop index
+                    // Remove the index that SearchLoop had within this parent from my stack
                     sal_Int32 nOldSearchChildIndex = m_arrChildIndizies[m_arrChildIndizies.size() - 1];
                     m_arrChildIndizies.pop_back();
 
                     if (nOldSearchChildIndex < xContainerAccess->getCount() - 1)
                     {   // Move to the right in this row
                         ++nOldSearchChildIndex;
-                        // and check the nex child
+                        // and check the next child
                         ::com::sun::star::uno::Any aElement(xContainerAccess->getByIndex(nOldSearchChildIndex));
                         xSearchLoop = *(::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface>*) aElement.getValue();
                         bCheckingStartingPoint = sal_False;
-                        // and update is position in the list.
+                        // and update its position in the list.
                         m_arrChildIndizies.push_back((sal_Int32)nOldSearchChildIndex);
 
                         break;
