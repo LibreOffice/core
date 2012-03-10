@@ -43,6 +43,7 @@ done :
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-warnings.patch
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-gcc-atomics.patch
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-debug.patch
+	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-narrowing-conversions.patch
 	#FIXME ?, our rules expect .cxx
 	for i in `find . -name "*.cpp"`; do mv $$i $${i%%cpp}cxx; done
 ifneq ($(OS),WNT)
