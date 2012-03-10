@@ -42,6 +42,7 @@
 #include <vcl/button.hxx>
 #include <vcl/salnativewidgets.hxx>
 #include <vcl/edit.hxx>
+#include <vcl/layout.hxx>
 
 #include <svids.hrc>
 #include <svdata.hxx>
@@ -1758,13 +1759,25 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
+namespace
+{
+    Window* getFirstNonLayoutParent(Window *pParent)
+    {
+        while (pParent && dynamic_cast<const Box*>(pParent))
+        {
+            pParent = pParent->GetParent();
+        }
+        return pParent;
+    }
+}
+
 void OKButton::Click()
 {
     SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for OKButton");
     // close parent if no link set
     if ( !GetClickHdl() )
     {
-        Window* pParent = GetParent();
+        Window* pParent = getFirstNonLayoutParent(GetParent());
         if ( pParent->IsSystemWindow() )
         {
             if ( pParent->IsDialog() )
@@ -1831,7 +1844,7 @@ void CancelButton::Click()
     // close parent if link not set
     if ( !GetClickHdl() )
     {
-        Window* pParent = GetParent();
+        Window* pParent = getFirstNonLayoutParent(GetParent());
         if ( pParent->IsSystemWindow() )
         {
             if ( pParent->IsDialog() )
