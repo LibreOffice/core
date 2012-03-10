@@ -366,7 +366,9 @@ void ChartController::executeDispatch_InsertMenu_YErrorBars()
         SolarMutexGuard aGuard;
         InsertErrorBarsDialog aDlg(
             m_pChartWindow, aItemSet,
-            uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY ));
+            uno::Reference< chart2::XChartDocument >( getModel(), uno::UNO_QUERY ),
+            ErrorBarResources::ERROR_BAR_Y);
+
         aDlg.SetAxisMinorStepWidthForErrorBarDecimals(
             InsertErrorBarsDialog::getAxisMinorStepWidthForErrorBarDecimals( getModel(), m_xChartView, rtl::OUString() ) );
 
