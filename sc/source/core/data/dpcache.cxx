@@ -226,7 +226,7 @@ bool ScDPCache::operator== ( const ScDPCache& r ) const
     return true;
 }
 
-ScDPCache::Field::Field() {}
+ScDPCache::Field::Field() : mnNumFormat(0) {}
 
 ScDPCache::ScDPCache(ScDocument* pDoc) :
     mpDoc( pDoc ),
@@ -637,7 +637,6 @@ bool ScDPCache::AddData(long nDim, const ScDPItemData& rData, sal_uLong nNumForm
             rField.maGlobalOrder.begin()+nIndex, rField.maItems.size()-1);
         OSL_ENSURE(rField.maGlobalOrder[nIndex] == sal::static_int_cast<SCROW>(rField.maItems.size())-1, "ScDPTableDataCache::AddData ");
         rField.maData.push_back(rField.maItems.size()-1);
-        rField.maNumFormats.push_back(nNumFormat);
     }
     else
         rField.maData.push_back(rField.maGlobalOrder[nIndex]);
@@ -645,7 +644,10 @@ bool ScDPCache::AddData(long nDim, const ScDPItemData& rData, sal_uLong nNumForm
     size_t nCurRow = maFields[nDim].maData.size() - 1;
 
     if (!rData.IsEmpty())
+    {
         maEmptyRows.insert_back(nCurRow, nCurRow+1, false);
+        rField.mnNumFormat = nNumFormat;
+    }
 
     return true;
 }
@@ -813,13 +815,9 @@ sal_uLong ScDPCache::GetNumberFormat( long nDim ) const
     if ( nDim >= mnColumnCount )
         return 0;
 
-    const std::vector<sal_uLong>& rNumFormats = maFields[nDim].maNumFormats;
-    if (rNumFormats.empty())
-        return 0;
-
     // TODO: Find a way to determine the dominant number format in presence of
     // multiple number formats in the same field.
-    return *rNumFormats.begin();
+    return maFields[nDim].mnNumFormat;
 }
 
 bool ScDPCache::IsDateDimension( long nDim ) const
@@ -831,11 +829,7 @@ bool ScDPCache::IsDateDimension( long nDim ) const
     if (!pFormatter)
         return false;
 
-    const std::vector<sal_uLong>& rNumFormats = maFields[nDim].maNumFormats;
-    if (rNumFormats.empty())
-        return false;
-
-    short eType = pFormatter->GetType(rNumFormats[0]);
+    short eType = pFormatter->GetType(maFields[nDim].mnNumFormat);
     return (eType == NUMBERFORMAT_DATE) || (eType == NUMBERFORMAT_DATETIME);
 }
 

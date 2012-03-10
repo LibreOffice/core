@@ -100,7 +100,7 @@ public:
          */
         mutable IndexArrayType maIndexOrder;
 
-        std::vector<sal_uLong> maNumFormats;
+        sal_uLong mnNumFormat;
 
         Field();
     };
