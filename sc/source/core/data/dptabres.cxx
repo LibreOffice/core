@@ -3012,10 +3012,10 @@ void ScDPResultDimension::ProcessData( const vector< SCROW >& aMembers,
     ScDPResultMember* pMember = FindMember( aMembers[0] );
     if ( NULL != pMember )
     {
-        vector</*ScDPItemData*/SCROW > aChildMembers;
+        vector<SCROW> aChildMembers;
         if (aMembers.size() > 1)
         {
-            vector</*ScDPItemData*/SCROW >::const_iterator itr = aMembers.begin();
+            vector<SCROW>::const_iterator itr = aMembers.begin();
             aChildMembers.insert(aChildMembers.begin(), ++itr, aMembers.end());
         }
         pMember->ProcessData( aChildMembers, pDataDim, aDataMembers, aValues );

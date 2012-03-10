@@ -163,7 +163,7 @@ class ScDPGroupTableData : public ScDPTableData
     ScDocument*             pDoc;
     StringHashSet           aGroupNames;
 
-    void                         FillGroupValues( SCROW* pItemDataIndex, long nCount, const long* pDims );
+    void FillGroupValues(std::vector<SCROW>& rItems, const std::vector<long>& rDims);
     virtual long                GetSourceDim( long nDim );
 
     bool        IsNumGroupDimension( long nDimension ) const;

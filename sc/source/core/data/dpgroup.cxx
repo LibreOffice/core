@@ -788,11 +788,11 @@ void ScDPGroupTableData::CalcResults(CalcInfo& rInfo, bool bAutoShow)
         FillRowDataFromCacheTable(nRow, rCacheTable, rInfo, aData);
 
         if ( !rInfo.aColLevelDims.empty() )
-            FillGroupValues(&aData.aColData[0], rInfo.aColLevelDims.size(), &rInfo.aColLevelDims[0]);
+            FillGroupValues(aData.aColData, rInfo.aColLevelDims);
         if ( !rInfo.aRowLevelDims.empty() )
-            FillGroupValues(&aData.aRowData[0], rInfo.aRowLevelDims.size(), &rInfo.aRowLevelDims[0]);
+            FillGroupValues(aData.aRowData, rInfo.aRowLevelDims);
         if ( !rInfo.aPageDims.empty() )
-            FillGroupValues(&aData.aPageData[0], rInfo.aPageDims.size(), &rInfo.aPageDims[0]);
+            FillGroupValues(aData.aPageData, rInfo.aPageDims);
 
         ProcessRowData(rInfo, aData, bAutoShow);
     }
@@ -803,16 +803,17 @@ const ScDPCacheTable& ScDPGroupTableData::GetCacheTable() const
     return pSourceData->GetCacheTable();
 }
 
-void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, const long* pDims)
+void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<long>& rDims)
 {
     long nGroupedColumns = aGroups.size();
 
     const ScDPCache* pCache = GetCacheTable().getCache();
-    for (long nDim = 0; nDim < nCount; ++nDim)
+    vector<long>::const_iterator it = rDims.begin(), itEnd = rDims.end();
+    for (size_t i = 0; it != itEnd; ++it, ++i)
     {
+        long nColumn = *it;
         const ScDPDateGroupHelper* pDateHelper = NULL;
 
-        long nColumn = pDims[nDim];
         long nSourceDim = nColumn;
         if ( nColumn >= nSourceCount && nColumn < nSourceCount + nGroupedColumns )
         {
@@ -821,15 +822,15 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
             pDateHelper = rGroupDim.GetDateHelper();
             if (!pDateHelper)                         // date is handled below
             {
-                const ScDPItemData& rItem = *GetMemberById(nSourceDim, pItemDataIndex[nDim]);
+                const ScDPItemData& rItem = *GetMemberById(nSourceDim, rItems[i]);
                 const ScDPGroupItem* pGroupItem = rGroupDim.GetGroupForData(rItem);
                 if (pGroupItem)
                 {
-                    pItemDataIndex[nDim] =
+                    rItems[i] =
                         pCache->GetIdByItemData(nColumn, pGroupItem->GetName());
                 }
                 else
-                    pItemDataIndex[nDim] = pCache->GetIdByItemData(nColumn, rItem);
+                    rItems[i] = pCache->GetIdByItemData(nColumn, rItem);
             }
         }
         else if ( IsNumGroupDimension( nColumn ) )
@@ -837,7 +838,7 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
             pDateHelper = pNumGroups[nColumn].GetDateHelper();
             if (!pDateHelper)                         // date is handled below
             {
-                const ScDPItemData* pData = pCache->GetItemDataById(nSourceDim, pItemDataIndex[nDim]);
+                const ScDPItemData* pData = pCache->GetItemDataById(nSourceDim, rItems[i]);
                 if (pData->GetType() == ScDPItemData::Value)
                 {
                     ScDPNumGroupInfo aNumInfo;
@@ -845,7 +846,7 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
                     double fGroupValue = ScDPUtil::getNumGroupStartValue(pData->GetValue(), aNumInfo);
                     ScDPItemData aItemData;
                     aItemData.SetRangeStart(fGroupValue);
-                    pItemDataIndex[nDim] = pCache->GetIdByItemData(nSourceDim, aItemData);
+                    rItems[i] = pCache->GetIdByItemData(nSourceDim, aItemData);
                 }
                 // else (textual) keep original value
             }
@@ -854,7 +855,7 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
         if ( pDateHelper )
         {
             const ScDPItemData* pData  =
-                GetCacheTable().getCache()->GetItemDataById(nSourceDim, pItemDataIndex[nDim]);
+                GetCacheTable().getCache()->GetItemDataById(nSourceDim, rItems[i]);
             if (pData->GetType() == ScDPItemData::Value)
             {
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
@@ -865,7 +866,7 @@ void ScDPGroupTableData::FillGroupValues(SCROW* pItemDataIndex, long nCount, con
                     pDateHelper->GetDatePart(), nPartValue, pFormatter, rNumInfo.mfStart, rNumInfo.mfEnd);
 
                 ScDPItemData aItem(pDateHelper->GetDatePart(), nPartValue);
-                pItemDataIndex[nDim] = GetCacheTable().getCache()->GetIdByItemData(nColumn, aItem);
+                rItems[i] = GetCacheTable().getCache()->GetIdByItemData(nColumn, aItem);
             }
         }
     }
