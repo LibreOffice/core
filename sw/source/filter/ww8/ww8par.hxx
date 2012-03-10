@@ -1113,7 +1113,7 @@ private:
 
     std::vector<String>* mpAtnNames;
 
-    sw::util::AuthorInfos* pAuthorInfos;
+    sw::util::AuthorInfos m_aAuthorInfos;
     String sBaseURL;
 
                                 // Ini-Flags:

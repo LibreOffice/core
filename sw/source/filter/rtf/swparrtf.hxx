@@ -294,7 +294,7 @@ class SwRTFParser : public SvxRTFParser
     SvPtrarr aRubyCharFmts;
     BookmarkPosition* mpBookmarkStart;
     sw::util::RedlineStack *mpRedlineStack;
-    sw::util::AuthorInfos* pAuthorInfos;
+    sw::util::AuthorInfos m_aAuthorInfos;
 
     SfxItemSet* pGrfAttrSet;
     SwTableNode* pTableNode, *pOldTblNd; // fuers Lesen von Tabellen: akt. Tab

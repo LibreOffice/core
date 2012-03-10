@@ -324,8 +324,6 @@ namespace sw
 
     namespace util
     {
-        SV_IMPL_OP_PTRARR_SORT(AuthorInfos, AuthorInfo_Ptr)
-
         SwTwips MakeSafePositioningValue(SwTwips nIn)
         {
             if (nIn > SHRT_MAX)

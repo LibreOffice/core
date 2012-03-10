@@ -3623,7 +3623,6 @@ SwWW8ImplReader::SwWW8ImplReader(sal_uInt8 nVersionPara, SvStorage* pStorage,
     maTxtNodesHavingLeftIndentSet(), // #i105414#
     pMSDffManager(0),
     mpAtnNames(0),
-    pAuthorInfos(0),
     sBaseURL(rBaseURL),
     m_bRegardHindiDigits( false ),
     mbNewDoc(bNewDoc),
@@ -4721,7 +4720,6 @@ sal_uLong SwWW8ImplReader::CoreLoad(WW8Glossary *pGloss, const SwPosition &rPos)
     delete pWDop;
     DELETEZ( pFonts );
     delete mpAtnNames;
-    DELETEZ( pAuthorInfos );
     delete mpSprmParser;
     ::EndProgress(mpDocShell);
 

@@ -466,11 +466,7 @@ void SwWW8ImplReader::ReadRevMarkAuthorStrTabl( SvStream& rStrm,
         // Store author in doc
         sal_uInt16 nSWId = rDocOut.InsertRedlineAuthor(aAuthorNames[nAuthor]);
         // Store matchpair
-        if( !pAuthorInfos )
-            pAuthorInfos = new sw::util::AuthorInfos;
-        sw::util::AuthorInfo* pAutorInfo = new sw::util::AuthorInfo( nAuthor, nSWId );
-        if( 0 == pAuthorInfos->Insert( pAutorInfo ) )
-            delete pAutorInfo;
+        m_aAuthorInfos[nAuthor] = nSWId;
     }
 }
 
@@ -524,21 +520,12 @@ void SwWW8ImplReader::Read_CRevisionMark(RedlineType_t eType,
     else
     {
         // start of new revision mark, if not there default to first entry
-        sal_uInt16 nWWAutNo = pSprmCIbstRMark ? SVBT16ToShort( pSprmCIbstRMark ) : 0;
-        sw::util::AuthorInfo aEntry(nWWAutNo);
-        sal_uInt16 nPos;
-        if (pAuthorInfos && pAuthorInfos->Seek_Entry(&aEntry, &nPos))
-        {
-            if (const sw::util::AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
-            {
-                sal_uInt32 nWWDate = pSprmCDttmRMark ? SVBT32ToUInt32(pSprmCDttmRMark): 0;
-                DateTime aStamp(sw::ms::DTTM2DateTime(nWWDate));
-                sal_uInt16 nAutorNo = pAuthor->nOurId;
-                SwFltRedline  aNewAttr(eType, nAutorNo, aStamp);
-
-                NewAttr(aNewAttr);
-            }
-        }
+        sal_uInt16 nWWAutNo = pSprmCIbstRMark ? SVBT16ToShort(pSprmCIbstRMark) : 0;
+        sal_uInt32 nWWDate = pSprmCDttmRMark ? SVBT32ToUInt32(pSprmCDttmRMark): 0;
+        DateTime aStamp(sw::ms::DTTM2DateTime(nWWDate));
+        sal_uInt16 nAuthorNo = m_aAuthorInfos[nWWAutNo];
+        SwFltRedline  aNewAttr(eType, nAuthorNo, aStamp);
+        NewAttr(aNewAttr);
     }
 }
 

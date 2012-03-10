@@ -235,7 +235,6 @@ SwRTFParser::SwRTFParser(SwDoc* pD,
     aTblFmts(0),
     mpBookmarkStart(0),
     mpRedlineStack(0),
-    pAuthorInfos(0),
     pGrfAttrSet(0),
     pTableNode(0),
     pOldTblNd(0),
@@ -1151,8 +1150,6 @@ SwRTFParser::~SwRTFParser()
 
     if (pGrfAttrSet)
         DELETEZ( pGrfAttrSet );
-
-    DELETEZ( pAuthorInfos );
 }
 
 //i19718
@@ -1591,11 +1588,7 @@ sal_uInt16 SwRTFParser::ReadRevTbl()
 
             sal_uInt16 nSWId = pDoc->InsertRedlineAuthor(aToken);
             // Store matchpair
-            if( !pAuthorInfos )
-                pAuthorInfos = new sw::util::AuthorInfos;
-            sw::util::AuthorInfo* pAutorInfo = new sw::util::AuthorInfo( nAuthorTableIndex, nSWId );
-            if( 0 == pAuthorInfos->Insert( pAutorInfo ) )
-                delete pAutorInfo;
+            m_aAuthorInfos[nAuthorTableIndex] = nSWId;
 
             aRevTbl.push_back(aToken);
             nAuthorTableIndex++;
@@ -1840,38 +1833,18 @@ void SwRTFParser::NextToken( int nToken )
         break;
 
     case RTF_REVAUTH:
+        if (pRedlineInsert)
         {
-            sw::util::AuthorInfo aEntry( static_cast< sal_uInt16 >(nTokenValue) );
-            sal_uInt16 nPos;
-
-            if(pRedlineInsert)
-            {
-                if (pAuthorInfos && pAuthorInfos->Seek_Entry(&aEntry, &nPos))
-                {
-                    if (const sw::util::AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
-                    {
-                        pRedlineInsert->nAutorNo = pAuthor->nOurId;
-                    }
-                }
-            }
+            sal_uInt16 nRevAuth = static_cast<sal_uInt16>(nTokenValue);
+            pRedlineInsert->nAutorNo = m_aAuthorInfos[nRevAuth];
         }
         break;
 
     case RTF_REVAUTHDEL:
+        if(pRedlineDelete)
         {
-            sw::util::AuthorInfo aEntry( static_cast< short >(nTokenValue) );
-            sal_uInt16 nPos;
-
-            if(pRedlineDelete)
-            {
-                if (pAuthorInfos && pAuthorInfos->Seek_Entry(&aEntry, &nPos))
-                {
-                    if (const sw::util::AuthorInfo* pAuthor = pAuthorInfos->GetObject(nPos))
-                    {
-                        pRedlineDelete->nAutorNo = pAuthor->nOurId;
-                    }
-                }
-            }
+            sal_uInt16 nRevAuthDel = static_cast<sal_uInt16>(nTokenValue);
+            pRedlineDelete->nAutorNo = m_aAuthorInfos[nRevAuthDel];
         }
         break;
 
