@@ -33,6 +33,10 @@ TARGET=odbcbase
 ENABLE_EXCEPTIONS=TRUE
 VISIBILITY_HIDDEN=TRUE
 
+.IF "$(GUI)$(COM)" == "WNTGCC"
+EXTERNAL_WARNINGS_NOT_ERRORS = TRUE
+.ENDIF
+
 # --- Settings ----------------------------------
 
 .INCLUDE : settings.mk

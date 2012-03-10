@@ -35,6 +35,10 @@ VISIBILITY_HIDDEN=TRUE
 USE_DEFFILE=TRUE
 LDUMP=ldump2.exe
 
+.IF "$(GUI)$(COM)" == "WNTGCC"
+EXTERNAL_WARNINGS_NOT_ERRORS = TRUE
+.ENDIF
+
 # --- Settings ----------------------------------
 
 .IF "$(DBGUTIL_OJ)"!=""
