@@ -163,8 +163,6 @@ GNUMAKE*=make
 TOUCH=touch
 #YD rename doesn't work across different drives!
 RENAME=mv
-MKDIR*=mkdir$E
-MKDIRHIER*=mkdir$E -p
 GREP=grep
 FIND=find
 LS=ls
