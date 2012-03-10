@@ -460,7 +460,7 @@ int MailMerge::GetString(hchar * hstr, int )
 static hchar olHanglJaso(int num, int type)
 {
     static const unsigned char han_init[] =
-        { "\x88\x90\x94\x9c\xa0\xa4\xac\xb4\xb8\xc0\xc4\xc8\xcc\xd0" };
+        { 0x88, 0x90, 0x94, 0x9c, 0xa0, 0xa4, 0xac, 0xb4, 0xb8, 0xc0, 0xc4, 0xc8, 0xcc, 0xd0 };
     static const unsigned char jung[] = { 3, 5, 7, 11, 13, 19, 20, 26, 27, 29, 30 };
     static const unsigned char jung2[] = { 3, 7, 13, 20, 27, 29, 30 };
 
