@@ -115,7 +115,8 @@ gb_Library_FILENAMES := $(patsubst z:z%,z:zlib%,$(gb_Library_FILENAMES))
 gb_Library_NOILIBFILENAMES := $(gb_Library_PLAINLIBS_NONE)
 gb_Library_NOILIBFILENAMES += \
     graphite2_off \
-	icudt icuin icule icuuc \
+    icudt icuin icule icuuc \
+    lcms2 \
     msvcprt \
     nspr4 \
     nss3 \
