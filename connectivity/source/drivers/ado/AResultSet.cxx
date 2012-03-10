@@ -854,7 +854,7 @@ sal_Bool SAL_CALL OResultSet::moveToBookmark( const Any& bookmark ) throw(SQLExc
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    sal_Int32 nPos;
+    sal_Int32 nPos = 0;
     bookmark >>= nPos;
     OSL_ENSURE(nPos >= 0 && nPos < (sal_Int32)m_aBookmarks.size(),"Invalid Index for vector");
     if(nPos < 0 || nPos >= (sal_Int32)m_aBookmarks.size())
@@ -869,7 +869,7 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const Any& bookmark, sal_I
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    sal_Int32 nPos;
+    sal_Int32 nPos = 0;
     bookmark >>= nPos;
     nPos += rows;
     OSL_ENSURE(nPos >= 0 && nPos < (sal_Int32)m_aBookmarks.size(),"Invalid Index for vector");
@@ -883,9 +883,9 @@ sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& bookmark1, const Any
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
-    sal_Int32 nPos1;
+    sal_Int32 nPos1 = 0;
     bookmark1 >>= nPos1;
-    sal_Int32 nPos2;
+    sal_Int32 nPos2 = 0;
     bookmark2 >>= nPos2;
     if(nPos1 == nPos2)  // they should be equal
         return sal_True;
@@ -929,7 +929,7 @@ sal_Int32 SAL_CALL OResultSet::hashBookmark( const Any& bookmark ) throw(SQLExce
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
 
-    sal_Int32 nPos;
+    sal_Int32 nPos = 0;
     bookmark >>= nPos;
     return nPos;
 }
@@ -942,7 +942,7 @@ Sequence< sal_Int32 > SAL_CALL OResultSet::deleteRows( const Sequence< Any >& ro
 
 
     OLEVariant aVar;
-    sal_Int32 nPos;
+    sal_Int32 nPos = 0;
 
     // Create SafeArray Bounds and initialize the array
     SAFEARRAYBOUND rgsabound[1];
