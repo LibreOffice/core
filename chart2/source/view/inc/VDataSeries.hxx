@@ -122,6 +122,9 @@ public:
                         getSymbolProperties( sal_Int32 index ) const;
 
     ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
+                        getXErrorBarProperties( sal_Int32 index ) const;
+
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >
                         getYErrorBarProperties( sal_Int32 index ) const;
 
     bool hasPointOwnColor( sal_Int32 index ) const;

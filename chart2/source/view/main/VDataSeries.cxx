@@ -816,6 +816,16 @@ Symbol* VDataSeries::getSymbolProperties( sal_Int32 index ) const
     return pRet;
 }
 
+uno::Reference< beans::XPropertySet > VDataSeries::getXErrorBarProperties( sal_Int32 index ) const
+{
+    uno::Reference< beans::XPropertySet > xErrorBarProp;
+
+    uno::Reference< beans::XPropertySet > xPointProp( this->getPropertiesOfPoint( index ));
+    if( xPointProp.is() )
+        xPointProp->getPropertyValue( C2U( "ErrorBarX" )) >>= xErrorBarProp;
+    return xErrorBarProp;
+}
+
 uno::Reference< beans::XPropertySet > VDataSeries::getYErrorBarProperties( sal_Int32 index ) const
 {
     uno::Reference< beans::XPropertySet > xErrorBarProp;
