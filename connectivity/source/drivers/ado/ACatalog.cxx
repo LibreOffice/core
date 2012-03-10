@@ -41,8 +41,8 @@ using namespace connectivity;
 using namespace connectivity::ado;
 // -------------------------------------------------------------------------
 OCatalog::OCatalog(_ADOCatalog* _pCatalog,OConnection* _pCon) : connectivity::sdbcx::OCatalog(_pCon)
-                ,m_pConnection(_pCon)
                 ,m_aCatalog(_pCatalog)
+                ,m_pConnection(_pCon)
 {
 }
 // -----------------------------------------------------------------------------

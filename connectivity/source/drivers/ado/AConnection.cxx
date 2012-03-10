@@ -57,13 +57,13 @@ IMPLEMENT_SERVICE_INFO(OConnection,"com.sun.star.sdbcx.AConnection","com.sun.sta
 // --------------------------------------------------------------------------------
 OConnection::OConnection(ODriver*   _pDriver) throw(SQLException, RuntimeException)
                          : OSubComponent<OConnection, OConnection_BASE>((::cppu::OWeakObject*)_pDriver, this),
-                         m_bClosed(sal_False),
                          m_xCatalog(NULL),
                          m_pDriver(_pDriver),
                          m_pAdoConnection(NULL),
-                         m_bAutocommit(sal_True),
+                         m_pCatalog(NULL),
                          m_nEngineType(0),
-                         m_pCatalog(NULL)
+                         m_bClosed(sal_False),
+                         m_bAutocommit(sal_True)
 {
     osl_incrementInterlockedCount( &m_refCount );
 

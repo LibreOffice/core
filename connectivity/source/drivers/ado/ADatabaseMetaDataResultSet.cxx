@@ -61,9 +61,9 @@ using namespace com::sun::star::sdbc;
 ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet)
     :ODatabaseMetaDataResultSet_BASE(m_aMutex)
     ,OPropertySetHelper(ODatabaseMetaDataResultSet_BASE::rBHelper)
+    ,m_pRecordSet(_pRecordSet)
     ,m_aStatement(NULL)
     ,m_xMetaData(NULL)
-    ,m_pRecordSet(_pRecordSet)
     ,m_bEOF(sal_False)
 {
     osl_incrementInterlockedCount( &m_refCount );

@@ -53,8 +53,8 @@ namespace connectivity
                 const TStringVector &_rVector,
                 const WpADOTables& _rCollection,
                 sal_Bool _bCase) : sdbcx::OCollection(*_pParent,_bCase,_rMutex,_rVector)
-                ,m_pCatalog(_pParent)
                 ,m_aCollection(_rCollection)
+                ,m_pCatalog(_pParent)
             {
                 OSL_ENSURE(m_aCollection.IsValid(),"Collection isn't valid");
             }

@@ -65,8 +65,8 @@ OStatement_Base::OStatement_Base(OConnection* _pConnection ) :  OStatement_BASE(
                                                         ,OPropertySetHelper(OStatement_BASE::rBHelper)
                                                         ,OSubComponent<OStatement_Base, OStatement_BASE>((::cppu::OWeakObject*)_pConnection, this)
                                                         ,m_pConnection(_pConnection)
-                                                        ,m_nFetchSize(1)
                                                         ,m_nMaxRows(0)
+                                                        ,m_nFetchSize(1)
                                                         ,m_eLockType(adLockReadOnly)
                                                         ,m_eCursorType(adOpenForwardOnly)
 {

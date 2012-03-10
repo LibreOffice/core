@@ -87,20 +87,20 @@ sal_Bool SAL_CALL OResultSet::supportsService( const ::rtl::OUString& _rServiceN
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(ADORecordset* _pRecordSet,OStatement_Base* pStmt) :  OResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(OResultSet_BASE::rBHelper)
-                        ,m_xStatement(*pStmt)
-                        ,m_pStmt(pStmt)
-                        ,m_nRowPos(0)
-                        ,m_xMetaData(NULL)
                         ,m_pRecordSet(_pRecordSet)
+                        ,m_pStmt(pStmt)
+                        ,m_xStatement(*pStmt)
+                        ,m_xMetaData(NULL)
+                        ,m_nRowPos(0)
                         ,m_bEOF(sal_False)
 {
 }
 // -------------------------------------------------------------------------
 OResultSet::OResultSet(ADORecordset* _pRecordSet) : OResultSet_BASE(m_aMutex)
                         ,OPropertySetHelper(OResultSet_BASE::rBHelper)
+                        ,m_pRecordSet(_pRecordSet)
                         ,m_xStatement(NULL)
                         ,m_xMetaData(NULL)
-                        ,m_pRecordSet(_pRecordSet)
                         ,m_bEOF(sal_False)
 {
 }
