@@ -78,7 +78,7 @@ namespace cppu
         release() and delegates incoming queryInterface() calls to this base class.
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6 >
-    class SAL_NO_VTABLE ImplHelper6
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC ImplHelper6
         : public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
     {
@@ -100,7 +100,7 @@ namespace cppu
         Your sub class defines method implementations for these interface(s).
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6 >
-    class SAL_NO_VTABLE WeakImplHelper6
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC WeakImplHelper6
         : public OWeakObject
         , public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
@@ -132,7 +132,7 @@ namespace cppu
         Your sub class defines method implementations for these interface(s).
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6 >
-    class SAL_NO_VTABLE WeakAggImplHelper6
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC WeakAggImplHelper6
         : public OWeakAggObject
         , public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
@@ -169,7 +169,7 @@ namespace cppu
         template argument(s). Your sub class defines method implementations for these interface(s).
     */
     template< class BaseClass, class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6 >
-    class SAL_NO_VTABLE ImplInheritanceHelper6
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC ImplInheritanceHelper6
         : public BaseClass
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
     {
@@ -237,7 +237,7 @@ namespace cppu
         template argument(s). Your sub class defines method implementations for these interface(s).
     */
     template< class BaseClass, class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6 >
-    class SAL_NO_VTABLE AggImplInheritanceHelper6
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC AggImplInheritanceHelper6
         : public BaseClass
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6
     {

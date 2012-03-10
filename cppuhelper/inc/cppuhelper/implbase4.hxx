@@ -76,7 +76,7 @@ namespace cppu
         release() and delegates incoming queryInterface() calls to this base class.
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4 >
-    class SAL_NO_VTABLE ImplHelper4
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC ImplHelper4
         : public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4
     {
@@ -98,7 +98,7 @@ namespace cppu
         Your sub class defines method implementations for these interface(s).
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4 >
-    class SAL_NO_VTABLE WeakImplHelper4
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC WeakImplHelper4
         : public OWeakObject
         , public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4
@@ -130,7 +130,7 @@ namespace cppu
         Your sub class defines method implementations for these interface(s).
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4 >
-    class SAL_NO_VTABLE WeakAggImplHelper4
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC WeakAggImplHelper4
         : public OWeakAggObject
         , public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4
@@ -167,7 +167,7 @@ namespace cppu
         template argument(s). Your sub class defines method implementations for these interface(s).
     */
     template< class BaseClass, class Ifc1, class Ifc2, class Ifc3, class Ifc4 >
-    class SAL_NO_VTABLE ImplInheritanceHelper4
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC ImplInheritanceHelper4
         : public BaseClass
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4
     {
@@ -235,7 +235,7 @@ namespace cppu
         template argument(s). Your sub class defines method implementations for these interface(s).
     */
     template< class BaseClass, class Ifc1, class Ifc2, class Ifc3, class Ifc4 >
-    class SAL_NO_VTABLE AggImplInheritanceHelper4
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC AggImplInheritanceHelper4
         : public BaseClass
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4
     {

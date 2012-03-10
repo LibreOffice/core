@@ -73,7 +73,7 @@ namespace cppu
         queryInterface() calls to this base class.
     */
     template< class Ifc1, class Ifc2 >
-    class SAL_NO_VTABLE ImplHelper2
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC ImplHelper2
         : public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2
     {
@@ -95,7 +95,7 @@ namespace cppu
         Your sub class defines method implementations for these interface(s).
     */
     template< class Ifc1, class Ifc2 >
-    class SAL_NO_VTABLE WeakImplHelper2
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC WeakImplHelper2
         : public OWeakObject
         , public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2
@@ -127,7 +127,7 @@ namespace cppu
         Your sub class defines method implementations for these interface(s).
     */
     template< class Ifc1, class Ifc2 >
-    class SAL_NO_VTABLE WeakAggImplHelper2
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC WeakAggImplHelper2
         : public OWeakAggObject
         , public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2
@@ -164,7 +164,7 @@ namespace cppu
         template argument(s). Your sub class defines method implementations for these interface(s).
     */
     template< class BaseClass, class Ifc1, class Ifc2 >
-    class SAL_NO_VTABLE ImplInheritanceHelper2
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC ImplInheritanceHelper2
         : public BaseClass
         , public Ifc1, public Ifc2
     {
@@ -232,7 +232,7 @@ namespace cppu
         template argument(s). Your sub class defines method implementations for these interface(s).
     */
     template< class BaseClass, class Ifc1, class Ifc2 >
-    class SAL_NO_VTABLE AggImplInheritanceHelper2
+    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC AggImplInheritanceHelper2
         : public BaseClass
         , public Ifc1, public Ifc2
     {
