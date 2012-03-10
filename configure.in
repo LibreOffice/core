@@ -4482,6 +4482,35 @@ istringstream strm( "test" ); return 0;
         LDFLAGS=$sharedlink_ldflags_save
     fi
 
+    if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE" -a "$HAVE_GCC_VISIBILITY_BROKEN" != "TRUE"; then
+        AC_MSG_CHECKING([if gcc is -fvisibility-inlines-hidden safe (Clang bug 11250)])
+        cat > conftestlib1.cc <<_ACEOF
+template<typename T> struct S1 { virtual ~S1() {} virtual void f() {} };
+struct S2: S1<int> { virtual ~S2(); };
+S2::~S2() {}
+_ACEOF
+        cat > conftestlib2.cc <<_ACEOF
+template<typename T> struct S1 { virtual ~S1() {} virtual void f() {} };
+struct S2: S1<int> { virtual ~S2(); };
+struct S3: S2 { virtual ~S3(); }; S3::~S3() {}
+_ACEOF
+        gccvisinlineshiddenok=yes
+        if ! $CXX $CXXFLAGS $CPPFLAGS -shared -fPIC -fvisibility-inlines-hidden conftestlib1.cc -o lib1.so >/dev/null 2>/dev/null; then
+            gccvisinlineshiddenok=no
+        else
+            if ! $CXX $CXXFLAGS $CPPFLAGS -shared -fPIC -fvisibility-inlines-hidden conftestlib2.cc -L. -l1 -Wl,-z,defs -o lib2.so >/dev/null 2>/dev/null ; then
+                gccvisinlineshiddenok=no
+            fi
+        fi
+
+        AC_MSG_RESULT([$gccvisinlineshiddenok])
+        if test "$gccvisinlineshiddenok" = "no"; then
+            AC_MSG_WARN([Your gcc/clang is not -fvisibility-inlines-hidden safe, disabling that.])
+            echo "Your gcc/clang is not -fvisibility-inlines-hidden safe, disabling that." >> warn
+            HAVE_GCC_VISIBILITY_BROKEN="TRUE"
+        fi
+    fi
+
     if test "$HAVE_GCC_VISIBILITY_FEATURE" = "TRUE"; then
         AC_MSG_CHECKING([if gcc has a visibility bug with class-level attributes (GCC bug 26905)])
         cat >visibility.cxx <<_ACEOF
