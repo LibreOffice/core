@@ -4527,10 +4527,10 @@ ScVbaRange::AutoFilter( const uno::Any& Field, const uno::Any& Criteria1, const 
             if ( xCurrent.is() )
             {
                 ScVbaRange* pRange = getImplementation( xCurrent );
-                if ( pRange->isSingleCellRange() )
-                    throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't create AutoFilter") ), uno::Reference< uno::XInterface >() );
                 if ( pRange )
                 {
+                    if ( pRange->isSingleCellRange() )
+                       throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Can't create AutoFilter") ), uno::Reference< uno::XInterface >() );
                     RangeHelper currentRegion( pRange->mxRange );
                     autoFiltAddress = currentRegion.getCellRangeAddressable()->getRangeAddress();
                 }
