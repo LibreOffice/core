@@ -2284,8 +2284,7 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
     pSource( pSrc ),
     nDim( nD ),
     nHier( nH ),
-    nLev( nL ),
-    ppMbrs( NULL )
+    nLev( nL )
 {
     //! hold pSource
 
@@ -2357,15 +2356,6 @@ ScDPMembers::ScDPMembers( ScDPSource* pSrc, long nD, long nH, long nL ) :
 
 ScDPMembers::~ScDPMembers()
 {
-    //! release pSource
-
-    if (ppMbrs)
-    {
-        for (long i=0; i<nMbrCount; i++)
-            if ( ppMbrs[i] )
-                ppMbrs[i]->release();   // ref-counted
-        delete[] ppMbrs;
-    }
 }
 
 // XNameAccess implementation using getCount/getByIndex
@@ -2451,13 +2441,14 @@ long ScDPMembers::getMinMembers() const
     // used in lcl_CountMinMembers
 
     long nVisCount = 0;
-    if ( ppMbrs )
+    if (!maMembers.empty())
     {
-        for (long i=0; i<nMbrCount; i++)
+        MembersType::const_iterator it = maMembers.begin(), itEnd = maMembers.end();
+        for (; it != itEnd; ++it)
         {
             //  count only visible with details (default is true for both)
-            const ScDPMember* pMbr = ppMbrs[i];
-            if ( !pMbr || ( pMbr->isVisible() && pMbr->getShowDetails() ) )
+            const rtl::Reference<ScDPMember>& pMbr = *it;
+            if (!pMbr.get() || (pMbr->isVisible() && pMbr->getShowDetails()))
                 ++nVisCount;
         }
     }
@@ -2474,20 +2465,17 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
 
     if ( nIndex >= 0 && nIndex < nMbrCount )
     {
-        if ( !ppMbrs )
+        if (maMembers.empty())
+            maMembers.resize(nMbrCount);
+
+        if (!maMembers[nIndex].get())
         {
-            ((ScDPMembers*)this)->ppMbrs = new ScDPMember*[nMbrCount];
-            for (long i=0; i<nMbrCount; i++)
-                ppMbrs[i] = NULL;
-        }
-        if ( !ppMbrs[nIndex] )
-        {
-            ScDPMember* pNew;
+            rtl::Reference<ScDPMember> pNew;
             long nSrcDim = pSource->GetSourceDim( nDim );
             if ( pSource->IsDataLayoutDimension(nSrcDim) )
             {
                 // empty name (never shown, not used for lookup)
-                pNew = new ScDPMember( pSource, nDim, nHier, nLev, 0 );
+                pNew.set(new ScDPMember(pSource, nDim, nHier, nLev, 0));
             }
             else if ( nHier != SC_DAPI_HIERARCHY_FLAT && pSource->IsDateDimension( nSrcDim ) )
             {
@@ -2549,20 +2537,17 @@ ScDPMember* ScDPMembers::getByIndex(long nIndex) const
 
                 ScDPItemData aData(nGroupBy, nVal);
                 SCROW nId = pSource->GetCache()->GetIdByItemData(nDim, aData);
-                pNew = new ScDPMember(pSource, nDim, nHier, nLev, nId);
+                pNew.set(new ScDPMember(pSource, nDim, nHier, nLev, nId));
             }
             else
             {
                 const std::vector<SCROW>& memberIndexs = pSource->GetData()->GetColumnEntries(nSrcDim);
-                pNew = new ScDPMember(pSource, nDim, nHier, nLev, memberIndexs[nIndex]);
+                pNew.set(new ScDPMember(pSource, nDim, nHier, nLev, memberIndexs[nIndex]));
             }
-            pNew->acquire();            // ref-counted
-            ppMbrs[nIndex] = pNew;
+            maMembers[nIndex] = pNew;
         }
 
-        OSL_ENSURE( ppMbrs[nIndex] ," member is not initialized " );
-
-        return ppMbrs[nIndex];
+        return maMembers[nIndex].get();
     }
 
     return NULL;    //! exception?

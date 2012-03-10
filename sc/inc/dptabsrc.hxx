@@ -54,6 +54,7 @@
 #include <cppuhelper/implbase3.hxx>
 #include <cppuhelper/implbase5.hxx>
 #include <cppuhelper/implbase6.hxx>
+#include "rtl/ref.hxx"
 
 #include "dptabdat.hxx"
 #include "dpglobal.hxx"
@@ -683,12 +684,13 @@ class ScDPMembers : public cppu::WeakImplHelper2<
                             com::sun::star::lang::XServiceInfo >
 {
 private:
+    typedef std::vector<rtl::Reference<ScDPMember> > MembersType;
     ScDPSource*     pSource;
     long            nDim;
     long            nHier;
     long            nLev;
     long            nMbrCount;
-    ScDPMember**    ppMbrs;
+    mutable MembersType maMembers;
     mutable ScDPMembersHashMap aHashMap;
 
 public:
