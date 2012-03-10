@@ -73,8 +73,13 @@ ScConditionalFormats_Impl::Remove(unsigned short, unsigned short)
 ScCsvControl::ScCsvControl(Window*, ScCsvLayoutData const&, long)
 ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void**, std::__cxx1998::vector<void*, std::allocator<void*> > >, std::__debug::vector<void*, std::allocator<void*> > >, ScDBData>)
 ScDBCollection::AnonDBs::size() const
-ScDPCache::GetDimensionIndex(rtl::OUString const&) const
-ScDPCache::GetIdByItemData(long, rtl::OUString const&) const
+ScDPCache::ClearGroupFields()
+ScDPCache::GetGroupDimMemberValues(long) const
+ScDPCache::GetGroupFieldCount() const
+ScDPInitState::GetNameIdForIndex(long) const
+ScDPItemData::SetGroupValue(int, int)
+ScDPLabelData::ScDPLabelData(rtl::OUString const&, short, bool)
+ScDPResultData::IsInGroup(ScDPItemData const&, long, long, long) const
 ScDocRowHeightUpdater::TabRanges::TabRanges()
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
 ScHTMLColOffset::Insert(ScHTMLColOffset const*, unsigned short, unsigned short)
