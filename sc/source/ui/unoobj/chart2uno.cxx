@@ -3280,7 +3280,7 @@ sal_uLong getDisplayNumberFormat(ScDocument* pDoc, const ScAddress& rPos)
         return nFormat;
 
     ScBaseCell* pCell = pDoc->GetCell(rPos);
-    if (!pCell || pCell->GetCellType() != CELLTYPE_FORMULA)
+    if (!pCell || pCell->GetCellType() != CELLTYPE_FORMULA || nFormat)
         return nFormat;
 
     // With formula cell, the format may be inferred from the formula result.
