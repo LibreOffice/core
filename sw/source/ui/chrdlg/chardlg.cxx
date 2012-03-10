@@ -147,31 +147,65 @@ void SwCharDlg::PageCreated( sal_uInt16 nId, SfxTabPage &rPage )
     }
 }
 
-SwCharURLPage::SwCharURLPage(   Window* pParent,
-                                const SfxItemSet& rCoreSet ) :
-    SfxTabPage( pParent, SW_RES( TP_CHAR_URL ), rCoreSet ),
-    aURLFL (        this, SW_RES(FL_URL)),
-
-    aURLFT(         this, SW_RES(FT_URL        )),
-    aURLED(         this, SW_RES(ED_URL        )),
-    aTextFT(        this, SW_RES(FT_TEXT          )),
-    aTextED(        this, SW_RES(ED_TEXT          )),
-    aNameFT(        this, SW_RES(FT_NAME    )),
-    aNameED(        this, SW_RES(ED_NAME)),
-    aTargetFrmFT(   this, SW_RES(FT_TARGET     )),
-    aTargetFrmLB(   this, SW_RES(LB_TARGET    )),
-    aURLPB(         this, SW_RES(PB_URL        )),
-    aEventPB(       this, SW_RES(PB_EVENT      )),
-    aStyleFL(       this, SW_RES(FL_STYLE      )),
-    aVisitedFT(     this, SW_RES(FT_VISITED    )),
-    aVisitedLB(     this, SW_RES(LB_VISITED    )),
-    aNotVisitedFT(  this, SW_RES(FT_NOT_VISITED)),
-    aNotVisitedLB(  this, SW_RES(LB_NOT_VISITED)),
-    pINetItem(0),
-    bModified(sal_False)
+SwCharURLPage::SwCharURLPage(Window* pParent, const SfxItemSet& rCoreSet)
+    : SfxTabPage(pParent, SW_RES(TP_CHAR_URL), rCoreSet)
+    , m_aBox(this, false, 7)
+    , m_aGrid(&m_aBox)
+    , aURLFL(&m_aGrid, SW_RES(FL_URL))
+    , aURLFT(&m_aGrid, SW_RES(FT_URL))
+    , aURLED(&m_aGrid, SW_RES(ED_URL))
+    , aTextFT(&m_aGrid, SW_RES(FT_TEXT))
+    , aTextED(&m_aGrid, SW_RES(ED_TEXT))
+    , aNameFT(&m_aGrid, SW_RES(FT_NAME))
+    , aNameED(&m_aGrid, SW_RES(ED_NAME))
+    , aTargetFrmFT(&m_aGrid, SW_RES(FT_TARGET))
+    , aTargetFrmLB(&m_aGrid, SW_RES(LB_TARGET))
+    , aURLPB(&m_aGrid, SW_RES(PB_URL))
+    , aEventPB(&m_aGrid, SW_RES(PB_EVENT))
+    , aStyleFL(&m_aGrid, SW_RES(FL_STYLE))
+    , aVisitedFT(&m_aGrid, SW_RES(FT_VISITED))
+    , aVisitedLB(&m_aGrid, SW_RES(LB_VISITED))
+    , aNotVisitedFT(&m_aGrid, SW_RES(FT_NOT_VISITED))
+    , aNotVisitedLB(&m_aGrid, SW_RES(LB_NOT_VISITED))
+    , pINetItem(0)
+    , bModified(sal_False)
 
 {
     FreeResource();
+
+    rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
+    rtl::OString sExpand(RTL_CONSTASCII_STRINGPARAM("expand"));
+
+    m_aBox.setChildProperty(sFill, true);
+    m_aBox.setChildProperty(sExpand, true);
+
+    m_aGrid.set_column_spacing(7);
+    m_aGrid.set_row_spacing(2);
+
+    setGridAttach(aURLFL, 0, 0, 3);
+
+    setGridAttach(aURLFT, 0, 1);
+    setGridAttach(aURLED, 1, 1);
+    setGridAttach(aURLPB, 2, 1);
+
+    setGridAttach(aTextFT, 0, 2);
+    setGridAttach(aTextED, 1, 2);
+
+    setGridAttach(aNameFT, 0, 3);
+    setGridAttach(aNameED, 1, 3);
+
+    setGridAttach(aTargetFrmFT, 0, 4);
+    setGridAttach(aTargetFrmLB, 1, 4);
+
+    setGridAttach(aEventPB, 0, 5);
+
+    setGridAttach(aStyleFL, 0, 6, 3);
+
+    setGridAttach(aVisitedFT, 0, 7);
+    setGridAttach(aVisitedLB, 1, 7);
+
+    setGridAttach(aNotVisitedFT, 0, 8);
+    setGridAttach(aNotVisitedLB, 1, 8);
 
     aEventPB.SetAccessibleRelationMemberOf(&aURLFL);
 

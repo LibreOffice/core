@@ -60,6 +60,9 @@ public:
 
 class SwCharURLPage : public SfxTabPage
 {
+    VBox m_aBox;
+    Grid m_aGrid;
+
     FixedLine           aURLFL;
 
     FixedText           aURLFT;
