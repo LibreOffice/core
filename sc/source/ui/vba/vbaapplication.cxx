@@ -1667,7 +1667,7 @@ ScVbaApplication::GetSaveAsFilename( const ::com::sun::star::uno::Any& InitialFi
                                 {
                                     break;
                                 }
-                                aIt++;
+                                ++aIt;
                             }
                             if ( !bValidFilter )
                             {
