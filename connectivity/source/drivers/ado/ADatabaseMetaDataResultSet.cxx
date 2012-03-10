@@ -64,7 +64,10 @@ ODatabaseMetaDataResultSet::ODatabaseMetaDataResultSet(ADORecordset* _pRecordSet
     ,m_pRecordSet(_pRecordSet)
     ,m_aStatement(NULL)
     ,m_xMetaData(NULL)
+    ,m_nRowPos(0)
+    ,m_bWasNull(sal_False)
     ,m_bEOF(sal_False)
+    ,m_bOnFirstAfterOpen(sal_False)
 {
     osl_incrementInterlockedCount( &m_refCount );
     m_aColMapping.push_back(-1);
