@@ -91,7 +91,14 @@ ifeq ($(MINGW_GCCLIB_EH),YES)
 gb_LinkTarget_LDFLAGS += -shared-libgcc
 endif
 
-gb_DEBUG_CFLAGS := -ggdb2 -finline-limit=0 -fno-inline -fno-default-inline
+# clang does not know -ggdb2
+ifneq ($(COM_GCC_IS_CLANG),TRUE)
+GGDB2=-ggdb2
+else
+GGDB2=-g2
+endif
+
+gb_DEBUG_CFLAGS := $(GGDB2) -finline-limit=0 -fno-inline -fno-default-inline
 
 gb_STDLIBS := \
 	mingwthrd \
@@ -141,8 +148,8 @@ gb_LinkTarget_CFLAGS := $(gb_CFLAGS)
 gb_LinkTarget_CXXFLAGS := $(gb_CXXFLAGS)
 
 ifeq ($(gb_SYMBOL),$(true))
-gb_LinkTarget_CXXFLAGS += -ggdb2
-gb_LinkTarget_CFLAGS += -ggdb2
+gb_LinkTarget_CXXFLAGS += $(GGDB2)
+gb_LinkTarget_CFLAGS += $(GGDB2)
 endif
 
 gb_LinkTarget_INCLUDE +=\
