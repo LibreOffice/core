@@ -39,6 +39,8 @@ COMPRDB=$(SOLARBINDIR)$/udkapi.rdb
 DLLPRE =
 # ------------------------------------------------------------------
 
+.IF "$(OS)" != "IOS"
+
 UNOUCRDEP=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCRRDB=$(SOLARBINDIR)$/udkapi.rdb
 UNOUCROUT=$(OUT)$/inc$/acceptor
@@ -68,6 +70,8 @@ DEF1NAME=		$(SHL1TARGET)
 
 # --- Targets ------------------------------------------------------
 .ENDIF 		# L10N_framework
+
+.ENDIF
 
 .INCLUDE :	target.mk
 
