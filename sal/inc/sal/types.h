@@ -273,7 +273,7 @@ typedef void *                   sal_Handle;
 #     define SAL_DLLPRIVATE        __hidden
 #   elif defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
 #     define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
-#     define SAL_DLLPUBLIC_IMPORT
+#     define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("default")))
 #     define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
 #   else
 #     define SAL_DLLPUBLIC_EXPORT
