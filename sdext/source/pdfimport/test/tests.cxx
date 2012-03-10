@@ -87,15 +87,18 @@ using namespace ::pdfparse;
 using namespace ::pdfi;
 using namespace ::com::sun::star;
 
-namespace
+namespace rtl
 {
-
     template< typename charT, typename traits > std::basic_ostream<charT, traits> &
         operator <<(
                 std::basic_ostream<charT, traits> & stream, rtl::OString const & string)
         {
             return stream << string.getStr();
         }
+}
+
+namespace
+{
 
     class TestSink : public ContentSink
     {
