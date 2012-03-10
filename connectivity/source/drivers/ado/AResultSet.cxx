@@ -878,15 +878,15 @@ sal_Bool SAL_CALL OResultSet::moveRelativeToBookmark( const Any& bookmark, sal_I
     return SUCCEEDED(m_pRecordSet->Move(rows,m_aBookmarks[nPos]));
 }
 //------------------------------------------------------------------------------
-sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& first, const Any& second ) throw(SQLException, RuntimeException)
+sal_Int32 SAL_CALL OResultSet::compareBookmarks( const Any& bookmark1, const Any& bookmark2 ) throw(SQLException, RuntimeException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
     checkDisposed(OResultSet_BASE::rBHelper.bDisposed);
 
     sal_Int32 nPos1;
-    first >>= nPos1;
+    bookmark1 >>= nPos1;
     sal_Int32 nPos2;
-    second >>= nPos2;
+    bookmark2 >>= nPos2;
     if(nPos1 == nPos2)  // they should be equal
         return sal_True;
 
