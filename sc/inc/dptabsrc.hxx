@@ -718,8 +718,8 @@ public:
     virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL getSupportedServiceNames()
                                 throw(::com::sun::star::uno::RuntimeException);
 
-    virtual long            getCount() const;
-    virtual ScDPMember*     getByIndex(long nIndex) const;
+    long getCount() const;
+    ScDPMember* getByIndex(long nIndex) const;
 
     long                    getMinMembers() const;
 
