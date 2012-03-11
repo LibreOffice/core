@@ -1676,7 +1676,7 @@ bool MSWordExportBase::NearestBookmark( xub_StrLen& rNearest, const xub_StrLen n
 {
     bool bHasBookmark = false;
 
-    if ( m_rSortedMarksStart.size( ) > 0 )
+    if ( !m_rSortedMarksStart.empty() )
     {
         IMark* pMarkStart = m_rSortedMarksStart.front();
         xub_StrLen nNext = pMarkStart->GetMarkStart().nContent.GetIndex();
@@ -1687,7 +1687,7 @@ bool MSWordExportBase::NearestBookmark( xub_StrLen& rNearest, const xub_StrLen n
         }
     }
 
-    if ( m_rSortedMarksEnd.size( ) > 0 )
+    if ( !m_rSortedMarksEnd.empty() )
     {
         IMark* pMarkEnd = m_rSortedMarksEnd[0];
         xub_StrLen nNext = pMarkEnd->GetMarkEnd().nContent.GetIndex();

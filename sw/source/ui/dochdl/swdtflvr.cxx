@@ -854,7 +854,7 @@ int SwTransferable::PrepareForCopy( sal_Bool bIsCut )
             // remove all DDE-Bookmarks, they are invalid inside the clipdoc!
             for(::std::vector< ::sw::mark::IMark* >::iterator ppMark = vDdeMarks.begin();
                 ppMark != vDdeMarks.end();
-                ppMark++)
+                ++ppMark)
                 pMarkAccess->deleteMark(*ppMark);
         }
 
