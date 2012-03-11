@@ -910,7 +910,6 @@ oox::AttributeConversion::decodeUnsignedHex(rtl::OUString const&)
 oox::ContainerHelper::insertByIndex(com::sun::star::uno::Reference<com::sun::star::container::XIndexContainer> const&, int, com::sun::star::uno::Any const&)
 oox::GraphicHelper::convertScreenPixelToHmm(com::sun::star::awt::Point const&) const
 oox::core::PowerPointExport::WriteTextStyle(boost::shared_ptr<sax_fastparser::FastSerializerHelper>, int, int)
-oox::core::XmlFilterBase::getChartConverter()
 oox::drawingml::ChartExport::exportDataSeq(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&, int)
 oox::drawingml::ChartExport::exportXAxis(oox::drawingml::AxisIdPair)
 oox::drawingml::ChartExport::exportYAxis(oox::drawingml::AxisIdPair)
