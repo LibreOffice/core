@@ -54,6 +54,7 @@ class SvxSearchItem;
 
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
+#include "objdlg.hxx"
 
 DBG_NAMEEX( ModulWindow )
 
@@ -291,6 +292,7 @@ private:
     EditorWindow        aEdtWindow;
     ScrollBar           aEWVScrollBar;
     bool                bLineNumberDisplay;
+    bool                bObjectCatalogDisplay;
 
     virtual void DataChanged(DataChangedEvent const & rDCEvt);
 
@@ -307,6 +309,7 @@ public:
     ScrollBar&          GetEWVScrollBar()   { return aEWVScrollBar; }
 
     void SetLineNumberDisplay(bool b);
+    void SetObjectCatalogDisplay(bool b);
 };
 
 
@@ -368,6 +371,7 @@ public:
     virtual sal_Bool    IsReadOnly();
 
     void SetLineNumberDisplay(bool);
+    void SetObjectCatalogDisplay(bool);
 
     StarBASIC*      GetBasic() { XModule(); return xBasic; }
 
@@ -437,6 +441,7 @@ private:
 
     WatchWindow     aWatchWindow;
     StackWindow     aStackWindow;
+    ObjectCatalog   aObjectCatalog;
 
     sal_Bool            bVSplitted;
     sal_Bool            bHSplitted;
@@ -474,6 +479,7 @@ public:
 
     WatchWindow&    GetWatchWindow()    { return aWatchWindow; }
     StackWindow&    GetStackWindow()    { return aStackWindow; }
+    ObjectCatalog&    GetObjectCatalog()    { return aObjectCatalog; }
 
     Image getImage(sal_uInt16 nId) const;
 

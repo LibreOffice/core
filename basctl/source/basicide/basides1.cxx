@@ -432,10 +432,22 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         break;
         case SID_BASICIDE_OBJCAT:
         {
-            if ( pObjectCatalog )
-                ShowObjectDialog( sal_False, sal_True );
+            if ( bObjectCatalogDisplay )
+            {
+                pModulLayout->GetObjectCatalog().Hide();
+                dynamic_cast<ModulWindow*>(pCurWin)->SetPosPixel( Point( 0, 0 ) );
+                dynamic_cast<ModulWindow*>(pCurWin)->SetSizePixel( Size( pCurWin->GetSizePixel().Width() + OBJCAT_PANE_WIDTH, pCurWin->GetSizePixel().Height() ) );
+                dynamic_cast<ModulWindow*>(pCurWin)->SetObjectCatalogDisplay( false );
+                bObjectCatalogDisplay = sal_False;
+            }
             else
-                ShowObjectDialog( sal_True, sal_True );
+            {
+                pModulLayout->GetObjectCatalog().Show();
+                dynamic_cast<ModulWindow*>(pCurWin)->SetPosPixel( Point( OBJCAT_PANE_WIDTH, 0 ) );
+                dynamic_cast<ModulWindow*>(pCurWin)->SetSizePixel( Size( pCurWin->GetSizePixel().Width() - OBJCAT_PANE_WIDTH, pCurWin->GetSizePixel().Height() ) );
+                dynamic_cast<ModulWindow*>(pCurWin)->SetObjectCatalogDisplay( true );
+                bObjectCatalogDisplay = sal_True;
+            }
         }
         break;
         case SID_BASICIDE_NAMECHANGEDONTAB:
@@ -870,6 +882,18 @@ void BasicIDEShell::GetState(SfxItemSet &rSet)
             break;
             case SID_BASICIDE_CHOOSEMACRO:
             case SID_BASICIDE_OBJCAT:
+            {
+                // FIXME: hide Object Catalog icon from the toolbar,
+                // when window type is not macro editor.
+                if( pCurWin && !pCurWin->IsA( TYPE( ModulWindow ) ) )
+                {
+                    rSet.DisableItem( nWh );
+                    rSet.Put(SfxVisibilityItem(nWh, sal_False));
+                }
+                else
+                    rSet.Put(SfxVisibilityItem(nWh, sal_True));
+            }
+            break;
             case SID_BASICIDE_SHOWSBX:
             case SID_BASICIDE_CREATEMACRO:
             case SID_BASICIDE_EDITMACRO:

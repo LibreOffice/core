@@ -44,7 +44,7 @@
 #include <vcl/sound.hxx>
 
 ObjectCatalog::ObjectCatalog( Window * pParent )
-    :FloatingWindow( pParent, IDEResId( RID_BASICIDE_OBJCAT ) )
+    :BasicDockingWindow( pParent, IDEResId( RID_BASICIDE_OBJCAT ) )
     ,aMacroTreeList( this, IDEResId( RID_TLB_MACROS ) )
     ,aToolBox(this, IDEResId(RID_TB_TOOLBOX))
     ,aMacroDescr( this, IDEResId( RID_FT_MACRODESCR ) )
@@ -94,6 +94,13 @@ ObjectCatalog::ObjectCatalog( Window * pParent )
 ObjectCatalog::~ObjectCatalog()
 {
     GetParent()->GetSystemWindow()->GetTaskPaneList()->RemoveWindow( this );
+}
+
+void ObjectCatalog::Paint( const Rectangle& )
+{
+    String sOC = GetText();
+    long nPos = GetSizePixel().Width()/2-GetTextWidth(sOC)/2;
+    DrawText( Point( nPos, 10 ), String( sOC ) );
 }
 
 void ObjectCatalog::Move()

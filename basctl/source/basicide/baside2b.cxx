@@ -1658,7 +1658,8 @@ ComplexEditorWindow::ComplexEditorWindow( ModulWindow* pParent ) :
     aLineNumberWindow( this, pParent ),
     aEdtWindow( this ),
     aEWVScrollBar( this, WB_VSCROLL | WB_DRAG ),
-    bLineNumberDisplay(false)
+    bLineNumberDisplay(false),
+    bObjectCatalogDisplay(true)
 {
     aEdtWindow.SetModulWindow( pParent );
     aBrkWindow.SetModulWindow( pParent );
@@ -1681,23 +1682,24 @@ void ComplexEditorWindow::Resize()
     long nSBWidth = aEWVScrollBar.GetSizePixel().Width();
 
     Size aBrkSz(nBrkWidth, aSz.Height());
-    aBrkWindow.SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
 
     Size aLnSz(aLineNumberWindow.GetWidth(), aSz.Height());
-    aLineNumberWindow.SetPosSizePixel(Point(DWBORDER+aBrkSz.Width() - 1, DWBORDER), aLnSz);
 
     if(bLineNumberDisplay)
     {
+        aBrkWindow.SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
+        aLineNumberWindow.SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aLnSz);
         Size aEWSz(aSz.Width() - nBrkWidth - aLineNumberWindow.GetWidth() - nSBWidth + 2, aSz.Height());
-        aEdtWindow.SetPosSizePixel( Point( DWBORDER+aBrkSz.Width()+aLnSz.Width()-1, DWBORDER ), aEWSz );
+        aEdtWindow.SetPosSizePixel( Point( DWBORDER + aBrkSz.Width() + aLnSz.Width() - 1, DWBORDER ), aEWSz );
     }
     else
     {
-        Size aEWSz(aSz.Width() - nBrkWidth - nSBWidth + 1, aSz.Height());
+        aBrkWindow.SetPosSizePixel( Point( DWBORDER, DWBORDER ), aBrkSz );
+        Size aEWSz(aSz.Width() - nBrkWidth - nSBWidth + 2, aSz.Height());
         aEdtWindow.SetPosSizePixel(Point(DWBORDER + aBrkSz.Width() - 1, DWBORDER), aEWSz);
     }
 
-    aEWVScrollBar.SetPosSizePixel( Point( aOutSz.Width()-DWBORDER-nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
+    aEWVScrollBar.SetPosSizePixel( Point( aOutSz.Width() - DWBORDER - nSBWidth, DWBORDER ), Size( nSBWidth, aSz.Height() ) );
 }
 
 IMPL_LINK( ComplexEditorWindow, ScrollHdl, ScrollBar *, pCurScrollBar )
@@ -1734,15 +1736,18 @@ void ComplexEditorWindow::DataChanged(DataChangedEvent const & rDCEvt)
 
 void ComplexEditorWindow::SetLineNumberDisplay(bool b)
 {
-    if(b == bLineNumberDisplay)
-        return;
+    bLineNumberDisplay = b;
+    Resize();
 
     if(b)
         aLineNumberWindow.Show();
     else
         aLineNumberWindow.Hide();
+}
 
-    bLineNumberDisplay = b;
+void ComplexEditorWindow::SetObjectCatalogDisplay(bool b)
+{
+    bObjectCatalogDisplay = b;
     Resize();
 }
 

@@ -52,7 +52,7 @@ private:
     ImageList m_aImagesNormal;
 };
 
-class ObjectCatalog : public FloatingWindow
+class ObjectCatalog : public BasicDockingWindow
 {
 private:
     BasicTreeListBox   aMacroTreeList;
@@ -68,6 +68,7 @@ protected:
     virtual void        Move();
     virtual sal_Bool        Close();
     virtual void        Resize();
+    virtual void    Paint( const Rectangle& rRect );
 
 public:
     ObjectCatalog( Window * pParent );
@@ -75,7 +76,6 @@ public:
 
     void                UpdateEntries();
     void                SetCurrentEntry( BasicEntryDescriptor& rDesc );
-
     void                SetCancelHdl( const Link& rLink ) { aCancelHdl = rLink; }
 };
 

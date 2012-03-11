@@ -78,6 +78,7 @@ protected:
 
 public:
     BasicDockingWindow( Window* pParent );
+    BasicDockingWindow( Window* pParent, const ResId& rResId );
 };
 
 // helper class for sorting TabBar
