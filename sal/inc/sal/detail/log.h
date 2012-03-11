@@ -58,6 +58,18 @@
 extern "C" {
 #endif
 
+/*
+ Clang warns about 'sal_True && sal_True' (those being integers and not booleans)
+ when it sees preprocessed source (-save-temps or using icecream)
+*/
+#if defined __cplusplus
+#define SAL_LOG_TRUE true
+#define SAL_LOG_FALSE false
+#else
+#define SAL_LOG_TRUE sal_True
+#define SAL_LOG_FALSE sal_False
+#endif
+
 enum sal_detail_LogLevel {
     SAL_DETAIL_LOG_LEVEL_INFO, SAL_DETAIL_LOG_LEVEL_WARN,
     SAL_DETAIL_MAKE_FIXED_SIZE = SAL_MAX_ENUM
@@ -81,17 +93,17 @@ SAL_DLLPUBLIC void SAL_CALL sal_detail_logFormat(
         if (condition) { \
             sal_detail_logFormat((level), (area), (where), __VA_ARGS__); \
         } \
-    } while (sal_False)
+    } while (SAL_LOG_FALSE)
 
 #if defined SAL_LOG_INFO
-#define SAL_DETAIL_ENABLE_LOG_INFO sal_True
+#define SAL_DETAIL_ENABLE_LOG_INFO SAL_LOG_TRUE
 #else
-#define SAL_DETAIL_ENABLE_LOG_INFO sal_False
+#define SAL_DETAIL_ENABLE_LOG_INFO SAL_LOG_FALSE
 #endif
 #if defined SAL_LOG_WARN
-#define SAL_DETAIL_ENABLE_LOG_WARN sal_True
+#define SAL_DETAIL_ENABLE_LOG_WARN SAL_LOG_TRUE
 #else
-#define SAL_DETAIL_ENABLE_LOG_WARN sal_False
+#define SAL_DETAIL_ENABLE_LOG_WARN SAL_LOG_FALSE
 #endif
 
 #define SAL_DETAIL_WHERE __FILE__ ":" SAL_STRINGIFY(__LINE__) ": "
