@@ -96,7 +96,7 @@ public:
                                     WriteType, WriteAttribute = 0 );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                    Table* pTable );
+                                    HelpIdTable& rTable );
 };
 SV_DECL_IMPL_REF(SvMetaModule)
 SV_DECL_IMPL_PERSIST_LIST(SvMetaModule,SvMetaModule *)

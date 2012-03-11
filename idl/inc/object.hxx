@@ -140,7 +140,7 @@ public:
                                   WriteType, WriteAttribute = 0 );
     virtual void        WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm );
     virtual void        WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
-                                Table* pTable );
+                                HelpIdTable& rTable );
 };
 SV_IMPL_REF(SvMetaClass)
 SV_IMPL_PERSIST_LIST(SvMetaClass,SvMetaClass *)

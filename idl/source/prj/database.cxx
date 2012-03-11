@@ -765,19 +765,19 @@ sal_Bool SvIdlWorkingBase::WriteHelpIds( SvStream& rOutStm )
     if( rOutStm.GetError() != SVSTREAM_OK )
         return sal_False;
 
-    Table aIdTable;
+    HelpIdTable aIdTable;
     sal_uLong n;
     for( n = 0; n < GetModuleList().Count(); n++ )
     {
         SvMetaModule * pModule = GetModuleList().GetObject( n );
-        pModule->WriteHelpIds( *this, rOutStm, &aIdTable );
+        pModule->WriteHelpIds( *this, rOutStm, aIdTable );
     }
 
     const SvMetaAttributeMemberList & rAttrList = GetAttrList();
     for( n = 0; n < rAttrList.Count(); n++ )
     {
         SvMetaAttribute * pAttr = rAttrList.GetObject( n );
-        pAttr->WriteHelpId( *this, rOutStm, &aIdTable );
+        pAttr->WriteHelpId( *this, rOutStm, aIdTable );
     }
 
     return sal_True;

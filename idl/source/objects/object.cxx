@@ -652,12 +652,12 @@ void SvMetaClass::WriteSfx( SvIdlDataBase & rBase, SvStream & rOutStm )
 }
 
 void SvMetaClass::WriteHelpIds( SvIdlDataBase & rBase, SvStream & rOutStm,
-                            Table* pTable )
+                            HelpIdTable& rTable )
 {
     for( sal_uLong n=0; n<aAttrList.Count(); n++ )
     {
         SvMetaAttribute * pAttr = aAttrList.GetObject( n );
-        pAttr->WriteHelpId( rBase, rOutStm, pTable );
+        pAttr->WriteHelpId( rBase, rOutStm, rTable );
     }
 }
 

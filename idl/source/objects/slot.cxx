@@ -1496,12 +1496,12 @@ sal_uInt16 SvMetaSlot::WriteSlotMap( const rtl::OString& rShellName, sal_uInt16 
 }
 
 void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
-                             Table * pTable )
+                             HelpIdTable&  rTable )
 {
     sal_uLong nSId = GetSlotId().GetValue();
-    if( !pTable->IsKeyValid( nSId ) )
+    if( rTable.find( nSId ) == rTable.end() )
     {
-        pTable->Insert( nSId, this );
+        rTable[ nSId ] = this;
         rOutStm << "#define " << GetSlotId().getString().getStr() << '\t'
             << rtl::OString::valueOf(static_cast<sal_Int32>(nSId)).getStr()
             << endl;
@@ -1533,9 +1533,9 @@ void SvMetaSlot::WriteHelpId( SvIdlDataBase & rBase, SvStream & rOutStm,
             }
 
             // if id not found, write always
-            if( !bIdOk || !pTable->IsKeyValid( nSId2 ) )
+            if( !bIdOk || rTable.find( nSId2 ) == rTable.end() )
             {
-                pTable->Insert( nSId2, this );
+                rTable[ nSId2 ] = this;
 
                 rOutStm << "#define " << aSId.getStr() << '\t'
                     << rtl::OString::valueOf(
