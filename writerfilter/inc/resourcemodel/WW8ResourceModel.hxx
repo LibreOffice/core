@@ -295,6 +295,8 @@ public:
     typedef auto_ptr<Value> Pointer_t;
     SAL_WNODEPRECATED_DECLARATIONS_POP
 
+    virtual ~Value() {}
+
     /**
        Returns integer representation of the value.
      */
