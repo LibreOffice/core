@@ -595,7 +595,6 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
     SAL_WARN_IF(pTextView == 0, "sw", "No View yet, but syntax highlighting?!");
 
     bHighlighting = sal_True;
-    sal_uInt16 nLine;
     sal_uInt16 nCount  = 0;
     // at first the region around the cursor is processed
     TextSelection aSel = pTextView->GetSelection();
@@ -604,16 +603,15 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
         nCur -= 40;
     else
         nCur = 0;
-    if(aSyntaxLineTable.Count())
+    if(!aSyntaxLineTable.empty())
         for(sal_uInt16 i = 0; i < 80 && nCount < 40; i++, nCur++)
         {
-            void * p = aSyntaxLineTable.Get(nCur);
-            if(p)
+            if(aSyntaxLineTable.find(nCur) != aSyntaxLineTable.end())
             {
                 DoSyntaxHighlight( nCur );
-                aSyntaxLineTable.Remove( nCur );
+                aSyntaxLineTable.erase( nCur );
                 nCount++;
-                if(!aSyntaxLineTable.Count())
+                if(aSyntaxLineTable.empty())
                     break;
                 if((Time( Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime()) > MAX_HIGHLIGHTTIME )
                 {
@@ -624,14 +622,11 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
         }
 
     // when there is still anything left by then, go on from the beginning
-    void* p = aSyntaxLineTable.First();
-    while ( p && nCount < MAX_SYNTAX_HIGHLIGHT)
+    while ( !aSyntaxLineTable.empty() && nCount < MAX_SYNTAX_HIGHLIGHT)
     {
-        nLine = (sal_uInt16)aSyntaxLineTable.GetCurKey();
+        sal_uInt16 nLine = *aSyntaxLineTable.begin();
         DoSyntaxHighlight( nLine );
-        sal_uInt16 nCurKey = (sal_uInt16)aSyntaxLineTable.GetCurKey();
-        p = aSyntaxLineTable.Next();
-        aSyntaxLineTable.Remove(nCurKey);
+        aSyntaxLineTable.erase(nLine);
         nCount ++;
         if(Time( Time::SYSTEM ).GetTime() - aSyntaxCheckStart.GetTime() > MAX_HIGHLIGHTTIME)
         {
@@ -640,7 +635,7 @@ IMPL_LINK( SwSrcEditWindow, SyntaxTimerHdl, Timer *, pTimer )
         }
     }
 
-    if(aSyntaxLineTable.Count() && !pTimer->IsActive())
+    if(!aSyntaxLineTable.empty() && !pTimer->IsActive())
         pTimer->Start();
     // SyntaxTimerHdl is called when text changed
     // => good opportunity to determine text width!
@@ -681,7 +676,7 @@ void SwSrcEditWindow::DoDelayedSyntaxHighlight( sal_uInt16 nPara )
 {
     if ( !bHighlighting && bDoSyntaxHighlight )
     {
-        aSyntaxLineTable.Insert( nPara, (void*)(sal_uInt16)1 );
+        aSyntaxLineTable.insert( nPara );
         aSyntaxIdleTimer.Start();
     }
 }
