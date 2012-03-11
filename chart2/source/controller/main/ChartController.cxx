@@ -1112,7 +1112,7 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
     else if( aCommand.equals("InsertMenuMeanValues"))
         this->executeDispatch_InsertMenu_MeanValues();
     else if( aCommand.equals("InsertMenuYErrorBars"))
-        this->executeDispatch_InsertMenu_YErrorBars();
+        this->executeDispatch_InsertYErrorBars();
     else if( aCommand.equals("InsertSymbol"))
          this->executeDispatch_InsertSpecialCharacter();
     else if( aCommand.equals("InsertTrendline"))

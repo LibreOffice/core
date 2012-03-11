@@ -623,7 +623,6 @@ private:
     void                executeDispatch_InsertGrid();
 
     void                executeDispatch_InsertMenu_DataLabels();
-    void                executeDispatch_InsertMenu_YErrorBars();
     void                executeDispatch_InsertMenu_Trendlines();
     void                executeDispatch_InsertMenu_MeanValues();
 
