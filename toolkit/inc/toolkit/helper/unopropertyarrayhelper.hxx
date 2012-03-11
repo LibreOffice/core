@@ -32,9 +32,8 @@
 #include <toolkit/dllapi.h>
 #include <cppuhelper/propshlp.hxx>
 
-#include <tools/table.hxx>
-
 #include <list>
+#include <set>
 #include "toolkit/dllapi.h"
 
 //  ----------------------------------------------------
@@ -43,7 +42,7 @@
 class TOOLKIT_DLLPUBLIC UnoPropertyArrayHelper : public ::cppu::IPropertyArrayHelper
 {
 private:
-    Table       maIDs;
+    std::set<sal_Int32>       maIDs;
 
 protected:
     sal_Bool    ImplHasProperty( sal_uInt16 nPropId ) const;
