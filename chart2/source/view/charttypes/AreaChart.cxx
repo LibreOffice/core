@@ -836,7 +836,7 @@ void AreaChart::createShapes()
                     if( !bIsVisible )
                         continue;
 
-                    bool bCreateErrorBar = false;
+                    bool bCreateYErrorBar = false, bCreateXErrorBar = false;
                     {
                         uno::Reference< beans::XPropertySet > xErrorBarProp(pSeries->getYErrorBarProperties(nIndex));
                         if( xErrorBarProp.is() )
@@ -845,14 +845,25 @@ void AreaChart::createShapes()
                             bool bShowNegative = false;
                             xErrorBarProp->getPropertyValue( C2U( "ShowPositiveError" )) >>= bShowPositive;
                             xErrorBarProp->getPropertyValue( C2U( "ShowNegativeError" )) >>= bShowNegative;
-                            bCreateErrorBar = bShowPositive || bShowNegative;
+                            bCreateYErrorBar = bShowPositive || bShowNegative;
+                        }
+
+                        xErrorBarProp = pSeries->getXErrorBarProperties(nIndex);
+                        if ( xErrorBarProp.is() )
+                        {
+                            bool bShowPositive = false;
+                            bool bShowNegative = false;
+                            xErrorBarProp->getPropertyValue( C2U( "ShowPositiveError" )) >>= bShowPositive;
+                            xErrorBarProp->getPropertyValue( C2U( "ShowNegativeError" )) >>= bShowNegative;
+                            bCreateXErrorBar = bShowPositive || bShowNegative;
                         }
                     }
 
                     Symbol* pSymbolProperties = m_bSymbol ? (*aSeriesIter)->getSymbolProperties( nIndex ) : 0;
                     bool bCreateSymbol = pSymbolProperties && (pSymbolProperties->Style != SymbolStyle_NONE);
 
-                    if( !bCreateSymbol && !bCreateErrorBar && !pSeries->getDataPointLabelIfLabel(nIndex) )
+                    if( !bCreateSymbol && !bCreateYErrorBar &&
+                            !bCreateXErrorBar && !pSeries->getDataPointLabelIfLabel(nIndex) )
                         continue;
 
                     //create a group shape for this point and add to the series shape:
@@ -899,8 +910,12 @@ void AreaChart::createShapes()
                                 }
                             }
                         }
-                        //create error bar
-                        createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget );
+                        //create error bars
+                        if (bCreateXErrorBar)
+                            createErrorBar_X( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget );
+
+                        if (bCreateYErrorBar)
+                            createErrorBar_Y( aUnscaledLogicPosition, **aSeriesIter, nIndex, m_xErrorBarTarget );
 
                         //create data point label
                         if( (**aSeriesIter).getDataPointLabelIfLabel(nIndex) )
