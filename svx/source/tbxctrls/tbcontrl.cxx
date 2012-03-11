@@ -2231,6 +2231,14 @@ void SvxColorToolBoxControl::StateChanged(
 //========================================================================
 // class SvxColorExtToolBoxControl ----------------------------------------
 //========================================================================
+/* Note:
+   The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
+   (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
+   The initial color used by the button is set in /core/svx/source/tbxcntrls/tbcontrl.cxx
+   (SvxColorExtToolBoxControl::SvxColorExtToolBoxControl())
+   and in case of writer for text(background)color also in /core/sw/source/ui/docvw/edtwin.cxx
+   (SwEditWin::aTextBackColor and SwEditWin::aTextBackColor)
+ */
 
 SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
     sal_uInt16 nSlotId,
@@ -2252,11 +2260,13 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
         case SID_ATTR_CHAR_COLOR:
             addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:Color" )));
             nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
+            mLastColor = COL_RED;
             break;
 
         case SID_ATTR_CHAR_COLOR2:
             addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharColorExt" )));
             nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
+            mLastColor = COL_RED;
             break;
 
         case SID_BACKGROUND_COLOR:
@@ -2264,11 +2274,13 @@ SvxColorExtToolBoxControl::SvxColorExtToolBoxControl(
         default:
             addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:CharBackgroundExt" )));
             nMode = TBX_UPDATER_MODE_CHAR_COLOR_NEW;
+            mLastColor = COL_YELLOW;
             break;
 
         case SID_FRAME_LINECOLOR:
             addStatusListener( OUString( RTL_CONSTASCII_USTRINGPARAM( ".uno:FrameLineColor" )));
             nMode = 0;
+            mLastColor = COL_BLUE;
             break;
     }
 

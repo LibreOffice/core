@@ -176,6 +176,14 @@ QuickHelpData* SwEditWin::pQuickHlpData = 0;
 
 long    SwEditWin::nDDStartPosY = 0;
 long    SwEditWin::nDDStartPosX = 0;
+/* Note:
+   The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
+   (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
+   The initial color used by the button is set in /core/svx/source/tbxcntrls/tbcontrl.cxx
+   (SvxColorExtToolBoxControl::SvxColorExtToolBoxControl())
+   and in case of writer for text(background)color also in /core/sw/source/ui/docvw/edtwin.cxx
+   (SwEditWin::aTextBackColor and SwEditWin::aTextBackColor)
+ */
 Color   SwEditWin::aTextBackColor(COL_YELLOW);
 Color   SwEditWin::aTextColor(COL_RED);
 sal_Bool SwEditWin::bTransparentBackColor = sal_False; // background not transparent

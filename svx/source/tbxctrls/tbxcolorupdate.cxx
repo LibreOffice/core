@@ -44,6 +44,14 @@ namespace svx
     //====================================================================
     //= ToolboxButtonColorUpdater
     //====================================================================
+    /* Note:
+       The initial color shown on the button is set in /core/svx/source/tbxctrls/tbxcolorupdate.cxx
+       (ToolboxButtonColorUpdater::ToolboxButtonColorUpdater()) .
+       The initial color used by the button is set in /core/svx/source/tbxcntrls/tbcontrl.cxx
+       (SvxColorExtToolBoxControl::SvxColorExtToolBoxControl())
+       and in case of writer for text(background)color also in /core/sw/source/ui/docvw/edtwin.cxx
+       (SwEditWin::aTextBackColor and SwEditWin::aTextBackColor)
+     */
 
     ToolboxButtonColorUpdater::ToolboxButtonColorUpdater(
         sal_uInt16 nId,
@@ -64,13 +72,17 @@ namespace svx
         {
             case SID_ATTR_CHAR_COLOR  :
             case SID_ATTR_CHAR_COLOR2 :
-                Update( COL_BLACK );
+                Update( COL_RED );
+                break;
+            case SID_FRAME_LINECOLOR  :
+                Update( COL_BLUE );
                 break;
             case SID_ATTR_CHAR_COLOR_BACKGROUND :
+            case SID_BACKGROUND_COLOR :
                 Update( COL_YELLOW );
                 break;
             default :
-                Update( COL_GRAY );
+                Update( COL_TRANSPARENT );
         }
     }
 
