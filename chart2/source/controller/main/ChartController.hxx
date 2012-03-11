@@ -629,7 +629,7 @@ private:
     void                executeDispatch_InsertMeanValue();
     void                executeDispatch_InsertTrendline();
     void                executeDispatch_InsertTrendlineEquation( bool bInsertR2=false );
-    void                executeDispatch_InsertYErrorBars();
+    void                executeDispatch_InsertErrorBars( bool bYError );
 
     void                executeDispatch_InsertR2Value();
     void                executeDispatch_DeleteR2Value();

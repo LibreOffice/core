@@ -472,7 +472,7 @@ void ChartController::executeDispatch_InsertTrendline()
     }
 }
 
-void ChartController::executeDispatch_InsertYErrorBars()
+void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 {
     //if a series is selected insert error bars for that series only:
     uno::Reference< chart2::XDataSeries > xSeries(
@@ -487,7 +487,9 @@ void ChartController::executeDispatch_InsertYErrorBars()
 
         // add error bars with standard deviation
         uno::Reference< beans::XPropertySet > xErrorBarProp(
-            StatisticsHelper::addErrorBars( xSeries, m_xCC, ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION ));
+            StatisticsHelper::addErrorBars( xSeries, m_xCC,
+                                            ::com::sun::star::chart::ErrorBarStyle::STANDARD_DEVIATION,
+                                            bYError));
 
         // get an appropriate item converter
         wrapper::ErrorBarItemConverter aItemConverter(
