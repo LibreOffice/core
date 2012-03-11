@@ -26,6 +26,10 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_UnoApiTarget_autopackage_inc,udkapi))
+$(eval $(call gb_UnoApiMerge_UnoApiMerge,ure/types))
+
+$(eval $(call gb_UnoApiMerge_add_rdbfiles,ure/types,\
+    udkapi \
+))
 
 # vim: set noet sw=4 ts=4:

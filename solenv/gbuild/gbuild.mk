@@ -289,8 +289,9 @@ include $(foreach class, \
 	JavaClassSet \
 	JunitTest \
 	Module \
-	TypesRdb \
 	UnoApiTarget \
+	UnoApi \
+	UnoApiMerge \
 	Zip \
 	Configuration \
 	Extension \

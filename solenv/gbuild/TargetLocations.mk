@@ -46,8 +46,8 @@ gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_ResTarget_get_outdir_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
 gb_ResTarget_get_outdir_target = $(OUTDIR)/bin/$(1).res
-gb_TypesRdb_get_outdir_target = $(OUTDIR)/rdb/$(1).rdb
-gb_UnoApiTarget_get_outdir_target = $(OUTDIR)/bin/$(1).rdb
+gb_UnoApi_get_target = $(OUTDIR)/bin/$(1).rdb
+gb_UnoApiMerge_get_target = $(OUTDIR)/bin/$(1).rdb
 gb_Jar_get_outdir_target = $(OUTDIR)/bin/$(1).jar
 gb_Zip_get_outdir_target = $(OUTDIR)/pck/$(1).zip
 # outdir targets: $(1) is path
@@ -119,10 +119,14 @@ gb_SrsPartTarget_get_target = $(WORKDIR)/SrsPartTarget/$(1)
 gb_SrsTarget_get_target = $(WORKDIR)/SrsTarget/$(1).srs
 gb_SrsTemplatePartTarget_get_target = $(WORKDIR)/inc/$(firstword $(subst /, ,$(1)))/$(subst _tmpl,,$(notdir $(1)))
 gb_SrsTemplateTarget_get_target = $(WORKDIR)/SrsTemplateTarget/$(1)
-gb_TypesRdb_get_target = $(WORKDIR)/TypesRdb/$(1).rdb
-gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).done
+gb_UnoApiTarget_get_target = $(WORKDIR)/UnoApiTarget/$(1).rdb
+gb_UnoApiHeadersTarget_get_comprehensive_dir = $(WORKDIR)/UnoApiHeadersTarget/$(1)/comprehensive
+gb_UnoApiHeadersTarget_get_lightweight_dir = $(WORKDIR)/UnoApiHeadersTarget/$(1)/lightweight
+gb_UnoApiHeadersTarget_get_dir = $(WORKDIR)/UnoApiHeadersTarget/$(1)/normal
+gb_UnoApiHeadersTarget_get_comprehensive_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/comprehensive.done
+gb_UnoApiHeadersTarget_get_lightweight_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/lightweight.done
+gb_UnoApiHeadersTarget_get_target = $(WORKDIR)/UnoApiHeadersTarget/$(1)/normal.done
 gb_UnoApiPartTarget_get_target = $(WORKDIR)/UnoApiPartTarget/$(1)
-gb_UnoApiTarget_get_header_target = $(WORKDIR)/UnoApiHeaders/$(1)
 gb_WinResTarget_get_target = $(WORKDIR)/WinResTarget/$(1)$(gb_WinResTarget_POSTFIX)
 # workdir targets: $(1) is prefix/path
 gb_Configuration_get_target = $(WORKDIR)/Configuration/$(1).done
@@ -174,10 +178,10 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	SdiTarget \
 	SrsTarget \
 	SrsTemplateTarget \
-	TypesRdb \
 	CppunitTest \
 	CustomTarget \
 	ExternalLib \
+	UnoApiHeadersTarget \
 	UnoApiTarget \
 	WinResTarget \
 	YaccTarget \
@@ -195,6 +199,8 @@ $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	Executable \
 	Library \
 	StaticLibrary \
+	UnoApi \
+	UnoApiMerge \
 ))
 
 $(eval $(call gb_Helper_make_dep_targets,\

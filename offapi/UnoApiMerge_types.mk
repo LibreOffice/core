@@ -26,6 +26,21 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_UnoApiTarget_autopackage_idl,udkapi))
+$(eval $(call gb_UnoApiMerge_UnoApiMerge,types))
+
+$(eval $(call gb_UnoApiMerge_add_rdbfiles,types,\
+    udkapi \
+    offapi \
+))
+
+$(eval $(call gb_UnoApiMerge_add_reference_rdbfile,types,\
+    offapi/type_reference/types \
+))
+
+# ugly hack for now!
+statistic : $(gb_Helper_MISC)/api_statistic
+
+$(gb_Helper_MISC)/api_statistic: $(call gb_UnoApiMerge_get_target,types)
+	$(PERL) util/checknewapi.pl $(call gb_UnoApiMerge_get_target,types) $(UNOAPI_REFERENCE_types) "$(RSCREVISION)" "$(gb_UnoApiMerge_REGVIEWTARGET)" > $@
 
 # vim: set noet sw=4 ts=4:

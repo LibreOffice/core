@@ -31,8 +31,6 @@ $(eval $(call gb_Module_Module,oovbaapi))
 
 $(eval $(call gb_Module_add_targets,oovbaapi,\
 	UnoApi_oovbaapi \
-	Package_oovbaapi_inc \
-	Package_oovbaapi_idl \
 ))
 
 # vim: set noet sw=4 ts=4:

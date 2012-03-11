@@ -31,9 +31,7 @@ $(eval $(call gb_Module_Module,offapi))
 
 $(eval $(call gb_Module_add_targets,offapi,\
 	UnoApi_offapi \
-	UnoApi_types \
-	Package_offapi_idl \
-	Package_offapi_inc \
+	UnoApiMerge_types \
 ))
 
 # vim: set noet sw=4 ts=4:

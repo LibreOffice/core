@@ -26,20 +26,20 @@
 #
 #*************************************************************************
 
-$(eval $(call gb_UnoApiTarget_UnoApiTarget,oovbaapi))
+$(eval $(call gb_UnoApi_UnoApi,oovbaapi))
 
-$(eval $(call gb_UnoApiTarget_add_rdbfiles,oovbaapi,\
+$(eval $(call gb_UnoApi_add_api,oovbaapi,\
     udkapi \
     offapi \
 ))
 
-$(eval $(call gb_UnoApiTarget_set_include,oovbaapi,\
+$(eval $(call gb_UnoApi_set_include,oovbaapi,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/oovbaapi \
 	-I$(OUTDIR)/idl \
 ))
 
-$(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,oovbaapi,oovbaapi/ooo/vba/excel,\
+$(eval $(call gb_UnoApi_add_idlfiles_nohdl,oovbaapi,oovbaapi/ooo/vba/excel,\
 	Globals \
 	Hyperlink \
 	Range \
@@ -49,18 +49,18 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,oovbaapi,oovbaapi/ooo/vba/excel
 	Worksheet \
 ))
 
-$(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba,\
 	ControlProvider \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba/msforms,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba/msforms,\
 	MSFormReturnTypes \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba/excel,\
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,oovbaapi,oovbaapi/ooo/vba/excel,\
 	Button \
 	SheetObjects \
 ))
 
-$(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba,\
+$(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba,\
     FormShowConstants \
     VbAppWinStyle \
     VbCalendar \
@@ -110,7 +110,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba,\
 	XVBAToOOEventDescGen \
 	XWindowBase \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/access,\
+$(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/access,\
     AcCloseSave \
     AcColorIndex \
     AcCommand \
@@ -165,7 +165,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/access,\
     ProcKind \
     RefKind \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/adodb,\
+$(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/adodb,\
     ADCPROP_ASYNCTHREADPRIORITY_ENUM \
     ADCPROP_AUTORECALC_ENUM \
     ADCPROP_UPDATECRITERIA_ENUM \
@@ -200,7 +200,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/adodb,\
     StringFormatEnum \
     XactAttributeEnum \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/dao,\
+$(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/dao,\
     CollatingOrderEnum \
     CommitTransOptionsEnum \
     CursorDriverEnum \
@@ -227,7 +227,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/dao,\
     UpdateTypeEnum \
     WorkspaceTypeEnum \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/excel,\
+$(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/excel,\
     Constants \
 	XApplication \
 	XAxes \
@@ -492,7 +492,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/excel,\
 	XWorksheetFunction \
 	XWorksheets \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/msforms,\
+$(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/msforms,\
     fmAction \
     fmAlignment \
     fmBackStyle \
@@ -565,7 +565,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/msforms,\
 	XToggleButton \
 	XUserForm \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/office,\
+$(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/office,\
     DocProperties \
     MailFormat \
     MsoAlertButtonType \
@@ -689,7 +689,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/office,\
     MsoWizardMsgType \
     MsoZOrderCmd \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/powerpoint,\
+$(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/powerpoint,\
     MsoAnimAccumulate \
     MsoAnimAdditive \
     MsoAnimAfterEffect \
@@ -760,11 +760,11 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/powerpoint,
     PpViewType \
     PpWindowState \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/stdole,\
+$(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/stdole,\
     LoadPictureConstants \
     OLE_TRISTATE \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/word,\
+$(eval $(call gb_UnoApi_add_idlfiles,oovbaapi,oovbaapi/ooo/vba/word,\
     WdAlertLevel \
     WdAnimation \
     WdArabicNumeral \
