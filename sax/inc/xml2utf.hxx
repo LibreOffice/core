@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#include <sax/dllapi.h>
+
+
 // TODO: Woher?
 #define Max( a, b )     (((a)>(b)) ? (a) : (b) )
 #define Min( a, b )     (((a)<(b)) ? (a) : (b) )
@@ -37,7 +40,7 @@
 **/
 namespace sax_expatwrap {
 
-class Text2UnicodeConverter
+class SAX_DLLPUBLIC Text2UnicodeConverter
 {
 
 public:
@@ -63,7 +66,7 @@ private:
 * Unicode2TextConverter
 *
 **-----------------------------------------*/
-class Unicode2TextConverter
+class SAX_DLLPUBLIC Unicode2TextConverter
 {
 public:
     Unicode2TextConverter( rtl_TextEncoding encoding );
@@ -94,7 +97,7 @@ private:
 * XMLFile2UTFConverter
 *
 **-----------------------------------------*/
-class XMLFile2UTFConverter
+class SAX_DLLPUBLIC XMLFile2UTFConverter
 {
 public:
     XMLFile2UTFConverter( ):

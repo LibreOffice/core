@@ -44,6 +44,7 @@ $(eval $(call gb_Library_add_linked_libs,expwrap,\
 	cppu \
 	cppuhelper \
 	sal \
+	sax \
     $(gb_STDLIBS) \
 ))
 
@@ -53,7 +54,6 @@ $(eval $(call gb_Library_add_exception_objects,expwrap,\
 	sax/source/expatwrap/attrlistimpl \
 	sax/source/expatwrap/sax_expat \
 	sax/source/expatwrap/saxwriter \
-	sax/source/expatwrap/xml2utf \
 ))
 
 # vim: set noet sw=4 ts=4:

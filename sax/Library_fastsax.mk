@@ -52,18 +52,9 @@ $(eval $(call gb_Library_use_external,fastsax,zlib))
 
 $(eval $(call gb_Library_use_external,fastsax,expat_utf8))
 
-# re-uses xml2utf object from sax.uno lib (see below)
 $(eval $(call gb_Library_add_exception_objects,fastsax,\
 	sax/source/fastparser/facreg \
 	sax/source/fastparser/fastparser \
-	sax/source/expatwrap/xml2utf \
 ))
-
-# mba: currently it's unclear whether xml2utf needs to be compiled with the
-# same compiler settings as in the sax.uno lib; in case not, we have to use 
-# a custom target
-#$(eval $(call gb_Library_add_generated_exception_objects,fastsax,\
-#	sax/source/expatwrap/xml2utf \
-#))
 
 # vim: set noet sw=4 ts=4:
