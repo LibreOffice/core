@@ -120,7 +120,7 @@ SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleRelative(
 
     @since LibreOffice 3.5
 */
-oslModule SAL_CALL osl_loadModuleRelativeAscii(
+SAL_DLLPUBLIC oslModule SAL_CALL osl_loadModuleRelativeAscii(
     oslGenericFunction baseModule, char const * relativePath, sal_Int32 mode);
     /* This function is guaranteed not to call into
        FullTextEncodingDataSingleton in sal/textenc/textenc.cxx, so can be used

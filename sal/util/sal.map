@@ -613,6 +613,7 @@ LIBO_UDK_3.6 { # symbols available in >= LibO 3.6
     global:
         osl_unmapMappedFile;
         osl_identicalDirectoryItem;
+        osl_loadModuleRelativeAscii;
         rtl_string_newReplaceAll;
         rtl_string_newReplaceFirst;
         rtl_uString_newReplaceAll;
