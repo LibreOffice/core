@@ -77,7 +77,7 @@ extern "C" oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
 ) SAL_THROW_EXTERN_C();
 
 
-#if defined(MACOSX)
+#if defined(MACOSX) || defined(IOS)
 #include <mach-o/dyld.h>
 
 oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
@@ -89,11 +89,7 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     char   buffer[PATH_MAX];
     size_t buflen = sizeof(buffer);
 
-#if defined(__GNUC__) && defined(MACOSX)
     if (_NSGetExecutablePath (buffer, (uint32_t*)&buflen) == 0)
-#else
-    if (_NSGetExecutablePath (buffer, &buflen) == 0)
-#endif
     {
         /* Determine absolute path. */
         char abspath[PATH_MAX];
