@@ -523,6 +523,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     libeay32 \
     nputils \
     pdfimport_s \
+    plugcon \
     ssleay32 \
     ooopathutils \
     sample \

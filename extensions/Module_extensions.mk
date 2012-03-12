@@ -109,6 +109,7 @@ $(eval $(call gb_Module_add_targets,extensions,\
 ifeq ($(GUI),UNX)
 ifneq ($(GUIBASE),aqua)
 $(eval $(call gb_Module_add_targets,extensions,\
+	StaticLibrary_plugcon \
 	Executable_pluginapp.bin \
 ))
 endif
