@@ -424,10 +424,15 @@ OOXMLPropertySetImpl::~OOXMLPropertySetImpl()
 
 void OOXMLPropertySetImpl::resolve(Properties & rHandler)
 {
-    OOXMLProperties_t::iterator aIt = begin();
-    while (aIt != end())
+    size_t nIt = 0;
+
+    // The pProp->resolve(rHandler) call below can cause elements to
+    // be appended to mProperties. I don't think it can cause elements
+    // to be deleted. But let's check with < here just to be safe that
+    // the indexing below works.
+    while (nIt < mProperties.size())
     {
-        OOXMLProperty::Pointer_t pProp = *aIt;
+        OOXMLProperty::Pointer_t pProp = mProperties[nIt];
 
         if (pProp.get() != NULL)
             pProp->resolve(rHandler);
@@ -440,7 +445,7 @@ void OOXMLPropertySetImpl::resolve(Properties & rHandler)
         }
 #endif
 
-        ++aIt;
+        ++nIt;
     }
 }
 
