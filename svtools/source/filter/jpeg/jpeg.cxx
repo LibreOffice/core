@@ -397,6 +397,14 @@ void* JPEGReader::CreateBitmap( void* pParam )
             ((JPEGCreateBitmapParam*)pParam)->bTopDown = sal_True;
             pBmpBuf = pBuffer = rtl_allocateMemory( nAlignedWidth * aSize.Height() );
         }
+
+        // clean up, if no Bitmap buffer can be provided.
+        if ( pBmpBuf == 0 )
+        {
+            aBmp.ReleaseAccess( pAcc );
+            pAcc = NULL;
+        }
+
         ((JPEGCreateBitmapParam*)pParam)->nAlignedWidth = nAlignedWidth;
     }
 
