@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,32 +25,37 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Rdb_Rdb,ure/services))
+$(eval $(call gb_Library_Library,reflection))
 
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    acceptor \
-    binaryurp/source/binaryurp \
-    stoc/util/bootstrap \
-    connector \
-    stoc/source/inspect/introspection \
-    stoc/source/invocation_adapterfactory/invocadapt \
-    stoc/source/invocation/invocation \
-    stoc/source/namingservice/namingservice \
-    stoc/source/proxy_factory/proxyfac \
-    stoc/source/corereflection/reflection \
-    stoc/util/stocservices \
-    streams \
-    textinstream \
-    textoutstream \
-    uuresolver \
-))
+ifneq ($(debug),)
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    stoc/source/javaloader/javaloader \
-    stoc/source/javavm/javavm \
-    juh \
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_defs,reflection,\
+    -0b0 \
 ))
 endif
+
+endif
+
+$(eval $(call gb_Library_add_internal_api,reflection,\
+    corefl \
+))
+
+$(eval $(call gb_Library_add_linked_libs,reflection,\
+    cppu \
+    cppuhelper \
+    sal \
+))
+
+$(eval $(call gb_Library_set_componentfile,reflection,stoc/source/corereflection/reflection))
+
+$(eval $(call gb_Library_add_exception_objects,reflection,\
+    stoc/source/corereflection/crarray \
+    stoc/source/corereflection/crbase \
+    stoc/source/corereflection/crcomp \
+    stoc/source/corereflection/crefl \
+    stoc/source/corereflection/crenum \
+    stoc/source/corereflection/criface \
+))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

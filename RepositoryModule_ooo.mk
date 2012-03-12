@@ -90,6 +90,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
     slideshow \
     sot \
     starmath \
+    stoc \
     svl \
     svtools \
     svx \

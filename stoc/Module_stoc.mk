@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,32 +25,37 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Rdb_Rdb,ure/services))
+$(eval $(call gb_Module_Module,stoc))
 
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    acceptor \
-    binaryurp/source/binaryurp \
-    stoc/util/bootstrap \
-    connector \
-    stoc/source/inspect/introspection \
-    stoc/source/invocation_adapterfactory/invocadapt \
-    stoc/source/invocation/invocation \
-    stoc/source/namingservice/namingservice \
-    stoc/source/proxy_factory/proxyfac \
-    stoc/source/corereflection/reflection \
-    stoc/util/stocservices \
-    streams \
-    textinstream \
-    textoutstream \
-    uuresolver \
+$(eval $(call gb_Module_add_targets,stoc,\
+    InternalUnoApi_bootstrap \
+    InternalUnoApi_corefl \
+    InternalUnoApi_insp \
+    InternalUnoApi_inv \
+    InternalUnoApi_invadp \
+    InternalUnoApi_javaloader \
+    InternalUnoApi_jen \
+    InternalUnoApi_namingservice \
+    InternalUnoApi_proxyfac \
+    InternalUnoApi_stocserv \
+    Library_bootstrap \
+    Library_introspection \
+    Library_invocadapt \
+    Library_invocation \
+    Library_namingservice \
+    Library_proxyfac \
+    Library_reflection \
+    Library_stocservices \
+    Package_xml \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    stoc/source/javaloader/javaloader \
-    stoc/source/javavm/javavm \
-    juh \
+ifeq ($(SOLAR_JAVA),TRUE)
+
+$(eval $(call gb_Module_add_targets,stoc,\
+    Library_javaloader \
+    Library_javavm \
 ))
+
 endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

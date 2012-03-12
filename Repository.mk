@@ -476,6 +476,13 @@ endif
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
     binaryurp \
+    introspection \
+    invocadapt \
+    invocation \
+    javaloader \
+    javavm \
+    namingservice \
+    proxyfac \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \

@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,32 +25,33 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Rdb_Rdb,ure/services))
+$(eval $(call gb_Library_Library,introspection))
 
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    acceptor \
-    binaryurp/source/binaryurp \
-    stoc/util/bootstrap \
-    connector \
-    stoc/source/inspect/introspection \
-    stoc/source/invocation_adapterfactory/invocadapt \
-    stoc/source/invocation/invocation \
-    stoc/source/namingservice/namingservice \
-    stoc/source/proxy_factory/proxyfac \
-    stoc/source/corereflection/reflection \
-    stoc/util/stocservices \
-    streams \
-    textinstream \
-    textoutstream \
-    uuresolver \
-))
+ifneq ($(debug),)
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    stoc/source/javaloader/javaloader \
-    stoc/source/javavm/javavm \
-    juh \
+ifeq ($(COM),MSC)
+$(eval $(call gb_Library_add_defs,introspection,\
+    -0b0 \
 ))
 endif
+
+endif
+
+$(eval $(call gb_Library_add_internal_api,introspection,\
+    insp \
+))
+
+$(eval $(call gb_Library_add_linked_libs,introspection,\
+    cppu \
+    cppuhelper \
+    sal \
+    salhelper \
+))
+
+$(eval $(call gb_Library_set_componentfile,introspection,stoc/source/inspect/introspection))
+
+$(eval $(call gb_Library_add_exception_objects,introspection,\
+    stoc/source/inspect/introspection \
+))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
