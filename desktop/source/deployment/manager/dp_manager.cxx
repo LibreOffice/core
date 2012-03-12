@@ -316,12 +316,19 @@ void PackageManagerImpl::initRegistryBackends()
 // as to whether a directory is truly read-only or not
 static bool isMacroURLReadOnly( const OUString &rMacro )
 {
-    rtl::OUString aURL( rMacro );
-    ::rtl::Bootstrap::expandMacros( aURL );
+    rtl::OUString aDirURL( rMacro );
+    ::rtl::Bootstrap::expandMacros( aDirURL );
+
+    ::osl::FileBase::RC aErr = ::osl::Directory::create( aDirURL );
+    if ( aErr == ::osl::FileBase::E_None )
+        return false; // it will be writeable
+    if ( aErr != ::osl::FileBase::E_EXIST )
+        return true; // some serious problem creating it
 
     bool bError;
     sal_uInt64 nWritten = 0;
-    ::osl::File aFile( aURL );
+    rtl::OUString aFileURL( aDirURL + "/stamp.sys" );
+    ::osl::File aFile( aFileURL );
 
     bError = aFile.open( osl_File_OpenFlag_Read |
                          osl_File_OpenFlag_Write |
@@ -330,12 +337,12 @@ static bool isMacroURLReadOnly( const OUString &rMacro )
         bError = aFile.write( "1", 1, nWritten ) != ::osl::FileBase::E_None;
     if (aFile.close() != ::osl::FileBase::E_None)
         bError = true;
-    if (osl::File::remove( aURL ) != ::osl::FileBase::E_None)
+    if (osl::File::remove( aFileURL ) != ::osl::FileBase::E_None)
         bError = true;
 
     SAL_INFO(
         "desktop.deployment",
-        "local url '" << rMacro << "' -> '" << aURL << "' "
+        "local url '" << rMacro << "' -> '" << aFileURL << "' "
             << (bError ? "is" : "is not") << " readonly\n");
     return bError;
 }
@@ -370,7 +377,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         //using virtualization it appears that he/she can. Then a shared extension can
         //be installed but is only visible for the user (because the extension is in
         //the virtual store).
-        stamp = OUSTR("$UNO_USER_PACKAGES_CACHE/stamp.sys");
+        stamp = OUSTR("$UNO_USER_PACKAGES_CACHE");
     }
     else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") )) {
         that->m_activePackages = OUSTR(
@@ -381,7 +388,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/registry");
         logFile = OUSTR(
             "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/log.txt");
-        stamp = OUSTR("$UNO_SHARED_PACKAGES_CACHE/stamp.sys");
+        stamp = OUSTR("$UNO_SHARED_PACKAGES_CACHE");
     }
     else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled") )) {
         that->m_activePackages = OUSTR(
@@ -420,7 +427,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             "vnd.sun.star.expand:$TMP_EXTENSIONS");
         that->m_registryCache = OUSTR(
             "vnd.sun.star.expand:$TMP_EXTENSIONS/registry");
-        stamp = OUSTR("$TMP_EXTENSIONS/stamp.sys");
+        stamp = OUSTR("$TMP_EXTENSIONS");
     }
     else if (! context.matchAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") )) {
