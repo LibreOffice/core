@@ -201,7 +201,11 @@ struct SystemFontData
 #if defined( WNT )
     HFONT           hFont;          // native font object
 #elif defined( QUARTZ )
+#ifdef ENABLE_CORETEXT
+    CTFontRef       rCTFont;
+#else
     void*           aATSUFontID;    // native font object
+#endif
 #elif defined( IOS )
     CTFontRef       rCTFont;        // native font object
 #elif defined( UNX )
@@ -218,7 +222,10 @@ struct SystemFontData
 #if defined( WNT )
         , hFont( 0 )
 #elif defined( QUARTZ )
+#ifdef ENABLE_CORETEXT
+#else
         , aATSUFontID( NULL )
+#endif
 #elif defined( IOS )
 #elif defined( UNX )
         , nFontId( NULL )

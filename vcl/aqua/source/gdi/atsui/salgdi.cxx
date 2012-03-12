@@ -45,11 +45,11 @@
 #include "vcl/svapp.hxx"
 
 #include "aqua/salconst.h"
-#include "aqua/salgdi.h"
+#include "aqua/atsui/salgdi.h"
 #include "aqua/salbmp.h"
 #include "aqua/salframe.h"
 #include "aqua/salcolorutils.hxx"
-#include "aqua/salatsuifontutils.hxx"
+#include "aqua/atsui/salatsuifontutils.hxx"
 
 #include "fontsubset.hxx"
 #include "impfont.hxx"

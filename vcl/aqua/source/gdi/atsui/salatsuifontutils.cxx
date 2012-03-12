@@ -33,9 +33,9 @@
 
 #include "vcl/svapp.hxx"
 
-#include "aqua/salgdi.h"
+#include "aqua/atsui/salgdi.h"
 #include "aqua/saldata.hxx"
-#include "aqua/salatsuifontutils.hxx"
+#include "aqua/atsui/salatsuifontutils.hxx"
 
 // ATSUI is deprecated in 10.6 (or already 10.5?)
 #if defined LIBO_WERROR && defined __GNUC__
