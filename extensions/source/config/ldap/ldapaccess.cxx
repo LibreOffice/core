@@ -273,26 +273,28 @@ void LdapConnection::initConnection()
     return userDn ;
 }
 
+#if defined WNT || !defined WITH_OPENLDAP
 extern "C" { static void SAL_CALL thisModule() {} }
+#endif
+
 void LdapConnection::loadModule()
 {
     if ( !s_Ldap_Module )
     {
-#if defined(WNT)
-#       define LIBLDAP "nsldap32v50.dll"
+#if defined WNT
+        s_Ldap_Module = osl_loadModuleRelativeAscii(
+            &thisModule, "nsldap32v50.dll", 0);
+#elif defined WITH_OPENLDAP
+        s_Ldap_Module = osl_loadModuleAscii(
+            ("libldap-" SAL_STRINGIFY(LDAP_VENDOR_VERSION_MAJOR) "."
+             SAL_STRINGIFY(LDAP_VENDOR_VERSION_MINOR) ".so."
+             SAL_STRINGIFY(LDAP_VENDOR_VERSION_MAJOR)),
+            0);
 #else
-#   ifdef WITH_OPENLDAP
-#       define xstr(s) str(s)
-#       define str(s) #s
-#       define LIBLDAP "libldap-" xstr(LDAP_VENDOR_VERSION_MAJOR) "." xstr(LDAP_VENDOR_VERSION_MINOR) ".so." xstr(LDAP_VENDOR_VERSION_MAJOR)
-#   else
-#       define LIBLDAP "libldap50.so"
-#   endif
+        s_Ldap_Module = osl_loadModuleRelativeAscii(
+            &thisModule, "libldap50.so", 0);
 #endif
-        const ::rtl::OUString sModuleName(RTL_CONSTASCII_USTRINGPARAM(LIBLDAP));
 
-        // load the dbtools library
-        s_Ldap_Module = osl_loadModuleRelative(&thisModule, sModuleName.pData, 0);
         if ( s_Ldap_Module != NULL )
         {
             s_p_unbind_s = (t_ldap_unbind_s)(osl_getFunctionSymbol(s_Ldap_Module, ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ldap_unbind_s")).pData));
