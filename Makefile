@@ -254,6 +254,9 @@ $(1).all: bootstrap fetch
 $(1).clean:
 	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) clean gb_PARTIALBUILD=T
 
+$(1).subsequentcheck:
+	cd $(1) && $(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) subsequentcheck gb_PARTIALBUILD=T
+
 $(1).deliver:
 	@true
 
