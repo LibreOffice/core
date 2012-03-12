@@ -21,7 +21,6 @@ HTMLControls::Insert(HTMLControls const*, unsigned short, unsigned short)
 HTMLControls::Remove(HTMLControl const*&, unsigned short)
 HTMLControls::Remove(unsigned short, unsigned short)
 ImpSvtData::~ImpSvtData()
-ImplDevFontList::ImplFindByLocale(com::sun::star::lang::Locale&) const
 InsCapOptArr::Insert(InsCapOptArr const*, unsigned short, unsigned short)
 InsCapOptArr::Insert(InsCaptionOpt* const&, unsigned short&)
 InsCapOptArr::Insert(InsCaptionOpt* const*, unsigned short)

@@ -544,6 +544,19 @@ bool WinGlyphFallbackSubstititution::HasMissingChars( const ImplFontData* pFace,
     return bHasMatches;
 }
 
+namespace
+{
+    //used by 2-level font fallback
+    ImplDevFontListData* findDevFontListByLocale(const ImplDevFontList &rDevFontList,
+        const com::sun::star::lang::Locale& rLocale )
+    {
+        // get the default font for a specified locale
+        const DefaultFontConfiguration& rDefaults = DefaultFontConfiguration::get();
+        const rtl::OUString aDefault = rDefaults.getUserInterfaceFont(rLocale);
+        return rDevFontList.ImplFindByTokenNames(aDefault);
+    }
+}
+
 // find a fallback font for missing characters
 // TODO: should stylistic matches be searched and prefered?
 bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFontSelData, rtl::OUString& rMissingChars ) const
@@ -571,7 +584,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
     // first level fallback:
     // try use the locale specific default fonts defined in VCL.xcu
     const ImplDevFontList* pDevFontList = ImplGetSVData()->maGDIData.mpScreenFontList;
-    /*const*/ ImplDevFontListData* pDevFont = pDevFontList->ImplFindByLocale( aLocale );
+    /*const*/ ImplDevFontListData* pDevFont = findDevFontListByLocale(*pDevFontList, aLocale);
     if( pDevFont )
     {
         const ImplFontData* pFace = pDevFont->FindBestFontFace( rFontSelData );
@@ -585,7 +598,7 @@ bool WinGlyphFallbackSubstititution::FindFontSubstitute( FontSelectPattern& rFon
     // are the missing characters symbols?
     pDevFont = pDevFontList->ImplFindByAttributes( IMPL_FONT_ATTR_SYMBOL,
                     rFontSelData.meWeight, rFontSelData.meWidthType,
-                    rFontSelData.meFamily, rFontSelData.meItalic, rFontSelData.maSearchName );
+                    rFontSelData.meItalic, rFontSelData.maSearchName );
     if( pDevFont )
     {
         const ImplFontData* pFace = pDevFont->FindBestFontFace( rFontSelData );
