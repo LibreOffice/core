@@ -84,74 +84,47 @@ ScDPCacheTable::RowFlag::RowFlag() :
 {
 }
 
-ScDPCacheTable::FilterItem::FilterItem() :
-    mfValue(0.0),
-    mbHasValue(false)
-{
-}
+ScDPCacheTable::FilterItem::FilterItem() {}
 
-bool ScDPCacheTable::FilterItem::match( const  ScDPItemData& rCellData ) const
+bool ScDPCacheTable::FilterItem::match(const ScDPItemData& rCellData) const
 {
-    if (!rCellData.GetString().equals(maString) &&
-        (!rCellData.IsValue()|| rCellData.GetValue()!=  mfValue))
-            return false;
-    return true;
+    return rCellData == maItem;
 }
 
 // ----------------------------------------------------------------------------
 
-ScDPCacheTable::SingleFilter::SingleFilter(const rtl::OUString& aString, double fValue, bool bHasValue)
+ScDPCacheTable::SingleFilter::SingleFilter(const ScDPItemData& rItem) :
+    maItem(rItem) {}
+
+bool ScDPCacheTable::SingleFilter::match(const ScDPItemData& rCellData) const
 {
-    maItem.maString = aString;
-    maItem.mfValue      = fValue;
-    maItem.mbHasValue   = bHasValue;
+    return maItem == rCellData;
 }
 
-bool ScDPCacheTable::SingleFilter::match( const  ScDPItemData& rCellData ) const
+const ScDPItemData& ScDPCacheTable::SingleFilter::getMatchValue() const
 {
-      return maItem.match(rCellData);
+    return maItem;
 }
-
-const rtl::OUString& ScDPCacheTable::SingleFilter::getMatchString() const
-{
-    return maItem.maString;
-}
-
-double ScDPCacheTable::SingleFilter::getMatchValue() const
-{
-    return maItem.mfValue;
-}
-
-bool ScDPCacheTable::SingleFilter::hasValue() const
-{
-    return maItem.mbHasValue;
-}
-
-// ----------------------------------------------------------------------------
 
 ScDPCacheTable::GroupFilter::GroupFilter()
 {
 }
 
-bool ScDPCacheTable::GroupFilter::match( const  ScDPItemData& rCellData ) const
+bool ScDPCacheTable::GroupFilter::match(const ScDPItemData& rCellData) const
 {
-    vector<FilterItem>::const_iterator itrEnd = maItems.end();
-        for (vector<FilterItem>::const_iterator itr = maItems.begin(); itr != itrEnd; ++itr)
-        {
-            bool bMatch = itr->match( rCellData);
-            if (bMatch)
-                return  true;
-        }
-        return false;
+    vector<ScDPItemData>::const_iterator it = maItems.begin(), itEnd = maItems.end();
+    for (; it != itEnd; ++it)
+    {
+        bool bMatch = *it == rCellData;
+        if (bMatch)
+            return true;
+    }
+    return false;
 }
 
-void ScDPCacheTable::GroupFilter::addMatchItem(const rtl::OUString& rStr, double fVal, bool bHasValue)
+void ScDPCacheTable::GroupFilter::addMatchItem(const ScDPItemData& rItem)
 {
-    FilterItem aItem;
-    aItem.maString = rStr;
-    aItem.mfValue = fVal;
-    aItem.mbHasValue = bHasValue;
-    maItems.push_back(aItem);
+    maItems.push_back(rItem);
 }
 
 size_t ScDPCacheTable::GroupFilter::getMatchItemCount() const

@@ -459,7 +459,7 @@ Sequence< Sequence<Any> > SAL_CALL ScDPSource::getDrillDownData(const Sequence<s
                     aFilterCriteria.push_back( ScDPCacheTable::Criterion() );
                     aFilterCriteria.back().mnFieldIndex = nCol;
                     aFilterCriteria.back().mpFilter.reset(
-                        new ScDPCacheTable::SingleFilter(aItem.GetString(), aItem.GetValue(), aItem.IsValue()));
+                        new ScDPCacheTable::SingleFilter(aItem));
                 }
             }
         }
@@ -724,7 +724,7 @@ void ScDPSource::FilterCacheTableByPageDimensions()
             {
                 ScDPItemData aData;
                 pMem->FillItemData(aData);
-                pGrpFilter->addMatchItem(aData.GetString(), aData.GetValue(), aData.IsValue());
+                pGrpFilter->addMatchItem(aData);
             }
         }
         if (pGrpFilter->getMatchItemCount() < static_cast<size_t>(nMemCount))
@@ -738,8 +738,7 @@ void ScDPSource::FilterCacheTableByPageDimensions()
         aCriteria.push_back(ScDPCacheTable::Criterion());
         ScDPCacheTable::Criterion& r = aCriteria.back();
         r.mnFieldIndex = static_cast<sal_Int32>(nField);
-        r.mpFilter.reset(
-            new ScDPCacheTable::SingleFilter(rData.GetString()/*rSharedString, nStrId*/, rData.GetValue(), rData.IsValue()));
+        r.mpFilter.reset(new ScDPCacheTable::SingleFilter(rData));
     }
     if (!aCriteria.empty())
     {

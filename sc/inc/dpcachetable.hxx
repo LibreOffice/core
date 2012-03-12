@@ -32,6 +32,7 @@
 #include "sal/types.h"
 #include "osl/mutex.hxx"
 #include "global.hxx"
+#include "dpitemdata.hxx"
 
 #include <vector>
 #include <boost/unordered_set.hpp>
@@ -68,12 +69,10 @@ public:
     /** individual filter item used in SingleFilter and GroupFilter. */
     struct FilterItem
     {
-        rtl::OUString maString;
-        double      mfValue;
-        bool        mbHasValue;
+        ScDPItemData maItem;
 
         FilterItem();
-        bool match( const  ScDPItemData& rCellData ) const;
+        bool match(const ScDPItemData& rCellData) const;
     };
 
     /** interface class used for filtering of rows. */
@@ -90,19 +89,17 @@ public:
     class SingleFilter : public FilterBase
     {
     public:
-        explicit SingleFilter(const rtl::OUString& aString, double fValue, bool bHasValue);
+        explicit SingleFilter(const ScDPItemData &rItem);
         virtual ~SingleFilter() {}
 
         virtual bool match(const ScDPItemData& rCellData) const;
 
-        const rtl::OUString& getMatchString() const;
-        double          getMatchValue() const;
-        bool            hasValue() const;
+        const ScDPItemData& getMatchValue() const;
 
     private:
         explicit SingleFilter();
 
-        FilterItem  maItem;
+        ScDPItemData maItem;
     };
 
     /** multi-item (group) filter. */
@@ -111,12 +108,12 @@ public:
     public:
         GroupFilter();
         virtual ~GroupFilter() {}
-        virtual bool match(  const  ScDPItemData& rCellData ) const;
-        void addMatchItem(const rtl::OUString& rStr, double fVal, bool bHasValue);
+        virtual bool match(const ScDPItemData& rCellData) const;
+        void addMatchItem(const ScDPItemData& rItem);
         size_t getMatchItemCount() const;
 
     private:
-        ::std::vector<FilterItem> maItems;
+        ::std::vector<ScDPItemData> maItems;
     };
 
     /** single filtering criterion. */

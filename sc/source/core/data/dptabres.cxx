@@ -3908,7 +3908,7 @@ void ScDPResultVisibilityData::fillFieldFilters(vector<ScDPCacheTable::Criterion
               itrMem != itrMemEnd; ++itrMem)
         {
             const ScDPItemData& rMemItem = *itrMem;
-            pGrpFilter->addMatchItem(rMemItem.GetString(), rMemItem.GetValue(), rMemItem.IsValue());
+            pGrpFilter->addMatchItem(rMemItem);
         }
 
         ScDPDimension* pDim = pDims->getByIndex(nDimIndex);

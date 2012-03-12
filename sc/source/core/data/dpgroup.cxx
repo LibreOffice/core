@@ -81,28 +81,26 @@ class ScDPGroupDateFilter : public ScDPCacheTable::FilterBase
 {
 public:
     virtual ~ScDPGroupDateFilter() {}
-    ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart,
-                        const Date* pNullDate, const ScDPNumGroupInfo* pNumInfo);
+    ScDPGroupDateFilter(
+        const ScDPItemData& rValue, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo);
 
     virtual bool match(const ScDPItemData & rCellData) const;
 
 private:
     ScDPGroupDateFilter(); // disabled
 
-    const Date*             mpNullDate;
-    const ScDPNumGroupInfo* mpNumInfo;
-    double                  mfMatchValue;
-    sal_Int32               mnDatePart;
+    ScDPItemData            maValue;
+    const Date              maNullDate;
+    const ScDPNumGroupInfo  maNumInfo;
 };
 
 // ----------------------------------------------------------------------------
 
-ScDPGroupDateFilter::ScDPGroupDateFilter(double fMatchValue, sal_Int32 nDatePart,
-                                 const Date* pNullDate, const ScDPNumGroupInfo* pNumInfo) :
-    mpNullDate(pNullDate),
-    mpNumInfo(pNumInfo),
-    mfMatchValue(fMatchValue),
-    mnDatePart(nDatePart)
+ScDPGroupDateFilter::ScDPGroupDateFilter(
+    const ScDPItemData& rItem, const Date& rNullDate, const ScDPNumGroupInfo& rNumInfo) :
+    maValue(rItem),
+    maNullDate(rNullDate),
+    maNumInfo(rNumInfo)
 {
 }
 
@@ -115,20 +113,28 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
     if ( !rCellData.IsValue() )
         return false;
 
-    if (!mpNumInfo)
+    if (maValue.GetType() != ScDPItemData::GroupValue)
         return false;
+
+    sal_Int32 nGroupType = maValue.GetGroupValue().mnGroupType;
+    sal_Int32 nValue = maValue.GetGroupValue().mnValue;
 
     // Start and end dates are inclusive.  (An end date without a time value
     // is included, while an end date with a time value is not.)
 
-    if ( rCellData.GetValue() < mpNumInfo->mfStart && !approxEqual(rCellData.GetValue(), mpNumInfo->mfStart) )
-        return static_cast<sal_Int32>(mfMatchValue) == ScDPItemData::DateFirst;
+    if ( rCellData.GetValue() < maNumInfo.mfStart && !approxEqual(rCellData.GetValue(), maNumInfo.mfStart) )
+    {
+        return nValue == ScDPItemData::DateFirst;
+    }
 
-    if ( rCellData.GetValue() > mpNumInfo->mfEnd && !approxEqual(rCellData.GetValue(), mpNumInfo->mfEnd) )
-        return static_cast<sal_Int32>(mfMatchValue) == ScDPItemData::DateLast;
+    if ( rCellData.GetValue() > maNumInfo.mfEnd && !approxEqual(rCellData.GetValue(), maNumInfo.mfEnd) )
+    {
+        return nValue == ScDPItemData::DateLast;
+    }
 
-    if (mnDatePart == DataPilotFieldGroupBy::HOURS || mnDatePart == DataPilotFieldGroupBy::MINUTES ||
-        mnDatePart == DataPilotFieldGroupBy::SECONDS)
+
+    if (nGroupType == DataPilotFieldGroupBy::HOURS || nGroupType == DataPilotFieldGroupBy::MINUTES ||
+        nGroupType == DataPilotFieldGroupBy::SECONDS)
     {
         // handle time
         // (as in the cell functions, ScInterpreter::ScGetHour etc.: seconds are rounded)
@@ -136,25 +142,22 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
         double time = rCellData.GetValue() - approxFloor(rCellData.GetValue());
         long seconds = static_cast<long>(approxFloor(time*D_TIMEFACTOR + 0.5));
 
-        switch (mnDatePart)
+        switch (nGroupType)
         {
             case DataPilotFieldGroupBy::HOURS:
             {
                 sal_Int32 hrs = seconds / 3600;
-                sal_Int32 matchHrs = static_cast<sal_Int32>(mfMatchValue);
-                return hrs == matchHrs;
+                return hrs == nValue;
             }
             case DataPilotFieldGroupBy::MINUTES:
             {
                 sal_Int32 minutes = (seconds % 3600) / 60;
-                sal_Int32 matchMinutes = static_cast<sal_Int32>(mfMatchValue);
-                return minutes == matchMinutes;
+                return minutes == nValue;
             }
             case DataPilotFieldGroupBy::SECONDS:
             {
                 sal_Int32 sec = seconds % 60;
-                sal_Int32 matchSec = static_cast<sal_Int32>(mfMatchValue);
-                return sec == matchSec;
+                return sec == nValue;
             }
             default:
                 OSL_FAIL("invalid time part");
@@ -162,26 +165,23 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
         return false;
     }
 
-    Date date = *mpNullDate + static_cast<long>(approxFloor(rCellData.GetValue()));
-    switch (mnDatePart)
+    Date date = maNullDate + static_cast<long>(approxFloor(rCellData.GetValue()));
+    switch (nGroupType)
     {
         case DataPilotFieldGroupBy::YEARS:
         {
             sal_Int32 year = static_cast<sal_Int32>(date.GetYear());
-            sal_Int32 matchYear = static_cast<sal_Int32>(mfMatchValue);
-            return year == matchYear;
+            return year == nValue;
         }
         case DataPilotFieldGroupBy::QUARTERS:
         {
             sal_Int32 qtr =  1 + (static_cast<sal_Int32>(date.GetMonth()) - 1) / 3;
-            sal_Int32 matchQtr = static_cast<sal_Int32>(mfMatchValue);
-            return qtr == matchQtr;
+            return qtr == nValue;
         }
         case DataPilotFieldGroupBy::MONTHS:
         {
             sal_Int32 month = static_cast<sal_Int32>(date.GetMonth());
-            sal_Int32 matchMonth = static_cast<sal_Int32>(mfMatchValue);
-            return month == matchMonth;
+            return month == nValue;
         }
         case DataPilotFieldGroupBy::DAYS:
         {
@@ -192,8 +192,7 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
                 // This is not a leap year.  Adjust the value accordingly.
                 ++days;
             }
-            sal_Int32 matchDays = static_cast<sal_Int32>(mfMatchValue);
-            return days == matchDays;
+            return days == nValue;
         }
         default:
             OSL_FAIL("invalid date part");
@@ -313,7 +312,7 @@ void ScDPGroupItem::FillGroupFilter( ScDPCacheTable::GroupFilter& rFilter ) cons
 {
     ScDPItemDataVec::const_iterator itrEnd = aElements.end();
     for (ScDPItemDataVec::const_iterator itr = aElements.begin(); itr != itrEnd; ++itr)
-        rFilter.addMatchItem(itr->GetString(), itr->GetValue(), itr->IsValue());
+        rFilter.addMatchItem(*itr);
 }
 
 // -----------------------------------------------------------------------
@@ -693,9 +692,9 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
 
                 ScDPCacheTable::Criterion aCri;
                 aCri.mnFieldIndex = itr->mnFieldIndex;
-                aCri.mpFilter.reset(new ScDPGroupDateFilter(
-                    pFilter->getMatchValue(), pDateHelper->GetDatePart(),
-                    pDoc->GetFormatTable()->GetNullDate(), &pDateHelper->GetNumInfo()));
+                aCri.mpFilter.reset(
+                    new ScDPGroupDateFilter(
+                        pFilter->getMatchValue(), *pDoc->GetFormatTable()->GetNullDate(), pDateHelper->GetNumInfo()));
 
                 aNewCriteria.push_back(aCri);
             }
@@ -718,9 +717,9 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
                 // external number group
                 ScDPCacheTable::Criterion aCri;
                 aCri.mnFieldIndex = nSrcDim;  // use the source dimension, not the group dimension.
-                aCri.mpFilter.reset(new ScDPGroupDateFilter(
-                    pFilter->getMatchValue(), pDateHelper->GetDatePart(),
-                    pDoc->GetFormatTable()->GetNullDate(), &pDateHelper->GetNumInfo()));
+                aCri.mpFilter.reset(
+                    new ScDPGroupDateFilter(
+                        pFilter->getMatchValue(), *pDoc->GetFormatTable()->GetNullDate(), pDateHelper->GetNumInfo()));
 
                 aNewCriteria.push_back(aCri);
             }
@@ -733,11 +732,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
                 for (size_t i = 0; i < nGroupItemCount; ++i)
                 {
                     const ScDPGroupItem* pGrpItem = pGrpDim->GetGroupByIndex(i);
-                    ScDPItemData aName;
-                    if (pFilter->hasValue())
-                        aName.SetValue(pFilter->getMatchValue());
-                    else
-                        aName.SetString(pFilter->getMatchString());
+                    ScDPItemData aName = pFilter->getMatchValue();
 
                     if (!pGrpItem || !pGrpItem->GetName().IsCaseInsEqual(aName))
                         continue;
