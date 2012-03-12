@@ -534,10 +534,10 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
     {
         SfxMapUnit eUnit = pPool->GetMetric( _nWhich );
 
+        const SvxULSpaceItem& rOldItem =
+            (const SvxULSpaceItem&)rSet.Get( _nWhich );
         if ( bRelativeMode )
         {
-            const SvxULSpaceItem& rOldItem =
-                (const SvxULSpaceItem&)rSet.Get( _nWhich );
 
             if ( rOldItem.GetPropUpper() != 100 )
             {
@@ -571,10 +571,8 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
         }
         else
         {
-            const SvxULSpaceItem& rTopMargin =
-                (const SvxULSpaceItem&)rSet.Get( _nWhich );
-            SetMetricValue( aTopDist, rTopMargin.GetUpper(), eUnit );
-            SetMetricValue( aBottomDist, rTopMargin.GetLower(), eUnit );
+            SetMetricValue( aTopDist, rOldItem.GetUpper(), eUnit );
+            SetMetricValue( aBottomDist, rOldItem.GetLower(), eUnit );
         }
     }
     else
