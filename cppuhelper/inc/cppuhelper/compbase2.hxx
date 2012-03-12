@@ -58,7 +58,7 @@ namespace cppu
         Your sub class defines method implementations for these interface(s).
     */
     template< class Ifc1, class Ifc2 >
-    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC WeakComponentImplHelper2
+    class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakComponentImplHelper2
         : public WeakComponentImplHelperBase
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2
@@ -100,7 +100,7 @@ namespace cppu
         the g++ overloaded-virtual warning
     */
     template< class Ifc1, class Ifc2 >
-    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC PartialWeakComponentImplHelper2
+    class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE PartialWeakComponentImplHelper2
         : public WeakComponentImplHelperBase
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2
@@ -141,7 +141,7 @@ namespace cppu
         @deprecated
     */
     template< class Ifc1, class Ifc2 >
-    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC WeakAggComponentImplHelper2
+    class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggComponentImplHelper2
         : public WeakAggComponentImplHelperBase
         , public ::com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2

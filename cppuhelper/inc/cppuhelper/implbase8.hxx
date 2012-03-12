@@ -80,7 +80,7 @@ namespace cppu
         release() and delegates incoming queryInterface() calls to this base class.
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8 >
-    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC ImplHelper8
+    class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplHelper8
         : public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8
     {
@@ -102,7 +102,7 @@ namespace cppu
         Your sub class defines method implementations for these interface(s).
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8 >
-    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC WeakImplHelper8
+    class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakImplHelper8
         : public OWeakObject
         , public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8
@@ -134,7 +134,7 @@ namespace cppu
         Your sub class defines method implementations for these interface(s).
     */
     template< class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8 >
-    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC WeakAggImplHelper8
+    class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakAggImplHelper8
         : public OWeakAggObject
         , public com::sun::star::lang::XTypeProvider
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8
@@ -171,7 +171,7 @@ namespace cppu
         template argument(s). Your sub class defines method implementations for these interface(s).
     */
     template< class BaseClass, class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8 >
-    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC ImplInheritanceHelper8
+    class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplInheritanceHelper8
         : public BaseClass
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8
     {
@@ -239,7 +239,7 @@ namespace cppu
         template argument(s). Your sub class defines method implementations for these interface(s).
     */
     template< class BaseClass, class Ifc1, class Ifc2, class Ifc3, class Ifc4, class Ifc5, class Ifc6, class Ifc7, class Ifc8 >
-    class SAL_NO_VTABLE CPPUHELPER_DLLPUBLIC AggImplInheritanceHelper8
+    class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE AggImplInheritanceHelper8
         : public BaseClass
         , public Ifc1, public Ifc2, public Ifc3, public Ifc4, public Ifc5, public Ifc6, public Ifc7, public Ifc8
     {

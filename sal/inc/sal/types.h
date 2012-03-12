@@ -255,6 +255,7 @@ typedef void *                   sal_Handle;
 #   define SAL_DLLPUBLIC_IMPORT
 #endif // defined(_MSC_VER)
 #   define SAL_DLLPRIVATE
+#   define SAL_DLLPUBLIC_TEMPLATE
 #if defined(_MSC_VER)
 #   define SAL_CALL         __cdecl
 #   define SAL_CALL_ELLIPSE __cdecl
@@ -267,18 +268,22 @@ typedef void *                   sal_Handle;
 #     define SAL_DLLPUBLIC_EXPORT  __global
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE        __hidden
+#     define SAL_DLLPUBLIC_TEMPLATE
 #   elif defined(__SUNPRO_C ) && (__SUNPRO_C  >= 0x550)
 #     define SAL_DLLPUBLIC_EXPORT  __global
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE        __hidden
+#     define SAL_DLLPUBLIC_TEMPLATE
 #   elif defined(__GNUC__) && defined(HAVE_GCC_VISIBILITY_FEATURE)
 #     define SAL_DLLPUBLIC_EXPORT  __attribute__ ((visibility("default")))
 #     define SAL_DLLPUBLIC_IMPORT  __attribute__ ((visibility("default")))
 #     define SAL_DLLPRIVATE        __attribute__ ((visibility("hidden")))
+#     define SAL_DLLPUBLIC_TEMPLATE __attribute__ ((visibility("default")))
 #   else
 #     define SAL_DLLPUBLIC_EXPORT
 #     define SAL_DLLPUBLIC_IMPORT
 #     define SAL_DLLPRIVATE
+#     define SAL_DLLPUBLIC_TEMPLATE
 #   endif
 #   define SAL_CALL
 #   define SAL_CALL_ELLIPSE
