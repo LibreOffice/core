@@ -159,6 +159,7 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/osl/unx/file_stat \
 	sal/osl/unx/file_url \
 	sal/osl/unx/file_volume \
+	sal/osl/unx/module \
 	sal/osl/unx/process \
 	sal/osl/unx/process_impl \
 	sal/osl/unx/salinit \
@@ -166,7 +167,6 @@ $(eval $(call gb_Library_add_exception_objects,sal,\
 ))
 $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/unx/diagnose \
-	sal/osl/unx/module \
 	sal/osl/unx/mutex \
 	sal/osl/unx/nlsupport \
 	sal/osl/unx/pipe \

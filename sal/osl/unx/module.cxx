@@ -26,18 +26,16 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <sal/log.hxx>
 #include <sal/types.h>
-#include <osl/diagnose.h>
 #include <osl/module.h>
 #include <osl/thread.h>
 #include <osl/process.h>
 #include <osl/file.h>
 
 #include "system.h"
-
-#if OSL_DEBUG_LEVEL > 1
-#include <stdio.h>
-#endif
 
 #ifdef AIX
 #include <sys/ldr.h>
@@ -48,7 +46,7 @@
 #endif
 
 /* implemented in file.c */
-extern int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
+extern "C" int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
 static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
     sal_Bool result = sal_False;
@@ -130,7 +128,7 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
     oslModule pModule=0;
     rtl_uString* ustrTmp = NULL;
 
-    OSL_ENSURE(ustrModuleName,"osl_loadModule : string is not valid");
+    SAL_WARN_IF(ustrModuleName == 0, "sal.osl", "string is not valid");
 
     /* ensure ustrTmp hold valid string */
     if (osl_File_E_None != osl_getSystemPathFromFileURL(ustrModuleName, &ustrTmp))
@@ -154,9 +152,10 @@ oslModule SAL_CALL osl_loadModule(rtl_uString *ustrModuleName, sal_Int32 nRtldMo
 
 oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nRtldMode)
 {
-    OSL_ASSERT(
-        (nRtldMode & SAL_LOADMODULE_LAZY) == 0 ||
-        (nRtldMode & SAL_LOADMODULE_NOW) == 0); /* only either LAZY or NOW */
+    SAL_WARN_IF(
+        ((nRtldMode & SAL_LOADMODULE_LAZY) != 0
+         && (nRtldMode & SAL_LOADMODULE_NOW) != 0),
+        "sal.osl", "only either LAZY or NOW");
     if (pModuleName)
     {
 #ifndef NO_DL_FUNCTIONS
@@ -169,10 +168,10 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
             ((nRtldMode & SAL_LOADMODULE_GLOBAL) ? RTLD_GLOBAL : RTLD_LOCAL);
         void* pLib = dlopen(pModuleName, rtld_mode);
 #endif
-#if OSL_DEBUG_LEVEL > 1
-        if (pLib == 0)
-            OSL_TRACE("Error osl_loadModule: %s", dlerror());
-#endif /* OSL_DEBUG_LEVEL */
+        SAL_INFO_IF(
+            pLib == 0, "sal.osl",
+            "dlopen(" << pModuleName << ", " << rtld_mode << "): "
+                << dlerror());
 
         return ((oslModule)(pLib));
 
@@ -187,14 +186,16 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
 oslModule osl_loadModuleRelativeAscii(
     oslGenericFunction baseModule, char const * relativePath, sal_Int32 mode)
 {
-    OSL_ASSERT(relativePath != NULL);
+    SAL_WARN_IF(relativePath == 0, "sal.osl", "illegal argument");
     if (relativePath[0] == '/') {
         return osl_loadModuleAscii(relativePath, mode);
     } else {
         rtl_String * path = NULL;
         rtl_String * suffix = NULL;
         oslModule module;
-        if (!getModulePathFromAddress(baseModule, &path)) {
+        if (!getModulePathFromAddress(
+                reinterpret_cast< void * >(baseModule), &path))
+        {
             return NULL;
         }
         rtl_string_newFromStr_WithLength(
@@ -217,9 +218,8 @@ oslModule osl_loadModuleRelativeAscii(
 /*****************************************************************************/
 
 sal_Bool SAL_CALL
-osl_getModuleHandle(rtl_uString *pModuleName, oslModule *pResult)
+osl_getModuleHandle(rtl_uString *, oslModule *pResult)
 {
-    (void) pModuleName; /* avoid warning about unused parameter */
 #if !defined(NO_DL_FUNCTIONS) || defined(IOS)
     *pResult = (oslModule) RTLD_DEFAULT;
 #else
@@ -241,16 +241,8 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 #else
         int nRet = dlclose(hModule);
 #endif
-
-#if OSL_DEBUG_LEVEL > 1
-        if (nRet != 0)
-        {
-            fprintf(stderr, "Error osl_unloadModule: %s\n", dlerror());
-        }
-#else
-        (void) nRet;
-#endif /* if OSL_DEBUG_LEVEL */
-
+        SAL_INFO_IF(
+            nRet != 0, "sal.osl", "dlclose(" << hModule << "): " << dlerror());
 #endif /* ifndef NO_DL_FUNCTIONS */
     }
 }
@@ -278,9 +270,9 @@ osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
     if (pSymbol)
     {
         fcnAddr = dlsym(Module, pSymbol);
-
-        if (!fcnAddr)
-            OSL_TRACE("Error osl_getAsciiFunctionSymbol: %s", dlerror());
+        SAL_INFO_IF(
+            fcnAddr == 0, "sal.osl",
+            "dlsym(" << Module << ", " << pSymbol << "): " << dlerror());
     }
 #endif
 
@@ -328,16 +320,16 @@ sal_Bool SAL_CALL osl_getModuleURLFromAddress(void * addr, rtl_uString ** ppLibr
         osl_getProcessWorkingDir(&workDir);
         if (workDir)
         {
-#if OSL_DEBUG_LEVEL > 1
-            OSL_TRACE("module.c::osl_getModuleURLFromAddress - %s", path->buffer);
-#endif
+            SAL_INFO(
+                "sal.osl", "osl_getModuleURLFromAddress: " << path->buffer);
             rtl_string2UString(ppLibraryUrl,
                                path->buffer,
                                path->length,
                                osl_getThreadTextEncoding(),
                                OSTRING_TO_OUSTRING_CVTFLAGS);
 
-            OSL_ASSERT(*ppLibraryUrl != NULL);
+            SAL_WARN_IF(
+                *ppLibraryUrl == 0, "sal.osl", "rtl_string2UString failed");
             osl_getFileURLFromSystemPath(*ppLibraryUrl, ppLibraryUrl);
             osl_getAbsoluteFileURL(workDir, *ppLibraryUrl, ppLibraryUrl);
 
