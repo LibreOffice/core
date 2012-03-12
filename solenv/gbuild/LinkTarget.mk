@@ -634,6 +634,36 @@ endif
 
 endef
 
+define gb_LinkTarget__add_internal_api_one
+$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_UnoApiHeadersTarget_get_$(3)target,$(api)))
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_UnoApiHeadersTarget_get_$(3)dir,$(api))
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(call gb_UnoApiHeadersTarget_get_$(3)dir,$(api))
+endif
+
+endef
+
+define gb_LinkTarget__add_internal_api
+$(foreach api,$(2),$(call gb_LinkTarget__add_internal_api_one,$(1),$(api),$(3)))
+
+endef
+
+define gb_LinkTarget_add_internal_api
+$(call gb_LinkTarget__add_internal_api,$(1),$(2),lightweight_)
+
+endef
+
+define gb_LinkTarget_add_internal_bootstrap_api
+$(call gb_LinkTarget__add_internal_api,$(1),$(2))
+
+endef
+
+define gb_LinkTarget_add_internal_comprehensive_api
+$(call gb_LinkTarget__add_internal_api,$(1),$(2),comprehensive_)
+
+endef
+
 define gb_LinkTarget_add_linked_libs
 ifneq (,$$(filter-out $(gb_Library_KNOWNLIBS),$(2)))
 $$(eval $$(call gb_Output_info,currently known libraries are: $(sort $(gb_Library_KNOWNLIBS)),ALL))

@@ -75,23 +75,46 @@ endif
 
 # UnoApiTarget
 
+gb_UnoApiTarget_RDBMAKERTARGET := $(call gb_Executable_get_target_for_build,rdbmaker)
+gb_UnoApiTarget_RDBMAKERCOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_RDBMAKERTARGET)
 gb_UnoApiTarget_REGCOMPARETARGET := $(call gb_Executable_get_target_for_build,regcompare)
 gb_UnoApiTarget_REGCOMPARECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGCOMPARETARGET)
 gb_UnoApiTarget_REGMERGETARGET := $(call gb_Executable_get_target_for_build,regmerge)
 gb_UnoApiTarget_REGMERGECOMMAND := $(gb_Helper_set_ld_path) SOLARBINDIR=$(OUTDIR_FOR_BUILD)/bin $(gb_UnoApiTarget_REGMERGETARGET)
+gb_UnoApiTarget_XML2CMPTARGET := $(call gb_Executable_get_target_for_build,xml2cmp)
+gb_UnoApiTarget_XML2CMPCOMMAND := $(gb_Helper_set_ld_path) $(gb_UnoApiTarget_XML2CMPTARGET)
+
+gb_UnoApiTarget_XMLRDB := $(call gb_UnoApiTarget_get_target,types)
+
+define gb_UnoApiTarget__get_types
+$(if $(1),$(foreach type,$(shell $(gb_UnoApiTarget_XML2CMPCOMMAND) -types stdout $(1)),$(addprefix -T,$(type))))
+endef
 
 define gb_UnoApiTarget__command_impl
-RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(call gb_Helper_convert_native,$(1) $(2) $(3))) && \
-$(gb_UnoApiTarget_REGMERGECOMMAND) @$${RESPONSEFILE} && \
+RESPONSEFILE=$(call var2file,$(shell $(gb_MKTEMP)),500,$(call gb_Helper_convert_native,$(2))) && \
+$(1) @$${RESPONSEFILE} && \
 rm -f $${RESPONSEFILE}
+endef
+
+define gb_UnoApiTarget__regmerge_command_impl
+$(call gb_UnoApiTarget__command_impl,$(gb_UnoApiTarget_REGMERGECOMMAND),$(1) $(2) $(3))
+endef
+
+# TODO: -bUCR changes content of the RDB files; the old build system
+# uses -b/ (by default)
+define gb_UnoApiTarget__rdbmaker_command_impl
+$(call gb_UnoApiTarget__command_impl,$(gb_UnoApiTarget_RDBMAKERCOMMAND),-O$(1) -B$(2) -b$(2) $(3) $(4))
 endef
 
 define gb_UnoApiTarget__command
 $(call gb_Output_announce,$*,$(true),RDB,3)
 mkdir -p $(dir $(1)) && \
 $(if $(UNOAPI_FILES),\
-	$(call gb_UnoApiTarget__command_impl,$(1),UCR,$(UNOAPI_FILES)),\
-	$(call gb_UnoApiTarget__command_impl,$(1),/,$(UNOAPI_MERGE))) \
+	$(call gb_UnoApiTarget__regmerge_command_impl,$(1),UCR,$(UNOAPI_FILES)),\
+	$(if $(UNOAPI_MERGE),\
+		$(call gb_UnoApiTarget__regmerge_command_impl,$(1),/,$(UNOAPI_MERGE)),\
+		$(call gb_UnoApiTarget__rdbmaker_command_impl,$(1),UCR,\
+			$(call gb_UnoApiTarget__get_types,$(UNOAPI_XML)),$(gb_UnoApiTarget_XMLRDB)))) \
 $(if $(UNOAPI_REFERENCE), \
 	$(call gb_Output_announce,$*,$(true),DBc,3) \
 	&& $(gb_UnoApiTarget_REGCOMPARECOMMAND) \
@@ -100,11 +123,15 @@ $(if $(UNOAPI_REFERENCE), \
 		-r2 $(call gb_Helper_convert_native,$(1)))
 endef
 
+define gb_UnoApiTarget__check_mode
+$(if $(or $(and $(1),$(2),$(3)),$(and $(1),$(2)),$(and $(2),$(3)),$(and $(1),$(3))),\
+	$(error More than one mode of function of UnoApiTarget used: this is not supported),\
+	$(if $(or $(1),$(2),$(3)),,\
+		$(error Neither IDL files nor merged RDBs nor XML desc. were used: nothing will be produced)))
+endef
+
 $(call gb_UnoApiTarget_get_target,%):
-	$(if $(and $(UNOAPI_FILES),$(UNOAPI_MERGE)),\
-		$(error Both IDL files and merged RDBs were added: this is not supported),\
-		$(if $(or $(UNOAPI_FILES),$(UNOAPI_MERGE)),,\
-			$(error Neither IDL files nor merged RDBs were added: nothing will be produced)))
+	$(call gb_UnoApiTarget__check_mode,$(UNOAPI_FILES),$(UNOAPI_MERGE),$(UNOAPI_XML))
 	$(call gb_UnoApiTarget__command,$@,$*,$<,$?)
 
 .PHONY : $(call gb_UnoApiTarget_get_clean_target,%)
@@ -139,6 +166,7 @@ define gb_UnoApiTarget_UnoApiTarget
 $(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_FILES :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_MERGE :=
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_XML :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE :=
 
 ifeq ($(gb_FULLDEPS),$(true))
@@ -199,6 +227,14 @@ $(call gb_UnoApiTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(2)
 
 endef
 
+# Set XML component dependencies description.
+define gb_UnoApiTarget_set_xmlfile
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_XML := $(SRCDIR)/$(2)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(SRCDIR)/$(2)
+$(call gb_UnoApiTarget_get_target,$(1)) : $(gb_UnoApiTarget_XMLRDB)
+
+endef
+
 define gb_UnoApiTarget_add_reference_rdbfile
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE := $(SRCDIR)/$(strip $(2)).rdb
 
@@ -248,6 +284,7 @@ $(call gb_UnoApiHeadersTarget_get_clean_target,%) :
 			$(call gb_UnoApiHeadersTarget_get_lightweight_target,$*) \
 		   	$(call gb_UnoApiHeadersTarget_get_target,$*))
 
+# TODO: add second parameter: root of rdb file (UCR vs. /)
 define gb_UnoApiHeadersTarget_UnoApiHeadersTarget
 $(call gb_UnoApiHeadersTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_UnoApiHeadersTarget_get_comprehensive_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))

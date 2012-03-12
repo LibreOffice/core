@@ -42,6 +42,7 @@ gb_PackagePart_get_destinations = \
 	$(OUTDIR)/unittest \
 	$(OUTDIR)/xml \
 
+gb_InternalUnoApi_get_target = $(OUTDIR)/rdb/$(1).rdb
 gb_PackagePart_get_target = $(OUTDIR)/$(1)
 gb_Rdb_get_outdir_target = $(OUTDIR)/xml/$(1).rdb
 gb_ResTarget_get_outdir_imagelist_target = $(OUTDIR)/res/img/$(1).ilst
@@ -197,6 +198,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 
 $(eval $(call gb_Helper_make_outdir_clean_targets,\
 	Executable \
+	InternalUnoApi \
 	Library \
 	StaticLibrary \
 	UnoApi \

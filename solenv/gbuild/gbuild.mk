@@ -292,6 +292,7 @@ include $(foreach class, \
 	UnoApiTarget \
 	UnoApi \
 	UnoApiMerge \
+	InternalUnoApi \
 	Zip \
 	Configuration \
 	Extension \
