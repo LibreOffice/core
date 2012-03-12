@@ -2008,6 +2008,8 @@ File gid_File_Lib_Apr
 	// part of the suffix.  An error?
 	#ifdef MACOSX
             Name = STRING(CONCAT6(libapr-1,.0.,APR_MINOR,.,APR_MICRO,UNXSUFFIX));
+	#elif FREEBSD
+            Name = STRING(CONCAT3(libapr-1,UNXSUFFIX,.4));
         #else
             Name = STRING(CONCAT6(libapr-1,UNXSUFFIX,.0.,APR_MINOR,.,APR_MICRO));
         #endif
@@ -2023,6 +2025,8 @@ File gid_File_Lib_AprUtil
 	// part of the suffix.  An error?
 	#ifdef MACOSX
             Name = STRING(CONCAT6(libaprutil-1,.0.,APR_UTIL_MINOR,.,APR_UTIL_MICRO,UNXSUFFIX));
+	#elif FREEBSD
+            Name = STRING(CONCAT3(libaprutil-1,UNXSUFFIX,.4));
 	#else
             Name = STRING(CONCAT6(libaprutil-1,UNXSUFFIX,.0.,APR_UTIL_MINOR,.,APR_UTIL_MICRO));
 	#endif
@@ -2038,6 +2042,8 @@ File gid_File_Lib_Serf
 	// part of the suffix.  An error?
 	#ifdef MACOSX
             Name = STRING(CONCAT6(libserf-1,.0.,SERF_MINOR,.,SERF_MICRO,UNXSUFFIX));
+	#elif FREEBSD
+            Name = STRING(CONCAT3(libserf-1,UNXSUFFIX,.0));
 	#else
             Name = STRING(CONCAT6(libserf-1,UNXSUFFIX,.0.,SERF_MINOR,.,SERF_MICRO));
 	#endif
