@@ -279,15 +279,6 @@ void ScDPInitState::RemoveMember()
         --nCount;
 }
 
-SCROW ScDPInitState::GetNameIdForIndex( long nIndexValue ) const
-{
-    for (long i=0; i<nCount; i++)
-        if ( pIndex[i] == nIndexValue )
-            return pData[i];
-
-    return -1;    // not found
-}
-
 // -----------------------------------------------------------------------
 
 void lcl_DumpRow( const String& rType, const String& rName, const ScDPAggData* pAggData,
@@ -920,15 +911,6 @@ bool ScDPResultData::IsNumOrDateGroup( long nDim ) const
     return pSource->GetData()->IsNumOrDateGroup( nDim );
 }
 
-bool ScDPResultData::IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
-                                long nBaseDataId, long nBaseIndex ) const
-{
-    const ScDPItemData* pData = pSource->GetItemDataById( nGroupIndex , nBaseDataId);
-    if ( pData )
-         return pSource->GetData()->IsInGroup( rGroupData, nGroupIndex, *pData , nBaseIndex );
-    else
-        return false;
-}
 bool ScDPResultData::IsInGroup( SCROW nGroupDataId, long nGroupIndex,
                                 const ScDPItemData& rBaseData, long nBaseIndex ) const
 {

@@ -83,7 +83,6 @@ public:
     long                GetCount() const    { return nCount; }
     const long*         GetSource() const   { return pIndex; }
     const SCROW* GetNameIds() const    { return pData; }
-    SCROW   GetNameIdForIndex( long nIndexValue ) const;
 };
 
 typedef ::std::vector<sal_Int32> ScMemberSortOrder;
@@ -337,8 +336,6 @@ public:
     bool                IsBaseForGroup( long nDim ) const;              // any group
     long                GetGroupBase( long nGroupDim ) const;
     bool                IsNumOrDateGroup( long nDim ) const;
-    bool                IsInGroup( const ScDPItemData& rGroupData, long nGroupIndex,
-                                   long nBaseDataId, long nBaseIndex ) const;
     bool                IsInGroup( SCROW nGroupDataId, long nGroupIndex,
                                    const ScDPItemData& rBaseData, long nBaseIndex ) const;
     bool                HasCommonElement( SCROW nFirstDataId, long nFirstIndex,
