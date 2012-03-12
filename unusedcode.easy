@@ -72,9 +72,6 @@ ScConditionalFormats_Impl::Remove(unsigned short, unsigned short)
 ScCsvControl::ScCsvControl(Window*, ScCsvLayoutData const&, long)
 ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void**, std::__cxx1998::vector<void*, std::allocator<void*> > >, std::__debug::vector<void*, std::allocator<void*> > >, ScDBData>)
 ScDBCollection::AnonDBs::size() const
-ScDPCache::ClearGroupFields()
-ScDPCache::GetGroupDimMemberValues(long) const
-ScDPCache::GetGroupFieldCount() const
 ScDPInitState::GetNameIdForIndex(long) const
 ScDPItemData::ScDPItemData(double)
 ScDPItemData::SetGroupValue(int, int)

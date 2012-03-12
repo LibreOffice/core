@@ -136,9 +136,7 @@ public:
     long AppendGroupField();
     void ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo);
     SCROW SetGroupItem(long nDim, const ScDPItemData& rData);
-    const DataListType* GetGroupDimMemberValues(long nDim) const;
     void GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const;
-    void ClearGroupFields();
 
     SCCOL GetDimensionIndex(const rtl::OUString& sName) const;
     sal_uLong GetNumberFormat( long nDim ) const;
@@ -158,7 +156,6 @@ public:
 
     ScDocument* GetDoc() const;
     long GetColumnCount() const;
-    long GetGroupFieldCount() const;
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
 

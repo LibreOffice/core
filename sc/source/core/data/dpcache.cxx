@@ -1013,27 +1013,6 @@ SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
     return -1;
 }
 
-const ScDPCache::DataListType* ScDPCache::GetGroupDimMemberValues(long nDim) const
-{
-    if (nDim < 0)
-        return NULL;
-
-    long nSourceCount = static_cast<long>(maFields.size());
-    if (nDim < nSourceCount)
-    {
-        if (!maFields.at(nDim).mpGroup)
-            return NULL;
-
-        return &maFields[nDim].mpGroup->maItems;
-    }
-
-    nDim -= nSourceCount;
-    if (nDim < static_cast<long>(maGroupFields.size()))
-        return &maGroupFields.at(nDim).maItems;
-
-    return NULL;
-}
-
 void ScDPCache::GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const
 {
     if (nDim < 0)
@@ -1074,12 +1053,6 @@ struct ClearGroupItems : std::unary_function<ScDPCache::Field, void>
 
 }
 
-void ScDPCache::ClearGroupFields()
-{
-    maGroupFields.clear();
-    std::for_each(maFields.begin(), maFields.end(), ClearGroupItems());
-}
-
 SCROW ScDPCache::GetOrder(long nDim, SCROW nIndex) const
 {
     OSL_ENSURE( nDim >=0 && nDim < mnColumnCount, "ScDPTableDataCache::GetOrder : out of bound" );
@@ -1108,11 +1081,6 @@ ScDocument* ScDPCache::GetDoc() const
 long ScDPCache::GetColumnCount() const
 {
     return mnColumnCount;
-}
-
-long ScDPCache::GetGroupFieldCount() const
-{
-    return maGroupFields.size();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
