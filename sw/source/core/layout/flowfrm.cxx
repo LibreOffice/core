@@ -1626,8 +1626,11 @@ SwTwips SwFlowFrm::CalcUpperSpace( const SwBorderAttrs *pAttrs,
     bool bContextualSpacing = pAttrs->GetULSpace().GetContext();
     delete pAccess;
 
-    if (bContextualSpacing && lcl_getContextualSpacing(pPrevFrm) && lcl_IdenticalStyles(pPrevFrm, &rThis))
+    if (bContextualSpacing && pPrevFrm && lcl_getContextualSpacing(pPrevFrm)
+            && lcl_IdenticalStyles(pPrevFrm, &rThis))
+    {
         return 0;
+    }
     else
         return nUpper;
 }
