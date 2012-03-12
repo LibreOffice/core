@@ -31,6 +31,7 @@ $(eval $(call gb_Library_set_include,sofficeapp,\
     $$(INCLUDE) \
     -I$(SRCDIR)/desktop/inc \
     -I$(SRCDIR)/desktop/source/inc \
+    -I$(SRCDIR)/desktop/source/deployment/inc \
 ))
 
 $(eval $(call gb_Library_add_api,sofficeapp,\
@@ -83,7 +84,6 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/app/desktopresid \
     desktop/source/app/dispatchwatcher \
     desktop/source/app/langselect \
-    desktop/source/app/lockfile \
     desktop/source/app/lockfile2 \
     desktop/source/app/officeipcthread \
     desktop/source/app/sofficemain \

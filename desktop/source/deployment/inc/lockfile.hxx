@@ -45,6 +45,8 @@
 #include "rtl/string.hxx"
 #include "rtl/ustring.hxx"
 
+#include "dp_misc_api.hxx"
+
 #define LOCKFILE_SUFFIX   rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "/.lock" ) )
 #define LOCKFILE_GROUP    rtl::OString(RTL_CONSTASCII_STRINGPARAM( "Lockdata" ) )
 #define LOCKFILE_USERKEY  rtl::OString(RTL_CONSTASCII_STRINGPARAM( "User" ) )
@@ -58,7 +60,7 @@ namespace desktop {
     class Lockfile;
     bool Lockfile_execWarning( Lockfile * that );
 
-    class Lockfile
+    class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC Lockfile
     {
     public:
 

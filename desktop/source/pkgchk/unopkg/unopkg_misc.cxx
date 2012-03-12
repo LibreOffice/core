@@ -31,7 +31,7 @@
 #include "unopkg_shared.h"
 #include "dp_identifier.hxx"
 #include "../../deployment/gui/dp_gui.hrc"
-#include "../../app/lockfile.hxx"
+#include "lockfile.hxx"
 #include "vcl/svapp.hxx"
 #include "vcl/msgbox.hxx"
 #include "rtl/bootstrap.hxx"
