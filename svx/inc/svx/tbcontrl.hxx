@@ -87,6 +87,9 @@
         for  cell background color (calc)
         Execute-Id      SID_ATTR_CHAR_COLOR_BACKGROUND
 
+        for table/cell border color (writer, calc)
+        Execute-Id      SID_FRAME_LINECOLOR
+
         SvxColorToolBoxControl
         --------------------------------
         Item type:      SvxBrushItem
