@@ -1484,9 +1484,9 @@ void OdgGeneratorPrivate::_writeGraphicsStyle()
             if (mxStyle["draw:fill-image-ref-point"])
                 pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-ref-point", mxStyle["draw:fill-image-ref-point"]->getStr());
             if (mxStyle["draw:fill-image-ref-point-x"])
-                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-ref-point-x", mxStyle["draw:fill-image-ref-point"]->getStr());
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-ref-point-x", mxStyle["draw:fill-image-ref-point-x"]->getStr());
             if (mxStyle["draw:fill-image-ref-point-y"])
-                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-ref-point-y", mxStyle["draw:fill-image-ref-point"]->getStr());
+                pStyleGraphicsPropertiesElement->addAttribute("draw:fill-image-ref-point-y", mxStyle["draw:fill-image-ref-point-y"]->getStr());
         }
         else
             pStyleGraphicsPropertiesElement->addAttribute("draw:fill", "none");
