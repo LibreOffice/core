@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,32 +25,8 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Rdb_Rdb,ure/services))
+$(eval $(call gb_InternalUnoApi_InternalUnoApi,connectr))
 
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    io/source/acceptor/acceptor \
-    binaryurp/source/binaryurp \
-    stoc/util/bootstrap \
-    io/source/connector/connector \
-    stoc/source/inspect/introspection \
-    stoc/source/invocation_adapterfactory/invocadapt \
-    stoc/source/invocation/invocation \
-    stoc/source/namingservice/namingservice \
-    stoc/source/proxy_factory/proxyfac \
-    stoc/source/corereflection/reflection \
-    stoc/util/stocservices \
-    io/source/stm/streams \
-    io/source/TextInputStream/textinstream \
-    io/source/TextOutputStream/textoutstream \
-    uuresolver \
-))
-
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    stoc/source/javaloader/javaloader \
-    stoc/source/javavm/javavm \
-    juh \
-))
-endif
+$(eval $(call gb_InternalUnoApi_set_xmlfile,connectr,io/source/connector/connectr.xml))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

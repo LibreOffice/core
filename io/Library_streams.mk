@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2012 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,32 +25,27 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Rdb_Rdb,ure/services))
+$(eval $(call gb_Library_Library,streams))
 
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    io/source/acceptor/acceptor \
-    binaryurp/source/binaryurp \
-    stoc/util/bootstrap \
-    io/source/connector/connector \
-    stoc/source/inspect/introspection \
-    stoc/source/invocation_adapterfactory/invocadapt \
-    stoc/source/invocation/invocation \
-    stoc/source/namingservice/namingservice \
-    stoc/source/proxy_factory/proxyfac \
-    stoc/source/corereflection/reflection \
-    stoc/util/stocservices \
-    io/source/stm/streams \
-    io/source/TextInputStream/textinstream \
-    io/source/TextOutputStream/textoutstream \
-    uuresolver \
+$(eval $(call gb_Library_add_internal_api,streams,\
+    stm \
 ))
 
-ifneq ($(SOLAR_JAVA),)
-$(eval $(call gb_Rdb_add_components,ure/services,\
-    stoc/source/javaloader/javaloader \
-    stoc/source/javavm/javavm \
-    juh \
+$(eval $(call gb_Library_add_linked_libs,streams,\
+    cppu \
+    cppuhelper \
+    sal \
 ))
-endif
+
+$(eval $(call gb_Library_set_componentfile,streams,io/source/stm/streams))
+
+$(eval $(call gb_Library_add_exception_objects,streams,\
+    io/source/stm/factreg \
+    io/source/stm/odata \
+    io/source/stm/omark \
+    io/source/stm/opipe \
+    io/source/stm/opump \
+    io/source/stm/streamhelper \
+))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

@@ -475,7 +475,9 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
 endif
 
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
+    acceptor \
     binaryurp \
+    connector \
     introspection \
     invocadapt \
     invocation \
@@ -483,6 +485,9 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
     javavm \
     namingservice \
     proxyfac \
+    streams \
+    textinstream \
+    textoutstream \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
