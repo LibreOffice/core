@@ -33,6 +33,7 @@ $(eval $(call gb_Library_Library,npsoplugin))
 $(eval $(call gb_Library_use_external,npsoplugin,mozilla_headers))
 
 $(eval $(call gb_Library_add_linked_static_libs,npsoplugin,\
+	npsoenv \
 	nputils \
 ))
 
@@ -118,7 +119,6 @@ $(eval $(call gb_LinkTarget_get_target,npsoplugin) : NATIVERES := $(call gb_WinR
 endif # GUI=WNT
 
 $(eval $(call gb_Library_add_exception_objects,npsoplugin,\
-	extensions/source/nsplugin/source/so_env \
 	extensions/source/nsplugin/source/npshell \
 ))
 

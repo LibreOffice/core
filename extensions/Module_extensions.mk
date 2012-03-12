@@ -96,6 +96,7 @@ ifeq ($(ENABLE_NSPLUGIN),YES)
 $(eval $(call gb_Module_add_targets,extensions,\
 	Executable_nsplugin \
 	Library_npsoplugin \
+	StaticLibrary_npsoenv \
 	WinResTarget_npsoplugin \
 ))
 endif

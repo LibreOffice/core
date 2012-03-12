@@ -38,8 +38,11 @@ $(eval $(call gb_Executable_add_api,nsplugin,\
 $(eval $(call gb_Executable_add_exception_objects,nsplugin,\
 	extensions/source/nsplugin/source/so_closelistener \
 	extensions/source/nsplugin/source/so_instance \
-	extensions/source/nsplugin/source/so_env \
 	extensions/source/nsplugin/source/so_main \
+))
+
+$(eval $(call gb_Executable_add_linked_static_libs,nsplugin,\
+	npsoenv \
 ))
 
 $(eval $(call gb_Executable_add_linked_libs,nsplugin,\

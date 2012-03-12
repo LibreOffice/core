@@ -521,6 +521,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     basegfx_s \
     dtobj \
     libeay32 \
+    npsoenv \
     nputils \
     pdfimport_s \
     plugcon \
