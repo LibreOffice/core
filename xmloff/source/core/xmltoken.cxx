@@ -471,6 +471,7 @@ namespace xmloff { namespace token {
         TOKEN( "content-validation",              XML_CONTENT_VALIDATION ),
         TOKEN( "content-validation-name",         XML_CONTENT_VALIDATION_NAME ),
         TOKEN( "content-validations",             XML_CONTENT_VALIDATIONS ),
+        TOKEN( "contextual-spacing",              XML_CONTEXTUAL_SPACING ),
         TOKEN( "continue",                        XML_CONTINUE ),
         TOKEN( "continue-numbering",              XML_CONTINUE_NUMBERING ),
         TOKEN( "contour-path",                    XML_CONTOUR_PATH ),
