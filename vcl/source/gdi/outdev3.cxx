@@ -1674,10 +1674,7 @@ ImplDevFontListData* ImplDevFontList::ImplFindByLocale( com::sun::star::lang::Lo
     // get the default font for a specified locale
     const DefaultFontConfiguration& rDefaults = DefaultFontConfiguration::get();
     const String aDefault = rDefaults.getUserInterfaceFont( rLocale );
-    ImplDevFontListData* pFontData = ImplFindByTokenNames( aDefault );
-    if( pFontData )
-        return pFontData;
-    return NULL;
+    return ImplFindByTokenNames( aDefault );
 }
 
 // -----------------------------------------------------------------------
