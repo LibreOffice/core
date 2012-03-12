@@ -55,6 +55,9 @@ gb_CFLAGS := \
 	-Wdeclaration-after-statement \
 	-Wshadow \
 
+# For -Wno-non-virtual-dtor see <http://markmail.org/message/664jsoqe6n6smy3b>
+# "Re: [dev] warnings01: -Wnon-virtual-dtor" message to dev@openoffice.org from
+# Feb 1, 2006:
 gb_CXXFLAGS := \
 	$(gb_CXXFLAGS_COMMON) \
 	-fPIC \
