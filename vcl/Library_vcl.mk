@@ -612,8 +612,8 @@ endif
 endif
 
 ifneq ($(OS),IOS)
-$(eval $(call gb_Library_add_exception_objects,vcl,\
-    vcl/source/salmain/salmain \
+$(eval $(call gb_Library_add_linked_static_libs,vcl,\
+    vclmain \
 ))
 endif
 
