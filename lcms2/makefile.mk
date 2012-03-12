@@ -39,6 +39,8 @@ TARGET=so_lcms2
 TARFILE_NAME=lcms2-2.3
 TARFILE_MD5=327348d67c979c88c2dec59a23a17d85
 
+PATCH_FILES = lcms2.patch
+
 .IF "$(SYSTEM_LCMS2)" == "YES"
 @all:
     @echo "Using system littlecms2..."
