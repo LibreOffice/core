@@ -48,29 +48,12 @@ $(eval $(call gb_Executable_add_linked_libs,pdfunzip,\
     sal \
 ))
 
-$(eval $(call gb_Executable_add_exception_objects,pdfunzip,\
-    sdext/source/pdfimport/test/pdfunzip \
+$(eval $(call gb_Executable_add_linked_static_libs,pdfunzip,\
+    pdfimport_s \
 ))
 
-# additional objects we need to link in
 $(eval $(call gb_Executable_add_exception_objects,pdfunzip,\
-    sdext/source/pdfimport/filterdet \
-    sdext/source/pdfimport/misc/pdfihelper \
-    sdext/source/pdfimport/misc/pwdinteract \
-    sdext/source/pdfimport/odf/odfemitter \
-    sdext/source/pdfimport/pdfiadaptor \
-    sdext/source/pdfimport/pdfparse/pdfentries \
-    sdext/source/pdfimport/pdfparse/pdfparse \
-    sdext/source/pdfimport/sax/emitcontext \
-    sdext/source/pdfimport/sax/saxattrlist \
-    sdext/source/pdfimport/tree/drawtreevisiting \
-    sdext/source/pdfimport/tree/genericelements \
-    sdext/source/pdfimport/tree/imagecontainer \
-    sdext/source/pdfimport/tree/pdfiprocessor \
-    sdext/source/pdfimport/tree/style \
-    sdext/source/pdfimport/tree/treevisitorfactory \
-    sdext/source/pdfimport/tree/writertreevisiting \
-    sdext/source/pdfimport/wrapper/wrapper \
+    sdext/source/pdfimport/test/pdfunzip \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

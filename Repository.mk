@@ -522,6 +522,7 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     dtobj \
     libeay32 \
     nputils \
+    pdfimport_s \
     ssleay32 \
     ooopathutils \
     sample \

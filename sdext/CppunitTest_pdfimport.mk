@@ -58,10 +58,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sdext_pdfimport,\
 
 $(eval $(call gb_CppunitTest_add_linked_static_libs,sdext_pdfimport,\
     basegfx_s \
-))
-
-$(eval $(call gb_CppunitTest_add_library_objects,sdext_pdfimport,\
-    pdfimport \
+    pdfimport_s \
 ))
 
 $(eval $(call gb_CppunitTest_add_exception_objects,sdext_pdfimport,\

@@ -25,22 +25,11 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-include $(dir $(realpath $(lastword $(MAKEFILE_LIST))))platform.mk
-
 $(eval $(call gb_Library_Library,pdfimport))
 
 $(eval $(call gb_Library_add_api,pdfimport,\
     offapi \
     udkapi \
-))
-
-$(eval $(call gb_Library_add_defs,pdfimport,\
-    -DBOOST_SPIRIT_USE_OLD_NAMESPACE \
-    -DPDFI_IMPL_IDENTIFIER=\"com.sun.star.PDFImport-$(sdext_PLATFORM)\" \
-))
-
-$(eval $(call gb_Library_add_package_headers,pdfimport,\
-    sdext_pdfimport_keywords \
 ))
 
 $(eval $(call gb_Library_set_include,pdfimport,\
@@ -57,6 +46,7 @@ $(eval $(call gb_Library_add_linked_libs,pdfimport,\
 
 $(eval $(call gb_Library_add_linked_static_libs,pdfimport,\
     basegfx_s \
+    pdfimport_s \
 ))
 
 $(eval $(call gb_Library_use_externals,pdfimport,\
@@ -64,24 +54,7 @@ $(eval $(call gb_Library_use_externals,pdfimport,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,pdfimport,\
-    sdext/source/pdfimport/filterdet \
-    sdext/source/pdfimport/misc/pdfihelper \
-    sdext/source/pdfimport/misc/pwdinteract \
-    sdext/source/pdfimport/odf/odfemitter \
-    sdext/source/pdfimport/pdfiadaptor \
-    sdext/source/pdfimport/pdfparse/pdfentries \
-    sdext/source/pdfimport/pdfparse/pdfparse \
-    sdext/source/pdfimport/sax/emitcontext \
-    sdext/source/pdfimport/sax/saxattrlist \
     sdext/source/pdfimport/services \
-    sdext/source/pdfimport/tree/drawtreevisiting \
-    sdext/source/pdfimport/tree/genericelements \
-    sdext/source/pdfimport/tree/imagecontainer \
-    sdext/source/pdfimport/tree/pdfiprocessor \
-    sdext/source/pdfimport/tree/style \
-    sdext/source/pdfimport/tree/treevisitorfactory \
-    sdext/source/pdfimport/tree/writertreevisiting \
-    sdext/source/pdfimport/wrapper/wrapper \
 ))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

@@ -43,6 +43,7 @@ $(eval $(call gb_Module_add_targets,sdext,\
     Executable_xpdfimport \
     Extension_pdfimport \
     Library_pdfimport \
+    StaticLibrary_pdfimport_s \
     Package_pdfimport_keywords \
 ))
 
