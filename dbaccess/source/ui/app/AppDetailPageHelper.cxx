@@ -1116,7 +1116,7 @@ void OAppDetailPageHelper::showPreview(const Reference< XContent >& _xContent)
                 else
                 {
                     m_aPreview.Hide();
-                    m_aDocumentInfo.Clear();
+                    m_aDocumentInfo.clear();
                     m_aDocumentInfo.Show();
                     Reference<document::XDocumentProperties> xProp(
                         aPreview, UNO_QUERY);

@@ -26,6 +26,7 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
 
 #include <svtools/fileview.hxx>
 #include <svtools/svtdata.hxx>
@@ -34,6 +35,7 @@
 #include <svtools/svtabbx.hxx>
 #include <svtools/svtools.hrc>
 #include "fileview.hrc"
+#include "fileview.hxx"
 #include "contentenumeration.hxx"
 #include <svtools/AccessibleBrowseBoxObjType.hxx>
 #include <com/sun/star/util/DateTime.hpp>
@@ -656,7 +658,7 @@ inline void SvtFileView_Impl::EndEditing( bool _bCancel )
 
 // functions -------------------------------------------------------------
 
-OUString CreateExactSizeText_Impl( sal_Int64 nSize )
+OUString CreateExactSizeText( sal_Int64 nSize )
 {
     double fSize( ( double ) nSize );
     int nDec;
@@ -2223,7 +2225,7 @@ void SvtFileView_Impl::CreateDisplayText_Impl()
         aValue += aTab;
         // folders don't have a size
         if ( ! (*aIt)->mbIsFolder )
-            aValue += CreateExactSizeText_Impl( (*aIt)->maSize );
+            aValue += CreateExactSizeText( (*aIt)->maSize );
         aValue += aTab;
         // set the date, but volumes have no date
         if ( ! (*aIt)->mbIsFolder || ! (*aIt)->mbIsVolume )

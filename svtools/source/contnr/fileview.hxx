@@ -26,58 +26,17 @@
  *
  ************************************************************************/
 
-#ifndef SVTOOLS_DOCUMENTINFOPREVIEW_HXX
-#define SVTOOLS_DOCUMENTINFOPREVIEW_HXX
+#ifndef INCLUDED_SVTOOLS_SOURCE_CONTNR_FILEVIEW_HXX
+#define INCLUDED_SVTOOLS_SOURCE_CONTNR_FILEVIEW_HXX
 
 #include "sal/config.h"
 
-#include "boost/scoped_ptr.hpp"
-#include "com/sun/star/lang/Locale.hpp"
-#include "com/sun/star/uno/Reference.hxx"
-#include "svtools/svmedit2.hxx"
-#include "svtools/svtdllapi.h"
-#include "tools/wintypes.hxx"
-#include "vcl/window.hxx"
+#include "sal/types.h"
 
-class SvtDocInfoTable_Impl;
-
-namespace com { namespace sun { namespace star {
-    namespace document { class XDocumentProperties; }
-    namespace util { struct DateTime; }
-} } }
 namespace rtl { class OUString; }
 
-namespace svtools {
+rtl::OUString CreateExactSizeText(sal_Int64 nSize);
 
-class SVT_DLLPUBLIC ODocumentInfoPreview: public Window {
-public:
-    ODocumentInfoPreview(Window * pParent, WinBits nBits);
-
-    virtual ~ODocumentInfoPreview();
-
-    virtual void Resize();
-
-    void clear();
-
-    void fill(
-        com::sun::star::uno::Reference<
-            com::sun::star::document::XDocumentProperties > const & xDocProps,
-        rtl::OUString const & rURL);
-
-private:
-    ExtMultiLineEdit m_pEditWin;
-    boost::scoped_ptr< SvtDocInfoTable_Impl > m_pInfoTable;
-    com::sun::star::lang::Locale m_aLocale;
-
-    void insertEntry(rtl::OUString const & title, rtl::OUString const & value);
-
-    void insertNonempty(long id, rtl::OUString const & value);
-
-    void insertDateTime(long id, com::sun::star::util::DateTime const & value);
-};
-
-}
-
-#endif // SVTOOLS_DOCUMENTINFOPREVIEW_HXX
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

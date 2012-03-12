@@ -176,16 +176,6 @@ public:
     const String&   GetString( long nId ) const;
 };
 
-class SvtExtendedMultiLineEdit_Impl : public ExtMultiLineEdit
-{
-public:
-    SvtExtendedMultiLineEdit_Impl( Window* pParent,WinBits _nBits );
-    inline ~SvtExtendedMultiLineEdit_Impl() {}
-
-    inline void         Clear() { SetText( String() ); }
-    void                InsertEntry( const String& rTitle, const String& rValue );
-};
-
 class SvtFrameWindow_Impl : public Window
 {
 private:
