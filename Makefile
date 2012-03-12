@@ -486,9 +486,9 @@ findunusedcode:
               | grep -v ^WPS \
               > unusedcode.easy
 
-check: subsequentcheck
+check: dev-install subsequentcheck
 
-subsequentcheck: dev-install
+subsequentcheck :| $(if $(filter-out subsequentcheck,$(MAKECMDGOALS)),dev-install)
 	$(GNUMAKE) -j $(GMAKE_PARALLELISM) $(GMAKE_OPTIONS) -f Makefile.post $@
 
 debugrun:
