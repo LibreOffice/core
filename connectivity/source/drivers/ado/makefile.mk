@@ -44,7 +44,7 @@ ENVCFLAGS+=/FR$(SLO)$/
 # --- Files -------------------------------------
         
 .IF "$(COM)" == "GCC"
-CFLAGS+=-fpermissive
+CFLAGSCXX+=-fpermissive
 .ENDIF
 
 EXCEPTIONSFILES= \
