@@ -29,8 +29,8 @@
 #include "tools/debug.hxx"
 
 #include "aqua/saldata.hxx"
-#include "aqua/salgdi.h"
-#include "aqua/salatsuifontutils.hxx"
+#include "aqua/atsui/salgdi.h"
+#include "aqua/atsui/salatsuifontutils.hxx"
 
 #include "sallayout.hxx"
 #include "salgdi.hxx"

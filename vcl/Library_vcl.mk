@@ -314,9 +314,26 @@ endif
 # GUIBASE specific stuff
 
 ifeq ($(GUIBASE),aqua)
+
 $(eval $(call gb_Library_add_cxxflags,vcl,\
     $(gb_OBJCXXFLAGS) \
 ))
+
+ifeq ($(ENABLE_CORETEXT),YES)
+
+$(eval $(call gb_Library_add_defs,vcl,\
+    -DENABLE_CORETEXT \
+))
+
+else # ATSUI
+
+$(eval $(call gb_Library_add_exception_objects,vcl,\
+    vcl/aqua/source/gdi/atsui/salatslayout \
+    vcl/aqua/source/gdi/atsui/salatsuifontutils \
+    vcl/aqua/source/gdi/atsui/salgdi \
+))
+endif
+
 $(eval $(call gb_Library_add_objcxxobjects,vcl,\
     vcl/aqua/source/a11y/aqua11yactionwrapper \
     vcl/aqua/source/a11y/aqua11ycomponentwrapper \
@@ -370,11 +387,8 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/dtrans/PictToBmpFlt \
     vcl/aqua/source/dtrans/aqua_clipboard \
     vcl/aqua/source/dtrans/service_entry \
-    vcl/aqua/source/gdi/salatslayout \
-    vcl/aqua/source/gdi/salatsuifontutils \
     vcl/aqua/source/gdi/salbmp \
     vcl/aqua/source/gdi/salcolorutils \
-    vcl/aqua/source/gdi/salgdi \
     vcl/aqua/source/gdi/salgdiutils \
     vcl/aqua/source/gdi/salmathutils \
     vcl/aqua/source/gdi/salnativewidgets \
@@ -384,14 +398,16 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/aqua/source/window/salmenu \
     vcl/aqua/source/window/salobj \
 ))
-$(eval $(call gb_Library_add_linked_libs,vcl,\
-    AppleRemote \
-))
+
 $(eval $(call gb_Library_use_externals,vcl,\
     quicktime \
     cocoa \
     carbon \
     corefoundation \
+))
+
+$(eval $(call gb_Library_add_linked_libs,vcl,\
+    AppleRemote \
 ))
 endif
 
