@@ -86,6 +86,14 @@ sub invalid_distro($$)
     closedir ($dirh);
 }
 
+# Handle help arguments first, so we don't clobber autogen.lastrun
+for my $arg (@ARGV) {
+    if ($arg =~ /^(--help|-h|-\?)$/) {
+        system ("./configure --help");
+        exit;
+    }
+}
+
 my @cmdline_args = ();
 if (!@ARGV) {
     my $lastrun = "autogen.lastrun";
