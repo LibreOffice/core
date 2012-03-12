@@ -58,12 +58,6 @@ DBG_NAME(SfxItemSet)
 #undef NUMTYPE
 #undef SfxNumRanges
 
-#define NUMTYPE         sal_uLong
-#define SfxNumRanges    SfxULongRanges
-#include "nranges.cxx"
-#undef NUMTYPE
-#undef SfxNumRanges
-
 //========================================================================
 
 #ifdef DBG_UTIL

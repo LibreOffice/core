@@ -190,30 +190,6 @@ SfxNumRanges::SfxNumRanges( NUMTYPE nWhich1, NUMTYPE nWhich2 )
 
 //------------------------------------------------------------------------
 
-SfxNumRanges::SfxNumRanges( NUMTYPE_ARG nWh0, NUMTYPE_ARG nWh1, NUMTYPE_ARG nNull, ... )
-
-/** <H3>Description</H3>
-
-    Constructs an SfxNumRanges-instance from more than one sorted ranges of
-    NUMTYPEs terminated with one 0.
-
-    precondition: for each n >= 0 && n < nArgs
-        nWh(2n) <= nWh(2n+1) && ( nWh(2n+2)-nWh(2n+1) ) > 1
-*/
-
-{
-    va_list pArgs;
-    va_start( pArgs, nNull );
-    InitializeRanges_Impl(
-        _pRanges, pArgs, sal::static_int_cast< NUMTYPE >(nWh0),
-        sal::static_int_cast< NUMTYPE >(nWh1),
-        sal::static_int_cast< NUMTYPE >(nNull));
-    va_end(pArgs);
-    DBG_CHECK_RANGES(NUMTYPE, _pRanges);
-}
-
-//------------------------------------------------------------------------
-
 SfxNumRanges::SfxNumRanges( const NUMTYPE* pArr )
 
 /** <H3>Description</H3>
