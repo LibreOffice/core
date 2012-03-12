@@ -199,6 +199,9 @@ void ScFiltersTest::testCVEs()
     //not indicate that it imported as .slk.
     testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SYLK")),
         getURLFromSrc("/sc/qa/unit/data/slk/"), rtl::OUString());
+
+    testDir(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("MS Excel 97")),
+        getURLFromSrc("/sc/qa/unit/data/xls/"), rtl::OUString());
 }
 
 #if TEST_BUG_FILES
