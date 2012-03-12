@@ -79,7 +79,6 @@ public:
     ScDPItemData();
     ScDPItemData(const ScDPItemData& r);
     ScDPItemData(const rtl::OUString& rStr);
-    ScDPItemData(double fVal);
     ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue);
     ~ScDPItemData();
 
@@ -89,7 +88,6 @@ public:
     void SetRangeStart(double fVal);
     void SetRangeFirst();
     void SetRangeLast();
-    void SetGroupValue(sal_Int32 nGroupType, sal_Int32 nValue);
     void SetErrorString(const rtl::OUString& rS);
     bool IsCaseInsEqual(const ScDPItemData& r) const;
 

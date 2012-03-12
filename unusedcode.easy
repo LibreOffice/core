@@ -72,8 +72,6 @@ ScConditionalFormats_Impl::Remove(unsigned short, unsigned short)
 ScCsvControl::ScCsvControl(Window*, ScCsvLayoutData const&, long)
 ScDBCollection::AnonDBs::erase(boost::void_ptr_iterator<__gnu_debug::_Safe_iterator<__gnu_cxx::__normal_iterator<void**, std::__cxx1998::vector<void*, std::allocator<void*> > >, std::__debug::vector<void*, std::allocator<void*> > >, ScDBData>)
 ScDBCollection::AnonDBs::size() const
-ScDPItemData::ScDPItemData(double)
-ScDPItemData::SetGroupValue(int, int)
 ScDPLabelData::ScDPLabelData(rtl::OUString const&, short, bool)
 ScDocRowHeightUpdater::TabRanges::TabRanges()
 ScFilterDetect::impl_createFactory(com::sun::star::uno::Reference<com::sun::star::lang::XMultiServiceFactory> const&)
