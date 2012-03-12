@@ -100,7 +100,12 @@ void test::ostring::StringLiterals::checkCtors()
 
 void test::ostring::StringLiterals::testcall( const char str[] )
 {
+#ifndef _MSC_VER
     CPPUNIT_ASSERT( !CONST_CTOR_USED( str ));
+#else
+    // MSVC just errors out on this for some reason, which is fine as well
+    (void)str;
+#endif
 }
 
 #undef CONST_CTOR_USED
