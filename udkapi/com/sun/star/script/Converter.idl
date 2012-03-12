@@ -85,13 +85,7 @@
     of the destination sequence.</li>
     </ul>
 */
-published service Converter
-{
-    /** Conversion interface.
-    */
-    interface com::sun::star::script::XTypeConverter;
-
-};
+published service Converter: XTypeConverter;
 
 //=============================================================================
 
