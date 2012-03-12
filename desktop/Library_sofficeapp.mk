@@ -91,8 +91,4 @@ $(eval $(call gb_Library_add_exception_objects,sofficeapp,\
     desktop/source/migration/migration \
 ))
 
-$(eval $(call gb_Library_add_cobjects,sofficeapp,\
-    desktop/source/app/main \
-))
-
 # vim: set ts=4 sw=4 et:
