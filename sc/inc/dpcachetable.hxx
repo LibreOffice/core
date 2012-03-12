@@ -66,14 +66,6 @@ class SC_DLLPUBLIC ScDPCacheTable
         RowFlag();
     };
 public:
-    /** individual filter item used in SingleFilter and GroupFilter. */
-    struct FilterItem
-    {
-        ScDPItemData maItem;
-
-        FilterItem();
-        bool match(const ScDPItemData& rCellData) const;
-    };
 
     /** interface class used for filtering of rows. */
     class FilterBase

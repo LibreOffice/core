@@ -84,15 +84,6 @@ ScDPCacheTable::RowFlag::RowFlag() :
 {
 }
 
-ScDPCacheTable::FilterItem::FilterItem() {}
-
-bool ScDPCacheTable::FilterItem::match(const ScDPItemData& rCellData) const
-{
-    return rCellData == maItem;
-}
-
-// ----------------------------------------------------------------------------
-
 ScDPCacheTable::SingleFilter::SingleFilter(const ScDPItemData& rItem) :
     maItem(rItem) {}
 
