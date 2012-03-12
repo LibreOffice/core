@@ -29,10 +29,6 @@
 #include <sax/dllapi.h>
 
 
-// TODO: Woher?
-#define Max( a, b )     (((a)>(b)) ? (a) : (b) )
-#define Min( a, b )     (((a)<(b)) ? (a) : (b) )
-
 /*
 *
 * Text2UnicodeConverter
