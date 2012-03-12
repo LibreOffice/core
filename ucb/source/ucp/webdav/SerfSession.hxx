@@ -25,9 +25,10 @@
 #define INCLUDED_SERFSESSION_HXX
 
 #include <vector>
+#include <boost/shared_ptr.hpp>
 #include <osl/mutex.hxx>
-#include "DAVSession.hxx"
-#include "SerfTypes.hxx"
+#include <DAVSession.hxx>
+#include <SerfTypes.hxx>
 //#include "SerfLockStore.hxx"
 #include <SerfUri.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
@@ -58,17 +59,19 @@ private:
     serf_context_t*         m_pSerfContext;
     serf_bucket_alloc_t*    m_pSerfBucket_Alloc;
     bool                    m_bIsHeadRequestInProgress;
+    bool                    m_bUseChunkedEncoding;
+    sal_Int16               m_bNoOfTransferEncodingSwitches;
 
     const ucbhelper::InternetProxyDecider & m_rProxyDecider;
 
     DAVRequestEnvironment m_aEnv;
 
-    static bool          m_bGlobalsInited;
-    static osl::Mutex m_aGlobalMutex;
 //    static SerfLockStore m_aSerfLockStore;
 
     char* getHostinfo();
     bool isSSLNeeded();
+
+    SerfRequestProcessor* createReqProc( const rtl::OUString & inPath );
 
 protected:
     virtual ~SerfSession();
@@ -264,9 +267,7 @@ private:
     void Init( const DAVRequestEnvironment & rEnv )
         throw ( DAVException );
 
-    void HandleError( SerfRequestProcessor& rReqProc,
-                      const rtl::OUString & inPath,
-                      const DAVRequestEnvironment & rEnv )
+    void HandleError( boost::shared_ptr<SerfRequestProcessor> rReqProc )
         throw ( DAVException );
 
     const ucbhelper::InternetProxyServer & getProxySettings() const;

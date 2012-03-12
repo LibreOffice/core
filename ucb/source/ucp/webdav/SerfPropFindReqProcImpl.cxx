@@ -136,6 +136,10 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                     rtl::OUString::createFromAscii( PROPFIND_TRAILER );
         body_bkt = SERF_BUCKET_SIMPLE_STRING( rtl::OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
                                               pSerfBucketAlloc );
+        if ( useChunkedEncoding() )
+        {
+            body_bkt = serf_bucket_chunk_create( body_bkt, pSerfBucketAlloc );
+        }
     }
 
     // create serf request
@@ -156,6 +160,10 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
     serf_bucket_headers_setn( hdrs_bkt, "Depth", mDepthStr );
     if ( body_bkt != 0 && aBodyText.getLength() > 0 )
     {
+        if ( useChunkedEncoding() )
+        {
+            serf_bucket_headers_setn( hdrs_bkt, "Transfer-Encoding", "chunked");
+        }
         serf_bucket_headers_setn( hdrs_bkt, "Content-Type", "application/xml" );
         serf_bucket_headers_setn( hdrs_bkt, "Content-Length",
                                   rtl::OUStringToOString( rtl::OUString::valueOf( aBodyText.getLength() ), RTL_TEXTENCODING_UTF8 ) );
@@ -164,54 +172,27 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
     return req_bkt;
 }
 
-
-bool SerfPropFindReqProcImpl::processSerfResponseBucket( serf_request_t * /*inSerfRequest*/,
-                                                         serf_bucket_t * inSerfResponseBucket,
-                                                         apr_pool_t * /*inAprPool*/,
-                                                         apr_status_t & outStatus )
+void SerfPropFindReqProcImpl::processChunkOfResponseData( const char* data,
+                                                          apr_size_t len )
 {
-    const char* data;
-    apr_size_t len;
-
-    while (1) {
-        outStatus = serf_bucket_read(inSerfResponseBucket, 2048, &data, &len);
-        if (SERF_BUCKET_READ_ERROR(outStatus))
-        {
-            return true;
-        }
-
-        if ( len > 0 )
-        {
-            xInputStream->AddToStream( data, len );
-        }
-
-        /* are we done yet? */
-        if (APR_STATUS_IS_EOF(outStatus))
-        {
-            if ( mbOnlyPropertyNames )
-            {
-                const std::vector< DAVResourceInfo > rResInfo( parseWebDAVPropNameResponse( xInputStream.get() ) );
-                *mpResInfo = rResInfo;
-            }
-            else
-            {
-                const std::vector< DAVResource > rResources( parseWebDAVPropFindResponse( xInputStream.get() ) );
-                *mpResources = rResources;
-            }
-
-            outStatus = APR_EOF;
-            return true;
-        }
-
-        /* have we drained the response so far? */
-        if ( APR_STATUS_IS_EAGAIN( outStatus ) )
-        {
-            return false;
-        }
+    if ( xInputStream.is() )
+    {
+        xInputStream->AddToStream( data, len );
     }
+}
 
-    /* NOTREACHED */
-    return true;
+void SerfPropFindReqProcImpl::handleEndOfResponseData( serf_bucket_t * /*inSerfResponseBucket*/ )
+{
+    if ( mbOnlyPropertyNames )
+    {
+        const std::vector< DAVResourceInfo > rResInfo( parseWebDAVPropNameResponse( xInputStream.get() ) );
+        *mpResInfo = rResInfo;
+    }
+    else
+    {
+        const std::vector< DAVResource > rResources( parseWebDAVPropFindResponse( xInputStream.get() ) );
+        *mpResources = rResources;
+    }
 }
 
 } // namespace http_dav_ucp

@@ -71,38 +71,15 @@ serf_bucket_t * SerfCopyReqProcImpl::createSerfRequestBucket( serf_request_t * i
     return req_bkt;
 }
 
-
-bool SerfCopyReqProcImpl::processSerfResponseBucket( serf_request_t * /*inSerfRequest*/,
-                                                       serf_bucket_t * inSerfResponseBucket,
-                                                       apr_pool_t * /*inAprPool*/,
-                                                       apr_status_t & outStatus )
+void SerfCopyReqProcImpl::processChunkOfResponseData( const char* /*data*/,
+                                                      apr_size_t /*len*/ )
 {
-    const char* data;
-    apr_size_t len;
+    // nothing to do;
+}
 
-    while (1) {
-        outStatus = serf_bucket_read(inSerfResponseBucket, 8096, &data, &len);
-        if (SERF_BUCKET_READ_ERROR(outStatus))
-        {
-            return true;
-        }
-
-        /* are we done yet? */
-        if (APR_STATUS_IS_EOF(outStatus))
-        {
-            outStatus = APR_EOF;
-            return true;
-        }
-
-        /* have we drained the response so far? */
-        if ( APR_STATUS_IS_EAGAIN( outStatus ) )
-        {
-            return false;
-        }
-    }
-
-    /* NOTREACHED */
-    return true;
+void SerfCopyReqProcImpl::handleEndOfResponseData( serf_bucket_t * /*inSerfResponseBucket*/ )
+{
+    // nothing to do;
 }
 
 } // namespace http_dav_ucp

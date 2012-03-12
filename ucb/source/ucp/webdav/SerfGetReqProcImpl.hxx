@@ -58,14 +58,16 @@ public:
     virtual
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest );
 
-    virtual
-    bool processSerfResponseBucket( serf_request_t * inSerfRequest,
-                                    serf_bucket_t * inSerfResponseBucket,
-                                    apr_pool_t * inAprPool,
-                                    apr_status_t & outStatus );
-
     void processSingleResponseHeader( const char* inHeaderName,
                                       const char* inHeaderValue );
+
+protected:
+    virtual
+    void processChunkOfResponseData( const char* data, apr_size_t len );
+
+    virtual
+    void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket );
+
 private:
     com::sun::star::uno::Reference< SerfInputStream > xInputStream;
     com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > xOutputStream;

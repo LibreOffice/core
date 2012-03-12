@@ -60,6 +60,12 @@ serf_bucket_t * SerfHeadReqProcImpl::createSerfRequestBucket( serf_request_t * i
     return req_bkt;
 }
 
+void SerfHeadReqProcImpl::processChunkOfResponseData( const char* /*data*/,
+                                                      apr_size_t /*len*/ )
+{
+    // nothing to do
+}
+
 namespace
 {
     apr_status_t Serf_ProcessResponseHeader( void* inUserData,
@@ -74,51 +80,19 @@ namespace
     }
 } // end of anonymous namespace
 
-bool SerfHeadReqProcImpl::processSerfResponseBucket( serf_request_t * /*inSerfRequest*/,
-                                                     serf_bucket_t * inSerfResponseBucket,
-                                                     apr_pool_t * /*inAprPool*/,
-                                                     apr_status_t & outStatus )
+void SerfHeadReqProcImpl::handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket )
 {
-    const char* data;
-    apr_size_t len;
-
-    serf_bucket_t* SerfHeaderBucket = serf_bucket_response_get_headers( inSerfResponseBucket );
-
-    while ( SerfHeaderBucket )
+    // read response header, if requested
+    if ( mpHeaderNames != 0 && mpResource != 0 )
     {
-        outStatus = serf_bucket_read(SerfHeaderBucket, 8096, &data, &len);
-        if (SERF_BUCKET_READ_ERROR(outStatus))
+        serf_bucket_t* SerfHeaderBucket = serf_bucket_response_get_headers( inSerfResponseBucket );
+        if ( SerfHeaderBucket != 0 )
         {
-            return true;
-        }
-
-        /* are we done yet? */
-        if (APR_STATUS_IS_EOF(outStatus))
-        {
-            // read response header, if requested
-            if ( mpHeaderNames != 0 && mpResource != 0 )
-            {
-                serf_bucket_t* SerfHeaderBucket = serf_bucket_response_get_headers( inSerfResponseBucket );
-                if ( SerfHeaderBucket != 0 )
-                {
-                    serf_bucket_headers_do( SerfHeaderBucket,
-                                            Serf_ProcessResponseHeader,
-                                            this );
-                }
-            }
-
-            outStatus = APR_EOF;
-            return true;
-        }
-
-        /* have we drained the response so far? */
-        if ( APR_STATUS_IS_EAGAIN( outStatus ) )
-        {
-            return false;
+            serf_bucket_headers_do( SerfHeaderBucket,
+                                    Serf_ProcessResponseHeader,
+                                    this );
         }
     }
-
-    return true;
 }
 
 void SerfHeadReqProcImpl::processSingleResponseHeader( const char* inHeaderName,

@@ -95,6 +95,20 @@ serf_bucket_t * SerfGetReqProcImpl::createSerfRequestBucket( serf_request_t * in
     return req_bkt;
 }
 
+void SerfGetReqProcImpl::processChunkOfResponseData( const char* data,
+                                                     apr_size_t len )
+{
+    if ( xInputStream.is() )
+    {
+        xInputStream->AddToStream( data, len );
+    }
+    else if ( xOutputStream.is() )
+    {
+        const uno::Sequence< sal_Int8 > aDataSeq( (sal_Int8 *)data, len );
+        xOutputStream->writeBytes( aDataSeq );
+    }
+}
+
 namespace
 {
     apr_status_t Serf_ProcessResponseHeader( void* inUserData,
@@ -109,62 +123,19 @@ namespace
     }
 } // end of anonymous namespace
 
-bool SerfGetReqProcImpl::processSerfResponseBucket( serf_request_t * /*inSerfRequest*/,
-                                                    serf_bucket_t * inSerfResponseBucket,
-                                                    apr_pool_t * /*inAprPool*/,
-                                                    apr_status_t & outStatus )
+void SerfGetReqProcImpl::handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket )
 {
-    const char* data;
-    apr_size_t len;
-
-    while (1) {
-        outStatus = serf_bucket_read(inSerfResponseBucket, 8096, &data, &len);
-        if (SERF_BUCKET_READ_ERROR(outStatus))
+    // read response header, if requested
+    if ( mpHeaderNames != 0 && mpResource != 0 )
+    {
+        serf_bucket_t* SerfHeaderBucket = serf_bucket_response_get_headers( inSerfResponseBucket );
+        if ( SerfHeaderBucket != 0 )
         {
-            return true;
-        }
-
-        if ( len > 0 )
-        {
-            if ( xInputStream.is() )
-            {
-                xInputStream->AddToStream( data, len );
-            }
-            else if ( xOutputStream.is() )
-            {
-                const uno::Sequence< sal_Int8 > aDataSeq( (sal_Int8 *)data, len );
-                xOutputStream->writeBytes( aDataSeq );
-            }
-        }
-
-        /* are we done yet? */
-        if (APR_STATUS_IS_EOF(outStatus))
-        {
-            // read response header, if requested
-            if ( mpHeaderNames != 0 && mpResource != 0 )
-            {
-                serf_bucket_t* SerfHeaderBucket = serf_bucket_response_get_headers( inSerfResponseBucket );
-                if ( SerfHeaderBucket != 0 )
-                {
-                    serf_bucket_headers_do( SerfHeaderBucket,
-                                            Serf_ProcessResponseHeader,
-                                            this );
-                }
-            }
-
-            outStatus = APR_EOF;
-            return true;
-        }
-
-        /* have we drained the response so far? */
-        if ( APR_STATUS_IS_EAGAIN( outStatus ) )
-        {
-            return false;
+            serf_bucket_headers_do( SerfHeaderBucket,
+                                    Serf_ProcessResponseHeader,
+                                    this );
         }
     }
-
-    /* NOTREACHED */
-    return true;
 }
 
 void SerfGetReqProcImpl::processSingleResponseHeader( const char* inHeaderName,

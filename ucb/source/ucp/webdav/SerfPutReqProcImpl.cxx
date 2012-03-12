@@ -53,6 +53,10 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
     if ( mpData != 0 && mnDataLen > 0 )
     {
         body_bkt = SERF_BUCKET_SIMPLE_STRING_LEN( mpData, mnDataLen, pSerfBucketAlloc );
+        if ( useChunkedEncoding() )
+        {
+            body_bkt = serf_bucket_chunk_create( body_bkt, pSerfBucketAlloc );
+        }
     }
 
     // create serf request
@@ -71,6 +75,10 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
     // request specific header fields
     if ( body_bkt != 0 )
     {
+        if ( useChunkedEncoding() )
+        {
+            serf_bucket_headers_setn( hdrs_bkt, "Transfer-Encoding", "chunked");
+        }
         serf_bucket_headers_setn( hdrs_bkt, "Content-Length",
                                   rtl::OUStringToOString( rtl::OUString::valueOf( (sal_Int32)mnDataLen ), RTL_TEXTENCODING_UTF8 ) );
     }
@@ -79,38 +87,15 @@ serf_bucket_t * SerfPutReqProcImpl::createSerfRequestBucket( serf_request_t * in
     return req_bkt;
 }
 
-
-bool SerfPutReqProcImpl::processSerfResponseBucket( serf_request_t * /*inSerfRequest*/,
-                                                    serf_bucket_t * inSerfResponseBucket,
-                                                    apr_pool_t * /*inAprPool*/,
-                                                    apr_status_t & outStatus )
+void SerfPutReqProcImpl::processChunkOfResponseData( const char* /*data*/,
+                                                     apr_size_t /*len*/ )
 {
-    const char* data;
-    apr_size_t len;
+    // nothing to do;
+}
 
-    while (1) {
-        outStatus = serf_bucket_read(inSerfResponseBucket, 8096, &data, &len);
-        if (SERF_BUCKET_READ_ERROR(outStatus))
-        {
-            return true;
-        }
-
-        /* are we done yet? */
-        if (APR_STATUS_IS_EOF(outStatus))
-        {
-            outStatus = APR_EOF;
-            return true;
-        }
-
-        /* have we drained the response so far? */
-        if ( APR_STATUS_IS_EAGAIN( outStatus ) )
-        {
-            return false;
-        }
-    }
-
-    /* NOTREACHED */
-    return true;
+void SerfPutReqProcImpl::handleEndOfResponseData( serf_bucket_t * /*inSerfResponseBucket*/ )
+{
+    // nothing to do;
 }
 
 } // namespace http_dav_ucp

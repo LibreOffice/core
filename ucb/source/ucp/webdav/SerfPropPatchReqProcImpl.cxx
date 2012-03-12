@@ -134,6 +134,10 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
 
             body_bkt = SERF_BUCKET_SIMPLE_STRING( rtl::OUStringToOString( aBodyText, RTL_TEXTENCODING_UTF8 ),
                                                   pSerfBucketAlloc );
+            if ( useChunkedEncoding() )
+            {
+                body_bkt = serf_bucket_chunk_create( body_bkt, pSerfBucketAlloc );
+            }
         }
     }
 
@@ -153,6 +157,10 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
     // request specific header fields
     if ( body_bkt != 0 && aBodyText.getLength() > 0 )
     {
+        if ( useChunkedEncoding() )
+        {
+            serf_bucket_headers_setn( hdrs_bkt, "Transfer-Encoding", "chunked");
+        }
         serf_bucket_headers_setn( hdrs_bkt, "Content-Type", "application/xml" );
         serf_bucket_headers_setn( hdrs_bkt, "Content-Length",
                                   rtl::OUStringToOString( rtl::OUString::valueOf( aBodyText.getLength() ), RTL_TEXTENCODING_UTF8 ) );
@@ -161,38 +169,15 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
     return req_bkt;
 }
 
-
-bool SerfPropPatchReqProcImpl::processSerfResponseBucket( serf_request_t * /*inSerfRequest*/,
-                                                         serf_bucket_t * inSerfResponseBucket,
-                                                         apr_pool_t * /*inAprPool*/,
-                                                         apr_status_t & outStatus )
+void SerfPropPatchReqProcImpl::processChunkOfResponseData( const char* /*data*/,
+                                                           apr_size_t /*len*/ )
 {
-    const char* data;
-    apr_size_t len;
+    // nothing to do;
+}
 
-    while (1) {
-        outStatus = serf_bucket_read(inSerfResponseBucket, 2048, &data, &len);
-        if (SERF_BUCKET_READ_ERROR(outStatus))
-        {
-            return true;
-        }
-
-        /* are we done yet? */
-        if (APR_STATUS_IS_EOF(outStatus))
-        {
-            outStatus = APR_EOF;
-            return true;
-        }
-
-        /* have we drained the response so far? */
-        if ( APR_STATUS_IS_EAGAIN( outStatus ) )
-        {
-            return false;
-        }
-    }
-
-    /* NOTREACHED */
-    return true;
+void SerfPropPatchReqProcImpl::handleEndOfResponseData( serf_bucket_t * /*inSerfResponseBucket*/ )
+{
+    // nothing to do;
 }
 
 } // namespace http_dav_ucp

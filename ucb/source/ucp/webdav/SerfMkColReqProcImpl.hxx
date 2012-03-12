@@ -37,12 +37,12 @@ public:
     virtual
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest );
 
+protected:
     virtual
-    bool processSerfResponseBucket( serf_request_t * inSerfRequest,
-                                    serf_bucket_t * inSerfResponseBucket,
-                                    apr_pool_t * inAprPool,
-                                    apr_status_t & outStatus );
+    void processChunkOfResponseData( const char* data, apr_size_t len );
 
+    virtual
+    void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket );
 };
 
 } // namespace http_dav_ucp

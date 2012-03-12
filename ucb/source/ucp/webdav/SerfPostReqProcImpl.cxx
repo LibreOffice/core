@@ -76,6 +76,10 @@ serf_bucket_t * SerfPostReqProcImpl::createSerfRequestBucket( serf_request_t * i
     if ( mpPostData != 0 && mnPostDataLen > 0 )
     {
         body_bkt = SERF_BUCKET_SIMPLE_STRING_LEN( mpPostData, mnPostDataLen, pSerfBucketAlloc );
+        if ( useChunkedEncoding() )
+        {
+            body_bkt = serf_bucket_chunk_create( body_bkt, pSerfBucketAlloc );
+        }
     }
 
     // create serf request
@@ -94,6 +98,10 @@ serf_bucket_t * SerfPostReqProcImpl::createSerfRequestBucket( serf_request_t * i
     // request specific header fields
     if ( body_bkt != 0 )
     {
+        if ( useChunkedEncoding() )
+        {
+            serf_bucket_headers_setn( hdrs_bkt, "Transfer-Encoding", "chunked");
+        }
         serf_bucket_headers_setn( hdrs_bkt, "Content-Length",
                                   rtl::OUStringToOString( rtl::OUString::valueOf( (sal_Int32)mnPostDataLen ), RTL_TEXTENCODING_UTF8 ) );
     }
@@ -109,51 +117,23 @@ serf_bucket_t * SerfPostReqProcImpl::createSerfRequestBucket( serf_request_t * i
     return req_bkt;
 }
 
-
-bool SerfPostReqProcImpl::processSerfResponseBucket( serf_request_t * /*inSerfRequest*/,
-                                                    serf_bucket_t * inSerfResponseBucket,
-                                                    apr_pool_t * /*inAprPool*/,
-                                                    apr_status_t & outStatus )
+void SerfPostReqProcImpl::processChunkOfResponseData( const char* data,
+                                                      apr_size_t len )
 {
-    const char* data;
-    apr_size_t len;
-
-    while (1) {
-        outStatus = serf_bucket_read(inSerfResponseBucket, 8096, &data, &len);
-        if (SERF_BUCKET_READ_ERROR(outStatus))
-        {
-            return true;
-        }
-
-        if ( len > 0 )
-        {
-            if ( xInputStream.is() )
-            {
-                xInputStream->AddToStream( data, len );
-            }
-            else if ( xOutputStream.is() )
-            {
-                const uno::Sequence< sal_Int8 > aDataSeq( (sal_Int8 *)data, len );
-                xOutputStream->writeBytes( aDataSeq );
-            }
-        }
-
-        /* are we done yet? */
-        if (APR_STATUS_IS_EOF(outStatus))
-        {
-            outStatus = APR_EOF;
-            return true;
-        }
-
-        /* have we drained the response so far? */
-        if ( APR_STATUS_IS_EAGAIN( outStatus ) )
-        {
-            return false;
-        }
+    if ( xInputStream.is() )
+    {
+        xInputStream->AddToStream( data, len );
     }
+    else if ( xOutputStream.is() )
+    {
+        const uno::Sequence< sal_Int8 > aDataSeq( (sal_Int8 *)data, len );
+        xOutputStream->writeBytes( aDataSeq );
+    }
+}
 
-    /* NOTREACHED */
-    return true;
+void SerfPostReqProcImpl::handleEndOfResponseData( serf_bucket_t * /*inSerfResponseBucket*/ )
+{
+    // nothing to do;
 }
 
 } // namespace http_dav_ucp

@@ -45,7 +45,8 @@ class SerfRequestProcessor
 {
 public:
     SerfRequestProcessor( SerfSession& rSerfSession,
-                          const rtl::OUString & inPath );
+                          const rtl::OUString & inPath,
+                          const bool bUseChunkedEncoding );
     ~SerfRequestProcessor();
 
     // PROPFIND - allprop & named
@@ -156,6 +157,7 @@ public:
 
     SerfSession& mrSerfSession;
     const char* mPathStr;
+    const bool mbUseChunkedEncoding;
     const char* mDestPathStr;
     const char* mContentType;
     const char* mReferer;

@@ -39,18 +39,26 @@ public:
     /*pure*/ virtual
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) = 0;
 
-    /*pure*/ virtual
     bool processSerfResponseBucket( serf_request_t * inSerfRequest,
                                     serf_bucket_t * inSerfResponseBucket,
                                     apr_pool_t * inAprPool,
-                                    apr_status_t & outStatus ) = 0;
+                                    apr_status_t & outStatus );
+
+    void activateChunkedEncoding();
 
 protected:
+    /*pure*/ virtual
+    void processChunkOfResponseData( const char* data, apr_size_t len ) = 0;
+
+    /*pure*/ virtual
+    void handleEndOfResponseData( serf_bucket_t * inSerfResponseBucket ) = 0;
+
     const char* getPathStr() const;
+    const bool useChunkedEncoding() const;
 
 private:
     const char* mPathStr;
-
+    bool mbUseChunkedEncoding;
 };
 
 } // namespace http_dav_ucp

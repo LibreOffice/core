@@ -34,10 +34,14 @@ namespace http_dav_ucp
 {
 
 SerfRequestProcessor::SerfRequestProcessor( SerfSession& rSerfSession,
-                                            const rtl::OUString & inPath )
+                                            const rtl::OUString & inPath,
+                                            const bool bUseChunkedEncoding )
     : mrSerfSession( rSerfSession )
     , mPathStr( 0 )
+    , mbUseChunkedEncoding( bUseChunkedEncoding )
     , mDestPathStr( 0 )
+    , mContentType( 0 )
+    , mReferer( 0 )
     , mpProcImpl( 0 )
     , mbProcessingDone( false )
     , mpDAVException()
@@ -226,7 +230,7 @@ bool SerfRequestProcessor::processPost( const char* inData,
     mContentType = apr_pstrdup( mrSerfSession.getAprPool(),
                                 rtl::OUStringToOString( inContentType, RTL_TEXTENCODING_UTF8 ) );
     mReferer = apr_pstrdup( mrSerfSession.getAprPool(),
-                                rtl::OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ) );
+                            rtl::OUStringToOString( inReferer, RTL_TEXTENCODING_UTF8 ) );
     mpProcImpl = createPostReqProcImpl( mPathStr,
                                         inData,
                                         inDataLen,
@@ -289,6 +293,12 @@ bool SerfRequestProcessor::processMove( const rtl::OUString & inDestinationPath,
 apr_status_t SerfRequestProcessor::runProcessor()
 {
     prepareProcessor();
+
+    // activate chunked encoding, if requested
+    if ( mbUseChunkedEncoding )
+    {
+        mpProcImpl->activateChunkedEncoding();
+    }
 
     // create serf request
     serf_connection_request_create( mrSerfSession.getSerfConnection(),

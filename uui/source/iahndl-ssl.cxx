@@ -325,7 +325,7 @@ handleCertificateValidationRequest_(
                                           SSLWARN_TYPE_DOMAINMISMATCH,
                                           rRequest.HostName );
     }
-
+    else
     if ( (((failures & security::CertificateValidity::TIME_INVALID)
               == security::CertificateValidity::TIME_INVALID) ||
           ((failures & security::CertificateValidity::NOT_TIME_NESTED)
@@ -338,7 +338,7 @@ handleCertificateValidationRequest_(
                                           SSLWARN_TYPE_EXPIRED,
                                           rRequest.HostName );
     }
-
+    else
     if ( (((failures & security::CertificateValidity::REVOKED)
               == security::CertificateValidity::REVOKED) ||
           ((failures & security::CertificateValidity::SIGNATURE_INVALID)
