@@ -62,6 +62,7 @@ public:
     void testFdo42465();
     void testFdo45187();
     void testFdo46662();
+    void testN750757();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -72,6 +73,7 @@ public:
     CPPUNIT_TEST(testFdo42465);
     CPPUNIT_TEST(testFdo45187);
     CPPUNIT_TEST(testFdo46662);
+    CPPUNIT_TEST(testN750757);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -299,6 +301,25 @@ void RtfModelTest::testFdo46662()
             CPPUNIT_ASSERT_EQUAL(sal_Int32(0), sValue.getLength());
         }
     }
+}
+
+void RtfModelTest::testN750757()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("n750757.rtf")));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+
+    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
+    sal_Bool bValue;
+    uno::Any aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaContextMargin")));
+    aValue >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(false), bValue);
+
+    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaContextMargin")));
+    aValue >>= bValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Bool(true), bValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);

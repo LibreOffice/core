@@ -2713,6 +2713,8 @@ void RtfAttributeOutput::FormatULSpace( const SvxULSpaceItem& rULSpace )
             m_aStyles.append( (sal_Int32) rULSpace.GetUpper() );
             m_aStyles.append(OOO_STRING_SVTOOLS_RTF_SA);
             m_aStyles.append( (sal_Int32) rULSpace.GetLower() );
+            if (rULSpace.GetContext())
+                m_aStyles.append(OOO_STRING_SVTOOLS_RTF_CONTEXTUALSPACE);
         }
     }
     else if (rULSpace.GetUpper() == rULSpace.GetLower() && m_rExport.bRTFFlySyntax)

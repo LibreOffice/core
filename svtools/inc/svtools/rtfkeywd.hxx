@@ -130,6 +130,7 @@
 #define OOO_STRING_SVTOOLS_RTF_COLUMN "\\column"
 #define OOO_STRING_SVTOOLS_RTF_COLW "\\colw"
 #define OOO_STRING_SVTOOLS_RTF_COMMENT "\\comment"
+#define OOO_STRING_SVTOOLS_RTF_CONTEXTUALSPACE "\\contextualspace"
 #define OOO_STRING_SVTOOLS_RTF_CREATIM "\\creatim"
 #define OOO_STRING_SVTOOLS_RTF_CTRL "\\ctrl"
 #define OOO_STRING_SVTOOLS_RTF_DEFF "\\deff"
