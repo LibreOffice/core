@@ -403,7 +403,6 @@ XMLTextListAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const
 XMLTextListAutoStylePoolNames_Impl::Remove(rtl::OUString*)
 XMLTextListAutoStylePool_Impl::GetPos(XMLTextListAutoStylePoolEntry_Impl const*) const
 XMLTextListAutoStylePool_Impl::Remove(XMLTextListAutoStylePoolEntry_Impl*)
-XMLVisAreaContext::XMLVisAreaContext(SvXMLImport&, unsigned short, rtl::OUString const&, com::sun::star::uno::Reference<com::sun::star::xml::sax::XAttributeList> const&, Rectangle&, short)
 XclExpPivotCache::GetFieldAcc(rtl::OUString const&)
 _CpyTabFrms::Insert(_CpyTabFrm const&, unsigned short&)
 _CpyTabFrms::Insert(_CpyTabFrm const*, unsigned short)
