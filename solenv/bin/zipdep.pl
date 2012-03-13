@@ -110,6 +110,11 @@ sub perled_slashes {
     my $path = shift;
     $path =~ s/\\/\//g;
     $path =~ s/\/+/\//g;
+    if ( $^O eq 'os2' )
+    {
+        # remove also quotes surrounding name, thus writing buggy paths
+        $path =~ s/\"//g;
+    }
     return $path;
 };
 
