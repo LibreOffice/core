@@ -833,7 +833,7 @@ void SwView::CalcAndSetBorderPixel( SvBorder &rToFill, sal_Bool /*bInner*/ )
 
     const StyleSettings &rSet = GetEditWin().GetSettings().GetStyleSettings();
     const long nTmp = rSet.GetScrollBarSize();
-    if( pVScrollbar->IsVisible(sal_False) )
+    if( pVScrollbar->IsVisible(sal_True) )
     {
         if(bRightVRuler)
             rToFill.Left() = nTmp;
