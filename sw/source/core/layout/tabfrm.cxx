@@ -2564,6 +2564,7 @@ void SwTabFrm::MakeAll()
         bMovedFwd = true;
         aNotify.SetLowersComplete( sal_False );
         if ( IsFollow() )
+        {
             //To avoid oscillations now invalid master should drop behind.
             SwTabFrm *pTab = FindMaster();
             if ( pTab->GetUpper() )
