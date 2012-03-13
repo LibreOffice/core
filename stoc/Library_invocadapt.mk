@@ -45,6 +45,7 @@ $(eval $(call gb_Library_add_linked_libs,invocadapt,\
     cppu \
     cppuhelper \
     sal \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,invocadapt,stoc/source/invocation_adapterfactory/invocadapt))

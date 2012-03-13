@@ -35,6 +35,7 @@ $(eval $(call gb_Library_add_linked_libs,connector,\
     cppu \
     cppuhelper \
     sal \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,connector,io/source/connector/connector))

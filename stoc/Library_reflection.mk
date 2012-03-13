@@ -45,6 +45,7 @@ $(eval $(call gb_Library_add_linked_libs,reflection,\
     cppu \
     cppuhelper \
     sal \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,reflection,stoc/source/corereflection/reflection))

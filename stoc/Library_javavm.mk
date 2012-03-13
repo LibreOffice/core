@@ -48,15 +48,8 @@ $(eval $(call gb_Library_add_linked_libs,javavm,\
     jvmfwk \
     sal \
     salhelper \
+    $(gb_STDLIBS) \
 ))
-
-ifeq ($(GUI),WNT)
-
-$(eval $(call gb_Library_add_linked_libs,javavm,\
-    advapi32 \
-))
-
-endif
 
 $(eval $(call gb_Library_set_componentfile,javavm,stoc/source/javavm/javavm))
 

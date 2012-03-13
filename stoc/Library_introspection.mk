@@ -46,6 +46,7 @@ $(eval $(call gb_Library_add_linked_libs,introspection,\
     cppuhelper \
     sal \
     salhelper \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,introspection,stoc/source/inspect/introspection))

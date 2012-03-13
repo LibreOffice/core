@@ -35,6 +35,7 @@ $(eval $(call gb_Library_add_linked_libs,textinstream,\
     cppu \
     cppuhelper \
     sal \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,textinstream,io/source/TextInputStream/textinstream))

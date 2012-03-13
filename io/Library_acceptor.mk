@@ -35,6 +35,7 @@ $(eval $(call gb_Library_add_linked_libs,acceptor,\
     cppu \
     cppuhelper \
     sal \
+    $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_set_componentfile,acceptor,io/source/acceptor/acceptor))
