@@ -42,7 +42,6 @@
 #include <com/sun/star/drawing/NormalsKind.hpp>
 #include <com/sun/star/drawing/PointSequence.hpp>
 #include <com/sun/star/drawing/PolygonKind.hpp>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/ProjectionMode.hpp>
 #include <com/sun/star/drawing/ShadeMode.hpp>
 #include <com/sun/star/drawing/TextFitToSizeType.hpp>
@@ -106,6 +105,16 @@ void DumpHelper::writeAttribute(const char* pAttrName, const sal_Int32 nValue)
 }
 
 void DumpHelper::writeAttribute(const char* pAttrName, const drawing::PointSequenceSequence& )
+{
+    std::cout << pAttrName << " " << std::endl;
+}
+
+void DumpHelper::writeAttribute(const char* pAttrName, const drawing::PolyPolygonShape3D& )
+{
+    std::cout << pAttrName << " " << std::endl;
+}
+
+void DumpHelper::writeAttribute(const char* pAttrName, const drawing::PolyPolygonBezierCoords& )
 {
     std::cout << pAttrName << " " << std::endl;
 }
@@ -564,8 +573,9 @@ uno::Reference<drawing::XShape>
                 , uno::makeAny( nPercentDiagonal ) );
 
             //Polygon
+            uno::Any aAny = createPolyPolygon_Cube( rSize, double(nPercentDiagonal)/200.0, bRounded);
             xProp->setPropertyValue( C2U( UNO_NAME_3D_POLYPOLYGON3D )
-                , createPolyPolygon_Cube( rSize, double(nPercentDiagonal)/200.0,bRounded) );
+                , aAny );
 
             //Matrix for position
             {
@@ -584,7 +594,9 @@ uno::Reference<drawing::XShape>
             {
                 maDumpHerlper.writeAttribute("depth",static_cast<sal_Int32>(fDepth));
                 maDumpHerlper.writeAttribute("PercentDiagonal",nPercentDiagonal);
-                maDumpHerlper.writeAttribute("Polygon","");
+                drawing::PolyPolygonShape3D aPP;
+                aAny >>= aPP;
+                maDumpHerlper.writeAttribute("Polygon", aPP);
                 maDumpHerlper.writeAttribute("Matrix","");
             }
         }
@@ -860,7 +872,9 @@ uno::Reference<drawing::XShape>
             if(mbDump)
             {
                 maDumpHerlper.writeAttribute("PercentDiagonal", nPercentDiagonal);
-                maDumpHerlper.writeAttribute("Polygon","");
+                drawing::PolyPolygonShape3D aPP;
+                aPPolygon >>= aPP;
+                maDumpHerlper.writeAttribute("Polygon", aPP);
                 maDumpHerlper.writeAttribute("Matrix","");
                 maDumpHerlper.writeAttribute("SegmentsHor",CHART_3DOBJECT_SEGMENTCOUNT);
                 maDumpHerlper.writeAttribute("SegmentsVert", static_cast<sal_Int32>(nVerticalSegmentCount));
@@ -1100,7 +1114,7 @@ uno::Reference< drawing::XShape >
 
             if(mbDump)
             {
-                maDumpHerlper.writeAttribute("PolyPolygonBezier", "");
+                maDumpHerlper.writeAttribute("PolyPolygonBezier", aCoords);
             }
         }
         catch( const uno::Exception& e )
@@ -1200,11 +1214,11 @@ uno::Reference< drawing::XShape >
             {
                 maDumpHerlper.writeAttribute("depth",static_cast<sal_Int32>(fDepth));
                 maDumpHerlper.writeAttribute("PercentDiagonal",nPercentDiagonal);
-                maDumpHerlper.writeAttribute("Polygon", "");
+                maDumpHerlper.writeAttribute("Polygon", aPoly);
                 maDumpHerlper.writeAttribute("DoubleSided", "true");
                 maDumpHerlper.writeAttribute("ReducedLines", "true");
-                maDumpHerlper.writeAttribute("TextureProjectionModeY", "");
-                maDumpHerlper.writeAttribute("TextureProjectionModeX", "");
+                maDumpHerlper.writeAttribute("TextureProjectionModeY", drawing::TextureProjectionMode_PARALLEL);
+                maDumpHerlper.writeAttribute("TextureProjectionModeX", drawing::TextureProjectionMode_OBJECTSPECIFIC);
             }
         }
         catch( const uno::Exception& e )
@@ -1277,10 +1291,16 @@ uno::Reference< drawing::XShape >
 
             if(mbDump)
             {
-                maDumpHerlper.writeAttribute("Polygon","");
-                maDumpHerlper.writeAttribute("TexturePolygon","");
-                maDumpHerlper.writeAttribute("NormalsPolygon","");
-                maDumpHerlper.writeAttribute("NormalsKind","");
+                drawing::PolyPolygonShape3D aPP3;
+                rStripe.getPolyPolygonShape3D() >>= aPP3;
+                maDumpHerlper.writeAttribute("Polygon", aPP3);
+                drawing::PolyPolygonShape3D aPP;
+                rStripe.getTexturePolygon(nRotatedTexture) >>= aPP;
+                maDumpHerlper.writeAttribute("TexturePolygon", aPP);
+                drawing::PolyPolygonShape3D aPP2;
+                rStripe.getNormalsPolygon() >>= aPP2;
+                maDumpHerlper.writeAttribute("NormalsPolygon", aPP2);
+                maDumpHerlper.writeAttribute("NormalsKind", drawing::NormalsKind_FLAT);
                 maDumpHerlper.writeAttribute("LineOnly", "false");
                 maDumpHerlper.writeAttribute("DoubleSided", bDoubleSided);
             }
@@ -1363,7 +1383,7 @@ uno::Reference< drawing::XShape >
             {
                 maDumpHerlper.writeAttribute("depth", static_cast<sal_Int32>(fDepth));
                 maDumpHerlper.writeAttribute("PercentDiagonal", nPercentDiagonal);
-                maDumpHerlper.writeAttribute("Polygon","");
+                maDumpHerlper.writeAttribute("Polygon", rPolyPolygon);
                 maDumpHerlper.writeAttribute("DoubleSided", "true");
                 maDumpHerlper.writeAttribute("Matrix","");
             }
@@ -1993,7 +2013,7 @@ uno::Reference< drawing::XShape >
 
             if(mbDump)
             {
-                maDumpHerlper.writeAttribute("Polygon", "");
+                maDumpHerlper.writeAttribute("Polygon", aPoints);
                 maDumpHerlper.writeAttribute("LineColor", nBorderColor);
                 maDumpHerlper.writeAttribute("FillColor", nFillColor);
             }
@@ -2159,7 +2179,7 @@ uno::Reference< drawing::XShapes >
                         , uno::makeAny(B3DHomMatrixToHomogenMatrix(aM)) );
 
                     if(mbDump)
-                        maDumpHerlper.writeAttribute("TransformMatrix", "");
+                        maDumpHerlper.writeAttribute("Matrix", "");
                 }
                 catch( const uno::Exception& e )
                 {
@@ -2313,22 +2333,22 @@ uno::Reference< drawing::XShape >
 
             if(mbDump)
             {
-                sal_Int16 nTransparence;
+                sal_Int16 nTransparence = 0;
                 rLineProperties.Transparence >>= nTransparence;
                 maDumpHerlper.writeAttribute("Transparency", nTransparence);
                 drawing::LineStyle aLineStyle;
                 rLineProperties.LineStyle >>= aLineStyle;
                 maDumpHerlper.writeAttribute("LineStyle", aLineStyle);
-                sal_Int32 nWidth;
+                sal_Int32 nWidth = 0;
                 rLineProperties.Width >>= nWidth;
                 maDumpHerlper.writeAttribute("LineWidth", nWidth);
-                sal_Int32 nColor;
+                sal_Int32 nColor = 0;
                 rLineProperties.Color >>= nColor;
                 maDumpHerlper.writeAttribute("LineColor", nColor);
                 rtl::OUString aDashName;
                 rLineProperties.DashName >>= aDashName;
                 maDumpHerlper.writeAttribute("LineDashName", aDashName);
-                maDumpHerlper.writeAttribute("Polygon", "");
+                maDumpHerlper.writeAttribute("Polygon", rPoints);
                 maDumpHerlper.writeAttribute("LineOnly", "true");
             }
         }
@@ -2407,16 +2427,16 @@ uno::Reference< drawing::XShape >
 
                 if(mbDump)
                 {
-                    sal_Int16 nTransparence;
+                    sal_Int16 nTransparence = 0;
                     pLineProperties->Transparence >>= nTransparence;
                     maDumpHerlper.writeAttribute("Transparency", nTransparence);
                     drawing::LineStyle aLineStyle;
                     pLineProperties->LineStyle >>= aLineStyle;
                     maDumpHerlper.writeAttribute("LineStyle", aLineStyle);
-                    sal_Int32 nWidth;
+                    sal_Int32 nWidth = 0;
                     pLineProperties->Width >>= nWidth;
                     maDumpHerlper.writeAttribute("LineWidth", nWidth);
-                    sal_Int32 nColor;
+                    sal_Int32 nColor = 0;
                     pLineProperties->Color >>= nColor;
                     maDumpHerlper.writeAttribute("LineColor", nColor);
                     rtl::OUString aDashName;

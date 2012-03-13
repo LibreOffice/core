@@ -36,6 +36,7 @@
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
+#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
@@ -64,6 +65,8 @@ public:
    void writeAttribute(const char* pAttrName, const sal_Int32);
    void writeAttribute(const char* pAttrName, const com::sun::star::drawing::Direction3D& rPosition);
    void writeAttribute(const char* pAttrName, const com::sun::star::drawing::PointSequenceSequence& rPoints);
+   void writeAttribute(const char* pAttrName, const com::sun::star::drawing::PolyPolygonShape3D& rPoints);
+   void writeAttribute(const char* pAttrName, const com::sun::star::drawing::PolyPolygonBezierCoords& rCoords);
    void endElement();
 };
 
