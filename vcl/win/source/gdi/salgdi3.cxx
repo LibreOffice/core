@@ -551,7 +551,7 @@ namespace
         const com::sun::star::lang::Locale& rLocale )
     {
         // get the default font for a specified locale
-        const DefaultFontConfiguration& rDefaults = DefaultFontConfiguration::get();
+        const DefaultFontConfiguration& rDefaults = utl::DefaultFontConfiguration::get();
         const rtl::OUString aDefault = rDefaults.getUserInterfaceFont(rLocale);
         return rDevFontList.ImplFindByTokenNames(aDefault);
     }
