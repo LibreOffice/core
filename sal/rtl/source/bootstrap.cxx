@@ -401,7 +401,7 @@ Bootstrap_Impl * BootstrapMap::getBaseIni() {
             // directory. Apps are self-contained anyway, there is no
             // possibility to have several "applications" in the same
             // installation location with different inifiles.
-            const char *inifile = [[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"rc"] UTF8String];
+            const char *inifile = [[@"vnd.sun.star.pathname:" stringByAppendingString: [[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"rc"]] UTF8String];
             uri = rtl::OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
             resolvePathnameUrl(&uri);
 #else
