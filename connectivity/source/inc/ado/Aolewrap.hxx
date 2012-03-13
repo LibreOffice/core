@@ -221,7 +221,7 @@ namespace connectivity
             // They only call the superclass
             using WpOLEBase<Ts>::pInterface;
             WpOLEAppendCollection(Ts* pInt=NULL):WpOLECollection<Ts,T,WrapT>(pInt){}
-            WpOLEAppendCollection(const WpOLEAppendCollection& rhs) : WpOLEAppendCollection<Ts, T, WrapT>(rhs) {}
+            WpOLEAppendCollection(const WpOLEAppendCollection& rhs) : WpOLECollection<Ts, T, WrapT>(rhs) {}
             inline WpOLEAppendCollection& operator=(const WpOLEAppendCollection& rhs)
                 {WpOLEBase<Ts>::operator=(rhs); return *this;};
             //////////////////////////////////////////////////////////////////////
