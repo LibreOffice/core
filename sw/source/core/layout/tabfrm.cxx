@@ -3517,6 +3517,7 @@ void SwTabFrm::Cut()
     InvalidatePage( pPage );
     SwFrm *pFrm = GetNext();
     if( pFrm )
+    {
         //The old follower eventually calculated a margin to the predecessor
         //which is obsolete now as it became the first one
         pFrm->_InvalidatePrt();
