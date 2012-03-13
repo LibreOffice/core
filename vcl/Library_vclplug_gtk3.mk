@@ -111,13 +111,10 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_gtk3,\
     vcl/unx/gtk3/gdi/gtk3salprn-gtk \
     vcl/unx/gtk3/window/gtk3gtkframe \
     vcl/unx/gtk3/window/gtk3gtkobject \
-    vcl/headless/svpbmp \
-    vcl/headless/svpdummies \
-    vcl/headless/svpelement \
-    vcl/headless/svpframe \
-    vcl/headless/svpprn \
-    vcl/headless/svptext \
-    vcl/headless/svpvd \
+))
+
+$(eval $(call gb_Library_add_linked_static_libs,vclplug_gtk3,\
+    headless \
 ))
 
 ifeq ($(OS),LINUX)

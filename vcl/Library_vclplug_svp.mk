@@ -71,16 +71,13 @@ $(eval $(call gb_Library_use_externals,vclplug_svp,\
 ))
 
 $(eval $(call gb_Library_add_exception_objects,vclplug_svp,\
-    vcl/headless/svpbmp \
-    vcl/headless/svpdummies \
-    vcl/headless/svpelement \
-    vcl/headless/svpframe \
     vcl/headless/svpgdi \
     vcl/headless/svpinst \
     vcl/headless/svpdata \
-    vcl/headless/svpprn \
-    vcl/headless/svptext \
-    vcl/headless/svpvd \
+))
+
+$(eval $(call gb_Library_add_linked_static_libs,vclplug_svp,\
+    headless \
 ))
 
 ifeq ($(OS),LINUX)

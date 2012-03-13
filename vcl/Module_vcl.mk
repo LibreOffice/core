@@ -42,6 +42,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_svp \
     Library_vclplug_gen \
     Library_desktop_detector \
+    StaticLibrary_headless \
 ))
 
 ifneq ($(ENABLE_GTK),)
@@ -70,6 +71,7 @@ endif
 ifeq ($(GUIBASE),headless)
 $(eval $(call gb_Module_add_targets,vcl,\
     Library_vclplug_svp \
+    StaticLibrary_headless \
 ))
 endif
 
