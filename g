@@ -321,11 +321,11 @@ for REPO in $DIRS ; do
                     ;;
                 push)
                     if [ "$PUSH_ALL" != "1" ] ; then
-                        [ -n "$(git rev-list origin..HEAD)" ] || exit 0
+                        [ -n "$(git rev-list @{upstream}..HEAD)" ] || exit 0
                     fi
                     ;;
                 status)
-                    LOCALCOMMITS="$(git rev-list origin..HEAD)"
+                    LOCALCOMMITS="$(git rev-list @{upstream}..HEAD)"
                     if [ -z "$LOCALCOMMITS" ] ; then
                         [ -z "$(git diff-index --name-only HEAD --)" ] && exit 0
                     fi
