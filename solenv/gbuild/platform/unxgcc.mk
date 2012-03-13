@@ -84,6 +84,12 @@ endif
 
 endif
 
+ifeq ($(HAVE_SFINAE_ANONYMOUS_BROKEN),TRUE)
+gb_COMPILERDEFS += \
+        -DHAVE_SFINAE_ANONYMOUS_BROKEN \
+
+endif
+
 # enable debug STL
 ifeq ($(gb_PRODUCT),$(false))
 gb_COMPILERDEFS += \

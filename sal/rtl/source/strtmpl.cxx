@@ -1189,7 +1189,6 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromStr_WithLength )( IMPL_RTL_STRINGDATA*
 /* ----------------------------------------------------------------------- */
 
 // Used when creating from string literals.
-// Intentionally copies also embedded \0's if present.
 void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral)( IMPL_RTL_STRINGDATA** ppThis,
                                                     const sal_Char* pCharStr,
                                                     sal_Int32 nLen )

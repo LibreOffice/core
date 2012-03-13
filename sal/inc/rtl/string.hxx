@@ -85,6 +85,7 @@ namespace rtl
   use this class.
 */
 
+#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
 namespace internal
 {
 // This template is used for SFINAE (Substitution failure is not an error), to detect that
@@ -107,6 +108,7 @@ struct CharPtrDetector< char* >
     typedef Dummy Type;
 };
 }
+#endif
 
 class OString
 {
@@ -184,6 +186,17 @@ public:
 
       @param    value       a NULL-terminated character array.
     */
+#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
+    // Old gcc can try to convert anonymous enums to OString and give compile error.
+    // So there's no special-cased handling of string literals.
+    // These are inline functions and technically both variants should work
+    // the same in practice, so there should be no compatibility problem.
+    OString( const sal_Char * value ) SAL_THROW(())
+     {
+         pData = 0;
+         rtl_string_newFromStr( &pData, value );
+     }
+#else
     template< typename T >
     OString( const T& value, typename internal::CharPtrDetector< T >::Type = internal::Dummy() ) SAL_THROW(())
     {
@@ -194,8 +207,8 @@ public:
     /**
       New string from a string literal.
 
-      Note that embedded \0's are included in the string if explicitly present
-      in the string literal.
+      If there are any embedded \0's in the string literal, the result is undefined.
+      Use the overload that explicitly accepts length.
 
       @param    literal       a string literal
     */
@@ -221,6 +234,7 @@ public:
         pData = 0;
         rtl_string_newFromStr( &pData, value );
     }
+#endif // HAVE_SFINAE_ANONYMOUS_BROKEN
 
     /**
       New string from a character buffer array.
