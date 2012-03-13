@@ -78,7 +78,7 @@ void BrowserHeader::EndDrag()
     sal_uInt16 nId = GetCurItemId();
     if ( nId )
     {
-        // Handle-Column?
+        // handle column?
         if ( nId == USHRT_MAX-1 )
             nId = 0;
 
@@ -92,8 +92,8 @@ void BrowserHeader::EndDrag()
         else
         {
             // column drag
-            // Hat sich die Position eigentlich veraendert
-            // Handlecolumn beruecksichtigen
+            // did the position actually change?
+            // take the handle column into account
             sal_uInt16 nOldPos = _pBrowseBox->GetColumnPos(nId),
                 nNewPos = GetItemPos( nId );
 

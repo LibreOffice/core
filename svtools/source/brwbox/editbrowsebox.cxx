@@ -187,7 +187,7 @@ namespace svt
     //------------------------------------------------------------------------------
     void EditBrowseBox::Init()
     {
-        // spaetes Construieren,
+        // late construction
     }
 
     //------------------------------------------------------------------------------
@@ -1024,7 +1024,7 @@ namespace svt
         nEditCol = nCol;
 
         if ((GetSelectRowCount() && GetSelection() != NULL) || GetSelectColumnCount() ||
-            (aMouseEvent.Is() && (aMouseEvent.IsDown() || aMouseEvent->GetClicks() > 1))) // bei MouseDown passiert noch nichts
+            (aMouseEvent.Is() && (aMouseEvent.IsDown() || aMouseEvent->GetClicks() > 1))) // nothing happens on MouseDown
         {
             return;
         }
