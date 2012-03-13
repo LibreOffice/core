@@ -7274,6 +7274,9 @@ if test "$with_system_mozilla_headers" = "yes"; then
     if test "x$LOCATED" != "xyes"; then
         PKG_CHECK_MODULES(MOZILLA_HEADERS, libxul, [LOCATED=yes], [LOCATED=no])
     fi
+    if test "x$LOCATED" != "xyes"; then
+        PKG_CHECK_MODULES(MOZILLA_HEADERS, mozilla-plugin, [LOCATED=yes], [LOCATED=no])
+    fi
     # if still not found bail out
     if test "x$LOCATED" != "xyes"; then
         AC_MSG_ERROR([npapi.h header file not found])
