@@ -571,7 +571,8 @@ void SdrHdl::CreateB2dIAObject()
                             aMoveOutsideOffset.X() += aOffset.Height();
                     }
 
-                    if(rPageWindow.GetOverlayManager())
+                    rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                    if (xManager.is())
                     {
                         basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
                         ::sdr::overlay::OverlayObject* pNewOverlayObject = CreateOverlayObject(
@@ -583,7 +584,7 @@ void SdrHdl::CreateB2dIAObject()
                         // OVERLAYMANAGER
                         if(pNewOverlayObject)
                         {
-                            rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                            xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(*pNewOverlayObject);
                         }
                     }
@@ -941,7 +942,8 @@ void SdrHdlColor::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager())
+                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        if (xManager.is())
                         {
                             Bitmap aBmpCol(CreateColorDropper(aMarkerColor));
                             basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
@@ -957,7 +959,7 @@ void SdrHdlColor::CreateB2dIAObject()
                             // OVERLAYMANAGER
                             if(pNewOverlayObject)
                             {
-                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                xManager->add(*pNewOverlayObject);
                                 maOverlayGroup.append(*pNewOverlayObject);
                             }
                         }
@@ -1108,7 +1110,8 @@ void SdrHdlGradient::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager())
+                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        if (xManager.is())
                         {
                             // striped line in between
                             basegfx::B2DVector aVec(a2ndPos.X() - aPos.X(), a2ndPos.Y() - aPos.Y());
@@ -1131,7 +1134,7 @@ void SdrHdlGradient::CreateB2dIAObject()
                             DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
                             pNewOverlayObject->setBaseColor(IsGradient() ? Color(COL_BLACK) : Color(COL_BLUE));
-                            rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                            xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(*pNewOverlayObject);
 
                             // arrowhead
@@ -1153,7 +1156,7 @@ void SdrHdlGradient::CreateB2dIAObject()
                                 );
                             DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
 
-                            rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                            xManager->add(*pNewOverlayObject);
                             maOverlayGroup.append(*pNewOverlayObject);
                         }
                     }
@@ -1267,7 +1270,8 @@ void SdrHdlLine::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager())
+                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        if (xManager.is())
                         {
                             basegfx::B2DPoint aPosition1(pHdl1->GetPos().X(), pHdl1->GetPos().Y());
                             basegfx::B2DPoint aPosition2(pHdl2->GetPos().X(), pHdl2->GetPos().Y());
@@ -1285,7 +1289,7 @@ void SdrHdlLine::CreateB2dIAObject()
                                 // color(?)
                                 pNewOverlayObject->setBaseColor(Color(COL_LIGHTRED));
 
-                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                xManager->add(*pNewOverlayObject);
                                 maOverlayGroup.append(*pNewOverlayObject);
                             }
                         }
@@ -1327,7 +1331,8 @@ void SdrHdlBezWgt::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager())
+                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        if (xManager.is())
                         {
                             basegfx::B2DPoint aPosition1(pHdl1->GetPos().X(), pHdl1->GetPos().Y());
                             basegfx::B2DPoint aPosition2(aPos.X(), aPos.Y());
@@ -1350,7 +1355,7 @@ void SdrHdlBezWgt::CreateB2dIAObject()
                                     // color(?)
                                     pNewOverlayObject->setBaseColor(Color(COL_LIGHTBLUE));
 
-                                    rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                    xManager->add(*pNewOverlayObject);
                                     maOverlayGroup.append(*pNewOverlayObject);
                                 }
                             }
@@ -1388,20 +1393,20 @@ void E3dVolumeMarker::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager() && aWireframePoly.count())
+                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        if (xManager.is() && aWireframePoly.count())
+                        {
+                            ::sdr::overlay::OverlayObject* pNewOverlayObject = new
+                            ::sdr::overlay::OverlayPolyPolygonStriped(aWireframePoly);
+                            DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
+
+                            // OVERLAYMANAGER
+                            if(pNewOverlayObject)
                             {
-                                ::sdr::overlay::OverlayObject* pNewOverlayObject = new
-                                ::sdr::overlay::OverlayPolyPolygonStriped(aWireframePoly);
-                                DBG_ASSERT(pNewOverlayObject, "Got NO new IAO!");
+                                pNewOverlayObject->setBaseColor(Color(COL_BLACK));
 
-                                // OVERLAYMANAGER
-                                if(pNewOverlayObject)
-                                {
-                                    pNewOverlayObject->setBaseColor(Color(COL_BLACK));
-
-                                    rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
-                                    maOverlayGroup.append(*pNewOverlayObject);
-                                }
+                                xManager->add(*pNewOverlayObject);
+                                maOverlayGroup.append(*pNewOverlayObject);
                             }
                         }
                     }
@@ -1409,6 +1414,7 @@ void E3dVolumeMarker::CreateB2dIAObject()
             }
         }
     }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1453,7 +1459,8 @@ void ImpEdgeHdl::CreateB2dIAObject()
 
                         if(rPageWindow.GetPaintWindow().OutputToWindow())
                         {
-                            if(rPageWindow.GetOverlayManager())
+                            rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                            if (xManager.is())
                             {
                                 basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
 
@@ -1465,7 +1472,7 @@ void ImpEdgeHdl::CreateB2dIAObject()
                                 // OVERLAYMANAGER
                                 if(pNewOverlayObject)
                                 {
-                                    rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                    xManager->add(*pNewOverlayObject);
                                     maOverlayGroup.append(*pNewOverlayObject);
                                 }
                             }
@@ -1573,7 +1580,8 @@ void ImpMeasureHdl::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager())
+                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        if (xManager.is())
                         {
                             basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
 
@@ -1585,7 +1593,7 @@ void ImpMeasureHdl::CreateB2dIAObject()
                             // OVERLAYMANAGER
                             if(pNewOverlayObject)
                             {
-                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                xManager->add(*pNewOverlayObject);
                                 maOverlayGroup.append(*pNewOverlayObject);
                             }
                         }
@@ -1636,7 +1644,8 @@ void ImpTextframeHdl::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager())
+                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        if (xManager.is())
                         {
                             const basegfx::B2DPoint aTopLeft(maRect.Left(), maRect.Top());
                             const basegfx::B2DPoint aBottomRight(maRect.Right(), maRect.Bottom());
@@ -1656,7 +1665,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
                             // OVERLAYMANAGER
                             if(pNewOverlayObject)
                             {
-                                rPageWindow.GetOverlayManager()->add(*pNewOverlayObject);
+                                xManager->add(*pNewOverlayObject);
                                 maOverlayGroup.append(*pNewOverlayObject);
                             }
                         }
@@ -2291,7 +2300,8 @@ void SdrCropHdl::CreateB2dIAObject()
 
             if(rPageWindow.GetPaintWindow().OutputToWindow())
             {
-                if(rPageWindow.GetOverlayManager())
+                rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                if (xManager.is())
                 {
                     basegfx::B2DPoint aPosition(aPos.X(), aPos.Y());
 
@@ -2324,7 +2334,7 @@ void SdrCropHdl::CreateB2dIAObject()
                     // OVERLAYMANAGER
                     if(pOverlayObject)
                     {
-                        rPageWindow.GetOverlayManager()->add(*pOverlayObject);
+                        xManager->add(*pOverlayObject);
                         maOverlayGroup.append(*pOverlayObject);
                     }
                 }

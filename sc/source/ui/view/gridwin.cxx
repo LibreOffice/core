@@ -5360,8 +5360,8 @@ void ScGridWindow::UpdateCopySourceOverlay()
 
     if (!pViewData->ShowPasteSource())
         return;
-    ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
-    if (!pOverlayManager)
+    rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
+    if (!xOverlayManager.is())
         return;
     ScTransferObj* pTransObj = ScTransferObj::GetOwnClipboard( pViewData->GetActiveWin() );
     if (!pTransObj)
@@ -5399,7 +5399,7 @@ void ScGridWindow::UpdateCopySourceOverlay()
         Rectangle aLogic = PixelToLogic(aRect, aDrawMode);
         ::basegfx::B2DRange aRange(aLogic.Left(), aLogic.Top(), aLogic.Right(), aLogic.Bottom());
         ScOverlayDashedBorder* pDashedBorder = new ScOverlayDashedBorder(aRange, aHighlight, this);
-        pOverlayManager->add(*pDashedBorder);
+        xOverlayManager->add(*pDashedBorder);
         mpOOSelectionBorder->append(*pDashedBorder);
     }
 
@@ -5494,9 +5494,9 @@ void ScGridWindow::UpdateCursorOverlay()
     if ( !aPixelRects.empty() )
     {
         // #i70788# get the OverlayManager safely
-        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if(pOverlayManager)
+        if (xOverlayManager.is())
         {
             Color aCursorColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
             if (pViewData->GetActivePart() != eWhich)
@@ -5519,7 +5519,7 @@ void ScGridWindow::UpdateCursorOverlay()
                 aRanges,
                 false);
 
-            pOverlayManager->add(*pOverlay);
+            xOverlayManager->add(*pOverlay);
             mpOOCursors = new ::sdr::overlay::OverlayObjectList;
             mpOOCursors->append(*pOverlay);
         }
@@ -5548,9 +5548,9 @@ void ScGridWindow::UpdateSelectionOverlay()
     if ( aPixelRects.size() && pViewData->IsActive() )
     {
         // #i70788# get the OverlayManager safely
-        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if(pOverlayManager)
+        if (xOverlayManager.is())
         {
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
@@ -5589,7 +5589,7 @@ void ScGridWindow::UpdateSelectionOverlay()
                 aRanges,
                 true);
 
-            pOverlayManager->add(*pOverlay);
+            xOverlayManager->add(*pOverlay);
             mpOOSelection = new ::sdr::overlay::OverlayObjectList;
             mpOOSelection->append(*pOverlay);
         }
@@ -5646,9 +5646,9 @@ void ScGridWindow::UpdateAutoFillOverlay()
         mpAutoFillRect.reset(new Rectangle(aFillPos, Size(6, 6)));
 
         // #i70788# get the OverlayManager safely
-        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if(pOverlayManager)
+        if (xOverlayManager.is())
         {
             Color aHandleColor( SC_MOD()->GetColorConfig().GetColorValue(svtools::FONTCOLOR).nColor );
             if (pViewData->GetActivePart() != eWhich)
@@ -5667,7 +5667,7 @@ void ScGridWindow::UpdateAutoFillOverlay()
                 aRanges,
                 false);
 
-            pOverlayManager->add(*pOverlay);
+            xOverlayManager->add(*pOverlay);
             mpOOAutoFill = new ::sdr::overlay::OverlayObjectList;
             mpOOAutoFill->append(*pOverlay);
         }
@@ -5776,9 +5776,9 @@ void ScGridWindow::UpdateDragRectOverlay()
         }
 
         // #i70788# get the OverlayManager safely
-        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if(pOverlayManager)
+        if (xOverlayManager.is())
         {
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
@@ -5797,7 +5797,7 @@ void ScGridWindow::UpdateDragRectOverlay()
                 aRanges,
                 false);
 
-            pOverlayManager->add(*pOverlay);
+            xOverlayManager->add(*pOverlay);
             mpOODragRect = new ::sdr::overlay::OverlayObjectList;
             mpOODragRect->append(*pOverlay);
         }
@@ -5825,9 +5825,9 @@ void ScGridWindow::UpdateHeaderOverlay()
     if ( !aInvertRect.IsEmpty() )
     {
         // #i70788# get the OverlayManager safely
-        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if(pOverlayManager)
+        if (xOverlayManager.is())
         {
             // Color aHighlight = GetSettings().GetStyleSettings().GetHighlightColor();
             std::vector< basegfx::B2DRange > aRanges;
@@ -5843,7 +5843,7 @@ void ScGridWindow::UpdateHeaderOverlay()
                 aRanges,
                 false);
 
-            pOverlayManager->add(*pOverlay);
+            xOverlayManager->add(*pOverlay);
             mpOOHeader = new ::sdr::overlay::OverlayObjectList;
             mpOOHeader->append(*pOverlay);
         }
@@ -5895,9 +5895,9 @@ void ScGridWindow::UpdateShrinkOverlay()
     if ( !aPixRect.IsEmpty() )
     {
         // #i70788# get the OverlayManager safely
-        ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-        if(pOverlayManager)
+        if (xOverlayManager.is())
         {
             std::vector< basegfx::B2DRange > aRanges;
             const basegfx::B2DHomMatrix aTransform(GetInverseViewTransformation());
@@ -5912,7 +5912,7 @@ void ScGridWindow::UpdateShrinkOverlay()
                 aRanges,
                 false);
 
-            pOverlayManager->add(*pOverlay);
+            xOverlayManager->add(*pOverlay);
             mpOOShrink = new ::sdr::overlay::OverlayObjectList;
             mpOOShrink->append(*pOverlay);
         }
@@ -5923,7 +5923,7 @@ void ScGridWindow::UpdateShrinkOverlay()
 }
 
 // #i70788# central method to get the OverlayManager safely
-::sdr::overlay::OverlayManager* ScGridWindow::getOverlayManager()
+rtl::Reference<sdr::overlay::OverlayManager> ScGridWindow::getOverlayManager()
 {
     SdrPageView* pPV = pViewData->GetView()->GetScDrawView()->GetSdrPageView();
 
@@ -5937,18 +5937,16 @@ void ScGridWindow::UpdateShrinkOverlay()
         }
     }
 
-    return 0L;
+    return rtl::Reference<sdr::overlay::OverlayManager>();
 }
 
 void ScGridWindow::flushOverlayManager()
 {
     // #i70788# get the OverlayManager safely
-    ::sdr::overlay::OverlayManager* pOverlayManager = getOverlayManager();
+    rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = getOverlayManager();
 
-    if(pOverlayManager)
-    {
-        pOverlayManager->flush();
-    }
+    if (xOverlayManager.is())
+        xOverlayManager->flush();
 }
 
 // ---------------------------------------------------------------------------

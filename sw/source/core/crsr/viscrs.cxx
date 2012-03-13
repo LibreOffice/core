@@ -345,9 +345,9 @@ void SwSelPaintRects::Show()
         else if(Count())
         {
             SdrPaintWindow* pCandidate = pView->GetPaintWindow(0);
-            sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
+            rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
-            if(pTargetOverlay)
+            if (xTargetOverlay.is())
             {
                 // #i97672# get the system's highlight color and limit it to the maximum
                 // allowed luminance. This is needed to react on too bright highlight colors
@@ -377,7 +377,7 @@ void SwSelPaintRects::Show()
                     aNewRanges,
                     true);
 
-                pTargetOverlay->add(*mpCursorOverlay);
+                xTargetOverlay->add(*mpCursorOverlay);
             }
         }
     }

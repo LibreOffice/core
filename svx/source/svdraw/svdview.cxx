@@ -104,13 +104,13 @@ void SdrDropMarkerOverlay::ImplCreateOverlays(const SdrView& rView, const basegf
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        ::sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
-        if(pTargetOverlay)
+        if (xTargetOverlay.is())
         {
             ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(
                 rPolyPolygon);
-            pTargetOverlay->add(*pNew);
+            xTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
         }
     }

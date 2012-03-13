@@ -29,6 +29,8 @@
 #ifndef _SDR_OVERLAY_OVERLAYMANAGER_HXX
 #define _SDR_OVERLAY_OVERLAYMANAGER_HXX
 
+#include <boost/utility.hpp>
+#include <rtl/ref.hxx>
 #include <svx/sdr/animation/scheduler.hxx>
 #include <svx/sdr/overlay/overlayobject.hxx>
 #include <vcl/mapmod.hxx>
@@ -58,8 +60,13 @@ namespace sdr
 {
     namespace overlay
     {
-        class SVX_DLLPUBLIC OverlayManager : public ::sdr::animation::Scheduler
+        class SVX_DLLPUBLIC OverlayManager
+            : private boost::noncopyable
+            , protected ::sdr::animation::Scheduler
+            , public rtl::IReference
         {
+        private:
+            oslInterlockedCount mnRefCount;
         protected:
             // the OutputDevice to work on, set on construction and not to be changed
             OutputDevice&                               rmOutputDevice;
@@ -92,14 +99,17 @@ namespace sdr
             // ViewTransformation and evtl. correct mfDiscreteOne
             double getDiscreteOne() const;
 
-        public:
             // when handing over another OverlayManager at construction, the OverlayObjects
             // will be taken over from it. The new one will have added all OverlayObjects
             // while the handed over one will have none
             OverlayManager(
                 OutputDevice& rOutputDevice,
-                OverlayManager* pOldOverlayManager = 0);
+                OverlayManager* pOldOverlayManager);
             virtual ~OverlayManager();
+
+        public:
+            static rtl::Reference<OverlayManager> create(OutputDevice& rOutputDevice,
+                OverlayManager* pOldOverlayManager = 0);
 
             // access to current ViewInformation2D; this call checks and evtl. updates ViewInformation2D
             const drawinglayer::geometry::ViewInformation2D getCurrentViewInformation2D() const;
@@ -140,6 +150,11 @@ namespace sdr
 
             // access to maDrawinglayerOpt
             const SvtOptionsDrawinglayer& getDrawinglayerOpt() const { return maDrawinglayerOpt; }
+
+            void InsertEvent(sdr::animation::Event* pNew) { Scheduler::InsertEvent(pNew); }
+
+            virtual oslInterlockedCount SAL_CALL acquire();
+            virtual oslInterlockedCount SAL_CALL release();
         };
     } // end of namespace overlay
 } // end of namespace sdr

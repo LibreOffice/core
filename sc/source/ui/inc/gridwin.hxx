@@ -310,7 +310,7 @@ public:
     ~ScGridWindow();
 
     // #i70788# flush and get overlay
-    ::sdr::overlay::OverlayManager* getOverlayManager();
+    rtl::Reference<sdr::overlay::OverlayManager> getOverlayManager();
     void flushOverlayManager();
 
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );

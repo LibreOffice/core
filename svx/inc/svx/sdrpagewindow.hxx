@@ -35,7 +35,8 @@
 #include <com/sun/star/awt/XControlContainer.hpp>
 #include <com/sun/star/util/XModeChangeListener.hpp>
 #include <cppuhelper/implbase4.hxx>
-#include <svx/svdtypes.hxx> // fuer SdrLayerID
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#include <svx/svdtypes.hxx> // for SdrLayerID
 #include <svl/svarray.hxx>
 #include <tools/contnr.hxx>
 #include <svx/sdrpagewindow.hxx>
@@ -106,7 +107,7 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::awt::XControlContainer > GetControlContainer( bool _bCreateIfNecessary = true ) const;
 
     // OVERLAYMANAGER
-    ::sdr::overlay::OverlayManager* GetOverlayManager() const;
+    rtl::Reference< ::sdr::overlay::OverlayManager > GetOverlayManager() const;
 
     // #i72752# allow patcing SdrPaintWindow from SdrPageView::DrawLayer if needed
     void patchPaintWindow(SdrPaintWindow& rPaintWindow);
