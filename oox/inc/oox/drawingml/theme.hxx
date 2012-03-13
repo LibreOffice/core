@@ -76,8 +76,6 @@ public:
 
     inline EffectStyleList&         getEffectStyleList() { return maEffectStyleList; }
     inline const EffectStyleList&   getEffectStyleList() const { return maEffectStyleList; }
-    /** Returns the effect properties of the passed one-based themed style index. */
-    const PropertyMap*              getEffectStyle( sal_Int32 nIndex ) const;
 
     inline FontScheme&              getFontScheme() { return maFontScheme; }
     inline const FontScheme&        getFontScheme() const { return maFontScheme; }

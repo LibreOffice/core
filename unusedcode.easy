@@ -901,7 +901,6 @@ oox::drawingml::ColorPropertySet::setColor(int)
 oox::drawingml::GraphicProperties::assignUsed(oox::drawingml::GraphicProperties const&)
 oox::drawingml::TextBodyProperties::pushToPropMap(oox::PropertyMap&) const
 oox::drawingml::TextListStyle::dump() const
-oox::drawingml::Theme::getEffectStyle(int) const
 oox::drawingml::addMissingProperties(oox::PropertyMap const&, oox::PropertyMap&)
 oox::drawingml::chart::ObjectTypeFormatter::convertAutomaticLine(oox::PropertySet&, int)
 oox::drawingml::lcl_SequenceHasUnhiddenData(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&)
