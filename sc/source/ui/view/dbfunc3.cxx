@@ -1150,7 +1150,7 @@ void ScDBFunc::GroupDataPilot()
     ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
 
     // find original base
-    String aBaseDimName( aDimName );
+    rtl::OUString aBaseDimName = aDimName;
     const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName );
     if ( pBaseGroupDim )
     {

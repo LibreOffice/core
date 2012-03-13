@@ -544,8 +544,17 @@ void ScDPObject::InvalidateData()
 
 void ScDPObject::ClearTableData()
 {
+    ClearSource();
+
+    if (mpTableData)
+        mpTableData->GetCacheTable().getCache()->RemoveReference(this);
+    mpTableData.reset();
+}
+
+void ScDPObject::ClearSource()
+{
     Reference< XComponent > xObjectComp( xSource, UNO_QUERY );
-    if ( xObjectComp.is() )
+    if (xObjectComp.is())
     {
         try
         {
@@ -557,9 +566,6 @@ void ScDPObject::ClearTableData()
         }
     }
     xSource = NULL;
-    if (mpTableData)
-        mpTableData->GetCacheTable().getCache()->RemoveReference(this);
-    mpTableData.reset();
 }
 
 ScRange ScDPObject::GetNewOutputRange( bool& rOverflow )

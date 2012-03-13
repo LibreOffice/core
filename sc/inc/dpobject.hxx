@@ -114,8 +114,11 @@ private:
     SC_DLLPRIVATE ScDPTableData*    GetTableData();
     SC_DLLPRIVATE void              CreateObjects();
     SC_DLLPRIVATE void              CreateOutput();
-
-    bool FillLabelDataForDimension(const com::sun::star::uno::Reference<com::sun::star::container::XIndexAccess>& xDims, sal_Int32 nDim, ScDPLabelData& rLabelData);
+    SC_DLLPRIVATE void ClearSource();
+    SC_DLLPRIVATE bool FillLabelDataForDimension(
+        const com::sun::star::uno::Reference<
+            com::sun::star::container::XIndexAccess>& xDims,
+        sal_Int32 nDim, ScDPLabelData& rLabelData);
 
 public:
     ScDPObject(ScDocument* pD);
