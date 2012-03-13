@@ -1995,7 +1995,7 @@ void SwTabFrm::MakeAll()
             }
         }
 
-        //We need to know the height of the first row, because the master needs 
+        //We need to know the height of the first row, because the master needs
         //to be activated if it shrinks and then absorb the row if necessary.
         long n1StLineHeight = 0;
         if ( IsFollow() )
@@ -2786,7 +2786,7 @@ void SwTabFrm::Format( const SwBorderAttrs *pAttrs )
     }
 
     //VarSize is always the height.
-    //For the upper/lower border the same rules apply as for cntfrms (see 
+    //For the upper/lower border the same rules apply as for cntfrms (see
     //MakePrtArea() of those).
 
     SwTwips nUpper = CalcUpperSpace( pAttrs );
@@ -4566,7 +4566,7 @@ SwTwips SwRowFrm::ShrinkFrm( SwTwips nDist, sal_Bool bTst, sal_Bool bInfo )
         SwTwips nTmp = GetUpper()->Shrink( nReal, bTst );
         if ( !bShrinkAnyway && !GetNext() && nTmp != nReal )
         {
-            //The last one gets the leftover in the upper and therefore takes 
+            //The last one gets the leftover in the upper and therefore takes
             //care (otherwise: endless loop)
             if ( !bTst )
             {
