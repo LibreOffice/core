@@ -322,6 +322,7 @@ endif
     bin/repo-list config.log config.status configure \
 	ooo.lst post_download post_download.log \
 	config_host.mk.last set_soenv.stamp src.downloaded warn
+	find $(SOLARENV)/gdb -name "*.pyc" -exec rm [} \;
 
 #
 # custom command
