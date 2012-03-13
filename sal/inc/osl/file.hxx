@@ -733,22 +733,6 @@ public:
         return static_cast< Type >(_aStatus.eType);
     }
 
-    /** Is it a file?
-        This method returns True for both regular files, and links.
-
-        @return
-        True if it's a file, False otherwise.
-
-        @see getFileType
-        @see isRegular
-        @see isLink
-        @since LibreOffice 3.6
-    */
-    inline sal_Bool isFile() const
-    {
-        return ( getFileType() == Regular || getFileType() == Link );
-    }
-
     /** Is it a directory?
         This method returns True for both directories, and volumes.
 
