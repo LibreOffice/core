@@ -295,7 +295,25 @@ public:
     SwTxtFmtColl& GetDfltTxtFmtColl() const;
     sal_uInt16 GetTxtFmtCollCount() const;
     SwTxtFmtColl& GetTxtFmtColl( sal_uInt16 nTxtFmtColl) const;
+    /**
+     * Get the named character format of the current selection.
+     *
+     * @see GetPaMTxtFmtColl()
+     *
+     * @return the named character format of the first node that contains one.
+     * Nodes are sort by order of appearance in the selections ;
+     * selections are sort by their order of creation
+     * (last created selection first, oldest selection at last).
+     */
     SwTxtFmtColl* GetCurTxtFmtColl() const;
+    /**
+     * Get the named character format of the selection(s) described by a SwPaM.
+     *
+     * @param pPaM
+     * input parameter - the selection where to look for the character format.
+     *
+     * @return the named character format of the first node that contains one.
+     */
     SwTxtFmtColl* GetPaMTxtFmtColl( SwPaM* pPaM ) const;
 
     // #i62675#

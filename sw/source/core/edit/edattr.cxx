@@ -182,44 +182,46 @@ SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl( ) const
 
 SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
 {
-    SwTxtFmtColl *pFmt = 0;
-
     if ( GetCrsrCnt() > getMaxLookup() )
-        return 0;
+        return NULL;
 
     SwPaM* pStartPaM = pPaM;
-    do {
+    do { // for all the point and mark (selections)
+
+        // get the start and the end node of the current selection
         sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
               nEndNd = pPaM->GetPoint()->nNode.GetIndex();
-        xub_StrLen nSttCnt = pPaM->GetMark()->nContent.GetIndex(),
-                   nEndCnt = pPaM->GetPoint()->nContent.GetIndex();
 
-        if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
+        // reverse start and end if they aren't sorted correctly
+        if( nSttNd > nEndNd )
         {
-            sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
-            nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (xub_StrLen)nTmp;
+            sal_uLong tmpNd = nSttNd;
+            nSttNd = nEndNd;
+            nEndNd = tmpNd;
         }
 
         if( nEndNd - nSttNd >= getMaxLookup() )
-        {
-            pFmt = 0;
             break;
-        }
 
+        // for all the nodes in the current Point and Mark
         for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
         {
+            // get the node
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
             if( pNd->IsTxtNode() )
             {
-                if( !pFmt )
-                    pFmt = ((SwTxtNode*)pNd)->GetTxtColl();
-                else if( pFmt == ((SwTxtNode*)pNd)->GetTxtColl() ) // ???
-                    break;
+                // if it's a text node get its named character format
+                SwTxtFmtColl* pFmt = static_cast<SwTxtNode*>(pNd)->GetTxtColl();
+
+                // if the character format exist stop here and return it
+                if( pFmt != NULL )
+                    return pFmt;
             }
         }
-    } while ( ( pPaM = ( SwPaM* )pPaM->GetNext() ) != pStartPaM );
+    } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
 
-    return pFmt;
+    // if none of the selected node contain a named character format
+    return NULL;
 }
 
 
