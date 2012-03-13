@@ -116,8 +116,8 @@ sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
 
         if( nSttNd > nEndNd || ( nSttNd == nEndNd && nSttCnt > nEndCnt ))
         {
-            sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
-            nTmp = nSttCnt; nSttCnt = nEndCnt; nEndCnt = (xub_StrLen)nTmp;
+            std::swap(nSttNd, nEndNd);
+            std::swap(nSttCnt, nEndCnt);
         }
 
         if( nEndNd - nSttNd >= getMaxLookup() )
@@ -195,11 +195,7 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
 
         // reverse start and end if they aren't sorted correctly
         if( nSttNd > nEndNd )
-        {
-            sal_uLong tmpNd = nSttNd;
-            nSttNd = nEndNd;
-            nEndNd = tmpNd;
-        }
+            std::swap(nSttNd, nEndNd);
 
         // for all the nodes in the current Point and Mark
         for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
@@ -343,9 +339,7 @@ sal_Bool SwEditShell::IsMoveLeftMargin( sal_Bool bRight, sal_Bool bModulus ) con
               nEndNd = PCURCRSR->GetPoint()->nNode.GetIndex();
 
         if( nSttNd > nEndNd )
-        {
-            sal_uLong nTmp = nSttNd; nSttNd = nEndNd; nEndNd = nTmp;
-        }
+            std::swap(nSttNd, nEndNd);
 
         SwCntntNode* pCNd;
         for( sal_uLong n = nSttNd; bRet && n <= nEndNd; ++n )

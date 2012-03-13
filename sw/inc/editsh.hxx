@@ -44,6 +44,7 @@
 #include <tblenum.hxx>
 #include <IMark.hxx>
 
+#include <algorithm>
 #include <vector>
 #include <set>
 #include <swundo.hxx>
