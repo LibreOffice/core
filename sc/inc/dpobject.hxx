@@ -133,8 +133,7 @@ public:
     void                SetAllowMove(bool bSet);
 
     void                InvalidateData();
-    void                ClearSource();
-
+    void ClearTableData();
 
     void                Output( const ScAddress& rPos );
     ScRange             GetNewOutputRange( bool& rOverflow );

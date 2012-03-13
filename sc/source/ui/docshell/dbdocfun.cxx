@@ -1324,7 +1324,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 // (and re-read column entry collections)
                 // so all changes take effect
                 if ( pNewObj == pOldObj && pDestObj->IsImportData() )
-                    pDestObj->ClearSource();
+                    pDestObj->ClearTableData();
 
                 pDestObj->InvalidateData();             // before getting the new output area
 

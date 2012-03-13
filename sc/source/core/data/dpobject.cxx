@@ -213,7 +213,7 @@ ScDPObject::~ScDPObject()
     delete pSheetDesc;
     delete pImpDesc;
     delete pServDesc;
-    ClearSource();
+    ClearTableData();
 }
 
 void ScDPObject::EnableGetPivotData(bool b)
@@ -282,7 +282,7 @@ void ScDPObject::SetSheetDesc(const ScSheetSourceDesc& rDesc)
     aParam.bHasHeader = true;
     pSheetDesc->SetQueryParam(aParam);
 
-    ClearSource();      // new source must be created
+    ClearTableData();      // new source must be created
 }
 
 void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
@@ -296,7 +296,7 @@ void ScDPObject::SetImportDesc(const ScImportSourceDesc& rDesc)
     delete pImpDesc;
     pImpDesc = new ScImportSourceDesc(rDesc);
 
-    ClearSource();      // new source must be created
+    ClearTableData();      // new source must be created
 }
 
 void ScDPObject::SetServiceData(const ScDPServiceDesc& rDesc)
@@ -310,7 +310,7 @@ void ScDPObject::SetServiceData(const ScDPServiceDesc& rDesc)
     delete pServDesc;
     pServDesc = new ScDPServiceDesc(rDesc);
 
-    ClearSource();      // new source must be created
+    ClearTableData();      // new source must be created
 }
 
 void ScDPObject::WriteSourceDataTo( ScDPObject& rDest ) const
@@ -485,7 +485,7 @@ void ScDPObject::CreateObjects()
 {
     // if groups are involved, create a new source with the ScDPGroupTableData
     if ( bSettingsChanged && pSaveData && pSaveData->GetExistingDimensionData() )
-        ClearSource();
+        ClearTableData();
 
     if (!xSource.is())
     {
@@ -542,7 +542,7 @@ void ScDPObject::InvalidateData()
     bSettingsChanged = true;
 }
 
-void ScDPObject::ClearSource()
+void ScDPObject::ClearTableData()
 {
     Reference< XComponent > xObjectComp( xSource, UNO_QUERY );
     if ( xObjectComp.is() )

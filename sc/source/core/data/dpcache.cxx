@@ -242,7 +242,7 @@ struct ClearObjectSource : std::unary_function<ScDPObject*, void>
 {
     void operator() (ScDPObject* p) const
     {
-        p->ClearSource();
+        p->ClearTableData();
     }
 };
 

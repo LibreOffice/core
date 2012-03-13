@@ -1358,7 +1358,7 @@ void Test::testPivotTable()
     pDPs->InsertNewTable(pDPObj2);
 
     aOutRange = pDPObj2->GetOutRange();
-    pDPObj2->ClearSource();
+    pDPObj2->ClearTableData();
     pDPObj2->Output(aOutRange.aStart);
     {
         // Expected output table content.  0 = empty cell
@@ -1394,7 +1394,7 @@ void Test::testPivotTable()
     CPPUNIT_ASSERT_MESSAGE("Reloading a cache shouldn't remove any cache.",
                            pDPs->GetSheetCaches().size() == 1);
 
-    pDPObj2->ClearSource();
+    pDPObj2->ClearTableData();
     pDPObj2->Output(aOutRange.aStart);
 
     {
