@@ -85,7 +85,7 @@ endif
 # require different compiler flags
 define gb_Object__owner
 $$(if $$(OBJECTOWNER),\
-  $$(call gb_Output_warn,$(1) is linked in by $$(OBJECTOWNER) $(2)))$(2)
+  $$(call gb_Output_error,$(1) is linked in by $$(OBJECTOWNER) $(2)))$(2)
 endef
 
 # For every object there is a dep file (if gb_FULLDEPS is active).
