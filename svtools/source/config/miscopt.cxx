@@ -248,7 +248,7 @@ class SvtMiscOptions_Impl : public ConfigItem
     private:
 
         /*-****************************************************************************************************//**
-            @short      return list of key names of ouer configuration management which represent oue module tree
+            @short      return list of key names of our configuration management which represent oue module tree
             @descr      These methods return a static const list of key names. We need it to get needed values from our
                         configuration management.
 
@@ -303,7 +303,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
     // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !(seqNames.getLength()!=seqValues.getLength()), "SvtMiscOptions_Impl::SvtMiscOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to ouer internal member.
+    // Copy values from list in right order to our internal member.
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
@@ -415,8 +415,8 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
         }
     }
 
-    // Enable notification mechanism of ouer baseclass.
-    // We need it to get information about changes outside these class on ouer used configuration keys!
+    // Enable notification mechanism of our baseclass.
+    // We need it to get information about changes outside these class on our used configuration keys!
     EnableNotification( seqNames );
 }
 
@@ -425,7 +425,7 @@ SvtMiscOptions_Impl::SvtMiscOptions_Impl()
 //*****************************************************************************************************************
 SvtMiscOptions_Impl::~SvtMiscOptions_Impl()
 {
-    // We must save our current values .. if user forget it!
+    // We must save our current values .. if user forgets it!
     if( IsModified() == sal_True )
     {
         Commit();
@@ -453,7 +453,7 @@ void SvtMiscOptions_Impl::Load( const Sequence< OUString >& rPropertyNames )
     // Follow assignment use order of values in relation to our list of key names!
     DBG_ASSERT( !(rPropertyNames.getLength()!=seqValues.getLength()), "SvtSecurityOptions_Impl::SvtSecurityOptions_Impl()\nI miss some values of configuration keys!\n" );
 
-    // Copy values from list in right order to ouer internal member.
+    // Copy values from list in right order to our internal member.
     sal_Int32 nPropertyCount = seqValues.getLength();
     for( sal_Int32 nProperty=0; nProperty<nPropertyCount; ++nProperty )
     {
@@ -751,9 +751,9 @@ SvtMiscOptions::SvtMiscOptions()
 {
     // Global access, must be guarded (multithreading!).
     MutexGuard aGuard( GetInitMutex() );
-    // Increase ouer refcount ...
+    // Increase our refcount ...
     ++m_nRefCount;
-    // ... and initialize ouer data container only if it not already exist!
+    // ... and initialize our data container only if it not already exist!
     if( m_pDataContainer == NULL )
     {
        RTL_LOGFILE_CONTEXT(aLog, "svtools ( ??? ) ::SvtMiscOptions_Impl::ctor()");
@@ -769,10 +769,10 @@ SvtMiscOptions::~SvtMiscOptions()
 {
     // Global access, must be guarded (multithreading!)
     MutexGuard aGuard( GetInitMutex() );
-    // Decrease ouer refcount.
+    // Decrease our refcount.
     --m_nRefCount;
     // If last instance was deleted ...
-    // we must destroy ouer static data container!
+    // we must destroy our static data container!
     if( m_nRefCount <= 0 )
     {
         delete m_pDataContainer;
