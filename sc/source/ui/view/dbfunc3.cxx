@@ -716,12 +716,7 @@ void ScDBFunc::RecalcPivotTable()
         }
 
         ScDBDocFunc aFunc( *pDocSh );
-        std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
-        for (; it != itEnd; ++it)
-        {
-            ScDPObject* pObj = *it;
-            aFunc.DataPilotUpdate(pObj, pObj, true, false);
-        }
+        aFunc.RefreshPivotTables(aRefs, true, false);
 
         CursorPosChanged();     // shells may be switched
     }

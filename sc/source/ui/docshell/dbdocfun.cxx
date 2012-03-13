@@ -1451,6 +1451,16 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     return bDone;
 }
 
+void ScDBDocFunc::RefreshPivotTables(std::set<ScDPObject*>& rRefs, bool bRecord, bool bApi)
+{
+    std::set<ScDPObject*>::iterator it = rRefs.begin(), itEnd = rRefs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScDPObject* pObj = *it;
+        DataPilotUpdate(pObj, pObj, bRecord, bApi);
+    }
+}
+
 //==================================================================
 //
 //      database import

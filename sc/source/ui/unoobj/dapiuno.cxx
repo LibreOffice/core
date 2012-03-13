@@ -1278,12 +1278,7 @@ void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
         ScDBDocFunc aFunc(*GetDocShell());
         std::set<ScDPObject*> aRefs;
         GetDocShell()->GetDocument()->GetDPCollection()->ReloadCache(pDPObj, aRefs);
-        std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
-        for (; it != itEnd; ++it)
-        {
-            ScDPObject* pObj = *it;
-            aFunc.DataPilotUpdate(pObj, pObj, true, true);
-        }
+        aFunc.RefreshPivotTables(aRefs, true, true);
     }
 }
 

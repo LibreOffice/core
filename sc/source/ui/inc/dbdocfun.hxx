@@ -33,6 +33,8 @@
 #include <tools/solar.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
+#include <set>
+
 class String;
 
 struct ScImportParam;
@@ -100,6 +102,14 @@ public:
 
     bool DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
                           bool bRecord, bool bApi, bool bAllowMove = false );
+
+    /**
+     * Refresh multiple pivot tables that reference the same pivot cache.
+     * Before calling this method, the caller must take care of reloading the
+     * cache and providing the correct pivot table objects referencing the
+     * cache.
+     */
+    void RefreshPivotTables(std::set<ScDPObject*>& rRefs, bool bRecord, bool bApi);
 };
 
 
