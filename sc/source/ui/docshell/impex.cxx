@@ -70,6 +70,7 @@ class StarBASIC;
 #include "editable.hxx"
 #include "compiler.hxx"
 #include "warnbox.hxx"
+#include "clipparam.hxx"
 
 #include "impex.hxx"
 
@@ -1437,26 +1438,33 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
     SCROW nRow;
     SCCOL nStartCol = aRange.aStart.Col();
     SCROW nStartRow = aRange.aStart.Row();
+    SCTAB nStartTab = aRange.aStart.Tab();
     SCCOL nEndCol = aRange.aEnd.Col();
     SCROW nEndRow = aRange.aEnd.Row();
+    SCTAB nEndTab = aRange.aEnd.Tab();
+
+    if (!pDoc->GetClipParam().isMultiRange() && nStartTab == nEndTab)
+        pDoc->ShrinkToDataArea( nStartTab, nStartCol, nStartRow, nEndCol, nEndRow );
+
     String aCell;
+
     bool bConvertLF = (GetSystemLineEnd() != LINEEND_LF);
 
     for (nRow = nStartRow; nRow <= nEndRow; nRow++)
     {
-        if (bIncludeFiltered || !pDoc->RowFiltered( nRow, aRange.aStart.Tab() ))
+        if (bIncludeFiltered || !pDoc->RowFiltered( nRow, nStartTab ))
         {
             for (nCol = nStartCol; nCol <= nEndCol; nCol++)
             {
                 CellType eType;
-                pDoc->GetCellType( nCol, nRow, aRange.aStart.Tab(), eType );
+                pDoc->GetCellType( nCol, nRow, nStartTab, eType );
                 switch (eType)
                 {
                     case CELLTYPE_FORMULA:
                     {
                         if (bFormulas)
                         {
-                            pDoc->GetFormula( nCol, nRow, aRange.aStart.Tab(), aCell );
+                            pDoc->GetFormula( nCol, nRow, nStartTab, aCell );
                             if( aCell.Search( cSep ) != STRING_NOTFOUND )
                                 lcl_WriteString( rStrm, aCell, cStr, cStr );
                             else
@@ -1464,7 +1472,7 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
                         }
                         else
                         {
-                            pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
+                            pDoc->GetString( nCol, nRow, nStartTab, aCell );
 
                             bool bMultiLineText = ( aCell.Search( _LF ) != STRING_NOTFOUND );
                             if( bMultiLineText )
@@ -1487,7 +1495,7 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
                     break;
                     case CELLTYPE_VALUE:
                     {
-                        pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
+                        pDoc->GetString( nCol, nRow, nStartTab, aCell );
                         lcl_WriteSimpleString( rStrm, aCell );
                     }
                     break;
@@ -1496,7 +1504,7 @@ sal_Bool ScImportExport::Doc2Text( SvStream& rStrm )
                     break;
                     default:
                     {
-                        pDoc->GetString( nCol, nRow, aRange.aStart.Tab(), aCell );
+                        pDoc->GetString( nCol, nRow, nStartTab, aCell );
 
                         bool bMultiLineText = ( aCell.Search( _LF ) != STRING_NOTFOUND );
                         if( bMultiLineText )
