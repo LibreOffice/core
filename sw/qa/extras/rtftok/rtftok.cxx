@@ -63,6 +63,7 @@ public:
     void testFdo45187();
     void testFdo46662();
     void testN750757();
+    void testFdo45563();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -74,6 +75,7 @@ public:
     CPPUNIT_TEST(testFdo45187);
     CPPUNIT_TEST(testFdo46662);
     CPPUNIT_TEST(testN750757);
+    CPPUNIT_TEST(testFdo45563);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -320,6 +322,21 @@ void RtfModelTest::testN750757()
     aValue = xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaContextMargin")));
     aValue >>= bValue;
     CPPUNIT_ASSERT_EQUAL(sal_Bool(true), bValue);
+}
+
+void RtfModelTest::testFdo45563()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45563.rtf")));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    int i = 0;
+    while (xParaEnum->hasMoreElements())
+    {
+        xParaEnum->nextElement();
+        i++;
+    }
+    CPPUNIT_ASSERT_EQUAL(4, i);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
