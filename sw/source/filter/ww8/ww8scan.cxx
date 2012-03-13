@@ -779,7 +779,7 @@ const wwSprmSearcher *wwSprmParser::GetWW8SprmSearcher()
         {0x303C, 1, L_FIX}, // undocumented, sep
         {0x245B, 1, L_FIX}, // undocumented, para autobefore
         {0x245C, 1, L_FIX}, // undocumented, para autoafter
-        // undocumented, don't add space between para of the same style
+        // "sprmPFContextualSpacing", don't add space between para of the same style
         {0x246D, 1, L_FIX}
     };
 

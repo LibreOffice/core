@@ -1588,7 +1588,6 @@ public:     // eigentlich private, geht aber leider nur public
     void Read_UL(               sal_uInt16 nId, const sal_uInt8*, short nLen );
     void Read_ParaAutoBefore(sal_uInt16 , const sal_uInt8 *pData, short nLen);
     void Read_ParaAutoAfter(sal_uInt16 , const sal_uInt8 *pData, short nLen);
-    void Read_DontAddEqual(sal_uInt16 , const sal_uInt8 *pData, short nLen);
     void Read_LineSpace(        sal_uInt16, const sal_uInt8*, short nLen );
     void Read_Justify(sal_uInt16, const sal_uInt8*, short nLen);
     void Read_IdctHint(sal_uInt16, const sal_uInt8*, short nLen);

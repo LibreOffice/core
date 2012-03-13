@@ -3885,6 +3885,12 @@ void WW8AttributeOutput::FormatULSpace( const SvxULSpaceItem& rUL )
         else
             m_rWW8Export.pO->push_back( 22 );
         m_rWW8Export.InsUInt16( rUL.GetLower() );
+        // sprmPFContextualSpacing
+        if (m_rWW8Export.bWrtWW8 && rUL.GetContext())
+        {
+            m_rWW8Export.InsUInt16(NS_sprm::LN_PContextualSpacing);
+            m_rWW8Export.InsUInt16(rUL.GetContext());
+        }
     }
 }
 

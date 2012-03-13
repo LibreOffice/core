@@ -4102,12 +4102,6 @@ sal_uInt16 SwWW8ImplReader::GetParagraphAutoSpace(bool fDontUseHTMLAutoSpacing)
         return 280;  //Seems to be always 14points in this case
 }
 
-void SwWW8ImplReader::Read_DontAddEqual(sal_uInt16, const sal_uInt8 *, short nLen)
-{
-    if (nLen < 0)
-        return;
-}
-
 void SwWW8ImplReader::Read_ParaAutoBefore(sal_uInt16, const sal_uInt8 *pData, short nLen)
 {
     if (nLen < 0)
@@ -4200,6 +4194,9 @@ void SwWW8ImplReader::Read_UL( sal_uInt16 nId, const sal_uInt8* pData, short nLe
         case     22:
         case 0xA414:
             aUL.SetLower( nPara );
+            break;
+        case 0x246D:
+            aUL.SetContextValue( nPara );
             break;
         default:
             return;
@@ -6079,7 +6076,7 @@ const wwSprmDispatcher *GetWW8SprmDispatcher()
         {0x303C, 0},                                 //undocumented
         {0x245B, &SwWW8ImplReader::Read_ParaAutoBefore},//undocumented, para
         {0x245C, &SwWW8ImplReader::Read_ParaAutoAfter},//undocumented, para
-        {0x246D, &SwWW8ImplReader::Read_DontAddEqual}//undocumented, para
+        {0x246D, &SwWW8ImplReader::Read_UL}          //"sprmPFContextualSpacing"
     };
 
     static wwSprmDispatcher aSprmSrch(aSprms, SAL_N_ELEMENTS(aSprms));
