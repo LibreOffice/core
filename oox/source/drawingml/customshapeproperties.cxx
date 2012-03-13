@@ -359,16 +359,6 @@ void CustomShapeProperties::pushToPropSet( const ::oox::core::FilterBase& /* rFi
     }
 }
 
-double CustomShapeProperties::getValue( const std::vector< CustomShapeGuide >& rGuideList, sal_uInt32 nIndex ) const
-{
-    double fRet = 0.0;
-    if ( nIndex < rGuideList.size() )
-    {
-
-    }
-    return fRet;
-}
-
 Any CustomShapeProvider::createStringSequence( size_t nStrings, const char **pStrings )
 {
     Sequence< OUString > aStringSequence( nStrings );
