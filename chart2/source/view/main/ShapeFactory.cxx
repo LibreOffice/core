@@ -104,14 +104,55 @@ void DumpHelper::writeAttribute(const char* pAttrName, const sal_Int32 nValue)
     std::cout << pAttrName << " " << nValue << std::endl;
 }
 
-void DumpHelper::writeAttribute(const char* pAttrName, const drawing::PointSequenceSequence& )
+void DumpHelper::writePointElement(const awt::Point& rPoint)
 {
-    std::cout << pAttrName << " " << std::endl;
+    std::cout << "Point" << " " << rPoint.X << "," << rPoint.Y << std::endl;
 }
 
-void DumpHelper::writeAttribute(const char* pAttrName, const drawing::PolyPolygonShape3D& )
+void DumpHelper::writeDoubleSequence(const char* pName, const drawing::DoubleSequenceSequence& rSequence)
+{
+    writeElement(pName);
+    writeElement("OuterSequence");
+    sal_Int32 nLength1 = rSequence.getLength();
+    for (sal_Int32 i = 0; i < nLength1; ++i)
+    {
+        writeElement("InnerSequence");
+        const uno::Sequence<double>& aInnerSequence = rSequence[i];
+        sal_Int32 nLength2 = aInnerSequence.getLength();
+        for( sal_Int32 j = 0; j < nLength2; ++j)
+        {
+            std::cout << "Value: " << aInnerSequence[j];
+        }
+        endElement();
+    }
+    endElement();
+}
+
+void DumpHelper::writeAttribute(const char* pAttrName, const drawing::PointSequenceSequence& rSequence)
 {
     std::cout << pAttrName << " " << std::endl;
+    sal_Int32 nLength1 = rSequence.getLength();
+    writeElement("OuterSequence");
+    for (sal_Int32 i = 0; i < nLength1; ++i)
+    {
+        writeElement("InnerSequence");
+        const uno::Sequence<awt::Point>& aInnerSequence = rSequence[i];
+        sal_Int32 nLength2 = aInnerSequence.getLength();
+        for( sal_Int32 j = 0; j < nLength2; ++j)
+        {
+            writePointElement(aInnerSequence[j]);
+        }
+        endElement();
+    }
+    endElement();
+}
+
+void DumpHelper::writeAttribute(const char* pAttrName, const drawing::PolyPolygonShape3D& rShape)
+{
+    std::cout << pAttrName << " " << std::endl;
+    writeDoubleSequence("SequenceX", rShape.SequenceX);
+    writeDoubleSequence("SequenceY", rShape.SequenceY);
+    writeDoubleSequence("SequenceZ", rShape.SequenceZ);
 }
 
 void DumpHelper::writeAttribute(const char* pAttrName, const drawing::PolyPolygonBezierCoords& )

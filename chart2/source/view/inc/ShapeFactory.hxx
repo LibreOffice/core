@@ -67,6 +67,8 @@ public:
    void writeAttribute(const char* pAttrName, const com::sun::star::drawing::PointSequenceSequence& rPoints);
    void writeAttribute(const char* pAttrName, const com::sun::star::drawing::PolyPolygonShape3D& rPoints);
    void writeAttribute(const char* pAttrName, const com::sun::star::drawing::PolyPolygonBezierCoords& rCoords);
+   void writePointElement(const com::sun::star::awt::Point& rPoint);
+   void writeDoubleSequence(const char* pName, const com::sun::star::drawing::DoubleSequenceSequence& rSequence);
    void endElement();
 };
 
