@@ -63,6 +63,7 @@ else
 $(eval $(call gb_Library_add_libs,emser,\
 	$(ATL_LIB)/atlsd.lib \
 ))
+endif
 
 $(eval $(call gb_Library_add_exception_objects,emser,\
 	embedserv/source/embed/docholder \
