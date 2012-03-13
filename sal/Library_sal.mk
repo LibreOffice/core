@@ -132,6 +132,12 @@ $(eval $(call gb_Library_add_cobjects,sal,\
 	sal/osl/all/filepath \
 ))
 
+ifeq ($(OS),IOS)
+$(eval $(call gb_Library_add_cxxflags,sal,\
+    $(gb_OBJCXXFLAGS) \
+))
+endif
+
 ifeq ($(OS),ANDROID)
 $(eval $(call gb_Library_add_exception_objects,sal,\
 	sal/textenc/context \

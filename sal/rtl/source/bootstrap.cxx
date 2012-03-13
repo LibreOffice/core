@@ -54,6 +54,12 @@
 #include <memory>
 #include <utility>
 
+#ifdef IOS
+#include <premac.h>
+#import <Foundation/Foundation.h>
+#include <postmac.h>
+#endif
+
 #define MY_STRING_(x) # x
 #define MY_STRING(x) MY_STRING_(x)
 
@@ -390,6 +396,15 @@ Bootstrap_Impl * BootstrapMap::getBaseIni() {
     if (baseIni_ == 0) {
         rtl::OUString uri;
         if (baseIniUri_.isEmpty()) {
+#ifdef IOS
+            // On iOS hardcode the inifile as "rc" in the .app
+            // directory. Apps are self-contained anyway, there is no
+            // possibility to have several "applications" in the same
+            // installation location with different inifiles.
+            const char *inifile = [[[[NSBundle mainBundle] bundlePath] stringByAppendingPathComponent: @"rc"] UTF8String];
+            uri = rtl::OUString(inifile, strlen(inifile), RTL_TEXTENCODING_UTF8);
+            resolvePathnameUrl(&uri);
+#else
             if (CommandLineParameters::get().get(
                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("INIFILENAME")),
                     &uri))
@@ -416,6 +431,7 @@ Bootstrap_Impl * BootstrapMap::getBaseIni() {
                 uri += rtl::OUString(
                     RTL_CONSTASCII_USTRINGPARAM(SAL_CONFIGFILE("")));
             }
+#endif
         } else {
             uri = baseIniUri_;
         }
