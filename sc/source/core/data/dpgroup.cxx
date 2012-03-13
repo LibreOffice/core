@@ -77,6 +77,46 @@ inline bool IsInteger( double fValue )
 
 }
 
+class ScDPGroupNumFilter : public ScDPCacheTable::FilterBase
+{
+public:
+    ScDPGroupNumFilter(const ScDPItemData& rValue, const ScDPNumGroupInfo& rInfo);
+    virtual ~ScDPGroupNumFilter() {}
+    virtual bool match(const ScDPItemData &rCellData) const;
+private:
+    ScDPItemData maValue;
+    ScDPNumGroupInfo maNumInfo;
+};
+
+ScDPGroupNumFilter::ScDPGroupNumFilter(const ScDPItemData& rValue, const ScDPNumGroupInfo& rInfo) :
+    maValue(rValue), maNumInfo(rInfo) {}
+
+bool ScDPGroupNumFilter::match(const ScDPItemData& rCellData) const
+{
+    if (rCellData.GetType() != ScDPItemData::Value)
+        return false;
+
+    double fVal = maValue.GetValue();
+    if (rtl::math::isInf(fVal))
+    {
+        if (rtl::math::isSignBitSet(fVal))
+        {
+            // Less than the min value.
+            return rCellData.GetValue() < maNumInfo.mfStart;
+        }
+
+        // Greater than the max value.
+        return maNumInfo.mfEnd < rCellData.GetValue();
+    }
+
+    double low = fVal;
+    double high = low + maNumInfo.mfStep;
+    if (maNumInfo.mbIntegerOnly)
+        high += 1.0;
+
+    return low <= rCellData.GetValue() && rCellData.GetValue() < high;
+}
+
 class ScDPGroupDateFilter : public ScDPCacheTable::FilterBase
 {
 public:
@@ -89,9 +129,9 @@ public:
 private:
     ScDPGroupDateFilter(); // disabled
 
-    ScDPItemData            maValue;
-    const Date              maNullDate;
-    const ScDPNumGroupInfo  maNumInfo;
+    ScDPItemData     maValue;
+    Date             maNullDate;
+    ScDPNumGroupInfo maNumInfo;
 };
 
 // ----------------------------------------------------------------------------
@@ -682,19 +722,24 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
             if (IsNumGroupDimension(itr->mnFieldIndex))
             {
                 // internal number group field
-                const ScDPNumGroupDimension& rNumGrpDim = pNumGroups[itr->mnFieldIndex];
-                const ScDPDateGroupHelper* pDateHelper = rNumGrpDim.GetDateHelper();
-                if (!pDateHelper)
-                {
-                    // What do we do here !?
-                    continue;
-                }
-
                 ScDPCacheTable::Criterion aCri;
                 aCri.mnFieldIndex = itr->mnFieldIndex;
-                aCri.mpFilter.reset(
-                    new ScDPGroupDateFilter(
-                        pFilter->getMatchValue(), *pDoc->GetFormatTable()->GetNullDate(), pDateHelper->GetNumInfo()));
+                const ScDPNumGroupDimension& rNumGrpDim = pNumGroups[itr->mnFieldIndex];
+                const ScDPDateGroupHelper* pDateHelper = rNumGrpDim.GetDateHelper();
+
+                if (pDateHelper)
+                {
+                    // grouped by dates.
+                    aCri.mpFilter.reset(
+                        new ScDPGroupDateFilter(
+                            pFilter->getMatchValue(), *pDoc->GetFormatTable()->GetNullDate(), pDateHelper->GetNumInfo()));
+                }
+                else
+                {
+                    // This dimension is grouped by numeric ranges.
+                    aCri.mpFilter.reset(
+                        new ScDPGroupNumFilter(pFilter->getMatchValue(), rNumGrpDim.GetInfo()));
+                }
 
                 aNewCriteria.push_back(aCri);
             }
