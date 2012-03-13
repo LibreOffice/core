@@ -699,24 +699,15 @@ void ScDBFunc::RecalcPivotTable()
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = GetViewData()->GetDocument();
 
-    ScDPCollection* pDPs = pDoc->GetDPCollection();
     ScDPObject* pDPObj  = pDoc->GetDPAtCursor( GetViewData()->GetCurX(),
                                                   GetViewData()->GetCurY(),
                                                   GetViewData()->GetTabNo() );
-    if (pDPs && pDPObj)
+    if (pDPObj)
     {
         // Remove existing data cache for the data that this datapilot uses,
         // to force re-build data cache.
-        std::set<ScDPObject*> aRefs;
-        sal_uLong nErrId = pDPs->ReloadCache(pDPObj, aRefs);
-        if (nErrId)
-        {
-            ErrorMessage(nErrId);
-            return;
-        }
-
-        ScDBDocFunc aFunc( *pDocSh );
-        aFunc.RefreshPivotTables(aRefs, true, false);
+        ScDBDocFunc aFunc(*pDocSh);
+        aFunc.RefreshPivotTables(pDPObj, true, false);
 
         CursorPosChanged();     // shells may be switched
     }

@@ -1276,9 +1276,7 @@ void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
     if (pDPObj)
     {
         ScDBDocFunc aFunc(*GetDocShell());
-        std::set<ScDPObject*> aRefs;
-        GetDocShell()->GetDocument()->GetDPCollection()->ReloadCache(pDPObj, aRefs);
-        aFunc.RefreshPivotTables(aRefs, true, true);
+        aFunc.RefreshPivotTables(pDPObj, true, true);
     }
 }
 

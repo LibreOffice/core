@@ -33,8 +33,6 @@
 #include <tools/solar.h>
 #include <com/sun/star/uno/Sequence.hxx>
 
-#include <set>
-
 class String;
 
 struct ScImportParam;
@@ -104,12 +102,10 @@ public:
                           bool bRecord, bool bApi, bool bAllowMove = false );
 
     /**
-     * Refresh multiple pivot tables that reference the same pivot cache.
-     * Before calling this method, the caller must take care of reloading the
-     * cache and providing the correct pivot table objects referencing the
-     * cache.
+     * Reload the referenced pivot cache, and refresh all pivot tables that
+     * reference the cache.
      */
-    void RefreshPivotTables(std::set<ScDPObject*>& rRefs, bool bRecord, bool bApi);
+    sal_uLong RefreshPivotTables(ScDPObject* pDPObj, bool bRecord, bool bApi);
 };
 
 

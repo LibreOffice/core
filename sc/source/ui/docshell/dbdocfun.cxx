@@ -61,6 +61,8 @@
 #include "queryentry.hxx"
 #include "markdata.hxx"
 
+#include <set>
+
 using namespace ::com::sun::star;
 
 // -----------------------------------------------------------------
@@ -1451,14 +1453,25 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     return bDone;
 }
 
-void ScDBDocFunc::RefreshPivotTables(std::set<ScDPObject*>& rRefs, bool bRecord, bool bApi)
+sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bRecord, bool bApi)
 {
-    std::set<ScDPObject*>::iterator it = rRefs.begin(), itEnd = rRefs.end();
+    ScDPCollection* pDPs = rDocShell.GetDocument()->GetDPCollection();
+    if (!pDPs)
+        return 0;
+
+    std::set<ScDPObject*> aRefs;
+    sal_uLong nErrId = pDPs->ReloadCache(pDPObj, aRefs);
+    if (nErrId)
+        return nErrId;
+
+    std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
     for (; it != itEnd; ++it)
     {
         ScDPObject* pObj = *it;
         DataPilotUpdate(pObj, pObj, bRecord, bApi);
     }
+
+    return 0;
 }
 
 //==================================================================
