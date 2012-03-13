@@ -278,6 +278,7 @@ void ScDPItemData::Dump(const char* msg) const
         break;
         case RangeStart:
             printf("range start: %g\n", mfValue);
+        break;
         default:
             printf("unknown type\n");
     }
