@@ -898,7 +898,6 @@ oox::drawingml::ChartExport::exportXAxis(oox::drawingml::AxisIdPair)
 oox::drawingml::ChartExport::exportYAxis(oox::drawingml::AxisIdPair)
 oox::drawingml::ColorPropertySet::getColor()
 oox::drawingml::ColorPropertySet::setColor(int)
-oox::drawingml::DiagramLayout::layout(std::__debug::vector<oox::drawingml::dgm::Point, std::allocator<oox::drawingml::dgm::Point> > const&, com::sun::star::awt::Point const&)
 oox::drawingml::GraphicProperties::assignUsed(oox::drawingml::GraphicProperties const&)
 oox::drawingml::TextBodyProperties::pushToPropMap(oox::PropertyMap&) const
 oox::drawingml::TextListStyle::dump() const

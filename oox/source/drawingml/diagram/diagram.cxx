@@ -95,9 +95,6 @@ void DiagramData::dump()
                   boost::bind( &dgm::Point::dump, _1 ) );
 }
 
-void DiagramLayout::layout( const dgm::Points & /*pTree*/, const awt::Point & /*pt*/ )
-{
-}
 
 void Diagram::setData( const DiagramDataPtr & pData)
 {

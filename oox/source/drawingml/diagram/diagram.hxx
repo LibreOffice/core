@@ -237,8 +237,6 @@ public:
     const DiagramDataPtr & getStyleData() const
         { return mpStyleData; }
 
-    void layout( const dgm::Points & pTree, const com::sun::star::awt::Point & pt );
-
 private:
     ::rtl::OUString msDefStyle;
     ::rtl::OUString msMinVer;
