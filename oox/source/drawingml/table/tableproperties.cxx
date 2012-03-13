@@ -61,10 +61,6 @@ TableProperties::~TableProperties()
 {
 }
 
-void TableProperties::apply( const TablePropertiesPtr& /* rSourceTableProperties */ )
-{
-}
-
 void CreateTableRows( uno::Reference< XTableRows > xTableRows, const std::vector< TableRow >& rvTableRows )
 {
     if ( rvTableRows.size() > 1 )

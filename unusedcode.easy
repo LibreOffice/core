@@ -907,7 +907,6 @@ oox::drawingml::lcl_SequenceHasUnhiddenData(com::sun::star::uno::Reference<com::
 oox::drawingml::lcl_dump_pset(com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet>)
 oox::drawingml::lcl_getSequenceLengthByRole(com::sun::star::uno::Sequence<com::sun::star::uno::Reference<com::sun::star::chart2::data::XLabeledDataSequence> > const&, rtl::OUString const&)
 oox::drawingml::lcl_getValueFromSequence(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&, int)
-oox::drawingml::table::TableProperties::apply(boost::shared_ptr<oox::drawingml::table::TableProperties> const&)
 oox::dump::AxPropertyObjectBase::construct(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&, oox::dump::String const&, bool)
 oox::dump::BinaryStreamObject::BinaryStreamObject(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&)
 oox::dump::Config::setNameList(oox::dump::String const&, boost::shared_ptr<oox::dump::NameListBase> const&)

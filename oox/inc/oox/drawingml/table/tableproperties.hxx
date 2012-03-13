@@ -61,7 +61,6 @@ public:
     sal_Bool&                           isBandRow(){ return mbBandRow; };
     sal_Bool&                           isBandCol(){ return mbBandCol; };
 
-    void apply( const TablePropertiesPtr& );
     void pushToPropSet( const ::oox::core::XmlFilterBase& rFilterBase,
         const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet > & xPropSet, ::oox::drawingml::TextListStylePtr pMasterTextListStyle );
 
