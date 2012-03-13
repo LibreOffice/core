@@ -72,6 +72,7 @@ const sal_uInt16& getMaxLookup()
 sal_Bool SwEditShell::GetPaMAttr( SwPaM* pPaM, SfxItemSet& rSet,
                               const bool bMergeIndentValuesOfNumRule ) const
 {
+    // ??? pPaM can be different from the Cursor ???
     if( GetCrsrCnt() > getMaxLookup() )
     {
         rSet.InvalidateAllItems();
@@ -182,8 +183,8 @@ SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl( ) const
 
 SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
 {
-    if ( GetCrsrCnt() > getMaxLookup() )
-        return NULL;
+    // number of nodes the function have explored so far
+    sal_uInt16 numberOfLookup = 0;
 
     SwPaM* pStartPaM = pPaM;
     do { // for all the point and mark (selections)
@@ -200,14 +201,18 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
             nEndNd = tmpNd;
         }
 
-        if( nEndNd - nSttNd >= getMaxLookup() )
-            break;
-
         // for all the nodes in the current Point and Mark
         for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
         {
             // get the node
             SwNode* pNd = GetDoc()->GetNodes()[ n ];
+
+            ++numberOfLookup;
+
+            // if the maximum number of node that can be inspected has been reached
+            if (numberOfLookup >= getMaxLookup())
+                return NULL;
+
             if( pNd->IsTxtNode() )
             {
                 // if it's a text node get its named character format
