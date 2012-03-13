@@ -2540,7 +2540,7 @@ AC_SUBST(HAVE_LD_BSYMBOLIC_FUNCTIONS)
 dnl Set the ENABLE_DBGUTIL variable
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build with additional debug utilities])
-if test -n "$enable_dbgutil" && test "$enable_dbgutil" != "no"; then
+if test -n "$enable_dbgutil" -a "$enable_dbgutil" != "no"; then
     PROEXT=""
     PRODUCT=""
 
@@ -3357,7 +3357,7 @@ AC_SUBST(ENABLE_CRASHDUMP)
 dnl Set the ENABLE_WERROR variable. (Activate --enable-werror)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to turn warnings to errors])
-if test -n "$enable_werror" && test "$enable_werror" != "no"; then
+if test -n "$enable_werror" -a "$enable_werror" != "no"; then
     EXTERNAL_WARNINGS_NOT_ERRORS="FALSE"
     AC_MSG_RESULT([yes])
 else
@@ -3369,7 +3369,7 @@ AC_SUBST(EXTERNAL_WARNINGS_NOT_ERRORS)
 dnl Set the ENABLE_DEBUG variable. (Activate --enable-symbols)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to do a debug build])
-if test -n "$enable_debug" && test "$enable_debug" != "no"; then
+if test -n "$enable_debug" -a "$enable_debug" != "no"; then
     ENABLE_DEBUG="TRUE"
     enable_symbols="yes"
     AC_MSG_RESULT([yes])
@@ -3516,7 +3516,7 @@ fi
 dnl Test whether to include MySpell dictionaries
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include MySpell dictionaries])
-if test -z "$with_myspell_dicts" || test "$with_myspell_dicts" = "yes"; then
+if test -z "$with_myspell_dicts" -o "$with_myspell_dicts" = "yes"; then
     AC_MSG_RESULT([yes])
     WITH_MYSPELL_DICTS=YES
     BUILD_TYPE="$BUILD_TYPE DICTIONARIES"
@@ -4644,7 +4644,7 @@ dnl empty or non-empty.
 dnl SOLAR_JAVA="" indicate no java support at all
 
 JITC_PROCESSOR_TYPE=""
-if test "$_os" = "Linux" && test "$host_cpu" = "powerpc"; then
+if test "$_os" = "Linux" -a "$host_cpu" = "powerpc"; then
     # IBMs JDK needs this...
     JITC_PROCESSOR_TYPE=6
     export JITC_PROCESSOR_TYPE
@@ -4972,7 +4972,7 @@ _ACEOF
             AC_MSG_CHECKING([if javac works])
             javac_cmd="$JAVACOMPILER findhome.java 1>&2"
             AC_TRY_EVAL(javac_cmd)
-            if test $? = 0 && test -f ./findhome.class ; then
+            if test $? = 0 -a -f ./findhome.class ; then
                 AC_MSG_RESULT([javac works])
             else
                 echo "configure: javac test failed" >&5
@@ -4981,7 +4981,7 @@ _ACEOF
             fi
             AC_MSG_CHECKING([if gij knows its java.home])
             JAVA_HOME=`$JAVAINTERPRETER findhome`
-            if test $? = 0 && test "$JAVA_HOME" != "" ; then
+            if test $? = 0 -a "$JAVA_HOME" != "" ; then
                 AC_MSG_RESULT([$JAVA_HOME])
             else
                 echo "configure: java test failed" >&5
@@ -5419,7 +5419,7 @@ if test "$enable_epm" = "yes"; then
         else
             AC_PATH_PROG(EPM, epm, no)
         fi
-        if test "$EPM" = "no" || test "$EPM" = "internal"; then
+        if test "$EPM" = "no" -o "$EPM" = "internal"; then
             echo "EPM will be built."
             BUILD_EPM=YES
             BUILD_TYPE="$BUILD_TYPE EPM"
@@ -5566,7 +5566,7 @@ msi - Windows .msi
     fi
     if echo "$PKGFORMAT" | $EGREP rpm 2>&1 >/dev/null || \
        echo "$PKGFORMAT" | $EGREP pkg 2>&1 >/dev/null; then
-        if test "$EPM" != "no" && test "$EPM" != "internal"; then
+        if test "$EPM" != "no" -a "$EPM" != "internal"; then
             if test "`echo $EPM_VERSION | cut -d'.' -f1`" -lt "4"; then
                 AC_MSG_CHECKING([whether epm is patched for LibreOffice's needs])
                 if grep "Patched for LibreOffice" $EPM >/dev/null 2>/dev/null; then
@@ -6678,7 +6678,7 @@ _ACEOF
 
     javac_cmd="$JAVACOMPILER -cp $SAXON_JAR saxontest.java 1>&2"
     AC_TRY_EVAL(javac_cmd)
-    if test $? = 0 && test -f ./saxontest.class ; then
+    if test $? = 0 -a -f ./saxontest.class ; then
         java_cmd="$JAVAINTERPRETER -cp $SAXON_JAR:. saxontest saxontest.xsl 1>&2"
         AC_TRY_EVAL(java_cmd)
         if test $? = 0; then
@@ -6978,21 +6978,21 @@ dnl Check for system mozilla
 dnl ===================================================================
 
 AC_MSG_CHECKING([which Mozilla to use])
-if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
+if test -n "$with_system_mozilla" -a "$with_system_mozilla" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_MOZILLA=YES
     AC_MSG_CHECKING([which Mozilla flavour to use])
-    if test -n "$with_system_mozilla" && test "$with_system_mozilla" = "libxul"; then
+    if test -n "$with_system_mozilla" -a "$with_system_mozilla" = "libxul"; then
         MOZ_FLAVOUR=libxul
-    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "xulrunner"; then
+    elif test -n "$with_system_mozilla" -a "$with_system_mozilla" = "xulrunner"; then
         MOZ_FLAVOUR=xulrunner
-    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "seamonkey"; then
+    elif test -n "$with_system_mozilla" -a "$with_system_mozilla" = "seamonkey"; then
         MOZ_FLAVOUR=seamonkey
-    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "iceape"; then
+    elif test -n "$with_system_mozilla" -a "$with_system_mozilla" = "iceape"; then
         MOZ_FLAVOUR=iceape
-    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "firefox"; then
+    elif test -n "$with_system_mozilla" -a "$with_system_mozilla" = "firefox"; then
         MOZ_FLAVOUR=firefox
-    elif test -n "$with_system_mozilla" && test "$with_system_mozilla" = "mozilla"; then
+    elif test -n "$with_system_mozilla" -a "$with_system_mozilla" = "mozilla"; then
         MOZ_FLAVOUR=mozilla
     else
         MOZ_FLAVOUR=libxul
@@ -7019,7 +7019,7 @@ if test -n "$with_system_mozilla" && test "$with_system_mozilla" != "no"; then
     fi
 
     MOZ_LIB_XPCOM=$MOZILLAXPCOM_LIBS
-    if test "$WITH_LDAP" != "NO" && test "$WITH_OPENLDAP" != "YES"; then
+    if test "$WITH_LDAP" != "NO" -a "$WITH_OPENLDAP" != "YES"; then
         AC_MSG_CHECKING([whether $tmp was compiled with --enable-ldap])
         if test -d "$MOZ_INC/ldap"; then
             AC_MSG_RESULT([yes])
@@ -9134,7 +9134,7 @@ dnl Test for the enabling the lockdown pieces
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable the lockdown pieces])
 ENABLE_LOCKDOWN=""
-if test -n "$enable_lockdown" && test "$enable_lockdown" != "no"; then
+if test -n "$enable_lockdown" -a "$enable_lockdown" != "no"; then
     ENABLE_LOCKDOWN=YES
     AC_MSG_RESULT([yes])
 else
@@ -9162,7 +9162,7 @@ dnl ===================================================================
 dnl Test whether to include KDE AB support
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable KDE address book support])
-if test "$enable_kdeab" = "yes" && test "$enable_kde" = "yes"; then
+if test "$enable_kdeab" = "yes" -a "$enable_kde" = "yes"; then
     AC_MSG_RESULT([yes])
     AC_LANG_PUSH([C++])
     save_CXXFLAGS=$CXXFLAGS
@@ -10153,7 +10153,7 @@ dnl Check for runtime JVM search path
 dnl ===================================================================
 if test "$SOLAR_JAVA" != ""; then
     AC_MSG_CHECKING([whether to use specific JVM search path at runtime])
-    if test -n "$with_jvm_path" && test "$with_jvm_path" != "no"; then
+    if test -n "$with_jvm_path" -a "$with_jvm_path" != "no"; then
         AC_MSG_RESULT([yes])
         if ! test -d "$with_jvm_path"; then
             AC_MSG_ERROR(["$with_jvm_path" not a directory])
@@ -10226,7 +10226,7 @@ EOF
             ant_cmd="$ANT -buildfile conftest.xml 1>&2"
         fi
         AC_TRY_EVAL(ant_cmd)
-        if test $? = 0 && test -f ./conftest.class ; then
+        if test $? = 0 -a -f ./conftest.class ; then
             AC_MSG_RESULT([Ant works])
             if test -z "$WITH_ANT_HOME"; then
                 ANT_HOME=`$ANT -diagnostics | $EGREP "ant.home :" | $SED -e "s#ant.home : ##g"`
@@ -10304,7 +10304,7 @@ EOF
     echo "configure: ant_version_minor $ant_version_minor " >&5
     if test "$ant_version_major" -ge "2"; then
         AC_MSG_RESULT([yes, $ant_version])
-    elif test "$ant_version_major" = "1" && test "$ant_version_minor" -ge "$ant_minminor1"; then
+    elif test "$ant_version_major" = "1" -a "$ant_version_minor" -ge "$ant_minminor1"; then
         AC_MSG_RESULT([yes, $ant_version])
     else
         AC_MSG_ERROR([no, you need at least Ant >= $ant_minver])
@@ -10345,7 +10345,7 @@ EOF
             ant_cmd="$ANT -buildfile conftest.xml 1>&2"
         fi
         AC_TRY_EVAL(ant_cmd)
-        if test $? = 0 && test -f ./conftest.class ; then
+        if test $? = 0 -a -f ./conftest.class ; then
             AC_MSG_RESULT([yes])
             rm -rf confdir
         else
@@ -10360,7 +10360,7 @@ EOF
 fi
 
 OOO_JUNIT_JAR=
-if test "$SOLAR_JAVA" != "" && test "$with_junit" != "no"; then
+if test "$SOLAR_JAVA" != "" -a "$with_junit" != "no"; then
     AC_MSG_CHECKING([for JUnit 4])
     if test "$with_junit" = "yes"; then
         if test -e /usr/share/java/junit4.jar; then
