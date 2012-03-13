@@ -807,7 +807,7 @@ SCROW ScDPCache::GetRowCount() const
 const ScDPCache::DataListType& ScDPCache::GetDimMemberValues(SCCOL nDim) const
 {
     OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," nDim < mnColumnCount ");
-    return maFields[nDim].maItems;
+    return maFields.at(nDim).maItems;
 }
 
 sal_uLong ScDPCache::GetNumberFormat( long nDim ) const

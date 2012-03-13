@@ -395,12 +395,15 @@ void ScDPSaveGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 
 void ScDPSaveGroupDimension::AddToCache(ScDPCache& rCache) const
 {
+    long nSourceDim = rCache.GetDimensionIndex(aSourceDim);
+    if (nSourceDim < 0)
+        return;
+
     long nDim = rCache.AppendGroupField();
     SvNumberFormatter* pFormatter = rCache.GetDoc()->GetFormatTable();
 
     if (nDatePart)
     {
-        long nSourceDim = rCache.GetDimensionIndex(aSourceDim);
         fillDateGroupDimension(rCache, aDateInfo, nSourceDim, nDim, nDatePart, pFormatter);
         return;
     }
@@ -416,7 +419,6 @@ void ScDPSaveGroupDimension::AddToCache(ScDPCache& rCache) const
         }
     }
 
-    long nSourceDim = rCache.GetDimensionIndex(aSourceDim);
     const ScDPCache::DataListType& rItems = rCache.GetDimMemberValues(nSourceDim);
     {
         ScDPCache::DataListType::const_iterator it = rItems.begin(), itEnd = rItems.end();
@@ -466,6 +468,9 @@ void ScDPSaveNumGroupDimension::AddToData( ScDPGroupTableData& rData ) const
 void ScDPSaveNumGroupDimension::AddToCache(ScDPCache& rCache) const
 {
     long nDim = rCache.GetDimensionIndex(aDimensionName);
+    if (nDim < 0)
+        return;
+
     if (aDateInfo.mbEnable)
     {
         // Date grouping
