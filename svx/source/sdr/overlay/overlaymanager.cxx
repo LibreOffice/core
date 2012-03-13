@@ -130,6 +130,7 @@ namespace sdr
             OutputDevice& rOutputDevice,
             OverlayManager* pOldOverlayManager)
         :   Scheduler(),
+            mnRefCount(0),
             rmOutputDevice(rOutputDevice),
             maOverlayObjects(),
             maStripeColorA(Color(COL_BLACK)),
