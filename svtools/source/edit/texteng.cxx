@@ -1476,7 +1476,11 @@ void TextEngine::SeekCursor( sal_uLong nPara, sal_uInt16 nPos, Font& rFont, Outp
         if ( ( ( pAttrib->GetStart() < nPos ) && ( pAttrib->GetEnd() >= nPos ) )
                     || !pNode->GetText().Len() )
         {
-            if ( pAttrib->Which() == TEXTATTR_FONTCOLOR )
+            if ( pAttrib->Which() != TEXTATTR_FONTCOLOR )
+            {
+                pAttrib->GetAttr().SetFont(rFont);
+            }
+            else
             {
                 if ( pOutDev )
                     pOutDev->SetTextColor( ((TextAttribFontColor&)pAttrib->GetAttr()).GetColor() );
