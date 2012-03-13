@@ -895,10 +895,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/report/
 	DataProviderHandler \
 	ReportComponentHandler \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/scaddins,\
-	analysisadd \
-	dateadd \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/scanner,\
 	ScannerManager \
 ))
@@ -1134,6 +1130,16 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sheet,\
 	UniqueCellFormatRanges \
 	UniqueCellFormatRangesEnumeration \
 	VolatileResult \
+))
+$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sheet/addin,\
+	XAnalysis \
+	XCompatibilityNames \
+	XDateFunctions \
+	XMiscFunctions \
+))
+$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sheet/addin,\
+	Analysis \
+	DateFunctions \
 ))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/style,\
 	CellStyle \

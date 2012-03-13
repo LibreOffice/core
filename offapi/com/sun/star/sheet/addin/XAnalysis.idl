@@ -26,13 +26,12 @@
  *
  ************************************************************************/
 
-#ifndef __com_sun_star_sheet_NoConvergenceException_idl__
-#include <com/sun/star/sheet/NoConvergenceException.idl>
-#endif
+#ifndef com_sun_star_sheet_addin_XAnalysis_idl
+#define com_sun_star_sheet_addin_XAnalysis_idl
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/sheet/LocalizedName.idl>
+#include <com/sun/star/sheet/NoConvergenceException.idl>
 
 module com
 {
@@ -44,12 +43,6 @@ module sheet
 {
 module addin
 {
-    interface XCompatibilityNames  : com::sun::star::uno::XInterface
-    {
-        /// getCompatibilityNames.
-        sequence< com::sun::star::sheet::LocalizedName > getCompatibilityNames ( [in] string aProgrammaticName );
-    };
-
     /**
     * Interface with analysis functions.
     */
@@ -580,17 +573,12 @@ module addin
         double getFvschedule( [in] double Principal, [in] sequence< sequence< double > > Schedule )
             raises( com::sun::star::lang::IllegalArgumentException );
     };
+};
+};
+};
+};
+};
 
-    service Analysis
-    {
-        // exported interfaces:
-        interface XCompatibilityNames;
-        interface XAnalysis;
-    };
-};
-};
-};
-};
-};
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -26,10 +26,11 @@
  *
 ************************************************************************/
 
+#ifndef com_sun_star_sheet_addin_XDateFunctions_idl
+#define com_sun_star_sheet_addin_XDateFunctions_idl
 
 #include <com/sun/star/uno/XInterface.idl>
 #include <com/sun/star/beans/XPropertySet.idl>
-#include <com/sun/star/sheet/LocalizedName.idl>
 
 module com
 {
@@ -41,12 +42,6 @@ module sheet
 {
 module addin
 {
-    interface XCompatibilityNames  : com::sun::star::uno::XInterface
-    {
-        /// @return a sequence with all localized names for a programmatic name
-        sequence< com::sun::star::sheet::LocalizedName > getCompatibilityNames ( [in] string aProgrammaticName );
-    };
-
     /**
      * Interface with date functions.
      */
@@ -94,27 +89,12 @@ module addin
                     [in] long nDate )
             raises( com::sun::star::lang::IllegalArgumentException );
     };
+};
+};
+};
+};
+};
 
-    /**
-     * Interface with miscellaneous functions.
-     */
-    interface XMiscFunctions : com::sun::star::uno::XInterface
-    {
-        /// Encrypts or decrypts a string using the ROT13 algorithm.
-        string getRot13( [in] string aSrcString )
-            raises( com::sun::star::lang::IllegalArgumentException );
-    };
-
-    service DateFunctions
-    {
-        // exported interfaces:
-        interface XDateFunctions;
-        interface XMiscFunctions;
-    };
-};
-};
-};
-};
-};
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

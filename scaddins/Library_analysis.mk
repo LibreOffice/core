@@ -33,7 +33,6 @@ $(eval $(call gb_Library_set_componentfile,analysis,scaddins/source/analysis/ana
 $(eval $(call gb_Library_set_include,analysis,\
     $$(INCLUDE) \
     -I$(realpath $(SRCDIR)/scaddins/source/analysis) \
-	-I$(realpath $(WORKDIR)/UnoApiHeaders/offapi) \
 ))
 
 $(eval $(call gb_Library_add_api,analysis,\
