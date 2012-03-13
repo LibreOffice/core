@@ -829,14 +829,14 @@ void SdrDragView::ShowDragObj()
         for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
         {
             SdrPaintWindow* pCandidate = GetPaintWindow(a);
-            sdr::overlay::OverlayManager* pOverlayManager = pCandidate->GetOverlayManager();
+            rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pCandidate->GetOverlayManager();
 
-            if(pOverlayManager)
+            if (xOverlayManager.is())
             {
-                mpCurrentSdrDragMethod->CreateOverlayGeometry(*pOverlayManager);
+                mpCurrentSdrDragMethod->CreateOverlayGeometry(*xOverlayManager);
 
                 // #i101679# Force changed overlay to be shown
-                pOverlayManager->flush();
+                xOverlayManager->flush();
             }
         }
 

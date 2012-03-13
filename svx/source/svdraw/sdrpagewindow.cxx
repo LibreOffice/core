@@ -147,7 +147,7 @@ sdr::contact::ObjectContact* SdrPageWindow::CreateViewSpecificObjectContact()
 }
 
 // OVERLAY MANAGER
-::sdr::overlay::OverlayManager* SdrPageWindow::GetOverlayManager() const
+rtl::Reference< ::sdr::overlay::OverlayManager > SdrPageWindow::GetOverlayManager() const
 {
     return GetPaintWindow().GetOverlayManager();
 }

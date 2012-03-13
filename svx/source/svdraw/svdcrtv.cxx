@@ -76,15 +76,15 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        ::sdr::overlay::OverlayManager* pTargetOverlay = pCandidate->GetOverlayManager();
+        rtl::Reference< ::sdr::overlay::OverlayManager > xTargetOverlay = pCandidate->GetOverlayManager();
 
-        if(pTargetOverlay)
+        if(xTargetOverlay.is())
         {
-            Size aHalfLogicSize(pTargetOverlay->getOutputDevice().PixelToLogic(Size(4, 4)));
+            Size aHalfLogicSize(xTargetOverlay->getOutputDevice().PixelToLogic(Size(4, 4)));
 
             // object
             ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aB2DPolyPolygon);
-            pTargetOverlay->add(*pNew);
+            xTargetOverlay->add(*pNew);
             maObjects.append(*pNew);
 
             // glue points
@@ -109,7 +109,7 @@ ImplConnectMarkerOverlay::ImplConnectMarkerOverlay(const SdrCreateView& rView, S
                     aTempPolyPoly.append(aTempPoly);
 
                     pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(aTempPolyPoly);
-                    pTargetOverlay->add(*pNew);
+                    xTargetOverlay->add(*pNew);
                     maObjects.append(*pNew);
                 }
             }
@@ -153,9 +153,9 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
     for(sal_uInt32 a(0L); a < rView.PaintWindowCount(); a++)
     {
         SdrPaintWindow* pCandidate = rView.GetPaintWindow(a);
-        ::sdr::overlay::OverlayManager* pOverlayManager = pCandidate->GetOverlayManager();
+        rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pCandidate->GetOverlayManager();
 
-        if(pOverlayManager)
+        if (xOverlayManager.is())
         {
             if(pObject)
             {
@@ -163,14 +163,14 @@ void ImpSdrCreateViewExtraData::CreateAndShowOverlay(const SdrCreateView& rView,
                 const drawinglayer::primitive2d::Primitive2DSequence aSequence = rVC.getViewIndependentPrimitive2DSequence();
                 sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
 
-                pOverlayManager->add(*pNew);
+                xOverlayManager->add(*pNew);
                 maObjects.append(*pNew);
             }
 
             if(rPolyPoly.count())
             {
                 ::sdr::overlay::OverlayPolyPolygonStriped* pNew = new ::sdr::overlay::OverlayPolyPolygonStriped(rPolyPoly);
-                pOverlayManager->add(*pNew);
+                xOverlayManager->add(*pNew);
                 maObjects.append(*pNew);
             }
         }
@@ -857,11 +857,11 @@ void SdrCreateView::ShowCreateObj(/*OutputDevice* pOut, sal_Bool bFull*/)
             for(sal_uInt32 a(0); a < PaintWindowCount(); a++)
             {
                 SdrPaintWindow* pCandidate = GetPaintWindow(a);
-                sdr::overlay::OverlayManager* pOverlayManager = pCandidate->GetOverlayManager();
+                rtl::Reference<sdr::overlay::OverlayManager> xOverlayManager = pCandidate->GetOverlayManager();
 
-                if(pOverlayManager)
+                if (xOverlayManager.is())
                 {
-                    pOverlayManager->flush();
+                    xOverlayManager->flush();
                 }
             }
         }

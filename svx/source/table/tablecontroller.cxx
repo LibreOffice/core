@@ -1935,15 +1935,15 @@ void SvxTableController::updateSelectionOverlay()
                 SdrPaintWindow* pPaintWindow = mpView->GetPaintWindow(nIndex);
                 if( pPaintWindow )
                 {
-                    ::sdr::overlay::OverlayManager* pOverlayManager = pPaintWindow->GetOverlayManager();
-                    if( pOverlayManager )
+                    rtl::Reference < ::sdr::overlay::OverlayManager > xOverlayManager = pPaintWindow->GetOverlayManager();
+                    if( xOverlayManager.is() )
                     {
                         // sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_INVERT;
                         sdr::overlay::CellOverlayType eType = sdr::overlay::CELL_OVERLAY_TRANSPARENT;
 
                         sdr::overlay::OverlayObjectCell* pOverlay = new sdr::overlay::OverlayObjectCell( eType, aHighlight, aRanges );
 
-                        pOverlayManager->add(*pOverlay);
+                        xOverlayManager->add(*pOverlay);
                         mpSelectionOverlay = new ::sdr::overlay::OverlayObjectList;
                         mpSelectionOverlay->append(*pOverlay);
                     }

@@ -312,13 +312,14 @@ void SdPathHdl::CreateB2dIAObject()
 
                     if(rPageWindow.GetPaintWindow().OutputToWindow())
                     {
-                        if(rPageWindow.GetOverlayManager() && mpPathObj)
+                        rtl::Reference< ::sdr::overlay::OverlayManager > xManager = rPageWindow.GetOverlayManager();
+                        if (xManager.is() && mpPathObj)
                         {
                             const sdr::contact::ViewContact& rVC = mpPathObj->GetViewContact();
                             const drawinglayer::primitive2d::Primitive2DSequence aSequence = rVC.getViewIndependentPrimitive2DSequence();
                             sdr::overlay::OverlayObject* pNew = new sdr::overlay::OverlayPrimitive2DSequenceObject(aSequence);
 
-                            rPageWindow.GetOverlayManager()->add(*pNew);
+                            xManager->add(*pNew);
                             maOverlayGroup.append(*pNew);
                         }
                     }

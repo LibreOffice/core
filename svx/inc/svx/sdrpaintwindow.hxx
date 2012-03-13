@@ -29,6 +29,7 @@
 #ifndef _SDRPAINTWINDOW_HXX
 #define _SDRPAINTWINDOW_HXX
 
+#include <rtl/ref.hxx>
 #include <vcl/virdev.hxx>
 #include "svx/svxdllapi.h"
 
@@ -78,7 +79,7 @@ private:
 
     // the new OverlayManager for the new OverlayObjects. Test add here, will
     // replace the IAOManager as soon as it works.
-    ::sdr::overlay::OverlayManager*                     mpOverlayManager;
+    rtl::Reference< ::sdr::overlay::OverlayManager >    mxOverlayManager;
 
     // The PreRenderDevice for PreRendering
     SdrPreRenderDevice*                                 mpPreRenderDevice;
@@ -90,14 +91,14 @@ private:
     // #i72889# flag if this is only a temporary target for repaint, default is false
     unsigned                                            mbTemporaryTarget : 1;
 
-    /** Remember whether the mpOverlayManager supports buffering.  Using
-        this flags expensive dynamic_casts on mpOverlayManager in order to
+    /** Remember whether the mxOverlayManager supports buffering.  Using
+        this flags expensive dynamic_casts on mxOverlayManager in order to
         detect this.
     */
     bool mbUseBuffer;
 
     // helpers
-    /** Create mpOverlayManager member on demand.
+    /** Create mxOverlayManager member on demand.
         @param bUseBuffer
             Specifies whether to use the buffered (OverlayManagerBuffered)
             or the unbuffered (OverlayManager) version of the overlay
@@ -119,7 +120,8 @@ public:
     OutputDevice& GetOutputDevice() const { return mrOutputDevice; }
 
     // OVERLAYMANAGER
-    ::sdr::overlay::OverlayManager* GetOverlayManager() const;
+    rtl::Reference< ::sdr::overlay::OverlayManager > GetOverlayManager() const;
+
     // #i73602# add flag if buffer shall be used
     void DrawOverlay(const Region& rRegion, bool bUseBuffer);
 
