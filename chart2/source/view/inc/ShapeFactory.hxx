@@ -42,17 +42,41 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
 
+#define ENABLE_DUMP 0
+
 //.............................................................................
 namespace chart
 {
 //.............................................................................
 
+class DumpHelper
+{
+private:
+    //XmlTextWriterPtr pWriter;
+
+public:
+   //void writeStripe(const Stripe& rStripe);
+
+   void writeElement(const char*);
+   void writeAttribute(const char* pAttrName, const char* pAttrValue);
+   void writeAttribute(const char* pAttrName, const com::sun::star::drawing::Position3D& rPosition);
+   void writeAttribute(const char* pAttrName, const rtl::OUString& rName);
+   void writeAttribute(const char* pAttrName, const sal_Int32);
+   void writeAttribute(const char* pAttrName, const com::sun::star::drawing::Direction3D& rPosition);
+   void writeAttribute(const char* pAttrName, const com::sun::star::drawing::PointSequenceSequence& rPoints);
+   void endElement();
+};
+
+
 class Stripe;
 class ShapeFactory
 {
 public:
-    ShapeFactory(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory)
-        {m_xShapeFactory = xFactory;}
+    ShapeFactory(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory):
+        m_xShapeFactory(xFactory),
+        mbDump(ENABLE_DUMP)
+    {
+    }
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         createGroup2D(
@@ -247,6 +271,9 @@ private:
     //member:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>
         m_xShapeFactory;
+
+    bool mbDump;
+    DumpHelper maDumpHerlper;
 };
 
 //.............................................................................

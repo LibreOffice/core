@@ -60,6 +60,8 @@
 #include <basegfx/matrix/b3dhommatrix.hxx>
 
 #include <algorithm>
+#include <iostream>
+#include <rtl/oustringostreaminserter.hxx>
 
 using namespace ::com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -67,6 +69,52 @@ using ::com::sun::star::uno::Reference;
 //.............................................................................
 namespace chart
 {
+/*
+void DumpHelper::writeStripe(const Stripe& rStripe)
+{
+    std::cout << "Stripe" << std::endl;
+}*/
+
+void DumpHelper::writeElement(const char* pName)
+{
+    std::cout << pName << std::endl;
+}
+
+void DumpHelper::writeAttribute(const char* pAttrName, const rtl::OUString& rName)
+{
+    std::cout << pAttrName << " " << rName << std::endl;
+}
+
+void DumpHelper::writeAttribute(const char* pAttrName, const char* pAttrValue)
+{
+    std::cout << pAttrName << " " << pAttrValue << std::endl;
+}
+
+void DumpHelper::writeAttribute(const char* pAttrName, const drawing::Position3D& rPos)
+{
+    std::cout << pAttrName << " " << rPos.PositionX << "," << rPos.PositionY << "," << rPos.PositionZ << std::endl;
+}
+
+void DumpHelper::writeAttribute(const char* pAttrName, const drawing::Direction3D& rDirection)
+{
+    std::cout << pAttrName << " " << rDirection.DirectionX << "," << rDirection.DirectionY << "," << rDirection.DirectionZ << std::endl;
+}
+
+void DumpHelper::writeAttribute(const char* pAttrName, const sal_Int32 nValue)
+{
+    std::cout << pAttrName << " " << nValue << std::endl;
+}
+
+void DumpHelper::writeAttribute(const char* pAttrName, const drawing::PointSequenceSequence& )
+{
+    std::cout << pAttrName << " " << std::endl;
+}
+
+void DumpHelper::endElement()
+{
+    std::cout << "EndElement" << std::endl;
+}
+
 //.............................................................................
 
 //-----------------------------------------------------------------------------
@@ -461,8 +509,20 @@ uno::Reference<drawing::XShape>
             ASSERT_EXCEPTION( e );
         }
     }
+
+    if(mbDump)
+    {
+        maDumpHerlper.writeElement("Cube");
+    }
+
     uno::Reference<drawing::XShape> xShape = impl_createCube( xTarget, rPosition, rSize, nRotateZAngleHundredthDegree, bRounded );
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
+
+    if (mbDump)
+    {
+        maDumpHerlper.endElement();
+    }
+
     if( xSourceProp.is())
         PropertyMapper::setMappedProperties( xProp, xSourceProp, rPropertyNameMap );
     return xShape;
@@ -518,6 +578,14 @@ uno::Reference<drawing::XShape>
                 drawing::HomogenMatrix aHM = B3DHomMatrixToHomogenMatrix(aM);
                 xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(aHM) );
+            }
+
+            if(mbDump)
+            {
+                maDumpHerlper.writeAttribute("depth",static_cast<sal_Int32>(fDepth));
+                maDumpHerlper.writeAttribute("PercentDiagonal",nPercentDiagonal);
+                maDumpHerlper.writeAttribute("Polygon","");
+                maDumpHerlper.writeAttribute("Matrix","");
             }
         }
         catch( const uno::Exception& e )
@@ -689,11 +757,22 @@ uno::Reference<drawing::XShape>
     aStripe4.SetManualNormal( aNormalsStripe4.getNormal() );
 
     const bool bFlatNormals = false;
+
+    if (mbDump)
+    {
+        maDumpHerlper.writeElement("Pyramid");
+    }
+
     ShapeFactory::createStripe( xGroup, aStripe1, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
     ShapeFactory::createStripe( xGroup, aStripe2, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
     ShapeFactory::createStripe( xGroup, aStripe3, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
     ShapeFactory::createStripe( xGroup, aStripe4, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
     ShapeFactory::createStripe( xGroup, aStripeBottom, xSourceProp, rPropertyNameMap, bDoubleSided, nRotatedTexture, bFlatNormals );
+
+    if (mbDump)
+    {
+        maDumpHerlper.endElement();
+    }
 
     return Reference< drawing::XShape >( xGroup, uno::UNO_QUERY );
 }
@@ -716,6 +795,14 @@ uno::Reference<drawing::XShape>
 {
     if( !xTarget.is() )
         return 0;
+
+    if(mbDump)
+    {
+        if (bCylinder)
+            maDumpHerlper.writeElement("Cylinder");
+        else
+            maDumpHerlper.writeElement("Cone");
+    }
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -769,12 +856,26 @@ uno::Reference<drawing::XShape>
             //Reduced lines
             xProp->setPropertyValue( C2U( UNO_NAME_3D_REDUCED_LINE_GEOMETRY )
                 , uno::makeAny((sal_Bool)sal_True) );
+
+            if(mbDump)
+            {
+                maDumpHerlper.writeAttribute("PercentDiagonal", nPercentDiagonal);
+                maDumpHerlper.writeAttribute("Polygon","");
+                maDumpHerlper.writeAttribute("Matrix","");
+                maDumpHerlper.writeAttribute("SegmentsHor",CHART_3DOBJECT_SEGMENTCOUNT);
+                maDumpHerlper.writeAttribute("SegmentsVert", static_cast<sal_Int32>(nVerticalSegmentCount));
+                maDumpHerlper.writeAttribute("ReducedLine","true");
+            }
         }
         catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
     }
+
+    if (mbDump)
+        maDumpHerlper.endElement();
+
     return xShape;
 }
 
@@ -973,6 +1074,11 @@ uno::Reference< drawing::XShape >
                 C2U("com.sun.star.drawing.ClosedBezierShape") ), uno::UNO_QUERY );
     xTarget->add(xShape); //need to add the shape before setting of properties
 
+    if(mbDump)
+    {
+        maDumpHerlper.writeElement("PieSegement2D");
+    }
+
     //set properties
     uno::Reference< beans::XPropertySet > xProp( xShape, uno::UNO_QUERY );
     OSL_ENSURE(xProp.is(), "created shape offers no XPropertySet");
@@ -991,11 +1097,21 @@ uno::Reference< drawing::XShape >
                 , aTransformationFromUnitCircle, fAngleSubdivisionRadian );
 
             xProp->setPropertyValue( C2U( "PolyPolygonBezier" ), uno::makeAny( aCoords ) );
+
+            if(mbDump)
+            {
+                maDumpHerlper.writeAttribute("PolyPolygonBezier", "");
+            }
         }
         catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
+    }
+
+    if( mbDump )
+    {
+        maDumpHerlper.endElement();
     }
 
     return xShape;
@@ -1020,6 +1136,10 @@ uno::Reference< drawing::XShape >
     while(fUnitCircleWidthAngleDegree<0)
         fUnitCircleWidthAngleDegree += 360.0;
 
+    if(mbDump)
+    {
+        maDumpHerlper.writeElement("PieSegment");
+    }
     //create shape
     uno::Reference< drawing::XShape > xShape(
         m_xShapeFactory->createInstance( C2U(
@@ -1075,12 +1195,27 @@ uno::Reference< drawing::XShape >
                 , uno::makeAny( drawing::TextureProjectionMode_PARALLEL ) );
             xProp->setPropertyValue( C2U( UNO_NAME_3D_TEXTURE_PROJ_Y )
                 , uno::makeAny( drawing::TextureProjectionMode_OBJECTSPECIFIC ) );
+
+            if (mbDump)
+            {
+                maDumpHerlper.writeAttribute("depth",static_cast<sal_Int32>(fDepth));
+                maDumpHerlper.writeAttribute("PercentDiagonal",nPercentDiagonal);
+                maDumpHerlper.writeAttribute("Polygon", "");
+                maDumpHerlper.writeAttribute("DoubleSided", "true");
+                maDumpHerlper.writeAttribute("ReducedLines", "true");
+                maDumpHerlper.writeAttribute("TextureProjectionModeY", "");
+                maDumpHerlper.writeAttribute("TextureProjectionModeX", "");
+            }
         }
         catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
     }
+
+    if(mbDump)
+        maDumpHerlper.endElement();
+
     return xShape;
 }
 
@@ -1099,6 +1234,9 @@ uno::Reference< drawing::XShape >
 {
     if( !xTarget.is() )
         return 0;
+
+    if (mbDump)
+        maDumpHerlper.writeElement("Stripe");
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1137,6 +1275,16 @@ uno::Reference< drawing::XShape >
             xProp->setPropertyValue( C2U( UNO_NAME_3D_DOUBLE_SIDED )
                 , uno::makeAny(bDoubleSided) );
 
+            if(mbDump)
+            {
+                maDumpHerlper.writeAttribute("Polygon","");
+                maDumpHerlper.writeAttribute("TexturePolygon","");
+                maDumpHerlper.writeAttribute("NormalsPolygon","");
+                maDumpHerlper.writeAttribute("NormalsKind","");
+                maDumpHerlper.writeAttribute("LineOnly", "false");
+                maDumpHerlper.writeAttribute("DoubleSided", bDoubleSided);
+            }
+
             if( xSourceProp.is())
                 PropertyMapper::setMappedProperties( xProp, xSourceProp, rPropertyNameMap );
         }
@@ -1145,6 +1293,10 @@ uno::Reference< drawing::XShape >
             ASSERT_EXCEPTION( e );
         }
     }
+
+    if(mbDump)
+        maDumpHerlper.endElement();
+
     return xShape;
 }
 
@@ -1158,6 +1310,9 @@ uno::Reference< drawing::XShape >
 
     if( !rPolyPolygon.SequenceX.getLength())
         return 0;
+
+    if(mbDump)
+        maDumpHerlper.writeElement("Area3D");
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1203,12 +1358,25 @@ uno::Reference< drawing::XShape >
                 xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                     , uno::makeAny(aHM) );
             }
+
+            if (mbDump)
+            {
+                maDumpHerlper.writeAttribute("depth", static_cast<sal_Int32>(fDepth));
+                maDumpHerlper.writeAttribute("PercentDiagonal", nPercentDiagonal);
+                maDumpHerlper.writeAttribute("Polygon","");
+                maDumpHerlper.writeAttribute("DoubleSided", "true");
+                maDumpHerlper.writeAttribute("Matrix","");
+            }
         }
         catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
     }
+
+    if(mbDump)
+        maDumpHerlper.endElement();
+
     return xShape;
 }
 
@@ -1792,6 +1960,9 @@ uno::Reference< drawing::XShape >
     if( !xTarget.is() )
         return 0;
 
+    if(mbDump)
+        maDumpHerlper.writeElement("Symbol2D");
+
     //create shape
     uno::Reference< drawing::XShape > xShape(
         m_xShapeFactory->createInstance( C2U(
@@ -1819,12 +1990,23 @@ uno::Reference< drawing::XShape >
             //FillColor
             xProp->setPropertyValue( C2U( UNO_NAME_FILLCOLOR )
                 , uno::makeAny( nFillColor ) );
+
+            if(mbDump)
+            {
+                maDumpHerlper.writeAttribute("Polygon", "");
+                maDumpHerlper.writeAttribute("LineColor", nBorderColor);
+                maDumpHerlper.writeAttribute("FillColor", nFillColor);
+            }
         }
         catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
     }
+
+    if(mbDump)
+        maDumpHerlper.endElement();
+
     return xShape;
 }
 
@@ -1841,6 +2023,9 @@ uno::Reference< drawing::XShape >
     // @todo: change this to a rectangle shape with a fill bitmap for
     // performance reasons (ask AW, said CL)
 
+    if(mbDump)
+        maDumpHerlper.writeElement("Graphic2D");
+
     //create shape
     uno::Reference< drawing::XShape > xShape(
         m_xShapeFactory->createInstance( C2U(
@@ -1856,6 +2041,12 @@ uno::Reference< drawing::XShape >
             rPosition.PositionZ );
         xShape->setPosition( Position3DToAWTPoint( aCenterPosition ));
         xShape->setSize( Direction3DToAWTSize( rSize ));
+
+        if(mbDump)
+        {
+            maDumpHerlper.writeAttribute("Position", aCenterPosition);
+            maDumpHerlper.writeAttribute("Size", rSize);
+        }
     }
     catch( const uno::Exception & e )
     {
@@ -1874,6 +2065,10 @@ uno::Reference< drawing::XShape >
             ASSERT_EXCEPTION( e );
         }
     }
+
+    if(mbDump)
+        maDumpHerlper.endElement();
+
     return xShape;
 }
 
@@ -1885,6 +2080,13 @@ uno::Reference< drawing::XShapes >
         return 0;
     try
     {
+        if(mbDump)
+        {
+            maDumpHerlper.writeElement("Group2D");
+            if(!aName.isEmpty())
+                maDumpHerlper.writeAttribute("Name", aName);
+        }
+
         //create and add to target
         uno::Reference< drawing::XShape > xShape(
                     m_xShapeFactory->createInstance( C2U(
@@ -1901,6 +2103,9 @@ uno::Reference< drawing::XShapes >
         }
 
         //return
+        if (mbDump)
+            maDumpHerlper.endElement();
+
         uno::Reference< drawing::XShapes > xShapes =
             uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
         return xShapes;
@@ -1909,6 +2114,10 @@ uno::Reference< drawing::XShapes >
     {
         ASSERT_EXCEPTION( e );
     }
+
+    if(mbDump)
+        maDumpHerlper.endElement();
+
     return 0;
 }
 
@@ -1920,6 +2129,13 @@ uno::Reference< drawing::XShapes >
         return 0;
     try
     {
+        if(mbDump)
+        {
+            maDumpHerlper.writeElement("Group3D");
+            if(!aName.isEmpty())
+                maDumpHerlper.writeAttribute("Name", aName);
+        }
+
         //create shape
         uno::Reference< drawing::XShape > xShape(
                 m_xShapeFactory->createInstance( C2U(
@@ -1941,6 +2157,9 @@ uno::Reference< drawing::XShapes >
                     ::basegfx::B3DHomMatrix aM;
                     xProp->setPropertyValue( C2U( UNO_NAME_3D_TRANSFORM_MATRIX )
                         , uno::makeAny(B3DHomMatrixToHomogenMatrix(aM)) );
+
+                    if(mbDump)
+                        maDumpHerlper.writeAttribute("TransformMatrix", "");
                 }
                 catch( const uno::Exception& e )
                 {
@@ -1956,12 +2175,20 @@ uno::Reference< drawing::XShapes >
         //return
         uno::Reference< drawing::XShapes > xShapes =
                 uno::Reference<drawing::XShapes>( xShape, uno::UNO_QUERY );
+
+        if(mbDump)
+            maDumpHerlper.endElement();
+
         return xShapes;
     }
     catch( const uno::Exception& e )
     {
         ASSERT_EXCEPTION( e );
     }
+
+    if(mbDump)
+        maDumpHerlper.endElement();
+
     return 0;
 }
 
@@ -1972,6 +2199,9 @@ uno::Reference< drawing::XShape >
 {
     if( !xTarget.is() )
         return 0;
+
+    if(mbDump)
+        maDumpHerlper.writeElement("Circle2D");
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -1987,6 +2217,12 @@ uno::Reference< drawing::XShape >
             rPosition.PositionZ );
         xShape->setPosition( Position3DToAWTPoint( aCenterPosition ));
         xShape->setSize( Direction3DToAWTSize( rSize ));
+
+        if(mbDump)
+        {
+            maDumpHerlper.writeAttribute("Position", aCenterPosition);
+            maDumpHerlper.writeAttribute("Size", rSize);
+        }
     }
     catch( const uno::Exception & e )
     {
@@ -2003,12 +2239,19 @@ uno::Reference< drawing::XShape >
             drawing::CircleKind eKind = drawing::CircleKind_FULL;
             xProp->setPropertyValue( C2U( UNO_NAME_CIRCKIND )
                 , uno::makeAny( eKind ) );
+
+            if(mbDump)
+                maDumpHerlper.writeAttribute("CircleKind", eKind);
         }
         catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
     }
+
+    if(mbDump)
+        maDumpHerlper.endElement();
+
     return xShape;
 }
 
@@ -2022,6 +2265,9 @@ uno::Reference< drawing::XShape >
 
     if(!rPoints.SequenceX.getLength())
         return NULL;
+
+    if(mbDump)
+        maDumpHerlper.writeElement("Line3D");
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -2064,12 +2310,37 @@ uno::Reference< drawing::XShape >
                 xProp->setPropertyValue( C2U( UNO_NAME_LINECOLOR )
                     , rLineProperties.Color );
                     //, uno::makeAny( sal_Int32( Color(COL_RED).GetColor()) ) );
+
+            if(mbDump)
+            {
+                sal_Int16 nTransparence;
+                rLineProperties.Transparence >>= nTransparence;
+                maDumpHerlper.writeAttribute("Transparency", nTransparence);
+                drawing::LineStyle aLineStyle;
+                rLineProperties.LineStyle >>= aLineStyle;
+                maDumpHerlper.writeAttribute("LineStyle", aLineStyle);
+                sal_Int32 nWidth;
+                rLineProperties.Width >>= nWidth;
+                maDumpHerlper.writeAttribute("LineWidth", nWidth);
+                sal_Int32 nColor;
+                rLineProperties.Color >>= nColor;
+                maDumpHerlper.writeAttribute("LineColor", nColor);
+                rtl::OUString aDashName;
+                rLineProperties.DashName >>= aDashName;
+                maDumpHerlper.writeAttribute("LineDashName", aDashName);
+                maDumpHerlper.writeAttribute("Polygon", "");
+                maDumpHerlper.writeAttribute("LineOnly", "true");
+            }
         }
         catch( const uno::Exception& e )
         {
             ASSERT_EXCEPTION( e );
         }
     }
+
+    if(mbDump)
+        maDumpHerlper.endElement();
+
     return xShape;
 }
 
@@ -2083,6 +2354,9 @@ uno::Reference< drawing::XShape >
 
     if(!rPoints.getLength())
         return NULL;
+
+    if(mbDump)
+        maDumpHerlper.writeElement("Line2D");
 
     //create shape
     uno::Reference< drawing::XShape > xShape(
@@ -2100,6 +2374,9 @@ uno::Reference< drawing::XShape >
             //Polygon
             xProp->setPropertyValue( C2U( UNO_NAME_POLYPOLYGON )
                 , uno::makeAny( rPoints ) );
+
+            if(mbDump)
+                maDumpHerlper.writeAttribute("Polygon", rPoints);
 
             if(pLineProperties)
             {
@@ -2127,6 +2404,25 @@ uno::Reference< drawing::XShape >
                 if(pLineProperties->DashName.hasValue())
                     xProp->setPropertyValue( C2U( "LineDashName" )
                         , pLineProperties->DashName );
+
+                if(mbDump)
+                {
+                    sal_Int16 nTransparence;
+                    pLineProperties->Transparence >>= nTransparence;
+                    maDumpHerlper.writeAttribute("Transparency", nTransparence);
+                    drawing::LineStyle aLineStyle;
+                    pLineProperties->LineStyle >>= aLineStyle;
+                    maDumpHerlper.writeAttribute("LineStyle", aLineStyle);
+                    sal_Int32 nWidth;
+                    pLineProperties->Width >>= nWidth;
+                    maDumpHerlper.writeAttribute("LineWidth", nWidth);
+                    sal_Int32 nColor;
+                    pLineProperties->Color >>= nColor;
+                    maDumpHerlper.writeAttribute("LineColor", nColor);
+                    rtl::OUString aDashName;
+                    pLineProperties->DashName >>= aDashName;
+                    maDumpHerlper.writeAttribute("LineDashName", aDashName);
+                }
             }
         }
         catch( const uno::Exception& e )
@@ -2134,6 +2430,10 @@ uno::Reference< drawing::XShape >
             ASSERT_EXCEPTION( e );
         }
     }
+
+    if(mbDump)
+        maDumpHerlper.endElement();
+
     return xShape;
 }
 
