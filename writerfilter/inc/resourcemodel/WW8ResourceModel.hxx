@@ -128,6 +128,9 @@ class Sprm;
 class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Properties
 {
 public:
+
+    virtual ~Properties() {}
+
     /**
        Receives an attribute.
 
@@ -152,6 +155,8 @@ class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Table
 {
 public:
     typedef boost::shared_ptr<Table> Pointer_t;
+
+    virtual ~Table() {}
     /**
        Receives an entry of the table.
 
@@ -167,6 +172,8 @@ public:
 class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC BinaryObj
 {
 public:
+
+    virtual ~BinaryObj() {}
     /**
        Receives binary data of the object.
 
@@ -184,10 +191,13 @@ public:
 class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Stream
 {
 public:
+
     /**
        Pointer to this stream.
      */
     typedef boost::shared_ptr<Stream> Pointer_t;
+
+    virtual ~Stream() {}
 
     /**
        Receives start mark for group with the same section properties.
@@ -344,6 +354,9 @@ public:
     typedef auto_ptr<Sprm> Pointer_t;
     SAL_WNODEPRECATED_DECLARATIONS_POP
     enum Kind { UNKNOWN, CHARACTER, PARAGRAPH, TABLE };
+
+    virtual ~Sprm() {}
+
     /**
        Returns id of the SPRM.
      */
