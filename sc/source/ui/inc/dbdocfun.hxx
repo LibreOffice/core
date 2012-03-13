@@ -98,8 +98,8 @@ public:
 
     bool RepeatDB( const ::rtl::OUString& rDBName, bool bRecord, bool bApi, bool bIsUnnamed=false, SCTAB aTab = 0);
 
-    sal_Bool            DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
-                                        sal_Bool bRecord, sal_Bool bApi, sal_Bool bAllowMove = false );
+    bool DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
+                          bool bRecord, bool bApi, bool bAllowMove = false );
 };
 
 

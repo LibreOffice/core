@@ -1192,14 +1192,14 @@ sal_Bool lcl_EmptyExcept( ScDocument* pDoc, const ScRange& rRange, const ScRange
     return sal_True;        // nothing found - empty
 }
 
-sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
-                                        sal_Bool bRecord, sal_Bool bApi, sal_Bool bAllowMove )
+bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewObj,
+                                   bool bRecord, bool bApi, bool bAllowMove )
 {
     ScDocShellModificator aModificator( rDocShell );
     WaitObject aWait( rDocShell.GetActiveDialogParent() );
 
-    sal_Bool bDone = false;
-    sal_Bool bUndoSelf = false;
+    bool bDone = false;
+    bool bUndoSelf = false;
     sal_uInt16 nErrId = 0;
 
     ScDocument* pOldUndoDoc = NULL;
@@ -1265,7 +1265,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
 
             rDocShell.PostPaintGridAll();   //! only necessary parts
             rDocShell.PostPaint(aRange, PAINT_GRID);
-            bDone = sal_True;
+            bDone = true;
         }
         else if ( pNewObj )
         {
@@ -1352,7 +1352,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                 {
                     //  like with STR_PROTECTIONERR, use undo to reverse everything
                     OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
-                    bUndoSelf = sal_True;
+                    bUndoSelf = true;
                     nErrId = STR_PIVOT_ERROR;
                 }
                 else
@@ -1374,7 +1374,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                 //  test if new output area is empty except for old area
                 if ( !bApi )
                 {
-                    sal_Bool bEmpty;
+                    bool bEmpty;
                     if ( pOldObj )  // OutRange of pOldObj (pDestObj) is still old area
                         bEmpty = lcl_EmptyExcept( pDoc, aNewOut, pOldObj->GetOutRange() );
                     else
@@ -1390,7 +1390,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                         {
                             //! like above (not editable), use undo to reverse everything
                             OSL_ENSURE( bRecord, "DataPilotUpdate: can't undo" );
-                            bUndoSelf = sal_True;
+                            bUndoSelf = true;
                         }
                     }
                 }
@@ -1406,7 +1406,7 @@ sal_Bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pN
                 pDestObj->Output( aNewOut.aStart );
 
                 rDocShell.PostPaintGridAll();           //! only necessary parts
-                bDone = sal_True;
+                bDone = true;
             }
         }
         // else nothing (no old, no new)
