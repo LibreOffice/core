@@ -792,28 +792,26 @@ bool SvxLRSpaceItem::HasMetrics() const
 
 // class SvxULSpaceItem --------------------------------------------------
 
-SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nId ) :
-
-    SfxPoolItem( nId ),
-
-    nUpper( 0 ),
-    nLower( 0 ),
-    nPropUpper( 100 ),
-    nPropLower( 100 )
+SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nId )
+    : SfxPoolItem(nId)
+    , nUpper(0)
+    , nLower(0)
+    , bContext(false)
+    , nPropUpper(100)
+    , nPropLower(100)
 {
 }
 
 // -----------------------------------------------------------------------
 
 SvxULSpaceItem::SvxULSpaceItem( const sal_uInt16 nUp, const sal_uInt16 nLow,
-                                const sal_uInt16 nId ) :
-
-    SfxPoolItem( nId ),
-
-    nUpper( nUp  ),
-    nLower( nLow ),
-    nPropUpper( 100 ),
-    nPropLower( 100 )
+                                const sal_uInt16 nId )
+    : SfxPoolItem(nId)
+    , nUpper(nUp)
+    , nLower(nLow)
+    , bContext(false)
+    , nPropUpper(100)
+    , nPropLower(100)
 {
 }
 
