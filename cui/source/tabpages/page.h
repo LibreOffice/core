@@ -72,6 +72,7 @@
 #define PAPERSIZE_B4_JIS        34
 #define PAPERSIZE_B5_JIS        35
 #define PAPERSIZE_B6_JIS        36
+#define PAPERSIZE_POSTCARD_JP   46
 #define PAPERSIZE_A6            56
 
 #endif

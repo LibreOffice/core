@@ -418,6 +418,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_STD
         < "#10 Envelope" ; PAPERSIZE_COM10; > ;
         < "#11 Envelope" ; PAPERSIZE_COM11; > ;
         < "#12 Envelope" ; PAPERSIZE_COM12; > ;
+        < "Japanese Postcard" ; PAPERSIZE_POSTCARD_JP; > ;
     };
 };
 StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
@@ -452,6 +453,7 @@ StringArray RID_SVXSTRARY_PAPERSIZE_DRAW
         < "C4 Envelope" ; PAPERSIZE_C4 ; > ;
         < "Dia Slide" ; PAPERSIZE_DIA ; > ;
         < "Screen" ; PAPERSIZE_SCREEN ; > ;
+        < "Japanese Postcard" ; PAPERSIZE_POSTCARD_JP; > ;
     };
 };
  // ********************************************************************** EOF
