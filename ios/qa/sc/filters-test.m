@@ -74,6 +74,8 @@ didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
   setenv("SRC_ROOT", app_root, 1);
   setenv("OUTDIR_FOR_BUILD", app_root, 1);
 
+  setenv("SAL_LOG", "yes", 1);
+
   CppUnitTestPlugIn *iface = cppunitTestPlugIn();
   iface->initialize(&CppUnit::TestFactoryRegistry::getRegistry(), CppUnit::PlugInParameters());
 
