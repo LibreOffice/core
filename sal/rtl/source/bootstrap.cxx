@@ -271,7 +271,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 {
 #if OSL_DEBUG_LEVEL > 1
     OString sFile = OUStringToOString(_iniName, RTL_TEXTENCODING_ASCII_US);
-    OSL_TRACE(__FILE__" -- Bootstrap_Impl() - %s\n", sFile.getStr());
+    OSL_TRACE("Bootstrap_Impl(): sFile=%s", sFile.getStr());
 #endif /* OSL_DEBUG_LEVEL > 1 */
 
     oslFileHandle handle;
@@ -295,7 +295,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
 				OString name_tmp = OUStringToOString(sName, RTL_TEXTENCODING_ASCII_US);
 				OString value_tmp = OUStringToOString(sValue, RTL_TEXTENCODING_UTF8);
                 OSL_TRACE(
-                    __FILE__" -- pushing: name=%s value=%s\n",
+                    "pushing: name=%s value=%s",
                     name_tmp.getStr(), value_tmp.getStr() );
 #endif /* OSL_DEBUG_LEVEL > 1 */
 
@@ -308,7 +308,7 @@ Bootstrap_Impl::Bootstrap_Impl( OUString const & rIniName )
     else
     {
         OString file_tmp = OUStringToOString(_iniName, RTL_TEXTENCODING_ASCII_US);
-        OSL_TRACE( __FILE__" -- couldn't open file: %s", file_tmp.getStr() );
+        OSL_TRACE( "couldn't open file: %s", file_tmp.getStr() );
     }
 #endif /* OSL_DEBUG_LEVEL > 1 */
 }
