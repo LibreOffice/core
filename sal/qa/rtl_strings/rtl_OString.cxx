@@ -356,11 +356,11 @@ TestCase arrTestCase[]={
         new OString(kTestStr2)},
     {"non empty and empty(def. constructor)", sal_False,
         new OString(kTestStr1),new OString()},
-    {"two empty strings(string arg = '\\0')", sal_True,
+    {"two empty strings(string arg = \"\")", sal_True,
         new OString(""),new OString("")},
-    {"empty(string arg = '\\0') and non empty", sal_False,
+    {"empty(string arg = \"\") and non empty", sal_False,
         new OString(""),new OString(kTestStr2)},
-    {"non empty and empty(string arg = '\\0')", sal_False,
+    {"non empty and empty(string arg = \"\")", sal_False,
         new OString(kTestStr1),new OString("")}
     };
 

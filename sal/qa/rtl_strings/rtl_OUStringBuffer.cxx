@@ -263,7 +263,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_makeStringAndCle
         OUString( aUStr25 ),
         OUString( aUStr27 ),
         OUString( aUStr29 ),
-        OUString( "\0",0,
+        OUString( "\0",1,
               kEncodingRTLTextUSASCII,
               kConvertFlagsOStringToOUString)
     };
@@ -331,7 +331,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getLength(
                         OUString( "",0,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
-                        OUString( "\0",0,
+                        OUString( "\0",1,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
                         OUString( aUStr2 )};
@@ -354,7 +354,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getLength(
                         new OUStringBuffer(arrOUS[2])},
     {"length of empty string (empty ascii string arg)",0,
             new OUStringBuffer(arrOUS[3])},
-    {"length of empty string (string arg = '\\0')", 0,
+    {"length of empty string (string arg = \"\\0\")", 1,
             new OUStringBuffer(arrOUS[4])},
         {"length(>16) of ascii string", kTestStr2Len,
             new OUStringBuffer(arrOUS[5]) },
@@ -404,7 +404,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getCapacity(
                         OUString( "",0,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
-                        OUString( "\0",0,
+                        OUString( "\0",1,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
                         OUString( aUStr2 )};
@@ -427,7 +427,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_getCapacity(
                         new OUStringBuffer(arrOUS[2]) },
     {"capacity of empty string (empty ascii string arg)",0+16,
             new OUStringBuffer(arrOUS[3]) },
-    {"capacity of empty string (string arg = '\\0')", 0+16,
+    {"capacity of empty string (string arg = \"\\0\")", 1+16,
             new OUStringBuffer(arrOUS[4]) },
         {"capacity(>16) of ascii string", kTestStr2Len+16,
             new OUStringBuffer(arrOUS[5]) },
@@ -564,7 +564,7 @@ extern "C" void /* sal_Bool */ SAL_CALL test_rtl_OUStringBuffer_setLength(
                         OUString( "",0,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
-                        OUString( "\0",0,
+                        OUString( "\0",1,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
                         OUString( aUStr2 )};
@@ -802,7 +802,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_001(
     OUString arrOUS[5]={OUString( aUStr7 ),
                         OUString(),
                         OUString( aUStr25 ),
-                        OUString( "\0",0,
+                        OUString( "\0",1,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
                         OUString( aUStr28 )};
@@ -919,7 +919,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_002(
     OUString arrOUS[5]={OUString( aUStr7 ),
                         OUString(),
                         OUString( aUStr25 ),
-                        OUString( "\0",0,
+                        OUString( "\0",1,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
                         OUString( aUStr28 )};
@@ -1036,7 +1036,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_003(
     OUString arrOUS[5]={OUString( aUStr7 ),
                         OUString(),
                         OUString( aUStr25 ),
-                        OUString( "\0",0,
+                        OUString( "\0",1,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
                         OUString( aUStr28 )};
@@ -1175,7 +1175,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_append_004(
     OUString arrOUS[5]={OUString( aUStr7 ),
                         OUString(),
                         OUString( aUStr25 ),
-                        OUString( "\0",0,
+                        OUString( "\0",1,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
                         OUString( aUStr28 )};
@@ -1276,7 +1276,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_001(
     OUString arrOUS[5]={OUString( aUStr7 ),
                         OUString(),
                         OUString( aUStr25 ),
-                        OUString( "\0",0,
+                        OUString( "\0",1,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
                         OUString( aUStr28 )};
@@ -1391,7 +1391,7 @@ sal_Bool SAL_CALL test_rtl_OUStringBuffer_appendAscii_002(
     OUString arrOUS[5]={OUString( aUStr7 ),
                         OUString(),
                         OUString( aUStr25 ),
-                        OUString( "\0",0,
+                        OUString( "\0",1,
                     kEncodingRTLTextUSASCII,
                     kConvertFlagsOStringToOUString),
                         OUString( aUStr28 )};
