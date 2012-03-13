@@ -55,11 +55,7 @@ oslInterlockedCount ObservableThread::release()
 {
     oslInterlockedCount nCount( osl_decrementInterlockedCount( &mnRefCount ) );
     if ( nCount == 0 )
-    {
         delete this;
-        return nCount;
-    }
-
     return nCount;
 }
 
