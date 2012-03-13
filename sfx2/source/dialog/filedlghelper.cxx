@@ -2473,23 +2473,10 @@ ErrCode FileDialogHelper::GetGraphic( Graphic& rGraphic ) const
 // ------------------------------------------------------------------------
 static int impl_isFolder( const OUString& rPath )
 {
-    uno::Reference< task::XInteractionHandler > xHandler;
-    try
-    {
-        uno::Reference< lang::XMultiServiceFactory > xFactory( ::comphelper::getProcessServiceFactory(), uno::UNO_QUERY_THROW );
-        xHandler.set( xFactory->createInstance( DEFINE_CONST_OUSTRING( "com.sun.star.task.InteractionHandler" ) ),
-                      uno::UNO_QUERY_THROW );
-    }
-    catch ( const Exception & )
-    {
-    }
-
-    ::rtl::Reference< ::comphelper::StillReadWriteInteraction > aHandler = new ::comphelper::StillReadWriteInteraction( xHandler );
-
     try
     {
         ::ucbhelper::Content aContent(
-            rPath, new ::ucbhelper::CommandEnvironment( static_cast< task::XInteractionHandler* > ( aHandler.get() ), uno::Reference< ucb::XProgressHandler >() ) );
+            rPath, uno::Reference< ucb::XCommandEnvironment > () );
         if ( aContent.isFolder() )
             return 1;
 
