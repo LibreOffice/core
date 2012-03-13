@@ -69,6 +69,10 @@ CONFIGURE_ACTION = CPPFLAGS="$(SOLARINC)" ./configure --without-jpeg --without-t
 CONFIGURE_ACTION += --build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
 .ENDIF
 
+.IF "$(OS)" == "IOS"
+CONFIGURE_ACTION += --disable-shared
+.ENDIF
+
 BUILD_ACTION = make -j$(GMAKE_MODULE_PARALLELISM)
 
 .ENDIF # "$(GUI)$(COM)"=="WNTMSC"
@@ -78,6 +82,8 @@ OUT2INC+=include$/lcms2*.h
 .IF "$(OS)"=="MACOSX"
 EXTRPATH=LOADER
 OUT2LIB+=src$/.libs$/liblcms2.*.dylib
+.ELIF "$(OS)"=="IOS"
+OUT2LIB+=src$/.libs$/liblcms2.a
 .ELIF "$(OS)"=="WNT"
 .IF "$(COM)"=="GCC"
 OUT2LIB+=src$/.libs$/liblcms2.dll.a
