@@ -79,7 +79,7 @@ AC_SUBST(x_Cygwin)
 
 cat /dev/null > warn
 
-if test "z$EUID" = "z0" -a "z`uname -o 2>/dev/null`" = "zCygwin"; then
+if test "$EUID" = "0" -a "`uname -o 2>/dev/null`" = "Cygwin"; then
     AC_MSG_ERROR([You must build LibreOffice as a normal user - not using an administrative account])
 fi
 
@@ -2399,7 +2399,7 @@ if test "$_os" = "WINNT"; then
 
     dnl Set the CL_X64 variable if we are building a 64-bit LibreOffice.
     AC_MSG_CHECKING([whether to build a 64-bit LibreOffice])
-    if test "z$enable_cl_x64" = "z" -o "$enable_cl_x64" = "no"; then
+    if test "$enable_cl_x64" = "" -o "$enable_cl_x64" = "no"; then
         CL_X64=""
         AC_MSG_RESULT([no])
     else
@@ -2528,7 +2528,7 @@ if test "$GCC" = "yes"; then
         ],[
 printf ("hello world\n");
         ])], HAVE_LD_BSYMBOLIC_FUNCTIONS=TRUE, [])
-    if test "z$HAVE_LD_BSYMBOLIC_FUNCTIONS" = "zTRUE"; then
+    if test "$HAVE_LD_BSYMBOLIC_FUNCTIONS" = "TRUE"; then
         AC_MSG_RESULT( found )
     else
         AC_MSG_RESULT( not found )
@@ -3419,7 +3419,7 @@ AC_SUBST(ENABLE_SYMBOLS)
 dnl Determine if the solver is to be stripped or not.
 dnl ===================================================================
 AC_MSG_CHECKING([whether to strip the solver or not.])
-if test "z$enable_strip_solver" = "zno"; then
+if test "$enable_strip_solver" = "no"; then
     DISABLE_STRIP="TRUE"
     AC_MSG_RESULT([no])
 else
@@ -3459,7 +3459,7 @@ fi
 
 
 # fontconfig checks
-if test "z$test_fontconfig" = "zyes"; then
+if test "$test_fontconfig" = "yes"; then
     PKG_CHECK_MODULES([FONTCONFIG], [fontconfig >= 2.2.0])
 else
     case "$BUILD_TYPE" in
@@ -3479,7 +3479,7 @@ fi
 AC_SUBST(TARFILE_LOCATION)
 
 AC_MSG_CHECKING([whether we want to fetch tarballs])
-if test "z$enable_fetch_external" != "zno"; then
+if test "$enable_fetch_external" != "no"; then
     AC_MSG_RESULT([yes])
     DO_FETCH_TARBALLS="YES"
 else
@@ -3642,7 +3642,7 @@ AC_SUBST(GNUMAKE)
 _make_ver_check=`$GNUMAKE --version | grep LibreOffice`;
 STALE_MAKE=
 make_warning=
-if test "z$_make_ver_check" = "z"; then
+if test "$_make_ver_check" = ""; then
    STALE_MAKE=TRUE
 fi
 
@@ -4603,7 +4603,7 @@ dnl Custom build version
 dnl ===================================================================
 
 AC_MSG_CHECKING([whether to add custom build version])
-if test "z$with_build_version" != "z"; then
+if test "$with_build_version" != ""; then
     BUILD_VER_STRING=$with_build_version
     AC_MSG_RESULT([yes, $BUILD_VER_STRING])
 else
@@ -5627,16 +5627,16 @@ dnl ===================================================================
 dnl Check for building ODK
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build the ODK])
-if test "z$enable_odk" = "z" -o "$enable_odk" != "no"; then
+if test "$enable_odk" = "" -o "$enable_odk" != "no"; then
     AC_MSG_RESULT([yes])
 
     if test "$with_java" != "no"; then
         AC_MSG_CHECKING([whether to build unowinreg.dll])
-        if test "$_os" = "WINNT" -a "z$enable_build_unowinreg" = "z"; then
+        if test "$_os" = "WINNT" -a "$enable_build_unowinreg" = ""; then
             # build on Win by default
             enable_build_unowinreg=yes
         fi
-        if test "z$enable_build_unowinreg" = "z" -o "$enable_build_unowinreg" = "no"; then
+        if test "$enable_build_unowinreg" = "" -o "$enable_build_unowinreg" = "no"; then
             AC_MSG_RESULT([no])
             BUILD_UNOWINREG=NO
         else
@@ -6198,7 +6198,7 @@ internal)
     SYSTEM_PYTHON=NO
     BUILD_TYPE="$BUILD_TYPE PYTHON"
     # Embedded Python dies without Home set
-    if test "z$HOME" = "z"; then
+    if test "$HOME" = ""; then
         export HOME="";
     fi
     # bz2 tarball and bzip2 is not standard
@@ -7400,7 +7400,7 @@ dnl Graphite
 dnl ===================================================================
 
 AC_MSG_CHECKING([whether to enable graphite support])
-if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "z$enable_graphite" = "z" -o "$enable_graphite" != "no"; then
+if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "$enable_graphite" = "" -o "$enable_graphite" != "no"; then
     AC_MSG_RESULT([yes])
     ENABLE_GRAPHITE="TRUE"
     AC_MSG_CHECKING([which graphite to use])
@@ -9227,7 +9227,7 @@ dnl ===================================================================
 dnl Test whether to integrate helppacks into the product's installer
 dnl ===================================================================
 AC_MSG_CHECKING([for helppack integration])
-if test "z$with_helppack_integration" = "zno"; then
+if test "$with_helppack_integration" = "no"; then
     WITH_HELPPACK_INTEGRATION=NO
     AC_MSG_RESULT([no integration])
 else
@@ -9424,12 +9424,12 @@ dnl ===================================================================
 dnl Test whether to include Sun Professional Template Pack
 dnl ===================================================================
 AC_MSG_CHECKING([for Sun Professional Template Pack integration (only supported languages displayed)])
-if test "z$with_sun_templates" = "z" -o "z$with_sun_templates" = "zno"; then
+if test "$with_sun_templates" = "" -o "$with_sun_templates" = "no"; then
     AC_MSG_RESULT([no integration])
 else
     SCPDEFS="$SCPDEFS -DWITH_EXTENSION_SUN_TEMPLATE_PACK"
     sun_supported_langs="en-US de it fr es hu"
-    if test "z$with_sun_templates" = "zyes"; then
+    if test "$with_sun_templates" = "yes"; then
         wanted_sun_templates="$sun_supported_langs"
     else
         # check whether the langs are supported by Sun
@@ -9528,7 +9528,7 @@ dnl ===================================================================
 dnl Test whether to include extra galleries
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include extra galleries])
-if test "z$enable_extra_gallery" = "z" -o "z$enable_extra_gallery" = "zno"; then
+if test "$enable_extra_gallery" = "" -o "$enable_extra_gallery" = "no"; then
     AC_MSG_RESULT([no])
     WITH_EXTRA_GALLERY=NO
     OOOP_GALLERY_PACK=""
@@ -9546,7 +9546,7 @@ dnl ===================================================================
 dnl Test whether to include extra templates
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include extra templates])
-if test "z$enable_extra_template" = "z" -o "z$enable_extra_template" = "zno"; then
+if test "$enable_extra_template" = "" -o "$enable_extra_template" = "no"; then
     AC_MSG_RESULT([no])
     WITH_EXTRA_TEMPLATE=NO
     OOOP_TEMPLATES_PACK=""
@@ -9564,7 +9564,7 @@ dnl ===================================================================
 dnl Test whether to include extra samples
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include extra samples])
-if test "z$enable_extra_sample" = "z" -o "z$enable_extra_sample" = "zno"; then
+if test "$enable_extra_sample" = "" -o "$enable_extra_sample" = "no"; then
     AC_MSG_RESULT([no])
     WITH_EXTRA_SAMPLE=NO
     OOOP_SAMPLES_PACK=""
@@ -9582,7 +9582,7 @@ dnl ===================================================================
 dnl Test whether to include extra fonts
 dnl ===================================================================
 AC_MSG_CHECKING([whether to include extra fonts])
-if test "z$enable_extra_font" = "z" -o "z$enable_extra_font" = "zno"; then
+if test "$enable_extra_font" = "" -o "$enable_extra_font" = "no"; then
     AC_MSG_RESULT([no])
     WITH_EXTRA_FONT=NO
     OOOP_FONTS_PACK=""
@@ -9600,7 +9600,7 @@ dnl ===================================================================
 dnl Test whether to download OxygenOffice branding and set custom settings
 dnl ===================================================================
 AC_MSG_CHECKING([whether to download OxygenOffice branding and set custom settings])
-if test "z$enable_oxygenoffice" = "z" -o "z$enable_oxygenoffice" = "zno"; then
+if test "$enable_oxygenoffice" = "" -o "$enable_oxygenoffice" = "no"; then
     AC_MSG_RESULT([no])
     ENABLE_OXYGENOFFICE=NO
 else
@@ -9616,7 +9616,7 @@ dnl ===================================================================
 dnl Test whether to build global menu support
 dnl ===================================================================
 AC_MSG_CHECKING([whether to build global menu support])
-if test "z$enable_lomenubar" = "z" -o "z$enable_lomenubar" = "zno"; then
+if test "$enable_lomenubar" = "" -o "$enable_lomenubar" = "no"; then
     AC_MSG_RESULT([no])
     ENABLE_LOMENUBAR="FALSE"
 else
@@ -9631,7 +9631,7 @@ dnl Test whether to enable online update service
 dnl ===================================================================
 AC_MSG_CHECKING([whether to enable online update])
 ENABLE_ONLINE_UPDATE=
-if test "z$enable_online_update" = "z"; then
+if test "$enable_online_update" = ""; then
     if test "$_os" = "WINNT" -o "$_os" = "Darwin"; then
         AC_MSG_RESULT([yes])
         ENABLE_ONLINE_UPDATE="TRUE"
@@ -9639,7 +9639,7 @@ if test "z$enable_online_update" = "z"; then
         AC_MSG_RESULT([no])
     fi
 else
-    if test "z$enable_online_update" = "zyes"; then
+    if test "$enable_online_update" = "yes"; then
         AC_MSG_RESULT([yes])
         ENABLE_ONLINE_UPDATE="TRUE"
     else
@@ -9652,7 +9652,7 @@ dnl ===================================================================
 dnl Test whether build target is Release Build
 dnl ===================================================================
 AC_MSG_CHECKING([whether build target is Release Build])
-if test "z$enable_release_build" = "z" -o "z$enable_release_build" = "zno"; then
+if test "$enable_release_build" = "" -o "$enable_release_build" = "no"; then
     AC_MSG_RESULT([no])
     ENABLE_RELEASE_BUILD="FALSE"
 else
@@ -9665,7 +9665,7 @@ dnl ===================================================================
 dnl Test whether to create MSI with LIMITUI=1 (silent install)
 dnl ===================================================================
 AC_MSG_CHECKING([whether to create MSI with LIMITUI=1 (silent install)])
-if test "z$enable_silent_msi" = "z" -o "z$enable_silent_msi" = "zno"; then
+if test "$enable_silent_msi" = "" -o "$enable_silent_msi" = "no"; then
     AC_MSG_RESULT([no])
     ENABLE_SILENT_MSI="FALSE"
 else
@@ -10883,7 +10883,7 @@ dnl Number of parallel jobs to be executed by dmake
 dnl ===================================================================
 AC_MSG_CHECKING([for maximum of jobs per processor])
 BUILD_MAX_JOBS="1"
-if test "z$with_max_jobs" != "z"; then
+if test "$with_max_jobs" != ""; then
     BUILD_MAX_JOBS="$with_max_jobs"
 else
     if test "$enable_icecream" = "yes"; then
