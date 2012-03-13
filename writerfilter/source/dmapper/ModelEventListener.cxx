@@ -83,13 +83,20 @@ void ModelEventListener::notifyEvent( const document::EventObject& rEvent ) thro
             sal_Int32 nIndex = 0;
             while(xEnumeration->hasMoreElements())
             {
-                uno::Reference<beans::XPropertySet> xPropertySet(xEnumeration->nextElement(), uno::UNO_QUERY);
-                sal_Int16 nSource = 0;
-                xPropertySet->getPropertyValue(rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_SOURCE)) >>= nSource;
-                sal_Int16 nPart = 0;
-                xPropertySet->getPropertyValue(rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_PART)) >>= nPart;
-                if (nSource == text::ReferenceFieldSource::BOOKMARK && nPart == text::ReferenceFieldPart::PAGE)
-                    ++nIndex;
+                try
+                {
+                    uno::Reference<beans::XPropertySet> xPropertySet(xEnumeration->nextElement(), uno::UNO_QUERY);
+                    sal_Int16 nSource = 0;
+                    xPropertySet->getPropertyValue(rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_SOURCE)) >>= nSource;
+                    sal_Int16 nPart = 0;
+                    xPropertySet->getPropertyValue(rPropNameSupplier.GetName(PROP_REFERENCE_FIELD_PART)) >>= nPart;
+                    if (nSource == text::ReferenceFieldSource::BOOKMARK && nPart == text::ReferenceFieldPart::PAGE)
+                        ++nIndex;
+                }
+                catch( const beans::UnknownPropertyException& )
+                {
+                    // doesn't even have such a property? ignore
+                }
             }
             if (nIndex)
             {
