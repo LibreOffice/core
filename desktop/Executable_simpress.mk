@@ -29,10 +29,6 @@ $(eval $(call gb_Executable_Executable,simpress))
 
 $(eval $(call gb_Executable_set_targettype_gui,simpress,YES))
 
-$(eval $(call gb_Executable_set_include,simpress,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_add_defs,simpress,\
     -DUNICODE \
 ))
@@ -41,8 +37,11 @@ $(eval $(call gb_Executable_add_linked_libs,simpress,\
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Executable_add_linked_static_libs,simpress,\
+    winlauncher \
+))
+
 $(eval $(call gb_Executable_add_noexception_objects,simpress,\
-    desktop/win32/source/applauncher/launcher \
     desktop/win32/source/applauncher/simpress \
 ))
 

@@ -83,6 +83,10 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 	unopkgio \
 ))
 
+$(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	winlauncher \
+))
+
 else
 
 $(eval $(call gb_Helper_register_executables,OOO,\

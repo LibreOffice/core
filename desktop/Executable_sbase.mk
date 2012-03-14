@@ -29,10 +29,6 @@ $(eval $(call gb_Executable_Executable,sbase))
 
 $(eval $(call gb_Executable_set_targettype_gui,sbase,YES))
 
-$(eval $(call gb_Executable_set_include,sbase,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_add_defs,sbase,\
     -DUNICODE \
 ))
@@ -41,8 +37,11 @@ $(eval $(call gb_Executable_add_linked_libs,sbase,\
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Executable_add_linked_static_libs,sbase,\
+    winlauncher \
+))
+
 $(eval $(call gb_Executable_add_noexception_objects,sbase,\
-    desktop/win32/source/applauncher/launcher \
     desktop/win32/source/applauncher/sbase \
 ))
 

@@ -1,4 +1,5 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
+# -*- Mode: makefile; tab-width: 4; indent-tabs-mode: t -*-
+#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -12,8 +13,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2011 Red Hat, Inc., David Tardon <dtardon@redhat.com>
-#  (initial developer)
+# [ Copyright (C) 2012 Red Hat, Inc., Michael Stahl <mstahl@redhat.com> (initial developer) ]
 #
 # All Rights Reserved.
 #
@@ -25,26 +25,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Executable_Executable,scalc))
+$(eval $(call gb_StaticLibrary_StaticLibrary,winlauncher))
 
-$(eval $(call gb_Executable_set_targettype_gui,scalc,YES))
-
-$(eval $(call gb_Executable_add_defs,scalc,\
+$(eval $(call gb_StaticLibrary_add_defs,winlauncher,\
     -DUNICODE \
 ))
 
-$(eval $(call gb_Executable_add_linked_libs,scalc,\
-    $(gb_STDLIBS) \
+$(eval $(call gb_StaticLibrary_add_noexception_objects,winlauncher,\
+    desktop/win32/source/applauncher/launcher \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,scalc,\
-    winlauncher \
-))
-
-$(eval $(call gb_Executable_add_noexception_objects,scalc,\
-    desktop/win32/source/applauncher/scalc \
-))
-
-$(eval $(call gb_Executable_add_nativeres,scalc,scalc/src))
-
-# vim: set ts=4 sw=4 et:
+# vim:set shiftwidth=4 softtabstop=4 expandtab:

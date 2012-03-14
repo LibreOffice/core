@@ -29,10 +29,6 @@ $(eval $(call gb_Executable_Executable,smath))
 
 $(eval $(call gb_Executable_set_targettype_gui,smath,YES))
 
-$(eval $(call gb_Executable_set_include,smath,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_add_defs,smath,\
     -DUNICODE \
 ))
@@ -41,8 +37,11 @@ $(eval $(call gb_Executable_add_linked_libs,smath,\
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_Executable_add_linked_static_libs,smath,\
+    winlauncher \
+))
+
 $(eval $(call gb_Executable_add_noexception_objects,smath,\
-    desktop/win32/source/applauncher/launcher \
     desktop/win32/source/applauncher/smath \
 ))
 
