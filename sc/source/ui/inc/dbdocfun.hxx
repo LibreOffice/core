@@ -105,7 +105,13 @@ public:
      * Reload the referenced pivot cache, and refresh all pivot tables that
      * reference the cache.
      */
-    sal_uLong RefreshPivotTables(ScDPObject* pDPObj, bool bRecord, bool bApi);
+    sal_uLong RefreshPivotTables(ScDPObject* pDPObj, bool bApi);
+
+    /**
+     * Refresh the group dimensions of all pivot tables referencing the same
+     * cache.
+     */
+    void RefreshPivotTableGroups(ScDPObject* pDPObj);
 };
 
 

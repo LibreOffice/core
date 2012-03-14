@@ -51,6 +51,7 @@
 #include "rangenam.hxx"
 #include "olinetab.hxx"
 #include "dpobject.hxx"
+#include "dpsave.hxx"
 #include "dociter.hxx"      // for lcl_EmptyExcept
 #include "cell.hxx"         // for lcl_EmptyExcept
 #include "editable.hxx"
@@ -1453,7 +1454,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
     return bDone;
 }
 
-sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bRecord, bool bApi)
+sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
 {
     ScDPCollection* pDPs = rDocShell.GetDocument()->GetDPCollection();
     if (!pDPs)
@@ -1468,10 +1469,47 @@ sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bRecord, bool
     for (; it != itEnd; ++it)
     {
         ScDPObject* pObj = *it;
-        DataPilotUpdate(pObj, pObj, bRecord, bApi);
+        // This action is intentionally not undoable since it modifies cache.
+        DataPilotUpdate(pObj, pObj, false, bApi);
     }
 
     return 0;
+}
+
+void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
+{
+    if (!pDPObj)
+        return;
+
+    ScDPCollection* pDPs = rDocShell.GetDocument()->GetDPCollection();
+    if (!pDPs)
+        return;
+
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    if (!pSaveData)
+        return;
+
+    std::set<ScDPObject*> aRefs;
+    if (!pDPs->ReloadGroupsInCache(pDPObj, aRefs))
+        return;
+
+    // We allow pDimData being NULL.
+    const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
+    std::set<ScDPObject*>::iterator it = aRefs.begin(), itEnd = aRefs.end();
+    for (; it != itEnd; ++it)
+    {
+        ScDPObject* pObj = *it;
+        if (pObj != pDPObj)
+        {
+            pSaveData = pObj->GetSaveData();
+            if (pSaveData)
+                pSaveData->SetDimensionData(pDimData);
+        }
+
+        pObj->ReloadGroupTableData();
+        // This action is intentionally not undoable since it modifies cache.
+        DataPilotUpdate(pObj, pObj, false, false);
+    }
 }
 
 //==================================================================

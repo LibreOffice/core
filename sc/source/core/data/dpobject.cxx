@@ -483,10 +483,6 @@ ScDPTableData* ScDPObject::GetTableData()
 
 void ScDPObject::CreateObjects()
 {
-    // if groups are involved, create a new source with the ScDPGroupTableData
-    if ( bSettingsChanged && pSaveData && pSaveData->GetExistingDimensionData() )
-        ClearTableData();
-
     if (!xSource.is())
     {
         //! cache DPSource and/or Output?
@@ -549,6 +545,43 @@ void ScDPObject::ClearTableData()
     if (mpTableData)
         mpTableData->GetCacheTable().getCache()->RemoveReference(this);
     mpTableData.reset();
+}
+
+void ScDPObject::ReloadGroupTableData()
+{
+    ClearSource();
+
+    if (!mpTableData)
+        // Table data not built yet.  No need to reload the group data.
+        return;
+
+    if (!pSaveData)
+        // How could it not have the save data... but whatever.
+        return;
+
+    const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
+    if (!pDimData)
+        // No dimension data. Most likey it doesn't have any group dimensions.
+        return;
+
+    ScDPGroupTableData* pData = dynamic_cast<ScDPGroupTableData*>(mpTableData.get());
+    if (pData)
+    {
+        // This is already a group table data. Salvage the source data and
+        // re-create a new group data.
+        shared_ptr<ScDPTableData> pSource = pData->GetSourceTableData();
+        shared_ptr<ScDPGroupTableData> pGroupData(new ScDPGroupTableData(pSource, pDoc));
+        pDimData->WriteToData(*pGroupData);
+        mpTableData = pGroupData;
+    }
+    else
+    {
+        // This is a source data.  Create a group data based on it.
+        shared_ptr<ScDPGroupTableData> pGroupData(new ScDPGroupTableData(mpTableData, pDoc));
+        pDimData->WriteToData(*pGroupData);
+        mpTableData = pGroupData;
+    }
+    bSettingsChanged = true;
 }
 
 void ScDPObject::ClearSource()
@@ -2548,6 +2581,25 @@ const ScDPCache* ScDPCollection::SheetCaches::getCache(const ScRange& rRange, co
     return p;
 }
 
+ScDPCache* ScDPCollection::SheetCaches::getExistingCache(const ScRange& rRange)
+{
+    RangeIndexType::iterator it = std::find(maRanges.begin(), maRanges.end(), rRange);
+    if (it == maRanges.end())
+        // Not cached.
+        return NULL;
+
+    // Already cached.
+    size_t nIndex = std::distance(maRanges.begin(), it);
+    CachesType::iterator itCache = maCaches.find(nIndex);
+    if (itCache == maCaches.end())
+    {
+        OSL_FAIL("Cache pool and index pool out-of-sync !!!");
+        return NULL;
+    }
+
+    return itCache->second;
+}
+
 size_t ScDPCollection::SheetCaches::size() const
 {
     return maCaches.size();
@@ -2658,6 +2710,12 @@ const ScDPCache* ScDPCollection::NameCaches::getCache(
     return p;
 }
 
+ScDPCache* ScDPCollection::NameCaches::getExistingCache(const OUString& rName)
+{
+    CachesType::iterator itr = maCaches.find(rName);
+    return itr != maCaches.end() ? itr->second : NULL;
+}
+
 size_t ScDPCollection::NameCaches::size() const
 {
     return maCaches.size();
@@ -2740,6 +2798,14 @@ const ScDPCache* ScDPCollection::DBCaches::getCache(
     const ScDPCache* p = pCache.get();
     maCaches.insert(aType, pCache);
     return p;
+}
+
+ScDPCache* ScDPCollection::DBCaches::getExistingCache(
+    sal_Int32 nSdbType, const OUString& rDBName, const OUString& rCommand)
+{
+    DBType aType(nSdbType, rDBName, rCommand);
+    CachesType::iterator itr = maCaches.find(aType);
+    return itr != maCaches.end() ? itr->second : NULL;
 }
 
 uno::Reference<sdbc::XRowSet> ScDPCollection::DBCaches::createRowSet(
@@ -2964,6 +3030,94 @@ sal_uLong ScDPCollection::ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>&
         }
     }
     return 0;
+}
+
+bool ScDPCollection::ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs)
+{
+    if (!pDPObj)
+        return false;
+
+    const ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    if (!pSaveData)
+        return false;
+
+    // Note: Unlike reloading cache, when modifying the group dimensions the
+    // cache may not have all its references when this method is called.
+    // Therefore, we need to always call GetAllTables to get its correct
+    // references even when the cache exists.  This may become a non-issue
+    // if/when we implement loading and saving of pivot caches.
+
+    ScDPCache* pCache = NULL;
+
+    if (pDPObj->IsSheetData())
+    {
+        // data source is internal sheet.
+        const ScSheetSourceDesc* pDesc = pDPObj->GetSheetDesc();
+        if (!pDesc)
+            return false;
+
+        if (pDesc->HasRangeName())
+        {
+            // cache by named range
+            ScDPCollection::NameCaches& rCaches = GetNameCaches();
+            if (rCaches.hasCache(pDesc->GetRangeName()))
+                pCache = rCaches.getExistingCache(pDesc->GetRangeName());
+            else
+            {
+                // Not cached yet.  Cache the source dimensions.  Groups will
+                // be added below.
+                pCache = const_cast<ScDPCache*>(
+                    rCaches.getCache(pDesc->GetRangeName(), pDesc->GetSourceRange(), NULL));
+            }
+            GetAllTables(pDesc->GetRangeName(), rRefs);
+        }
+        else
+        {
+            // cache by cell range
+            ScDPCollection::SheetCaches& rCaches = GetSheetCaches();
+            if (rCaches.hasCache(pDesc->GetSourceRange()))
+                pCache = rCaches.getExistingCache(pDesc->GetSourceRange());
+            else
+            {
+                // Not cached yet.  Cache the source dimensions.  Groups will
+                // be added below.
+                pCache = const_cast<ScDPCache*>(
+                    rCaches.getCache(pDesc->GetSourceRange(), NULL));
+            }
+            GetAllTables(pDesc->GetSourceRange(), rRefs);
+        }
+    }
+    else if (pDPObj->IsImportData())
+    {
+        // data source is external database.
+        const ScImportSourceDesc* pDesc = pDPObj->GetImportSourceDesc();
+        if (!pDesc)
+            return false;
+
+        ScDPCollection::DBCaches& rCaches = GetDBCaches();
+        if (rCaches.hasCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject))
+            pCache = rCaches.getExistingCache(
+                pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject);
+        else
+        {
+            // Not cached yet.  Cache the source dimensions.  Groups will
+            // be added below.
+            pCache = const_cast<ScDPCache*>(
+                rCaches.getCache(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, NULL));
+        }
+        GetAllTables(pDesc->GetCommandType(), pDesc->aDBName, pDesc->aObject, rRefs);
+    }
+
+    if (!pCache)
+        return false;
+
+    // Clear the existing group data from the cache, and rebuild it from the
+    // dimension data.
+    pCache->ClearGroupFields();
+    const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
+    if (pDimData)
+        pDimData->WriteToCache(*pCache);
+    return true;
 }
 
 void ScDPCollection::DeleteOnTab( SCTAB nTab )

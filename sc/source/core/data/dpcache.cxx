@@ -1053,6 +1053,12 @@ struct ClearGroupItems : std::unary_function<ScDPCache::Field, void>
 
 }
 
+void ScDPCache::ClearGroupFields()
+{
+    maGroupFields.clear();
+    std::for_each(maFields.begin(), maFields.end(), ClearGroupItems());
+}
+
 SCROW ScDPCache::GetOrder(long nDim, SCROW nIndex) const
 {
     OSL_ENSURE( nDim >=0 && nDim < mnColumnCount, "ScDPTableDataCache::GetOrder : out of bound" );

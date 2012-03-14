@@ -707,7 +707,7 @@ void ScDBFunc::RecalcPivotTable()
         // Remove existing data cache for the data that this datapilot uses,
         // to force re-build data cache.
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.RefreshPivotTables(pDPObj, true, false);
+        aFunc.RefreshPivotTables(pDPObj, false);
 
         CursorPosChanged();     // shells may be switched
     }
@@ -1081,7 +1081,7 @@ void ScDBFunc::DateGroupDataPilot( const ScDPNumGroupInfo& rInfo, sal_Int32 nPar
     // apply changes
     ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
     pDPObj->SetSaveData( aData );
-    aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
+    aFunc.RefreshPivotTableGroups(pDPObj);
 
     // unmark cell selection
     Unmark();
@@ -1123,7 +1123,7 @@ void ScDBFunc::NumGroupDataPilot( const ScDPNumGroupInfo& rInfo )
     // apply changes
     ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
     pDPObj->SetSaveData( aData );
-    aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
+    aFunc.RefreshPivotTableGroups(pDPObj);
 
     // unmark cell selection
     Unmark();
@@ -1264,7 +1264,7 @@ void ScDBFunc::GroupDataPilot()
     // apply changes
     ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
     pDPObj->SetSaveData( aData );
-    aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
+    aFunc.RefreshPivotTableGroups(pDPObj);
 
     // unmark cell selection
     Unmark();
@@ -1288,8 +1288,11 @@ void ScDBFunc::UngroupDataPilot()
     OUString aDimName = pDPObj->GetDimName( nSelectDimension, bIsDataLayout );
 
     ScDPSaveData aData( *pDPObj->GetSaveData() );
-    ScDPDimensionSaveData* pDimData = aData.GetDimensionData();     // created if not there
-    //! test first if DimensionData exists?
+    if (!aData.GetExistingDimensionData())
+        // There is nothing to ungroup.
+        return;
+
+    ScDPDimensionSaveData* pDimData = aData.GetDimensionData();
 
     bool bApply = false;
 
@@ -1343,7 +1346,7 @@ void ScDBFunc::UngroupDataPilot()
         // apply changes
         ScDBDocFunc aFunc( *GetViewData()->GetDocShell() );
         pDPObj->SetSaveData( aData );
-        aFunc.DataPilotUpdate( pDPObj, pDPObj, true, false );
+        aFunc.RefreshPivotTableGroups(pDPObj);
 
         // unmark cell selection
         Unmark();

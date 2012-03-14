@@ -137,6 +137,7 @@ public:
     void ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo);
     SCROW SetGroupItem(long nDim, const ScDPItemData& rData);
     void GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const;
+    void ClearGroupFields();
 
     SCCOL GetDimensionIndex(const rtl::OUString& sName) const;
     sal_uLong GetNumberFormat( long nDim ) const;

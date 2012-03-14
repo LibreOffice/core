@@ -137,6 +137,7 @@ public:
 
     void                InvalidateData();
     void ClearTableData();
+    void ReloadGroupTableData();
 
     void                Output( const ScAddress& rPos );
     ScRange             GetNewOutputRange( bool& rOverflow );
@@ -286,6 +287,8 @@ public:
             UpdateRefMode eMode, const ScRange& r, SCsCOL nDx, SCsROW nDy, SCsTAB nDz);
 
     private:
+        ScDPCache* getExistingCache(const ScRange& rRange);
+
         void updateCache(const ScRange& rRange, const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs);
         bool remove(const ScDPCache* p);
     };
@@ -306,6 +309,8 @@ public:
             const ::rtl::OUString& rName, const ScRange& rRange, const ScDPDimensionSaveData* pDimData);
         size_t size() const;
     private:
+        ScDPCache* getExistingCache(const rtl::OUString& rName);
+
         void updateCache(
             const rtl::OUString& rName, const ScRange& rRange,
             const ScDPDimensionSaveData* pDimData, std::set<ScDPObject*>& rRefs);
@@ -346,6 +351,9 @@ public:
             const ScDPDimensionSaveData* pDimData);
 
     private:
+        ScDPCache* getExistingCache(
+            sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
+
         com::sun::star::uno::Reference<com::sun::star::sdbc::XRowSet> createRowSet(
             sal_Int32 nSdbType, const ::rtl::OUString& rDBName, const ::rtl::OUString& rCommand);
 
@@ -359,6 +367,7 @@ public:
     ~ScDPCollection();
 
     sal_uLong ReloadCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
+    bool ReloadGroupsInCache(ScDPObject* pDPObj, std::set<ScDPObject*>& rRefs);
 
     SC_DLLPUBLIC size_t GetCount() const;
     SC_DLLPUBLIC ScDPObject* operator[](size_t nIndex);

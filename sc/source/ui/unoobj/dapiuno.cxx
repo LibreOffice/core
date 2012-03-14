@@ -1276,7 +1276,7 @@ void SAL_CALL ScDataPilotTableObj::refresh() throw(RuntimeException)
     if (pDPObj)
     {
         ScDBDocFunc aFunc(*GetDocShell());
-        aFunc.RefreshPivotTables(pDPObj, true, true);
+        aFunc.RefreshPivotTables(pDPObj, true);
     }
 }
 
