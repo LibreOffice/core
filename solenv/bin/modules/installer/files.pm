@@ -95,34 +95,6 @@ sub save_file
     }
 }
 
-sub save_array_of_hashes
-{
-    my ($savefile, $arrayref) = @_;
-
-    my @printcontent = ();
-
-    for ( my $i = 0; $i <= $#{$arrayref}; $i++ )
-    {
-        my $line = "";
-        my $hashref = ${$arrayref}[$i];
-        my $itemkey;
-
-        foreach $itemkey ( keys %{$hashref} )
-        {
-            my $itemvalue = $hashref->{$itemkey};
-            $line = $line . $itemkey . "=" . $itemvalue . "\t";
-        }
-
-        $line = $line . "\n";
-
-        push(@printcontent, $line);
-    }
-
-    open( OUT, ">$savefile" ) || installer::exiter::exit_program("ERROR: Cannot open file $savefile for writing", "save_array_of_hashes");
-    print OUT @printcontent;
-    close( OUT);
-}
-
 ###########################################
 # Binary file operations
 ###########################################

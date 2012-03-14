@@ -32,6 +32,7 @@
 use lib ("$ENV{SOLARENV}/bin/modules");
 
 use Cwd;
+use Data::Dumper;
 use File::Copy;
 use installer::archivefiles;
 use installer::control;
@@ -1999,8 +2000,10 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
     }    # end of "if ( $installer::globals::iswindowsbuild )"
 
     # saving file_info file for later analysis
-    my $speciallogfilename = "fileinfo_" . $installer::globals::product . "\.log";
-    installer::files::save_array_of_hashes($loggingdir . $speciallogfilename, $filesinproductlanguageresolvedarrayref);
+    my $speciallogfilename = $loggingdir . "fileinfo_" . $installer::globals::product . "\.log";
+    open my $log_fh, '>', $speciallogfilename
+        or die "Could not open $speciallogfilename for writing: $!";
+    print $log_fh Dumper($filesinproductlanguageresolvedarrayref);
 
 }   # end of iteration for one language group
 
