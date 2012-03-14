@@ -44,6 +44,10 @@ class Parser:
             help="Only print the filenames of files containing German comments")
         op.add_option("-v", "--verbose", action="store_true", dest="verbose", default=False,
             help="Turn on verbose mode (print progress to stderr)")
+        op.add_option("-l", "--line-numbers", action="store_true", dest="line_numbers", default=False,
+            help="Prints the filenames and line numbers only.")
+        op.add_option("-t", "--threshold", action="store", dest="THRESHOLD", default=0,
+            help="When used with '--line-numbers', only bothers outputting comment info if there are more than X number of flagged comments. Useful for weeding out false positives.")
         self.options, args = op.parse_args()
         try:
             dir = args[0]
@@ -141,7 +145,45 @@ class Parser:
         """
         checks each comment in a file
         """
-        if not self.options.filenames_only:
+        def tab_calc (string):
+            START = 40 #Default of 10 tabs
+            if len(string) >= START:
+                return 1, 0
+            diff = START - len(string)
+            if diff % 4 is not 0:
+                padding = 1
+            else:
+                padding = 0
+            return (diff/4)+padding
+
+        if self.options.line_numbers:
+            TABS = "\t"*10
+            path_linenums = []
+            for linenum, s in self.get_comments(path):
+                if self.is_german(s):
+                    path_linenums.append(linenum)
+            valid = len(path_linenums) > int(self.options.THRESHOLD)
+            sys.stderr.write("%s ... %s positives -- %s\n" % (path, str(len(path_linenums)), str(valid)))
+            if valid:
+                if len(path) + (len(path_linenums)*4) > 75:
+                    print "%s:\n" % path
+                    while(path_linenums):
+                        i = 0
+                        numline = []
+                        while i < 10:
+                            try:
+                                numline.append(path_linenums[0])
+                                path_linenums.remove(path_linenums[0])
+                            except IndexError:
+                                i = 10
+                            i+=1
+                        numline = [str(i) for i in numline]
+                        print "%s%s" %(TABS, ",".join(numline))
+                else:
+                    path_linenums = [str(i) for i in path_linenums]
+                    print "%s:%s%s" % (path,"\t"*tab_calc(path),",".join(path_linenums))
+
+        elif not self.options.filenames_only:
             for linenum, s in self.get_comments(path):
                 if self.is_german(s):
                     print "%s:%s: %s" % (path, linenum, s)
