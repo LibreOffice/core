@@ -19064,6 +19064,11 @@
           </element>
         </optional>
         <optional>
+          <element name="linkStyles">
+            <ref name="CT_OnOff"/>
+          </element>
+        </optional>
+        <optional>
           <element name="removePersonalInformation">
             <ref name="CT_OnOff"/>
           </element>

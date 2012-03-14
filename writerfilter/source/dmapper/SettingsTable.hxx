@@ -64,6 +64,9 @@ class WRITERFILTER_DLLPRIVATE SettingsTable : public LoggedProperties, public Lo
     //returns default TabStop in 1/100th mm
     int GetDefaultTabStop() const;
 
+    /// Automatically update styles from document template?
+    bool GetLinkStyles() const;
+
     void ApplyProperties( uno::Reference< text::XTextDocument > xDoc );
 
  private:

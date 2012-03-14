@@ -41,6 +41,8 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/style/LineNumberPosition.hpp>
+#include <com/sun/star/style/LineSpacing.hpp>
+#include <com/sun/star/style/LineSpacingMode.hpp>
 #include <com/sun/star/style/NumberingType.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
@@ -3504,6 +3506,16 @@ void DomainMapper_Impl::ApplySettingsTable()
                                                                 m_xTextFactory->createInstance(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.Defaults"))), uno::UNO_QUERY_THROW );
             sal_Int32 nDefTab = m_pSettingsTable->GetDefaultTabStop();
             xTextDefaults->setPropertyValue( PropertyNameSupplier::GetPropertyNameSupplier().GetName( PROP_TAB_STOP_DISTANCE ), uno::makeAny(nDefTab) );
+            if (m_pSettingsTable->GetLinkStyles())
+            {
+                PropertyNameSupplier& rSupplier = PropertyNameSupplier::GetPropertyNameSupplier();
+                // If linked styles are enabled, set paragraph defaults from Word's default template
+                xTextDefaults->setPropertyValue(rSupplier.GetName(PROP_PARA_BOTTOM_MARGIN), uno::makeAny(ConversionHelper::convertTwipToMM100(200)));
+                style::LineSpacing aSpacing;
+                aSpacing.Mode = style::LineSpacingMode::PROP;
+                aSpacing.Height = sal_Int16(115);
+                xTextDefaults->setPropertyValue(rSupplier.GetName(PROP_PARA_LINE_SPACING), uno::makeAny(aSpacing));
+            }
         }
         catch(const uno::Exception& )
         {
