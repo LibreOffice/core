@@ -58,6 +58,7 @@
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/tenccvt.hxx>
+#include <tools/table.hxx>
 
 #include "htmlpars.hxx"
 #include "global.hxx"
@@ -331,7 +332,7 @@ sal_uLong ScHTMLLayoutParser::Read( SvStream& rStream, const String& rBaseURL )
     {
         aSize.Width() = *pOff - nOff;
         aSize = pDefaultDev->PixelToLogic( aSize, MapMode( MAP_TWIP ) );
-        pColWidths->Insert( j-1, (void*)aSize.Width() );
+        maColWidths[ j-1 ] = aSize.Width();
         nOff = *pOff;
     }
     return nErr;
