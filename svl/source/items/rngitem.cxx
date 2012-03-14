@@ -36,12 +36,6 @@
 #include <svl/rngitem.hxx>
 #include "rngitem_inc.cxx"
 
-#define NUMTYPE sal_uInt32
-#define SfxXRangeItem SfxULongRangeItem
-#define SfxXRangesItem SfxULongRangesItem
-#include <svl/rngitem.hxx>
-#include "rngitem_inc.cxx"
-
 #else
 
 // We leave this condition just in case NUMTYPE has been defined externally to this

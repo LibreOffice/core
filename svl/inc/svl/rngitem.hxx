@@ -38,16 +38,6 @@
 #undef SfxXRangeItem
 #undef SfxXRangesItem
 
-#ifndef _SFXITEMS_HXX
-#define NUMTYPE sal_uLong
-#define SfxXRangeItem SfxULongRangeItem
-#define SfxXRangesItem SfxULongRangesItem
-#include <svl/rngitem.hxx>
-#undef NUMTYPE
-#undef SfxXRangeItem
-#undef SfxXRangesItem
-#endif
-
 #define _SFXRNGITEM_HXX
 
 #else
@@ -94,7 +84,6 @@ private:
 public:
                                 TYPEINFO();
                                 SfxXRangesItem();
-                                SfxXRangesItem( sal_uInt16 nWID, const NUMTYPE *pRanges );
                                 SfxXRangesItem( sal_uInt16 nWID, SvStream &rStream );
                                 SfxXRangesItem( const SfxXRangesItem& rItem );
     virtual                     ~SfxXRangesItem();
