@@ -79,7 +79,7 @@ AC_SUBST(x_Cygwin)
 
 cat /dev/null > warn
 
-if test "$EUID" = "0" -a "`uname -o 2>/dev/null`" = "Cygwin"; then
+if test "z$EUID" = "z0" -a "`uname -o 2>/dev/null`" = "Cygwin"; then
     AC_MSG_ERROR([You must build LibreOffice as a normal user - not using an administrative account])
 fi
 
