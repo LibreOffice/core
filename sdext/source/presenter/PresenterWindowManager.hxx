@@ -97,8 +97,6 @@ public:
         const double nWidth,
         const double nHeight);
     void SetPaneBorderPainter (const ::rtl::Reference<PresenterPaneBorderPainter>& rPainter);
-    css::uno::Reference<css::awt::XWindow> GetParentWindow (void) const;
-    css::uno::Reference<css::rendering::XCanvas> GetParentCanvas (void) const;
     void Update (void);
     void Layout (void);
 

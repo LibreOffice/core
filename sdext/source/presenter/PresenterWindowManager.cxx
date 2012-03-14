@@ -1168,17 +1168,6 @@ void PresenterWindowManager::Invalidate (void)
 {
     mpPresenterController->GetPaintManager()->Invalidate(mxParentWindow);
 }
-
-Reference<awt::XWindow> PresenterWindowManager::GetParentWindow (void) const
-{
-    return mxParentWindow;
-}
-
-Reference<rendering::XCanvas> PresenterWindowManager::GetParentCanvas (void) const
-{
-    return mxParentCanvas;
-}
-
 void PresenterWindowManager::Update (void)
 {
     mxClipPolygon = NULL;
