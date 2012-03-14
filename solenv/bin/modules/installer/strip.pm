@@ -30,16 +30,20 @@ package installer::strip;
 use strict;
 use warnings;
 
+use base 'Exporter';
+
 use installer::globals;
 use installer::logger;
 use installer::pathanalyzer;
 use installer::systemactions;
 
+our @EXPORT_OK = qw(strip_libraries);
+
 #####################################################################
 # Checking whether a file has to be stripped
 #####################################################################
 
-sub need_to_strip
+sub _need_to_strip
 {
     my ( $filename ) = @_;
 
@@ -60,7 +64,7 @@ sub need_to_strip
 # Checking whether a file has to be stripped
 #####################################################################
 
-sub do_strip
+sub _do_strip
 {
     my ( $filename ) = @_;
 
@@ -104,7 +108,7 @@ sub strip_libraries
     {
         my $sourcefilename = ${$filelist}[$i]->{'sourcepath'};
 
-        if ( need_to_strip($sourcefilename) )
+        if ( _need_to_strip($sourcefilename) )
         {
             my $shortfilename = $sourcefilename;
             installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$shortfilename);
@@ -132,7 +136,7 @@ sub strip_libraries
 
             # strip file
 
-            do_strip($destfilename);
+            _do_strip($destfilename);
         }
     }
 }

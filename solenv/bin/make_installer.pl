@@ -57,7 +57,7 @@ use installer::scpzipfiles;
 use installer::scriptitems;
 use installer::setupscript;
 use installer::simplepackage;
-use installer::strip;
+use installer::strip qw(strip_libraries);
 use installer::substfilenamefiles;
 use installer::systemactions;
 use installer::windows::assembly;
@@ -1256,7 +1256,7 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             if ( $installer::globals::strip )
             {
-                installer::strip::strip_libraries($filesinpackage, $languagestringref);
+                strip_libraries($filesinpackage, $languagestringref);
             }
 
             ###############################################################

@@ -33,7 +33,7 @@ use installer::download;
 use installer::exiter;
 use installer::globals;
 use installer::logger;
-use installer::strip;
+use installer::strip qw(strip_libraries);
 use installer::systemactions;
 use installer::worker;
 
@@ -677,7 +677,7 @@ sub create_simple_package
     }
 
     # stripping files ?!
-    if (( $installer::globals::strip ) && ( ! $installer::globals::iswindowsbuild )) { installer::strip::strip_libraries($filesref, $languagestringref); }
+    if (( $installer::globals::strip ) && ( ! $installer::globals::iswindowsbuild )) { strip_libraries($filesref, $languagestringref); }
 
     # copy Files
     installer::logger::print_message( "... copying files ...\n" );
