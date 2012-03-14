@@ -1460,6 +1460,11 @@ sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
     if (!pDPs)
         return 0;
 
+    bool bHasGroups = false;
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    if (pSaveData && pSaveData->GetExistingDimensionData())
+        bHasGroups = true;
+
     std::set<ScDPObject*> aRefs;
     sal_uLong nErrId = pDPs->ReloadCache(pDPObj, aRefs);
     if (nErrId)
@@ -1469,6 +1474,10 @@ sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
     for (; it != itEnd; ++it)
     {
         ScDPObject* pObj = *it;
+        if (bHasGroups)
+            // Re-build table data for each pivot table when the original contains group fields.
+            pObj->ClearTableData();
+
         // This action is intentionally not undoable since it modifies cache.
         DataPilotUpdate(pObj, pObj, false, bApi);
     }
