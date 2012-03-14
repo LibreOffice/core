@@ -32,10 +32,14 @@
 // -----------------------------------------------------------------------
 
 #include "rangelst.hxx"
-
+#include <map>
 
 class ScAddress;
-class Table;
+
+// map of row number to ScAddress*
+typedef std::map<sal_uLong, ScAddress*> RowMap;
+// map of column number to RowMap*
+typedef std::map<sal_uLong, RowMap*>    ColumnMap;
 
 class ScChartPositionMap
 {
@@ -51,7 +55,7 @@ class ScChartPositionMap
                                 ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
                                     SCCOL nColAdd,      // header columns
                                     SCROW nRowAdd,      // header rows
-                                    Table& rCols        // table with col tables with address*
+                                    ColumnMap& rCols        // table with col tables with address*
                                     );
                                 ~ScChartPositionMap();  //! deletes all ScAddress*
 
