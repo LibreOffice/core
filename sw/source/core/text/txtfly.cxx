@@ -38,19 +38,19 @@
 #include "swregion.hxx"     // SwRegionRects
 #include "dcontact.hxx"     // SwContact
 #include "dflyobj.hxx"      // SdrObject
-#include "flyfrm.hxx"     // SwFlyFrm
-#include "frmtool.hxx"    // ::DrawGraphic
+#include "flyfrm.hxx"       // SwFlyFrm
+#include "frmtool.hxx"      // ::DrawGraphic
 #include "porfld.hxx"       // SwGrfNumPortion
-#include "txtfrm.hxx"     // SwTxtFrm
-#include "itrform2.hxx"   // SwTxtFormatter
-#include "porfly.hxx"     // NewFlyCntPortion
-#include "porfld.hxx"     // SwGrfNumPortion
-#include "txtfly.hxx"     // SwTxtFly
-#include "txtpaint.hxx"   // SwSaveClip
-#include "txtatr.hxx"     // SwTxtFlyCnt
+#include "txtfrm.hxx"       // SwTxtFrm
+#include "itrform2.hxx"     // SwTxtFormatter
+#include "porfly.hxx"       // NewFlyCntPortion
+#include "porfld.hxx"       // SwGrfNumPortion
+#include "txtfly.hxx"       // SwTxtFly
+#include "txtpaint.hxx"     // SwSaveClip
+#include "txtatr.hxx"       // SwTxtFlyCnt
 #include "notxtfrm.hxx"
 #include "flyfrms.hxx"
-#include "fmtcnct.hxx"  // SwFmtChain
+#include "fmtcnct.hxx"      // SwFmtChain
 #include <pormulti.hxx>     // SwMultiPortion
 #include <svx/obj3d.hxx>
 #include <editeng/txtrange.hxx>
@@ -74,7 +74,7 @@
 #include "doc.hxx"
 
 #ifdef DBG_UTIL
-#include "viewopt.hxx"  // SwViewOptions, nur zum Testen (Test2)
+#include "viewopt.hxx"  // SwViewOptions, only for testing (Test2)
 #include "doc.hxx"
 #endif
 
@@ -82,37 +82,34 @@
 using namespace ::com::sun::star;
 
 /*****************************************************************************
- * Beschreibung:
- * Die Klasse SwTxtFly soll die Universalschnittstelle zwischen der
- * Formatierung/Textausgabe und den u.U. ueberlappenden freifliegenden
- * Frames sein.
- * Waehrend der Formatierung erkundigt sich der Formatierer beim SwTxtFly,
- * ob ein bestimmter Bereich durch die Attribute eines ueberlappenden
- * Frames vorliegt. Solche Bereiche werden in Form von Dummy-Portions
- * abgebildet.
- * Die gesamte Textausgabe und Retusche wird ebenfalls an ein SwTxtFly
- * weitergeleitet. Dieser entscheidet, ob Textteile geclippt werden muessen
- * und zerteilt z.B. die Bereiche bei einem DrawRect.
- * Zu beachten ist, dass alle freifliegenden Frames in einem nach TopLeft
- * sortiertem PtrArray an der Seite zu finden sind. Intern wird immer nur
- * in dokumentglobalen Werten gerechnet. Die IN- und OUT-Parameter sind
- * jedoch in den meisten Faellen an die Beduerfnisse des LineIters
- * zugeschnitten, d.h. sie werden in frame- oder windowlokalen Koordinaten
- * konvertiert.
- * Wenn mehrere Frames mit Umlaufattributen in einer Zeile liegen,
- * ergeben sich unterschiedliche Auswirkungen fuer den Textfluss:
+ * Description:
+ * SwTxtFly's purpose is to be the universal interface between
+ * formatting/text output and the possibly overlapping free-flying frames.
+ * During formatting the formatter gets the information from SwTxtFly, whether
+ * a certain area is present by the attributes of an overlapping frame.
+ * Such areas are represented by dummy portions.
+ * The whole text output and touch-up is, again, forwarded to a SwTxtFly.
+ * This one decides, whether parts of the text need to be clipped and splits
+ * the areas for e.g. a DrawRect.
+ * Please note that all free-flying frames are located in a PtrArray, sorted
+ * by TopLeft.
+ * Internally we always use document-global values. The IN and OUT parameters
+ * are, however, adjusted to the needs of the LineIter most of the time. That
+ * is: they are converted to frame- and window-local coordinates.
+ * If multiple frames with wrap attributes are located on the same line, we get
+ * the following settings for the text flow:
  *
- *      L/R    P     L     R     K
- *       P   -P-P- -P-L  -P R- -P K
- *       L   -L P- -L L  -L R- -L K
- *       R    R-P-  R-L   R R-  R K
- *       K    K P-  K L   K R-  K K
+ *      L/R    P     L     R     N
+ *       P   -P-P- -P-L  -P R- -P N
+ *       L   -L P- -L L  -L R- -L N
+ *       R    R-P-  R-L   R R-  R N
+ *       N    N P-  N L   N R-  N N
  *
- * (P=parallel, L=links, R=rechts, K=kein Umlauf)
+ * (P=parallel, L=left, R=right, N=no wrap)
  *
- * Das Verhalten so beschreiben:
- * Jeder Rahmen kann Text verdraengen, wobei der Einfluss allerdings nur
- * bis zum naechsten Rahmen reicht.
+ * We can describe the behaviour as follows:
+ * Every frame can push away text, with the restriction that it only has influence
+ * until the next frame.
  *****************************************************************************/
 
 void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
@@ -128,9 +125,10 @@ void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
 }
 
 /*************************************************************************
- * SwTxtFormatter::UpdatePos() aktualisiert die Referenzpunkte der zeichengeb.
- * Objekte, z. B. nach Adjustierung ( rechtsbuendig, Blocksatz etc. )
- * ( hauptsaechlich Korrrektur der X-Position )
+ * SwTxtFormatter::UpdatePos()
+ * Updates the reference points of the character anchored objects,
+ * e.g. after adjusting right-aligned, justified etc.
+ * (That's mainly to correct the x position)
  *************************************************************************/
 
 void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
@@ -149,7 +147,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
     aTmpInf.SetKanaComp( pCurrent->GetpKanaComp() );
     aTmpInf.ResetKanaIdx();
 
-    // Die Groesse des Frames
+    // The frame's size
     aTmpInf.SetIdx( nStartIdx );
     aTmpInf.SetPos( aStart );
 
@@ -185,9 +183,9 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
 
     while( pPos )
     {
-        // bislang ist mir nur ein Fall bekannt, wo die Positionsaenderung
-        // (verursacht durch das Adjustment) fuer eine Portion wichtig
-        // sein koennte: Bei FlyCntPortions muss ein SetRefPoint erfolgen.
+        // We only know one case where changing the position (caused by the
+        // adjustment) could be relevant for a portion: We need to SetRefPoint
+        // for FlyCntPortions.
         if( ( pPos->IsFlyCntPortion() || pPos->IsGrfNumPortion() )
             && ( bAllWays || !IsQuick() ) )
         {
@@ -257,7 +255,7 @@ void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
 
 /*************************************************************************
  * SwTxtFormatter::AlignFlyInCntBase()
- * richtet die zeichengeb. Objekte in Y-Richtung ggf. neu aus.
+ * If needed, re-adjusts the character anchored objects to the y axis.
  *************************************************************************/
 
 void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
@@ -308,12 +306,12 @@ void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
 }
 
 /*************************************************************************
- *                      SwTxtFly::ChkFlyUnderflow()
- * This is called after the real height of the line has been calculated
+ * SwTxtFly::ChkFlyUnderflow()
+ * This is called after the real height of the line has been calculated.
  * Therefore it is possible, that more flys from below intersect with the
- * line, or that flys from above do not intersect with the line anymore
- * We check this and return true if so, meaning that the line has to be
- * formatted again
+ * line, or that flys from above do not intersect with the line anymore.
+ * We check this and return true, meaning that the line has to be
+ * formatted again.
  *************************************************************************/
 
 sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
@@ -321,7 +319,7 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
     OSL_ENSURE( rInf.GetTxtFly()->IsOn(), "SwTxtFormatter::ChkFlyUnderflow: why?" );
     if( GetCurr() )
     {
-        // Erst pruefen wir, ob ueberhaupt ein Fly mit der Zeile ueberlappt.
+        // First we check, whether a fly overlaps with the line.
         // = GetLineHeight()
         const long nHeight = GetCurr()->GetRealHeight();
         SwRect aLine( GetLeftMargin(), Y(), rInf.RealWidth(), nHeight );
@@ -336,8 +334,8 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
         if( !aInter.HasArea() )
             return sal_False;
 
-        // Nun ueberpruefen wir jede Portion, die sich haette senken koennen,
-        // ob sie mit dem Fly ueberlappt.
+        // We now check every portion that could have lowered for overlapping
+        // with the fly.
         const SwLinePortion *pPos = GetCurr()->GetFirstPortion();
         aLine.Pos().Y() = Y() + GetCurr()->GetRealHeight() - GetCurr()->Height();
         aLine.Height( GetCurr()->Height() );
@@ -353,7 +351,7 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
             if ( pFrm->IsVertical() )
                 pFrm->SwitchVerticalToHorizontal( aInter );
 
-            // new flys from below?
+            // New flys from below?
             if( !pPos->IsFlyPortion() )
             {
                 if( aInter.IsOver( aLine ) )
@@ -361,7 +359,7 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                     aInter._Intersection( aLine );
                     if( aInter.HasArea() )
                     {
-                        // to be evaluated during reformat of this line:
+                        // To be evaluated during reformat of this line:
                         // RealHeight including spacing
                         rInf.SetLineHeight( KSHORT(nHeight) );
                         // Height without extra spacing
@@ -372,7 +370,7 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
             }
             else
             {
-                // the fly portion is not anylonger intersected by a fly
+                // The fly portion is not intersected by a fly anymore
                 if ( ! aInter.IsOver( aLine ) )
                 {
                     rInf.SetLineHeight( KSHORT(nHeight) );
@@ -383,10 +381,10 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
                 {
                     aInter._Intersection( aLine );
 
-                    // no area means a fly has become invalid because of
-                    // lowering the line => reformat the line
-                    // we also have to reformat the line, if the fly size
-                    // differs from the intersection intervals size
+                    // No area means a fly has become invalid because of
+                    // lowering the line => reformat the line.
+                    // We also have to reformat the line, if the fly size
+                    // differs from the intersection interval's size.
                     if( ! aInter.HasArea() ||
                         ((SwFlyPortion*)pPos)->GetFixWidth() != aInter.Width() )
                     {
@@ -406,12 +404,12 @@ sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
 
 /*************************************************************************
  * SwTxtFormatter::CalcFlyWidth()
- * ermittelt das naechste Objekt, das in die restliche Zeile ragt und
- * konstruiert die zugehoerige FlyPortion.
- * Dazu wird SwTxtFly.GetFrm(..) benutzt.
+ * Determines the next object, that reaches into the rest of the line and
+ * constructs the appropriate FlyPortion.
+ * We use SwTxtFly.GetFrm(..) for that.
  *************************************************************************/
 
-// Durch Flys kann sich der rechte Rand verkuerzen.
+// The right margin can be shortened by Flys.
 
 void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
 {
@@ -430,7 +428,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
 
     if( rInf.GetLineHeight() )
     {
-        // real line height has already been calculated, we only have to
+        // Real line height has already been calculated, we only have to
         // search for intersections in the lower part of the strip
         nAscent = pCurr->GetAscent();
         nHeight = rInf.GetLineNettoHeight();
@@ -441,14 +439,14 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
         nAscent = pLast->GetAscent();
         nHeight = pLast->Height();
 
-        // we make a first guess for the lines real height
+        // We make a first guess for the line's real height
         if ( ! pCurr->GetRealHeight() )
             CalcRealHeight();
 
         if ( pCurr->GetRealHeight() > nHeight )
             nTop += pCurr->GetRealHeight() - nHeight;
         else
-            // important for fixed space between lines
+            // Important for fixed space between lines
             nHeight = pCurr->GetRealHeight();
     }
 
@@ -495,10 +493,9 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
                 nAddMar = nLeftMar - nFrmLeft;
 
             aInter.Width( aInter.Width() + nAddMar );
-            // Bei negativem Erstzeileneinzug setzen wir das Flag,
-            // um anzuzeigen, dass der Einzug/Rand verschoben wurde
-            // Dies muss beim DefaultTab an der Nullposition beruecksichtigt
-            // werden.
+            // For a negative first line indent, we set this flag to show
+            // that the indentation/margin has been moved.
+            // This needs to be respected by the DefaultTab at the zero position.
             if( IsFirstTxtLine() && HasNegFirst() )
                 bForced = sal_True;
         }
@@ -509,17 +506,16 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
         const sal_Bool bFullLine =  aLine.Left()  == aInter.Left() &&
                                 aLine.Right() == aInter.Right();
 
-        // Obwohl kein Text mehr da ist, muss eine weitere Zeile
-        // formatiert werden, weil auch leere Zeilen einem Fly
-        // ohne Umlauf ausweichen muessen.
+        // Although no text is left, we need to format another line,
+        // because also empty lines need to avoid a Fly with no wrapping.
         if( bFullLine && rInf.GetIdx() == rInf.GetTxt().Len() )
         {
             rInf.SetNewLine( sal_True );
-            // 8221: Dummies erkennt man an Ascent == Height
+            // 8221: We know that for dummies, it holds ascent == height
             pCurr->SetDummy(sal_True);
         }
 
-        // aInter wird framelokal
+        // aInter becomes frame-local
         aInter.Pos().X() -= nLeftMar;
         SwFlyPortion *pFly = new SwFlyPortion( aInter );
         if( bForced )
@@ -530,24 +526,23 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
 
         if( bFullLine )
         {
-            // 8110: wir muessen um Einheiten von Zeilenhoehen anwachsen,
-            // um nebeneinanderliegende Flys mit unterschiedlichen
-            // Umlaufattributen angemessen zu umfliessen.
-            // Die letzte ausweichende Zeile, sollte in der Hoehe angepasst
-            // sein, damit nicht der Eindruck von "Rahmenabstaenden" aufkommt.
-            // 8221: Wichtig ist, dass Ascent == Height ist, weil die FlyPortionWerte
-            // im CalcLine in pCurr uebertragen werden und IsDummy() darauf
-            // angewiesen ist.
-            // Es gibt meines Wissens nur zwei Stellen, in denen DummyLines
-            // entstehen koennen: hier und in MakeFlyDummies.
-            // Ausgewertet wird IsDummy() in IsFirstTxtLine() und
-            // beim Zeilenwandern und im Zusammenhang mit DropCaps.
+            // 8110: In order to properly flow around Flys with different
+            // wrapping attributes, we need to increase by units of line height.
+            // The last avoiding line should be adjusted in height, so that
+            // we don't get a frame spacing effect.
+            // 8221: It is important that ascent == height, because the FlyPortion
+            // values are transferred to pCurr in CalcLine and IsDummy() relies
+            // on this behaviour.
+            // To my knowledge we only have two places where DummyLines can be
+            // created: here and in MakeFlyDummies.
+            // IsDummy() is evaluated in IsFirstTxtLine(), when moving lines
+            // and in relation with DropCaps.
             pFly->Height( KSHORT(aInter.Height()) );
 
-            // In nNextTop steckt jetzt die Unterkante des Rahmens, dem wir
-            // ausweichen oder die Oberkante des naechsten Rahmens, den wir
-            // beachten muessen. Wir koennen also jetzt getrost bis zu diesem
-            // Wert anwachsen, so sparen wir einige Leerzeilen.
+            // nNextTop now contains the margin's bottom edge, which we avoid
+            // or the next margin's top edge, which we need to respect.
+            // That means we can comfortably grow up to this value; that's how
+            // we save a few empty lines.
             long nNextTop = pTxtFly->GetNextTop();
             if ( pFrm->IsVertical() )
                 nNextTop = pFrm->SwitchVerticalToHorizontal( nNextTop );
@@ -566,7 +561,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
         {
             if( rInf.GetIdx() == rInf.GetTxt().Len() )
             {
-                // Nicht nHeight nehmen, sonst haben wir einen Riesendescent
+                // Don't use nHeight, or we have a huge descent
                 pFly->Height( pLast->Height() );
                 pFly->SetAscent( pLast->GetAscent() );
             }
@@ -598,7 +593,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
                                     (pPageFrm->*fnRect->fnGetPrtLeft)();
 
             const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
-            const sal_uInt16 nGridWidth = GETGRIDWIDTH( pGrid, pDoc);   //for textgrid refactor
+            const sal_uInt16 nGridWidth = GETGRIDWIDTH( pGrid, pDoc); // For textgrid refactor
 
             SwTwips nStartX = GetLeftMargin();
             if ( bVert )
@@ -624,7 +619,7 @@ void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
 
 /*****************************************************************************
  * SwTxtFormatter::NewFlyCntPortion
- * legt eine neue Portion fuer ein zeichengebundenes Objekt an.
+ * Creates a new portion for a character anchored object.
  *****************************************************************************/
 
 SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
@@ -639,11 +634,9 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
         pFly = ((SwTxtFlyCnt*)pHint)->GetFlyFrm(pFrame);
     else
         pFly = NULL;
-    // aBase bezeichnet die dokumentglobale Position,
-    // ab der die neue Extraportion plaziert wird.
-    // aBase.X() = Offset in der Zeile,
-    //             hinter der aktuellen Portion
-    // aBase.Y() = LineIter.Y() + Ascent der aktuellen Portion
+    // aBase is the document-global position, from which the new extra portion is placed
+    // aBase.X() = Offset in in the line after the current position
+    // aBase.Y() = LineIter.Y() + Ascent of the current position
 
     long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
     // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
@@ -651,11 +644,10 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     //lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
     pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
 
-    // Wenn der Ascent des Rahmens groesser als der Ascent der akt. Portion
-    // ist, wird dieser bei der Base-Berechnung verwendet, sonst wuerde
-    // der Rahmen zunaechst zu weit nach oben gesetzt, um dann doch wieder
-    // nach unten zu rutschen und dabei ein Repaint in einem Bereich ausloesen,
-    // indem er niemals wirklich war.
+    // If the ascent of the frame is larger than the ascent of the current position,
+    // we use this one when calculating the base, or the frame would be positioned
+    // too much to the top, sliding down after all causing a repaint in an area
+    // he actually never was in.
     KSHORT nAscent = 0;
 
     const bool bTxtFrmVertical = GetInfo().GetTxtFrm()->IsVertical();
@@ -670,7 +662,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
                                                   pFly->GetRelPos().X() :
                                                   pFly->GetRelPos().Y() ) ) );
 
-    // check if be prefer to use the ascent of the last portion:
+    // Check if we prefer to use the ascent of the last portion:
     if ( IsQuick() ||
          !bUseFlyAscent ||
          nAscent < rInf.GetLast()->GetAscent() )
@@ -697,11 +689,11 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
     {
         pRet = new SwFlyCntPortion( *GetInfo().GetTxtFrm(), pFly, aTmpBase,
                                     nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
-        // Wir muessen sicherstellen, dass unser Font wieder im OutputDevice
-        // steht. Es koennte sein, dass der FlyInCnt frisch eingefuegt wurde,
-        // dann hat GetFlyFrm dazu gefuehrt, dass er neu angelegt wird.
-        // Dessen Frames werden sofort formatiert, die verstellen den Font
-        // und schon haben wir den Salat (3322).
+        // We need to make sure that our font is set again in the OutputDevice
+        // It could be that the FlyInCnt was added anew and GetFlyFrm() would
+        // in turn cause, that it'd be created anew again.
+        // This one's frames get formatted right away, which change the font and
+        // we have a bug (3322).
         rInf.SelectFont();
         if( pRet->GetAscent() > nAscent )
         {
@@ -727,7 +719,7 @@ SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
 
 
 /*************************************************************************
- *                      SwTxtFly::SwTxtFly()
+ * SwTxtFly::SwTxtFly()
  *************************************************************************/
 
 SwTxtFly::SwTxtFly( const SwTxtFly& rTxtFly )
@@ -770,11 +762,11 @@ void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )
     pMaster = pCurrFrm->IsFollow() ? NULL : pCurrFrm;
     // #i68520#
     mpAnchoredObjList = NULL;
-    // Wenn wir nicht von einem Frame ueberlappt werden, oder wenn
-    // es gar keine FlyCollection gibt, dann schaltet wir uns fuer immer ab.
-    // Aber es koennte sein, dass waehrend der Formatierung eine Zeile
-    // hinzukommt, die in einen Frame hineinragt. Deswegen keine Optimierung
-    // per bOn = pSortedFlys && IsAnyFrm();
+    // If we're not overlapped by a frame or if a FlyCollection does not exist
+    // at all, we switch off forever.
+    // It could be, however, that a line is added while formatting, that
+    // extends into a frame.
+    // That's why we do not optimize for: bOn = pSortedFlys && IsAnyFrm();
     bOn = pPage->GetSortedObjs() != 0;
     bTopRule = sal_True;
     bLeftSide = sal_False;
@@ -783,13 +775,14 @@ void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )
 }
 
 /*************************************************************************
- *                      SwTxtFly::_GetFrm()
+ * SwTxtFly::_GetFrm()
  *
- * IN:  dokumentglobal  (rRect)
- * OUT: framelokal      (return-Wert)
- * Diese Methode wird waehrend der Formatierung vom LineIter gerufen.
- * 1. um die naechste FlyPortion vorzubereiten
- * 2. um nach Aenderung der Zeilenhoehe neue Ueberlappungen festzustellen
+ * IN:  document-global (rRect)
+ * OUT: frame-local (return value)
+ *
+ * This method is called during formatting of LineIter in order to:
+ * 1. prepare the next FlyPortion
+ * 2. remember new overlappings after changes to the line height
  *************************************************************************/
 
 SwRect SwTxtFly::_GetFrm( const SwRect &rRect, sal_Bool bTop ) const
@@ -801,7 +794,7 @@ SwRect SwTxtFly::_GetFrm( const SwRect &rRect, sal_Bool bTop ) const
         if( bTop )
             (aRet.*fnRect->fnSetTop)( (rRect.*fnRect->fnGetTop)() );
 
-        // 8110: Bottom nicht immer anpassen.
+        // 8110: Do not always adapt the bottom
         const SwTwips nRetBottom = (aRet.*fnRect->fnGetBottom)();
         const SwTwips nRectBottom = (rRect.*fnRect->fnGetBottom)();
         if ( (*fnRect->fnYDiff)( nRetBottom, nRectBottom ) > 0 ||
@@ -812,12 +805,12 @@ SwRect SwTxtFly::_GetFrm( const SwRect &rRect, sal_Bool bTop ) const
 }
 
 /*************************************************************************
- *                      SwTxtFly::IsAnyFrm()
+ * SwTxtFly::IsAnyFrm()
  *
- * IN: dokumentglobal
- * fuer die Printarea des aktuellen Frame
+ * IN: document-global
+ * for the print area of the current frame
  *
- * dient zum Abschalten des SwTxtFly, wenn keine Objekte ueberlappen (Relax)
+ * Is used to disable the SwTxtFly if no objects overlap (relax)
  *
  *************************************************************************/
 
@@ -835,13 +828,13 @@ sal_Bool SwTxtFly::IsAnyFrm() const
 }
 
 /*************************************************************************
- *                      SwTxtFly::IsAnyObj()
+ * SwTxtFly::IsAnyObj()
  *
- * IN: dokumentglobal
- * OUT: sal_True Wenn ein Rahmen oder DrawObj beruecksichtigt werden muss
- * Nur wenn IsAnyObj sal_False liefert, koennen Optimierungen benutzt werden
- * wie Paint/FormatEmpty fuer leere Absaetze
- * und auch das virtuelle Outputdevice.
+ * IN: document-global
+ * OUT: sal_True     If a frame or DrawObj needs to be respected
+ *
+ * Only if this method returns sal_False, we can use optimizations like
+ * Paint/FormatEmpty for empty paragraphs and also the virtual OutputDevice.
  *************************************************************************/
 
 sal_Bool SwTxtFly::IsAnyObj( const SwRect &rRect ) const
@@ -854,8 +847,8 @@ sal_Bool SwTxtFly::IsAnyObj( const SwRect &rRect ) const
                         pCurrFrm->Prt().SSize() );
 
     const SwSortedObjs *pSorted = pPage->GetSortedObjs();
-    if( pSorted ) // Eigentlich ist durch bOn sichergestellt, dass es an der
-    // Seite Objekte gibt, aber wer weiss, wer inzwischen etwas geloescht hat.
+    if( pSorted ) // bOn actually makes sure that we have objects on the side,
+                  // but who knows who deleted somehting in the meantime?
     {
         for ( MSHORT i = 0; i < pSorted->Count(); ++i )
         {
@@ -863,7 +856,7 @@ sal_Bool SwTxtFly::IsAnyObj( const SwRect &rRect ) const
 
             const SwRect aBound( pObj->GetObjRectWithSpaces() );
 
-            // Optimierung
+            // Optimization
             if( pObj->GetObjRect().Left() > aRect.Right() )
                 continue;
 
@@ -884,14 +877,15 @@ const SwCntntFrm* SwTxtFly::_GetMaster()
 }
 
 /*************************************************************************
- *                      SwTxtFly::DrawTextOpaque()
+ * SwTxtFly::DrawTextOpaque()
  *
- * IN: dokumentglobal
- * DrawTextOpaque() wird von DrawText() gerufen.
- * Die Clipregions werden so gesetzt, dass nur die Teile ausgegeben werden,
- * die nicht in den Bereichen von FlyFrms liegen, die undurchsichtig und
- * ueber dem aktuellen Frame liegen.
- * Die On-Optimierung uebernimmt DrawText()!
+ * IN: document-global
+ *
+ * DrawTextOpaque() is called by DrawText().
+ * The ClipRegions are placed int a way, that only those parts are displayed
+ * which are not within the areas of FlyFrms which are opaque and above the
+ * current Frame.
+ * DrawText() takes over the on optimization!
  *************************************************************************/
 
 sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
@@ -952,7 +946,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                     const SwFrmFmt *pFmt = pFly->GetFmt();
                     const SwFmtSurround &rSur = pFmt->GetSurround();
                     const SwFmtAnchor& rAnchor = pFmt->GetAnchor();
-                        //Nur undurchsichtige und weiter oben liegende.
+                    // Only the ones who are opaque and more to the top
                     if( !( pFly->IsBackgroundTransparent()
                            || pFly->IsShadowTransparent() ) &&
                         SURROUND_THROUGHT == rSur.GetSurround() &&
@@ -968,7 +962,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
                         nCurrOrd < pTmpAnchoredObj->GetDrawObj()->GetOrdNum()
                       )
                     {
-                        //Ausser der Inhalt ist Transparent
+                        // Except for the content is transparent
                         const SwNoTxtFrm *pNoTxt =
                                 pFly->Lower() && pFly->Lower()->IsNoTxtFrm()
                                                    ? (SwNoTxtFrm*)pFly->Lower()
@@ -1000,7 +994,7 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     }
     else if( aRegion.Count() )
     {
-        // Was fuer ein Aufwand ...
+        // What a huge effort ...
         SwSaveClip aClipVout( rInf.GetpOut() );
         for( MSHORT i = 0; i < aRegion.Count(); ++i )
         {
@@ -1018,12 +1012,12 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
 }
 
 /*************************************************************************
- *                      SwTxtFly::DrawFlyRect()
+ * SwTxtFly::DrawFlyRect()
  *
- * IN: windowlokal
- * Zwei Feinheiten gilt es zu beachten:
- * 1) DrawRect() oberhalb des ClipRects sind erlaubt !
- * 2) FlyToRect() liefert groessere Werte als die Framedaten !
+ * IN: window-local
+ * We need to keep two subtelties in mind:
+ * 1) DrawRect() above the ClipRect are allowed!
+ * 2) FlyToRect() returns larger values than the frame data!
  *************************************************************************/
 
 void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
@@ -1151,7 +1145,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 bEvade = sal_True;
             else
             {
-                // innerhalb von verketteten Flys wird nur Lowern ausgewichen
+                // Within chained Flys we only avoid Lower
                 // #i68520#
                 const SwFmtChain &rChain = mpCurrAnchoredObj->GetFrmFmt().GetChain();
                 if ( !rChain.GetPrev() && !rChain.GetNext() )
@@ -1180,11 +1174,11 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                             return sal_False;
                     }
                     else if (FLY_AT_PAGE == rCurrA.GetAnchorId())
-                        return sal_False; // Seitengebundene weichen nur seitengeb. aus
+                        return sal_False; // Page anchored ones only avoid page anchored ones
                     else if (FLY_AT_FLY == rNewA.GetAnchorId())
-                        bEvade = sal_True; // Nicht seitengeb. weichen Rahmengeb. aus
+                        bEvade = sal_True; // Non-page anchored ones avoid frame anchored ones
                     else if( FLY_AT_FLY == rCurrA.GetAnchorId() )
-                        return sal_False; // Rahmengebundene weichen abs.geb. nicht aus
+                        return sal_False; // Frame anchored ones do not avoid paragraph anchored ones
                     // #i57062#
                     // In order to avoid loop situation, it's decided to adjust
                     // the wrapping behaviour of content of at-paragraph/at-character
@@ -1196,9 +1190,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
                 }
             }
 
-            // aber: es wird niemals einem hierarchisch untergeordnetem
-            // ausgewichen und ausserdem braucht nur bei Ueberlappung
-            // ausgewichen werden.
+            // But: we never avoid a subordinate one and additionally we only avoid when overlapping.
             // #i68520#
             bEvade &= ( mpCurrAnchoredObj->GetDrawObj()->GetOrdNum() < pNew->GetOrdNum() );
             if( bEvade )
@@ -1217,7 +1209,7 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
             OSL_ENSURE( FLY_AS_CHAR != rNewA.GetAnchorId(),
                     "Don't call GetTop with a FlyInCntFrm" );
             if (FLY_AT_PAGE == rNewA.GetAnchorId())
-                return sal_True;  // Seitengebundenen wird immer ausgewichen.
+                return sal_True;  // We always avoid page anchored ones
 
             // Wenn absatzgebundene Flys in einem FlyCnt gefangen sind, so
             // endet deren Einflussbereich an den Grenzen des FlyCnt!
@@ -2169,9 +2161,9 @@ SwSurround SwTxtFly::_GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
 }
 
 /*************************************************************************
- *                      SwTxtFly::IsAnyFrm( SwRect )
+ * SwTxtFly::IsAnyFrm( SwRect )
  *
- * IN: dokumentglobal
+ * IN: document-global
  *
  * dient zum Abschalten des SwTxtFly, wenn keine Objekte ueberlappen (Relax)
  *
