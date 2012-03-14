@@ -31,7 +31,10 @@
 
 #include <com/sun/star/i18n/ScriptType.hdl>
 #include <editeng/lspcitem.hxx>
+#include <txtflcnt.hxx>
 #include <txtftn.hxx>
+#include <flyfrms.hxx>
+#include <fmtflcnt.hxx>
 #include <fmtftn.hxx>
 #include <ftninfo.hxx>
 #include <charfmt.hxx>
@@ -2002,6 +2005,579 @@ sal_Bool SwTxtFormatter::AllowRepaintOpt() const
     }
 
     return bOptimizeRepaint;
+}
+
+void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
+{
+    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+            "SwTxtFormatter::CalcUnclipped with unswapped frame" );
+
+    long nFlyAsc, nFlyDesc;
+    pCurr->MaxAscentDescent( rTop, rBottom, nFlyAsc, nFlyDesc );
+    rTop = Y() + GetCurr()->GetAscent();
+    rBottom = rTop + nFlyDesc;
+    rTop -= nFlyAsc;
+}
+
+
+void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
+    xub_StrLen nStartIdx, sal_Bool bAllWays ) const
+{
+    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+            "SwTxtFormatter::UpdatePos with unswapped frame" );
+
+    if( GetInfo().IsTest() )
+        return;
+    SwLinePortion *pFirst = pCurrent->GetFirstPortion();
+    SwLinePortion *pPos = pFirst;
+    SwTxtPaintInfo aTmpInf( GetInfo() );
+    aTmpInf.SetpSpaceAdd( pCurrent->GetpLLSpaceAdd() );
+    aTmpInf.ResetSpaceIdx();
+    aTmpInf.SetKanaComp( pCurrent->GetpKanaComp() );
+    aTmpInf.ResetKanaIdx();
+
+    // The frame's size
+    aTmpInf.SetIdx( nStartIdx );
+    aTmpInf.SetPos( aStart );
+
+    long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
+    pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
+
+    KSHORT nTmpHeight = pCurrent->GetRealHeight();
+    KSHORT nAscent = pCurrent->GetAscent() + nTmpHeight - pCurrent->Height();
+    objectpositioning::AsCharFlags nFlags = AS_CHAR_ULSPACE;
+    if( GetMulti() )
+    {
+        aTmpInf.SetDirection( GetMulti()->GetDirection() );
+        if( GetMulti()->HasRotation() )
+        {
+            nFlags |= AS_CHAR_ROTATE;
+            if( GetMulti()->IsRevers() )
+            {
+                nFlags |= AS_CHAR_REVERSE;
+                aTmpInf.X( aTmpInf.X() - nAscent );
+            }
+            else
+                aTmpInf.X( aTmpInf.X() + nAscent );
+        }
+        else
+        {
+            if ( GetMulti()->IsBidi() )
+                nFlags |= AS_CHAR_BIDI;
+            aTmpInf.Y( aTmpInf.Y() + nAscent );
+        }
+    }
+    else
+        aTmpInf.Y( aTmpInf.Y() + nAscent );
+
+    while( pPos )
+    {
+        // We only know one case where changing the position (caused by the
+        // adjustment) could be relevant for a portion: We need to SetRefPoint
+        // for FlyCntPortions.
+        if( ( pPos->IsFlyCntPortion() || pPos->IsGrfNumPortion() )
+            && ( bAllWays || !IsQuick() ) )
+        {
+            pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
+
+            if( pPos->IsGrfNumPortion() )
+            {
+                if( !nFlyAsc && !nFlyDesc )
+                {
+                    nTmpAscent = nAscent;
+                    nFlyAsc = nAscent;
+                    nTmpDescent = nTmpHeight - nAscent;
+                    nFlyDesc = nTmpDescent;
+                }
+                ((SwGrfNumPortion*)pPos)->SetBase( nTmpAscent, nTmpDescent,
+                                                   nFlyAsc, nFlyDesc );
+            }
+            else
+            {
+                Point aBase( aTmpInf.GetPos() );
+                if ( GetInfo().GetTxtFrm()->IsVertical() )
+                    GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aBase );
+
+                ((SwFlyCntPortion*)pPos)->SetBase( *aTmpInf.GetTxtFrm(),
+                    aBase, nTmpAscent, nTmpDescent, nFlyAsc,
+                    nFlyDesc, nFlags );
+            }
+        }
+        if( pPos->IsMultiPortion() && ((SwMultiPortion*)pPos)->HasFlyInCntnt() )
+        {
+            OSL_ENSURE( !GetMulti(), "Too much multi" );
+            ((SwTxtFormatter*)this)->pMulti = (SwMultiPortion*)pPos;
+            SwLineLayout *pLay = &GetMulti()->GetRoot();
+            Point aSt( aTmpInf.X(), aStart.Y() );
+
+            if ( GetMulti()->HasBrackets() )
+            {
+                OSL_ENSURE( GetMulti()->IsDouble(), "Brackets only for doubles");
+                aSt.X() += ((SwDoubleLinePortion*)GetMulti())->PreWidth();
+            }
+            else if( GetMulti()->HasRotation() )
+            {
+                aSt.Y() += pCurrent->GetAscent() - GetMulti()->GetAscent();
+                if( GetMulti()->IsRevers() )
+                    aSt.X() += GetMulti()->Width();
+                else
+                    aSt.Y() += GetMulti()->Height();
+               }
+            else if ( GetMulti()->IsBidi() )
+                // jump to end of the bidi portion
+                aSt.X() += pLay->Width();
+
+            xub_StrLen nStIdx = aTmpInf.GetIdx();
+            do
+            {
+                UpdatePos( pLay, aSt, nStIdx, bAllWays );
+                nStIdx = nStIdx + pLay->GetLen();
+                aSt.Y() += pLay->Height();
+                pLay = pLay->GetNext();
+            } while ( pLay );
+            ((SwTxtFormatter*)this)->pMulti = NULL;
+        }
+        pPos->Move( aTmpInf );
+        pPos = pPos->GetPortion();
+    }
+}
+
+
+void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
+{
+    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
+            "SwTxtFormatter::AlignFlyInCntBase with unswapped frame" );
+
+    if( GetInfo().IsTest() )
+        return;
+    SwLinePortion *pFirst = pCurr->GetFirstPortion();
+    SwLinePortion *pPos = pFirst;
+    objectpositioning::AsCharFlags nFlags = AS_CHAR_NOFLAG;
+    if( GetMulti() && GetMulti()->HasRotation() )
+    {
+        nFlags |= AS_CHAR_ROTATE;
+        if( GetMulti()->IsRevers() )
+            nFlags |= AS_CHAR_REVERSE;
+    }
+
+    long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
+
+    while( pPos )
+    {
+        if( pPos->IsFlyCntPortion() || pPos->IsGrfNumPortion() )
+        {
+            pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
+
+            if( pPos->IsGrfNumPortion() )
+                ((SwGrfNumPortion*)pPos)->SetBase( nTmpAscent, nTmpDescent,
+                                                   nFlyAsc, nFlyDesc );
+            else
+            {
+                Point aBase;
+                if ( GetInfo().GetTxtFrm()->IsVertical() )
+                {
+                    nBaseLine = GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( nBaseLine );
+                    aBase = Point( nBaseLine, ((SwFlyCntPortion*)pPos)->GetRefPoint().Y() );
+                }
+                else
+                    aBase = Point( ((SwFlyCntPortion*)pPos)->GetRefPoint().X(), nBaseLine );
+
+                ((SwFlyCntPortion*)pPos)->SetBase( *GetInfo().GetTxtFrm(), aBase, nTmpAscent, nTmpDescent,
+                    nFlyAsc, nFlyDesc, nFlags );
+            }
+        }
+        pPos = pPos->GetPortion();
+    }
+}
+
+
+sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
+{
+    OSL_ENSURE( rInf.GetTxtFly()->IsOn(), "SwTxtFormatter::ChkFlyUnderflow: why?" );
+    if( GetCurr() )
+    {
+        // First we check, whether a fly overlaps with the line.
+        // = GetLineHeight()
+        const long nHeight = GetCurr()->GetRealHeight();
+        SwRect aLine( GetLeftMargin(), Y(), rInf.RealWidth(), nHeight );
+
+        SwRect aLineVert( aLine );
+        if ( pFrm->IsVertical() )
+            pFrm->SwitchHorizontalToVertical( aLineVert );
+        SwRect aInter( rInf.GetTxtFly()->GetFrm( aLineVert ) );
+        if ( pFrm->IsVertical() )
+            pFrm->SwitchVerticalToHorizontal( aInter );
+
+        if( !aInter.HasArea() )
+            return sal_False;
+
+        // We now check every portion that could have lowered for overlapping
+        // with the fly.
+        const SwLinePortion *pPos = GetCurr()->GetFirstPortion();
+        aLine.Pos().Y() = Y() + GetCurr()->GetRealHeight() - GetCurr()->Height();
+        aLine.Height( GetCurr()->Height() );
+
+        while( pPos )
+        {
+            aLine.Width( pPos->Width() );
+
+            aLineVert = aLine;
+            if ( pFrm->IsVertical() )
+                pFrm->SwitchHorizontalToVertical( aLineVert );
+            aInter = rInf.GetTxtFly()->GetFrm( aLineVert );
+            if ( pFrm->IsVertical() )
+                pFrm->SwitchVerticalToHorizontal( aInter );
+
+            // New flys from below?
+            if( !pPos->IsFlyPortion() )
+            {
+                if( aInter.IsOver( aLine ) )
+                {
+                    aInter._Intersection( aLine );
+                    if( aInter.HasArea() )
+                    {
+                        // To be evaluated during reformat of this line:
+                        // RealHeight including spacing
+                        rInf.SetLineHeight( KSHORT(nHeight) );
+                        // Height without extra spacing
+                        rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
+                        return sal_True;
+                    }
+                }
+            }
+            else
+            {
+                // The fly portion is not intersected by a fly anymore
+                if ( ! aInter.IsOver( aLine ) )
+                {
+                    rInf.SetLineHeight( KSHORT(nHeight) );
+                    rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
+                    return sal_True;
+                }
+                else
+                {
+                    aInter._Intersection( aLine );
+
+                    // No area means a fly has become invalid because of
+                    // lowering the line => reformat the line
+                    // we also have to reformat the line, if the fly size
+                    // differs from the intersection interval's size.
+                    if( ! aInter.HasArea() ||
+                        ((SwFlyPortion*)pPos)->GetFixWidth() != aInter.Width() )
+                    {
+                        rInf.SetLineHeight( KSHORT(nHeight) );
+                        rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
+                        return sal_True;
+                    }
+                }
+            }
+
+            aLine.Left( aLine.Left() + pPos->Width() );
+            pPos = pPos->GetPortion();
+        }
+    }
+    return sal_False;
+}
+
+void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
+{
+    if( GetMulti() || rInf.GetFly() )
+        return;
+
+    SwTxtFly *pTxtFly = rInf.GetTxtFly();
+    if( !pTxtFly->IsOn() || rInf.IsIgnoreFly() )
+        return;
+
+    const SwLinePortion *pLast = rInf.GetLast();
+
+    long nAscent;
+    long nTop = Y();
+    long nHeight;
+
+    if( rInf.GetLineHeight() )
+    {
+        // Real line height has already been calculated, we only have to
+        // search for intersections in the lower part of the strip
+        nAscent = pCurr->GetAscent();
+        nHeight = rInf.GetLineNettoHeight();
+        nTop += rInf.GetLineHeight() - nHeight;
+    }
+    else
+    {
+        nAscent = pLast->GetAscent();
+        nHeight = pLast->Height();
+
+        // We make a first guess for the lines real height
+        if ( ! pCurr->GetRealHeight() )
+            CalcRealHeight();
+
+        if ( pCurr->GetRealHeight() > nHeight )
+            nTop += pCurr->GetRealHeight() - nHeight;
+        else
+            // Important for fixed space between lines
+            nHeight = pCurr->GetRealHeight();
+    }
+
+    const long nLeftMar = GetLeftMargin();
+    const long nLeftMin = (rInf.X() || GetDropLeft()) ? nLeftMar : GetLeftMin();
+
+    SwRect aLine( rInf.X() + nLeftMin, nTop, rInf.RealWidth() - rInf.X()
+                  + nLeftMar - nLeftMin , nHeight );
+
+    SwRect aLineVert( aLine );
+    if ( pFrm->IsRightToLeft() )
+        pFrm->SwitchLTRtoRTL( aLineVert );
+
+    if ( pFrm->IsVertical() )
+        pFrm->SwitchHorizontalToVertical( aLineVert );
+    SwRect aInter( pTxtFly->GetFrm( aLineVert ) );
+
+    if ( pFrm->IsRightToLeft() )
+        pFrm->SwitchRTLtoLTR( aInter );
+
+    if ( pFrm->IsVertical() )
+        pFrm->SwitchVerticalToHorizontal( aInter );
+
+    if( aInter.IsOver( aLine ) )
+    {
+        aLine.Left( rInf.X() + nLeftMar );
+        sal_Bool bForced = sal_False;
+        if( aInter.Left() <= nLeftMin )
+        {
+            SwTwips nFrmLeft = GetTxtFrm()->Frm().Left();
+            if( GetTxtFrm()->Prt().Left() < 0 )
+                nFrmLeft += GetTxtFrm()->Prt().Left();
+            if( aInter.Left() < nFrmLeft )
+                aInter.Left( nFrmLeft );
+
+            long nAddMar = 0;
+            if ( pFrm->IsRightToLeft() )
+            {
+                nAddMar = pFrm->Frm().Right() - Right();
+                if ( nAddMar < 0 )
+                    nAddMar = 0;
+            }
+            else
+                nAddMar = nLeftMar - nFrmLeft;
+
+            aInter.Width( aInter.Width() + nAddMar );
+            // For a negative first line indent, we set this flag to show
+            // that the indentation/margin has been moved.
+            // This needs to be respected by the DefaultTab at the zero position.
+            if( IsFirstTxtLine() && HasNegFirst() )
+                bForced = sal_True;
+        }
+        aInter.Intersection( aLine );
+        if( !aInter.HasArea() )
+            return;
+
+        const sal_Bool bFullLine =  aLine.Left()  == aInter.Left() &&
+                                aLine.Right() == aInter.Right();
+
+        // Although no text is left, we need to format another line,
+        // because also empty lines need to avoid a Fly with no wrapping.
+        if( bFullLine && rInf.GetIdx() == rInf.GetTxt().Len() )
+        {
+            rInf.SetNewLine( sal_True );
+            // 8221: We know that for dummies, it holds ascent == height
+            pCurr->SetDummy(sal_True);
+        }
+
+        // aInter becomes frame-local
+        aInter.Pos().X() -= nLeftMar;
+        SwFlyPortion *pFly = new SwFlyPortion( aInter );
+        if( bForced )
+        {
+            pCurr->SetForcedLeftMargin( sal_True );
+            rInf.ForcedLeftMargin( (sal_uInt16)aInter.Width() );
+        }
+
+        if( bFullLine )
+        {
+            // 8110: In order to properly flow around Flys with different
+            // wrapping attributes, we need to increase by units of line height.
+            // The last avoiding line should be adjusted in height, so that
+            // we don't get a frame spacing effect.
+            // 8221: It is important that ascent == height, because the FlyPortion
+            // values are transferred to pCurr in CalcLine and IsDummy() relies
+            // on this behaviour.
+            // To my knowledge we only have two places where DummyLines can be
+            // created: here and in MakeFlyDummies.
+            // IsDummy() is evaluated in IsFirstTxtLine(), when moving lines
+            // and in relation with DropCaps.
+            pFly->Height( KSHORT(aInter.Height()) );
+
+            // nNextTop now contains the margin's bottom edge, which we avoid
+            // or the next margin's top edge, which we need to respect.
+            // That means we can comfortably grow up to this value; that's how
+            // we save a few empty lines.
+            long nNextTop = pTxtFly->GetNextTop();
+            if ( pFrm->IsVertical() )
+                nNextTop = pFrm->SwitchVerticalToHorizontal( nNextTop );
+            if( nNextTop > aInter.Bottom() )
+            {
+                SwTwips nH = nNextTop - aInter.Top();
+                if( nH < KSHRT_MAX )
+                    pFly->Height( KSHORT( nH ) );
+            }
+            if( nAscent < pFly->Height() )
+                pFly->SetAscent( KSHORT(nAscent) );
+            else
+                pFly->SetAscent( pFly->Height() );
+        }
+        else
+        {
+            if( rInf.GetIdx() == rInf.GetTxt().Len() )
+            {
+                // Don't use nHeight, or we have a huge descent
+                pFly->Height( pLast->Height() );
+                pFly->SetAscent( pLast->GetAscent() );
+            }
+            else
+            {
+                pFly->Height( KSHORT(aInter.Height()) );
+                if( nAscent < pFly->Height() )
+                    pFly->SetAscent( KSHORT(nAscent) );
+                else
+                    pFly->SetAscent( pFly->Height() );
+            }
+        }
+
+        rInf.SetFly( pFly );
+
+        if( pFly->Fix() < rInf.Width() )
+            rInf.Width( pFly->Fix() );
+
+        GETGRID( pFrm->FindPageFrm() )
+        if ( pGrid )
+        {
+            const SwPageFrm* pPageFrm = pFrm->FindPageFrm();
+            const SwLayoutFrm* pBody = pPageFrm->FindBodyCont();
+
+            SWRECTFN( pPageFrm )
+
+            const long nGridOrigin = pBody ?
+                                    (pBody->*fnRect->fnGetPrtLeft)() :
+                                    (pPageFrm->*fnRect->fnGetPrtLeft)();
+
+            const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
+            const sal_uInt16 nGridWidth = GETGRIDWIDTH( pGrid, pDoc);   //For textgrid refactor
+
+            SwTwips nStartX = GetLeftMargin();
+            if ( bVert )
+            {
+                Point aPoint( nStartX, 0 );
+                pFrm->SwitchHorizontalToVertical( aPoint );
+                nStartX = aPoint.Y();
+            }
+
+            const SwTwips nOfst = nStartX - nGridOrigin;
+            const SwTwips nTmpWidth = rInf.Width() + nOfst;
+
+            const sal_uLong i = nTmpWidth / nGridWidth + 1;
+
+            const long nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
+            if ( nNewWidth > 0 )
+                rInf.Width( (sal_uInt16)nNewWidth );
+            else
+                rInf.Width( 0 );
+        }
+    }
+}
+
+
+SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
+                                                   SwTxtAttr *pHint ) const
+{
+    SwFlyCntPortion *pRet = 0;
+    const SwFrm *pFrame = (SwFrm*)pFrm;
+
+    SwFlyInCntFrm *pFly;
+    SwFrmFmt* pFrmFmt = ((SwTxtFlyCnt*)pHint)->GetFlyCnt().GetFrmFmt();
+    if( RES_FLYFRMFMT == pFrmFmt->Which() )
+        pFly = ((SwTxtFlyCnt*)pHint)->GetFlyFrm(pFrame);
+    else
+        pFly = NULL;
+    // aBase is the document-global position, from which the new extra portion is placed
+    // aBase.X() = Offset in in the line after the current position
+    // aBase.Y() = LineIter.Y() + Ascent of the current position
+
+    long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
+    // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
+    //SwLinePortion *pPos = pCurr->GetFirstPortion();
+    //lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
+    pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
+
+    // If the ascent of the frame is larger than the ascent of the current position,
+    // we use this one when calculating the base, or the frame would be positioned
+    // too much to the top, sliding down after all causing a repaint in an area
+    // he actually never was in.
+    KSHORT nAscent = 0;
+
+    const bool bTxtFrmVertical = GetInfo().GetTxtFrm()->IsVertical();
+
+    const bool bUseFlyAscent = pFly && pFly->GetValidPosFlag() &&
+                               0 != ( bTxtFrmVertical ?
+                                      pFly->GetRefPoint().X() :
+                                      pFly->GetRefPoint().Y() );
+
+    if ( bUseFlyAscent )
+         nAscent = static_cast<sal_uInt16>( Abs( int( bTxtFrmVertical ?
+                                                  pFly->GetRelPos().X() :
+                                                  pFly->GetRelPos().Y() ) ) );
+
+    // Check if be prefer to use the ascent of the last portion:
+    if ( IsQuick() ||
+         !bUseFlyAscent ||
+         nAscent < rInf.GetLast()->GetAscent() )
+    {
+        nAscent = rInf.GetLast()->GetAscent();
+    }
+    else if( nAscent > nFlyAsc )
+        nFlyAsc = nAscent;
+
+    Point aBase( GetLeftMargin() + rInf.X(), Y() + nAscent );
+    objectpositioning::AsCharFlags nMode = IsQuick() ? AS_CHAR_QUICK : 0;
+    if( GetMulti() && GetMulti()->HasRotation() )
+    {
+        nMode |= AS_CHAR_ROTATE;
+        if( GetMulti()->IsRevers() )
+            nMode |= AS_CHAR_REVERSE;
+    }
+
+    Point aTmpBase( aBase );
+    if ( GetInfo().GetTxtFrm()->IsVertical() )
+        GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
+
+    if( pFly )
+    {
+        pRet = new SwFlyCntPortion( *GetInfo().GetTxtFrm(), pFly, aTmpBase,
+                                    nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
+        // We need to make sure that our font is set again in the OutputDevice
+        // It could be that the FlyInCnt was added anew and GetFlyFrm() would
+        // in turn cause, that it'd be created anew again.
+        // This one's frames get formatted right away, which change the font and
+        // we have a bug (3322).
+        rInf.SelectFont();
+        if( pRet->GetAscent() > nAscent )
+        {
+            aBase.Y() = Y() + pRet->GetAscent();
+            nMode |= AS_CHAR_ULSPACE;
+            if( !rInf.IsTest() )
+                aTmpBase = aBase;
+                if ( GetInfo().GetTxtFrm()->IsVertical() )
+                    GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
+
+                pRet->SetBase( *rInf.GetTxtFrm(), aTmpBase, nTmpAscent,
+                               nTmpDescent, nFlyAsc, nFlyDesc, nMode );
+        }
+    }
+    else
+    {
+        pRet = new SwFlyCntPortion( *rInf.GetTxtFrm(), (SwDrawContact*)pFrmFmt->FindContactObj(),
+           aTmpBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
+    }
+    return pRet;
 }
 
 namespace {

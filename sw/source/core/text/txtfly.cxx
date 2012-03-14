@@ -30,27 +30,21 @@
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
 
-#include "viewsh.hxx"
 #include "pagefrm.hxx"
 #include "rootfrm.hxx"
-#include "viewimp.hxx"      // SwViewImp
 #include "pam.hxx"          // SwPosition
 #include "swregion.hxx"     // SwRegionRects
-#include "dcontact.hxx"     // SwContact
 #include "dflyobj.hxx"      // SdrObject
 #include "flyfrm.hxx"       // SwFlyFrm
 #include "frmtool.hxx"      // ::DrawGraphic
-#include "porfld.hxx"       // SwGrfNumPortion
-#include "txtfrm.hxx"       // SwTxtFrm
-#include "itrform2.hxx"     // SwTxtFormatter
 #include "porfly.hxx"       // NewFlyCntPortion
 #include "porfld.hxx"       // SwGrfNumPortion
 #include "txtfly.hxx"       // SwTxtFly
 #include "txtpaint.hxx"     // SwSaveClip
 #include "txtatr.hxx"       // SwTxtFlyCnt
 #include "notxtfrm.hxx"
-#include "flyfrms.hxx"
 #include "fmtcnct.hxx"      // SwFmtChain
+#include "inftxt.hxx"
 #include <pormulti.hxx>     // SwMultiPortion
 #include <svx/obj3d.hxx>
 #include <editeng/txtrange.hxx>
@@ -58,10 +52,8 @@
 #include <editeng/ulspitem.hxx>
 // #i28701#
 #include <editeng/lspcitem.hxx>
-#include <txtflcnt.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtanchr.hxx>
-#include <fmtflcnt.hxx>
 #include <frmfmt.hxx>
 #include <pagedesc.hxx> // SwPageDesc
 #include <tgrditem.hxx>
@@ -71,9 +63,9 @@
 #include <IDocumentLayoutAccess.hxx>
 #include <IDocumentSettingAccess.hxx>
 #include <svx/svdoedge.hxx>
-#include "doc.hxx"
 
 #ifdef DBG_UTIL
+#include "viewsh.hxx"
 #include "viewopt.hxx"  // SwViewOptions, only for testing (Test2)
 #include "doc.hxx"
 #endif
@@ -81,646 +73,287 @@
 
 using namespace ::com::sun::star;
 
-/*****************************************************************************
- * Description:
- * SwTxtFly's purpose is to be the universal interface between
- * formatting/text output and the possibly overlapping free-flying frames.
- * During formatting the formatter gets the information from SwTxtFly, whether
- * a certain area is present by the attributes of an overlapping frame.
- * Such areas are represented by dummy portions.
- * The whole text output and touch-up is, again, forwarded to a SwTxtFly.
- * This one decides, whether parts of the text need to be clipped and splits
- * the areas for e.g. a DrawRect.
- * Please note that all free-flying frames are located in a PtrArray, sorted
- * by TopLeft.
- * Internally we always use document-global values. The IN and OUT parameters
- * are, however, adjusted to the needs of the LineIter most of the time. That
- * is: they are converted to frame- and window-local coordinates.
- * If multiple frames with wrap attributes are located on the same line, we get
- * the following settings for the text flow:
- *
- *      L/R    P     L     R     N
- *       P   -P-P- -P-L  -P R- -P N
- *       L   -L P- -L L  -L R- -L N
- *       R    R-P-  R-L   R R-  R N
- *       N    N P-  N L   N R-  N N
- *
- * (P=parallel, L=left, R=right, N=no wrap)
- *
- * We can describe the behaviour as follows:
- * Every frame can push away text, with the restriction that it only has influence
- * until the next frame.
- *****************************************************************************/
-
-void SwTxtFormatter::CalcUnclipped( SwTwips& rTop, SwTwips& rBottom )
+namespace
 {
-    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
-            "SwTxtFormatter::CalcUnclipped with unswapped frame" );
+    // #i68520#
+    struct AnchoredObjOrder
+    {
+        sal_Bool mbR2L;
+        SwRectFn mfnRect;
 
-    long nFlyAsc, nFlyDesc;
-    pCurr->MaxAscentDescent( rTop, rBottom, nFlyAsc, nFlyDesc );
-    rTop = Y() + GetCurr()->GetAscent();
-    rBottom = rTop + nFlyDesc;
-    rTop -= nFlyAsc;
+        AnchoredObjOrder( const sal_Bool bR2L,
+                           SwRectFn fnRect )
+            : mbR2L( bR2L ),
+              mfnRect( fnRect )
+        {}
+
+        bool operator()( const SwAnchoredObject* pListedAnchoredObj,
+                         const SwAnchoredObject* pNewAnchoredObj )
+        {
+            const SwRect aBoundRectOfListedObj( pListedAnchoredObj->GetObjRectWithSpaces() );
+            const SwRect aBoundRectOfNewObj( pNewAnchoredObj->GetObjRectWithSpaces() );
+            if ( ( mbR2L &&
+                   ( (aBoundRectOfListedObj.*mfnRect->fnGetRight)() ==
+                     (aBoundRectOfNewObj.*mfnRect->fnGetRight)() ) ) ||
+                 ( !mbR2L &&
+                   ( (aBoundRectOfListedObj.*mfnRect->fnGetLeft)() ==
+                     (aBoundRectOfNewObj.*mfnRect->fnGetLeft)() ) ) )
+            {
+                SwTwips nTopDiff =
+                    (*mfnRect->fnYDiff)( (aBoundRectOfNewObj.*mfnRect->fnGetTop)(),
+                                        (aBoundRectOfListedObj.*mfnRect->fnGetTop)() );
+                if ( nTopDiff == 0 &&
+                     ( ( mbR2L &&
+                         ( (aBoundRectOfNewObj.*mfnRect->fnGetLeft)() >
+                           (aBoundRectOfListedObj.*mfnRect->fnGetLeft)() ) ) ||
+                       ( !mbR2L &&
+                         ( (aBoundRectOfNewObj.*mfnRect->fnGetRight)() <
+                           (aBoundRectOfListedObj.*mfnRect->fnGetRight)() ) ) ) )
+                {
+                    return true;
+                }
+                else if ( nTopDiff > 0 )
+                {
+                    return true;
+                }
+            }
+            else if ( ( mbR2L &&
+                        ( (aBoundRectOfListedObj.*mfnRect->fnGetRight)() >
+                          (aBoundRectOfNewObj.*mfnRect->fnGetRight)() ) ) ||
+                      ( !mbR2L &&
+                        ( (aBoundRectOfListedObj.*mfnRect->fnGetLeft)() <
+                          (aBoundRectOfNewObj.*mfnRect->fnGetLeft)() ) ) )
+            {
+                return true;
+            }
+
+            return false;
+        }
+    };
 }
 
-/*************************************************************************
- * SwTxtFormatter::UpdatePos()
- * Updates the reference points of the character anchored objects,
- * e.g. after adjusting right-aligned, justified etc.
- * (That's mainly to correct the x position)
- *************************************************************************/
-
-void SwTxtFormatter::UpdatePos( SwLineLayout *pCurrent, Point aStart,
-    xub_StrLen nStartIdx, sal_Bool bAllWays ) const
+SwContourCache::SwContourCache() :
+    nPntCnt( 0 ), nObjCnt( 0 )
 {
-    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
-            "SwTxtFormatter::UpdatePos with unswapped frame" );
+    memset( (SdrObject**)pSdrObj, 0, sizeof(pSdrObj) );
+    memset( pTextRanger, 0, sizeof(pTextRanger) );
+}
 
-    if( GetInfo().IsTest() )
-        return;
-    SwLinePortion *pFirst = pCurrent->GetFirstPortion();
-    SwLinePortion *pPos = pFirst;
-    SwTxtPaintInfo aTmpInf( GetInfo() );
-    aTmpInf.SetpSpaceAdd( pCurrent->GetpLLSpaceAdd() );
-    aTmpInf.ResetSpaceIdx();
-    aTmpInf.SetKanaComp( pCurrent->GetpKanaComp() );
-    aTmpInf.ResetKanaIdx();
+SwContourCache::~SwContourCache()
+{
+    for( MSHORT i = 0; i < nObjCnt; delete pTextRanger[ i++ ] )
+        ;
+}
 
-    // The frame's size
-    aTmpInf.SetIdx( nStartIdx );
-    aTmpInf.SetPos( aStart );
+void SwContourCache::ClrObject( MSHORT nPos )
+{
+    OSL_ENSURE( pTextRanger[ nPos ], "ClrObject: Allready cleared. Good Bye!" );
+    nPntCnt -= pTextRanger[ nPos ]->GetPointCount();
+    delete pTextRanger[ nPos ];
+    --nObjCnt;
+    memmove( (SdrObject**)pSdrObj + nPos, pSdrObj + nPos + 1,
+             ( nObjCnt - nPos ) * sizeof( SdrObject* ) );
+    memmove( pTextRanger + nPos, pTextRanger + nPos + 1,
+             ( nObjCnt - nPos ) * sizeof( TextRanger* ) );
+}
 
-    long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
-    pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
-
-    KSHORT nTmpHeight = pCurrent->GetRealHeight();
-    KSHORT nAscent = pCurrent->GetAscent() + nTmpHeight - pCurrent->Height();
-    objectpositioning::AsCharFlags nFlags = AS_CHAR_ULSPACE;
-    if( GetMulti() )
-    {
-        aTmpInf.SetDirection( GetMulti()->GetDirection() );
-        if( GetMulti()->HasRotation() )
-        {
-            nFlags |= AS_CHAR_ROTATE;
-            if( GetMulti()->IsRevers() )
+void ClrContourCache( const SdrObject *pObj )
+{
+    if( pContourCache && pObj )
+        for( MSHORT i = 0; i < pContourCache->GetCount(); ++i )
+            if( pObj == pContourCache->GetObject( i ) )
             {
-                nFlags |= AS_CHAR_REVERSE;
-                aTmpInf.X( aTmpInf.X() - nAscent );
+                pContourCache->ClrObject( i );
+                break;
             }
-            else
-                aTmpInf.X( aTmpInf.X() + nAscent );
+}
+
+void ClrContourCache()
+{
+    if( pContourCache )
+    {
+        for( MSHORT i = 0; i < pContourCache->GetCount();
+             delete pContourCache->pTextRanger[ i++ ] )
+             ;
+        pContourCache->nObjCnt = 0;
+        pContourCache->nPntCnt = 0;
+    }
+}
+
+// #i68520#
+const SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
+                                            const SwRect &rLine,
+                                            const SwTxtFrm* pFrm,
+                                            const long nXPos,
+                                            const sal_Bool bRight )
+{
+    SwRect aRet;
+    const SwFrmFmt* pFmt = &(pAnchoredObj->GetFrmFmt());
+    if( pFmt->GetSurround().IsContour() &&
+        ( !pAnchoredObj->ISA(SwFlyFrm) ||
+          ( static_cast<const SwFlyFrm*>(pAnchoredObj)->Lower() &&
+            static_cast<const SwFlyFrm*>(pAnchoredObj)->Lower()->IsNoTxtFrm() ) ) )
+    {
+        aRet = pAnchoredObj->GetObjRectWithSpaces();
+        if( aRet.IsOver( rLine ) )
+        {
+            if( !pContourCache )
+                pContourCache = new SwContourCache;
+
+            aRet = pContourCache->ContourRect(
+                    pFmt, pAnchoredObj->GetDrawObj(), pFrm, rLine, nXPos, bRight );
+        }
+        else
+            aRet.Width( 0 );
+    }
+    else
+    {
+        aRet = pAnchoredObj->GetObjRectWithSpaces();
+    }
+
+    return aRet;
+}
+
+const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
+    const SdrObject* pObj, const SwTxtFrm* pFrm, const SwRect &rLine,
+    const long nXPos, const sal_Bool bRight )
+{
+    SwRect aRet;
+    MSHORT nPos = 0; // Suche im Cache ...
+    while( nPos < GetCount() && pObj != pSdrObj[ nPos ] )
+        ++nPos;
+    if( GetCount() == nPos ) // nicht gefunden
+    {
+        if( nObjCnt == POLY_CNT )
+        {
+            nPntCnt -= pTextRanger[ --nObjCnt ]->GetPointCount();
+            delete pTextRanger[ nObjCnt ];
+        }
+        ::basegfx::B2DPolyPolygon aPolyPolygon;
+        ::basegfx::B2DPolyPolygon* pPolyPolygon = 0L;
+
+        if ( pObj->ISA(SwVirtFlyDrawObj) )
+        {
+            // Vorsicht #37347: Das GetContour() fuehrt zum Laden der Grafik,
+            // diese aendert dadurch ggf. ihre Groesse, ruft deshalb ein
+            // ClrObject() auf.
+            PolyPolygon aPoly;
+            if( !((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetContour( aPoly ) )
+                aPoly = PolyPolygon( ((SwVirtFlyDrawObj*)pObj)->
+                                     GetFlyFrm()->Frm().SVRect() );
+            aPolyPolygon.clear();
+            aPolyPolygon.append(aPoly.getB2DPolyPolygon());
         }
         else
         {
-            if ( GetMulti()->IsBidi() )
-                nFlags |= AS_CHAR_BIDI;
-            aTmpInf.Y( aTmpInf.Y() + nAscent );
+            if( !pObj->ISA( E3dObject ) )
+            {
+                aPolyPolygon = pObj->TakeXorPoly();
+            }
+
+            ::basegfx::B2DPolyPolygon aContourPoly(pObj->TakeContour());
+            pPolyPolygon = new ::basegfx::B2DPolyPolygon(aContourPoly);
         }
-    }
-    else
-        aTmpInf.Y( aTmpInf.Y() + nAscent );
+        const SvxLRSpaceItem &rLRSpace = pFmt->GetLRSpace();
+        const SvxULSpaceItem &rULSpace = pFmt->GetULSpace();
+        memmove( pTextRanger + 1, pTextRanger, nObjCnt * sizeof( TextRanger* ) );
+        memmove( (SdrObject**)pSdrObj + 1, pSdrObj, nObjCnt++ * sizeof( SdrObject* ) );
+        pSdrObj[ 0 ] = pObj; // Wg. #37347 darf das Object erst nach dem
+                             // GetContour() eingetragen werden.
+        pTextRanger[ 0 ] = new TextRanger( aPolyPolygon, pPolyPolygon, 20,
+            (sal_uInt16)rLRSpace.GetLeft(), (sal_uInt16)rLRSpace.GetRight(),
+            pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
+        pTextRanger[ 0 ]->SetUpper( rULSpace.GetUpper() );
+        pTextRanger[ 0 ]->SetLower( rULSpace.GetLower() );
 
-    while( pPos )
-    {
-        // We only know one case where changing the position (caused by the
-        // adjustment) could be relevant for a portion: We need to SetRefPoint
-        // for FlyCntPortions.
-        if( ( pPos->IsFlyCntPortion() || pPos->IsGrfNumPortion() )
-            && ( bAllWays || !IsQuick() ) )
+        delete pPolyPolygon;
+        // UPPER_LOWER_TEST
+#ifdef DBG_UTIL
+        const ViewShell* pTmpViewShell = pFmt->GetDoc()->GetCurrentViewShell();
+        if( pTmpViewShell )
         {
-            pCurrent->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
-
-            if( pPos->IsGrfNumPortion() )
+            sal_Bool bT2 = pTmpViewShell->GetViewOptions()->IsTest2();
+            sal_Bool bT6 = pTmpViewShell->GetViewOptions()->IsTest6();
+            if( bT2 || bT6 )
             {
-                if( !nFlyAsc && !nFlyDesc )
-                {
-                    nTmpAscent = nAscent;
-                    nFlyAsc = nAscent;
-                    nTmpDescent = nTmpHeight - nAscent;
-                    nFlyDesc = nTmpDescent;
-                }
-                ((SwGrfNumPortion*)pPos)->SetBase( nTmpAscent, nTmpDescent,
-                                                   nFlyAsc, nFlyDesc );
-            }
-            else
-            {
-                Point aBase( aTmpInf.GetPos() );
-                if ( GetInfo().GetTxtFrm()->IsVertical() )
-                    GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aBase );
-
-                ((SwFlyCntPortion*)pPos)->SetBase( *aTmpInf.GetTxtFrm(),
-                    aBase, nTmpAscent, nTmpDescent, nFlyAsc,
-                    nFlyDesc, nFlags );
-            }
-        }
-        if( pPos->IsMultiPortion() && ((SwMultiPortion*)pPos)->HasFlyInCntnt() )
-        {
-            OSL_ENSURE( !GetMulti(), "Too much multi" );
-            ((SwTxtFormatter*)this)->pMulti = (SwMultiPortion*)pPos;
-            SwLineLayout *pLay = &GetMulti()->GetRoot();
-            Point aSt( aTmpInf.X(), aStart.Y() );
-
-            if ( GetMulti()->HasBrackets() )
-            {
-                OSL_ENSURE( GetMulti()->IsDouble(), "Brackets only for doubles");
-                aSt.X() += ((SwDoubleLinePortion*)GetMulti())->PreWidth();
-            }
-            else if( GetMulti()->HasRotation() )
-            {
-                aSt.Y() += pCurrent->GetAscent() - GetMulti()->GetAscent();
-                if( GetMulti()->IsRevers() )
-                    aSt.X() += GetMulti()->Width();
+                if( bT2 )
+                    pTextRanger[ 0 ]->SetFlag7( sal_True );
                 else
-                    aSt.Y() += GetMulti()->Height();
-               }
-            else if ( GetMulti()->IsBidi() )
-                // jump to end of the bidi portion
-                aSt.X() += pLay->Width();
-
-            xub_StrLen nStIdx = aTmpInf.GetIdx();
-            do
-            {
-                UpdatePos( pLay, aSt, nStIdx, bAllWays );
-                nStIdx = nStIdx + pLay->GetLen();
-                aSt.Y() += pLay->Height();
-                pLay = pLay->GetNext();
-            } while ( pLay );
-            ((SwTxtFormatter*)this)->pMulti = NULL;
+                    pTextRanger[ 0 ]->SetFlag6( sal_True );
+            }
         }
-        pPos->Move( aTmpInf );
-        pPos = pPos->GetPortion();
+#endif
+        nPntCnt += pTextRanger[ 0 ]->GetPointCount();
+        while( nPntCnt > POLY_MAX && nObjCnt > POLY_MIN )
+        {
+            nPntCnt -= pTextRanger[ --nObjCnt ]->GetPointCount();
+            delete pTextRanger[ nObjCnt ];
+        }
     }
+    else if( nPos )
+    {
+        const SdrObject* pTmpObj = pSdrObj[ nPos ];
+        TextRanger* pTmpRanger = pTextRanger[ nPos ];
+        memmove( (SdrObject**)pSdrObj + 1, pSdrObj, nPos * sizeof( SdrObject* ) );
+        memmove( pTextRanger + 1, pTextRanger, nPos * sizeof( TextRanger* ) );
+        pSdrObj[ 0 ] = pTmpObj;
+        pTextRanger[ 0 ] = pTmpRanger;
+    }
+    SWRECTFN( pFrm )
+    long nTmpTop = (rLine.*fnRect->fnGetTop)();
+    // fnGetBottom is top + height
+    long nTmpBottom = (rLine.*fnRect->fnGetBottom)();
+
+    Range aRange( Min( nTmpTop, nTmpBottom ), Max( nTmpTop, nTmpBottom ) );
+
+    LongDqPtr pTmp = pTextRanger[ 0 ]->GetTextRanges( aRange );
+
+    MSHORT nCount;
+    if( 0 != ( nCount = pTmp->size() ) )
+    {
+        MSHORT nIdx = 0;
+        while( nIdx < nCount && (*pTmp)[ nIdx ] < nXPos )
+            ++nIdx;
+        sal_Bool bOdd = (nIdx % 2) ? sal_True : sal_False;
+        sal_Bool bSet = sal_True;
+        if( bOdd )
+            --nIdx; // innerhalb eines Intervalls
+        else if( ! bRight && ( nIdx >= nCount || (*pTmp)[ nIdx ] != nXPos ) )
+        {
+            if( nIdx )
+                nIdx -= 2; // ein Intervall nach links gehen
+            else
+                bSet = sal_False; // vor dem erstem Intervall
+        }
+
+        if( bSet && nIdx < nCount )
+        {
+            (aRet.*fnRect->fnSetTopAndHeight)( (rLine.*fnRect->fnGetTop)(),
+                                               (rLine.*fnRect->fnGetHeight)() );
+            (aRet.*fnRect->fnSetLeft)( (*pTmp)[ nIdx ] );
+            (aRet.*fnRect->fnSetRight)( (*pTmp)[ nIdx + 1 ] + 1 );
+        }
+    }
+    return aRet;
 }
 
-/*************************************************************************
- * SwTxtFormatter::AlignFlyInCntBase()
- * If needed, re-adjusts the character anchored objects to the y axis.
- *************************************************************************/
 
-void SwTxtFormatter::AlignFlyInCntBase( long nBaseLine ) const
+SwTxtFly::SwTxtFly() :
+    pPage(0),
+    mpCurrAnchoredObj(0),
+    pCurrFrm(0),
+    pMaster(0),
+    mpAnchoredObjList(0),
+    nMinBottom(0),
+    nNextTop(0),
+    nIndex(0)
 {
-    OSL_ENSURE( ! pFrm->IsVertical() || pFrm->IsSwapped(),
-            "SwTxtFormatter::AlignFlyInCntBase with unswapped frame" );
-
-    if( GetInfo().IsTest() )
-        return;
-    SwLinePortion *pFirst = pCurr->GetFirstPortion();
-    SwLinePortion *pPos = pFirst;
-    objectpositioning::AsCharFlags nFlags = AS_CHAR_NOFLAG;
-    if( GetMulti() && GetMulti()->HasRotation() )
-    {
-        nFlags |= AS_CHAR_ROTATE;
-        if( GetMulti()->IsRevers() )
-            nFlags |= AS_CHAR_REVERSE;
-    }
-
-    long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
-
-    while( pPos )
-    {
-        if( pPos->IsFlyCntPortion() || pPos->IsGrfNumPortion() )
-        {
-            pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, pPos );
-
-            if( pPos->IsGrfNumPortion() )
-                ((SwGrfNumPortion*)pPos)->SetBase( nTmpAscent, nTmpDescent,
-                                                   nFlyAsc, nFlyDesc );
-            else
-            {
-                Point aBase;
-                if ( GetInfo().GetTxtFrm()->IsVertical() )
-                {
-                    nBaseLine = GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( nBaseLine );
-                    aBase = Point( nBaseLine, ((SwFlyCntPortion*)pPos)->GetRefPoint().Y() );
-                }
-                else
-                    aBase = Point( ((SwFlyCntPortion*)pPos)->GetRefPoint().X(), nBaseLine );
-
-                ((SwFlyCntPortion*)pPos)->SetBase( *GetInfo().GetTxtFrm(), aBase, nTmpAscent, nTmpDescent,
-                    nFlyAsc, nFlyDesc, nFlags );
-            }
-        }
-        pPos = pPos->GetPortion();
-    }
 }
 
-/*************************************************************************
- * SwTxtFly::ChkFlyUnderflow()
- * This is called after the real height of the line has been calculated.
- * Therefore it is possible, that more flys from below intersect with the
- * line, or that flys from above do not intersect with the line anymore.
- * We check this and return true, meaning that the line has to be
- * formatted again.
- *************************************************************************/
-
-sal_Bool SwTxtFormatter::ChkFlyUnderflow( SwTxtFormatInfo &rInf ) const
+SwTxtFly::SwTxtFly( const SwTxtFrm *pFrm )
 {
-    OSL_ENSURE( rInf.GetTxtFly()->IsOn(), "SwTxtFormatter::ChkFlyUnderflow: why?" );
-    if( GetCurr() )
-    {
-        // First we check, whether a fly overlaps with the line.
-        // = GetLineHeight()
-        const long nHeight = GetCurr()->GetRealHeight();
-        SwRect aLine( GetLeftMargin(), Y(), rInf.RealWidth(), nHeight );
-
-        SwRect aLineVert( aLine );
-        if ( pFrm->IsVertical() )
-            pFrm->SwitchHorizontalToVertical( aLineVert );
-        SwRect aInter( rInf.GetTxtFly()->GetFrm( aLineVert ) );
-        if ( pFrm->IsVertical() )
-            pFrm->SwitchVerticalToHorizontal( aInter );
-
-        if( !aInter.HasArea() )
-            return sal_False;
-
-        // We now check every portion that could have lowered for overlapping
-        // with the fly.
-        const SwLinePortion *pPos = GetCurr()->GetFirstPortion();
-        aLine.Pos().Y() = Y() + GetCurr()->GetRealHeight() - GetCurr()->Height();
-        aLine.Height( GetCurr()->Height() );
-
-        while( pPos )
-        {
-            aLine.Width( pPos->Width() );
-
-            aLineVert = aLine;
-            if ( pFrm->IsVertical() )
-                pFrm->SwitchHorizontalToVertical( aLineVert );
-            aInter = rInf.GetTxtFly()->GetFrm( aLineVert );
-            if ( pFrm->IsVertical() )
-                pFrm->SwitchVerticalToHorizontal( aInter );
-
-            // New flys from below?
-            if( !pPos->IsFlyPortion() )
-            {
-                if( aInter.IsOver( aLine ) )
-                {
-                    aInter._Intersection( aLine );
-                    if( aInter.HasArea() )
-                    {
-                        // To be evaluated during reformat of this line:
-                        // RealHeight including spacing
-                        rInf.SetLineHeight( KSHORT(nHeight) );
-                        // Height without extra spacing
-                        rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
-                        return sal_True;
-                    }
-                }
-            }
-            else
-            {
-                // The fly portion is not intersected by a fly anymore
-                if ( ! aInter.IsOver( aLine ) )
-                {
-                    rInf.SetLineHeight( KSHORT(nHeight) );
-                    rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
-                    return sal_True;
-                }
-                else
-                {
-                    aInter._Intersection( aLine );
-
-                    // No area means a fly has become invalid because of
-                    // lowering the line => reformat the line.
-                    // We also have to reformat the line, if the fly size
-                    // differs from the intersection interval's size.
-                    if( ! aInter.HasArea() ||
-                        ((SwFlyPortion*)pPos)->GetFixWidth() != aInter.Width() )
-                    {
-                        rInf.SetLineHeight( KSHORT(nHeight) );
-                        rInf.SetLineNettoHeight( KSHORT( pCurr->Height() ) );
-                        return sal_True;
-                    }
-                }
-            }
-
-            aLine.Left( aLine.Left() + pPos->Width() );
-            pPos = pPos->GetPortion();
-        }
-    }
-    return sal_False;
+    CtorInitTxtFly( pFrm );
 }
-
-/*************************************************************************
- * SwTxtFormatter::CalcFlyWidth()
- * Determines the next object, that reaches into the rest of the line and
- * constructs the appropriate FlyPortion.
- * We use SwTxtFly.GetFrm(..) for that.
- *************************************************************************/
-
-// The right margin can be shortened by Flys.
-
-void SwTxtFormatter::CalcFlyWidth( SwTxtFormatInfo &rInf )
-{
-    if( GetMulti() || rInf.GetFly() )
-        return;
-
-    SwTxtFly *pTxtFly = rInf.GetTxtFly();
-    if( !pTxtFly->IsOn() || rInf.IsIgnoreFly() )
-        return;
-
-    const SwLinePortion *pLast = rInf.GetLast();
-
-    long nAscent;
-    long nTop = Y();
-    long nHeight;
-
-    if( rInf.GetLineHeight() )
-    {
-        // Real line height has already been calculated, we only have to
-        // search for intersections in the lower part of the strip
-        nAscent = pCurr->GetAscent();
-        nHeight = rInf.GetLineNettoHeight();
-        nTop += rInf.GetLineHeight() - nHeight;
-    }
-    else
-    {
-        nAscent = pLast->GetAscent();
-        nHeight = pLast->Height();
-
-        // We make a first guess for the line's real height
-        if ( ! pCurr->GetRealHeight() )
-            CalcRealHeight();
-
-        if ( pCurr->GetRealHeight() > nHeight )
-            nTop += pCurr->GetRealHeight() - nHeight;
-        else
-            // Important for fixed space between lines
-            nHeight = pCurr->GetRealHeight();
-    }
-
-    const long nLeftMar = GetLeftMargin();
-    const long nLeftMin = (rInf.X() || GetDropLeft()) ? nLeftMar : GetLeftMin();
-
-    SwRect aLine( rInf.X() + nLeftMin, nTop, rInf.RealWidth() - rInf.X()
-                  + nLeftMar - nLeftMin , nHeight );
-
-    SwRect aLineVert( aLine );
-    if ( pFrm->IsRightToLeft() )
-        pFrm->SwitchLTRtoRTL( aLineVert );
-
-    if ( pFrm->IsVertical() )
-        pFrm->SwitchHorizontalToVertical( aLineVert );
-    SwRect aInter( pTxtFly->GetFrm( aLineVert ) );
-
-    if ( pFrm->IsRightToLeft() )
-        pFrm->SwitchRTLtoLTR( aInter );
-
-    if ( pFrm->IsVertical() )
-        pFrm->SwitchVerticalToHorizontal( aInter );
-
-    if( aInter.IsOver( aLine ) )
-    {
-        aLine.Left( rInf.X() + nLeftMar );
-        sal_Bool bForced = sal_False;
-        if( aInter.Left() <= nLeftMin )
-        {
-            SwTwips nFrmLeft = GetTxtFrm()->Frm().Left();
-            if( GetTxtFrm()->Prt().Left() < 0 )
-                nFrmLeft += GetTxtFrm()->Prt().Left();
-            if( aInter.Left() < nFrmLeft )
-                aInter.Left( nFrmLeft );
-
-            long nAddMar = 0;
-            if ( pFrm->IsRightToLeft() )
-            {
-                nAddMar = pFrm->Frm().Right() - Right();
-                if ( nAddMar < 0 )
-                    nAddMar = 0;
-            }
-            else
-                nAddMar = nLeftMar - nFrmLeft;
-
-            aInter.Width( aInter.Width() + nAddMar );
-            // For a negative first line indent, we set this flag to show
-            // that the indentation/margin has been moved.
-            // This needs to be respected by the DefaultTab at the zero position.
-            if( IsFirstTxtLine() && HasNegFirst() )
-                bForced = sal_True;
-        }
-        aInter.Intersection( aLine );
-        if( !aInter.HasArea() )
-            return;
-
-        const sal_Bool bFullLine =  aLine.Left()  == aInter.Left() &&
-                                aLine.Right() == aInter.Right();
-
-        // Although no text is left, we need to format another line,
-        // because also empty lines need to avoid a Fly with no wrapping.
-        if( bFullLine && rInf.GetIdx() == rInf.GetTxt().Len() )
-        {
-            rInf.SetNewLine( sal_True );
-            // 8221: We know that for dummies, it holds ascent == height
-            pCurr->SetDummy(sal_True);
-        }
-
-        // aInter becomes frame-local
-        aInter.Pos().X() -= nLeftMar;
-        SwFlyPortion *pFly = new SwFlyPortion( aInter );
-        if( bForced )
-        {
-            pCurr->SetForcedLeftMargin( sal_True );
-            rInf.ForcedLeftMargin( (sal_uInt16)aInter.Width() );
-        }
-
-        if( bFullLine )
-        {
-            // 8110: In order to properly flow around Flys with different
-            // wrapping attributes, we need to increase by units of line height.
-            // The last avoiding line should be adjusted in height, so that
-            // we don't get a frame spacing effect.
-            // 8221: It is important that ascent == height, because the FlyPortion
-            // values are transferred to pCurr in CalcLine and IsDummy() relies
-            // on this behaviour.
-            // To my knowledge we only have two places where DummyLines can be
-            // created: here and in MakeFlyDummies.
-            // IsDummy() is evaluated in IsFirstTxtLine(), when moving lines
-            // and in relation with DropCaps.
-            pFly->Height( KSHORT(aInter.Height()) );
-
-            // nNextTop now contains the margin's bottom edge, which we avoid
-            // or the next margin's top edge, which we need to respect.
-            // That means we can comfortably grow up to this value; that's how
-            // we save a few empty lines.
-            long nNextTop = pTxtFly->GetNextTop();
-            if ( pFrm->IsVertical() )
-                nNextTop = pFrm->SwitchVerticalToHorizontal( nNextTop );
-            if( nNextTop > aInter.Bottom() )
-            {
-                SwTwips nH = nNextTop - aInter.Top();
-                if( nH < KSHRT_MAX )
-                    pFly->Height( KSHORT( nH ) );
-            }
-            if( nAscent < pFly->Height() )
-                pFly->SetAscent( KSHORT(nAscent) );
-            else
-                pFly->SetAscent( pFly->Height() );
-        }
-        else
-        {
-            if( rInf.GetIdx() == rInf.GetTxt().Len() )
-            {
-                // Don't use nHeight, or we have a huge descent
-                pFly->Height( pLast->Height() );
-                pFly->SetAscent( pLast->GetAscent() );
-            }
-            else
-            {
-                pFly->Height( KSHORT(aInter.Height()) );
-                if( nAscent < pFly->Height() )
-                    pFly->SetAscent( KSHORT(nAscent) );
-                else
-                    pFly->SetAscent( pFly->Height() );
-            }
-        }
-
-        rInf.SetFly( pFly );
-
-        if( pFly->Fix() < rInf.Width() )
-            rInf.Width( pFly->Fix() );
-
-        GETGRID( pFrm->FindPageFrm() )
-        if ( pGrid )
-        {
-            const SwPageFrm* pPageFrm = pFrm->FindPageFrm();
-            const SwLayoutFrm* pBody = pPageFrm->FindBodyCont();
-
-            SWRECTFN( pPageFrm )
-
-            const long nGridOrigin = pBody ?
-                                    (pBody->*fnRect->fnGetPrtLeft)() :
-                                    (pPageFrm->*fnRect->fnGetPrtLeft)();
-
-            const SwDoc *pDoc = rInf.GetTxtFrm()->GetNode()->GetDoc();
-            const sal_uInt16 nGridWidth = GETGRIDWIDTH( pGrid, pDoc); // For textgrid refactor
-
-            SwTwips nStartX = GetLeftMargin();
-            if ( bVert )
-            {
-                Point aPoint( nStartX, 0 );
-                pFrm->SwitchHorizontalToVertical( aPoint );
-                nStartX = aPoint.Y();
-            }
-
-            const SwTwips nOfst = nStartX - nGridOrigin;
-            const SwTwips nTmpWidth = rInf.Width() + nOfst;
-
-            const sal_uLong i = nTmpWidth / nGridWidth + 1;
-
-            const long nNewWidth = ( i - 1 ) * nGridWidth - nOfst;
-            if ( nNewWidth > 0 )
-                rInf.Width( (sal_uInt16)nNewWidth );
-            else
-                rInf.Width( 0 );
-        }
-    }
-}
-
-/*****************************************************************************
- * SwTxtFormatter::NewFlyCntPortion
- * Creates a new portion for a character anchored object.
- *****************************************************************************/
-
-SwFlyCntPortion *SwTxtFormatter::NewFlyCntPortion( SwTxtFormatInfo &rInf,
-                                                   SwTxtAttr *pHint ) const
-{
-    SwFlyCntPortion *pRet = 0;
-    const SwFrm *pFrame = (SwFrm*)pFrm;
-
-    SwFlyInCntFrm *pFly;
-    SwFrmFmt* pFrmFmt = ((SwTxtFlyCnt*)pHint)->GetFlyCnt().GetFrmFmt();
-    if( RES_FLYFRMFMT == pFrmFmt->Which() )
-        pFly = ((SwTxtFlyCnt*)pHint)->GetFlyFrm(pFrame);
-    else
-        pFly = NULL;
-    // aBase is the document-global position, from which the new extra portion is placed
-    // aBase.X() = Offset in in the line after the current position
-    // aBase.Y() = LineIter.Y() + Ascent of the current position
-
-    long nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc;
-    // OD 08.01.2004 #i11859# - use new method <SwLineLayout::MaxAscentDescent(..)>
-    //SwLinePortion *pPos = pCurr->GetFirstPortion();
-    //lcl_MaxAscDescent( pPos, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
-    pCurr->MaxAscentDescent( nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc );
-
-    // If the ascent of the frame is larger than the ascent of the current position,
-    // we use this one when calculating the base, or the frame would be positioned
-    // too much to the top, sliding down after all causing a repaint in an area
-    // he actually never was in.
-    KSHORT nAscent = 0;
-
-    const bool bTxtFrmVertical = GetInfo().GetTxtFrm()->IsVertical();
-
-    const bool bUseFlyAscent = pFly && pFly->GetValidPosFlag() &&
-                               0 != ( bTxtFrmVertical ?
-                                      pFly->GetRefPoint().X() :
-                                      pFly->GetRefPoint().Y() );
-
-    if ( bUseFlyAscent )
-         nAscent = static_cast<sal_uInt16>( Abs( int( bTxtFrmVertical ?
-                                                  pFly->GetRelPos().X() :
-                                                  pFly->GetRelPos().Y() ) ) );
-
-    // Check if we prefer to use the ascent of the last portion:
-    if ( IsQuick() ||
-         !bUseFlyAscent ||
-         nAscent < rInf.GetLast()->GetAscent() )
-    {
-        nAscent = rInf.GetLast()->GetAscent();
-    }
-    else if( nAscent > nFlyAsc )
-        nFlyAsc = nAscent;
-
-    Point aBase( GetLeftMargin() + rInf.X(), Y() + nAscent );
-    objectpositioning::AsCharFlags nMode = IsQuick() ? AS_CHAR_QUICK : 0;
-    if( GetMulti() && GetMulti()->HasRotation() )
-    {
-        nMode |= AS_CHAR_ROTATE;
-        if( GetMulti()->IsRevers() )
-            nMode |= AS_CHAR_REVERSE;
-    }
-
-    Point aTmpBase( aBase );
-    if ( GetInfo().GetTxtFrm()->IsVertical() )
-        GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
-
-    if( pFly )
-    {
-        pRet = new SwFlyCntPortion( *GetInfo().GetTxtFrm(), pFly, aTmpBase,
-                                    nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
-        // We need to make sure that our font is set again in the OutputDevice
-        // It could be that the FlyInCnt was added anew and GetFlyFrm() would
-        // in turn cause, that it'd be created anew again.
-        // This one's frames get formatted right away, which change the font and
-        // we have a bug (3322).
-        rInf.SelectFont();
-        if( pRet->GetAscent() > nAscent )
-        {
-            aBase.Y() = Y() + pRet->GetAscent();
-            nMode |= AS_CHAR_ULSPACE;
-            if( !rInf.IsTest() )
-                aTmpBase = aBase;
-                if ( GetInfo().GetTxtFrm()->IsVertical() )
-                    GetInfo().GetTxtFrm()->SwitchHorizontalToVertical( aTmpBase );
-
-                pRet->SetBase( *rInf.GetTxtFrm(), aTmpBase, nTmpAscent,
-                               nTmpDescent, nFlyAsc, nFlyDesc, nMode );
-        }
-    }
-    else
-    {
-        pRet = new SwFlyCntPortion( *rInf.GetTxtFrm(), (SwDrawContact*)pFrmFmt->FindContactObj(),
-           aTmpBase, nTmpAscent, nTmpDescent, nFlyAsc, nFlyDesc, nMode );
-    }
-    return pRet;
-}
-
-
-
-/*************************************************************************
- * SwTxtFly::SwTxtFly()
- *************************************************************************/
 
 SwTxtFly::SwTxtFly( const SwTxtFly& rTxtFly )
 {
@@ -746,6 +379,11 @@ SwTxtFly::SwTxtFly( const SwTxtFly& rTxtFly )
     mbIgnoreCurrentFrame = rTxtFly.mbIgnoreCurrentFrame;
     mbIgnoreContour = rTxtFly.mbIgnoreContour;
     mbIgnoreObjsInHeaderFooter = rTxtFly.mbIgnoreObjsInHeaderFooter;
+}
+
+SwTxtFly::~SwTxtFly()
+{
+    delete mpAnchoredObjList;
 }
 
 void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )
@@ -774,16 +412,6 @@ void SwTxtFly::CtorInitTxtFly( const SwTxtFrm *pFrm )
     nIndex = ULONG_MAX;
 }
 
-/*************************************************************************
- * SwTxtFly::_GetFrm()
- *
- * IN:  document-global (rRect)
- * OUT: frame-local (return value)
- *
- * This method is called during formatting of LineIter in order to:
- * 1. prepare the next FlyPortion
- * 2. remember new overlappings after changes to the line height
- *************************************************************************/
 
 SwRect SwTxtFly::_GetFrm( const SwRect &rRect, sal_Bool bTop ) const
 {
@@ -804,15 +432,6 @@ SwRect SwTxtFly::_GetFrm( const SwRect &rRect, sal_Bool bTop ) const
     return aRet;
 }
 
-/*************************************************************************
- * SwTxtFly::IsAnyFrm()
- *
- * IN: document-global
- * for the print area of the current frame
- *
- * Is used to disable the SwTxtFly if no objects overlap (relax)
- *
- *************************************************************************/
 
 sal_Bool SwTxtFly::IsAnyFrm() const
 {
@@ -826,16 +445,6 @@ sal_Bool SwTxtFly::IsAnyFrm() const
     UNDO_SWAP( pCurrFrm )
     return bRet;
 }
-
-/*************************************************************************
- * SwTxtFly::IsAnyObj()
- *
- * IN: document-global
- * OUT: sal_True     If a frame or DrawObj needs to be respected
- *
- * Only if this method returns sal_False, we can use optimizations like
- * Paint/FormatEmpty for empty paragraphs and also the virtual OutputDevice.
- *************************************************************************/
 
 sal_Bool SwTxtFly::IsAnyObj( const SwRect &rRect ) const
 {
@@ -876,17 +485,6 @@ const SwCntntFrm* SwTxtFly::_GetMaster()
     return pMaster;
 }
 
-/*************************************************************************
- * SwTxtFly::DrawTextOpaque()
- *
- * IN: document-global
- *
- * DrawTextOpaque() is called by DrawText().
- * The ClipRegions are placed int a way, that only those parts are displayed
- * which are not within the areas of FlyFrms which are opaque and above the
- * current Frame.
- * DrawText() takes over the on optimization!
- *************************************************************************/
 
 sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
 {
@@ -1011,14 +609,6 @@ sal_Bool SwTxtFly::DrawTextOpaque( SwDrawTextInfo &rInf )
     return sal_True;
 }
 
-/*************************************************************************
- * SwTxtFly::DrawFlyRect()
- *
- * IN: window-local
- * We need to keep two subtelties in mind:
- * 1) DrawRect() above the ClipRect are allowed!
- * 2) FlyToRect() returns larger values than the frame data!
- *************************************************************************/
 
 void SwTxtFly::DrawFlyRect( OutputDevice* pOut, const SwRect &rRect,
         const SwTxtPaintInfo &rInf, sal_Bool bNoGraphic )
@@ -1284,61 +874,6 @@ sal_Bool SwTxtFly::GetTop( const SwAnchoredObject* _pAnchoredObj,
     }
     return sal_False;
 }
-// #i68520#
-struct AnchoredObjOrder
-{
-    sal_Bool mbR2L;
-    SwRectFn mfnRect;
-
-    AnchoredObjOrder( const sal_Bool bR2L,
-                       SwRectFn fnRect )
-        : mbR2L( bR2L ),
-          mfnRect( fnRect )
-    {}
-
-    bool operator()( const SwAnchoredObject* pListedAnchoredObj,
-                     const SwAnchoredObject* pNewAnchoredObj )
-    {
-        const SwRect aBoundRectOfListedObj( pListedAnchoredObj->GetObjRectWithSpaces() );
-        const SwRect aBoundRectOfNewObj( pNewAnchoredObj->GetObjRectWithSpaces() );
-        if ( ( mbR2L &&
-               ( (aBoundRectOfListedObj.*mfnRect->fnGetRight)() ==
-                 (aBoundRectOfNewObj.*mfnRect->fnGetRight)() ) ) ||
-             ( !mbR2L &&
-               ( (aBoundRectOfListedObj.*mfnRect->fnGetLeft)() ==
-                 (aBoundRectOfNewObj.*mfnRect->fnGetLeft)() ) ) )
-        {
-            SwTwips nTopDiff =
-                (*mfnRect->fnYDiff)( (aBoundRectOfNewObj.*mfnRect->fnGetTop)(),
-                                    (aBoundRectOfListedObj.*mfnRect->fnGetTop)() );
-            if ( nTopDiff == 0 &&
-                 ( ( mbR2L &&
-                     ( (aBoundRectOfNewObj.*mfnRect->fnGetLeft)() >
-                       (aBoundRectOfListedObj.*mfnRect->fnGetLeft)() ) ) ||
-                   ( !mbR2L &&
-                     ( (aBoundRectOfNewObj.*mfnRect->fnGetRight)() <
-                       (aBoundRectOfListedObj.*mfnRect->fnGetRight)() ) ) ) )
-            {
-                return true;
-            }
-            else if ( nTopDiff > 0 )
-            {
-                return true;
-            }
-        }
-        else if ( ( mbR2L &&
-                    ( (aBoundRectOfListedObj.*mfnRect->fnGetRight)() >
-                      (aBoundRectOfNewObj.*mfnRect->fnGetRight)() ) ) ||
-                  ( !mbR2L &&
-                    ( (aBoundRectOfListedObj.*mfnRect->fnGetLeft)() <
-                      (aBoundRectOfNewObj.*mfnRect->fnGetLeft)() ) ) )
-        {
-            return true;
-        }
-
-        return false;
-    }
-};
 
 // #i68520#
 SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
@@ -1503,234 +1038,6 @@ SwTwips SwTxtFly::CalcMinBottom() const
     return nRet;
 }
 
-/*************************************************************************
- * Hier erfolgt die Berechnung der Kontur ...
- * CalcBoundRect(..) und andere
- *************************************************************************/
-
-/*************************************************************************
- * class SwContourCache
- *************************************************************************/
-
-SwContourCache::SwContourCache() :
-    nPntCnt( 0 ), nObjCnt( 0 )
-{
-    memset( (SdrObject**)pSdrObj, 0, sizeof(pSdrObj) );
-    memset( pTextRanger, 0, sizeof(pTextRanger) );
-}
-
-SwContourCache::~SwContourCache()
-{
-    for( MSHORT i = 0; i < nObjCnt; delete pTextRanger[ i++ ] )
-        ;
-}
-
-void SwContourCache::ClrObject( MSHORT nPos )
-{
-    OSL_ENSURE( pTextRanger[ nPos ], "ClrObject: Allready cleared. Good Bye!" );
-    nPntCnt -= pTextRanger[ nPos ]->GetPointCount();
-    delete pTextRanger[ nPos ];
-    --nObjCnt;
-    memmove( (SdrObject**)pSdrObj + nPos, pSdrObj + nPos + 1,
-             ( nObjCnt - nPos ) * sizeof( SdrObject* ) );
-    memmove( pTextRanger + nPos, pTextRanger + nPos + 1,
-             ( nObjCnt - nPos ) * sizeof( TextRanger* ) );
-}
-
-void ClrContourCache( const SdrObject *pObj )
-{
-    if( pContourCache && pObj )
-        for( MSHORT i = 0; i < pContourCache->GetCount(); ++i )
-            if( pObj == pContourCache->GetObject( i ) )
-            {
-                pContourCache->ClrObject( i );
-                break;
-            }
-}
-
-void ClrContourCache()
-{
-    if( pContourCache )
-    {
-        for( MSHORT i = 0; i < pContourCache->GetCount();
-             delete pContourCache->pTextRanger[ i++ ] )
-             ;
-        pContourCache->nObjCnt = 0;
-        pContourCache->nPntCnt = 0;
-    }
-}
-
-/*************************************************************************
- * SwContourCache::CalcBoundRect
- * berechnet das Rechteck, welches vom Objekt in der angegebenen Zeile
- * ueberdeckt wird.
- * Bei _nicht_ konturumflossenen Objekten ist dies einfach die Ueber-
- * lappung von BoundRect (inkl. Abstand!) und Zeile,
- * bei Konturumfluss wird das Polypolygon des Objekts abgeklappert
- *************************************************************************/
-// #i68520#
-const SwRect SwContourCache::CalcBoundRect( const SwAnchoredObject* pAnchoredObj,
-                                            const SwRect &rLine,
-                                            const SwTxtFrm* pFrm,
-                                            const long nXPos,
-                                            const sal_Bool bRight )
-{
-    SwRect aRet;
-    const SwFrmFmt* pFmt = &(pAnchoredObj->GetFrmFmt());
-    if( pFmt->GetSurround().IsContour() &&
-        ( !pAnchoredObj->ISA(SwFlyFrm) ||
-          ( static_cast<const SwFlyFrm*>(pAnchoredObj)->Lower() &&
-            static_cast<const SwFlyFrm*>(pAnchoredObj)->Lower()->IsNoTxtFrm() ) ) )
-    {
-        aRet = pAnchoredObj->GetObjRectWithSpaces();
-        if( aRet.IsOver( rLine ) )
-        {
-            if( !pContourCache )
-                pContourCache = new SwContourCache;
-
-            aRet = pContourCache->ContourRect(
-                    pFmt, pAnchoredObj->GetDrawObj(), pFrm, rLine, nXPos, bRight );
-        }
-        else
-            aRet.Width( 0 );
-    }
-    else
-    {
-        aRet = pAnchoredObj->GetObjRectWithSpaces();
-    }
-
-    return aRet;
-}
-
-const SwRect SwContourCache::ContourRect( const SwFmt* pFmt,
-    const SdrObject* pObj, const SwTxtFrm* pFrm, const SwRect &rLine,
-    const long nXPos, const sal_Bool bRight )
-{
-    SwRect aRet;
-    MSHORT nPos = 0; // Suche im Cache ...
-    while( nPos < GetCount() && pObj != pSdrObj[ nPos ] )
-        ++nPos;
-    if( GetCount() == nPos ) // nicht gefunden
-    {
-        if( nObjCnt == POLY_CNT )
-        {
-            nPntCnt -= pTextRanger[ --nObjCnt ]->GetPointCount();
-            delete pTextRanger[ nObjCnt ];
-        }
-        ::basegfx::B2DPolyPolygon aPolyPolygon;
-        ::basegfx::B2DPolyPolygon* pPolyPolygon = 0L;
-
-        if ( pObj->ISA(SwVirtFlyDrawObj) )
-        {
-            // Vorsicht #37347: Das GetContour() fuehrt zum Laden der Grafik,
-            // diese aendert dadurch ggf. ihre Groesse, ruft deshalb ein
-            // ClrObject() auf.
-            PolyPolygon aPoly;
-            if( !((SwVirtFlyDrawObj*)pObj)->GetFlyFrm()->GetContour( aPoly ) )
-                aPoly = PolyPolygon( ((SwVirtFlyDrawObj*)pObj)->
-                                     GetFlyFrm()->Frm().SVRect() );
-            aPolyPolygon.clear();
-            aPolyPolygon.append(aPoly.getB2DPolyPolygon());
-        }
-        else
-        {
-            if( !pObj->ISA( E3dObject ) )
-            {
-                aPolyPolygon = pObj->TakeXorPoly();
-            }
-
-            ::basegfx::B2DPolyPolygon aContourPoly(pObj->TakeContour());
-            pPolyPolygon = new ::basegfx::B2DPolyPolygon(aContourPoly);
-        }
-        const SvxLRSpaceItem &rLRSpace = pFmt->GetLRSpace();
-        const SvxULSpaceItem &rULSpace = pFmt->GetULSpace();
-        memmove( pTextRanger + 1, pTextRanger, nObjCnt * sizeof( TextRanger* ) );
-        memmove( (SdrObject**)pSdrObj + 1, pSdrObj, nObjCnt++ * sizeof( SdrObject* ) );
-        pSdrObj[ 0 ] = pObj; // Wg. #37347 darf das Object erst nach dem
-                             // GetContour() eingetragen werden.
-        pTextRanger[ 0 ] = new TextRanger( aPolyPolygon, pPolyPolygon, 20,
-            (sal_uInt16)rLRSpace.GetLeft(), (sal_uInt16)rLRSpace.GetRight(),
-            pFmt->GetSurround().IsOutside(), sal_False, pFrm->IsVertical() );
-        pTextRanger[ 0 ]->SetUpper( rULSpace.GetUpper() );
-        pTextRanger[ 0 ]->SetLower( rULSpace.GetLower() );
-
-        delete pPolyPolygon;
-        // UPPER_LOWER_TEST
-#ifdef DBG_UTIL
-        const ViewShell* pTmpViewShell = pFmt->GetDoc()->GetCurrentViewShell();
-        if( pTmpViewShell )
-        {
-            sal_Bool bT2 = pTmpViewShell->GetViewOptions()->IsTest2();
-            sal_Bool bT6 = pTmpViewShell->GetViewOptions()->IsTest6();
-            if( bT2 || bT6 )
-            {
-                if( bT2 )
-                    pTextRanger[ 0 ]->SetFlag7( sal_True );
-                else
-                    pTextRanger[ 0 ]->SetFlag6( sal_True );
-            }
-        }
-#endif
-        nPntCnt += pTextRanger[ 0 ]->GetPointCount();
-        while( nPntCnt > POLY_MAX && nObjCnt > POLY_MIN )
-        {
-            nPntCnt -= pTextRanger[ --nObjCnt ]->GetPointCount();
-            delete pTextRanger[ nObjCnt ];
-        }
-    }
-    else if( nPos )
-    {
-        const SdrObject* pTmpObj = pSdrObj[ nPos ];
-        TextRanger* pTmpRanger = pTextRanger[ nPos ];
-        memmove( (SdrObject**)pSdrObj + 1, pSdrObj, nPos * sizeof( SdrObject* ) );
-        memmove( pTextRanger + 1, pTextRanger, nPos * sizeof( TextRanger* ) );
-        pSdrObj[ 0 ] = pTmpObj;
-        pTextRanger[ 0 ] = pTmpRanger;
-    }
-    SWRECTFN( pFrm )
-    long nTmpTop = (rLine.*fnRect->fnGetTop)();
-    // fnGetBottom is top + height
-    long nTmpBottom = (rLine.*fnRect->fnGetBottom)();
-
-    Range aRange( Min( nTmpTop, nTmpBottom ), Max( nTmpTop, nTmpBottom ) );
-
-    LongDqPtr pTmp = pTextRanger[ 0 ]->GetTextRanges( aRange );
-
-    MSHORT nCount;
-    if( 0 != ( nCount = pTmp->size() ) )
-    {
-        MSHORT nIdx = 0;
-        while( nIdx < nCount && (*pTmp)[ nIdx ] < nXPos )
-            ++nIdx;
-        sal_Bool bOdd = (nIdx % 2) ? sal_True : sal_False;
-        sal_Bool bSet = sal_True;
-        if( bOdd )
-            --nIdx; // innerhalb eines Intervalls
-        else if( ! bRight && ( nIdx >= nCount || (*pTmp)[ nIdx ] != nXPos ) )
-        {
-            if( nIdx )
-                nIdx -= 2; // ein Intervall nach links gehen
-            else
-                bSet = sal_False; // vor dem erstem Intervall
-        }
-
-        if( bSet && nIdx < nCount )
-        {
-            (aRet.*fnRect->fnSetTopAndHeight)( (rLine.*fnRect->fnGetTop)(),
-                                               (rLine.*fnRect->fnGetHeight)() );
-            (aRet.*fnRect->fnSetLeft)( (*pTmp)[ nIdx ] );
-            (aRet.*fnRect->fnSetRight)( (*pTmp)[ nIdx + 1 ] + 1 );
-        }
-    }
-    return aRet;
-}
-
-/*************************************************************************
- *                      SwTxtFly::ForEach()
- *
- * sucht nach dem ersten Objekt, welches mit dem Rechteck ueberlappt
- *
- *************************************************************************/
 
 sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid ) const
 {
@@ -1817,11 +1124,6 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
     return bRet;
 }
 
-/*************************************************************************
- *                      SwTxtFly::GetPos()
- *
- * liefert die Position im sorted Array zurueck
- *************************************************************************/
 
 // #i68520#
 SwAnchoredObjList::size_type SwTxtFly::GetPos( const SwAnchoredObject* pAnchoredObj ) const
@@ -1833,14 +1135,6 @@ SwAnchoredObjList::size_type SwTxtFly::GetPos( const SwAnchoredObject* pAnchored
     return nRet;
 }
 
-/*************************************************************************
- *                      SwTxtFly::CalcRightMargin()
- *
- * pObj ist das Object, der uns gerade ueberlappt.
- * pCurrFrm ist der aktuelle Textframe, der ueberlappt wird.
- * Der rechte Rand ist der rechte Rand oder
- * er wird durch das naechste Object, welches in die Zeile ragt, bestimmt.
- *************************************************************************/
 // #i68520#
 void SwTxtFly::CalcRightMargin( SwRect &rFly,
                                 SwAnchoredObjList::size_type nFlyPos,
@@ -1932,14 +1226,6 @@ void SwTxtFly::CalcRightMargin( SwRect &rFly,
     (rFly.*fnRect->fnSetRight)( nRight );
 }
 
-/*************************************************************************
- *                      SwTxtFly::CalcLeftMargin()
- *
- * pFly ist der FlyFrm, der uns gerade ueberlappt.
- * pCurrFrm ist der aktuelle Textframe, der ueberlappt wird.
- * Der linke Rand ist der linke Rand der aktuellen PrintArea oder
- * er wird durch den vorigen FlyFrm, der in die Zeile ragt, bestimmt.
- *************************************************************************/
 // #i68520#
 void SwTxtFly::CalcLeftMargin( SwRect &rFly,
                                SwAnchoredObjList::size_type nFlyPos,
@@ -2006,15 +1292,6 @@ void SwTxtFly::CalcLeftMargin( SwRect &rFly,
 }
 
 // #i68520#
-/**
-  Computes the bounds of an anchored object. This takes the
-  object wrapping and contour into account.
-
-  @param pAnchoredObj the object for which to get the bounds
-  @param rLine the bounds of the line to format
-
-  @return the flying object bounds
-  */
 SwRect SwTxtFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
                             const SwRect &rLine ) const
 {
@@ -2070,27 +1347,11 @@ SwRect SwTxtFly::AnchoredObjToRect( const SwAnchoredObject* pAnchoredObj,
 }
 
 // #i68520#
-// new method <_GetSurroundForTextWrap(..)> replaces methods
-// <CalcSmart(..)> and <GetOrder(..)>
-/*************************************************************************
- *                      SwTxtFly::CalcSmart()
- *
- * CalcSmart() liefert die Umlaufform zurueck.
- *
- * Auf beiden Seiten ist weniger als 2 cm Platz fuer den Text
- *   => kein Umlauf ( SURROUND_NONE )
- * Auf genau einer Seite ist mehr als 2 cm Platz
- *   => Umlauf auf dieser Seite ( SURROUND_LEFT / SURROUND_RIGHT )
- * Auf beiden Seiten ist mehr als 2 cm Platz, das Objekt ist breiter als 1,5 cm
- *   => Umlauf auf der breiteren Seite ( SURROUND_LEFT / SURROUND_RIGHT )
- * Auf beiden Seiten ist mehr als 2 cm Platz, das Objekt ist schmaler als 1,5 cm
- *   => beidseitiger Umlauf ( SURROUND_PARALLEL )
- *
- *************************************************************************/
 
-// Umfluss nur auf Seiten mit mindestens 2 cm Platz fuer den Text
+// Wrap only on sides with at least 2cm space for the text
 #define TEXT_MIN 1134
-// Beidseitiger Umfluss bis zu einer Rahmenbreite von maximal 1,5 cm
+
+// Wrap on both sides up to a frame width of 1.5cm
 #define FRAME_MAX 850
 
 SwSurround SwTxtFly::_GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredObj ) const
@@ -2159,15 +1420,6 @@ SwSurround SwTxtFly::_GetSurroundForTextWrap( const SwAnchoredObject* pAnchoredO
 
     return eSurroundForTextWrap;
 }
-
-/*************************************************************************
- * SwTxtFly::IsAnyFrm( SwRect )
- *
- * IN: document-global
- *
- * dient zum Abschalten des SwTxtFly, wenn keine Objekte ueberlappen (Relax)
- *
- *************************************************************************/
 
 sal_Bool SwTxtFly::IsAnyFrm( const SwRect &rLine ) const
 {
