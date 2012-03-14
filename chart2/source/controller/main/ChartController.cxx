@@ -1111,6 +1111,8 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_InsertMenu_Trendlines();
     else if( aCommand.equals("InsertMenuMeanValues"))
         this->executeDispatch_InsertMenu_MeanValues();
+    else if( aCommand.equals("InsertMenuXErrorBars"))
+        this->executeDispatch_InsertErrorBars(false);
     else if( aCommand.equals("InsertMenuYErrorBars"))
         this->executeDispatch_InsertErrorBars(true);
     else if( aCommand.equals("InsertSymbol"))
@@ -1123,6 +1125,8 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_InsertMeanValue();
     else if( aCommand.equals("DeleteMeanValue"))
         this->executeDispatch_DeleteMeanValue();
+    else if( aCommand.equals("InsertXErrorBars"))
+        this->executeDispatch_InsertErrorBars(false);
     else if( aCommand.equals("InsertYErrorBars"))
         this->executeDispatch_InsertErrorBars(true);
     else if( aCommand.equals("DeleteYErrorBars"))
@@ -1509,6 +1513,7 @@ void ChartController::impl_initializeAccessible( const uno::Reference< lang::XIn
         ( "InsertR2Value" )      ( "DeleteR2Value" )
         ( "InsertMenuTrendlines" )  ( "InsertTrendline" )
         ( "InsertMenuMeanValues" ) ( "InsertMeanValue" )
+        ( "InsertMenuXErrorBars" )  ( "InsertXErrorBars" )
         ( "InsertMenuYErrorBars" )   ( "InsertYErrorBars" )
         ( "InsertDataLabels" )   ( "InsertDataLabel" )
         ( "DeleteTrendline" )    ( "DeleteMeanValue" )      ( "DeleteTrendlineEquation" )
