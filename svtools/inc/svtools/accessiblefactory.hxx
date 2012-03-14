@@ -180,6 +180,9 @@ namespace svt
                 ::svt::IToolPanelDeck& i_rPanelDeck,
                 ::svt::PanelTabBar& i_rTabBar
             ) = 0;
+
+    protected:
+        ~IAccessibleFactory() {}
     };
 
 //........................................................................

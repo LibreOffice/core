@@ -52,6 +52,10 @@ public:
     void testGetHiddenFields();
 
     virtual uno::Reference< uno::XInterface > init() = 0;
+
+protected:
+    ~XDataPilotDescriptor() {}
+
 private:
 
     void testGetDataPilotFields_Impl( uno::Reference< sheet::XDataPilotDescriptor > xDescr );

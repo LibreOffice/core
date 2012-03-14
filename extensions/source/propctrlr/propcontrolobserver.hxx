@@ -47,6 +47,9 @@ namespace pcr
     public:
         virtual void    focusGained( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _Control ) = 0;
         virtual void    valueChanged( const ::com::sun::star::uno::Reference< ::com::sun::star::inspection::XPropertyControl >& _Control ) = 0;
+
+    protected:
+        ~IPropertyControlObserver() {}
     };
 
 //........................................................................

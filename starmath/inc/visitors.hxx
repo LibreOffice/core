@@ -65,12 +65,16 @@ public:
     virtual void Visit( SmRootSymbolNode* pNode ) = 0;
     virtual void Visit( SmRectangleNode* pNode ) = 0;
     virtual void Visit( SmVerticalBraceNode* pNode ) = 0;
+
+protected:
+    ~SmVisitor() {}
 };
 
 /** Simple visitor for testing SmVisitor */
 class SmVisitorTest : public SmVisitor
 {
 public:
+    virtual ~SmVisitorTest() {}
     void Visit( SmTableNode* pNode );
     void Visit( SmBraceNode* pNode );
     void Visit( SmBracebodyNode* pNode );
@@ -142,6 +146,8 @@ public:
     void Visit( SmRectangleNode* pNode );
     void Visit( SmVerticalBraceNode* pNode );
 protected:
+    ~SmDefaultingVisitor() {}
+
     /** Method invoked by Visit methods by default */
     virtual void DefaultVisit( SmNode* pNode ) = 0;
 };
@@ -154,6 +160,7 @@ class SmCaretDrawingVisitor : public SmDefaultingVisitor
 public:
     /** Given position and device this constructor will draw the caret */
     SmCaretDrawingVisitor( OutputDevice& rDevice, SmCaretPos position, Point offset, bool caretVisible );
+    virtual ~SmCaretDrawingVisitor() {}
     void Visit( SmTextNode* pNode );
     using SmDefaultingVisitor::Visit;
 private:
@@ -181,6 +188,7 @@ public:
 
         pos.pSelectedNode->Accept( this );
     }
+    virtual ~SmCaretPos2LineVisitor() {}
     void Visit( SmTextNode* pNode );
     using SmDefaultingVisitor::Visit;
     SmCaretLine GetResult( ){
@@ -212,6 +220,7 @@ public:
         this->Position = position;
         pTree->Accept( this );
     }
+    virtual ~SmDrawingVisitor() {}
     void Visit( SmTableNode* pNode );
     void Visit( SmBraceNode* pNode );
     void Visit( SmBracebodyNode* pNode );
@@ -268,6 +277,7 @@ class SmSetSelectionVisitor : public SmDefaultingVisitor
 {
 public:
     SmSetSelectionVisitor( SmCaretPos startPos, SmCaretPos endPos, SmNode* pNode);
+    virtual ~SmSetSelectionVisitor() {}
     void Visit( SmBinHorNode* pNode );
     void Visit( SmUnHorNode* pNode );
     void Visit( SmFontNode* pNode );
@@ -327,6 +337,7 @@ class SmCaretPosGraphBuildingVisitor : public SmVisitor
 public:
     /** Builds a caret position graph for pRootNode */
     SmCaretPosGraphBuildingVisitor( SmNode* pRootNode );
+    virtual ~SmCaretPosGraphBuildingVisitor() {}
     void Visit( SmTableNode* pNode );
     void Visit( SmBraceNode* pNode );
     void Visit( SmBracebodyNode* pNode );
@@ -372,6 +383,7 @@ class SmCloningVisitor : public SmVisitor
 {
 public:
     SmCloningVisitor( ){ pResult = NULL; }
+    virtual ~SmCloningVisitor() {}
     void Visit( SmTableNode* pNode );
     void Visit( SmBraceNode* pNode );
     void Visit( SmBracebodyNode* pNode );
@@ -417,6 +429,7 @@ class SmSelectionDrawingVisitor : public SmDefaultingVisitor
 public:
     /** Draws a selection on rDevice for the selection on pTree */
     SmSelectionDrawingVisitor( OutputDevice& rDevice, SmNode* pTree, Point Offset );
+    virtual ~SmSelectionDrawingVisitor() {}
     void Visit( SmTextNode* pNode );
     using SmDefaultingVisitor::Visit;
 private:
@@ -444,6 +457,7 @@ public:
         : rCmdText( rText ) {
         pNode->Accept( this );
     }
+    virtual ~SmNodeToTextVisitor() {}
     void Visit( SmTableNode* pNode );
     void Visit( SmBraceNode* pNode );
     void Visit( SmBracebodyNode* pNode );

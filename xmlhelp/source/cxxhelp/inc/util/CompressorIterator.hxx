@@ -36,9 +36,10 @@ namespace xmlsearch {
         class CompressorIterator
         {
         public:
-
             virtual void value( sal_Int32 ) = 0;
 
+        protected:
+            ~CompressorIterator() {}
         };
 
 

@@ -275,6 +275,7 @@ void ContainerSorter::ImpSubSort(long nL, long nR) const
 class ImpUShortContainerSorter: public ContainerSorter {
 public:
     ImpUShortContainerSorter(Container& rNewCont): ContainerSorter(rNewCont) {}
+    virtual ~ImpUShortContainerSorter() {}
     virtual int Compare(const void* pElem1, const void* pElem2) const;
 };
 

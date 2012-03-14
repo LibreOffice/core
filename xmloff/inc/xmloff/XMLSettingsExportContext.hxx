@@ -58,6 +58,8 @@ namespace xmloff
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >
                         GetServiceFactory() const = 0;
 
+    protected:
+        ~XMLSettingsExportContext() {}
     };
 
 //........................................................................

@@ -99,6 +99,9 @@ namespace canvas
         /** Query sprite priority
          */
         virtual double              getPriority() const = 0;
+
+    protected:
+        ~Sprite() {}
     };
 
     /** Functor providing a StrictWeakOrdering for sprite references

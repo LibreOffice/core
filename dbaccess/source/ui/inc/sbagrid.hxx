@@ -224,6 +224,9 @@ namespace dbaui
         virtual void CellDeactivated()  = 0;
         virtual void BeforeDrop()       = 0;
         virtual void AfterDrop()        = 0;
+
+    protected:
+        ~SbaGridListener() {}
     };
 
     //==================================================================

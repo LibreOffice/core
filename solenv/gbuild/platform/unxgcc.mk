@@ -32,6 +32,9 @@ gb_Executable_EXT:=
 
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 
+gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
+gb_GccLess460 := $(shell expr $(gb_CCVER) \< 40600)
+
 gb_MKTEMP := mktemp -t gbuild.XXXXXX
 
 ifneq ($(origin AR),default)
@@ -55,16 +58,23 @@ gb_CFLAGS := \
 	-Wdeclaration-after-statement \
 	-Wshadow \
 
-# For -Wno-non-virtual-dtor see <http://markmail.org/message/664jsoqe6n6smy3b>
-# "Re: [dev] warnings01: -Wnon-virtual-dtor" message to dev@openoffice.org from
-# Feb 1, 2006:
 gb_CXXFLAGS := \
 	$(gb_CXXFLAGS_COMMON) \
 	-fPIC \
 	-Wshadow \
 	-Wsign-promo \
 	-Woverloaded-virtual \
-	-Wno-non-virtual-dtor \
+
+# Only GCC 4.6 has a fix for <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=7302>
+# "-Wnon-virtual-dtor should't complain of protected dtor" and supports #pragma
+# GCC diagnostic push/pop required e.g. in cppuhelper/propertysetmixin.hxx to
+# silence warnings about a protected, non-virtual dtor in a class with virtual
+# members and friends:
+ifeq ($(gb_GccLess460),1)
+gb_CXXFLAGS += -Wno-non-virtual-dtor
+else
+gb_CXXFLAGS += -Wnon-virtual-dtor
+endif
 
 ifeq ($(HAVE_GCC_VISIBILITY_FEATURE),TRUE)
 gb_COMPILERDEFS += \
@@ -96,9 +106,6 @@ gb_COMPILERDEFS += \
 	-D_GLIBCXX_DEBUG \
 
 endif
-
-gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- '{ print $$1*10000+$$2*100+$$3 }')
-gb_GccLess460 := $(shell expr $(gb_CCVER) \< 40600)
 
 #At least SLED 10.2 gcc 4.3 overly agressively optimizes uno::Sequence into
 #junk, so only strict-alias on >= 4.6.0

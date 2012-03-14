@@ -66,6 +66,9 @@ namespace vclcanvas
         virtual void redraw( OutputDevice&              rOutDev,
                              const ::basegfx::B2DPoint& rPos,
                              bool                       bBufferedUpdate ) const = 0;
+
+    protected:
+        ~Sprite() {}
     };
 }
 

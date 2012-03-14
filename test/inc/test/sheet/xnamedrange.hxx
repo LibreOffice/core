@@ -47,6 +47,8 @@ public:
     void testGetReferencePosition();
     void testSetReferencePosition();
 protected:
+    ~XNamedRange() {}
+
     virtual uno::Reference< sheet::XNamedRange> getNamedRange(const rtl::OUString&) = 0;
 
 };

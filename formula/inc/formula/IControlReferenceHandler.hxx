@@ -41,6 +41,9 @@ namespace formula
         virtual void HideReference( sal_Bool bDoneRefMode = sal_True ) = 0;
         virtual void ReleaseFocus( RefEdit* pEdit, RefButton* pButton = NULL ) = 0;
         virtual void ToggleCollapsed( RefEdit* pEdit, RefButton* pButton = NULL ) = 0;
+
+    protected:
+        ~IControlReferenceHandler() {}
     };
 } // formula
 #endif // FORMULA_ICONTROL_REFERENCE_HANDLER_HXX_INCLUDED

@@ -215,6 +215,9 @@ public:
     virtual void listActionLeftAndMerged() = 0;
     virtual void listActionCancelled() = 0;
     virtual void undoManagerDying() = 0;
+
+protected:
+    ~SfxUndoListener() {}
 };
 
 //=========================================================================

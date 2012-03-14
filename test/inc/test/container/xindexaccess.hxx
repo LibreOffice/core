@@ -43,6 +43,8 @@ public:
     // will throw an exception and should fail if not
     void testGetByIndexException();
 
+protected:
+    ~XIndexAccess() {}
 
 private:
     sal_Int32 mnItems;

@@ -83,6 +83,9 @@ public:
                                 preferences for the given property
     */
     virtual sal_Int32           getPreferedPropertyId(const ::rtl::OUString& _rName) = 0;
+
+protected:
+    ~IPropertyInfoService() {}
 };
 
 /**

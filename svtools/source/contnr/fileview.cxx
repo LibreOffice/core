@@ -113,6 +113,9 @@ namespace
     {
     public:
         virtual void onTimeout( CallbackTimer* _pInstigator ) = 0;
+
+    protected:
+        ~ITimeoutHandler() {}
     };
 
     //====================================================================

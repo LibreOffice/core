@@ -1412,8 +1412,13 @@ void InterfaceType::dumpDeclaration(FileStream& o)
 
     o << "\n" << indent()
       << ("static inline ::com::sun::star::uno::Type const & SAL_CALL"
-          " static_type(void * = 0);\n");
-
+          " static_type(void * = 0);\n\n");
+    dec();
+    o << "protected:\n";
+    inc();
+    o << indent() << "~" << m_name
+      << ("() throw () {} // avoid warnings about virtual members and"
+          " non-virtual dtor\n");
     dec();
     o << "};\n\n";
 }

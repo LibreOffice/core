@@ -236,6 +236,7 @@ protected:
 public:
     SwImplEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : pFrm( pF ), nFunction( nFunct ), nAction( nAct ), pParam( pPar ) {}
+    virtual ~SwImplEnterLeave() {}
     virtual void Enter();           // message when entering
     virtual void Leave();           // message when leaving
 };
@@ -246,6 +247,7 @@ class SwSizeEnterLeave : public SwImplEnterLeave
 public:
     SwSizeEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrmHeight( pF->Frm().Height() ) {}
+    virtual ~SwSizeEnterLeave() {}
     virtual void Leave();           // resize message
 };
 
@@ -255,6 +257,7 @@ class SwUpperEnterLeave : public SwImplEnterLeave
 public:
     SwUpperEnterLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), nFrmId( 0 ) {}
+    virtual ~SwUpperEnterLeave() {}
     virtual void Enter();           // message
     virtual void Leave();           // message of FrmId from upper
 };
@@ -265,6 +268,7 @@ class SwFrmChangesLeave : public SwImplEnterLeave
 public:
     SwFrmChangesLeave( const SwFrm* pF, sal_uLong nFunct, sal_uLong nAct, void* pPar )
         : SwImplEnterLeave( pF, nFunct, nAct, pPar ), aFrm( pF->Frm() ) {}
+    virtual ~SwFrmChangesLeave() {}
     virtual void Enter();           // no message
     virtual void Leave();           // message when resizing the Frm area
 };

@@ -41,6 +41,9 @@ public:
     void testCreateDateGroup();
 
     virtual uno::Reference< uno::XInterface > init() = 0;
+
+protected:
+    ~XDataPilotFieldGrouping() {}
 };
 
 }

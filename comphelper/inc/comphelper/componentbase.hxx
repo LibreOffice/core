@@ -71,6 +71,8 @@ namespace comphelper
         {
         }
 
+        ~ComponentBase() {}
+
         /** marks the instance as initialized
 
             Subsequent instantiations of a ComponentMethodGuard won't throw the NotInitializedException now.

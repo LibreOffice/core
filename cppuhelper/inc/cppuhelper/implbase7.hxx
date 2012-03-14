@@ -91,6 +91,9 @@ namespace cppu
             { return ImplHelper_getTypes( cd::get() ); }
         virtual com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (com::sun::star::uno::RuntimeException)
             { return ImplHelper_getImplementationId( cd::get() ); }
+
+    protected:
+        ~ImplHelper7() throw () {}
     };
     /** Implementation helper implementing interfaces com::sun::star::lang::XTypeProvider and
         com::sun::star::uno::XInterface which supports weak mechanism to be held weakly

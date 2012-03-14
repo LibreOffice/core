@@ -65,6 +65,9 @@ namespace vcl
         /** selects a given entry
         */
         virtual void                    SelectEntry( StringEntryIdentifier _entry ) = 0;
+
+    protected:
+        ~ISearchableStringList() {}
     };
 
     //====================================================================

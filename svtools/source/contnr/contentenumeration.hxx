@@ -135,6 +135,9 @@ namespace svt
     {
     public:
         virtual sal_Bool    GetTranslation( const ::rtl::OUString& _rOriginalName, ::rtl::OUString& _rTranslatedName ) const = 0;
+
+    protected:
+        ~IContentTitleTranslation() {}
     };
 
     //====================================================================
@@ -180,6 +183,9 @@ namespace svt
     {
     public:
         virtual void        enumerationDone( EnumerationResult _eResult ) = 0;
+
+    protected:
+        ~IEnumerationResultHandler() {}
     };
 
     //====================================================================

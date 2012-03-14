@@ -85,6 +85,8 @@ namespace formula
     public:
         OFormulaToken(bool _bFunction,sal_Int32 _nParaCount) : m_nParaCount(_nParaCount),m_bIsFunction(_bFunction){}
 
+        virtual ~OFormulaToken() {}
+
         virtual bool isFunction() const { return m_bIsFunction; }
         virtual sal_uInt32 getArgumentCount() const { return m_nParaCount; }
     };

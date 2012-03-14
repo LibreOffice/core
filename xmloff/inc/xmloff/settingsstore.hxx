@@ -49,6 +49,9 @@ public:
 	filterStreamsToStorage(
 		const com::sun::star::uno::Reference< com::sun::star::embed::XStorage > &xStorage,
 		const com::sun::star::uno::Sequence<com::sun::star::beans::PropertyValue>& aConfigProps ) = 0;
+
+protected:
+    ~DocumentSettingsSerializer() {}
 };
 
 #endif // _XMLOFF_SETTINGS_STORE_HXX

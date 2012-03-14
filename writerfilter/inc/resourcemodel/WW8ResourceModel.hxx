@@ -101,8 +101,6 @@ public:
     */
     typedef boost::shared_ptr< Reference<T> > Pointer_t;
 
-    virtual ~Reference() {}
-
     /**
        Resolves the reference.
 
@@ -117,6 +115,9 @@ public:
        Returns the type of the reference aka the name of the access class.
      */
     virtual string getType() const = 0;
+
+protected:
+    ~Reference() {}
 };
 
 class Value;
@@ -128,9 +129,6 @@ class Sprm;
 class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Properties
 {
 public:
-
-    virtual ~Properties() {}
-
     /**
        Receives an attribute.
 
@@ -146,6 +144,8 @@ public:
     */
     virtual void sprm(Sprm & sprm) = 0;
 
+protected:
+    ~Properties() {}
 };
 
 /**
@@ -156,7 +156,6 @@ class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Table
 public:
     typedef boost::shared_ptr<Table> Pointer_t;
 
-    virtual ~Table() {}
     /**
        Receives an entry of the table.
 
@@ -164,6 +163,9 @@ public:
        @param ref     reference to properties of the entry
      */
     virtual void entry(int pos, writerfilter::Reference<Properties>::Pointer_t ref) = 0;
+
+protected:
+    ~Table() {}
 };
 
 /**
@@ -172,8 +174,6 @@ public:
 class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC BinaryObj
 {
 public:
-
-    virtual ~BinaryObj() {}
     /**
        Receives binary data of the object.
 
@@ -183,6 +183,9 @@ public:
      */
     virtual void data(const sal_uInt8* buf, size_t len,
                       writerfilter::Reference<Properties>::Pointer_t ref) = 0;
+
+protected:
+    ~BinaryObj() {}
 };
 
 /**
@@ -196,8 +199,6 @@ public:
        Pointer to this stream.
      */
     typedef boost::shared_ptr<Stream> Pointer_t;
-
-    virtual ~Stream() {}
 
     /**
        Receives start mark for group with the same section properties.
@@ -286,6 +287,9 @@ public:
        @param info     the information
      */
     virtual void info(const string & info) = 0;
+
+protected:
+    ~Stream() {}
 };
 
 /**
@@ -355,8 +359,6 @@ public:
     SAL_WNODEPRECATED_DECLARATIONS_POP
     enum Kind { UNKNOWN, CHARACTER, PARAGRAPH, TABLE };
 
-    virtual ~Sprm() {}
-
     /**
        Returns id of the SPRM.
      */
@@ -397,6 +399,9 @@ public:
        Returns string repesentation of sprm.
      */
     virtual string toString() const = 0;
+
+protected:
+    ~Sprm() {}
 };
 
 /**

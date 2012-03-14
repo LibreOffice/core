@@ -28,7 +28,7 @@
 gb_PARTIALBUILD := T
 include $(GBUILDDIR)/gbuild_simple.mk
 
-done :
+done : $(gb_UnoApiTarget_CPPUMAKERTARGET)
 	$(call gb_Helper_abbreviate_dirs_native, \
 	$(call gb_Helper_execute,cppumaker -C -BUCR -O. \
 		-Tcom.sun.star.beans.NamedValue \

@@ -270,7 +270,7 @@ endif
 # - get idlc switch "-P" (generate .urd into package dir)
 # - empty $? in headertarget?
 
-$(call gb_UnoApiTarget_get_target,%):
+$(call gb_UnoApiTarget_get_target,%): $(gb_UnoApiTarget_CPPUMAKERTARGET)
 	$(call gb_Output_announce,$*,$(true),RDB,3)
 	$(if $(gb_UnoApiTarget_IDLFILES_$*),$(call gb_UnoApiTarget__command,$@,$*,$<,UCR,$(addprefix $(call gb_UnoApiPartTarget_get_target,),$(patsubst %.idl,%.urd,$(gb_UnoApiTarget_IDLFILES_$*)))))
 	$(if $(UNOAPI_MERGE),$(call gb_UnoApiTarget__command,$@,$*,$<,/,$(UNOAPI_MERGE)))

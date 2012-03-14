@@ -70,6 +70,9 @@ namespace dbaui
         virtual bool    allowAddition() const = 0;
         virtual void    addTableWindow( const String& _rQualifiedTableName, const String& _rAliasName ) = 0;
         virtual void    onWindowClosing( const Window* _pWindow ) = 0;
+
+    protected:
+        ~IAddTableDialogContext() {}
     };
 
     //========================================================================

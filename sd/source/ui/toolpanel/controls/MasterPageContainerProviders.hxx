@@ -66,6 +66,9 @@ public:
     virtual int GetCostIndex (void) = 0;
 
     virtual bool operator== (const PageObjectProvider& rProvider) = 0;
+
+protected:
+    ~PageObjectProvider() {}
 };
 
 
@@ -100,6 +103,9 @@ public:
         preview.
     */
     virtual bool NeedsPageObject (void) = 0;
+
+protected:
+    ~PreviewProvider() {}
 };
 
 

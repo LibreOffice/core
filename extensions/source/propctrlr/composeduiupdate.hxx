@@ -56,6 +56,9 @@ namespace pcr
     {
     public:
         virtual ::sal_Bool SAL_CALL hasPropertyByName( const ::rtl::OUString& _rName ) throw (::com::sun::star::uno::RuntimeException) = 0;
+
+    protected:
+        ~IPropertyExistenceCheck() {}
     };
 
     //====================================================================

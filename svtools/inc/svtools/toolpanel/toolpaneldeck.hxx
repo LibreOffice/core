@@ -74,6 +74,9 @@ namespace svt
             release all references to the deck then.
         */
         virtual void Dying() = 0;
+
+    protected:
+        ~IToolPanelDeckListener() {}
     };
 
     //====================================================================
@@ -129,6 +132,9 @@ namespace svt
         /** removes a container listener previously added via addListener.
         */
         virtual void        RemoveListener( IToolPanelDeckListener& i_rListener ) = 0;
+
+    protected:
+        ~IToolPanelDeck() {}
     };
 
     //====================================================================

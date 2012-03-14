@@ -601,8 +601,10 @@ nsProfile::CreateInstance(nsISupports* aOuter, const nsID& aIID,
 }
 
 //Register profile manager
+#include "pre_include_mozilla.h"
 #include "nsIComponentManager.h"
 #include "nsIComponentRegistrar.h"
+#include "post_include_mozilla.h"
 
 static const nsCID kProfileManagerCID = NS_PROFILE_CID;
 

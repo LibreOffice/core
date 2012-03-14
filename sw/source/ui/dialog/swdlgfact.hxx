@@ -433,6 +433,8 @@ class SwAbstractDialogFactory_Impl : public SwAbstractDialogFactory
 {
 
 public:
+    virtual ~SwAbstractDialogFactory_Impl() {}
+
     virtual SfxAbstractDialog*              CreateSfxDialog( Window* pParent, //add for SvxMeasureDialog & SvxConnectionDialog
                                                                         const SfxItemSet& rAttr,
                                     const ::com::sun::star::uno::Reference< ::com::sun::star::frame::XFrame >& _rxFrame,

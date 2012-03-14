@@ -53,6 +53,9 @@ namespace sfx2
     public:
         /// indicates the root or a sub storage of the document has been modified
         virtual void storageIsModified() = 0;
+
+    protected:
+        ~IModifiableDocument() {}
     };
 
     //====================================================================

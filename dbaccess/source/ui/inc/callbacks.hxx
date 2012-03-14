@@ -73,6 +73,9 @@ namespace dbaui
         /** execute a drop request
         */
         virtual sal_Int8    executeDrop( const ExecuteDropEvent& _rEvt ) = 0;
+
+    protected:
+        ~IControlActionListener() {}
     };
 
     //====================================================================
@@ -108,6 +111,9 @@ namespace dbaui
         */
         virtual ::com::sun::star::uno::Any
                                 getCurrentSelection( Control& _rControl ) const = 0;
+
+    protected:
+        ~IContextMenuProvider() {}
     };
 
     //====================================================================
@@ -118,6 +124,9 @@ namespace dbaui
     public:
         /// called when a drag operation done with a Transferable has been finished
         virtual void        dragFinished( ) = 0;
+
+    protected:
+        ~IDragTransferableListener() {}
     };
 
 //........................................................................

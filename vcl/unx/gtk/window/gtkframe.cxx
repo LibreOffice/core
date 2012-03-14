@@ -351,6 +351,9 @@ struct DamageTracker : public basebmp::IBitmapDeviceDamageTracker
 {
     DamageTracker(GtkSalFrame& rFrame) : m_rFrame(rFrame)
     {}
+
+    virtual ~DamageTracker() {}
+
     virtual void damaged(const basegfx::B2IBox& rDamageRect) const
     {
         m_rFrame.damaged(rDamageRect);

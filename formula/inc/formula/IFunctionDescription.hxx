@@ -64,6 +64,9 @@ namespace formula
         virtual const IFunctionDescription* getFunctionByName(const ::rtl::OUString& _sFunctionName) const = 0;
 
         virtual sal_Unicode getSingleToken(const EToken _eToken) const = 0;
+
+    protected:
+        ~IFunctionManager() {}
     };
 
     class SAL_NO_VTABLE IFunctionCategory
@@ -75,6 +78,9 @@ namespace formula
         virtual const IFunctionDescription* getFunction(sal_uInt32 _nPos) const = 0;
         virtual sal_uInt32                  getNumber() const = 0;
         virtual ::rtl::OUString             getName() const = 0;
+
+    protected:
+        ~IFunctionCategory() {}
     };
 
     class SAL_NO_VTABLE IFunctionDescription
@@ -99,6 +105,9 @@ namespace formula
         virtual ::rtl::OUString getParameterName(sal_uInt32 _nPos) const = 0;
         virtual ::rtl::OUString getParameterDescription(sal_uInt32 _nPos) const = 0;
         virtual bool isParameterOptional(sal_uInt32 _nPos) const = 0;
+
+    protected:
+        ~IFunctionDescription() {}
     };
 
     class SAL_NO_VTABLE IFormulaToken
@@ -106,6 +115,9 @@ namespace formula
     public:
         virtual bool isFunction() const = 0;
         virtual sal_uInt32 getArgumentCount() const = 0;
+
+    protected:
+        ~IFormulaToken() {}
     };
 
     class SAL_NO_VTABLE IStructHelper
@@ -117,6 +129,9 @@ namespace formula
 
         virtual String          GetEntryText(SvLBoxEntry* pEntry) const = 0;
         virtual SvLBoxEntry*    GetParent(SvLBoxEntry* pEntry) const = 0;
+
+    protected:
+        ~IStructHelper() {}
     };
 
     class SAL_NO_VTABLE IFormulaEditorHelper
@@ -153,6 +168,9 @@ namespace formula
         virtual void doClose(sal_Bool _bOk) = 0;
         virtual void insertEntryToLRUList(const IFunctionDescription*   pDesc) = 0;
         virtual void showReference(const String& _sFormula) = 0;
+
+    protected:
+        ~IFormulaEditorHelper() {}
     };
 
 }

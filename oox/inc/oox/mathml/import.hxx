@@ -49,9 +49,13 @@ class XmlStream;
 class OOX_DLLPUBLIC FormulaImportBase
 {
 public:
-    FormulaImportBase();
     virtual void readFormulaOoxml( oox::formulaimport::XmlStream& stream ) = 0;
     virtual Size getFormulaSize() const = 0;
+
+protected:
+    FormulaImportBase();
+
+    ~FormulaImportBase() {}
 };
 
 } // namespace

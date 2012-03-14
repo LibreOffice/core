@@ -44,6 +44,9 @@ public:
         resized.
     */
     virtual void RequestResize (void) = 0;
+
+protected:
+    ~ILayouter() {}
 };
 
 

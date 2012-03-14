@@ -58,6 +58,9 @@ namespace frm
 
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::beans::XMultiPropertySet >
                                 getPropertiesInterface() = 0;
+
+    protected:
+        ~IPropertyBagHelperContext() {}
     };
 
     //====================================================================

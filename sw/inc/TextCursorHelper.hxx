@@ -48,6 +48,9 @@ public:
     virtual SwPaM*              GetPaM()        = 0;
     virtual const SwDoc*        GetDoc() const  = 0;
     virtual SwDoc*              GetDoc()        = 0;
+
+protected:
+    ~OTextCursorHelper() {}
 };
 
 #endif // _SW_TEXTCURSORHELPER_HXX

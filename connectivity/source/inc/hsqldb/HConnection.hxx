@@ -52,6 +52,9 @@ namespace connectivity
         public:
             virtual ::osl::Mutex&   getMutex() const = 0;
             virtual void            checkDisposed() const = 0;
+
+        protected:
+            ~IMethodGuardAccess() {}
         };
 
         //==========================================================================

@@ -155,6 +155,9 @@ namespace slideshow
              */
             virtual SlideBitmapSharedPtr
                 getCurrentSlideBitmap( const UnoViewSharedPtr& rView ) const = 0;
+
+        protected:
+            ~Slide() {}
         };
 
         typedef ::boost::shared_ptr< Slide > SlideSharedPtr;

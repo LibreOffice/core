@@ -43,6 +43,9 @@ namespace frm
     {
     public:
         virtual void    onAttributeStateChanged( AttributeId _nAttributeId, const AttributeState& _rState ) = 0;
+
+    protected:
+        ~ITextAttributeListener() {}
     };
 
     //====================================================================
@@ -52,6 +55,9 @@ namespace frm
     {
     public:
         virtual void    onSelectionChanged( const ESelection& _rSelection ) = 0;
+
+    protected:
+        ~ITextSelectionListener() {}
     };
 
 //........................................................................

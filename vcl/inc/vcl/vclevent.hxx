@@ -201,6 +201,7 @@ private:
 
 public:
     VclSimpleEvent( sal_uLong n ) { nId = n; }
+    virtual ~VclSimpleEvent() {}
     TYPEINFO();
 
     sal_uLong GetId() const { return nId; }
@@ -214,6 +215,7 @@ private:
 
 public:
     VclWindowEvent( Window* pWin, sal_uLong n, void* pDat = NULL ) : VclSimpleEvent(n) { pWindow = pWin; pData = pDat; }
+    virtual ~VclWindowEvent() {}
     TYPEINFO();
 
     Window* GetWindow() const { return pWindow; }
@@ -242,6 +244,7 @@ private:
 
 public:
     VclMenuEvent( Menu* pM, sal_uLong n, sal_uInt16 nPos ) : VclSimpleEvent(n) { pMenu = pM; mnPos = nPos; }
+    virtual ~VclMenuEvent() {}
     TYPEINFO();
 
     Menu* GetMenu() const { return pMenu; }

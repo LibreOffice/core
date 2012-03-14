@@ -85,6 +85,9 @@ class SVL_DLLPUBLIC SfxItemPoolUser
 {
 public:
     virtual void ObjectInDestruction(const SfxItemPool& rSfxItemPool) = 0;
+
+protected:
+    ~SfxItemPoolUser() {}
 };
 
 class SVL_DLLPUBLIC SfxItemPool

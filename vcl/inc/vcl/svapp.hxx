@@ -135,6 +135,9 @@ class VCL_DLLPUBLIC PropertyHandler
 {
 public:
     virtual void                Property( ApplicationProperty& ) = 0;
+
+protected:
+    ~PropertyHandler() {}
 };
 
 // ---------------

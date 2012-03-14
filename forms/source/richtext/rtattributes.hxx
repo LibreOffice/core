@@ -163,6 +163,9 @@ namespace frm
     public:
         virtual AttributeState  getState( AttributeId _nAttributeId ) const = 0;
         virtual void            executeAttribute( AttributeId _nAttributeId, const SfxPoolItem* _pArgument ) = 0;
+
+    protected:
+        ~IMultiAttributeDispatcher() {}
     };
 
 //........................................................................

@@ -2070,6 +2070,7 @@ class ScFormatFilterMissing : public ScFormatFilterPlugin {
     {
       OSL_FAIL("Missing file filters");
     }
+    virtual ~ScFormatFilterMissing() {}
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet ) RETURN_ERROR
     virtual FltError ScImportQuattroPro( SfxMedium &, ScDocument * ) RETURN_ERROR
     virtual FltError ScImportExcel( SfxMedium&, ScDocument*, const EXCIMPFORMAT ) RETURN_ERROR

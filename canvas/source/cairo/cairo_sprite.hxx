@@ -66,6 +66,9 @@ namespace cairocanvas
         virtual void redraw( const ::cairo::CairoSharedPtr& pCairo,
                              const ::basegfx::B2DPoint&     rOrigOutputPos,
                              bool                           bBufferedUpdate ) const = 0;
+
+    protected:
+        ~Sprite() {}
     };
 }
 

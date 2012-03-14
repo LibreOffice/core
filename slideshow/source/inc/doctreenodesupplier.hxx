@@ -144,6 +144,9 @@ namespace slideshow
             virtual DocTreeNode getSubsetTreeNode( const DocTreeNode&       rParentNode,
                                                    sal_Int32                nNodeIndex,
                                                    DocTreeNode::NodeType    eNodeType ) const = 0; // throw ShapeLoadFailedException;
+
+        protected:
+            ~DocTreeNodeSupplier() {}
         };
 
     }

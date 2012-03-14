@@ -24,6 +24,9 @@ namespace ftp {
                              const rtl::OUString& username,
                              const rtl::OUString& password,
                              const rtl::OUString& account) = 0;
+
+    protected:
+        ~FTPHandleProvider() {}
     };
 
 

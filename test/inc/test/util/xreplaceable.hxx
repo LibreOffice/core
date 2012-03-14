@@ -44,6 +44,9 @@ public:
 	void testCreateReplaceDescriptor();
 	void testReplaceAll();
 
+protected:
+    ~XReplaceable() {}
+
 private:
 	rtl::OUString maSearchString;
 	rtl::OUString maReplaceString;

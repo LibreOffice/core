@@ -65,6 +65,9 @@ class ScDistFunc
 {
 public:
     virtual double GetValue(double x) const = 0;
+
+protected:
+    ~ScDistFunc() {}
 };
 
 //  iteration for inverse distributions
@@ -1989,6 +1992,8 @@ public:
             ScGammaDistFunction( ScInterpreter& rI, double fpVal, double fAlphaVal, double fBetaVal ) :
                 rInt(rI), fp(fpVal), fAlpha(fAlphaVal), fBeta(fBetaVal) {}
 
+    virtual ~ScGammaDistFunction() {}
+
     double  GetValue( double x ) const  { return fp - rInt.GetGammaDist(x, fAlpha, fBeta); }
 };
 
@@ -2027,6 +2032,8 @@ class ScBetaDistFunction : public ScDistFunc
 public:
             ScBetaDistFunction( ScInterpreter& rI, double fpVal, double fAlphaVal, double fBetaVal ) :
                 rInt(rI), fp(fpVal), fAlpha(fAlphaVal), fBeta(fBetaVal) {}
+
+    virtual ~ScBetaDistFunction() {}
 
     double  GetValue( double x ) const  { return fp - rInt.GetBetaDist(x, fAlpha, fBeta); }
 };
@@ -2082,6 +2089,8 @@ public:
             ScTDistFunction( ScInterpreter& rI, double fpVal, double fDFVal ) :
                 rInt(rI), fp(fpVal), fDF(fDFVal) {}
 
+    virtual ~ScTDistFunction() {}
+
     double  GetValue( double x ) const  { return fp - 2 * rInt.GetTDist(x, fDF); }
 };
 
@@ -2114,6 +2123,8 @@ class ScFDistFunction : public ScDistFunc
 public:
             ScFDistFunction( ScInterpreter& rI, double fpVal, double fF1Val, double fF2Val ) :
                 rInt(rI), fp(fpVal), fF1(fF1Val), fF2(fF2Val) {}
+
+    virtual ~ScFDistFunction() {}
 
     double  GetValue( double x ) const  { return fp - rInt.GetFDist(x, fF1, fF2); }
 };
@@ -2149,6 +2160,8 @@ public:
             ScChiDistFunction( ScInterpreter& rI, double fpVal, double fDFVal ) :
                 rInt(rI), fp(fpVal), fDF(fDFVal) {}
 
+    virtual ~ScChiDistFunction() {}
+
     double  GetValue( double x ) const  { return fp - rInt.GetChiDist(x, fDF); }
 };
 
@@ -2182,6 +2195,8 @@ class ScChiSqDistFunction : public ScDistFunc
 public:
             ScChiSqDistFunction( ScInterpreter& rI, double fpVal, double fDFVal ) :
                 rInt(rI), fp(fpVal), fDF(fDFVal) {}
+
+    virtual ~ScChiSqDistFunction() {}
 
     double  GetValue( double x ) const  { return fp - rInt.GetChiSqDistCDF(x, fDF); }
 };

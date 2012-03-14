@@ -54,6 +54,9 @@ public:
     virtual void SAL_CALL slot_queryInterface() = 0;
     virtual void SAL_CALL acquire() throw () = 0;
     virtual void SAL_CALL release() throw () = 0;
+protected:
+    ~XInterface() {}
+        // avoid warnings about virtual members and non-virtual dtor
 };
 //--------------------------------------------------------------------------------------------------
 static typelib_InterfaceTypeDescription * get_type_XCurrentContext()

@@ -26,7 +26,9 @@
  *
  ************************************************************************/
 
-#if defined __SUNPRO_CC
+#if defined __GNUC__ && ((__GNUC__ == 4 && __GNUC_MINOR__ >= 6) || __GNUC__ > 4)
+#pragma GCC diagnostic pop
+#elif defined __SUNPRO_CC
 #pragma enable_warn
 #elif defined _MSC_VER
 #pragma warning(pop)

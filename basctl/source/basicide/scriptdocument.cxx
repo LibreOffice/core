@@ -147,6 +147,8 @@ namespace basctl
         public:
             FilterDocuments( bool _bFilterInvisible ) : m_bFilterInvisible( _bFilterInvisible ) { }
 
+            virtual ~FilterDocuments() {}
+
             virtual bool    includeDocument( const docs::DocumentDescriptor& _rDocument ) const;
 
         private:

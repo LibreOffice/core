@@ -42,6 +42,9 @@ namespace pcr
     public:
         virtual void    Clicked(    const ::rtl::OUString& _rName, sal_Bool _bPrimary ) = 0;
         virtual void    Commit(     const ::rtl::OUString& _rName, const ::com::sun::star::uno::Any& _rVal ) = 0;
+
+    protected:
+        ~IPropertyLineListener() {}
     };
 
 //............................................................................

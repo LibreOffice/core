@@ -61,7 +61,10 @@ class ISpinfieldListener
         virtual void StateChanged( StateChangedType nType ) = 0;
         virtual void DataChanged( const DataChangedEvent& rDCEvt ) = 0;
         virtual long PreNotify( NotifyEvent& rNEvt ) = 0;
- };
+
+    protected:
+        ~ISpinfieldListener() {}
+};
 
 class SpinfieldToolbarController : public ISpinfieldListener,
                                    public ComplexToolbarController

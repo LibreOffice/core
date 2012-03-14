@@ -422,6 +422,9 @@ namespace sdr { namespace contact {
         /** determines whether a given layer is visible
          */
         virtual bool    isLayerVisible( SdrLayerID _nLayerID ) const = 0;
+
+    protected:
+        ~IPageViewAccess() {}
     };
 
     //====================================================================
@@ -434,6 +437,8 @@ namespace sdr { namespace contact {
         const SdrPageView&  m_rPageView;
     public:
         SdrPageViewAccess( const SdrPageView& _rPageView ) : m_rPageView( _rPageView ) { }
+
+        virtual ~SdrPageViewAccess() {}
 
         virtual bool    isDesignMode() const;
         virtual Reference< XControlContainer >
@@ -477,6 +482,8 @@ namespace sdr { namespace contact {
             :m_rControlContainer( _inout_ControlContainer )
         {
         }
+
+        virtual ~InvisibleControlViewAccess() {}
 
         virtual bool    isDesignMode() const;
         virtual Reference< XControlContainer >
@@ -525,6 +532,8 @@ namespace sdr { namespace contact {
         DummyPageViewAccess()
         {
         }
+
+        virtual ~DummyPageViewAccess() {}
 
         virtual bool    isDesignMode() const;
         virtual Reference< XControlContainer >

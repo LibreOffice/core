@@ -389,6 +389,8 @@ class ScAbstractDialogFactory_Impl : public ScAbstractDialogFactory
 {
 
 public:
+    virtual ~ScAbstractDialogFactory_Impl() {}
+
     virtual     AbstractScImportAsciiDlg * CreateScImportAsciiDlg( Window* pParent, String aDatName, //add for ScImportAsciiDlg
                                                                     SvStream* pInStream, int nId,
                                                                     sal_Unicode cSep = '\t');

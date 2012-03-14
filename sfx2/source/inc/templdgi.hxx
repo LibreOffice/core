@@ -111,6 +111,7 @@ private:
         SfxCommonTemplateDialog_Impl* pDialog;
     public:
         ISfxTemplateCommon_Impl( SfxCommonTemplateDialog_Impl* pDialogP ) : pDialog( pDialogP ) {}
+        virtual ~ISfxTemplateCommon_Impl() {}
         virtual SfxStyleFamily GetActualFamily() const { return pDialog->GetActualFamily(); }
         virtual String GetSelectedEntry() const { return pDialog->GetSelectedEntry(); }
     };

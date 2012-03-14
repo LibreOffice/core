@@ -88,8 +88,12 @@ class PresenterClockTimer
       public PresenterClockTimerInterfaceBase
 {
 public:
-    class Listener { public:
+    class Listener {
+    public:
         virtual void TimeHasChanged (const oslDateTime& rCurrentTime) = 0;
+
+    protected:
+        ~Listener() {}
     };
     typedef ::boost::shared_ptr<Listener> SharedListener;
 

@@ -186,6 +186,7 @@ class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE ImplHelperBase##N \
     , __PUBLIC_IFC##N \
 { \
 protected: \
+    ~ImplHelperBase##N() throw () {} \
     ClassData & SAL_CALL getClassData( ClassDataBase & s_aCD ) SAL_THROW(()) \
     { \
         ClassData & rCD = * static_cast< ClassData * >( &s_aCD ); \
@@ -221,6 +222,8 @@ public: \
         { return this->getClassData( s_aCD ).getTypes(); } \
     virtual ::com::sun::star::uno::Sequence< sal_Int8 > SAL_CALL getImplementationId() throw (::com::sun::star::uno::RuntimeException) \
         { return this->getClassData( s_aCD ).getImplementationId(); } \
+protected: \
+    ~ImplHelper##N() throw () {} \
 }; \
 template< __CLASS_IFC##N > \
 class SAL_NO_VTABLE SAL_DLLPUBLIC_TEMPLATE WeakImplHelper##N \

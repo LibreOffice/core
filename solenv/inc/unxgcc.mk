@@ -143,11 +143,21 @@ CFLAGSOUTOBJ=-o
 # -Wshadow does not work for C with nested uses of pthread_cleanup_push:
 CFLAGSWARNBOTH=-Wall -Wextra -Wendif-labels
 CFLAGSWARNCC=$(CFLAGSWARNBOTH) -Wdeclaration-after-statement
-CFLAGSWARNCXX=$(CFLAGSWARNBOTH) -Wshadow -Wno-ctor-dtor-privacy \
-    -Wno-non-virtual-dtor
+CFLAGSWARNCXX=$(CFLAGSWARNBOTH) -Wshadow -Wno-ctor-dtor-privacy
 CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-Werror -DLIBO_WERROR
+
+# Only GCC 4.6 has a fix for <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=7302>
+# "-Wnon-virtual-dtor should't complain of protected dtor" and supports #pragma
+# GCC diagnostic push/pop required e.g. in cppuhelper/propertysetmixin.hxx to
+# silence warnings about a protected, non-virtual dtor in a class with virtual
+# members and friends:
+.IF "$(GCCNUMVER)" <= "000400059999"
+CFLAGSWARNCXX += -Wno-non-virtual-dtor
+.ELSE
+CFLAGSWARNCXX += -Wnon-virtual-dtor
+.END
 
 COMPILER_WARN_ERRORS=TRUE
 

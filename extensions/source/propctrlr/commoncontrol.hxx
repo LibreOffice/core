@@ -79,6 +79,9 @@ namespace pcr
     {
     public:
         virtual void modified() = 0;
+
+    protected:
+        ~IModifyListener() {}
     };
 
     //========================================================================

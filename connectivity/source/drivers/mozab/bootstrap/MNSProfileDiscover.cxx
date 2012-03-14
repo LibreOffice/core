@@ -66,9 +66,10 @@
 #include <rmsdef.h>
 #endif
 
+#include "pre_include_mozilla.h"
 #include "nsICharsetConverterManager.h"
 #include "nsIPlatformCharset.h"
-
+#include "post_include_mozilla.h"
 
 #if defined (XP_UNIX)
 #   define USER_ENVIRONMENT_VARIABLE "USER"

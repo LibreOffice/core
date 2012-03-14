@@ -109,6 +109,9 @@ public:
     static sal_Int32 getExplicitPercentageNumberFormatKeyForDataLabel(
             const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xSeriesOrPointProp
             , const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormatsSupplier >& xNumberFormatsSupplier );
+
+protected:
+    ~ExplicitValueProvider() {}
 };
 
 //.............................................................................

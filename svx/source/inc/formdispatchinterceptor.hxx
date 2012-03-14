@@ -47,12 +47,15 @@ namespace svxform
     class DispatchInterceptor
     {
     public:
-        DispatchInterceptor() { }
-
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::frame::XDispatch> interceptedQueryDispatch(
             const ::com::sun::star::util::URL& aURL, const ::rtl::OUString& aTargetFrameName, sal_Int32 nSearchFlags) throw( ::com::sun::star::uno::RuntimeException ) = 0;
 
         virtual ::osl::Mutex* getInterceptorMutex() = 0;
+
+    protected:
+        DispatchInterceptor() {}
+
+        ~DispatchInterceptor() {}
     };
 
     //====================================================================

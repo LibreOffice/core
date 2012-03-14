@@ -75,6 +75,9 @@ namespace pdfi
     struct ElementTreeVisitable
     {
         virtual void visitedBy( ElementTreeVisitor&, const std::list< Element* >::const_iterator& rParentIt ) = 0;
+
+    protected:
+        ~ElementTreeVisitable() {}
     };
     typedef boost::shared_ptr<ElementTreeVisitable> ElementTreeVisitableSharedPtr;
 }

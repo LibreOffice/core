@@ -71,6 +71,9 @@ namespace svx
     public:
         virtual void    focusGained( const ::com::sun::star::awt::FocusEvent& _rEvent ) = 0;
         virtual void    focusLost( const ::com::sun::star::awt::FocusEvent& _rEvent ) = 0;
+
+    protected:
+        ~IFocusObserver() {}
     };
 
     //====================================================================
@@ -80,6 +83,9 @@ namespace svx
     {
     public:
         virtual void    contextMenuRequested( const ::com::sun::star::awt::MouseEvent& _rEvent ) = 0;
+
+    protected:
+        ~IContextRequestObserver() {}
     };
 
     //====================================================================

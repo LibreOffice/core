@@ -68,6 +68,9 @@ namespace frm
         virtual     AttributeId     getAttributeId( ) const = 0;
         virtual     AttributeState  getState( const SfxItemSet& _rAttribs ) const = 0;
         virtual     void            executeAttribute( const SfxItemSet& _rCurrentAttribs, SfxItemSet& _rNewAttribs, const SfxPoolItem* _pAdditionalArg, ScriptType _nForScriptType ) const = 0;
+
+    protected:
+        ~IAttributeHandler() {}
     };
 
     //====================================================================

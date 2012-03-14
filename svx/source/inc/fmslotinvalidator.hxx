@@ -45,6 +45,9 @@ namespace svx
     {
     public:
         virtual void    Invalidate( SfxSlotId _nSlot ) = 0;
+
+    protected:
+        ~ISlotInvalidator() {}
     };
 
 //........................................................................

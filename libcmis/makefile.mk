@@ -48,6 +48,7 @@ ADDITIONAL_FILES=src$/libcmis$/makefile.mk
 PATCH_FILES=$(TARFILE_NAME).patch
 #https://sourceforge.net/p/libcmis/tickets/1/
 PATCH_FILES+=libcmis-0001-virtualdtor.patch
+PATCH_FILES+=libcmis-0.1.0-non-virtual-dtor.patch
 
 BUILD_ACTION=dmake $(MFLAGS) $(CALLMACROS)
 BUILD_DIR=src$/libcmis

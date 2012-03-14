@@ -46,6 +46,9 @@ public:
     void testGetImportDescriptor();
     void testGetFilterDescriptor();
     void testRefresh();
+
+protected:
+    ~XDatabaseRange() {}
 };
 
 }

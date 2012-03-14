@@ -41,6 +41,10 @@ public:
     virtual uno::Reference< uno::XInterface > init() = 0;
 
     void testGetSheets();
+
+protected:
+    ~XSpreadsheetDocument() {}
+
 private:
     sal_Int32 mnSheets;
 };

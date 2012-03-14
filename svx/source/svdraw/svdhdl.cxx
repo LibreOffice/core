@@ -1669,6 +1669,7 @@ void ImpTextframeHdl::CreateB2dIAObject()
 class ImpSdrHdlListSorter: public ContainerSorter {
 public:
     ImpSdrHdlListSorter(Container& rNewCont): ContainerSorter(rNewCont) {}
+    virtual ~ImpSdrHdlListSorter() {}
     virtual int Compare(const void* pElem1, const void* pElem2) const;
 };
 

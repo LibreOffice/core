@@ -199,6 +199,8 @@ public:
         : pOut(_pOut), rTxt(_rTxt), nIdx(_nIdx), nLen(_nLen)
         { }
 
+    virtual ~SvxDoCapitals() {}
+
     virtual void DoSpace( const sal_Bool bDraw );
     virtual void SetSpace();
     virtual void Do( const XubString &rTxt,
@@ -623,6 +625,8 @@ public:
               nKern( _nKrn )
             { }
 
+    virtual ~SvxDoGetCapitalSize() {}
+
     virtual void Do( const XubString &rTxt, const xub_StrLen nIdx,
                      const xub_StrLen nLen, const sal_Bool bUpper );
 
@@ -687,6 +691,7 @@ public:
           aSpacePos( rPos ),
           nKern( nKrn )
         { }
+    virtual ~SvxDoDrawCapital() {}
     virtual void DoSpace( const sal_Bool bDraw );
     virtual void SetSpace();
     virtual void Do( const XubString &rTxt, const xub_StrLen nIdx,

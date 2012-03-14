@@ -62,6 +62,9 @@ namespace dbaccess
                     const ::com::sun::star::uno::Type& _rType,
                     const void* _pInitialValue
                 ) = 0;
+
+    protected:
+        ~IPropertyContainer() {}
     };
 
     //====================================================================

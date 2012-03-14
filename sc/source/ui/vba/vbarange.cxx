@@ -1018,6 +1018,9 @@ class RangeProcessor
 {
 public:
     virtual void process( const uno::Reference< excel::XRange >& xRange ) = 0;
+
+protected:
+    ~RangeProcessor() {}
 };
 
 class RangeValueProcessor : public RangeProcessor
@@ -1025,6 +1028,7 @@ class RangeValueProcessor : public RangeProcessor
     const uno::Any& m_aVal;
 public:
     RangeValueProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
+    virtual ~RangeValueProcessor() {}
     virtual void process( const uno::Reference< excel::XRange >& xRange )
     {
         xRange->setValue( m_aVal );
@@ -1036,6 +1040,7 @@ class RangeFormulaProcessor : public RangeProcessor
     const uno::Any& m_aVal;
 public:
     RangeFormulaProcessor( const uno::Any& rVal ):m_aVal( rVal ) {}
+    virtual ~RangeFormulaProcessor() {}
     virtual void process( const uno::Reference< excel::XRange >& xRange )
     {
         xRange->setFormula( m_aVal );
@@ -1047,6 +1052,7 @@ class RangeCountProcessor : public RangeProcessor
     sal_Int32 nCount;
 public:
     RangeCountProcessor():nCount(0){}
+    virtual ~RangeCountProcessor() {}
     virtual void process( const uno::Reference< excel::XRange >& xRange )
     {
         nCount = nCount + xRange->getCount();

@@ -41,6 +41,9 @@ public:
 
     void testGetDataArray();
     void testSetDataArray();
+
+protected:
+    ~XCellRangeData() {}
 };
 
 }

@@ -66,6 +66,9 @@ public:
         the returned bitmap as is or if a new preview has to be created.
     */
     virtual bool IsLossless (void) const = 0;
+
+protected:
+    ~BitmapCompressor() {}
 };
 
 
@@ -78,6 +81,9 @@ class BitmapReplacement
 {
 public:
     virtual sal_Int32 GetMemorySize (void) const { return 0; }
+
+protected:
+    ~BitmapReplacement() {}
 };
 
 

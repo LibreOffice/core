@@ -52,6 +52,9 @@ struct DownloadInteractionHandler : public rtl::IReference
 
     // called when download has been finished
     virtual void downloadFinished(const rtl::OUString& rFileName) = 0;
+
+protected:
+    ~DownloadInteractionHandler() {}
 };
 
 

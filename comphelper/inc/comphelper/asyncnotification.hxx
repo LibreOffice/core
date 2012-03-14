@@ -87,6 +87,9 @@ namespace comphelper
 
         virtual void SAL_CALL acquire() = 0;
         virtual void SAL_CALL release() = 0;
+
+    protected:
+        ~IEventProcessor() {}
     };
 
     //====================================================================

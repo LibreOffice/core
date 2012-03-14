@@ -38,6 +38,9 @@ namespace dbaui
     public:
         virtual void SAL_CALL acquire(  ) throw () = 0;
         virtual void SAL_CALL release(  ) throw () = 0;
+
+    protected:
+        ~IReference() {}
     };
 }
 #endif // DBAUI_IREFERENCE_HXX

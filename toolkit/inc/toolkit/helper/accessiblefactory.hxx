@@ -129,6 +129,9 @@ namespace toolkit
         */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::accessibility::XAccessible >
             createAccessible( Menu* _pMenu, sal_Bool _bIsMenuBar ) = 0;
+
+    protected:
+        ~IAccessibleFactory() {}
     };
 
 //........................................................................

@@ -83,6 +83,9 @@ namespace svt { namespace table
             the data is currently not sorted.
         */
         virtual ColumnSort  getCurrentSortOrder() const = 0;
+
+    protected:
+        ~ITableDataSort() {}
     };
 
 //......................................................................................................................

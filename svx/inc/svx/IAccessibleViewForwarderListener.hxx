@@ -68,6 +68,9 @@ public:
     */
     virtual void ViewForwarderChanged (ChangeType aChangeType,
         const IAccessibleViewForwarder* pViewForwarder) = 0;
+
+protected:
+    ~IAccessibleViewForwarderListener() {}
 };
 
 } // end of namespace accessibility

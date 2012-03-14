@@ -55,6 +55,9 @@ namespace sfx2
     {
     public:
         virtual void ActivateToolPanel( const ::rtl::OUString& i_rPanelURL ) = 0;
+
+    protected:
+        ~ITaskPaneToolPanelAccess() {}
     };
 
     //==================================================================================================================
@@ -95,6 +98,9 @@ namespace sfx2
                         const ::rtl::OUString& i_rLHS,
                         const ::rtl::OUString& i_rRHS
                     ) const = 0;
+
+    protected:
+        ~IToolPanelCompare() {}
     };
 
     //==================================================================================================================

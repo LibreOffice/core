@@ -49,6 +49,9 @@ public:
         returned.
     */
     virtual bool HasNextStep (void) = 0;
+
+protected:
+    ~AsynchronousTask() {}
 };
 
 } } // end of namespace ::sd::tools

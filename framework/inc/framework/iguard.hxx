@@ -63,6 +63,9 @@ class SAL_NO_VTABLE IGuard
         */
         virtual void reset() = 0;
 
+    protected:
+        ~IGuard() {}
+
 };      //  class IGuard
 
 }       //  namespace framework

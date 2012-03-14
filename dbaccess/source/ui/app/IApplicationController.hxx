@@ -92,6 +92,9 @@ namespace dbaui
 
         /// called when an object container of any kind was found during enumerating tree view elements
         virtual void containerFound( const ::com::sun::star::uno::Reference< ::com::sun::star::container::XContainer >& _xContainer) = 0;
+
+    protected:
+        ~IApplicationController() {}
     };
 
 //........................................................................

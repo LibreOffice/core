@@ -73,6 +73,7 @@ namespace connectivity
         class OOO_DLLPUBLIC_DBTOOLS SAL_NO_VTABLE IObjectCollection
         {
         public:
+            virtual ~IObjectCollection();
             virtual void reserve(size_t nLength) = 0;
             virtual bool exists(const ::rtl::OUString& _sName ) = 0;
             virtual bool empty() = 0;

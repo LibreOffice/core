@@ -511,6 +511,9 @@ struct PageData
         static storeError createInstance (
             rtl::Reference< PageData::Allocator > & rxAllocator, sal_uInt16 nPageSize);
 
+    protected:
+        ~Allocator() {}
+
     private:
         /** Implementation (abstract).
          */

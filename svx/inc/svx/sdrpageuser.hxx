@@ -49,6 +49,9 @@ namespace sdr
         // do all necessary action to forget the page. It is not necessary to call
         // RemovePageUser(), that is done form the destructor.
         virtual void PageInDestruction(const SdrPage& rPage) = 0;
+
+    protected:
+        ~PageUser() {}
     };
 
     // typedef for PageUserVector

@@ -42,6 +42,9 @@ namespace dbtools
     {
     public:
         virtual void addComment(const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& descriptor,::rtl::OUStringBuffer& _rOut) = 0;
+
+    protected:
+        ~ISQLStatementHelper() {}
     };
 
 //.........................................................................

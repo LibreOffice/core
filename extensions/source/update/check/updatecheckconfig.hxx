@@ -41,6 +41,9 @@
 struct IByNameAccess
 {
     virtual ::com::sun::star::uno::Any getValue(const sal_Char * pName) = 0;
+
+protected:
+    ~IByNameAccess() {}
 };
 
 /* This helper class provides by name access to a sequence of named values */

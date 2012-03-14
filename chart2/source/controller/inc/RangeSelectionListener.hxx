@@ -41,6 +41,9 @@ class RangeSelectionListenerParent
 public:
     virtual void listeningFinished( const ::rtl::OUString & rNewRange ) = 0;
     virtual void disposingRangeSelection() = 0;
+
+protected:
+    ~RangeSelectionListenerParent() {}
 };
 
 // ----------------------------------------

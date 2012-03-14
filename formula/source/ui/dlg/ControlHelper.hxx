@@ -146,6 +146,8 @@ public:
 
     ArgInput();
 
+    virtual ~ArgInput() {}
+
     void        InitArgInput (  FixedText*      pftArg,
                                 ImageButton*    pbtnFx,
                                 ArgEdit*        pedArg,

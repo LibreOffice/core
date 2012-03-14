@@ -192,6 +192,9 @@ namespace sfx2
                     showBrokenSignatureWarning(
                         const ::com::sun::star::uno::Reference< ::com::sun::star::task::XInteractionHandler >& _rxInteraction
                     ) const = 0;
+
+    protected:
+        ~IMacroDocumentAccess() {}
     };
 
     //====================================================================

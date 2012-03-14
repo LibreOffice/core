@@ -334,6 +334,10 @@ public:
         sal_Int32 nCount,
         sal_Bool bVetoable,
         bool bIgnoreRuntimeExceptionsWhileFiring) = 0;
+
+protected:
+    ~IEventNotificationHook() {}
+        // avoid warnings about virtual members and non-virtual dtor
 };
 
 
@@ -656,11 +660,9 @@ private:
                 sal_Int32 i_count
             );
 
-public:
+protected:
 // Suppress warning about virtual functions but non-virtual destructor:
-#if defined __GNUC__
-#pragma GCC system_header
-#elif defined _MSC_VER
+#if defined _MSC_VER
 #pragma warning(push)
 #pragma warning(disable: 4265)
 #endif
@@ -703,7 +705,7 @@ private:
     OPropertySetHelper2( const OPropertySetHelper2 & ) SAL_THROW(());
     OPropertySetHelper2 &    operator = ( const OPropertySetHelper2 & ) SAL_THROW(());
 
-public:
+protected:
 // Suppress warning about virtual functions but non-virtual destructor:
     /**
        You must call disposing before destruction.

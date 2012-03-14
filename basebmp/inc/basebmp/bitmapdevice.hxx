@@ -67,6 +67,9 @@ struct IBitmapDeviceDamageTracker
 {
     /// gets called when said region is clobbered
     virtual void damaged(const basegfx::B2IBox& rDamageRect) const = 0;
+
+protected:
+    ~IBitmapDeviceDamageTracker() {}
 };
 
 /** Definition of BitmapDevice interface

@@ -130,6 +130,9 @@ namespace fileaccess {
         virtual PropertySetInfoChangeNotifier* cPSL( void ) = 0;
         virtual PropertyChangeNotifier*        cPCL( void ) = 0;
         virtual rtl::OUString                  getKey( void ) = 0;
+
+    protected:
+        ~Notifier() {}
     };
 
 

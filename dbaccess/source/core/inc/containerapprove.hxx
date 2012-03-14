@@ -52,6 +52,8 @@ namespace dbaccess
     class SAL_NO_VTABLE IContainerApprove
     {
     public:
+        virtual ~IContainerApprove() {}
+
         /** approves a given element for insertion into the container
             @param  _rName
                 specifies the name under which the element is going to be inserted

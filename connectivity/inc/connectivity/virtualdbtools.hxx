@@ -226,6 +226,9 @@ namespace connectivity
                 const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XInterface >& _rxComponent,
                 ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XConnection >& _rxActualConnection
             ) = 0;
+
+        protected:
+            ~IDataAccessTools() {}
         };
 
         //================================================================
@@ -244,6 +247,9 @@ namespace connectivity
             virtual sal_Int32   getSupportedTextEncodings(
                 ::std::vector< rtl_TextEncoding >& /* [out] */ _rEncs
             ) const = 0;
+
+        protected:
+            ~IDataAccessCharSet() {}
         };
 
         //================================================================
@@ -272,6 +278,9 @@ namespace connectivity
                 const ::com::sun::star::lang::Locale& _rLocale,
                 const ::com::sun::star::util::Date& _rNullDate
             ) const = 0;
+
+        protected:
+            ~IDataAccessTypeConversion() {}
         };
 
         //================================================================
@@ -295,6 +304,9 @@ namespace connectivity
                 const sal_Char _cDecSeparator,
                 const IParseContext* _pContext
             ) const = 0;
+
+        protected:
+            ~ISQLParseNode() {}
         };
 
         //================================================================
@@ -313,6 +325,9 @@ namespace connectivity
             ) const = 0;
 
             virtual const IParseContext& getContext() const = 0;
+
+        protected:
+            ~ISQLParser() {}
         };
 
         //================================================================
@@ -344,6 +359,9 @@ namespace connectivity
                 const ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet >& _rxRowSet,
                 const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& _rxColumn
             ) = 0;
+
+        protected:
+            ~IDataAccessToolsFactory() {}
         };
 
     //....................................................................

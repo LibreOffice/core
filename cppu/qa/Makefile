@@ -26,11 +26,11 @@
 # instead of those above.
 
 gb_PARTIALBUILD:=T
-include $(GBUILDDIR)/gbuild_simple.mk
+include $(GBUILDDIR)/gbuild.mk
 
 all: qa/cppumaker.flag qa/cppumaker/cppumaker.flag
 
-%/cppumaker.flag: %/cppumaker.rdb
+%/cppumaker.flag: %/cppumaker.rdb $(gb_UnoApiTarget_CPPUMAKERTARGET)
 	$(call gb_Helper_abbreviate_dirs_native, \
 		$(call gb_Helper_execute,cppumaker) -O. -BUCR -C $< $(OUTDIR_FOR_BUILD)/bin/udkapi.rdb)
 	touch $@

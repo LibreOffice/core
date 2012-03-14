@@ -126,6 +126,9 @@ class ScFormatFilterPlugin {
     virtual FltError ScExportHTML( SvStream&, const String& rBaseURL, ScDocument*, const ScRange& rRange, const CharSet eDest, sal_Bool bAll,
                   const String& rStreamPath, String& rNonConvertibleChars ) = 0;
     virtual FltError ScExportRTF( SvStream&, ScDocument*, const ScRange& rRange, const CharSet eDest ) = 0;
+
+protected:
+    ~ScFormatFilterPlugin() {}
 };
 
 // scfilt plugin symbol

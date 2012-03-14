@@ -263,6 +263,9 @@ class ICustomhandleSupplier
 {
 public:
     virtual void addCustomHandler( SdrView& rSourceView, ViewShell::ShellType eShellType, SdrHdlList& rHandlerList ) = 0;
+
+protected:
+    ~ICustomhandleSupplier() {}
 };
 
 } // end of namespace sd

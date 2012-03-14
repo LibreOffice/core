@@ -68,6 +68,9 @@ namespace canvas
         virtual void updateSprite( const Sprite::Reference&     rSprite,
                                    const ::basegfx::B2DPoint&   rPos,
                                    const ::basegfx::B2DRange&   rUpdateArea ) = 0;
+
+    protected:
+        ~SpriteSurface() {}
     };
 }
 

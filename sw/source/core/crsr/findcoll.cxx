@@ -48,6 +48,7 @@ struct SwFindParaFmtColl : public SwFindParas
                         const SwTxtFmtColl* pRpColl, SwCursor& rCrsr )
         : pFmtColl( &rFmtColl ), pReplColl( pRpColl ), rCursor( rCrsr )
     {}
+    virtual ~SwFindParaFmtColl() {}
     virtual int Find( SwPaM* , SwMoveFn , const SwPaM*, sal_Bool bInReadOnly );
     virtual int IsReplaceMode() const;
 };

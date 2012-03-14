@@ -74,9 +74,17 @@ struct DerivedException1: css::uno::Exception {};
 
 struct DerivedException2: css::uno::RuntimeException {};
 
-struct DerivedInterface1: css::uno::XInterface {};
+struct DerivedInterface1: css::uno::XInterface {
+private:
+    ~DerivedInterface1() {}
+        // avoid warnings about virtual members and non-virtual dtor
+};
 
-struct DerivedInterface2: css::uno::XComponentContext {};
+struct DerivedInterface2: css::uno::XComponentContext {
+private:
+    ~DerivedInterface2() {}
+        // avoid warnings about virtual members and non-virtual dtor
+};
 
 class Test: public ::CppUnit::TestFixture {
 public:

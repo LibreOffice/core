@@ -43,6 +43,9 @@ public:
 
     void testGetReferredCells();
 
+protected:
+    ~XCellRangeReferrer() {}
+
 private:
     table::CellRangeAddress maCellRange;
 };

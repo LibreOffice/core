@@ -51,6 +51,9 @@ namespace reportdesign
         virtual void traverseGroupFooter(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) = 0;
 
         virtual void traverseDetail(const ::com::sun::star::uno::Reference< ::com::sun::star::report::XSection>& _xSection) = 0;
+
+    protected:
+        ~ITraverseReport() {}
     };
 
     class REPORTDESIGN_DLLPUBLIC OReportVisitor

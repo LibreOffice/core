@@ -54,6 +54,9 @@ namespace dbaui
     public:
         virtual const SfxItemSet* getOutputSet() const = 0;
         virtual SfxItemSet* getWriteOutputSet() = 0;
+
+    protected:
+        ~IItemSetHelper() {}
     };
 
     class SAL_NO_VTABLE IDatabaseSettingsDialog
@@ -73,6 +76,9 @@ namespace dbaui
             In a normal tab dialog, this will usually disable the "OK" button.
         */
         virtual void enableConfirmSettings( bool _bEnable ) = 0;
+
+    protected:
+        ~IDatabaseSettingsDialog() {}
     };
 }
 #endif // DBAUI_ITEMSETHELPER_HXX

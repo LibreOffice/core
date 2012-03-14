@@ -43,6 +43,9 @@ namespace dbaui
         virtual void copy()     = 0;
         virtual void cut()      = 0;
         virtual void paste()    = 0;
+
+    protected:
+        ~IClipboardTest() {}
     };
 }
 #endif // DBACCESS_TABLEDESIGN_ICLIPBOARDTEST_HXX

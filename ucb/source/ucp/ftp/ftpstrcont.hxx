@@ -52,7 +52,8 @@ namespace ftp {
 
         FTPOutputStreamContainer(const com::sun::star::uno::Reference<
                                  com::sun::star::io::XOutputStream>& out);
-                                 virtual ~FTPOutputStreamContainer() {}
+
+        virtual ~FTPOutputStreamContainer() {}
 
         virtual size_t write(void *buffer,size_t size,size_t nmemb);
 
@@ -70,6 +71,8 @@ namespace ftp {
     public:
 
         FTPInputStreamContainer(FTPInputStream* out);
+
+        virtual ~FTPInputStreamContainer() {}
 
         virtual size_t write(void *buffer,size_t size,size_t nmemb);
 

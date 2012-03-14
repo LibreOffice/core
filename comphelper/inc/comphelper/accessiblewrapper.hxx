@@ -61,7 +61,10 @@ namespace comphelper
 
     struct OAccessibleWrapper_Base :
         public ::cppu::ImplHelper1 < ::com::sun::star::accessibility::XAccessible >
-    {};
+    {
+    protected:
+        ~OAccessibleWrapper_Base() {}
+    };
 
     /** a class which aggregates a proxy for an XAccessible, and wrapping the context returned by this
         XAccessible.

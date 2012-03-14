@@ -47,6 +47,9 @@ namespace dbaccess
     {
     public:
         virtual void refresh(const ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >& _rToBeRefreshed) = 0;
+
+    protected:
+        ~IRefreshListener() {}
     };
 
 }   // namespace dbaccess

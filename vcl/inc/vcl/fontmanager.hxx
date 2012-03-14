@@ -544,6 +544,9 @@ public:
         virtual bool queryOverwriteFile( const rtl::OUString& rFile ) = 0;
         virtual void importFontFailed( const rtl::OUString& rFile, FailCondition ) = 0;
         virtual bool isCanceled() = 0;
+
+    protected:
+        ~ImportFontCallback() {}
     };
 
     /*  system dependendent font matching

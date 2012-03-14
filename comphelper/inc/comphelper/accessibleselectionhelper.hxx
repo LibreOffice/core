@@ -56,6 +56,8 @@ namespace comphelper
 
         OCommonAccessibleSelection();
 
+        ~OCommonAccessibleSelection();
+
     protected:
 
         // access to context - still waiting to be overwritten

@@ -65,6 +65,9 @@ public:
     //return a constant out of ::com::sun::star::chart::TimeUnit that allows to display the smallest distance between occuring dates
     virtual long calculateTimeResolutionOnXAxis() = 0;
     virtual void setTimeResolutionOnXAxis( long nTimeResolution, const Date& rNullDate ) = 0;
+
+protected:
+    ~MinimumAndMaximumSupplier() {}
 };
 
 class MergedMinimumAndMaximumSupplier : public MinimumAndMaximumSupplier

@@ -49,6 +49,9 @@ namespace vcl
     {
     public:
         virtual ImageList getImageList(ImageListType) SAL_THROW (( com::sun::star::lang::IllegalArgumentException )) = 0;
+
+    protected:
+        ~IImageListProvider() {}
     };
 } /* vcl */
 

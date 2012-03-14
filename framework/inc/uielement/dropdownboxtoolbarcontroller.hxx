@@ -55,6 +55,8 @@ class IListBoxListener
         virtual void GetFocus() = 0;
         virtual void LoseFocus() = 0;
         virtual long PreNotify( NotifyEvent& rNEvt ) = 0;
+    protected:
+        ~IListBoxListener() {}
 };
 
 class DropdownToolbarController : public IListBoxListener,

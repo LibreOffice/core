@@ -71,6 +71,9 @@ public:
     virtual void CloseMarkedObjects(sal_Bool bToggle, sal_Bool bOpen ) = 0;
     virtual bool IsOpenCloseMarkedObjectsPossible() const = 0;
     virtual SdrObjClosedKind GetMarkedObjectsClosedState() const = 0;
+
+protected:
+    ~IPolyPolygonEditorController() {}
 };
 
 #endif //_SDR_IPOLYPOLYGONEDITORCONTROLLER_HXX

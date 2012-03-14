@@ -41,8 +41,7 @@ class SwMailMergeWizard;
 
 class SwGreetingsHandler
 {
-    friend class SwMailBodyDialog;
-    friend class SwMailMergeGreetingsPage;
+protected:
     CheckBox*           m_pGreetingLineCB;
 
     CheckBox*           m_pPersonalizedCB;
@@ -67,6 +66,8 @@ class SwGreetingsHandler
     bool                m_bIsTabPage;
 
     SwMailMergeWizard*  m_pWizard;
+
+    ~SwGreetingsHandler() {}
 
     DECL_LINK(IndividualHdl_Impl, void *);
     DECL_LINK(GreetingHdl_Impl, PushButton*);

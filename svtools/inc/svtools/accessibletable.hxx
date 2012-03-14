@@ -128,6 +128,9 @@ public:
     virtual bool IsRowSelected( sal_Int32 const i_rowIndex ) const = 0;
     virtual void SelectRow( sal_Int32 const i_rowIndex, bool const i_select ) = 0;
     virtual void SelectAllRows( bool const i_select ) = 0;
+
+protected:
+    ~IAccessibleTable() {}
 };
 
 // ----------------------------------------------------------------------------
@@ -172,6 +175,9 @@ public:
         const ::com::sun::star::uno::Any& rNewValue,
         const ::com::sun::star::uno::Any& rOldValue
     ) = 0;
+
+protected:
+    ~IAccessibleTableControl() {}
 };
 
 // ----------------------------------------------------------------------------

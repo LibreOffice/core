@@ -209,6 +209,9 @@ class IRecoveryUpdateListener
 
         // TODO
         virtual void stepNext(TURLInfo* pItem) = 0;
+
+    protected:
+        ~IRecoveryUpdateListener() {}
 };
 
 //===============================================

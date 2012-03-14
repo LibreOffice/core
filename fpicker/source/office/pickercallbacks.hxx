@@ -46,6 +46,9 @@ namespace svt
         virtual Control*    getControl( sal_Int16 _nControlId, sal_Bool _bLabelControl = sal_False ) const = 0;
         virtual void        enableControl( sal_Int16 _nControlId, sal_Bool _bEnable ) = 0;
         virtual String      getCurFilter( ) const = 0;
+
+    protected:
+        ~IFilePickerController() {}
     };
 
     // --------------------------------------------------------------------
@@ -53,6 +56,9 @@ namespace svt
     {
     public:
         virtual void    notify( sal_Int16 _nEventId, sal_Int16 _nControlId ) = 0;
+
+    protected:
+        ~IFilePickerListener() {}
     };
 
 //.........................................................................

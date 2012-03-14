@@ -39,6 +39,9 @@ struct UpdateCheckConfigListener : public rtl::IReference
 {
     virtual void autoCheckStatusChanged(bool enabled) = 0;
     virtual void autoCheckIntervalChanged() = 0;
+
+protected:
+    ~UpdateCheckConfigListener() {}
 };
 
 #endif

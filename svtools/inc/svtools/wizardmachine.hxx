@@ -87,6 +87,9 @@ namespace svt
             The default implementation always returns <TRUE/>.
         */
         virtual bool    canAdvance() const = 0;
+
+    protected:
+        ~IWizardPageController() {}
     };
 
     //=====================================================================

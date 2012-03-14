@@ -192,6 +192,7 @@ namespace chart
         class DummyMutex : public ::framework::IMutex
         {
         public:
+            virtual ~DummyMutex() {}
             virtual void acquire() { }
             virtual void release() { }
         };

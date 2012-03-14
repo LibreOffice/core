@@ -42,6 +42,9 @@ namespace nullcanvas
         /** Redraw sprite
          */
         virtual void redraw() const = 0;
+
+    protected:
+        ~Sprite() {}
     };
 }
 

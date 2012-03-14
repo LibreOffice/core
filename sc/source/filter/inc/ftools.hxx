@@ -293,6 +293,7 @@ typedef ::std::vector< ::rtl::OUString >            ScfStringVec;
 class ScFormatFilterPluginImpl : public ScFormatFilterPlugin {
   public:
     ScFormatFilterPluginImpl();
+    virtual ~ScFormatFilterPluginImpl() {}
     // various import filters
     virtual FltError ScImportLotus123( SfxMedium&, ScDocument*, CharSet eSrc = RTL_TEXTENCODING_DONTKNOW );
     virtual FltError ScImportQuattroPro( SfxMedium &rMedium, ScDocument *pDoc );

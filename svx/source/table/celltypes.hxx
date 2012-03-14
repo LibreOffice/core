@@ -54,6 +54,9 @@ class TableDesignUser
 {
 public:
     virtual bool isInUse() = 0;
+
+protected:
+    ~TableDesignUser() {}
 };
 
 template< typename T >

@@ -51,6 +51,9 @@ namespace dbaui
     {
     public:
         virtual bool    includeEntry( SvLBoxEntry* _pEntry ) const = 0;
+
+    protected:
+        ~IEntryFilter() {}
     };
 
     //========================================================================

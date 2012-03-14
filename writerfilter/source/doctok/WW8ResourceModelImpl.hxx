@@ -54,7 +54,7 @@ public:
     {
     }
 
-    ~WW8PropertiesReference()
+    virtual ~WW8PropertiesReference()
     {
     }
 
@@ -70,7 +70,7 @@ public:
     {
     }
 
-    ~WW8TableReference()
+    virtual ~WW8TableReference()
     {
     }
 

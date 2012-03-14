@@ -43,6 +43,9 @@ class ILayoutNotifications
         };
 
         virtual void requestLayout( Hint eHint = HINT_NOT_SPECIFIED ) = 0;
+
+    protected:
+        ~ILayoutNotifications() {}
 };
 
 }

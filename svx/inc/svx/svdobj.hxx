@@ -352,6 +352,9 @@ class SdrObjectUser
 {
 public:
     virtual void ObjectInDestruction(const SdrObject& rObject) = 0;
+
+protected:
+    ~SdrObjectUser() {}
 };
 
 // typedef for GetParentContacts()

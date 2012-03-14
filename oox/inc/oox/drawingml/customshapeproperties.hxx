@@ -126,6 +126,7 @@ protected:
     static com::sun::star::drawing::EnhancedCustomShapeParameterPair createParameterPair( const ParameterPairData *pData );
     static com::sun::star::uno::Sequence< com::sun::star::drawing::EnhancedCustomShapeParameterPair > createParameterPairSequence( size_t nElems, const ParameterPairData *pData );
 public:
+    virtual ~CustomShapeProvider() {}
     virtual PropertyMap getProperties() = 0;
 };
 

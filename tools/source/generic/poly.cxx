@@ -1198,6 +1198,9 @@ class ImplPointFilter
 public:
     virtual void LastPoint() = 0;
     virtual void Input( const Point& rPoint ) = 0;
+
+protected:
+    ~ImplPointFilter() {}
 };
 
 class ImplPolygonPointFilter : public ImplPointFilter
@@ -1211,6 +1214,8 @@ public:
                     {
                         mpPoly = new ImplPolygon( nDestSize );
                     }
+
+    virtual         ~ImplPolygonPointFilter() {}
 
     virtual void    LastPoint();
     virtual void    Input( const Point& rPoint );
@@ -1254,6 +1259,8 @@ public:
                             mbFirst( sal_True )
                         {
                         }
+
+    virtual             ~ImplEdgePointFilter() {}
 
     Point               EdgeSection( const Point& rPoint, int nEdge ) const;
     int                 VisibleSide( const Point& rPoint ) const;

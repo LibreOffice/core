@@ -42,8 +42,12 @@ namespace oox
 class OOX_DLLPUBLIC FormulaExportBase
 {
 public:
-    FormulaExportBase();
     virtual void writeFormulaOoxml( ::sax_fastparser::FSHelperPtr m_pSerializer, oox::core::OoxmlVersion version ) = 0;
+
+protected:
+    FormulaExportBase();
+
+    ~FormulaExportBase() {}
 };
 
 } // namespace

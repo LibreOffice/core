@@ -80,11 +80,12 @@ namespace ftp {
     };
 
     class CurlInput {
-
     public:
-
         // returns the number of bytes actually read
         virtual sal_Int32 read(sal_Int8 *dest,sal_Int32 nBytesRequested) = 0;
+
+    protected:
+        ~CurlInput() {}
     };
 
 

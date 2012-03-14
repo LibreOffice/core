@@ -60,6 +60,9 @@ namespace framework
             Even if the guard currently has not a lock on the mutex, this method must succeed.
         */
         virtual IMutex& getGuardedMutex() = 0;
+
+    protected:
+        ~IMutexGuard() {}
     };
 
     //==================================================================================================================
@@ -82,6 +85,9 @@ namespace framework
         */
         virtual ::com::sun::star::uno::Reference< ::com::sun::star::document::XUndoManager >
                                         getThis() = 0;
+
+    protected:
+        ~IUndoManagerImplementation() {}
     };
 
     //==================================================================================================================

@@ -41,6 +41,9 @@ class IActionListener : public rtl::IReference
     virtual void            pause() = 0;
     virtual void            resume() = 0;
     virtual void            closeAfterFailure() = 0;
+
+protected:
+    ~IActionListener() {}
 };
 
 #endif //INCLUDED_ACTION_LISTENER_HXX
