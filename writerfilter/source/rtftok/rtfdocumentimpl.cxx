@@ -2025,6 +2025,12 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                     m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PContextualSpacing, pValue));
                 }
                 break;
+        case RTF_LINKSTYLES:
+                {
+                    RTFValue::Pointer_t pValue(new RTFValue(1));
+                    m_aSettingsTableSprms->push_back(make_pair(NS_ooxml::LN_CT_Settings_linkStyles, pValue));
+                }
+                break;
         default:
             SAL_INFO("writerfilter", OSL_THIS_FUNC << ": TODO handle flag '" << lcl_RtfToString(nKeyword) << "'");
             aSkip.setParsed(false);
