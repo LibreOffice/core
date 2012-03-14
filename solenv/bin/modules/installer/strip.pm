@@ -27,7 +27,9 @@
 
 package installer::strip;
 
-use installer::converter;
+use strict;
+use warnings;
+
 use installer::globals;
 use installer::logger;
 use installer::pathanalyzer;
@@ -107,7 +109,7 @@ sub strip_libraries
             my $shortfilename = $sourcefilename;
             installer::pathanalyzer::make_absolute_filename_to_relative_filename(\$shortfilename);
 
-            $infoline = "Strip: $shortfilename\n";
+            my $infoline = "Strip: $shortfilename\n";
             push( @installer::globals::logfileinfo, $infoline);
 
             # copy file into directory for stripped libraries
