@@ -30,7 +30,7 @@
 // this includes no link dependency
 #include <svl/solar.hrc>
 
-//next free is 293
+//next free is 295
 //single free: 139
 
 //-----------------------------------------------------------------------------
@@ -232,7 +232,9 @@
 #define STR_PAGE_ILLUMINATION                (RID_APP_START + 237)
 
 #define STR_PAGE_TRENDLINE_TYPE              (RID_APP_START + 89)
+#define STR_PAGE_XERROR_BARS                 (RID_APP_START + 293)
 #define STR_PAGE_YERROR_BARS                 (RID_APP_START + 206)
+#define STR_PAGE_ZERROR_BARS                 (RID_APP_START + 294)
 #define STR_CONTROLTEXT_ERROR_BARS_FROM_DATA (RID_APP_START + 276)
 
 #define STR_DLG_CHART_WIZARD                 (RID_APP_START + 228)

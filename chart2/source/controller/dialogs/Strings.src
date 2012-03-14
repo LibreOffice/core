@@ -135,9 +135,19 @@ String STR_PAGE_TRENDLINE_TYPE
     Text[ en-US ] = "Type";
 };
 
+String STR_PAGE_XERROR_BARS
+{
+    Text[ en-US ] = "X Error Bars";
+};
+
 String STR_PAGE_YERROR_BARS
 {
     Text[ en-US ] = "Y Error Bars";
+};
+
+String STR_PAGE_ZERROR_BARS
+{
+    Text[ en-US ] = "Z Error Bars";
 };
 
 String STR_PAGE_ALIGNMENT

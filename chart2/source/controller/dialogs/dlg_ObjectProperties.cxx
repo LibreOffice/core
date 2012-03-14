@@ -447,12 +447,18 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             break;
         }
 
-        case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_X:
+            AddTabPage(TP_XERRORBAR, String(SchResId(STR_PAGE_XERROR_BARS)), ErrorBarsTabPage::Create, NULL);
+            AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
+            break;
+
+        case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_Y:
-        case OBJECTTYPE_DATA_ERRORS_Z:
             AddTabPage(TP_YERRORBAR, String(SchResId(STR_PAGE_YERROR_BARS)), ErrorBarsTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
+            break;
+
+        case OBJECTTYPE_DATA_ERRORS_Z:
             break;
 
         case OBJECTTYPE_GRID:
@@ -616,7 +622,18 @@ void SchAttribTabDlg::PageCreated(sal_uInt16 nId, SfxTabPage &rPage)
                aSet.Put (SvxNumberInfoItem( m_pNumberFormatter, (const sal_uInt16)SID_ATTR_NUMBERFORMAT_INFO));
             rPage.PageCreated(aSet);
             break;
-
+        case TP_XERRORBAR:
+        {
+            ErrorBarsTabPage * pTabPage = dynamic_cast< ErrorBarsTabPage * >( &rPage );
+            OSL_ASSERT( pTabPage );
+            if( pTabPage )
+            {
+                pTabPage->SetAxisMinorStepWidthForErrorBarDecimals( m_fAxisMinorStepWidthForErrorBarDecimals );
+                pTabPage->SetErrorBarType( ErrorBarResources::ERROR_BAR_X );
+                pTabPage->SetChartDocumentForRangeChoosing( m_pParameter->getDocument());
+            }
+            break;
+        }
         case TP_YERRORBAR:
         {
             ErrorBarsTabPage * pTabPage = dynamic_cast< ErrorBarsTabPage * >( &rPage );
