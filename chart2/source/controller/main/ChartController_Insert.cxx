@@ -474,6 +474,8 @@ void ChartController::executeDispatch_InsertTrendline()
 
 void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 {
+    ObjectType objType = bYError ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
+
     //if a series is selected insert error bars for that series only:
     uno::Reference< chart2::XDataSeries > xSeries(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ), uno::UNO_QUERY );
@@ -502,7 +504,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         aItemConverter.FillItemSet( aItemSet );
         ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter(
             ObjectIdentifier::createClassifiedIdentifierWithParent(
-                OBJECTTYPE_DATA_ERRORS, ::rtl::OUString(), m_aSelection.getSelectedCID()));
+                objType, ::rtl::OUString(), m_aSelection.getSelectedCID()));
         aDialogParameter.init( getModel() );
         ViewElementListProvider aViewElementListProvider( m_pDrawModelWrapper.get());
         SolarMutexGuard aGuard;
@@ -531,7 +533,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
         UndoGuard aUndoGuard(
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::INSERT,
-                ObjectNameProvider::getName_ObjectForAllSeries( OBJECTTYPE_DATA_ERRORS ) ),
+                ObjectNameProvider::getName_ObjectForAllSeries( objType ) ),
             m_xUndoManager );
 
         try
