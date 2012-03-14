@@ -34,6 +34,7 @@ class SerfPropPatchReqProcImpl : public SerfRequestProcessorImpl
 {
 public:
     SerfPropPatchReqProcImpl( const char* inPath,
+                              const DAVRequestHeaders& inRequestHeaders,
                               const std::vector< ProppatchValue > & inProperties );
 
     virtual ~SerfPropPatchReqProcImpl();

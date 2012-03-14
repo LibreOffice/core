@@ -30,7 +30,8 @@ namespace http_dav_ucp
 class SerfDeleteReqProcImpl : public SerfRequestProcessorImpl
 {
 public:
-    SerfDeleteReqProcImpl( const char* inPath );
+    SerfDeleteReqProcImpl( const char* inPath,
+                           const DAVRequestHeaders& inRequestHeaders );
 
     virtual ~SerfDeleteReqProcImpl();
 

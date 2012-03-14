@@ -32,12 +32,13 @@ namespace http_dav_ucp
 {
 
 SerfPostReqProcImpl::SerfPostReqProcImpl( const char* inPath,
+                                          const DAVRequestHeaders& inRequestHeaders,
                                           const char* inData,
                                           apr_size_t inDataLen,
                                           const char* inContentType,
                                           const char* inReferer,
                                           const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm )
-    : SerfRequestProcessorImpl( inPath )
+    : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mpPostData( inData )
     , mnPostDataLen( inDataLen )
     , mpContentType( inContentType )
@@ -48,12 +49,13 @@ SerfPostReqProcImpl::SerfPostReqProcImpl( const char* inPath,
 }
 
 SerfPostReqProcImpl::SerfPostReqProcImpl( const char* inPath,
+                                          const DAVRequestHeaders& inRequestHeaders,
                                           const char* inData,
                                           apr_size_t inDataLen,
                                           const char* inContentType,
                                           const char* inReferer,
                                           const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm )
-    : SerfRequestProcessorImpl( inPath )
+    : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mpPostData( inData )
     , mnPostDataLen( inDataLen )
     , mpContentType( inContentType )
@@ -89,29 +91,28 @@ serf_bucket_t * SerfPostReqProcImpl::createSerfRequestBucket( serf_request_t * i
                                                                  body_bkt,
                                                                  serf_request_get_alloc( inSerfRequest ) );
 
-    // TODO - correct headers
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    serf_bucket_headers_setn( hdrs_bkt, "User-Agent", "www.openoffice.org/ucb/" );
-    serf_bucket_headers_setn( hdrs_bkt, "Accept-Encoding", "gzip");
+    // general header fields provided by caller
+    setRequestHeaders( hdrs_bkt );
 
     // request specific header fields
     if ( body_bkt != 0 )
     {
         if ( useChunkedEncoding() )
         {
-            serf_bucket_headers_setn( hdrs_bkt, "Transfer-Encoding", "chunked");
+            serf_bucket_headers_set( hdrs_bkt, "Transfer-Encoding", "chunked");
         }
-        serf_bucket_headers_setn( hdrs_bkt, "Content-Length",
-                                  rtl::OUStringToOString( rtl::OUString::valueOf( (sal_Int32)mnPostDataLen ), RTL_TEXTENCODING_UTF8 ) );
+        serf_bucket_headers_set( hdrs_bkt, "Content-Length",
+                                 rtl::OUStringToOString( rtl::OUString::valueOf( (sal_Int32)mnPostDataLen ), RTL_TEXTENCODING_UTF8 ) );
     }
     if ( mpContentType != 0 )
     {
-        serf_bucket_headers_setn( hdrs_bkt, "Content-Type", mpContentType );
+        serf_bucket_headers_set( hdrs_bkt, "Content-Type", mpContentType );
     }
     if ( mpReferer != 0 )
     {
-        serf_bucket_headers_setn( hdrs_bkt, "Referer", mpReferer );
+        serf_bucket_headers_set( hdrs_bkt, "Referer", mpReferer );
     }
 
     return req_bkt;

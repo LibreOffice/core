@@ -38,17 +38,21 @@ class SerfGetReqProcImpl : public SerfRequestProcessorImpl
 {
 public:
     SerfGetReqProcImpl( const char* inPath,
+                        const DAVRequestHeaders& inRequestHeaders,
                         const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm );
 
     SerfGetReqProcImpl( const char* inPath,
+                        const DAVRequestHeaders& inRequestHeaders,
                         const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm,
                         const std::vector< ::rtl::OUString > & inHeaderNames,
                         DAVResource & ioResource );
 
     SerfGetReqProcImpl( const char* inPath,
+                        const DAVRequestHeaders& inRequestHeaders,
                         const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm );
 
     SerfGetReqProcImpl( const char* inPath,
+                        const DAVRequestHeaders& inRequestHeaders,
                         const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm,
                         const std::vector< ::rtl::OUString > & inHeaderNames,
                         DAVResource & ioResource );

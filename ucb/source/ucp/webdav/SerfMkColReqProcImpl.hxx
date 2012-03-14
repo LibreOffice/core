@@ -30,7 +30,8 @@ namespace http_dav_ucp
 class SerfMkColReqProcImpl : public SerfRequestProcessorImpl
 {
 public:
-    SerfMkColReqProcImpl( const char* inPath );
+    SerfMkColReqProcImpl( const char* inPath,
+                          const DAVRequestHeaders& inRequestHeaders );
 
     virtual ~SerfMkColReqProcImpl();
 

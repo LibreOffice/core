@@ -24,8 +24,10 @@
 namespace http_dav_ucp
 {
 
-SerfRequestProcessorImpl::SerfRequestProcessorImpl( const char* inPath )
+SerfRequestProcessorImpl::SerfRequestProcessorImpl( const char* inPath,
+                                                    const DAVRequestHeaders& inRequestHeaders )
     : mPathStr( inPath )
+    , mrRequestHeaders( inRequestHeaders )
     , mbUseChunkedEncoding( false )
 {
 }
@@ -47,6 +49,28 @@ void SerfRequestProcessorImpl::activateChunkedEncoding()
 const bool SerfRequestProcessorImpl::useChunkedEncoding() const
 {
     return mbUseChunkedEncoding;
+}
+
+void SerfRequestProcessorImpl::setRequestHeaders( serf_bucket_t* inoutSerfHeaderBucket )
+{
+    DAVRequestHeaders::const_iterator aHeaderIter( mrRequestHeaders.begin() );
+    const DAVRequestHeaders::const_iterator aEnd( mrRequestHeaders.end() );
+
+    while ( aHeaderIter != aEnd )
+    {
+        const rtl::OString aHeader = rtl::OUStringToOString( (*aHeaderIter).first,
+                                                               RTL_TEXTENCODING_UTF8 );
+        const rtl::OString aValue = rtl::OUStringToOString( (*aHeaderIter).second,
+                                                            RTL_TEXTENCODING_UTF8 );
+
+        serf_bucket_headers_set( inoutSerfHeaderBucket,
+                                 aHeader.getStr(),
+                                 aValue.getStr() );
+
+        ++aHeaderIter;
+    }
+
+    serf_bucket_headers_set( inoutSerfHeaderBucket, "Accept-Encoding", "gzip");
 }
 
 bool SerfRequestProcessorImpl::processSerfResponseBucket( serf_request_t * /*inSerfRequest*/,

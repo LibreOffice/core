@@ -38,6 +38,7 @@ class SerfHeadReqProcImpl : public SerfRequestProcessorImpl
 {
 public:
     SerfHeadReqProcImpl( const char* inPath,
+                         const DAVRequestHeaders& inRequestHeaders,
                          const std::vector< ::rtl::OUString > & inHeaderNames,
                          DAVResource & ioResource );
 

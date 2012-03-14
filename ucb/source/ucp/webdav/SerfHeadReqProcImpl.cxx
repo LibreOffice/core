@@ -30,9 +30,10 @@ namespace http_dav_ucp
 {
 
 SerfHeadReqProcImpl::SerfHeadReqProcImpl( const char* inPath,
-                                         const std::vector< ::rtl::OUString > & inHeaderNames,
-                                         DAVResource & ioResource )
-    : SerfRequestProcessorImpl( inPath )
+                                          const DAVRequestHeaders& inRequestHeaders,
+                                          const std::vector< ::rtl::OUString > & inHeaderNames,
+                                          DAVResource & ioResource )
+    : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mpHeaderNames( &inHeaderNames )
     , mpResource( &ioResource )
 {
@@ -51,11 +52,10 @@ serf_bucket_t * SerfHeadReqProcImpl::createSerfRequestBucket( serf_request_t * i
                                                                  0,
                                                                  serf_request_get_alloc( inSerfRequest ) );
 
-    // TODO - correct headers
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    serf_bucket_headers_setn( hdrs_bkt, "User-Agent", "www.openoffice.org/ucb/" );
-    serf_bucket_headers_setn( hdrs_bkt, "Accept-Encoding", "gzip");
+    // general header fields provided by caller
+    setRequestHeaders( hdrs_bkt );
 
     return req_bkt;
 }

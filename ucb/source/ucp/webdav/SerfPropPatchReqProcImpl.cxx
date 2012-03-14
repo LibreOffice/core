@@ -33,8 +33,9 @@ namespace http_dav_ucp
 {
 
 SerfPropPatchReqProcImpl::SerfPropPatchReqProcImpl( const char* inPath,
+                                                    const DAVRequestHeaders& inRequestHeaders,
                                                     const std::vector< ProppatchValue > & inProperties )
-    : SerfRequestProcessorImpl( inPath )
+    : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mpProperties( &inProperties )
 {
 }
@@ -148,22 +149,21 @@ serf_bucket_t * SerfPropPatchReqProcImpl::createSerfRequestBucket( serf_request_
                                                                  body_bkt,
                                                                  pSerfBucketAlloc ) ;
 
-    // TODO - correct header data
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    serf_bucket_headers_setn( hdrs_bkt, "User-Agent", "www.openoffice.org/ucb/" );
-    serf_bucket_headers_setn( hdrs_bkt, "Accept-Encoding", "gzip");
+    // general header fields provided by caller
+    setRequestHeaders( hdrs_bkt );
 
     // request specific header fields
     if ( body_bkt != 0 && aBodyText.getLength() > 0 )
     {
         if ( useChunkedEncoding() )
         {
-            serf_bucket_headers_setn( hdrs_bkt, "Transfer-Encoding", "chunked");
+            serf_bucket_headers_set( hdrs_bkt, "Transfer-Encoding", "chunked");
         }
-        serf_bucket_headers_setn( hdrs_bkt, "Content-Type", "application/xml" );
-        serf_bucket_headers_setn( hdrs_bkt, "Content-Length",
-                                  rtl::OUStringToOString( rtl::OUString::valueOf( aBodyText.getLength() ), RTL_TEXTENCODING_UTF8 ) );
+        serf_bucket_headers_set( hdrs_bkt, "Content-Type", "application/xml" );
+        serf_bucket_headers_set( hdrs_bkt, "Content-Length",
+                                 rtl::OUStringToOString( rtl::OUString::valueOf( aBodyText.getLength() ), RTL_TEXTENCODING_UTF8 ) );
     }
 
     return req_bkt;

@@ -34,42 +34,52 @@
 namespace http_dav_ucp
 {
     SerfRequestProcessorImpl* createPropFindReqProcImpl( const char* inPath,
+                                                         const DAVRequestHeaders& inRequestHeaders,
                                                          const Depth inDepth,
                                                          const std::vector< ::rtl::OUString > & inPropNames,
                                                          std::vector< DAVResource > & ioResources );
 
     SerfRequestProcessorImpl* createPropFindReqProcImpl( const char* inPath,
+                                                         const DAVRequestHeaders& inRequestHeaders,
                                                          const Depth inDepth,
                                                          std::vector< DAVResourceInfo > & ioResInfo );
 
     SerfRequestProcessorImpl* createPropPatchReqProcImpl( const char* inPath,
+                                                          const DAVRequestHeaders& inRequestHeaders,
                                                           const std::vector< ProppatchValue > & inProperties );
 
     SerfRequestProcessorImpl* createGetReqProcImpl( const char* inPath,
+                                                    const DAVRequestHeaders& inRequestHeaders,
                                                     const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm );
 
     SerfRequestProcessorImpl* createGetReqProcImpl( const char* inPath,
+                                                    const DAVRequestHeaders& inRequestHeaders,
                                                     const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm,
                                                     const std::vector< ::rtl::OUString > & inHeaderNames,
                                                     DAVResource& ioResource );
 
     SerfRequestProcessorImpl* createGetReqProcImpl( const char* inPath,
+                                                    const DAVRequestHeaders& inRequestHeaders,
                                                     const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm );
 
     SerfRequestProcessorImpl* createGetReqProcImpl( const char* inPath,
+                                                    const DAVRequestHeaders& inRequestHeaders,
                                                     const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm,
                                                     const std::vector< ::rtl::OUString > & inHeaderNames,
                                                     DAVResource& ioResource );
 
     SerfRequestProcessorImpl* createHeadReqProcImpl( const char* inPath,
+                                                     const DAVRequestHeaders& inRequestHeaders,
                                                      const std::vector< ::rtl::OUString > & inHeaderNames,
                                                      DAVResource& ioResource );
 
     SerfRequestProcessorImpl* createPutReqProcImpl( const char* inPath,
+                                                    const DAVRequestHeaders& inRequestHeaders,
                                                     const char* inData,
                                                     apr_size_t inDataLen );
 
     SerfRequestProcessorImpl* createPostReqProcImpl( const char* inPath,
+                                                     const DAVRequestHeaders& inRequestHeaders,
                                                      const char* inData,
                                                      apr_size_t inDataLen,
                                                      const char* inContentType,
@@ -77,21 +87,26 @@ namespace http_dav_ucp
                                                      const com::sun::star::uno::Reference< SerfInputStream >& xioInStrm );
 
     SerfRequestProcessorImpl* createPostReqProcImpl( const char* inPath,
+                                                     const DAVRequestHeaders& inRequestHeaders,
                                                      const char* inData,
                                                      apr_size_t inDataLen,
                                                      const char* inContentType,
                                                      const char* inReferer,
                                                      const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream >& xioOutStrm );
 
-    SerfRequestProcessorImpl* createDeleteReqProcImpl( const char* inPath );
+    SerfRequestProcessorImpl* createDeleteReqProcImpl( const char* inPath,
+                                                       const DAVRequestHeaders& inRequestHeaders );
 
-    SerfRequestProcessorImpl* createMkColReqProcImpl( const char* inPath );
+    SerfRequestProcessorImpl* createMkColReqProcImpl( const char* inPath,
+                                                      const DAVRequestHeaders& inRequestHeaders );
 
     SerfRequestProcessorImpl* createCopyReqProcImpl( const char* inSourcePath,
+                                                     const DAVRequestHeaders& inRequestHeaders,
                                                      const char* inDestinationPath,
                                                      const bool inOverwrite );
 
     SerfRequestProcessorImpl* createMoveReqProcImpl( const char* inSourcePath,
+                                                     const DAVRequestHeaders& inRequestHeaders,
                                                      const char* inDestinationPath,
                                                      const bool inOverwrite );
 

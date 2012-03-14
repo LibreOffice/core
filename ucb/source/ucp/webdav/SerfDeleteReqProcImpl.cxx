@@ -29,8 +29,9 @@
 namespace http_dav_ucp
 {
 
-SerfDeleteReqProcImpl::SerfDeleteReqProcImpl( const char* inPath )
-    : SerfRequestProcessorImpl( inPath )
+SerfDeleteReqProcImpl::SerfDeleteReqProcImpl( const char* inPath,
+                                              const DAVRequestHeaders& inRequestHeaders )
+    : SerfRequestProcessorImpl( inPath, inRequestHeaders )
 {
 }
 
@@ -47,11 +48,10 @@ serf_bucket_t * SerfDeleteReqProcImpl::createSerfRequestBucket( serf_request_t *
                                                                  0,
                                                                  serf_request_get_alloc( inSerfRequest ) );
 
-    // TODO - correct headers
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    serf_bucket_headers_setn( hdrs_bkt, "User-Agent", "www.openoffice.org/ucb/" );
-    serf_bucket_headers_setn( hdrs_bkt, "Accept-Encoding", "gzip");
+    // general header fields provided by caller
+    setRequestHeaders( hdrs_bkt );
 
     return req_bkt;
 }

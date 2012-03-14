@@ -30,9 +30,10 @@ namespace http_dav_ucp
 {
 
 SerfMoveReqProcImpl::SerfMoveReqProcImpl( const char* inSourcePath,
+                                          const DAVRequestHeaders& inRequestHeaders,
                                           const char* inDestinationPath,
                                           const bool inOverwrite )
-    : SerfRequestProcessorImpl( inSourcePath )
+    : SerfRequestProcessorImpl( inSourcePath, inRequestHeaders )
     , mDestPathStr( inDestinationPath )
     , mbOverwrite( inOverwrite )
 {
@@ -51,21 +52,20 @@ serf_bucket_t * SerfMoveReqProcImpl::createSerfRequestBucket( serf_request_t * i
                                                                  0,
                                                                  serf_request_get_alloc( inSerfRequest ) );
 
-    // TODO - correct headers
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    serf_bucket_headers_setn( hdrs_bkt, "User-Agent", "www.openoffice.org/ucb/" );
-    serf_bucket_headers_setn( hdrs_bkt, "Accept-Encoding", "gzip");
+    // general header fields provided by caller
+    setRequestHeaders( hdrs_bkt );
 
     // MOVE specific header fields
-    serf_bucket_headers_setn( hdrs_bkt, "Destination", mDestPathStr );
+    serf_bucket_headers_set( hdrs_bkt, "Destination", mDestPathStr );
     if ( mbOverwrite )
     {
-        serf_bucket_headers_setn( hdrs_bkt, "Overwrite", "T" );
+        serf_bucket_headers_set( hdrs_bkt, "Overwrite", "T" );
     }
     else
     {
-        serf_bucket_headers_setn( hdrs_bkt, "Overwrite", "F" );
+        serf_bucket_headers_set( hdrs_bkt, "Overwrite", "F" );
     }
 
     return req_bkt;

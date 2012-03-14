@@ -34,6 +34,7 @@ class SerfPostReqProcImpl : public SerfRequestProcessorImpl
 {
 public:
     SerfPostReqProcImpl( const char* inPath,
+                         const DAVRequestHeaders& inRequestHeaders,
                          const char* inData,
                          apr_size_t inDataLen,
                          const char* inContentType,
@@ -41,6 +42,7 @@ public:
                          const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm );
 
     SerfPostReqProcImpl( const char* inPath,
+                         const DAVRequestHeaders& inRequestHeaders,
                          const char* inData,
                          apr_size_t inDataLen,
                          const char* inContentType,

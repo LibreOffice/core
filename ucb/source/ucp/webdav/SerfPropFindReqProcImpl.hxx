@@ -38,11 +38,13 @@ class SerfPropFindReqProcImpl : public SerfRequestProcessorImpl
 {
 public:
     SerfPropFindReqProcImpl( const char* inPath,
+                             const DAVRequestHeaders& inRequestHeaders,
                              const Depth inDepth,
                              const std::vector< ::rtl::OUString > & inPropNames,
                              std::vector< DAVResource > & ioResources );
 
     SerfPropFindReqProcImpl( const char* inPath,
+                             const DAVRequestHeaders& inRequestHeaders,
                              const Depth inDepth,
                              std::vector< DAVResourceInfo > & ioResInfo );
 

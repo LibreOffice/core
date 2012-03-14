@@ -31,6 +31,7 @@ class SerfMoveReqProcImpl : public SerfRequestProcessorImpl
 {
 public:
     SerfMoveReqProcImpl( const char* inSourcePath,
+                         const DAVRequestHeaders& inRequestHeaders,
                          const char* inDestinationPath,
                          const bool inOverwrite );
 

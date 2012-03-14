@@ -25,6 +25,7 @@
 #include <serf.h>
 
 #include <sal/types.h>
+#include <DAVRequestEnvironment.hxx>
 
 namespace http_dav_ucp
 {
@@ -32,7 +33,8 @@ namespace http_dav_ucp
 class SerfRequestProcessorImpl
 {
 public:
-    SerfRequestProcessorImpl( const char* inPath );
+    SerfRequestProcessorImpl( const char* inPath,
+                              const DAVRequestHeaders& inRequestHeaders );
 
     virtual ~SerfRequestProcessorImpl();
 
@@ -40,6 +42,7 @@ public:
     serf_bucket_t * createSerfRequestBucket( serf_request_t * inSerfRequest ) = 0;
 
     bool processSerfResponseBucket( serf_request_t * inSerfRequest,
+
                                     serf_bucket_t * inSerfResponseBucket,
                                     apr_pool_t * inAprPool,
                                     apr_status_t & outStatus );
@@ -47,6 +50,8 @@ public:
     void activateChunkedEncoding();
 
 protected:
+    void setRequestHeaders( serf_bucket_t* inoutSerfHeaderBucket );
+
     /*pure*/ virtual
     void processChunkOfResponseData( const char* data, apr_size_t len ) = 0;
 
@@ -58,6 +63,7 @@ protected:
 
 private:
     const char* mPathStr;
+    const DAVRequestHeaders& mrRequestHeaders;
     bool mbUseChunkedEncoding;
 };
 

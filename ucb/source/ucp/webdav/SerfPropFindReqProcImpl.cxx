@@ -35,10 +35,11 @@ namespace http_dav_ucp
 {
 
 SerfPropFindReqProcImpl::SerfPropFindReqProcImpl( const char* inPath,
+                                                  const DAVRequestHeaders& inRequestHeaders,
                                                   const Depth inDepth,
                                                   const std::vector< ::rtl::OUString > & inPropNames,
                                                   std::vector< DAVResource > & ioResources )
-    : SerfRequestProcessorImpl( inPath )
+    : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mDepthStr( 0 )
     , mpPropNames( &inPropNames )
     , mpResources( &ioResources )
@@ -50,9 +51,10 @@ SerfPropFindReqProcImpl::SerfPropFindReqProcImpl( const char* inPath,
 }
 
 SerfPropFindReqProcImpl::SerfPropFindReqProcImpl( const char* inPath,
+                                                  const DAVRequestHeaders& inRequestHeaders,
                                                   const Depth inDepth,
                                                   std::vector< DAVResourceInfo > & ioResInfo )
-    : SerfRequestProcessorImpl( inPath )
+    : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , mDepthStr( 0 )
     , mpPropNames( 0 )
     , mpResources( 0 )
@@ -149,24 +151,22 @@ serf_bucket_t * SerfPropFindReqProcImpl::createSerfRequestBucket( serf_request_t
                                                                  body_bkt,
                                                                  pSerfBucketAlloc );
 
-    // TODO - correct header data
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    serf_bucket_headers_setn( hdrs_bkt, "User-Agent", "www.openoffice.org/ucb/" );
-    serf_bucket_headers_setn( hdrs_bkt, "Accept-Encoding", "gzip");
+    // general header fields provided by caller
+    setRequestHeaders( hdrs_bkt );
 
     // request specific header fields
-    // request specific header fields
-    serf_bucket_headers_setn( hdrs_bkt, "Depth", mDepthStr );
+    serf_bucket_headers_set( hdrs_bkt, "Depth", mDepthStr );
     if ( body_bkt != 0 && aBodyText.getLength() > 0 )
     {
         if ( useChunkedEncoding() )
         {
-            serf_bucket_headers_setn( hdrs_bkt, "Transfer-Encoding", "chunked");
+            serf_bucket_headers_set( hdrs_bkt, "Transfer-Encoding", "chunked");
         }
-        serf_bucket_headers_setn( hdrs_bkt, "Content-Type", "application/xml" );
-        serf_bucket_headers_setn( hdrs_bkt, "Content-Length",
-                                  rtl::OUStringToOString( rtl::OUString::valueOf( aBodyText.getLength() ), RTL_TEXTENCODING_UTF8 ) );
+        serf_bucket_headers_set( hdrs_bkt, "Content-Type", "application/xml" );
+        serf_bucket_headers_set( hdrs_bkt, "Content-Length",
+                                 rtl::OUStringToOString( rtl::OUString::valueOf( aBodyText.getLength() ), RTL_TEXTENCODING_UTF8 ) );
     }
 
     return req_bkt;

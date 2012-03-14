@@ -30,8 +30,9 @@ namespace http_dav_ucp
 {
 
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
+                                        const DAVRequestHeaders& inRequestHeaders,
                                         const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm )
-    : SerfRequestProcessorImpl( inPath )
+    : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , xInputStream( xioInStrm )
     , xOutputStream()
     , mpHeaderNames( 0 )
@@ -40,10 +41,11 @@ SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
 }
 
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
+                                        const DAVRequestHeaders& inRequestHeaders,
                                         const com::sun::star::uno::Reference< SerfInputStream > & xioInStrm,
                                         const std::vector< ::rtl::OUString > & inHeaderNames,
                                         DAVResource & ioResource )
-    : SerfRequestProcessorImpl( inPath )
+    : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , xInputStream( xioInStrm )
     , xOutputStream()
     , mpHeaderNames( &inHeaderNames )
@@ -52,8 +54,9 @@ SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
 }
 
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
+                                        const DAVRequestHeaders& inRequestHeaders,
                                         const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm )
-    : SerfRequestProcessorImpl( inPath )
+    : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , xInputStream()
     , xOutputStream( xioOutStrm )
     , mpHeaderNames( 0 )
@@ -62,10 +65,11 @@ SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
 }
 
 SerfGetReqProcImpl::SerfGetReqProcImpl( const char* inPath,
+                                        const DAVRequestHeaders& inRequestHeaders,
                                         const com::sun::star::uno::Reference< com::sun::star::io::XOutputStream > & xioOutStrm,
                                         const std::vector< ::rtl::OUString > & inHeaderNames,
                                         DAVResource & ioResource )
-    : SerfRequestProcessorImpl( inPath )
+    : SerfRequestProcessorImpl( inPath, inRequestHeaders )
     , xInputStream()
     , xOutputStream( xioOutStrm )
     , mpHeaderNames( &inHeaderNames )
@@ -86,11 +90,10 @@ serf_bucket_t * SerfGetReqProcImpl::createSerfRequestBucket( serf_request_t * in
                                                                  0,
                                                                  serf_request_get_alloc( inSerfRequest ) );
 
-    // TODO - correct headers
     // set request header fields
     serf_bucket_t* hdrs_bkt = serf_bucket_request_get_headers( req_bkt );
-    serf_bucket_headers_setn( hdrs_bkt, "User-Agent", "www.openoffice.org/ucb/" );
-    serf_bucket_headers_setn( hdrs_bkt, "Accept-Encoding", "gzip");
+    // general header fields provided by caller
+    setRequestHeaders( hdrs_bkt );
 
     return req_bkt;
 }

@@ -31,6 +31,7 @@ class SerfPutReqProcImpl : public SerfRequestProcessorImpl
 {
 public:
     SerfPutReqProcImpl( const char* inPath,
+                        const DAVRequestHeaders& inRequestHeaders,
                         const char* inData,
                         apr_size_t inDataLen );
 

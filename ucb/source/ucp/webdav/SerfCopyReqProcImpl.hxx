@@ -31,6 +31,7 @@ class SerfCopyReqProcImpl : public SerfRequestProcessorImpl
 {
 public:
     SerfCopyReqProcImpl( const char* inSourcePath,
+                         const DAVRequestHeaders& inRequestHeaders,
                          const char* inDestinationPath,
                          const bool inOverwrite );
 
