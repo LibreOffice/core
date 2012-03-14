@@ -176,6 +176,63 @@ sal_Bool SwEditShell::GetCurAttr( SfxItemSet& rSet,
     return GetPaMAttr( GetCrsr(), rSet, bMergeIndentValuesOfNumRule );
 }
 
+sal_Bool SwEditShell::GetCurParAttr( SfxItemSet& rSet) const
+{
+    return GetPaMParAttr( GetCrsr(), rSet );
+}
+
+sal_Bool SwEditShell::GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const
+{
+    // number of nodes the function has explored so far
+    sal_uInt16 numberOfLookup = 0;
+
+    SfxItemSet aSet( *rSet.GetPool(), rSet.GetRanges() );
+    SfxItemSet* pSet = &rSet;
+
+    SwPaM* pStartPaM = pPaM;
+    do { // for all the point and mark (selections)
+
+        // get the start and the end node of the current selection
+        sal_uLong nSttNd = pPaM->GetMark()->nNode.GetIndex(),
+              nEndNd = pPaM->GetPoint()->nNode.GetIndex();
+
+        // reverse start and end if there number aren't sorted correctly
+        if( nSttNd > nEndNd )
+            std::swap(nSttNd, nEndNd);
+
+        // for all the nodes in the current selection
+        // get the node (paragraph) attributes
+        // and merge them in rSet
+        for( sal_uLong n = nSttNd; n <= nEndNd; ++n )
+        {
+            // get the node
+            SwNode* pNd = GetDoc()->GetNodes()[ n ];
+
+            if( pNd->IsTxtNode() )
+            {
+                // get the node (paragraph) attributes
+                static_cast<SwCntntNode*>(pNd)->GetAttr(*pSet);
+
+                if( pSet != &rSet && aSet.Count() )
+                {
+                    rSet.MergeValues( aSet );
+                    aSet.ClearItem();
+                }
+
+                pSet = &aSet;
+            }
+
+            ++numberOfLookup;
+
+            // if the maximum number of node that can be inspected has been reached
+            if (numberOfLookup >= getMaxLookup())
+                return sal_False;
+        }
+    } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
+
+    return sal_True;
+}
+
 SwTxtFmtColl* SwEditShell::GetCurTxtFmtColl( ) const
 {
     return GetPaMTxtFmtColl( GetCrsr() );

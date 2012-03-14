@@ -253,6 +253,34 @@ public:
     void SetAttr( const SfxPoolItem&, sal_uInt16 nFlags = 0 );
     void SetAttr( const SfxItemSet&, sal_uInt16 nFlags = 0, SwPaM* pCrsr = NULL );
 
+    /**
+     * Get the paragraph format attribute(s) of the current selection.
+     *
+     * @see GetPaMParAttr()
+     *
+     * @param rSet
+     * output parameter - the SfxItemSet where the automatic paragraph format attribut(s) will be store.
+     * The attributes aren't invalidated or cleared if the function reach the getMaxLookup limite.
+     *
+     * @return true if the function inspect all the nodes point by the pPaM parameter,
+     * false if the function reach the limit of getMaxLookup number of nodes inspected.
+     */
+    sal_Bool GetCurParAttr( SfxItemSet& rSet ) const;
+    /**
+     * Get the paragraph format attribute(s) of the selection(s) described by a SwPaM.
+     *
+     * @param pPaM
+     * input parameter - the selection where to look for the paragraph format.
+     *
+     * @param rSet
+     * output parameter - the SfxItemSet where the automatic paragraph format attribute(s) will be store.
+     * The attributes aren't invalidated or cleared if the function reaches the getMaxLookup limit.
+     *
+     * @return true if the function inspects all the nodes point by the pPaM parameter,
+     * false if the function reaches the limit of getMaxLookup number of nodes inspected.
+     */
+    sal_Bool GetPaMParAttr( SwPaM* pPaM, SfxItemSet& rSet ) const;
+
     // Set attribute as new default attribute in document.
     void SetDefault( const SfxPoolItem& );
 
