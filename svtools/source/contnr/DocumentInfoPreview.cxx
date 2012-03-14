@@ -138,17 +138,15 @@ void ODocumentInfoPreview::fill(
 void ODocumentInfoPreview::insertEntry(
     rtl::OUString const & title, rtl::OUString const & value)
 {
-    rtl::OUString p1(rtl::OUString("\n") + title + rtl::OUString(":"));
-    m_pEditWin.InsertText(p1);
+    if (m_pEditWin.GetText().Len() != 0) {
+        m_pEditWin.InsertText(rtl::OUString("\n\n"));
+    }
+    rtl::OUString caption(title + rtl::OUString(":\n"));
+    m_pEditWin.InsertText(caption);
     m_pEditWin.SetAttrib(
-        TextAttribFontWeight(WEIGHT_BOLD), m_pEditWin.GetParagraphCount() - 1,
-        0, p1.getLength());
-    rtl::OUString p2(rtl::OUString("\n") + value);
-    m_pEditWin.InsertText(p2);
-    m_pEditWin.SetAttrib(
-        TextAttribFontWeight(WEIGHT_NORMAL),
-        m_pEditWin.GetParagraphCount() - 1, 0, p2.getLength());
-    m_pEditWin.InsertText(rtl::OUString("\n"));
+        TextAttribFontWeight(WEIGHT_BOLD), m_pEditWin.GetParagraphCount() - 2,
+        0, caption.getLength() - 1);
+    m_pEditWin.InsertText(value);
 }
 
 void ODocumentInfoPreview::insertNonempty(long id, rtl::OUString const & value)

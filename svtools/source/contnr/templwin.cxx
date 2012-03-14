@@ -427,7 +427,6 @@ SvtFileViewWindow_Impl::SvtFileViewWindow_Impl( SvtTemplateWindow* pParent ) :
     aFileView.SetStyle( aFileView.GetStyle() | WB_DIALOGCONTROL | WB_TABSTOP );
     aFileView.SetHelpId( HID_TEMPLATEDLG_FILEVIEW );
     aFileView.Show();
-    aFileView.SetPosPixel( Point( 0, 0 ) );
     aFileView.EnableAutoResize();
     aFileView.EnableContextMenu( sal_False );
     aFileView.EnableDelete( sal_False );
@@ -528,14 +527,7 @@ Sequence< ::rtl::OUString > SvtFileViewWindow_Impl::GetNewDocContents() const
 
 void SvtFileViewWindow_Impl::Resize()
 {
-    Size aWinSize = GetOutputSizePixel();
-
-    static int  x = 0;
-    static int  y = 0;
-
-    aWinSize.nA += x;
-    aWinSize.nB += y;
-    aFileView.SetSizePixel( aWinSize );
+    aFileView.SetSizePixel(GetOutputSizePixel());
 }
 
 String SvtFileViewWindow_Impl::GetSelectedFile() const

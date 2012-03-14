@@ -38,7 +38,6 @@
 Control CTRL_FILEVIEW
 {
     Pos = MAP_APPFONT ( 0 , 0 ) ;
-    Size = MAP_APPFONT ( 200 , 180 ) ;
 };
 
 String STR_SVT_NEWDOC

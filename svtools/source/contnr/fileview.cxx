@@ -187,6 +187,7 @@ private:
     sal_Bool                mbAutoResize            : 1;
     sal_Bool                mbEnableDelete          : 1;
     sal_Bool                mbEnableRename          : 1;
+    bool                    mbShowHeader;
 
     void            DeleteEntries();
     void            DoQuickSearch( const xub_Unicode& rChar );
@@ -722,10 +723,9 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
     mbResizeDisabled    ( sal_False ),
     mbAutoResize        ( sal_False ),
     mbEnableDelete      ( sal_True ),
-    mbEnableRename      ( sal_True )
-
+    mbEnableRename      ( sal_True ),
+    mbShowHeader        ( (nFlags & FILEVIEW_SHOW_NONE) == 0 )
 {
-    const bool bViewHeader = (nFlags & FILEVIEW_SHOW_NONE) == 0;
     Size aBoxSize = pParentWin->GetSizePixel();
     mpHeaderBar = new HeaderBar( pParentWin, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
     mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), mpHeaderBar->CalcWindowSizePixel() );
@@ -760,7 +760,7 @@ ViewTabListBox_Impl::ViewTabListBox_Impl( Window* pParentWin,
         SetSelectionMode( MULTIPLE_SELECTION );
 
     Show();
-    if( bViewHeader )
+    if( mbShowHeader )
         mpHeaderBar->Show();
 
     maResetQuickSearch.SetTimeout( QUICK_SEARCH_TIMEOUT );
@@ -806,9 +806,13 @@ void ViewTabListBox_Impl::Resize()
     if ( mbResizeDisabled || !aBoxSize.Width() )
         return;
 
-    Size aBarSize = mpHeaderBar->GetSizePixel();
-    aBarSize.Width() = mbAutoResize ? aBoxSize.Width() : GetSizePixel().Width();
-    mpHeaderBar->SetSizePixel( aBarSize );
+    Size aBarSize;
+    if ( mbShowHeader )
+    {
+        aBarSize = mpHeaderBar->GetSizePixel();
+        aBarSize.Width() = mbAutoResize ? aBoxSize.Width() : GetSizePixel().Width();
+        mpHeaderBar->SetSizePixel( aBarSize );
+    }
 
     if ( mbAutoResize )
     {
