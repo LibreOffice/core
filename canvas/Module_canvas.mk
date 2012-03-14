@@ -49,6 +49,7 @@ ifneq ($(strip $(ENABLE_DIRECTX)),)
 $(eval $(call gb_Module_add_targets,canvas,\
 	Library_directx9canvas \
 	Library_gdipluscanvas \
+	StaticLibrary_directxcanvas \
 ))
 
 endif
