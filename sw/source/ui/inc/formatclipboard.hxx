@@ -81,8 +81,11 @@ public:
 private:
     int         m_nSelectionType;
 
-    /** automatic/named character and paragraph attribute set */
-    SfxItemSet* m_pItemSet;
+    /** automatic/named character attribute set */
+    SfxItemSet* m_pItemSet_TxtAttr;
+    /** automatic/named paragraph attribute set
+     * (it can be caractere attribute applyied to the paragraph) */
+    SfxItemSet* m_pItemSet_ParAttr;
 
     /** table attribute set */
     SfxItemSet* m_pTableItemSet;
