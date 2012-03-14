@@ -268,17 +268,17 @@ SwTxtFmtColl* SwEditShell::GetPaMTxtFmtColl( SwPaM* pPaM ) const
 
             if( pNd->IsTxtNode() )
             {
-                // if it's a text node get its named character format
+                // if it's a text node get its named paragraph format
                 SwTxtFmtColl* pFmt = static_cast<SwTxtNode*>(pNd)->GetTxtColl();
 
-                // if the character format exist stop here and return it
+                // if the paragraph format exist stop here and return it
                 if( pFmt != NULL )
                     return pFmt;
             }
         }
     } while ( ( pPaM = static_cast<SwPaM*>(pPaM->GetNext()) ) != pStartPaM );
 
-    // if none of the selected node contain a named character format
+    // if none of the selected node contain a named paragraph format
     return NULL;
 }
 
