@@ -29,10 +29,6 @@ $(eval $(call gb_Executable_Executable,soffice))
 
 $(eval $(call gb_Executable_set_targettype_gui,soffice,YES))
 
-$(eval $(call gb_Executable_set_include,soffice,\
-    $$(INCLUDE) \
-))
-
 $(eval $(call gb_Executable_add_linked_libs,soffice,\
     sal \
     advapi32 \
@@ -43,10 +39,10 @@ $(eval $(call gb_Executable_add_linked_libs,soffice,\
 
 $(eval $(call gb_Executable_add_linked_static_libs,soffice,\
     ooopathutils \
+    winextendloaderenv \
 ))
 
 $(eval $(call gb_Executable_add_noexception_objects,soffice,\
-    desktop/win32/source/extendloaderenvironment \
     desktop/win32/source/officeloader/officeloader \
 ))
 

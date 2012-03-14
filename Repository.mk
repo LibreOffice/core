@@ -84,6 +84,7 @@ $(eval $(call gb_Helper_register_executables,OOO,\
 ))
 
 $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
+	winextendloaderenv \
 	winlauncher \
 ))
 

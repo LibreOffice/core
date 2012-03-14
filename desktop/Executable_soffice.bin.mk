@@ -54,6 +54,7 @@ ifeq ($(OS),WNT)
 
 $(eval $(call gb_Executable_add_linked_static_libs,$(sofficebin),\
     ooopathutils \
+    winextendloaderenv \
 ))
 
 ifeq ($(COM),MSC)
@@ -63,10 +64,6 @@ $(eval $(call gb_Executable_add_ldflags,$(sofficebin),\
 ))
 
 endif
-
-$(eval $(call gb_Executable_add_noexception_objects,$(sofficebin),\
-    desktop/win32/source/extendloaderenvironment \
-))
 
 $(call gb_Module_get_target,desktop) : $(OUTDIR)/bin/soffice.bin
 
