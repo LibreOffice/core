@@ -27,6 +27,9 @@
 
 package installer::converter;
 
+use strict;
+use warnings;
+
 use installer::globals;
 
 #############################
