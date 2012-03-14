@@ -334,8 +334,7 @@ my_components += \
     component/dtrans/util/dnd \
     component/dtrans/util/ftransl \
     component/dtrans/util/sysdtrans \
-    component/fpicker/util/fop \
-    component/fpicker/util/fps \
+    component/fpicker/source/win32/fps \
     component/vcl/vcl.windows
 .IF "$(SOLAR_JAVA)" == "TRUE"
 my_components += \

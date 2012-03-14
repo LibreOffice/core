@@ -484,17 +484,6 @@ STD_LIB_FILE( gid_File_Lib_Flat, flat)
 
 #ifdef WNT
 
-File gid_File_Lib_Fop
-    LIB_FILE_BODY;
-    Styles = (PACKED);
-    Dir = SCP2_OOO_BIN_DIR;
-    Name = "fop.dll";
-End
-
-#endif
-
-#ifdef WNT
-
 File gid_File_Lib_Fps
     LIB_FILE_BODY;
     Styles = (PACKED);

@@ -29,7 +29,7 @@ $(eval $(call gb_Library_Library,fps))
 
 $(eval $(call gb_Library_add_nativeres,fps,fps/src))
 
-$(eval $(call gb_Library_set_componentfile,fps,fpicker/util/fps))
+$(eval $(call gb_Library_set_componentfile,fps,fpicker/source/win32/fps))
 
 $(eval $(call gb_Library_add_api,fps,\
 	offapi \
@@ -93,6 +93,10 @@ $(eval $(call gb_Library_add_exception_objects,fps,\
 	fpicker/source/win32/filepicker/VistaFilePickerEventHandler \
 	fpicker/source/win32/filepicker/VistaFilePickerImpl \
 	fpicker/source/win32/filepicker/WinFileOpenImpl \
+	fpicker/source/win32/folderpicker/FolderPicker \
+	fpicker/source/win32/folderpicker/Fopentry \
+	fpicker/source/win32/folderpicker/MtaFop \
+	fpicker/source/win32/folderpicker/WinFOPImpl \
 	fpicker/source/win32/misc/AutoBuffer \
 	fpicker/source/win32/misc/resourceprovider \
 	fpicker/source/win32/misc/WinImplHelper \

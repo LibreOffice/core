@@ -53,7 +53,7 @@ typedef sal::systools::COMReference<IShellFolder> IShellFolderPtr;
 
 namespace
 {
-    const char* FOLDERPICKER_SRV_DLL_NAME = "fop.dll";
+    const char* FOLDERPICKER_SRV_DLL_NAME = "fps.dll";
     const char g_szWndClsName[]           = "FopStaReqWnd###";
     const char* CURRENT_INSTANCE          = "CurrInst";
 

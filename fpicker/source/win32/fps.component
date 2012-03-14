@@ -28,6 +28,9 @@
 
 <component loader="com.sun.star.loader.SharedLibrary"
     xmlns="http://openoffice.org/2010/uno-components">
+  <implementation name="com.sun.star.ui.dialogs.Win32FilePicker">
+    <service name="com.sun.star.ui.dialogs.SystemFilePicker"/>
+  </implementation>
   <implementation name="com.sun.star.ui.dialogs.Win32FolderPicker">
     <service name="com.sun.star.ui.dialogs.SystemFolderPicker"/>
   </implementation>

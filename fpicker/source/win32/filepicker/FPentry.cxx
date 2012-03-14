@@ -43,6 +43,10 @@
 #include "../misc/WinImplHelper.hxx"
 #include <stdio.h>
 
+#include "../folderpicker/FolderPicker.hxx"
+#include "../folderpicker/FOPServiceInfo.hxx"
+#include "../folderpicker/WinFOPImpl.hxx"
+
 //-----------------------------------------------
 // namespace directives
 //-----------------------------------------------
@@ -87,6 +91,13 @@ static Reference< XInterface > SAL_CALL createInstance(
     return xDlg;
 }
 
+static Reference< XInterface > SAL_CALL
+createInstance_fop( const Reference< XMultiServiceFactory >& rServiceManager )
+{
+    return Reference< XInterface >( static_cast< XFolderPicker* >( new CFolderPicker( rServiceManager ) ) );
+}
+
+
 extern "C"
 {
 
@@ -104,6 +115,23 @@ SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory(
             reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
             OUString::createFromAscii( pImplName ),
             createInstance,
+            aSNS ) );
+        if ( xFactory.is() )
+        {
+            xFactory->acquire();
+            pRet = xFactory.get();
+        }
+    }
+
+    if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, FOLDER_PICKER_IMPL_NAME ) ) )
+    {
+        Sequence< OUString > aSNS( 1 );
+        aSNS.getArray( )[0] = OUString( RTL_CONSTASCII_USTRINGPARAM( FOLDER_PICKER_SERVICE_NAME ) );
+
+        Reference< XSingleServiceFactory > xFactory ( createSingleFactory(
+            reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
+            OUString::createFromAscii( pImplName ),
+            createInstance_fop,
             aSNS ) );
         if ( xFactory.is() )
         {
