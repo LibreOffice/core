@@ -1340,7 +1340,7 @@ sal_Bool SvtFileView::GetParentURL( String& rParentURL ) const
     }
     catch( Exception const & )
     {
-        // perhaps an unkown url protocol (e.g. "private:newdoc")
+        // perhaps an unknown url protocol (e.g. "private:newdoc")
     }
 
     return bRet;
@@ -2274,7 +2274,6 @@ void SvtFileView_Impl::CreateVector_Impl( const Sequence < OUString > &rList )
         // get the title
         pEntry->SetNewTitle( aValue.getToken( 0, '\t', nIndex ) );
         aDisplayText = pEntry->GetTitle();
-        // #83004# --------------------
         ReplaceTabWithString( aDisplayText );
         aDisplayText += aTab;
 
@@ -2410,7 +2409,7 @@ sal_Bool CompareSortingData_Impl( SortingData_Impl* const aOne, SortingData_Impl
         switch ( gnColumn )
         {
             case COLUMN_TITLE:
-                // compare case insensitiv first
+                // compare case insensitive first
                 nComp = pCollatorWrapper->compareString( aOne->GetLowerTitle(), aTwo->GetLowerTitle() );
 
                 if ( nComp == 0 )
@@ -2552,7 +2551,6 @@ String SvtFileView_Impl::FolderInserted( const OUString& rURL, const OUString& r
 
     // title, type, size, date
     aValue = pData->GetTitle();
-    // #83004# --------------------
     ReplaceTabWithString( aValue );
     aValue += aTab;
     aValue += pData->maType;
@@ -2641,7 +2639,7 @@ namespace svtools {
 QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
 (
     Window* pParent,
-    const String& rName      // Eintragsname
+    const String& rName      // entry name
 ) :
 
     ModalDialog( pParent, SvtResId( DLG_SVT_QUERYDELETE ) ),
@@ -2663,7 +2661,7 @@ QueryDeleteDlg_Impl::QueryDeleteDlg_Impl
     _aAllButton.SetClickHdl( aLink );
     _aNoButton.SetClickHdl( aLink );
 
-    // Anzeige der spezifizierten Texte
+    // display specified texts
 
     WinBits nTmpStyle = _aEntry.GetStyle();
     nTmpStyle |= WB_PATHELLIPSIS;

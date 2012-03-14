@@ -213,7 +213,7 @@ void SvTreeList::RemoveView( SvListView* pView )
 }
 
 
-// Ein Entry ist sichtbar, wenn alle Parents expandiert sind
+// an entry is visible if all parents are expanded
 sal_Bool SvTreeList::IsEntryVisible( const SvListView* pView, SvListEntry* pEntry ) const
 {
     DBG_ASSERT(pView&&pEntry,"IsVisible:Invalid Params");
@@ -300,7 +300,7 @@ sal_Bool SvTreeList::IsChild( SvListEntry* pParent, SvListEntry* pChild ) const
 
 sal_uLong SvTreeList::Move(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,sal_uLong nListPos)
 {
-    // pDest darf Null sein!
+    // pDest may be 0!
     DBG_ASSERT(pSrcEntry,"Entry?");
     if ( !pTargetParent )
         pTargetParent = pRootItem;
@@ -318,30 +318,30 @@ sal_uLong SvTreeList::Move(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,sal
     SvTreeEntryList* pDstList = pTargetParent->pChildren;
     SvTreeEntryList* pSrcList = pSrcEntry->pParent->pChildren;
 
-    // Dummy-Ptr einfuegen, weil nListPos durch das
-    // folgende Remove ungueltig werden koennte
+    // insert dummy pointer, as nListPos might become invalid because of the
+    // following Remove.
     SvListEntry* pDummy = 0;
     pDstList->insert( pDummy, nListPos );
 
-    // loeschen
+    // delete
     pSrcList->remove( pSrcEntry );
-    // Hat Parent noch Children ?
+    // does parent still have children?
     if ( pSrcList->empty() )
     {
-        // Keine Children, deshalb Child-List loeschen
+        // no children, thus delete child list
         SvListEntry* pParent = pSrcEntry->pParent;
         pParent->pChildren = 0;
         delete pSrcList;
         pSrcList = 0;
     }
 
-    // Parent umsetzen (erst hier, weil wir zum Loeschen
-    // der ChildList den alten Parent noch benoetigen!)
+    // move parent umsetzen (do this only now, because we need the parent for
+    // deleting the old child list!)
     pSrcEntry->pParent = pTargetParent;
 
     pDstList->replace( pSrcEntry, pDummy );
 
-    // Listenpositionen in Zielliste korrigieren
+    // correct list position in target list
     SetListPositions( pDstList );
     if ( pSrcList && (sal_uLong)pSrcList != (sal_uLong)pDstList )
         SetListPositions( pSrcList );
@@ -358,7 +358,7 @@ sal_uLong SvTreeList::Move(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,sal
 
 sal_uLong SvTreeList::Copy(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,sal_uLong nListPos)
 {
-    // pDest darf Null sein!
+    // pDest may be 0!
     DBG_ASSERT(pSrcEntry,"Entry?");
     if ( !pTargetParent )
         pTargetParent = pRootItem;
@@ -372,9 +372,9 @@ sal_uLong SvTreeList::Copy(SvListEntry* pSrcEntry,SvListEntry* pTargetParent,sal
     nEntryCount += nCloneCount;
 
     SvTreeEntryList* pDstList = pTargetParent->pChildren;
-    pClonedEntry->pParent = pTargetParent;      // Parent umsetzen
-    pDstList->insert( pClonedEntry, nListPos ); // Einfuegen
-    SetListPositions( pDstList ); // Listenpositionen in Zielliste korrigieren
+    pClonedEntry->pParent = pTargetParent;      // move parent
+    pDstList->insert( pClonedEntry, nListPos ); // insert
+    SetListPositions( pDstList ); // correct list position in target list
 
 #ifdef CHECK_INTEGRITY
     CheckIntegrity();
@@ -406,7 +406,7 @@ void SvTreeList::Move( SvListEntry* pSrcEntry, SvListEntry* pDstEntry )
     {
         pParent = pDstEntry->pParent;
         nPos = pDstEntry->GetChildListPos();
-        nPos++;  // UNTER (Bildschirm) pDstEntry einfuegen
+        nPos++;  // (On screen:) insert _below_ pDstEntry
     }
     Move( pSrcEntry, pParent, nPos );
 }
@@ -423,17 +423,17 @@ void SvTreeList::InsertTree(SvListEntry* pSrcEntry,
     if ( !pTargetParent->pChildren )
         pTargetParent->pChildren = new SvTreeEntryList;
 
-    // Sortierung beruecksichtigen
+    // take sorting into account
     GetInsertionPos( pSrcEntry, pTargetParent, nListPos );
 
     bAbsPositionsValid = sal_False;
 
-    pSrcEntry->pParent = pTargetParent; // Parent umsetzen
+    pSrcEntry->pParent = pTargetParent; // move parent
     SvTreeEntryList* pDstList = pTargetParent->pChildren;
-    pDstList->insert( pSrcEntry, nListPos ); // einfuegen
-    SetListPositions(pDstList); // Listenpositionen in Zielliste korrigieren
+    pDstList->insert( pSrcEntry, nListPos ); // insert
+    SetListPositions(pDstList); // correct list position in target list
     nEntryCount += GetChildCount( pSrcEntry );
-    nEntryCount++; // der Parent ist ja auch neu
+    nEntryCount++; // the parent is new, too
 
 #ifdef CHECK_INTEGRITY
 CheckIntegrity();
@@ -730,7 +730,7 @@ sal_uLong SvTreeList::GetVisiblePos( const SvListView* pView, SvListEntry* pEntr
 
     if ( !pView->bVisPositionsValid )
     {
-        // damit GetVisibleCount die Positionen aktualisiert
+        // to make GetVisibleCount refresh the positions
         ((SvListView*)pView)->nVisibleCount = 0;
         GetVisibleCount( const_cast<SvListView*>(pView) );
     }
@@ -753,7 +753,7 @@ sal_uLong SvTreeList::GetVisibleCount( SvListView* pView ) const
         return pView->nVisibleCount;
 
     sal_uLong nPos = 0;
-    SvListEntry* pEntry = First();  // erster Eintrag immer sichtbar
+    SvListEntry* pEntry = First();  // first entry is always visible
     while ( pEntry )
     {
         SvViewData* pViewData = pView->GetViewData( pEntry );
@@ -779,8 +779,8 @@ sal_uLong SvTreeList::GetVisibleCount( SvListView* pView ) const
 |*
 *************************************************************************/
 
-// Funktion geht aus Geschwindigkeitsgruenden davon aus,
-// das der uebergebene Eintrag bereits sichtbar ist
+// For performance reasons, this function assumes that the passed entry is
+// already visible.
 
 SvListEntry* SvTreeList::NextVisible(const SvListView* pView,SvListEntry* pActEntry,sal_uInt16* pActDepth) const
 {
@@ -845,8 +845,8 @@ SvListEntry* SvTreeList::NextVisible(const SvListView* pView,SvListEntry* pActEn
 |*
 *************************************************************************/
 
-// Funktion geht aus Geschwindigkeitsgruenden davon aus,
-// das der uebergebene Eintrag bereits sichtbar ist
+// For performance reasons, this function assumes that the passed entry is
+// already visible.
 
 SvListEntry* SvTreeList::PrevVisible(const SvListView* pView, SvListEntry* pActEntry, sal_uInt16* pActDepth) const
 {
@@ -919,8 +919,8 @@ SvListEntry* SvTreeList::NextVisible(const SvListView* pView,SvListEntry* pEntry
     DBG_ASSERT(pView&&pEntry&&IsEntryVisible(pView,pEntry),"NextVis:Wrong Prms/!Vis");
 
     sal_uLong nVisPos = GetVisiblePos( pView, pEntry );
-    // nDelta Eintraege vorhanden ?
-    // Beispiel: 0,1,2,3,4,5,6,7,8,9 nVisPos=5 nDelta=7
+    // nDelta entries existent?
+    // example: 0,1,2,3,4,5,6,7,8,9 nVisPos=5 nDelta=7
     //           nNewDelta = 10-nVisPos-1 == 4
     if (  nVisPos+nDelta >= pView->nVisibleCount )
     {
@@ -948,8 +948,8 @@ SvListEntry* SvTreeList::PrevVisible( const SvListView* pView, SvListEntry* pEnt
     DBG_ASSERT(pView&&pEntry&&IsEntryVisible(pView,pEntry),"PrevVis:Parms/!Vis");
 
     sal_uLong nVisPos = GetVisiblePos( pView, pEntry );
-    // nDelta Eintraege vorhanden ?
-    // Beispiel: 0,1,2,3,4,5,6,7,8,9 nVisPos=8 nDelta=20
+    // nDelta entries existent?
+    // example: 0,1,2,3,4,5,6,7,8,9 nVisPos=8 nDelta=20
     //           nNewDelta = nNewVisPos
     if (  nDelta > nVisPos )
         nDelta = (sal_uInt16)nVisPos;
@@ -1096,12 +1096,12 @@ sal_uLong SvTreeList::Insert( SvListEntry* pEntry,SvListEntry* pParent,sal_uLong
     SvTreeEntryList* pList = pParent->pChildren;
     if ( !pList )
     {
-        // Parent bekommt zum erstenmal ein Kind
+        // parent gets the first child
         pList = new SvTreeEntryList;
         pParent->pChildren = pList;
     }
 
-    // Sortierung beruecksichtigen
+    // take sorting into account
     GetInsertionPos( pEntry, pParent, nPos );
 
     bAbsPositionsValid = sal_False;
@@ -1174,7 +1174,7 @@ void SvTreeList::Expand( SvListView* pView, SvListEntry* pEntry )
     SvViewData* pViewData = pView->GetViewData(pEntry);
     pViewData->nFlags |= SVLISTENTRYFLAG_EXPANDED;
     SvListEntry* pParent = pEntry->pParent;
-    // wenn Parent sichtbar dann Statusdaten invalidieren
+    // if parent is visible, invalidate status data
     if ( pView->IsExpanded( pParent ) )
     {
         pView->bVisPositionsValid = sal_False;
@@ -1262,10 +1262,9 @@ sal_Bool SvTreeList::Remove( SvListEntry* pEntry )
     if( !pEntry->pParent )
     {
         OSL_FAIL("Removing entry not in model!");
-        // unter gewissen Umstaenden (welche?) loescht der
-        // Explorer aus der View Eintraege, die er nicht in die View
-        // eingefuegt hat. Da sich der Kunde fuer ein platzendes
-        // Office nichts kaufen kann, fange ich diesen Fall ab.
+        // Under certain circumstances (which?), the explorer deletes entries
+        // from the view that it hasn't inserted into the view. We don't want
+        // to crash, so we catch this case here.
         return sal_False;
     }
 
@@ -1310,7 +1309,7 @@ sal_Bool SvTreeList::Remove( SvListEntry* pEntry )
 #endif
     Broadcast( LISTACTION_REMOVED, pEntry );
 
-    delete pEntry; // loescht auch alle Children
+    delete pEntry; // deletes any children as well
     return sal_True;
 }
 
@@ -1402,7 +1401,7 @@ SvListEntry* SvTreeList::GetRootLevelParent( SvListEntry* pEntry ) const
     {
         pCurParent = pEntry->pParent;
         if ( pCurParent == pRootItem )
-            return pEntry; // ist sein eigener Parent
+            return pEntry; // is its own parent
         while( pCurParent && pCurParent->pParent != pRootItem )
             pCurParent = pCurParent->pParent;
     }
@@ -1448,21 +1447,21 @@ void SvListView::InitTable()
     if( maDataTable.size() )
     {
         DBG_ASSERT(maDataTable.size()==1,"InitTable: TableCount != 1");
-        // die im Clear fuer die Root allozierten View-Daten loeschen
-        // Achtung: Das zu dem RootEntry (und damit auch der Entry)
-        // gehoerende Model kann bereits geloescht sein!
+        // Delete the view data allocated to the Clear in the root.
+        // Attention: The model belonging to the root entry (and thus the entry
+        // itself) might already be deleted.
         maDataTable.clear();
     }
 
     SvListEntry* pEntry;
     SvViewData* pViewData;
 
-    // RootEntry einfuegen
+    // insert root entry
     pEntry = pModel->pRootItem;
     pViewData = new SvViewData;
     pViewData->nFlags = SVLISTENTRYFLAG_EXPANDED;
     maDataTable.insert( pEntry, pViewData );
-    // Jetzt alle anderen Entries
+    // now all the other entries
     pEntry = pModel->First();
     while( pEntry )
     {
@@ -1494,7 +1493,7 @@ void SvListView::Clear()
     bVisPositionsValid = sal_False;
     if( pModel )
     {
-        // RootEntry einfuegen
+        // insert root entry
         SvListEntry* pEntry = pModel->pRootItem;
         SvViewData* pViewData = new SvViewData;
         pViewData->nFlags = SVLISTENTRYFLAG_EXPANDED;
@@ -1614,7 +1613,7 @@ void SvListView::ActionInsertedTree( SvListEntry* pEntry )
         nVisibleCount = 0;
         bVisPositionsValid = sal_False;
     }
-    // ueber Entry und seine Children iterieren
+    // iterate over entry and its children
     SvListEntry* pCurEntry = pEntry;
     sal_uInt16 nRefDepth = pModel->GetDepth( pCurEntry );
     while( pCurEntry )
@@ -1728,12 +1727,12 @@ void SvListView::ModelNotification( sal_uInt16 nActionId, SvListEntry* pEntry1,
             break;
         case LISTACTION_CLEARING:
             ActionClear();
-            ModelHasCleared(); //sic! wg. Kompatibilitaet!
+            ModelHasCleared(); // sic! for compatibility reasons!
             break;
         case LISTACTION_CLEARED:
             break;
         case LISTACTION_INVALIDATE_ENTRY:
-            // keine Action fuer die Basisklasse
+            // no action for the base class
             ModelHasEntryInvalidated( pEntry1 );
             break;
         case LISTACTION_RESORTED:
@@ -1830,10 +1829,10 @@ void SvTreeList::GetInsertionPos( SvListEntry* pEntry, SvListEntry* pParent,
 
         if( eCompare != COMPARE_EQUAL )
         {
-            if(i > ((long)pChildList->size() - 1)) // nicht gefunden, Ende der Liste
+            if(i > ((long)pChildList->size() - 1)) // not found, end of list
                 rPos = ULONG_MAX;
             else
-                rPos = i;              // nicht gefunden, Mitte
+                rPos = i;              // not found, middle of list
         }
         else
             rPos = k;
