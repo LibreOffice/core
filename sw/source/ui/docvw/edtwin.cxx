@@ -4338,15 +4338,18 @@ void SwEditWin::MouseButtonUp(const MouseEvent& rMEvt)
             SwWrtShell& rWrtShell = rView.GetWrtShell();
             SfxStyleSheetBasePool* pPool=0;
             bool bNoCharacterFormats = false;
-            bool bNoParagraphFormats = false;
+            bool bNoParagraphFormats = true;
             {
                 SwDocShell* pDocSh = rView.GetDocShell();
                 if(pDocSh)
                     pPool = pDocSh->GetStyleSheetPool();
                 if( (rMEvt.GetModifier()&KEY_MOD1) && (rMEvt.GetModifier()&KEY_SHIFT) )
+                {
                     bNoCharacterFormats = true;
+                    bNoParagraphFormats = false;
+                }
                 else if( rMEvt.GetModifier() & KEY_MOD1 )
-                    bNoParagraphFormats = true;
+                    bNoParagraphFormats = false;
             }
             //execute paste
             pFormatClipboard->Paste( rWrtShell, pPool, bNoCharacterFormats, bNoParagraphFormats );
