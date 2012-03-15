@@ -59,6 +59,7 @@ using namespace ::com::sun::star::registry  ;
 using namespace ::cppu                      ;
 using ::com::sun::star::ui::dialogs::XFilePicker;
 using ::com::sun::star::ui::dialogs::XFilePicker2;
+using ::com::sun::star::ui::dialogs::XFolderPicker;
 
 //------------------------------------------------
 //
