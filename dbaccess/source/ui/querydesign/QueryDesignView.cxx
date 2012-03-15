@@ -2319,9 +2319,9 @@ namespace
                             const ::connectivity::OSQLParseNode* pParseRoot )
     {
         SqlParseError eErrorCode = eOk;
-        if (!pParseRoot->getChild(3)->getChild(5)->isLeaf())
+        if (!pParseRoot->getChild(3)->getChild(ORDER_BY_CHILD_POS)->isLeaf())
         {
-            ::connectivity::OSQLParseNode* pNode = pParseRoot->getChild(3)->getChild(5)->getChild(2);
+            ::connectivity::OSQLParseNode* pNode = pParseRoot->getChild(3)->getChild(ORDER_BY_CHILD_POS)->getChild(2);
             ::connectivity::OSQLParseNode* pParamRef = NULL;
 
             OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
