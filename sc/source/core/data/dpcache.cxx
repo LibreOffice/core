@@ -75,7 +75,7 @@ namespace {
  *
  * @return true if the item is found, or false otherwise.
  */
-bool hasItemInDimension(const ScDPCache::DataListType& rArray, const ScDPCache::IndexArrayType& rOrder, const ScDPItemData& rItem, SCROW& rIndex)
+bool hasItemInDimension(const ScDPCache::ItemsType& rArray, const ScDPCache::IndexArrayType& rOrder, const ScDPItemData& rItem, SCROW& rIndex)
 {
     rIndex = rArray.size();
     bool bFound = false;
@@ -705,7 +705,7 @@ void ScDPCache::PostInit()
     for (; it != itEnd; ++it)
     {
         // Trim excess capacity.
-        DataListType(it->maItems).swap(it->maItems);
+        ItemsType(it->maItems).swap(it->maItems);
     }
 }
 
@@ -777,7 +777,7 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
             return NULL;
 
         nItemId -= rField.maItems.size();
-        const DataListType& rGI = rField.mpGroup->maItems;
+        const ItemsType& rGI = rField.mpGroup->maItems;
         if (nItemId >= rGI.size())
             return NULL;
 
@@ -789,7 +789,7 @@ const ScDPItemData* ScDPCache::GetItemDataById(long nDim, SCROW nId) const
     if (nDimPos >= maGroupFields.size())
         return NULL;
 
-    const DataListType& rGI = maGroupFields[nDimPos].maItems;
+    const ItemsType& rGI = maGroupFields[nDimPos].maItems;
     if (nItemId >= rGI.size())
         return NULL;
 
@@ -804,7 +804,7 @@ SCROW ScDPCache::GetRowCount() const
     return maFields[0].maData.size();
 }
 
-const ScDPCache::DataListType& ScDPCache::GetDimMemberValues(SCCOL nDim) const
+const ScDPCache::ItemsType& ScDPCache::GetDimMemberValues(SCCOL nDim) const
 {
     OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," nDim < mnColumnCount ");
     return maFields.at(nDim).maItems;
@@ -878,7 +878,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
     if (nDim < mnColumnCount)
     {
         // source field.
-        const DataListType& rItems = maFields[nDim].maItems;
+        const ItemsType& rItems = maFields[nDim].maItems;
         for (size_t i = 0, n = rItems.size(); i < n; ++i)
         {
             if (rItems[i] == rItem)
@@ -889,7 +889,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
             return -1;
 
         // grouped source field.
-        const DataListType& rGI = maFields[nDim].mpGroup->maItems;
+        const ItemsType& rGI = maFields[nDim].mpGroup->maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
         {
             if (rGI[i] == rItem)
@@ -902,7 +902,7 @@ SCROW ScDPCache::GetIdByItemData(long nDim, const ScDPItemData& rItem) const
     nDim -= mnColumnCount;
     if (static_cast<size_t>(nDim) < maGroupFields.size())
     {
-        const DataListType& rGI = maGroupFields[nDim].maItems;
+        const ItemsType& rGI = maGroupFields[nDim].maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
         {
             if (rGI[i] == rItem)
@@ -1005,7 +1005,7 @@ SCROW ScDPCache::SetGroupItem(long nDim, const ScDPItemData& rData)
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
     {
-        DataListType& rItems = maGroupFields.at(nDim).maItems;
+        ItemsType& rItems = maGroupFields.at(nDim).maItems;
         rItems.push_back(rData);
         return rItems.size()-1;
     }
@@ -1025,7 +1025,7 @@ void ScDPCache::GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const
             return;
 
         size_t nOffset = maFields[nDim].maItems.size();
-        const DataListType& rGI = maFields[nDim].mpGroup->maItems;
+        const ItemsType& rGI = maFields[nDim].mpGroup->maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
             rIds.push_back(static_cast<SCROW>(i + nOffset));
 
@@ -1035,7 +1035,7 @@ void ScDPCache::GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const
     nDim -= nSourceCount;
     if (nDim < static_cast<long>(maGroupFields.size()))
     {
-        const DataListType& rGI = maGroupFields.at(nDim).maItems;
+        const ItemsType& rGI = maGroupFields.at(nDim).maItems;
         for (size_t i = 0, n = rGI.size(); i < n; ++i)
             rIds.push_back(static_cast<SCROW>(i));
     }

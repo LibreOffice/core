@@ -59,14 +59,14 @@ struct ScDPNumGroupInfo;
 class SC_DLLPUBLIC ScDPCache : boost::noncopyable
 {
 public:
-    typedef std::vector<ScDPItemData> DataListType;
+    typedef std::vector<ScDPItemData> ItemsType;
     typedef std::set<ScDPObject*> ObjectSetType;
     typedef std::vector<rtl::OUString> LabelsType;
     typedef std::vector<SCROW> IndexArrayType;
 
     struct GroupItems : boost::noncopyable
     {
-        DataListType maItems;
+        ItemsType maItems;
         ScDPNumGroupInfo maInfo;
 
         GroupItems();
@@ -80,7 +80,7 @@ public:
          */
         boost::scoped_ptr<GroupItems> mpGroup;
 
-        DataListType maItems; /// Unique values in the field.
+        ItemsType maItems; /// Unique values in the field.
 
         /**
          * Original source data represented as indices to the unique value
@@ -145,7 +145,7 @@ public:
     SCROW GetDimMemberCount( SCCOL nDim ) const;
     SCROW GetOrder( long nDim, SCROW nIndex ) const;
 
-    const DataListType& GetDimMemberValues( SCCOL nDim ) const;
+    const ItemsType& GetDimMemberValues( SCCOL nDim ) const;
     bool InitFromDoc(ScDocument* pDoc, const ScRange& rRange);
     bool InitFromDataBase(const  ::com::sun::star::uno::Reference< ::com::sun::star::sdbc::XRowSet>& xRowSet, const Date& rNullDate);
 
