@@ -148,6 +148,7 @@ CFLAGSWALLCC=$(CFLAGSWARNCC)
 CFLAGSWALLCXX=$(CFLAGSWARNCXX)
 CFLAGSWERRCC=-Werror -DLIBO_WERROR
 
+.IF "$(COM_GCC_IS_CLANG)" != "TRUE"
 # Only GCC 4.6 has a fix for <http://gcc.gnu.org/bugzilla/show_bug.cgi?id=7302>
 # "-Wnon-virtual-dtor should't complain of protected dtor" and supports #pragma
 # GCC diagnostic push/pop required e.g. in cppuhelper/propertysetmixin.hxx to
@@ -155,6 +156,9 @@ CFLAGSWERRCC=-Werror -DLIBO_WERROR
 # members and friends:
 .IF "$(GCCNUMVER)" <= "000400059999"
 CFLAGSWARNCXX += -Wno-non-virtual-dtor
+.ELSE
+CFLAGSWARNCXX += -Wnon-virtual-dtor
+.END
 .ELSE
 CFLAGSWARNCXX += -Wnon-virtual-dtor
 .END
