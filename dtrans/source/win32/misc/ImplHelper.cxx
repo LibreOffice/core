@@ -46,6 +46,8 @@
 #include <sehandler.hxx>
 #endif
 
+#include <vector>
+
 //------------------------------------------------------------------------
 // defines
 //------------------------------------------------------------------------
@@ -133,15 +135,12 @@ OUString SAL_CALL getWinCPFromLocaleId( LCID lcid, LCTYPE lctype )
 
         OSL_ASSERT( len > 0 );
 
-        std::auto_ptr< sal_Unicode > lpwchBuff( new sal_Unicode[len] );
+        std::vector< sal_Unicode > lpwchBuff(len);
 
-        if ( NULL != lpwchBuff.get( ) )
-        {
-            len = MultiByteToWideChar(
-                CP_ACP, 0, buff, -1, reinterpret_cast<LPWSTR>(lpwchBuff.get( )), len );
+        len = MultiByteToWideChar(
+            CP_ACP, 0, buff, -1, reinterpret_cast<LPWSTR>(&lpwchBuff[0]), len );
 
-            winCP = OUString( lpwchBuff.get( ), (len - 1) );
-        }
+        winCP = OUString( &lpwchBuff[0], (len - 1) );
     }
 
     return winCP;
