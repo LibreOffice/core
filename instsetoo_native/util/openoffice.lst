@@ -94,13 +94,13 @@ OpenOffice
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/
+			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
 			STARTCENTER_INFO_URL http://www.openoffice.org
-			STARTCENTER_TEMPLREP_URL http://templates.services.openoffice.org
+			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
 			STARTCENTER_LAYOUT_STYLE 0
 			REGISTRATION_PRODUCT OpenOffice.org
 			REGISTRATION_CID 926117
-			DICT_REPO_URL http://extensions.services.openoffice.org/dictionaries
+			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
 		}
 		active			1
 		compression		5
@@ -159,13 +159,13 @@ OpenOffice_wJRE
 			DOWNLOADBITMAP	ooobitmap.bmp
 			DOWNLOADSETUPICO	ooosetup.ico
 			RELATIVE_PATHES_IN_DDF 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/
+			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
 			STARTCENTER_INFO_URL http://www.openoffice.org
-			STARTCENTER_TEMPLREP_URL http://templates.services.openoffice.org
+			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
 			STARTCENTER_LAYOUT_STYLE 0
 			REGISTRATION_PRODUCT OpenOffice.org
 			REGISTRATION_CID 926117
-			DICT_REPO_URL http://extensions.services.openoffice.org/dictionaries
+			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
 		}
 		active			1
 		compression		5
@@ -230,13 +230,13 @@ OpenOffice_Dev
 			DOWNLOADSETUPICO	ooosetup.ico
 			LOCALUSERDIR $ORIGIN/..
 			RELATIVE_PATHES_IN_DDF 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/
+			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
 			STARTCENTER_INFO_URL http://www.openoffice.org
-			STARTCENTER_TEMPLREP_URL http://templates.services.openoffice.org
+			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
 			STARTCENTER_LAYOUT_STYLE 0
 			REGISTRATION_PRODUCT OpenOffice.org
 			REGISTRATION_CID 926117
-			DICT_REPO_URL http://extensions.services.openoffice.org/dictionaries
+			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
 		}
 		active			1
 		compression		5
@@ -273,13 +273,13 @@ URE
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
             NOLANGUAGESELECTIONPRODUCT 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/
+			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
 			STARTCENTER_INFO_URL http://www.openoffice.org
-			STARTCENTER_TEMPLREP_URL http://templates.services.openoffice.org
+			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
             STARTCENTER_LAYOUT_STYLE 0
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,version.lst
 			PACKAGEMAP package_names_ext.txt
-			DICT_REPO_URL http://extensions.services.openoffice.org/dictionaries
+			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
         }
         active 1
         compression 5
@@ -321,11 +321,11 @@ OpenOffice_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-			STARTCENTER_ADDFEATURE_URL http://extensions.services.openoffice.org/
+			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
 			STARTCENTER_INFO_URL http://www.openoffice.org
-			STARTCENTER_TEMPLREP_URL http://templates.services.openoffice.org
+			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
             STARTCENTER_LAYOUT_STYLE 0
-			DICT_REPO_URL http://extensions.services.openoffice.org/dictionaries
+			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
         }
         active 1
         compression 5
@@ -374,11 +374,11 @@ OpenOffice_Dev_SDK
             DOWNLOADSETUPICO ooosetup.ico
             DONTUSESTARTMENUFOLDER 1
             RELATIVE_PATHES_IN_DDF 1
-            STARTCENTER_ADDFEATURE_URL http://tools.services.openoffice.org/forward/OpenOffice.org/extensions.jsp?cid=920794
-            STARTCENTER_INFO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/homepage.jsp
-            STARTCENTER_TEMPLREP_URL http://tools.services.openoffice.org/forward/OpenOffice.org/templates.jsp?cid=926383
+			STARTCENTER_ADDFEATURE_URL http://extensions.openoffice.org/
+			STARTCENTER_INFO_URL http://www.openoffice.org
+			STARTCENTER_TEMPLREP_URL http://templates.openoffice.org
             STARTCENTER_LAYOUT_STYLE 0
-            DICT_REPO_URL http://tools.services.openoffice.org/forward/OpenOffice.org/dictionaries.jsp
+			DICT_REPO_URL http://extensions.openoffice.org/dictionaries
         }
         active 1
         compression 5
