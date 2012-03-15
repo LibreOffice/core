@@ -4495,13 +4495,15 @@ struct S2: S1<int> { virtual ~S2(); };
 struct S3: S2 { virtual ~S3(); }; S3::~S3() {}
 _ACEOF
         gccvisinlineshiddenok=yes
-        if ! $CXX $CXXFLAGS $CPPFLAGS -shared -fPIC -fvisibility-inlines-hidden conftestlib1.cc -o lib1.so >/dev/null 2>/dev/null; then
+        if ! $CXX $CXXFLAGS $CPPFLAGS -shared -fPIC -fvisibility-inlines-hidden conftestlib1.cc -o libconftest1.so >/dev/null 2>/dev/null; then
             gccvisinlineshiddenok=no
         else
-            if ! $CXX $CXXFLAGS $CPPFLAGS -shared -fPIC -fvisibility-inlines-hidden conftestlib2.cc -L. -l1 -Wl,-z,defs -o lib2.so >/dev/null 2>/dev/null; then
+            if ! $CXX $CXXFLAGS $CPPFLAGS -shared -fPIC -fvisibility-inlines-hidden conftestlib2.cc -L. -lconftest1 -Wl,-z,defs -o libconftest2.so >/dev/null 2>/dev/null; then
                 gccvisinlineshiddenok=no
             fi
         fi
+        
+        rm -f libconftest1.so libconftest2.so
 
         AC_MSG_RESULT([$gccvisinlineshiddenok])
         if test "$gccvisinlineshiddenok" = "no"; then
