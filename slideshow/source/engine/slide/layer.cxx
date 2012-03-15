@@ -222,7 +222,7 @@ namespace slideshow
             std::for_each( maViewEntries.begin(),
                            maViewEntries.end(),
                            boost::bind(
-                               &ViewLayer::clear,
+                               &ViewLayer::clearAll,
                                boost::bind(
                                    &ViewEntry::getViewLayer,
                                    _1)));
