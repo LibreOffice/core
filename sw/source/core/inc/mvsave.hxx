@@ -32,6 +32,7 @@
 #include <svl/svarray.hxx>
 #include <IDocumentMarkAccess.hxx>
 #include <vector>
+#include <deque>
 
 namespace sfx2 {
     class MetadatableUndo;
@@ -111,7 +112,7 @@ struct _SaveFly
     { }
 };
 
-SV_DECL_VARARR( _SaveFlyArr, _SaveFly, 0 )
+typedef ::std::deque< _SaveFly > _SaveFlyArr;
 
 void _RestFlyInRange( _SaveFlyArr& rArr, const SwNodeIndex& rSttIdx,
                       const SwNodeIndex* pInsPos );
@@ -181,8 +182,6 @@ public:
     const SwFrmFmt* GetFmt() const              { return pFmt; }
     const SwFmtAnchor* GetAnchor() const        { return pAnchor; }
 };
-
-SV_DECL_VARARR_SORT( _ZSortFlys, _ZSortFly, 0 )
 
 
 class SwTblNumFmtMerge

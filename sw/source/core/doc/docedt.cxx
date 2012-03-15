@@ -163,7 +163,6 @@ struct _SaveRedline
 
 SV_DECL_PTRARR_DEL( _SaveRedlines, _SaveRedline*, 0 )
 
-SV_IMPL_VARARR( _SaveFlyArr, _SaveFly )
 SV_IMPL_PTRARR( _SaveRedlines, _SaveRedline* )
 
 bool lcl_MayOverwrite( const SwTxtNode *pNode, const xub_StrLen nPos )
@@ -191,7 +190,7 @@ void _RestFlyInRange( _SaveFlyArr & rArr, const SwNodeIndex& rSttIdx,
                       const SwNodeIndex* pInsertPos )
 {
     SwPosition aPos( rSttIdx );
-    for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
+    for( size_t n = 0; n < rArr.size(); ++n )
     {
         // create new anchor
         _SaveFly& rSave = rArr[n];
@@ -234,7 +233,7 @@ void _SaveFlyInRange( const SwNodeRange& rRg, _SaveFlyArr& rArr )
         {
             _SaveFly aSave( pAPos->nNode.GetIndex() - rRg.aStart.GetIndex(),
                             pFmt, sal_False );
-            rArr.Insert( aSave, rArr.Count());
+            rArr.push_back( aSave );
             pFmt->DelFrms();
             rFmts.Remove( n--, 1 );
         }
@@ -295,7 +294,7 @@ void _SaveFlyInRange( const SwPaM& rPam, const SwNodeIndex& rInsPos,
             {
                 _SaveFly aSave( pAPos->nNode.GetIndex() - rSttNdIdx.GetIndex(),
                                 pFmt, bInsPos );
-                rArr.Insert( aSave, rArr.Count());
+                rArr.push_back( aSave );
                 pFmt->DelFrms();
                 rFmts.Remove( n--, 1 );
             }
@@ -1188,7 +1187,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
     }
 
     // move the Flys to the new position
-    if( aSaveFlyArr.Count() )
+    if( !aSaveFlyArr.empty() )
         _RestFlyInRange( aSaveFlyArr, aIdx, NULL );
 
     // Add the Bookmarks back to the Document
