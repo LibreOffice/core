@@ -1666,10 +1666,13 @@ void SwPagePreView::ScrollViewSzChg()
 
         if(rDocRect.GetWidth() < rPreviewSize.Width())
         {
+            pHScrollbar->Show( sal_True );
             nVisWidth = rDocRect.GetWidth();
             nThumb = rDocRect.Left();
             aRange = Range(0, rPreviewSize.Width());
         }
+        else
+            pHScrollbar->Show( sal_False );
         pHScrollbar->SetRange( aRange );
         pHScrollbar->SetVisibleSize( nVisWidth );
         pHScrollbar->SetThumbPos( nThumb );
