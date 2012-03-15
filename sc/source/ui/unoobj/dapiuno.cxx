@@ -1193,7 +1193,7 @@ void ScDataPilotTableObj::SetDPObject( ScDPObject* pDPObject )
     if ( pDPObj && pDocSh )
     {
         ScDBDocFunc aFunc(*pDocSh);
-        aFunc.DataPilotUpdate( pDPObj, pDPObject, sal_True, sal_True );
+        aFunc.DataPilotUpdate( pDPObj, pDPObject, true, true );
     }
 }
 
@@ -1563,6 +1563,11 @@ Reference< XNameAccess > ScDataPilotChildObjBase::GetMembers() const
     if( ScDPObject* pDPObj = GetDPObject() )
         pDPObj->GetMembersNA( lcl_GetObjectIndex( pDPObj, maFieldId ), xMembersNA );
     return xMembersNA;
+}
+
+ScDocShell* ScDataPilotChildObjBase::GetDocShell() const
+{
+    return mrParent.GetDocShell();
 }
 
 // ============================================================================
@@ -2569,13 +2574,13 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
     ScDPObject* pDPObj = 0;
     if( ScDPSaveDimension* pDim = GetDPDimension( &pDPObj ) )
     {
-        String aDimName = pDim->GetName();
+        rtl::OUString aDimName = pDim->GetName();
 
         ScDPSaveData aSaveData = *pDPObj->GetSaveData();
         ScDPDimensionSaveData* pDimData = aSaveData.GetDimensionData();     // created if not there
 
         // find original base
-        String aBaseDimName( aDimName );
+        rtl::OUString aBaseDimName( aDimName );
         const ScDPSaveGroupDimension* pBaseGroupDim = pDimData->GetNamedGroupDim( aDimName );
         if ( pBaseGroupDim )
         {
@@ -2595,7 +2600,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         {
             for (nEntry=0; nEntry<nEntryCount; nEntry++)
             {
-                String aEntryName(rItems[nEntry]);
+                const rtl::OUString& aEntryName = rItems[nEntry];
                 if ( pBaseGroupDim )
                 {
                     // for each selected (intermediate) group, remove all its items
@@ -2615,9 +2620,8 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
         if ( !pGroupDimension )
         {
             // create a new group dimension
-            String aGroupDimName = pDimData->CreateGroupDimName( aBaseDimName, *pDPObj, false, NULL );
-            pNewGroupDim = new ScDPSaveGroupDimension( aBaseDimName, aGroupDimName );
-            sNewDim = aGroupDimName;
+            sNewDim = pDimData->CreateGroupDimName( aBaseDimName, *pDPObj, false, NULL );
+            pNewGroupDim = new ScDPSaveGroupDimension( aBaseDimName, sNewDim );
 
             pGroupDimension = pNewGroupDim;     // make changes to the new dim if none existed
 
@@ -2645,10 +2649,10 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
                 }
             }
         }
-        String aGroupDimName = pGroupDimension->GetGroupDimName();
+        rtl::OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
         //! localized prefix string
-        String aGroupName = pGroupDimension->CreateGroupName( String( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
+        rtl::OUString aGroupName = pGroupDimension->CreateGroupName( String( RTL_CONSTASCII_USTRINGPARAM( "Group" ) ) );
         ScDPSaveGroupItem aGroup( aGroupName );
         Reference< XNameAccess > xMembers = GetMembers();
         if (!xMembers.is())
@@ -2702,7 +2706,7 @@ Reference< XDataPilotField > SAL_CALL ScDataPilotFieldObj::createNameGroup( cons
 
         // apply changes
         pDPObj->SetSaveData( aSaveData );
-        SetDPObject( pDPObj );
+        ScDBDocFunc(*GetDocShell()).RefreshPivotTableGroups(pDPObj);
     }
 
     // if new grouping field has been created (on first group), return it

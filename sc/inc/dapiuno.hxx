@@ -422,6 +422,7 @@ protected:
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess >
                         GetMembers() const;
 
+    ScDocShell* GetDocShell() const;
 protected:
     ScDataPilotDescriptorBase& mrParent;
     ScFieldIdentifier   maFieldId;
