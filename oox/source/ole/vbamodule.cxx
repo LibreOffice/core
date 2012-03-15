@@ -313,7 +313,7 @@ OUString VbaModule::readSourceCode( StorageBase& rVbaStrg, const Reference< XNam
                             procInfo.nPos = aSourceCode.getLength();
                         }
                     }
-                    else if ( mbExecutable && aCodeLine.trim().equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("End Sub")) )
+                    else if ( mbExecutable && aCodeLine.trim().matchAsciiL( RTL_CONSTASCII_STRINGPARAM("End Sub")) )
                     {
                         // un-matched End Sub
                         if ( !procInfo.bInProcedure )
