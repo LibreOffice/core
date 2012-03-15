@@ -223,6 +223,7 @@ bool ScDPItemData::operator< (const ScDPItemData& r) const
 
 ScDPItemData& ScDPItemData::operator= (const ScDPItemData& r)
 {
+    DisposeString();
     meType = r.meType;
     switch (r.meType)
     {
