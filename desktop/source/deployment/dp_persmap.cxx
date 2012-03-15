@@ -26,6 +26,10 @@
 #include "dp_persmap.h"
 #include "rtl/strbuf.hxx"
 
+#ifndef DISABLE_BDB2PMAP
+#include <vector>
+#endif
+
 using namespace ::rtl;
 
 // the persistent map is used to manage a handful of key-value string pairs
@@ -48,6 +52,10 @@ PersistentMap::PersistentMap( OUString const & url_, bool readOnly )
 ,   m_bToBeCreated( !readOnly)
 ,   m_bIsDirty( false)
 {
+#ifndef DISABLE_BDB2PMAP
+    m_MapFileName = expandUnoRcUrl( url_);
+#endif
+
     open();
 }
 
@@ -157,11 +165,17 @@ bool PersistentMap::open()
     if( !m_bReadOnly)
         nOpenFlags |= osl_File_OpenFlag_Write;
 
-    const ::osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
+    const osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
     m_bIsOpen = (rcOpen == osl::File::E_None);
 
     // or create later if needed
     m_bToBeCreated &= (rcOpen == osl::File::E_NOENT) && !m_bIsOpen;
+
+#ifndef DISABLE_BDB2PMAP
+    if( m_bToBeCreated)
+        importFromBDB();
+#endif // DISABLE_BDB2PMAP
+
     if( !m_bIsOpen)
         return m_bToBeCreated;
 
@@ -227,7 +241,7 @@ void PersistentMap::flush( void)
     if( m_bToBeCreated && !m_entries.empty())
     {
         const sal_uInt32 nOpenFlags = osl_File_OpenFlag_Read | osl_File_OpenFlag_Write | osl_File_OpenFlag_Create;
-        const ::osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
+        const osl::File::RC rcOpen = m_MapFile.open( nOpenFlags);
         m_bIsOpen = (rcOpen == osl::File::E_None);
         m_bToBeCreated = !m_bIsOpen;
     }
@@ -326,4 +340,82 @@ t_string2string_map PersistentMap::getEntries() const
     return m_entries;
 }
 
+//______________________________________________________________________________
+#ifndef DISABLE_BDB2PMAP
+bool PersistentMap::importFromBDB()
+{
+    if( m_bReadOnly)
+        return false;
+
+    // get the name of its BDB counterpart
+    rtl::OUString aDBName = m_MapFileName;
+    if( !aDBName.endsWithAsciiL( ".pmap", 5))
+        return false;
+    aDBName = aDBName.replaceAt( aDBName.getLength()-5, 5, OUSTR(".db"));
+
+    // open the corresponding BDB file for reading
+    osl::File aDBFile( aDBName);
+    osl::File::RC rc = aDBFile.open( osl_File_OpenFlag_Read);
+    if( rc != osl::File::E_None)
+        return false;
+    sal_uInt64 nFileSize = 0;
+    if( aDBFile.getSize( nFileSize) != osl::File::E_None)
+        return false;
+
+    // read the BDB file
+    std::vector<sal_uInt8> aRawBDB( nFileSize);
+    for( sal_uInt64 nOfs = 0; nOfs < nFileSize;) {
+        sal_uInt64 nBytesRead = 0;
+        rc = aDBFile.read( (void*)&aRawBDB[nOfs], nFileSize - nOfs, nBytesRead);
+        if( (rc != osl::File::E_None) || !nBytesRead)
+            return false;
+        nOfs += nBytesRead;
+    }
+
+    // check BDB file header for non_encrypted Hash_v9 format
+    if( nFileSize < 0x1000)
+        return false;
+    if( (aRawBDB[12]!=0x61 || aRawBDB[13]!=0x15 || aRawBDB[14]!=0x06)
+    &&  (aRawBDB[15]!=0x61 || aRawBDB[14]!=0x15 || aRawBDB[13]!=0x06))
+        return false;
+    if( aRawBDB[16]!=0x09)
+        return false;
+
+    // find PackageManagers new_style entries
+    // using a simple heuristic for BDB_Hash_v9 files
+    int nEntryCount = 0;
+    const sal_uInt8* pBeg = &aRawBDB[0] + 0x1000;
+    const sal_uInt8* pEnd = pBeg + nFileSize;
+    for( const sal_uInt8* pCur = pBeg; pCur < pEnd; ++pCur) {
+        if( pCur[0] != 0x01)
+            continue;
+        // get the value-candidate
+        const sal_uInt8* pVal = pCur + 1;
+        while( ++pCur < pEnd)
+            if( (*pCur < ' ') || ((*pCur > 0x7F) && (*pCur != 0xFF)))
+                break;
+        if( pCur >= pEnd)
+            break;
+        if( (pCur[0] != 0x01) || (pCur[1] != 0xFF))
+            continue;
+        const OString aVal( (sal_Char*)pVal, pCur - pVal);
+        // get the key-candidate
+        const sal_uInt8* pKey = pCur + 1;
+        while( ++pCur < pEnd)
+            if( (*pCur < ' ') || ((*pCur > 0x7F) && (*pCur != 0xFF)))
+                break;
+        if( (pCur < pEnd) && (*pCur > 0x01))
+            continue;
+        const OString aKey( (sal_Char*)pKey, pCur - pKey);
+
+        // add the key/value pair
+        add( aKey, aVal);
+        ++nEntryCount;
+    }
+
+    return (nEntryCount > 0);
 }
+#endif // DISABLE_BDB2PMAP
+
+}
+
