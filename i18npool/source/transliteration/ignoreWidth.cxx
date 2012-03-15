@@ -43,17 +43,16 @@ OUString SAL_CALL
 ignoreWidth::folding( const OUString& inStr, sal_Int32 startPos, sal_Int32 nCount, Sequence< sal_Int32 >& offset )
   throw(RuntimeException)
 {
-    halfwidthToFullwidth t1;
+    fullwidthToHalfwidth t1;
     return t1.transliterate(inStr, startPos, nCount, offset);
 }
-
 
 Sequence< OUString > SAL_CALL
 ignoreWidth::transliterateRange( const OUString& str1, const OUString& str2 )
   throw(RuntimeException)
 {
-    halfwidthToFullwidth t1;
-    fullwidthToHalfwidth t2;
+    fullwidthToHalfwidth t1;
+    halfwidthToFullwidth t2;
 
     return transliteration_Ignore::transliterateRange(str1, str2, t1, t2);
 }
@@ -61,7 +60,7 @@ ignoreWidth::transliterateRange( const OUString& str1, const OUString& str2 )
 sal_Unicode SAL_CALL
 ignoreWidth::transliterateChar2Char( sal_Unicode inChar) throw(RuntimeException, MultipleCharsOutputException)
 {
-    halfwidthToFullwidth t1;
+    fullwidthToHalfwidth t1;
     return t1.transliterateChar2Char(inChar);
 }
 
