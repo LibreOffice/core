@@ -788,9 +788,6 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
 {
     pCode = rCell.pCode->Clone();
 
-    if ( nCloneFlags & SC_CLONECELL_ADJUST3DREL )
-        pCode->ReadjustRelative3DReferences( rCell.aPos, aPos );
-
     // evtl. Fehler zuruecksetzen und neu kompilieren
     //  nicht im Clipboard - da muss das Fehlerflag erhalten bleiben
     //  Spezialfall Laenge=0: als Fehlerzelle erzeugt, dann auch Fehler behalten
@@ -826,6 +823,9 @@ ScFormulaCell::ScFormulaCell( const ScFormulaCell& rCell, ScDocument& rDoc, cons
 
         pCode->AdjustAbsoluteRefs( rCell.pDocument, rCell.aPos, aPos );
     }
+
+    if ( nCloneFlags & SC_CLONECELL_ADJUST3DREL )
+        pCode->ReadjustRelative3DReferences( rCell.aPos, aPos );
 
     if( !bCompile )
     {   // Name references with references and ColRowNames
