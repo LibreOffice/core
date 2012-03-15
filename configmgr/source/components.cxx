@@ -845,7 +845,8 @@ void Components::parseXcsXcuIniLayer(
     rtl::Bootstrap ini(url);
     if (ini.getHandle() != 0)
     {
-        rtl::OUStringBuffer prefix("${.override:");
+        rtl::OUStringBuffer prefix;
+        prefix.appendAscii(RTL_CONSTASCII_STRINGPARAM("${.override:"));
         for (sal_Int32 i = 0; i != url.getLength(); ++i) {
             sal_Unicode c = url[i];
             switch (c) {
@@ -859,13 +860,16 @@ void Components::parseXcsXcuIniLayer(
             }
         }
         prefix.append(':');
-        rtl::OUString urls(prefix.toString() + rtl::OUString("SCHEMA}"));
+        rtl::OUString urls(
+            prefix.toString()
+            + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SCHEMA}")));
         rtl::Bootstrap::expandMacros(urls);
         if (!urls.isEmpty())
         {
             parseFileList(layer, &parseXcsFile, urls, ini, false);
         }
-        urls = prefix.makeStringAndClear() + rtl::OUString("DATA}");
+        urls = prefix.makeStringAndClear()
+            + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATA}"));
         rtl::Bootstrap::expandMacros(urls);
         if (!urls.isEmpty())
         {
