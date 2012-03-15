@@ -169,7 +169,6 @@ private:
     void PostInit();
     void Clear();
     void AddLabel(const rtl::OUString& rLabel);
-    bool AddData(long nDim, const ScDPItemData& rData, sal_uLong nNumFormat);
     const GroupItems* GetGroupItems(long nDim) const;
 };
 

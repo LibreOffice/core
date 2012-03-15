@@ -64,44 +64,6 @@ using ::com::sun::star::uno::UNO_QUERY_THROW;
 
 namespace {
 
-/**
- * Search for an item in the data array.  If it's in the array, return its
- * index to the caller.
- *
- * @param rArray dimension array
- * @param rOrder global order (what's this?)
- * @param item item to search for
- * @param rIndex the index of the found item in the global order.
- *
- * @return true if the item is found, or false otherwise.
- */
-bool hasItemInDimension(const ScDPCache::ItemsType& rArray, const ScDPCache::IndexArrayType& rOrder, const ScDPItemData& rItem, SCROW& rIndex)
-{
-    rIndex = rArray.size();
-    bool bFound = false;
-    SCROW nLo = 0;
-    SCROW nHi = rArray.size() - 1;
-    long nCompare;
-    while (nLo <= nHi)
-    {
-        SCROW nIndex = (nLo + nHi) / 2;
-        nCompare = ScDPItemData::Compare(rArray[rOrder[nIndex]], rItem);
-        if (nCompare < 0)
-            nLo = nIndex + 1;
-        else
-        {
-            nHi = nIndex - 1;
-            if (nCompare == 0)
-            {
-                bFound = true;
-                nLo = nIndex;
-            }
-        }
-    }
-    rIndex = nLo;
-    return bFound;
-}
-
 void getItemValue(
     ScDPItemData& rData, const Reference<sdbc::XRow>& xRow, sal_Int32 nType,
     long nCol, const Date& rNullDate, short& rNumType)
@@ -753,35 +715,6 @@ bool ScDPCache::IsRowEmpty(SCROW nRow) const
     bool bEmpty = true;
     maEmptyRows.search_tree(nRow, bEmpty);
     return bEmpty;
-}
-
-bool ScDPCache::AddData(long nDim, const ScDPItemData& rData, sal_uLong nNumFormat)
-{
-    OSL_ENSURE( nDim < mnColumnCount && nDim >=0 , "dimension out of bound" );
-
-    SCROW nIndex = 0;
-    Field& rField = maFields[nDim];
-    if (!hasItemInDimension(rField.maItems, rField.maGlobalOrder, rData, nIndex))
-    {
-        // This item doesn't exist in the dimension array yet.
-        rField.maItems.push_back(rData);
-        rField.maGlobalOrder.insert(
-            rField.maGlobalOrder.begin()+nIndex, rField.maItems.size()-1);
-        OSL_ENSURE(rField.maGlobalOrder[nIndex] == sal::static_int_cast<SCROW>(rField.maItems.size())-1, "ScDPTableDataCache::AddData ");
-        rField.maData.push_back(rField.maItems.size()-1);
-    }
-    else
-        rField.maData.push_back(rField.maGlobalOrder[nIndex]);
-
-    size_t nCurRow = maFields[nDim].maData.size() - 1;
-
-    if (!rData.IsEmpty())
-    {
-        maEmptyRows.insert_back(nCurRow, nCurRow+1, false);
-        rField.mnNumFormat = nNumFormat;
-    }
-
-    return true;
 }
 
 const ScDPCache::GroupItems* ScDPCache::GetGroupItems(long nDim) const
