@@ -684,6 +684,8 @@ sal_Bool ErrorBarResources::FillItemSet(SfxItemSet& rOutAttrs) const
         }
     }
 
+    rOutAttrs.Put( SfxBoolItem( SCHATTR_STAT_ERRORBAR_TYPE , m_eErrorBarType == ERROR_BAR_Y ));
+
     return sal_True;
 }
 
