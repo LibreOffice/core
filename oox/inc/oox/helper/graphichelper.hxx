@@ -93,8 +93,6 @@ public:
     sal_Int32           convertScreenPixelXToHmm( double fPixelX ) const;
     /** Converts the passed value from vertical screen pixels to 1/100 mm. */
     sal_Int32           convertScreenPixelYToHmm( double fPixelY ) const;
-    /** Converts the passed point from screen pixels to 1/100 mm. */
-    ::com::sun::star::awt::Point convertScreenPixelToHmm( const ::com::sun::star::awt::Point& rPixel ) const;
     /** Converts the passed size from screen pixels to 1/100 mm. */
     ::com::sun::star::awt::Size convertScreenPixelToHmm( const ::com::sun::star::awt::Size& rPixel ) const;
 

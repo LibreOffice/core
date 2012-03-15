@@ -185,11 +185,6 @@ sal_Int32 GraphicHelper::convertScreenPixelYToHmm( double fPixelY ) const
     return lclConvertScreenPixelToHmm( fPixelY, mfPixelPerHmmY );
 }
 
-awt::Point GraphicHelper::convertScreenPixelToHmm( const awt::Point& rPixel ) const
-{
-    return awt::Point( convertScreenPixelXToHmm( rPixel.X ), convertScreenPixelYToHmm( rPixel.Y ) );
-}
-
 awt::Size GraphicHelper::convertScreenPixelToHmm( const awt::Size& rPixel ) const
 {
     return awt::Size( convertScreenPixelXToHmm( rPixel.Width ), convertScreenPixelYToHmm( rPixel.Height ) );

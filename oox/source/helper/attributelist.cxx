@@ -122,16 +122,6 @@ sal_Int32 AttributeConversion::decodeIntegerHex( const OUString& rValue )
     return rValue.toInt32( 16 );
 }
 
-sal_uInt32 AttributeConversion::decodeUnsignedHex( const OUString& rValue )
-{
-    return getLimitedValue< sal_uInt32, sal_Int64 >( rValue.toInt64( 16 ), 0, SAL_MAX_UINT32 );
-}
-
-sal_Int64 AttributeConversion::decodeHyperHex( const OUString& rValue )
-{
-    return rValue.toInt64( 16 );
-}
-
 // ============================================================================
 
 AttributeList::AttributeList( const Reference< XFastAttributeList >& rxAttribs ) :

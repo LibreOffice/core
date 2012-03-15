@@ -1551,16 +1551,6 @@ void PowerPointExport::WriteTextStyleLevel( FSHelperPtr pFS, int nInstance, int 
     pFS->endElementNS( XML_a, PowerPointExport::nStyleLevelToken[ nLevel ] );
 }
 
-void PowerPointExport::WriteTextStyle( FSHelperPtr pFS, int nInstance, sal_Int32 xmlToken )
-{
-    pFS->startElementNS( XML_p, xmlToken, FSEND );
-
-    for( int nLevel = 0; nLevel < 5; nLevel ++ )
-    WriteTextStyleLevel( pFS, nInstance, nLevel );
-
-    pFS->endElementNS( XML_p, xmlToken );
-}
-
 void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > aXBackgroundPropSet )
 {
     DBG(printf("write slide master: %" SAL_PRIuUINT32 "\n----------------\n", nPageNum));

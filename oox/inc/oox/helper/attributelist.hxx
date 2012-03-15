@@ -66,12 +66,6 @@ public:
 
     /** Returns the 32-bit signed integer value from the passed string (hexadecimal). */
     static sal_Int32    decodeIntegerHex( const ::rtl::OUString& rValue );
-
-    /** Returns the 32-bit unsigned integer value from the passed string (hexadecimal). */
-    static sal_uInt32   decodeUnsignedHex( const ::rtl::OUString& rValue );
-
-    /** Returns the 64-bit signed integer value from the passed string (hexadecimal). */
-    static sal_Int64    decodeHyperHex( const ::rtl::OUString& rValue );
 };
 
 // ============================================================================

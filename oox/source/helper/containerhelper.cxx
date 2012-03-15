@@ -119,24 +119,6 @@ Reference< XIndexContainer > ContainerHelper::createIndexContainer( const Refere
     return xContainer;
 }
 
-bool ContainerHelper::insertByIndex(
-        const Reference< XIndexContainer >& rxIndexContainer,
-        sal_Int32 nIndex, const Any& rObject )
-{
-    OSL_ENSURE( rxIndexContainer.is(), "ContainerHelper::insertByIndex - missing XIndexContainer interface" );
-    bool bRet = false;
-    try
-    {
-        rxIndexContainer->insertByIndex( nIndex, rObject );
-        bRet = true;
-    }
-    catch( Exception& )
-    {
-    }
-    OSL_ENSURE( bRet, "ContainerHelper::insertByIndex - cannot insert object" );
-    return bRet;
-}
-
 Reference< XNameContainer > ContainerHelper::createNameContainer( const Reference< XComponentContext >& rxContext )
 {
     Reference< XNameContainer > xContainer;
