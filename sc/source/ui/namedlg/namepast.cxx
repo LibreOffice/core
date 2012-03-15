@@ -54,18 +54,17 @@ ScNamePasteDlg::ScNamePasteDlg( Window * pParent, ScDocShell* pShell, bool )
 {
     ScDocument* pDoc = pShell->GetDocument();
     std::map<rtl::OUString, ScRangeName*> aCopyMap;
-    boost::ptr_map<rtl::OUString, ScRangeName> aRangeMap;
     pDoc->GetRangeNameMap(aCopyMap);
     std::map<rtl::OUString, ScRangeName*>::iterator itr = aCopyMap.begin(), itrEnd = aCopyMap.end();
     for (; itr != itrEnd; ++itr)
     {
         rtl::OUString aTemp(itr->first);
-        aRangeMap.insert(aTemp, new ScRangeName(*itr->second));
+        maRangeMap.insert(aTemp, new ScRangeName(*itr->second));
     }
 
     ScViewData* pViewData = pShell->GetViewData();
     ScAddress aPos(pViewData->GetCurX(), pViewData->GetCurY(), pViewData->GetTabNo());
-    mpTable = new ScRangeManagerTable(&maCtrl, aRangeMap, aPos);
+    mpTable = new ScRangeManagerTable(&maCtrl, maRangeMap, aPos);
 
     maBtnPaste.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl) );
     maBtnPasteAll.SetClickHdl( LINK( this, ScNamePasteDlg, ButtonHdl));
