@@ -518,20 +518,31 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
 
         // Now get the data rows.
         Reference<sdbc::XRow> xRow(xRowSet, UNO_QUERY_THROW);
-        xRowSet->first();
-        ScDPItemData aData;
-        do
+
+        std::vector<Bucket> aBuckets;
+        for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
         {
-            for (sal_Int32 nCol = 0; nCol < mnColumnCount; ++nCol)
+            xRowSet->first();
+            ScDPItemData aData;
+            aBuckets.clear();
+            Field& rField = maFields[nCol];
+            do
             {
+                SCROW nRow = 0;
                 short nFormatType = NUMBERFORMAT_UNDEFINED;
                 getItemValue(aData, xRow, aColTypes[nCol], nCol+1, rNullDate, nFormatType);
-                SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
-                sal_uLong nNumFormat = pFormatter ? pFormatter->GetStandardFormat(nFormatType) : 0;
-                AddData(nCol, aData, nNumFormat);
+                aBuckets.push_back(Bucket(aData, 0, nRow++));
+                if (!aData.IsEmpty())
+                {
+                    maEmptyRows.insert_back(nRow, nRow+1, false);
+                    SvNumberFormatter* pFormatter = mpDoc->GetFormatTable();
+                    rField.mnNumFormat = pFormatter ? pFormatter->GetStandardFormat(nFormatType) : 0;
+                }
             }
+            while (xRowSet->next());
+
+            processBuckets(aBuckets, rField);
         }
-        while (xRowSet->next());
 
         xRowSet->beforeFirst();
 
