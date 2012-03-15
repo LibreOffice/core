@@ -320,6 +320,112 @@ void initFromCell(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, ScDPItem
     }
 }
 
+struct Bucket
+{
+    ScDPItemData maValue;
+    SCROW mnOrderIndex;
+    SCROW mnDataIndex;
+    Bucket(const ScDPItemData& rValue, SCROW nOrder, SCROW nData) :
+        maValue(rValue), mnOrderIndex(nOrder), mnDataIndex(nData) {}
+};
+
+struct LessByValue : std::binary_function<Bucket, Bucket, bool>
+{
+    bool operator() (const Bucket& left, const Bucket& right) const
+    {
+        return left.maValue < right.maValue;
+    }
+};
+
+struct LessByDataIndex : std::binary_function<Bucket, Bucket, bool>
+{
+    bool operator() (const Bucket& left, const Bucket& right) const
+    {
+        return left.mnDataIndex < right.mnDataIndex;
+    }
+};
+
+struct EqualByValue : std::binary_function<Bucket, Bucket, bool>
+{
+    bool operator() (const Bucket& left, const Bucket& right) const
+    {
+        return left.maValue == right.maValue;
+    }
+};
+
+class PushBackValue : std::unary_function<Bucket, void>
+{
+    ScDPCache::ItemsType& mrItems;
+public:
+    PushBackValue(ScDPCache::ItemsType& _items) : mrItems(_items) {}
+    void operator() (const Bucket& v)
+    {
+        mrItems.push_back(v.maValue);
+    }
+};
+
+class PushBackOrderIndex : std::unary_function<Bucket, void>
+{
+    ScDPCache::IndexArrayType& mrData;
+public:
+    PushBackOrderIndex(ScDPCache::IndexArrayType& _items) : mrData(_items) {}
+    void operator() (const Bucket& v)
+    {
+        mrData.push_back(v.mnOrderIndex);
+    }
+};
+
+void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
+{
+    if (aBuckets.empty())
+        return;
+
+    // Sort by the value.
+    std::sort(aBuckets.begin(), aBuckets.end(), LessByValue());
+
+    {
+        // Set order index such that unique values have identical index value.
+        SCROW nCurIndex = 0;
+        std::vector<Bucket>::iterator it = aBuckets.begin(), itEnd = aBuckets.end();
+        ScDPItemData aPrev = it->maValue;
+        it->mnOrderIndex = nCurIndex;
+        for (++it; it != itEnd; ++it)
+        {
+            if (aPrev != it->maValue)
+                ++nCurIndex;
+
+            it->mnOrderIndex = nCurIndex;
+            aPrev = it->maValue;
+        }
+    }
+
+    // Re-sort the bucket this time by the data index.
+    std::sort(aBuckets.begin(), aBuckets.end(), LessByDataIndex());
+
+    // Copy the order index series into the field object.
+    rField.maData.reserve(aBuckets.size());
+    std::for_each(aBuckets.begin(), aBuckets.end(), PushBackOrderIndex(rField.maData));
+
+    // Sort by the value again.
+    std::sort(aBuckets.begin(), aBuckets.end(), LessByValue());
+
+    // Unique by value.
+    std::vector<Bucket>::iterator itUniqueEnd =
+        std::unique(aBuckets.begin(), aBuckets.end(), EqualByValue());
+
+    // Copy the unique values into items.
+    std::vector<Bucket>::iterator itBeg = aBuckets.begin();
+    size_t nLen = distance(itBeg, itUniqueEnd);
+    rField.maItems.reserve(nLen);
+    std::for_each(itBeg, itUniqueEnd, PushBackValue(rField.maItems));
+
+    // The items are actually already sorted.  So, just insert a sequence
+    // of integers from 0 and up.
+    rField.maGlobalOrder.reserve(nLen);
+    for (size_t i = 0; i < nLen; ++i)
+        rField.maGlobalOrder.push_back(i);
+}
+
 }
 
 bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
@@ -350,12 +456,27 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
         AddLabel(createLabelString(pDoc, nCol, nStartRow, nDocTab));
-        for (SCROW nRow = nStartRow + 1; nRow <= nEndRow; ++nRow)
+        Field& rField = maFields[nCol];
+        std::vector<Bucket> aBuckets;
+        aBuckets.reserve(nEndRow-nStartRow); // skip the topmost label cell.
+
+        // Push back all original values.
+        SCROW nOffset = nStartRow + 1;
+        for (SCROW i = 0, n = nEndRow-nStartRow; i < n; ++i)
         {
+            SCROW nRow = i + nOffset;
             sal_uLong nNumFormat = 0;
             initFromCell(pDoc, nCol, nRow, nDocTab, aData, nNumFormat);
-            AddData(nCol - nStartCol, aData, nNumFormat);
+            aBuckets.push_back(Bucket(aData, 0, i));
+
+            if (!aData.IsEmpty())
+            {
+                maEmptyRows.insert_back(nRow, nRow+1, false);
+                rField.mnNumFormat = nNumFormat;
+            }
         }
+
+        processBuckets(aBuckets, rField);
     }
 
     PostInit();

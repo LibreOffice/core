@@ -93,6 +93,8 @@ public:
 
     // exact equality
     bool operator==(const ScDPItemData& r) const;
+    bool operator!=(const ScDPItemData& r) const;
+    bool operator< (const ScDPItemData& r) const;
 
     ScDPItemData& operator= (const ScDPItemData& r);
 

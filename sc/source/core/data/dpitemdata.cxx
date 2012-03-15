@@ -211,6 +211,16 @@ bool ScDPItemData::operator== (const ScDPItemData& r) const
     return GetString() == r.GetString();
 }
 
+bool ScDPItemData::operator!= (const ScDPItemData& r) const
+{
+    return !operator== (r);
+}
+
+bool ScDPItemData::operator< (const ScDPItemData& r) const
+{
+    return Compare(*this, r) == -1;
+}
+
 ScDPItemData& ScDPItemData::operator= (const ScDPItemData& r)
 {
     meType = r.meType;
