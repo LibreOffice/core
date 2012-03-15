@@ -77,6 +77,7 @@
 
 #include <basegfx/tools/zoomtools.hxx>
 #include <svx/zoom_def.hxx>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #include "sc.hrc"
 #include "scabstdlg.hxx"
@@ -844,7 +845,11 @@ void ScPreviewShell::FillFieldData( ScHeaderFieldData& rData )
     pDoc->GetName(nTab, aTmp);
     rData.aTabName = aTmp;
 
-    rData.aTitle        = pDocShell->GetTitle();
+    if( pDocShell->getDocProperties()->getTitle().getLength() != 0 )
+        rData.aTitle = pDocShell->getDocProperties()->getTitle();
+    else
+        rData.aTitle = pDocShell->GetTitle();
+
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
     rData.aLongDocName  = rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
     if ( rData.aLongDocName.Len() )

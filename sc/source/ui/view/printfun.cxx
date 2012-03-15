@@ -83,6 +83,7 @@
 #include <vcl/lineinfo.hxx>
 
 #include <boost/scoped_ptr.hpp>
+#include <com/sun/star/document/XDocumentProperties.hpp>
 
 #define ZOOM_MIN    10
 
@@ -1037,7 +1038,11 @@ void ScPrintFunc::InitParam( const ScPrintOptions* pOptions )
 
     SetDateTime( Date( Date::SYSTEM ), Time( Time::SYSTEM ) );
 
-    aFieldData.aTitle       = pDocShell->GetTitle();
+    if( pDocShell->getDocProperties()->getTitle().getLength() != 0 )
+        aFieldData.aTitle = pDocShell->getDocProperties()->getTitle();
+    else
+        aFieldData.aTitle = pDocShell->GetTitle();
+
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
     aFieldData.aLongDocName = rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
     if ( aFieldData.aLongDocName.Len() )

@@ -97,6 +97,8 @@
 #include "markdata.hxx"
 #include "preview.hxx"
 
+#include <com/sun/star/document/XDocumentProperties.hpp>
+
 void ActivateOlk( ScViewData* pViewData );
 void DeActivateOlk( ScViewData* pViewData );
 
@@ -1824,7 +1826,11 @@ void ScTabViewShell::FillFieldData( ScHeaderFieldData& rData )
     pDoc->GetName(nTab, aTmp);
     rData.aTabName = aTmp;
 
-    rData.aTitle        = pDocShell->GetTitle();
+    if( pDocShell->getDocProperties()->getTitle().getLength() != 0 )
+        rData.aTitle = pDocShell->getDocProperties()->getTitle();
+    else
+        rData.aTitle = pDocShell->GetTitle();
+
     const INetURLObject& rURLObj = pDocShell->GetMedium()->GetURLObject();
     rData.aLongDocName  = rURLObj.GetMainURL( INetURLObject::DECODE_UNAMBIGUOUS );
     if ( rData.aLongDocName.Len() )
