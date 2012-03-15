@@ -2277,7 +2277,7 @@ void ScDocument::CopyBlockFromClip( SCCOL nCol1, SCROW nRow1,
                 while ( i + nFollow < nTabEnd
                         && rMark.GetTableSelect( i + nFollow + 1 )
                         && nClipTab + nFollow < MAXTAB
-                        && rClipTabs[nClipTab + nFollow + 1] )
+                        && rClipTabs[(nClipTab + nFollow + 1) % static_cast<SCTAB>(rClipTabs.size())] )
                     ++nFollow;
 
                 if ( pCBFCP->pClipDoc->GetClipParam().mbCutMode )
