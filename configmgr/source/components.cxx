@@ -53,6 +53,7 @@
 #include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ref.hxx"
 #include "rtl/string.h"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/ustring.h"
 #include "rtl/ustring.hxx"
 #include "rtl/instance.hxx"
@@ -827,17 +828,38 @@ void Components::parseXcsXcuLayer(int layer, rtl::OUString const & url) {
 void Components::parseXcsXcuIniLayer(
     int layer, rtl::OUString const & url, bool recordAdditions)
 {
-    //TODO: rtl::Bootstrap::getFrom "first trie[s] to retrieve the value via the
-    // global function"
+    // Check if ini file exists (otherwise .override would still read global
+    // SCHEMA/DATA variables, which could interfere with unrelated environment
+    // variables):
     rtl::Bootstrap ini(url);
-    rtl::OUString urls;
-    if (ini.getFrom(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SCHEMA")), urls))
+    if (ini.getHandle() != 0)
     {
-        parseFileList(layer, &parseXcsFile, urls, ini, false);
-    }
-    if (ini.getFrom(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("DATA")), urls))
-    {
-        parseFileList(layer + 1, &parseXcuFile, urls, ini, recordAdditions);
+        rtl::OUStringBuffer prefix("${.override:");
+        for (sal_Int32 i = 0; i != url.getLength(); ++i) {
+            sal_Unicode c = url[i];
+            switch (c) {
+            case '$':
+            case ':':
+            case '\\':
+                prefix.append('\\');
+                // fall through
+            default:
+                prefix.append(c);
+            }
+        }
+        prefix.append(':');
+        rtl::OUString urls(prefix.toString() + rtl::OUString("SCHEMA}"));
+        rtl::Bootstrap::expandMacros(urls);
+        if (!urls.isEmpty())
+        {
+            parseFileList(layer, &parseXcsFile, urls, ini, false);
+        }
+        urls = prefix.makeStringAndClear() + rtl::OUString("DATA}");
+        rtl::Bootstrap::expandMacros(urls);
+        if (!urls.isEmpty())
+        {
+            parseFileList(layer + 1, &parseXcuFile, urls, ini, recordAdditions);
+        }
     }
 }
 
