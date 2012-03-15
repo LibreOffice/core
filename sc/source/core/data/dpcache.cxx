@@ -62,89 +62,6 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 
-namespace {
-
-void getItemValue(
-    ScDPItemData& rData, const Reference<sdbc::XRow>& xRow, sal_Int32 nType,
-    long nCol, const Date& rNullDate, short& rNumType)
-{
-    rNumType = NUMBERFORMAT_NUMBER;
-    try
-    {
-        double fValue = 0.0;
-        switch (nType)
-        {
-            case sdbc::DataType::BIT:
-            case sdbc::DataType::BOOLEAN:
-            {
-                rNumType = NUMBERFORMAT_LOGICAL;
-                fValue  = xRow->getBoolean(nCol) ? 1 : 0;
-                rData.SetValue(fValue);
-                break;
-            }
-            case sdbc::DataType::TINYINT:
-            case sdbc::DataType::SMALLINT:
-            case sdbc::DataType::INTEGER:
-            case sdbc::DataType::BIGINT:
-            case sdbc::DataType::FLOAT:
-            case sdbc::DataType::REAL:
-            case sdbc::DataType::DOUBLE:
-            case sdbc::DataType::NUMERIC:
-            case sdbc::DataType::DECIMAL:
-            {
-                //! do the conversion here?
-                fValue = xRow->getDouble(nCol);
-                rData.SetValue(fValue);
-                break;
-            }
-            case sdbc::DataType::DATE:
-            {
-                rNumType = NUMBERFORMAT_DATE;
-
-                util::Date aDate = xRow->getDate(nCol);
-                fValue = Date(aDate.Day, aDate.Month, aDate.Year) - rNullDate;
-                rData.SetValue(fValue);
-                break;
-            }
-            case sdbc::DataType::TIME:
-            {
-                rNumType = NUMBERFORMAT_TIME;
-
-                util::Time aTime = xRow->getTime(nCol);
-                fValue = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
-                           aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                rData.SetValue(fValue);
-                break;
-            }
-            case sdbc::DataType::TIMESTAMP:
-            {
-                rNumType = NUMBERFORMAT_DATETIME;
-
-                util::DateTime aStamp = xRow->getTimestamp(nCol);
-                fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - rNullDate ) +
-                         ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
-                           aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
-                rData.SetValue(fValue);
-                break;
-            }
-            case sdbc::DataType::CHAR:
-            case sdbc::DataType::VARCHAR:
-            case sdbc::DataType::LONGVARCHAR:
-            case sdbc::DataType::SQLNULL:
-            case sdbc::DataType::BINARY:
-            case sdbc::DataType::VARBINARY:
-            case sdbc::DataType::LONGVARBINARY:
-            default:
-                rData.SetString(xRow->getString(nCol));
-        }
-    }
-    catch (uno::Exception&)
-    {
-    }
-}
-
-}
-
 ScDPCache::GroupItems::GroupItems() {}
 
 ScDPCache::GroupItems::GroupItems(const ScDPNumGroupInfo& rInfo) :
@@ -279,6 +196,85 @@ void initFromCell(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, ScDPItem
     else if (pDoc->HasData(nCol, nRow, nTab))
     {
         rData.SetString(aDocStr);
+    }
+}
+
+void getItemValue(
+    ScDPItemData& rData, const Reference<sdbc::XRow>& xRow, sal_Int32 nType,
+    long nCol, const Date& rNullDate, short& rNumType)
+{
+    rNumType = NUMBERFORMAT_NUMBER;
+    try
+    {
+        double fValue = 0.0;
+        switch (nType)
+        {
+            case sdbc::DataType::BIT:
+            case sdbc::DataType::BOOLEAN:
+            {
+                rNumType = NUMBERFORMAT_LOGICAL;
+                fValue  = xRow->getBoolean(nCol) ? 1 : 0;
+                rData.SetValue(fValue);
+                break;
+            }
+            case sdbc::DataType::TINYINT:
+            case sdbc::DataType::SMALLINT:
+            case sdbc::DataType::INTEGER:
+            case sdbc::DataType::BIGINT:
+            case sdbc::DataType::FLOAT:
+            case sdbc::DataType::REAL:
+            case sdbc::DataType::DOUBLE:
+            case sdbc::DataType::NUMERIC:
+            case sdbc::DataType::DECIMAL:
+            {
+                //! do the conversion here?
+                fValue = xRow->getDouble(nCol);
+                rData.SetValue(fValue);
+                break;
+            }
+            case sdbc::DataType::DATE:
+            {
+                rNumType = NUMBERFORMAT_DATE;
+
+                util::Date aDate = xRow->getDate(nCol);
+                fValue = Date(aDate.Day, aDate.Month, aDate.Year) - rNullDate;
+                rData.SetValue(fValue);
+                break;
+            }
+            case sdbc::DataType::TIME:
+            {
+                rNumType = NUMBERFORMAT_TIME;
+
+                util::Time aTime = xRow->getTime(nCol);
+                fValue = ( aTime.Hours * 3600 + aTime.Minutes * 60 +
+                           aTime.Seconds + aTime.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                rData.SetValue(fValue);
+                break;
+            }
+            case sdbc::DataType::TIMESTAMP:
+            {
+                rNumType = NUMBERFORMAT_DATETIME;
+
+                util::DateTime aStamp = xRow->getTimestamp(nCol);
+                fValue = ( Date( aStamp.Day, aStamp.Month, aStamp.Year ) - rNullDate ) +
+                         ( aStamp.Hours * 3600 + aStamp.Minutes * 60 +
+                           aStamp.Seconds + aStamp.HundredthSeconds / 100.0 ) / D_TIMEFACTOR;
+                rData.SetValue(fValue);
+                break;
+            }
+            case sdbc::DataType::CHAR:
+            case sdbc::DataType::VARCHAR:
+            case sdbc::DataType::LONGVARCHAR:
+            case sdbc::DataType::SQLNULL:
+            case sdbc::DataType::BINARY:
+            case sdbc::DataType::VARBINARY:
+            case sdbc::DataType::LONGVARBINARY:
+            default:
+                rData.SetString(xRow->getString(nCol));
+        }
+    }
+    catch (uno::Exception&)
+    {
     }
 }
 
