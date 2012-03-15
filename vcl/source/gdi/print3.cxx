@@ -773,7 +773,7 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
     PrinterController::PageSize aPageSize;
     aPageSize.aSize = mpPrinter->GetPaperSize();
     awt::Size aSetSize, aIsSize;
-    sal_Int32 nPaperBin = (mnFixedPaperBin != -1) ? mnFixedPaperBin : mnDefaultPaperBin;
+    sal_Int32 nPaperBin = mnDefaultPaperBin;
     for( sal_Int32 nProperty = 0, nPropertyCount = i_rProps.getLength(); nProperty < nPropertyCount; ++nProperty )
     {
         if( i_rProps[ nProperty ].Name.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "PreferredPageSize" ) ) )
