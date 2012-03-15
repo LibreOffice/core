@@ -345,6 +345,7 @@ void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer )
 
 void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
 {
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "id" ), "%u", GetFrmId() );
     if ( GetNext( ) )
         xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "next" ), "%u", GetNext()->GetFrmId() );
@@ -378,6 +379,7 @@ void SwAnchoredObject::dumpAsXml( xmlTextWriterPtr writer )
         writer = lcl_createDefaultWriter();
 
     xmlTextWriterStartElement( writer, BAD_CAST( getElementName() ) );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
     xmlTextWriterEndElement( writer );
 
     if ( bCreateWriter )
