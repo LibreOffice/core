@@ -1811,7 +1811,7 @@ void ScInputHandler::UpdateActiveView()
     else
         pTableView = NULL;
 
-    if (pInputWin && pInputWin->IsInputActive())
+    if (pInputWin && eMode == SC_INPUT_TOP )
         pTopView = pInputWin->GetEditView();
     else
         pTopView = NULL;
