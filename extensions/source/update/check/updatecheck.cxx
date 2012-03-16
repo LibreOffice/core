@@ -160,7 +160,7 @@ rtl::OUString getImageFromFileName(const rtl::OUString& aFile)
         oslProcessError rc = osl_executeProcess_WithRedirectedIO(
             aUnpackPath.pData,                                  // [in] Image name
             &aSystemPath.pData, 1,                              // [in] Arguments
-            osl_Process_WAIT || osl_Process_NORMAL,             // [in] Options
+            osl_Process_WAIT | osl_Process_NORMAL,              // [in] Options
             NULL,                                               // [in] Security
             NULL,                                               // [in] Working directory
             NULL, 0,                                            // [in] Environment variables
