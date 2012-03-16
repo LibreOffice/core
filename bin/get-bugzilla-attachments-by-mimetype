@@ -237,6 +237,7 @@ image_mimetypes = [
     ('image/gif', 'gif'),
     ('image/jpeg', 'jpeg'),
     ('image/png', 'png'),
+    ('image/cgm', 'cgm'),
 ]
 
 for (mimetype,extension) in mimetypes:
