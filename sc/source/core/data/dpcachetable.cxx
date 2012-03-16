@@ -64,15 +64,6 @@ using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 using ::com::sun::star::sheet::DataPilotFieldFilter;
 
-
-static sal_Bool lcl_HasQueryEntry( const ScQueryParam& rParam )
-{
-    return rParam.GetEntryCount() > 0 &&
-            rParam.GetEntry(0).bDoQuery;
-}
-
-// ----------------------------------------------------------------------------
-
 bool ScDPCacheTable::RowFlag::isActive() const
 {
     return mbShowByFilter && mbShowByPage;
@@ -186,9 +177,9 @@ void ScDPCacheTable::fillTable(
                     maRowFlags.back().mbShowByFilter = false;
                 }
 
-                if ( lcl_HasQueryEntry(rQuery) &&
-                    !getCache()->ValidQuery(nRow , rQuery) )
+                if (!getCache()->ValidQuery(nRow, rQuery))
                     continue;
+
                 if ( bIgnoreEmptyRows &&  getCache()->IsRowEmpty( nRow ) )
                     continue;
 

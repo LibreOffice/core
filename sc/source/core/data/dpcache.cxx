@@ -471,8 +471,12 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
 
 bool ScDPCache::ValidQuery( SCROW nRow, const ScQueryParam &rParam) const
 {
+    if (!rParam.GetEntryCount())
+        return true;
+
     if (!rParam.GetEntry(0).bDoQuery)
         return true;
+
     bool bMatchWholeCell = mpDoc->GetDocOptions().IsMatchWholeCell();
 
     SCSIZE nEntryCount = rParam.GetEntryCount();
