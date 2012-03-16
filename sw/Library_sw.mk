@@ -61,7 +61,6 @@ $(eval $(call gb_Library_add_linked_libs,sw,\
     i18nisolang1 \
     i18nutil \
     lng \
-    oox \
     sal \
     salhelper \
 	sax \
