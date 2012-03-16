@@ -1,0 +1,11 @@
+--- misc/build/nss-3.12.8/mozilla/security/nss/lib/softoken/secmodt.h.sav	2008-12-17 22:39:05.000000000 +0100
++++ misc/build/nss-3.12.8/mozilla/security/nss/lib/softoken/secmodt.h	2012-03-16 01:56:47.881621915 +0100
+@@ -338,7 +338,7 @@ typedef PRUint32 PK11AttrFlags;
+ #define SECMOD_SLOT_FLAGS "slotFlags=[RSA,DSA,DH,RC2,RC4,DES,RANDOM,SHA1,MD5,MD2,SSL,TLS,AES,Camellia,SEED,SHA256,SHA512]"
+ 
+ #define SECMOD_MAKE_NSS_FLAGS(fips,slot) \
+-"Flags=internal,critical"fips" slotparams=("#slot"={"SECMOD_SLOT_FLAGS"})"
++"Flags=internal,critical" fips " slotparams=(" #slot "={" SECMOD_SLOT_FLAGS "})"
+ 
+ #define SECMOD_INT_NAME "NSS Internal PKCS #11 Module"
+ #define SECMOD_INT_FLAGS SECMOD_MAKE_NSS_FLAGS("",1)
