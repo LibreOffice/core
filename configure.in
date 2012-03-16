@@ -4532,7 +4532,7 @@ _ACEOF
                 if test "$_os" = "Darwin"; then
                     gccvisbroken=no
                 else
-                    if $EGREP -q '@PLT' visibility.s; then
+                    if $EGREP -q '@PLT|@GOT' visibility.s; then
                         gccvisbroken=no
                     else
                         gccvisbroken=yes
