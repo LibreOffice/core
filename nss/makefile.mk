@@ -48,7 +48,7 @@ VER_PATCH=8
 TARFILE_NAME=nss-$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)-with-nspr-4.8.6
 TARFILE_MD5=71474203939fafbe271e1263e61d083e
 TARFILE_ROOTDIR=nss-$(VER_MAJOR).$(VER_MINOR).$(VER_PATCH)
-PATCH_FILES=nss.patch nss.aix.patch nss-config.patch nss-linux3.patch nss-clang_os_Linux_x86_s_comments.patch nss-string-concat.patch
+PATCH_FILES=nss.patch nss.aix.patch nss-config.patch nss-linux3.patch nss-clang_os_Linux_x86_s_comments.patch nss-clang_os_Linux_x86_64_s_comments.patch nss-string-concat.patch nss-asm-fix.patch
 
 .IF "$(OS)"=="MACOSX"
 PATCH_FILES+=nss_macosx.patch
