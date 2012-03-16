@@ -749,25 +749,12 @@ void Chart2Positioner::createPositionMap()
 
             for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol)
             {
-                if (bNoGlue || meGlue == GLUETYPE_ROWS)
+                pCol = static_cast<Table*>(pCols->Get(nInsCol));
+                if (!pCol)
                 {
-                    pCol = static_cast<Table*>(pCols->Get(nInsCol));
-                    if (!pCol)
-                    {
-                        pCol = pNewRowTable.get();
-                        pCols->Insert(nInsCol, pNewRowTable.release());
-                        pNewRowTable.reset(new Table);
-                    }
-                }
-                else
-                {
-                    pCol = static_cast<Table*>(pCols->Get(nInsCol));
-                    if (!pCol)
-                    {
-                        pCol = pNewRowTable.get();
-                        pCols->Insert(nInsCol, pNewRowTable.release());
-                        pNewRowTable.reset(new Table);
-                    }
+                    pCol = pNewRowTable.get();
+                    pCols->Insert(nInsCol, pNewRowTable.release());
+                    pNewRowTable.reset(new Table);
                 }
 
                 sal_uInt32 nInsRow = static_cast<sal_uInt32>(bNoGlue ? nNoGlueRow : nRow1);
