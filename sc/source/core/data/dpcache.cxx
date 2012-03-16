@@ -67,44 +67,6 @@ ScDPCache::GroupItems::GroupItems() {}
 ScDPCache::GroupItems::GroupItems(const ScDPNumGroupInfo& rInfo) :
     maInfo(rInfo) {}
 
-bool ScDPCache::operator== ( const ScDPCache& r ) const
-{
-    if ( GetColumnCount() == r.GetColumnCount() )
-    {
-        for ( SCCOL i = 0 ; i < GetColumnCount(); i++ )
-        {   //check dim names
-            if ( GetDimensionName( i ) != r.GetDimensionName( i ) )
-                return false;
-            //check rows count
-            if ( GetRowCount() != r.GetRowCount() )
-                return false;
-            //check dim member values
-            size_t nMembersCount = GetDimMemberValues( i ).size();
-            if ( GetDimMemberValues( i ).size() == r. GetDimMemberValues( i ).size() )
-            {
-                for ( size_t j = 0; j < nMembersCount; j++ )
-                {
-                    if (GetDimMemberValues(i)[j] == r.GetDimMemberValues(i)[j])
-                        continue;
-                    else
-                        return false;
-                }
-            }
-            else
-                return false;
-            //check source table index
-            for ( SCROW k=0 ; k < GetRowCount(); k ++ )
-            {
-                if ( GetItemDataId( i, k, false ) == r.GetItemDataId( i,k,false) )
-                    continue;
-                else
-                    return false;
-            }
-        }
-    }
-    return true;
-}
-
 ScDPCache::Field::Field() : mnNumFormat(0) {}
 
 ScDPCache::ScDPCache(ScDocument* pDoc) :

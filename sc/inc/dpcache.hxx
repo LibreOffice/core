@@ -152,8 +152,6 @@ public:
 
     const ScDPItemData* GetItemDataById( long nDim, SCROW nId ) const;
 
-    bool operator== ( const ScDPCache& r ) const;
-
     ScDPCache(ScDocument* pDoc);
     ~ScDPCache();
 
