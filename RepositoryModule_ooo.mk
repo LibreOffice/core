@@ -137,6 +137,7 @@ $(eval $(call gb_Module_add_moduledirs,ooo,\
 	$(if $(filter TRANSLATIONS,$(BUILD_TYPE)),\
 		translations \
 	) \
+	tubes \
     twain \
     ucb \
     ucbhelper \

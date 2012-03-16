@@ -1086,6 +1086,34 @@ $(call gb_LinkTarget_add_libs,$(1),$(DBUSMENUGTK_LIBS))
 
 endef
 
+
+ifeq ($(ENABLE_TELEPATHY),TRUE)
+
+define gb_LinkTarget__use_telepathy
+$(call gb_LinkTarget_set_include,$(1),\
+	$$(INCLUDE) \
+	$(TELEPATHY_CFLAGS) \
+)
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DENABLE_TELEPATHY \
+)
+
+$(call gb_LinkTarget_add_libs,$(1),\
+	$(TELEPATHY_LIBS) \
+)
+
+endef
+
+else # !ENABLE_TELEPATHY
+
+define gb_LinkTarget__use_telepathy
+
+endef
+
+endif # ENABLE_TELEPATHY
+
+
 ifeq ($(SYSTEM_DB),YES)
 
 define gb_LinkTarget__use_berkeleydb

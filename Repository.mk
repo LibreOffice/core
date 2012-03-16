@@ -361,6 +361,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     textfd \
     tk \
     tl \
+	tubes \
     unordf \
     unoxml \
     updatecheckui \

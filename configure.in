@@ -789,6 +789,11 @@ AC_ARG_ENABLE(gio,
         [Determines whether to use the GIO support.]),
 ,enable_gio=no)
 
+AC_ARG_ENABLE(telepathy,
+    AS_HELP_STRING([--enable-telepathy],
+        [Determines whether to enable Telepathy for collaboration.]),
+,enable_telepathy=no)
+
 AC_ARG_ENABLE(build-mozilla,
     AS_HELP_STRING([--disable-build-mozilla],
         [Use this option if you do not want to build the Mozilla components from
@@ -8948,6 +8953,31 @@ AC_SUBST(DBUS_LIBS)
 AC_SUBST([ENABLE_GTK_PRINT])
 AC_SUBST([GTK_PRINT_CFLAGS])
 AC_SUBST([GTK_PRINT_LIBS])
+
+
+dnl ===================================================================
+dnl Check whether the Telepathy libraries are available.
+dnl ===================================================================
+
+ENABLE_TELEPATHY=""
+TELEPATHY_CFLAGS=""
+TELEPATHY_LIBS=""
+
+AC_MSG_CHECKING([whether to enable Telepathy support])
+if test "$_os" != "WINNT" -a "$_os" != "Darwin" -a "$enable_telepathy" = "yes"; then
+    ENABLE_TELEPATHY="TRUE"
+    AC_MSG_RESULT([yes])
+    PKG_CHECK_MODULES( TELEPATHY, telepathy-glib >= 0.16.4 )
+else
+    AC_MSG_RESULT([no])
+fi
+
+AC_SUBST(ENABLE_TELEPATHY)
+AC_SUBST(TELEPATHY_CFLAGS)
+AC_SUBST(TELEPATHY_LIBS)
+
+
+dnl ===================================================================
 
 PKG_CHECK_MODULES( LIBPNG, libpng, ENABLE_QUICKSTART_LIBPNG="TRUE", ENABLE_QUICKSTART_LIBPNG="" )
 AC_SUBST(LIBPNG_LIBS)

@@ -1,0 +1,33 @@
+Interface to Telepathy Tubes.
+
+To enable configure LibO with --enable-telepathy
+
+Status 2012-03-16:
+
+* no LibO code depends on this module yet, so it is not built in a regular
+  build, even if configured with --enable-telepathy, so cd tubes and make here
+  * to enable the various SAL_INFO and SAL_WARN messages emitted during
+    cppunittest pass SAL_LOG=... and do a debug build
+  * SAL_LOG="+WARN+INFO.tubes" make -rs debug=true
+  * the cppunittest will currently fail anyway (even if it wouldn't for other
+    reasons), this is on purpose to be able to see the output as otherwise it
+    is silenced down ... :-(
+
+* for the cppunittest needed:
+  * a jabber daemon running on localhost.localdomain
+  * two accounts configured in Empathy
+    * libo1@localhost.localdomain
+    * libo2@localhost.localdomain
+  * libo1 and libo2 must be contacts/buddies of each other
+  * both accounts need to be online in Empathy
+
+* very nasty GMainLoop handling for cppunittest, MAYBE we could get rid of
+  that in a real LibO, this might be responsible for some ugly behaviour
+* contact channels seem to be successfully setup
+* the client's callback TeleManager_DBusChannelHandler setup with
+  TeleManager::connect() does not appear to get ever called
+* hence the tube offer triggered by TeleManager_ChannelReadyHandler is never
+  accepted
+* unsure if the uniquify setup with tp_simple_handler_new_with_factory() would
+  work at all, hence trying to have one instance un-uniquified, but to no
+  avail

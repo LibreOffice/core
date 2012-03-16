@@ -1,0 +1,188 @@
+/* -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+/*
+ * Version: MPL 1.1 / GPLv3+ / LGPLv3+
+ *
+ * The contents of this file are subject to the Mozilla Public License Version
+ * 1.1 (the "License"); you may not use this file except in compliance with
+ * the License or as specified alternatively below. You may obtain a copy of
+ * the License at http://www.mozilla.org/MPL/
+ *
+ * Software distributed under the License is distributed on an "AS IS" basis,
+ * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License
+ * for the specific language governing rights and limitations under the
+ * License.
+ *
+ * Major Contributor(s):
+ * Copyright (C) 2012 Red Hat, Inc., Eike Rathke <erack@redhat.com>
+ *
+ * All Rights Reserved.
+ *
+ * For minor contributions see the git repository.
+ *
+ * Alternatively, the contents of this file may be used under the terms of
+ * either the GNU General Public License Version 3 or later (the "GPLv3+"), or
+ * the GNU Lesser General Public License Version 3 or later (the "LGPLv3+"),
+ * in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
+ * instead of those above.
+ */
+
+#include <sal/precppunit.hxx>
+
+#include <tubes/manager.hxx>
+
+#include <cppunit/TestAssert.h>
+#include <cppunit/TestFixture.h>
+#include <cppunit/extensions/HelperMacros.h>
+#include <cppunit/plugin/TestPlugIn.h>
+#include <rtl/string.hxx>
+#include <rtl/ustring.hxx>
+
+namespace {
+
+class TestTeleTubes: public CppUnit::TestFixture
+{
+public:
+
+    TestTeleTubes();
+    ~TestTeleTubes();
+    void testSetupManager1();
+    void testSetupManager2();
+    void testConnect1();
+    void testConnect2();
+    void testPrepareAccountManager1();
+    void testPrepareAccountManager2();
+    void testStartBuddySession1();
+    void testStartBuddySession2();
+    void testSendPacket();
+    void testFlushLoops();
+    void testDestroyManager1();
+    void testDestroyManager2();
+    void testFailAlways();
+
+    // Order is significant.
+    CPPUNIT_TEST_SUITE( TestTeleTubes );
+    CPPUNIT_TEST( testSetupManager1 );
+    CPPUNIT_TEST( testSetupManager2 );
+    CPPUNIT_TEST( testConnect1 );
+    CPPUNIT_TEST( testConnect2 );
+    CPPUNIT_TEST( testPrepareAccountManager1 );
+    CPPUNIT_TEST( testPrepareAccountManager2 );
+    CPPUNIT_TEST( testStartBuddySession1 );
+    CPPUNIT_TEST( testStartBuddySession2 );
+    CPPUNIT_TEST( testSendPacket );
+    CPPUNIT_TEST( testFlushLoops );
+    CPPUNIT_TEST( testDestroyManager1 );
+    CPPUNIT_TEST( testDestroyManager2 );
+    CPPUNIT_TEST( testFailAlways );     // need failure to display SAL_LOG, comment out for real builds
+    CPPUNIT_TEST_SUITE_END();
+
+private:
+
+    void runSetupManager( TeleManager* pManager, const rtl::OUString& rBuddy );
+};
+
+// static, not members, so they actually survive cppunit test iteration
+static TeleManager* mpManager1 = NULL;
+static TeleManager* mpManager2 = NULL;
+
+// XXX The accounts need to be setup in Empathy and a jabber daemon needs
+// to be running on localhost.localdomain and both accounts need to be
+// enabled and connected.
+static rtl::OUString sAcc1( RTL_CONSTASCII_USTRINGPARAM( "libo1@localhost.localdomain"));
+static rtl::OUString sAcc2( RTL_CONSTASCII_USTRINGPARAM( "libo2@localhost.localdomain"));
+static rtl::OUString sService( RTL_CONSTASCII_USTRINGPARAM( "TeleTest"));
+
+TestTeleTubes::TestTeleTubes()
+{
+}
+
+TestTeleTubes::~TestTeleTubes()
+{
+}
+
+void TestTeleTubes::testSetupManager1()
+{
+    mpManager1 = new TeleManager( sAcc1, sService, true);
+}
+
+void TestTeleTubes::testSetupManager2()
+{
+    mpManager2 = new TeleManager( sAcc2, sService);
+}
+
+void TestTeleTubes::testPrepareAccountManager1()
+{
+    mpManager1->prepareAccountManager();
+    TeleManager::AccountManagerStatus eStatus = mpManager1->getAccountManagerStatus();
+    CPPUNIT_ASSERT( eStatus == TeleManager::AMS_PREPARED);
+}
+
+void TestTeleTubes::testPrepareAccountManager2()
+{
+    mpManager2->prepareAccountManager();
+    TeleManager::AccountManagerStatus eStatus = mpManager2->getAccountManagerStatus();
+    CPPUNIT_ASSERT( eStatus == TeleManager::AMS_PREPARED);
+}
+
+void TestTeleTubes::testStartBuddySession1()
+{
+    bool bStarted = mpManager1->startBuddySession( sAcc2);
+    CPPUNIT_ASSERT( bStarted == true);
+}
+
+void TestTeleTubes::testStartBuddySession2()
+{
+    bool bStarted = mpManager2->startBuddySession( sAcc1);
+    CPPUNIT_ASSERT( bStarted == true);
+}
+
+void TestTeleTubes::testConnect1()
+{
+    bool bConnected = mpManager1->connect();
+    CPPUNIT_ASSERT( bConnected == true);
+}
+
+void TestTeleTubes::testConnect2()
+{
+    bool bConnected = mpManager2->connect();
+    CPPUNIT_ASSERT( bConnected == true);
+}
+
+void TestTeleTubes::testSendPacket()
+{
+    TelePacket aPacket( "", RTL_CONSTASCII_STRINGPARAM( "from 1 to 2"));
+    bool bPacketSent = mpManager1->sendPacket( aPacket);
+    CPPUNIT_ASSERT( bPacketSent == true);
+}
+
+void TestTeleTubes::testFlushLoops()
+{
+    mpManager1->flushLoop();
+    mpManager2->flushLoop();
+}
+
+void TestTeleTubes::testDestroyManager1()
+{
+    delete mpManager1;
+    mpManager1 = NULL;
+}
+
+void TestTeleTubes::testDestroyManager2()
+{
+    delete mpManager2;
+    mpManager2 = NULL;
+}
+
+void TestTeleTubes::testFailAlways()
+{
+    CPPUNIT_ASSERT( false);
+}
+
+
+CPPUNIT_TEST_SUITE_REGISTRATION( TestTeleTubes);
+
+}
+
+CPPUNIT_PLUGIN_IMPLEMENT();
+
+/* vim:set shiftwidth=4 softtabstop=4 expandtab: */
