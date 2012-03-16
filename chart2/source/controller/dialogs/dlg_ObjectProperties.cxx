@@ -160,7 +160,10 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         }
     }
 
-    if( OBJECTTYPE_DATA_ERRORS == m_eObjectType )
+    if( OBJECTTYPE_DATA_ERRORS == m_eObjectType ||
+            m_eObjectType == OBJECTTYPE_DATA_ERRORS_X ||
+            m_eObjectType == OBJECTTYPE_DATA_ERRORS_Y ||
+            m_eObjectType == OBJECTTYPE_DATA_ERRORS_Z)
         m_bHasStatisticProperties = true;
 
     if( OBJECTTYPE_AXIS == m_eObjectType )
