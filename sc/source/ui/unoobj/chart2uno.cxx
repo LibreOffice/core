@@ -717,7 +717,6 @@ void Chart2Positioner::createPositionMap()
     bool bNoGlue = (meGlue == GLUETYPE_NONE);
     SAL_WNODEPRECATED_DECLARATIONS_PUSH
     auto_ptr<Table> pCols(new Table);
-    auto_ptr<Table> pNewRowTable(new Table);
     SAL_WNODEPRECATED_DECLARATIONS_POP
     Table* pCol = NULL;
     SCROW nNoGlueRow = 0;
@@ -752,9 +751,8 @@ void Chart2Positioner::createPositionMap()
                 pCol = static_cast<Table*>(pCols->Get(nInsCol));
                 if (!pCol)
                 {
-                    pCol = pNewRowTable.get();
-                    pCols->Insert(nInsCol, pNewRowTable.release());
-                    pNewRowTable.reset(new Table);
+                    pCol = new Table;
+                    pCols->Insert(nInsCol, pCol);
                 }
 
                 sal_uInt32 nInsRow = static_cast<sal_uInt32>(bNoGlue ? nNoGlueRow : nRow1);
@@ -773,7 +771,7 @@ void Chart2Positioner::createPositionMap()
                     if (pCol->Get(nInsRow) == NULL)
                     {
                         if (bExternal)
-                            pCol->Insert(nInsRow, new ScExternalSingleRefToken(nFileId, aTabName, aCellData))
+                            pCol->Insert(nInsRow, new ScExternalSingleRefToken(nFileId, aTabName, aCellData));
                         else
                             pCol->Insert(nInsRow, new ScSingleRefToken(aCellData));
                     }
@@ -782,7 +780,6 @@ void Chart2Positioner::createPositionMap()
         }
         nNoGlueRow += nRow2 - nRow1 + 1;
     }
-    pNewRowTable.reset(NULL);
 
     bool bFillRowHeader = mbRowHeaders;
     bool bFillColumnHeader = mbColHeaders;
