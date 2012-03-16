@@ -30,7 +30,7 @@
 // this includes no link dependency
 #include <svl/solar.hrc>
 
-//next free is 295
+//next free is 297
 //single free: 139
 
 //-----------------------------------------------------------------------------
@@ -179,7 +179,9 @@
 #define STR_OBJECT_FOR_ALL_SERIES           (RID_APP_START + 289)
 
 #define STR_OBJECT_AVERAGE_LINE             (RID_APP_START + 174)
-#define STR_OBJECT_ERROR_BARS               (RID_APP_START + 175)
+#define STR_OBJECT_ERROR_BARS_X             (RID_APP_START + 175)
+#define STR_OBJECT_ERROR_BARS_Y             (RID_APP_START + 295)
+#define STR_OBJECT_ERROR_BARS_Z             (RID_APP_START + 296)
 #define STR_OBJECT_CURVE                    (RID_APP_START + 176)
 #define STR_OBJECT_CURVES                   (RID_APP_START + 130)
 

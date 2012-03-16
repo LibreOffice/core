@@ -484,7 +484,8 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
     {
         UndoLiveUpdateGuard aUndoGuard(
             ActionDescriptionProvider::createDescription(
-                ActionDescriptionProvider::INSERT, String( SchResId( STR_OBJECT_ERROR_BARS ))),
+                ActionDescriptionProvider::INSERT,
+                String( SchResId( bYError ? STR_OBJECT_ERROR_BARS_Y : STR_OBJECT_ERROR_BARS_X ))),
             m_xUndoManager );
 
         // add error bars with standard deviation

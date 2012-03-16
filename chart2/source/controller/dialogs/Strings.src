@@ -331,9 +331,19 @@ String STR_OBJECT_CURVE_EQUATION
     Text[ en-US ] = "Equation";
 };
 
-String STR_OBJECT_ERROR_BARS
+String STR_OBJECT_ERROR_BARS_X
 {
-    Text [ en-US ] = "Error Bars";
+    Text [ en-US ] = "X Error Bars";
+};
+
+String STR_OBJECT_ERROR_BARS_Y
+{
+    Text [ en-US ] = "Y Error Bars";
+};
+
+String STR_OBJECT_ERROR_BARS_Z
+{
+    Text [ en-US ] = "Z Error Bars";
 };
 String STR_OBJECT_STOCK_LOSS
 {

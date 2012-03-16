@@ -723,7 +723,7 @@ bool ChartController::executeDispatch_Delete()
                     // using assignment for broken gcc 3.3
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
-                            ActionDescriptionProvider::DELETE, String( SchResId( STR_OBJECT_ERROR_BARS ))),
+                            ActionDescriptionProvider::DELETE, String( SchResId( STR_OBJECT_ERROR_BARS_Y ))),
                         m_xUndoManager );
                     {
                         ControllerLockGuard aCtlLockGuard( xModel );
