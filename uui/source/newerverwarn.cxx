@@ -113,7 +113,7 @@ IMPL_LINK_NOARG(NewerVersionWarningDialog, UpdateHdl)
             if ( xSystemShell.is() && !sNotifyURL.isEmpty() )
             {
                 xSystemShell->execute(
-                    sNotifyURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                    sNotifyURL, ::rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
             }
         }
         else

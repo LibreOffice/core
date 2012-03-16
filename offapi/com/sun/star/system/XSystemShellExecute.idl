@@ -65,8 +65,10 @@ published interface XSystemShellExecute: com::sun::star::uno::XInterface
         avoid showing system error messages, in case of failures, etc.
 
         @throws com::sun::star::lang::IllegalArgumentException
-        when the specified flags are wrong or exclude each other.
-.
+        when the specified flags are wrong or exclude each other; also thrown,
+        with an ArgumentPosition of 0, when nFlags contains URIS_ONLY and
+        aCommand is not an absolute URI reference
+
         @throws com::sun::star::sys::SystemExecuteException
         in the case of errors when trying to executed the specified command.
 

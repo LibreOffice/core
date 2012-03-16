@@ -63,7 +63,7 @@
 
 #define MSG_QUERY_OPENASTEMPLATE            (RID_SFX_VIEW_START+41)
 #define MSG_CANT_CLOSE                      (RID_SFX_VIEW_START+42)
-#define MSG_ERROR_NO_WEBBROWSER_FOUND       (RID_SFX_VIEW_START+43)
+
 #define TP_FRAMEPROPERTIES                  (RID_SFX_VIEW_START+44)
 
 #define FT_FRAMENAME                    3

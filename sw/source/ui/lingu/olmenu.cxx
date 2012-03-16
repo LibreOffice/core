@@ -844,7 +844,7 @@ void SwSpellPopup::Execute( sal_uInt16 nId )
                 ::comphelper::getProcessServiceFactory()->createInstance(
                     DEFINE_CONST_UNICODE("com.sun.star.system.SystemShellExecute") ), uno::UNO_QUERY_THROW );
             xSystemShellExecute->execute( sExplanationLink, rtl::OUString(),
-                    com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+                    com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
         }
         catch (const uno::Exception&)
         {

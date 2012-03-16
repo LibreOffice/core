@@ -634,7 +634,7 @@ void DialogHelper::openWebBrowser( const OUString & sURL, const OUString &sTitle
         uno::Reference< XSystemShellExecute > xSystemShellExecute(
             m_xContext->getServiceManager()->createInstanceWithContext( OUSTR( "com.sun.star.system.SystemShellExecute" ), m_xContext), uno::UNO_QUERY_THROW);
         //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
-        xSystemShellExecute->execute( sURL, OUString(),  SystemShellExecuteFlags::DEFAULTS );
+        xSystemShellExecute->execute( sURL, OUString(),  SystemShellExecuteFlags::URIS_ONLY );
     }
     catch ( const uno::Exception& )
     {

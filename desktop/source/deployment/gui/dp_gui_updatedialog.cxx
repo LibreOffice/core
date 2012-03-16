@@ -1419,7 +1419,7 @@ IMPL_LINK( UpdateDialog, hyperlink_clicked, svt::FixedHyperlink*, pHyperlink )
                 m_context), uno::UNO_QUERY_THROW);
         //throws lang::IllegalArgumentException, system::SystemShellExecuteException
         xSystemShellExecute->execute(
-                                     sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS);
+                                     sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
     }
     catch ( const uno::Exception& )
     {

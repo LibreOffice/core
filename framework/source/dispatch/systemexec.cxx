@@ -192,7 +192,7 @@ void SAL_CALL SystemExec::dispatchWithNotification( const css::util::URL&       
             xFactory->createInstance(SERVICENAME_SYSTEMSHELLEXECUTE),
             css::uno::UNO_QUERY_THROW);
 
-        xShell->execute(sSystemURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::DEFAULTS);
+        xShell->execute(sSystemURL, ::rtl::OUString(), css::system::SystemShellExecuteFlags::URIS_ONLY);
         impl_notifyResultListener(xListener, css::frame::DispatchResultState::SUCCESS);
     }
     catch(const css::uno::Exception&)

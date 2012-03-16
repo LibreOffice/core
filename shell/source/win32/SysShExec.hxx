@@ -36,6 +36,7 @@
 #include <cppuhelper/compbase2.hxx>
 #include <osl/mutex.hxx>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/uno/XComponentContext.hpp>
 
 #include <com/sun/star/system/XSystemShellExecute.hpp>
 
@@ -55,8 +56,11 @@ class CSysShExec :
             com::sun::star::system::XSystemShellExecute,
             com::sun::star::lang::XServiceInfo >
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
+    m_xContext;
+
 public:
-    CSysShExec( );
+    CSysShExec(const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& xContext);
 
     //------------------------------------------------
     // XSystemShellExecute
