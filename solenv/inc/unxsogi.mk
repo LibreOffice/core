@@ -78,16 +78,17 @@ LINK*=$(CXX)
 LINKC*=$(CC)
 
 LINKFLAGS=
-LINKFLAGSAPPGUI=-Wl,-export-dynamic
+#LINKFLAGSAPPGUI=-Wl,-export-dynamic
 LINKFLAGSSHLGUI=-shared
-LINKFLAGSAPPCUI=-Wl,-export-dynamic
+#LINKFLAGSAPPCUI=-Wl,-export-dynamic
 LINKFLAGSSHLCUI=-shared
 LINKFLAGSTACK=
 LINKFLAGSPROF=
 LINKFLAGSDEBUG=-g
 LINKFLAGSOPT=
 
-LINKVERSIONMAPFLAG=-Wl,--version-script
+#LINKVERSIONMAPFLAG=-Wl,--version-script
+LINKVERSIONMAPFLAG=-Wl,-M
 
 # enable visibility define in "sal/types.h"
 .IF "$(HAVE_GCC_VISIBILITY_FEATURE)" == "TRUE"
