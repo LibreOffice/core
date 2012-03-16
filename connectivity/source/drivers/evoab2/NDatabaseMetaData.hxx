@@ -64,7 +64,6 @@ namespace connectivity
         const SplitEvoColumns* get_evo_addr();
 
         const ColumnProperty *getField(guint n);
-        guint                 getFieldCount() ;
         GType                 getGFieldType(guint nCol) ;
         sal_Int32             getFieldType(guint nCol) ;
         rtl::OUString         getFieldTypeName(guint nCol) ;

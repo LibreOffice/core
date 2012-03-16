@@ -65,7 +65,6 @@ namespace connectivity
                 {  }
 
             OConnection* getConnection() const { return m_pConnection; }
-            void describeParam(::rtl::Reference<OSQLColumns> rParameterColumns); // More detailed description of parameters
             ::std::vector<sal_Int32>* bindEvaluationRow(OValueRefRow& _pRow); // Bind an evaluation row to the restriction
             /** bind the select columns if they contain a function which needs a row value
                 @param  _pRow   the result row
@@ -81,7 +80,6 @@ namespace connectivity
 
             void dispose();
             void start(OSQLParseNode* pSQLParseNode);
-            void clean();
             virtual sal_Bool hasRestriction() const;
             virtual sal_Bool hasFunctions() const;
             inline sal_Bool evaluateRestriction()   { return m_aInterpreter->start(); }

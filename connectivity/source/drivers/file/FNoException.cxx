@@ -66,11 +66,6 @@ void OPredicateCompiler::Clean()
     m_aCodeList.clear();
 }
 // -----------------------------------------------------------------------------
-void OSQLAnalyzer::clean()
-{
-    m_aCompiler->Clean();
-}
-// -----------------------------------------------------------------------------
 void OSQLAnalyzer::bindParameterRow(OValueRefRow& _pRow)
 {
     OCodeList& rCodeList    = m_aCompiler->m_aCodeList;

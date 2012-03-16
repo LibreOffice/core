@@ -809,10 +809,6 @@ connectivity::OSQLParseNodesContainer::empty() const
 connectivity::OSQLScanner::GetCurrentRule() const
 connectivity::OSortIndex::GetValue(int) const
 connectivity::SQLError::getSQLState(int) const
-connectivity::evoab::OCommonStatement::reset()
-connectivity::evoab::getFieldCount()
-connectivity::file::OSQLAnalyzer::clean()
-connectivity::file::OSQLAnalyzer::describeParam(rtl::Reference<connectivity::ORefVector<com::sun::star::uno::Reference<com::sun::star::beans::XPropertySet> > >)
 connectivity::file::OStatement_Base::reset()
 connectivity::file::OStatement_Base::setWarning(com::sun::star::sdbc::SQLWarning const&)
 connectivity::mozab::MQuery::getAddressbook() const

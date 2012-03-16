@@ -163,18 +163,6 @@ void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException)
 }
 // -------------------------------------------------------------------------
 
-void OCommonStatement::reset() throw (SQLException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
-
-
-    clearWarnings ();
-
-    if (m_xResultSet.get().is())
-        clearMyResultSet();
-}
-
 void OCommonStatement::clearMyResultSet () throw (SQLException)
 {
     ::osl::MutexGuard aGuard( m_aMutex );
