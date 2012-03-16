@@ -62,7 +62,6 @@ endif
 ifeq ($(ENABLE_KDE4),TRUE)
 $(eval $(call gb_Module_add_targets,fpicker,\
 	Library_fps_kde4 \
-	Package_kde4_moc \
 ))
 endif
 endif
