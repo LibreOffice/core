@@ -154,7 +154,7 @@ public:
 };
 
 //========================================================================
-// class SvxColorToolBoxControl
+// class SvxLineEndToolBoxControl
 //========================================================================
 
 class SVX_DLLPUBLIC SvxLineEndToolBoxControl : public SfxToolBoxControl
