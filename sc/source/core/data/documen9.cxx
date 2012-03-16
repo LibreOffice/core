@@ -131,6 +131,7 @@ void ScDocument::TransferDrawPage(ScDocument* pSrcDoc, SCTAB nSrcPos, SCTAB nDes
     //  #71726# make sure the data references of charts are adapted
     //  (this must be after InsertObject!)
     ScChartHelper::AdjustRangesOfChartsOnDestinationPage( pSrcDoc, this, nSrcPos, nDestPos );
+    ScChartHelper::UpdateChartsOnDestinationPage(this, nDestPos);
 }
 
 void ScDocument::InitDrawLayer( SfxObjectShell* pDocShell )

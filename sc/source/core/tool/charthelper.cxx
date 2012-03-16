@@ -37,6 +37,7 @@
 #include <svx/svdpage.hxx>
 
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
+#include <com/sun/star/util/XModifiable.hpp>
 
 using namespace com::sun::star;
 using ::com::sun::star::uno::Reference;
@@ -172,6 +173,34 @@ void ScChartHelper::AdjustRangesOfChartsOnDestinationPage( ScDocument* pSrcDoc, 
                     }
                     pDestDoc->SetChartRanges( aChartName, aRangesVector );
                 }
+            }
+            pObject = aIter.Next();
+        }
+    }
+}
+
+//static
+void ScChartHelper::UpdateChartsOnDestinationPage( ScDocument* pDestDoc, const SCTAB nDestTab )
+{
+    if( !pDestDoc )
+        return;
+    ScDrawLayer* pDrawLayer = pDestDoc->GetDrawLayer();
+    if( !pDrawLayer )
+        return;
+
+    SdrPage* pDestPage = pDrawLayer->GetPage(static_cast<sal_uInt16>(nDestTab));
+    if( pDestPage )
+    {
+        SdrObjListIter aIter( *pDestPage, IM_FLAT );
+        SdrObject* pObject = aIter.Next();
+        while( pObject )
+        {
+            if( pObject->GetObjIdentifier() == OBJ_OLE2 && ((SdrOle2Obj*)pObject)->IsChart() )
+            {
+                String aChartName = ((SdrOle2Obj*)pObject)->GetPersistName();
+                Reference< chart2::XChartDocument > xChartDoc( pDestDoc->GetChartByName( aChartName ) );
+                Reference< util::XModifiable > xModif(xChartDoc, uno::UNO_QUERY_THROW);
+                xModif->setModified( sal_True);
             }
             pObject = aIter.Next();
         }
