@@ -49,7 +49,6 @@ $(eval $(call gb_Jar_add_jars,OOoRunner,\
 
 $(eval $(call gb_Jar_set_packageroot,OOoRunner,\
 	base \
-	basicrunner \
 	complex \
 	complexlib \
 	convwatch \
@@ -65,23 +64,11 @@ $(eval $(call gb_Jar_set_packageroot,OOoRunner,\
 ))
 
 $(eval $(call gb_Jar_add_sourcefiles,OOoRunner,\
-    qadevOOo/runner/base/basic_fat \
     qadevOOo/runner/base/java_cmp \
     qadevOOo/runner/base/java_complex \
     qadevOOo/runner/base/java_fat \
     qadevOOo/runner/base/java_fat_service \
     qadevOOo/runner/base/TestBase \
-    qadevOOo/runner/basicrunner/BasicException \
-    qadevOOo/runner/basicrunner/BasicHandler \
-    qadevOOo/runner/basicrunner/BasicHandlerProvider \
-    qadevOOo/runner/basicrunner/basichelper/AttributeList \
-    qadevOOo/runner/basicrunner/basichelper/Connector \
-    qadevOOo/runner/basicrunner/basichelper/DispatchProviderInterceptor \
-    qadevOOo/runner/basicrunner/basichelper/DocumentHandler \
-    qadevOOo/runner/basicrunner/basichelper/Filter \
-    qadevOOo/runner/basicrunner/basichelper/ThreadRunner \
-    qadevOOo/runner/basicrunner/BasicIfcTest \
-    qadevOOo/runner/basicrunner/BasicTestCase \
     qadevOOo/runner/complexlib/Assurance \
     qadevOOo/runner/complexlib/ComplexTestCase \
     qadevOOo/runner/complexlib/MethodThread \
