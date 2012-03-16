@@ -306,7 +306,7 @@ sal_Bool KDESalGraphics::drawNativeControl( ControlType type, ControlPart part,
         draw( QStyle::CE_PushButton, &option, m_image,
               vclStateValue2StateFlag(nControlState, value) );
     }
-    else if ( (type == CTRL_MENUBAR))
+    else if (type == CTRL_MENUBAR)
     {
         if (part == PART_MENU_ITEM)
         {
