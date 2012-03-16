@@ -33,9 +33,11 @@
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <rtl/oustringostreaminserter.hxx>
 #include <test/bootstrapfixture.hxx>
@@ -64,6 +66,7 @@ public:
     void testFdo46662();
     void testN750757();
     void testFdo45563();
+    void testFdo43965();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -76,6 +79,7 @@ public:
     CPPUNIT_TEST(testFdo46662);
     CPPUNIT_TEST(testN750757);
     CPPUNIT_TEST(testFdo45563);
+    CPPUNIT_TEST(testFdo43965);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -337,6 +341,37 @@ void RtfModelTest::testFdo45563()
         i++;
     }
     CPPUNIT_ASSERT_EQUAL(4, i);
+}
+
+void RtfModelTest::testFdo43965()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo43965.rtf")));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+
+    // First paragraph: the parameter of \up was ignored
+    uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
+    uno::Reference<beans::XPropertySet> xPropertySet(xRangeEnum->nextElement(), uno::UNO_QUERY);
+    sal_Int32 nValue;
+    xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharEscapement"))) >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(58), nValue);
+    xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharEscapementHeight"))) >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(100), nValue);
+
+    // Second paragraph: Word vs Writer border default problem
+    xPropertySet.set(xParaEnum->nextElement(), uno::UNO_QUERY);
+    table::BorderLine2 aBorder;
+    xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TopBorder"))) >>= aBorder;
+    CPPUNIT_ASSERT_EQUAL(sal_uInt32(26), aBorder.LineWidth);
+
+    // Finally, make sure that we have two pages
+    uno::Reference<frame::XModel> xModel(mxComponent, uno::UNO_QUERY);
+    uno::Reference<text::XTextViewCursorSupplier> xTextViewCursorSupplier(xModel->getCurrentController(), uno::UNO_QUERY);
+    uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
+    xCursor->jumpToLastPage();
+    CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
