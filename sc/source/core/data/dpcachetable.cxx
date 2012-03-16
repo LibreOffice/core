@@ -161,6 +161,7 @@ void ScDPCacheTable::fillTable(
     // Data rows
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
+        maFieldEntries.push_back( vector<SCROW>() );
         SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
         if ( nMemCount )
         {
@@ -188,7 +189,6 @@ void ScDPCacheTable::fillTable(
 
                 aAdded[nOrder] = nIndex;
             }
-            maFieldEntries.push_back( vector<SCROW>() );
             for ( SCROW nRow = 0; nRow < nMemCount; nRow++ )
             {
                 if ( aAdded[nRow] != -1 )
@@ -216,6 +216,7 @@ void ScDPCacheTable::fillTable()
     // Data rows
     for (SCCOL nCol = 0; nCol < nColCount; ++nCol)
     {
+        maFieldEntries.push_back( vector<SCROW>() );
         SCROW nMemCount = getCache()->GetDimMemberCount( nCol );
         if ( nMemCount )
         {
@@ -234,7 +235,6 @@ void ScDPCacheTable::fillTable()
 
                 pAdded[nOrder] = nIndex;
             }
-            maFieldEntries.push_back( vector<SCROW>() );
             for ( SCROW nRow = 0; nRow < nMemCount; nRow++ )
             {
                 if ( pAdded[nRow] != -1 )
