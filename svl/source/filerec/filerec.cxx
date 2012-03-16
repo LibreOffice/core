@@ -31,10 +31,6 @@
 
 //========================================================================
 
-SV_IMPL_VARARR( SfxUINT32s, sal_uInt32 );
-
-//========================================================================
-
 /*  Die folgenden Makros extrahieren Teilbereiche aus einem sal_uInt32 Wert.
     Diese sal_uInt32-Werte werden anstelle der einzelnen Werte gestreamt,
     um Calls zu sparen.
@@ -487,9 +483,10 @@ void SfxMultiVarRecordWriter::FlushContent_Impl()
 {
     // Versions-Kennung und Positions-Offset des aktuellen Contents merken;
     // das Positions-Offset ist relativ zur Startposition des ersten Contents
-    _aContentOfs.Insert(
-            SFX_REC_CONTENT_HEADER(_nContentVer,_nStartPos,_nContentStartPos),
-            _nContentCount-1 );
+    assert(_aContentOfs.size() == _nContentCount-1);
+    _aContentOfs.resize(_nContentCount-1);
+    _aContentOfs.push_back(
+            SFX_REC_CONTENT_HEADER(_nContentVer,_nStartPos,_nContentStartPos));
 }
 
 //-------------------------------------------------------------------------
@@ -525,13 +522,8 @@ sal_uInt32 SfxMultiVarRecordWriter::Close( bool bSeekToEndOfRec )
         // Content-Offset-Tabelle schreiben
         sal_uInt32 nContentOfsPos = _pStream->Tell();
         //! darf man das so einr"ucken?
-        #if defined(OSL_LITENDIAN)
-            _pStream->Write( _aContentOfs.GetData(),
-                             sizeof(sal_uInt32)*_nContentCount );
-        #else
-            for ( sal_uInt16 n = 0; n < _nContentCount; ++n )
-                *_pStream << sal_uInt32(_aContentOfs[n]);
-        #endif
+        for ( sal_uInt16 n = 0; n < _nContentCount; ++n )
+            *_pStream << _aContentOfs[n];
 
         // SfxMultiFixRecordWriter::Close() "uberspringen!
         sal_uInt32 nEndPos = SfxSingleRecordWriter::Close( sal_False );

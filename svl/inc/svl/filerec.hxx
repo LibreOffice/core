@@ -34,9 +34,7 @@
 #include "svl/svldllapi.h"
 #include <tools/debug.hxx>
 #include <tools/stream.hxx>
-#include <svl/svarray.hxx>
-
-SV_DECL_VARARR( SfxUINT32s, sal_uInt32, 8 )
+#include <vector>
 
 //------------------------------------------------------------------------
 
@@ -516,7 +514,7 @@ class SVL_DLLPUBLIC SfxMultiVarRecordWriter: public SfxMultiFixRecordWriter
 
 {
 protected:
-    SfxUINT32s          _aContentOfs;
+    std::vector<sal_uInt32> _aContentOfs;
     sal_uInt16              _nContentVer;   // nur f"ur SfxMultiMixRecordWriter
 
                         SfxMultiVarRecordWriter( sal_uInt8 nRecordType,
