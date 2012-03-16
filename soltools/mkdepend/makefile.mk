@@ -76,7 +76,7 @@ APP1RPATH=NONE
 APP1STDLIBS+=msvcprt.lib
 .ENDIF                        # "$(COM)"=="MSC"
 
-.IF "$(OS)"=="SOLARIS"
+.IF "$(OS)$(COM)"=="SOLARISC52"
 #APP1STDLIBS+=-lstlport
 APP1STDLIBS+=-lCstd
 .ENDIF
