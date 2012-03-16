@@ -34,6 +34,7 @@
 #include "oox/helper/helper.hxx"
 #include "oox/token/namespaces.hxx"
 #include "oox/token/tokens.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
 
@@ -42,7 +43,7 @@ namespace oox {
 /** Static helpers for conversion of strings to attribute values of various
     different data types.
  */
-class AttributeConversion
+class OOX_DLLPUBLIC AttributeConversion
 {
 public:
     /** Returns the XML token identifier from the passed string. */
@@ -76,7 +77,7 @@ public:
     convenience functions that convert the string value of an attribute to
     various other data types.
  */
-class AttributeList
+class OOX_DLLPUBLIC AttributeList
 {
 public:
     explicit            AttributeList(

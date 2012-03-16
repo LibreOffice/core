@@ -30,6 +30,7 @@
 #define OOX_VML_VMLFORMATTING_HXX
 
 #include "oox/helper/helper.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
     class GraphicHelper;
@@ -47,7 +48,7 @@ typedef ::std::pair< double, double >       DoublePair;
 
 // ============================================================================
 
-class ConversionHelper
+class OOX_DLLPUBLIC ConversionHelper
 {
 public:
     /** Returns two values contained in rValue separated by cSep.

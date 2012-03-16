@@ -28,7 +28,7 @@
 
 #include "oox/dump/pptxdumper.hxx"
 
-#include "oox/dump/biffdumper.hxx"
+//#include "oox/dump/biffdumper.hxx"
 #include "oox/dump/oledumper.hxx"
 #include "oox/dump/xlsbdumper.hxx"
 #include "oox/helper/zipstorage.hxx"
@@ -43,7 +43,7 @@ namespace pptx {
 // ============================================================================
 
 using namespace ::com::sun::star::io;
-using namespace ::com::sun::star::lang;
+//using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::uno;
 
 using ::comphelper::MediaDescriptor;
@@ -65,6 +65,7 @@ void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm,
     {
         Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
+#if FIXME
     else if(
         aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xlsb")) ||
         aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xlsm")) ||
@@ -84,6 +85,7 @@ void RootStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm,
     {
         ::oox::dump::biff::Dumper( getContext(), rxStrm, rSysFileName ).dump();
     }
+#endif
     else if(
         aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("xml")) ||
         aExt.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("vml")) ||

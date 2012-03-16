@@ -47,7 +47,7 @@ class BinaryOutputStream;
 
     The binary data in the stream is assumed to be in little-endian format.
  */
-class BinaryInputStream : public virtual BinaryStreamBase
+class OOX_DLLPUBLIC BinaryInputStream : public virtual BinaryStreamBase
 {
 public:
     /** Derived classes implement reading nBytes bytes to the passed sequence.
@@ -281,7 +281,7 @@ void BinaryInputStream::skipArray( sal_Int32 nElemCount )
 
     The binary data in the stream is assumed to be in little-endian format.
  */
-class BinaryXInputStream : public BinaryXSeekableStream, public BinaryInputStream
+class OOX_DLLPUBLIC BinaryXInputStream : public BinaryXSeekableStream, public BinaryInputStream
 {
 public:
     /** Constructs the wrapper object for the passed input stream.
@@ -333,7 +333,7 @@ private:
 
     The binary data in the stream is assumed to be in little-endian format.
  */
-class SequenceInputStream : public SequenceSeekableStream, public BinaryInputStream
+class OOX_DLLPUBLIC SequenceInputStream : public SequenceSeekableStream, public BinaryInputStream
 {
 public:
     /** Constructs the wrapper object for the passed data sequence.

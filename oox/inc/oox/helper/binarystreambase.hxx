@@ -32,6 +32,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <boost/shared_ptr.hpp>
 #include "oox/helper/helper.hxx"
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace io { class XSeekable; }
@@ -45,7 +46,7 @@ typedef ::com::sun::star::uno::Sequence< sal_Int8 > StreamDataSequence;
 
 /** Base class for binary stream classes.
  */
-class BinaryStreamBase
+class OOX_DLLPUBLIC BinaryStreamBase
 {
 public:
     virtual             ~BinaryStreamBase();
@@ -134,7 +135,7 @@ private:
 /** Base class for binary input and output streams wrapping a UNO stream,
     seekable via the com.sun.star.io.XSeekable interface.
  */
-class BinaryXSeekableStream : public virtual BinaryStreamBase
+class OOX_DLLPUBLIC BinaryXSeekableStream : public virtual BinaryStreamBase
 {
 public:
     virtual             ~BinaryXSeekableStream();
@@ -166,7 +167,7 @@ private:
     wrapper. The data sequence MUST NOT be changed from outside as long as this
     stream wrapper is used to modify it.
  */
-class SequenceSeekableStream : public virtual BinaryStreamBase
+class OOX_DLLPUBLIC SequenceSeekableStream : public virtual BinaryStreamBase
 {
 public:
     /** Returns the size of the wrapped data sequence. */

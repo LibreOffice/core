@@ -30,6 +30,7 @@
 #define OOX_DRAWINGML_THEMEFRAGMENTHANDLER_HXX
 
 #include "oox/core/fragmenthandler2.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
 namespace drawingml {
@@ -38,7 +39,7 @@ class Theme;
 
 // ============================================================================
 
-class ThemeFragmentHandler : public ::oox::core::FragmentHandler2
+class OOX_DLLPUBLIC ThemeFragmentHandler : public ::oox::core::FragmentHandler2
 {
 public:
     explicit            ThemeFragmentHandler(

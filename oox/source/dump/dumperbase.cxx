@@ -40,7 +40,7 @@
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/textinputstream.hxx"
-#include "oox/xls/biffhelper.hxx"
+//#include "oox/xls/biffhelper.hxx"
 
 #if OOX_INCLUDE_DUMPER
 
@@ -2388,7 +2388,11 @@ double OutputObjectBase::writeRkItem( const String& rName, sal_Int32 nRk )
 {
     MultiItemsGuard aMultiGuard( mxOut );
     writeHexItem( rName, static_cast< sal_uInt32 >( nRk ), "RK-FLAGS" );
+#if FIXME
     double fValue = ::oox::xls::BiffHelper::calcDoubleFromRk( nRk );
+#else
+    double fValue = 0.0;
+#endif
     writeDecItem( "decoded", fValue );
     return fValue;
 }

@@ -48,7 +48,7 @@ struct LineArrowProperties
 
 // ============================================================================
 
-struct LineProperties
+struct OOX_DLLPUBLIC LineProperties
 {
     typedef ::std::pair< sal_Int32, sal_Int32 > DashStop;
     typedef ::std::vector< DashStop >           DashStopVector;

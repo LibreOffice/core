@@ -35,6 +35,7 @@
 #include <rtl/ref.hxx>
 #include "oox/token/namespaces.hxx"
 #include "oox/token/tokens.hxx"
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace xml { namespace sax { class XLocator; } }
@@ -60,7 +61,7 @@ typedef ::boost::shared_ptr< FragmentBaseData > FragmentBaseDataRef;
 
 typedef ::cppu::WeakImplHelper1< ::com::sun::star::xml::sax::XFastContextHandler > ContextHandler_BASE;
 
-class ContextHandler : public ContextHandler_BASE
+class OOX_DLLPUBLIC ContextHandler : public ContextHandler_BASE
 {
 public:
     explicit            ContextHandler( const ContextHandler& rParent );

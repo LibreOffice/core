@@ -32,6 +32,7 @@
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/helper/binaryoutputstream.hxx"
 #include "oox/helper/refvector.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
 namespace ole {
@@ -52,7 +53,7 @@ const sal_Int32 AX_FONTDATA_RIGHT           = 2;
 const sal_Int32 AX_FONTDATA_CENTER          = 3;
 
 /** All entries of a font property. */
-struct AxFontData
+struct OOX_DLLPUBLIC AxFontData
 {
     ::rtl::OUString     maFontName;         /// Name of the used font.
     sal_uInt32          mnFontEffects;      /// Font effect flags.

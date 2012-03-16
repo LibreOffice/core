@@ -33,6 +33,7 @@
 #include <memory>
 #include <vector>
 #include <oox/ole/oleobjecthelper.hxx>
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
@@ -68,7 +69,7 @@ enum DrawingType
 // ============================================================================
 
 /** Contains information about an OLE object embedded in a draw page. */
-struct OleObjectInfo : public ::oox::ole::OleObjectInfo
+struct OOX_DLLPUBLIC OleObjectInfo : public ::oox::ole::OleObjectInfo
 {
     ::rtl::OUString     maShapeId;          /// Shape identifier for shape lookup.
     ::rtl::OUString     maName;             /// Programmatical name of the OLE object.
@@ -81,10 +82,10 @@ struct OleObjectInfo : public ::oox::ole::OleObjectInfo
     void                setShapeId( sal_Int32 nShapeId );
 };
 
-// ============================================================================
+// =========================================/===================================
 
 /** Contains information about a form control embedded in a draw page. */
-struct ControlInfo
+struct OOX_DLLPUBLIC ControlInfo
 {
     ::rtl::OUString     maShapeId;          /// Shape identifier for shape lookup.
     ::rtl::OUString     maFragmentPath;     /// Path to the fragment describing the form control properties.
@@ -99,7 +100,7 @@ struct ControlInfo
 // ============================================================================
 
 /** Represents the collection of VML shapes for a complete draw page. */
-class Drawing
+class OOX_DLLPUBLIC Drawing
 {
 public:
     explicit            Drawing(

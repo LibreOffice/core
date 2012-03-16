@@ -88,9 +88,6 @@
 #include <comphelper/processfactory.hxx>
 #include "SchXMLSeriesHelper.hxx"
 #include "ColorPropertySet.hxx"
-#include "oox/xls/formulaparser.hxx"
-#include "oox/xls/workbookhelper.hxx"
-#include "oox/xls/addressconverter.hxx"
 #include <set>
 #include <time.h>
 

@@ -42,6 +42,7 @@
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <vector>
 #include <map>
+#include "oox/dllapi.h"
 
 namespace oox { namespace vml {
     struct OleObjectInfo;
@@ -75,7 +76,7 @@ struct ChartShapeInfo
 
 // ============================================================================
 
-class Shape
+class OOX_DLLPUBLIC Shape
     : public boost::enable_shared_from_this< Shape >
 {
 public:

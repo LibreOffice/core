@@ -35,6 +35,7 @@
 #include <com/sun/star/uno/Sequence.hxx>
 #include <rtl/ustring.hxx>
 #include "oox/token/properties.hxx"
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star { namespace beans {
     struct PropertyValue;
@@ -56,7 +57,7 @@ typedef ::std::map< sal_Int32, ::com::sun::star::uno::Any > PropertyMapBase;
     name mapping is done internally while the properties are written to
     property sets.
  */
-class PropertyMap : public PropertyMapBase
+class OOX_DLLPUBLIC PropertyMap : public PropertyMapBase
 {
 public:
     explicit            PropertyMap();

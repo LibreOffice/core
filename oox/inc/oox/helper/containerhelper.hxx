@@ -33,6 +33,7 @@
 #include <vector>
 #include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/Sequence.h>
+#include "oox/dllapi.h"
 
 namespace rtl { class OUString; }
 
@@ -73,7 +74,7 @@ typedef ::std::vector< ValueRange > ValueRangeVector;
 /** An ordered list of value ranges. The insertion operation will merge
     consecutive value ranges.
  */
-class ValueRangeSet
+class OOX_DLLPUBLIC ValueRangeSet
 {
 public:
     inline explicit     ValueRangeSet() {}
@@ -164,7 +165,7 @@ private:
 // ============================================================================
 
 /** Static helper functions for improved API container handling. */
-class ContainerHelper
+class OOX_DLLPUBLIC ContainerHelper
 {
 public:
     // com.sun.star.container.XIndexContainer ---------------------------------

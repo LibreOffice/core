@@ -33,6 +33,7 @@
 #include <map>
 #include <vector>
 #include "oox/drawingml/color.hxx"
+#include "oox/dllapi.h"
 
 namespace oox { namespace drawingml {
 
@@ -48,7 +49,7 @@ public:
 
 typedef boost::shared_ptr< ClrMap > ClrMapPtr;
 
-class ClrScheme
+class OOX_DLLPUBLIC ClrScheme
 {
     std::map < sal_Int32, sal_Int32 > maClrScheme;
 

@@ -32,6 +32,7 @@
 #include <map>
 #include <boost/shared_ptr.hpp>
 #include "oox/helper/helper.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
 namespace core {
@@ -70,7 +71,7 @@ struct Relation
 class Relations;
 typedef ::boost::shared_ptr< Relations > RelationsRef;
 
-class Relations : public ::std::map< ::rtl::OUString, Relation >
+class OOX_DLLPUBLIC Relations : public ::std::map< ::rtl::OUString, Relation >
 {
 public:
     explicit            Relations( const ::rtl::OUString& rFragmentPath );

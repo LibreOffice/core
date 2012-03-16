@@ -34,10 +34,11 @@
 #include "oox/core/contexthandler.hxx"
 #include "oox/drawingml/shape.hxx"
 #include "oox/drawingml/shapepropertiescontext.hxx"
+#include "oox/dllapi.h"
 
 namespace oox { namespace drawingml {
 
-class ShapeContext : public ::oox::core::ContextHandler
+class OOX_DLLPUBLIC ShapeContext : public ::oox::core::ContextHandler
 {
 public:
     ShapeContext( ::oox::core::ContextHandler& rParent, ShapePtr pMasterShapePtr, ShapePtr pShapePtr );

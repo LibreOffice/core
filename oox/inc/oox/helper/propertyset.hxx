@@ -33,6 +33,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/beans/XPropertySetInfo.hpp>
 #include "oox/token/properties.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
 
@@ -55,7 +56,7 @@ class PropertyMap;
     implementation does not support the XMultiPropertySet interface, all
     properties are handled separately in a loop.
  */
-class PropertySet
+class OOX_DLLPUBLIC PropertySet
 {
 public:
     inline explicit     PropertySet() {}

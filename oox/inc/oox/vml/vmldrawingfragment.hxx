@@ -30,6 +30,7 @@
 #define OOX_VML_VMLDRAWINGFRAGMENT_HXX
 
 #include "oox/core/fragmenthandler2.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
 namespace vml {
@@ -38,7 +39,7 @@ class Drawing;
 
 // ============================================================================
 
-class DrawingFragment : public ::oox::core::FragmentHandler2
+class OOX_DLLPUBLIC DrawingFragment : public ::oox::core::FragmentHandler2
 {
 public:
     explicit            DrawingFragment(

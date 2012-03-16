@@ -34,6 +34,7 @@
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/binaryinputstream.hxx"
 #include "oox/core/contexthandler.hxx"
+#include "oox/dllapi.h"
 
 namespace oox {
 namespace core {
@@ -69,7 +70,7 @@ struct ElementInfo;
     and implEndRecord() functions of this helper. Again, this is implemented
     already in the classes ContextHandler2 and FragmentHandler2.
  */
-class ContextHandler2Helper
+class OOX_DLLPUBLIC ContextHandler2Helper
 {
 public:
     explicit            ContextHandler2Helper( bool bEnableTrimSpace );
@@ -219,7 +220,7 @@ private:
 
 // ============================================================================
 
-class ContextHandler2 : public ContextHandler, public ContextHandler2Helper
+class OOX_DLLPUBLIC ContextHandler2 : public ContextHandler, public ContextHandler2Helper
 {
 public:
     explicit            ContextHandler2( ContextHandler2Helper& rParent );

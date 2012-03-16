@@ -33,6 +33,7 @@
 #include <com/sun/star/uno/XInterface.hpp>
 #include "oox/helper/refvector.hxx"
 #include "oox/helper/storagebase.hxx"
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace container { class XNameContainer; }
@@ -50,7 +51,7 @@ namespace ole {
 
 // ============================================================================
 
-class VbaFilterConfig
+class OOX_DLLPUBLIC VbaFilterConfig
 {
 public:
     explicit            VbaFilterConfig(
@@ -89,7 +90,7 @@ private:
     store all information needed to finally attach the macro to the action,
     once the VBA project has been imported.
  */
-class VbaMacroAttacherBase
+class OOX_DLLPUBLIC VbaMacroAttacherBase
 {
 public:
     explicit            VbaMacroAttacherBase( const ::rtl::OUString& rMacroName );

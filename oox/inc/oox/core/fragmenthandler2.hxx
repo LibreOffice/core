@@ -32,13 +32,14 @@
 #include "oox/core/contexthandler2.hxx"
 #include "oox/core/fragmenthandler.hxx"
 #include <vector>
+#include "oox/dllapi.h"
 
 namespace oox {
 namespace core {
 
 // ============================================================================
 
-class FragmentHandler2 : public FragmentHandler, public ContextHandler2Helper
+class OOX_DLLPUBLIC FragmentHandler2 : public FragmentHandler, public ContextHandler2Helper
 {
 private:
     enum MCE_STATE

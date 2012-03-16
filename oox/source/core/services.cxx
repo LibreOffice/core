@@ -43,16 +43,10 @@ namespace oox {
     namespace core {    DECLARE_FUNCTIONS( FastTokenHandler );          }
     namespace core {    DECLARE_FUNCTIONS( FilterDetect );              }
     namespace docprop { DECLARE_FUNCTIONS( DocumentPropertiesImport );  }
-    namespace ole {     DECLARE_FUNCTIONS( WordVbaProjectFilter );      }
     namespace ppt {     DECLARE_FUNCTIONS( PowerPointImport );          }
     namespace ppt {     DECLARE_FUNCTIONS( QuickDiagrammingImport );    }
     namespace ppt {     DECLARE_FUNCTIONS( QuickDiagrammingLayout );    }
     namespace shape {   DECLARE_FUNCTIONS( ShapeContextHandler );       }
-    namespace xls {     DECLARE_FUNCTIONS( BiffDetector );              }
-    namespace xls {     DECLARE_FUNCTIONS( ExcelFilter );               }
-    namespace xls {     DECLARE_FUNCTIONS( ExcelBiffFilter );           }
-    namespace xls {     DECLARE_FUNCTIONS( ExcelVbaProjectFilter );     }
-    namespace xls {     DECLARE_FUNCTIONS( OOXMLFormulaParser );        }
 }
 
 #undef DECLARE_FUNCTIONS
@@ -69,16 +63,10 @@ static ::cppu::ImplementationEntry const spServices[] =
     IMPLEMENTATION_ENTRY( ::oox::core::FastTokenHandler ),
     IMPLEMENTATION_ENTRY( ::oox::core::FilterDetect ),
     IMPLEMENTATION_ENTRY( ::oox::docprop::DocumentPropertiesImport ),
-    IMPLEMENTATION_ENTRY( ::oox::ole::WordVbaProjectFilter ),
     IMPLEMENTATION_ENTRY( ::oox::ppt::PowerPointImport ),
     IMPLEMENTATION_ENTRY( ::oox::ppt::QuickDiagrammingImport ),
     IMPLEMENTATION_ENTRY( ::oox::ppt::QuickDiagrammingLayout ),
     IMPLEMENTATION_ENTRY( ::oox::shape::ShapeContextHandler ),
-    IMPLEMENTATION_ENTRY( ::oox::xls::BiffDetector ),
-    IMPLEMENTATION_ENTRY( ::oox::xls::ExcelFilter ),
-    IMPLEMENTATION_ENTRY( ::oox::xls::ExcelBiffFilter ),
-    IMPLEMENTATION_ENTRY( ::oox::xls::ExcelVbaProjectFilter ),
-    IMPLEMENTATION_ENTRY( ::oox::xls::OOXMLFormulaParser ),
     { 0, 0, 0, 0, 0, 0 }
 };
 

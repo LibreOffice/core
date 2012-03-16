@@ -34,6 +34,7 @@
 #include "oox/helper/propertyset.hxx"
 #include "oox/ole/axbinaryreader.hxx"
 #include "oox/ole/olehelper.hxx"
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace awt { class XControlModel; }
@@ -197,7 +198,7 @@ enum ApiDefaultStateMode
 /** A base class with useful helper functions for something that is able to
     convert ActiveX and ComCtl form controls.
  */
-class ControlConverter
+class OOX_DLLPUBLIC ControlConverter
 {
 public:
     explicit            ControlConverter(
@@ -349,7 +350,7 @@ private:
 // ============================================================================
 
 /** Base class for all models of form controls. */
-class ControlModelBase
+class OOX_DLLPUBLIC ControlModelBase
 {
 public:
     explicit            ControlModelBase();
@@ -484,7 +485,7 @@ private:
 // ============================================================================
 
 /** Base class for all models of Form 2.0 form controls. */
-class AxControlModelBase : public ControlModelBase
+class OOX_DLLPUBLIC AxControlModelBase : public ControlModelBase
 {
 public:
     explicit            AxControlModelBase();
@@ -495,7 +496,7 @@ public:
 // ============================================================================
 
 /** Base class for Forms 2.0 controls supporting text formatting. */
-class AxFontDataModel : public AxControlModelBase
+class OOX_DLLPUBLIC AxFontDataModel : public AxControlModelBase
 {
 public:
     explicit            AxFontDataModel( bool bSupportsAlign = true );
@@ -519,7 +520,7 @@ private:
 // ============================================================================
 
 /** Model for a Forms 2.0 command button. */
-class AxCommandButtonModel : public AxFontDataModel
+class OOX_DLLPUBLIC AxCommandButtonModel : public AxFontDataModel
 {
 public:
     explicit            AxCommandButtonModel();
@@ -548,7 +549,7 @@ public: // direct access needed for legacy VML drawing controls
 // ============================================================================
 
 /** Model for a Forms 2.0 label. */
-class AxLabelModel : public AxFontDataModel
+class OOX_DLLPUBLIC AxLabelModel : public AxFontDataModel
 {
 public:
     explicit            AxLabelModel();
@@ -576,7 +577,7 @@ public: // direct access needed for legacy VML drawing controls
 // ============================================================================
 
 /** Model for a Forms 2.0 image. */
-class AxImageModel : public AxControlModelBase
+class OOX_DLLPUBLIC AxImageModel : public AxControlModelBase
 {
 public:
     explicit            AxImageModel();
@@ -605,7 +606,7 @@ private:
 // ============================================================================
 
 /** Base class for a Forms 2.0 morph data control. */
-class AxMorphDataModelBase : public AxFontDataModel
+class OOX_DLLPUBLIC AxMorphDataModelBase : public AxFontDataModel
 {
 public:
     explicit            AxMorphDataModelBase();
@@ -642,7 +643,7 @@ public: // direct access needed for legacy VML drawing controls
 // ============================================================================
 
 /** Model for a Forms 2.0 toggle button. */
-class AxToggleButtonModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxToggleButtonModel : public AxMorphDataModelBase
 {
 public:
     explicit            AxToggleButtonModel();
@@ -656,7 +657,7 @@ public:
 // ============================================================================
 
 /** Model for a Forms 2.0 check box. */
-class AxCheckBoxModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxCheckBoxModel : public AxMorphDataModelBase
 {
 public:
     explicit            AxCheckBoxModel();
@@ -670,7 +671,7 @@ public:
 // ============================================================================
 
 /** Model for a Forms 2.0 option button. */
-class AxOptionButtonModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxOptionButtonModel : public AxMorphDataModelBase
 {
 public:
     explicit            AxOptionButtonModel();
@@ -687,7 +688,7 @@ public:
 // ============================================================================
 
 /** Model for a Forms 2.0 text box. */
-class AxTextBoxModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxTextBoxModel : public AxMorphDataModelBase
 {
 public:
     explicit            AxTextBoxModel();
@@ -701,7 +702,7 @@ public:
 // ============================================================================
 
 /** Model for a numeric field (legacy drawing controls only). */
-class AxNumericFieldModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxNumericFieldModel : public AxMorphDataModelBase
 {
 public:
     explicit            AxNumericFieldModel();
@@ -715,7 +716,7 @@ public:
 // ============================================================================
 
 /** Model for a Forms 2.0 list box. */
-class AxListBoxModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxListBoxModel : public AxMorphDataModelBase
 {
 public:
     explicit            AxListBoxModel();
@@ -729,7 +730,7 @@ public:
 // ============================================================================
 
 /** Model for a Forms 2.0 combo box. */
-class AxComboBoxModel : public AxMorphDataModelBase
+class OOX_DLLPUBLIC AxComboBoxModel : public AxMorphDataModelBase
 {
 public:
     explicit            AxComboBoxModel();
@@ -743,7 +744,7 @@ public:
 // ============================================================================
 
 /** Model for a Forms 2.0 spin button. */
-class AxSpinButtonModel : public AxControlModelBase
+class OOX_DLLPUBLIC AxSpinButtonModel : public AxControlModelBase
 {
 public:
     explicit            AxSpinButtonModel();
@@ -772,7 +773,7 @@ public: // direct access needed for legacy VML drawing controls
 // ============================================================================
 
 /** Model for a Forms 2.0 scroll bar. */
-class AxScrollBarModel : public AxControlModelBase
+class OOX_DLLPUBLIC AxScrollBarModel : public AxControlModelBase
 {
 public:
     explicit            AxScrollBarModel();
@@ -803,7 +804,7 @@ public: // direct access needed for legacy VML drawing controls
 // ============================================================================
 
 /** Model for a Forms 2.0 tabstrip control. */
-class AxTabStripModel : public AxFontDataModel
+class OOX_DLLPUBLIC AxTabStripModel : public AxFontDataModel
 {
 public:
     explicit            AxTabStripModel();
@@ -833,7 +834,7 @@ typedef ::boost::shared_ptr< AxTabStripModel > AxTabStripModelRef;
 typedef ::std::vector< ::rtl::OUString > AxClassTable;
 
 /** Base class for ActiveX container controls. */
-class AxContainerModelBase : public AxFontDataModel
+class OOX_DLLPUBLIC AxContainerModelBase : public AxFontDataModel
 {
 public:
     explicit            AxContainerModelBase( bool bFontSupport = false );
@@ -874,7 +875,7 @@ typedef ::boost::shared_ptr< AxContainerModelBase > AxContainerModelRef;
 // ============================================================================
 
 /** Model for a Forms 2.0 frame control. */
-class AxFrameModel : public AxContainerModelBase
+class OOX_DLLPUBLIC AxFrameModel : public AxContainerModelBase
 {
 public:
     explicit            AxFrameModel();
@@ -886,7 +887,7 @@ public:
 // ============================================================================
 
 /** Model for a Forms 2.0 formpage control (a single page in a multipage control). */
-class AxFormPageModel : public AxContainerModelBase
+class OOX_DLLPUBLIC AxFormPageModel : public AxContainerModelBase
 {
 public:
     explicit            AxFormPageModel();
@@ -899,7 +900,7 @@ public:
 
 /** Model for a Forms 2.0 multipage control. Contains the tabstrip control
     (class AxTabStripModel) and the single pages (class AxFormPageModel). */
-class AxMultiPageModel : public AxContainerModelBase
+class OOX_DLLPUBLIC AxMultiPageModel : public AxContainerModelBase
 {
 public:
     explicit            AxMultiPageModel();
@@ -918,7 +919,7 @@ private:
 // ============================================================================
 
 /** Model for a Forms 2.0 user form. */
-class AxUserFormModel : public AxContainerModelBase
+class OOX_DLLPUBLIC AxUserFormModel : public AxContainerModelBase
 {
 public:
     explicit            AxUserFormModel();
@@ -947,7 +948,7 @@ public:
 
 /** A form control embedded in a document draw page. Contains a specific model
     structure according to the type of the control. */
-class EmbeddedControl
+class OOX_DLLPUBLIC EmbeddedControl
 {
 public:
     explicit            EmbeddedControl( const ::rtl::OUString& rName );

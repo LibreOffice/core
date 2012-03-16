@@ -33,6 +33,7 @@
 #include <vector>
 #include <com/sun/star/awt/Point.hpp>
 #include "oox/vml/vmlformatting.hxx"
+#include "oox/dllapi.h"
 
 namespace com { namespace sun { namespace star {
     namespace awt { struct Rectangle; }
@@ -196,7 +197,7 @@ struct ShapeModel
 
 /** A shape object that is part of a drawing. May inherit properties from a
     shape template. */
-class ShapeBase : public ShapeType
+class OOX_DLLPUBLIC ShapeBase : public ShapeType
 {
 public:
     /** Returns read/write access to the shape model structure. */
