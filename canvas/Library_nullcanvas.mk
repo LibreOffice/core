@@ -28,6 +28,8 @@
 
 $(eval $(call gb_Library_Library,nullcanvas))
 
+$(eval $(call gb_Library_set_componentfile,nullcanvas,canvas/source/null/nullcanvas))
+
 $(eval $(call gb_Library_set_include,nullcanvas,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/canvas/inc \

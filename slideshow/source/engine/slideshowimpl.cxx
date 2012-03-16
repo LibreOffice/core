@@ -2456,14 +2456,6 @@ const sdecl::ServiceDecl slideShowDecl(
     "com.sun.star.presentation.SlideShow" );
 
 // The C shared lib entry points
-extern "C"
-{
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL slideshow_component_getFactory( sal_Char const* pImplName,
-    ::com::sun::star::lang::XMultiServiceFactory* pServiceManager,
-    ::com::sun::star::registry::XRegistryKey* pRegistryKey )
-{
-    return component_getFactoryHelper( pImplName, pServiceManager, pRegistryKey, slideShowDecl );
-}
-}
+COMPHELPER_SERVICEDECL_EXPORTS1(slideshow, slideShowDecl)
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
