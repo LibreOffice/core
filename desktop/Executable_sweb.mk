@@ -37,9 +37,12 @@ $(eval $(call gb_Executable_add_linked_libs,sweb,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,sweb,\
-    winlauncher \
+$(eval $(call gb_Executable_add_libs,sweb,\
+    $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher) \
 ))
+
+$(call gb_Executable_get_target,sweb) : \
+    $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher)
 
 $(eval $(call gb_Executable_add_noexception_objects,sweb,\
     desktop/win32/source/applauncher/sweb \

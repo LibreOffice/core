@@ -37,9 +37,12 @@ $(eval $(call gb_Executable_add_linked_libs,sbase,\
     $(gb_STDLIBS) \
 ))
 
-$(eval $(call gb_Executable_add_linked_static_libs,sbase,\
-    winlauncher \
+$(eval $(call gb_Executable_add_libs,sbase,\
+    $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher) \
 ))
+
+$(call gb_Executable_get_target,sbase) : \
+    $(call gb_CxxObject_get_target,desktop/win32/source/applauncher/launcher)
 
 $(eval $(call gb_Executable_add_noexception_objects,sbase,\
     desktop/win32/source/applauncher/sbase \
