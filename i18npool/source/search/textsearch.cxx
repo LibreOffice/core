@@ -725,11 +725,11 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
 #else
     IcuUniString aIcuSearchPatStr( rPatternStr.getStr(), rPatternStr.getLength());
 #endif
-#if 1
+#ifndef DISABLE_WORDBOUND_EMULATION
     // for conveniance specific syntax elements of the old regex engine are emulated
     // by using regular word boundary matching \b to replace \< and \>
-    static const IcuUniString aChevronPattern( "\\<|\\>", -1, IcuUniString::kInvariant);
-    static const IcuUniString aChevronReplace( "\\b", -1, IcuUniString::kInvariant);
+    static const IcuUniString aChevronPattern( "\\\\<|\\\\>", -1, IcuUniString::kInvariant);
+    static const IcuUniString aChevronReplace( "\\\\b", -1, IcuUniString::kInvariant);
     static RegexMatcher aChevronMatcher( aChevronPattern, 0, nIcuErr);
     aChevronMatcher.reset( aIcuSearchPatStr);
     aIcuSearchPatStr = aChevronMatcher.replaceAll( aChevronReplace, nIcuErr);
