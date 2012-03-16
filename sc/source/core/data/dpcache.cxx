@@ -848,7 +848,7 @@ bool ScDPCache::IsDateDimension( long nDim ) const
     return (eType == NUMBERFORMAT_DATE) || (eType == NUMBERFORMAT_DATETIME);
 }
 
-SCROW ScDPCache::GetDimMemberCount( SCCOL nDim ) const
+long ScDPCache::GetDimMemberCount(long nDim) const
 {
     OSL_ENSURE( nDim>=0 && nDim < mnColumnCount ," ScDPTableDataCache::GetDimMemberCount : out of bound ");
     return maFields[nDim].maItems.size();

@@ -134,7 +134,7 @@ public:
     SCCOL GetDimensionIndex(const rtl::OUString& sName) const;
     sal_uLong GetNumberFormat( long nDim ) const;
     bool  IsDateDimension( long nDim ) const ;
-    SCROW GetDimMemberCount( SCCOL nDim ) const;
+    long GetDimMemberCount(long nDim) const;
     SCROW GetOrder( long nDim, SCROW nIndex ) const;
 
     const ItemsType& GetDimMemberValues( SCCOL nDim ) const;

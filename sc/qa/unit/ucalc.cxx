@@ -59,6 +59,7 @@
 #include "dpshttab.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
+#include "dpcache.hxx"
 
 #include "formula/IFunctionDescription.hxx"
 
@@ -146,6 +147,8 @@ public:
      */
     void testPivotTableNamedSource();
 
+    void testPivotTableCache();
+
     void testSheetCopy();
     void testSheetMove();
     void testExternalRef();
@@ -200,6 +203,7 @@ public:
     CPPUNIT_TEST(testPivotTableDateLabels);
     CPPUNIT_TEST(testPivotTableFilters);
     CPPUNIT_TEST(testPivotTableNamedSource);
+    CPPUNIT_TEST(testPivotTableCache);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -1099,6 +1103,26 @@ struct DPFieldDef
 };
 
 template<size_t _Size>
+ScRange insertRangeData(ScDocument* pDoc, const ScAddress& rPos, const char* aData[][_Size], size_t nRowCount)
+{
+    for (size_t i = 0; i < _Size; ++i)
+    {
+        for (size_t j = 0; j < nRowCount; ++j)
+        {
+            SCCOL nCol = i + rPos.Col();
+            SCROW nRow = j + rPos.Row();
+            pDoc->SetString(nCol, nRow, rPos.Tab(), OUString(aData[j][i], strlen(aData[j][i]), RTL_TEXTENCODING_UTF8));
+        }
+    }
+
+    ScRange aRange(rPos);
+    aRange.aEnd.SetCol(rPos.Col()+_Size-1);
+    aRange.aEnd.SetRow(rPos.Row()+nRowCount-1);
+    printRange(pDoc, aRange, "Range data content");
+    return aRange;
+}
+
+template<size_t _Size>
 ScRange insertDPSourceData(ScDocument* pDoc, DPFieldDef aFields[], size_t nFieldCount, const char* aData[][_Size], size_t nDataCount)
 {
     // Insert field names in row 0.
@@ -1847,6 +1871,121 @@ void Test::testPivotTableNamedSource()
 
     pNames->clear();
     m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableCache()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+
+    // Raw data
+    const char* aData[][3] = {
+        { "F1", "F2", "F3" },
+        { "Z",  "A", "30" },
+        { "R",  "A", "20" },
+        { "A",  "B", "45" },
+        { "F",  "B", "12" },
+        { "Y",  "C",  "8" },
+        { "12", "C", "15" },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPCache aCache(m_pDoc);
+    aCache.InitFromDoc(m_pDoc, aDataRange);
+    long nDimCount = aCache.GetColumnCount();
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension count.", nDimCount == 3);
+    rtl::OUString aDimName = aCache.GetDimensionName(0);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F1"));
+    aDimName = aCache.GetDimensionName(1);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F2"));
+    aDimName = aCache.GetDimensionName(2);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F3"));
+
+    // In each dimension, member ID values also represent their order;
+    // dimension members are sorted in ascending order.  And values come
+    // before strings.  Also, no duplicate dimension members exist.
+
+    // Dimension 0 - a mix of strings and values.
+    long nMemCount = aCache.GetDimMemberCount(0);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 6);
+    const ScDPItemData* pItem = aCache.GetItemDataById(0, 0);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 12);
+    pItem = aCache.GetItemDataById(0, 1);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("A"));
+    pItem = aCache.GetItemDataById(0, 2);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("F"));
+    pItem = aCache.GetItemDataById(0, 3);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("R"));
+    pItem = aCache.GetItemDataById(0, 4);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("Y"));
+    pItem = aCache.GetItemDataById(0, 5);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("Z"));
+    pItem = aCache.GetItemDataById(0, 6);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
+
+    // Dimension 1 - duplicate values in source.
+    nMemCount = aCache.GetDimMemberCount(1);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 3);
+    pItem = aCache.GetItemDataById(1, 0);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("A"));
+    pItem = aCache.GetItemDataById(1, 1);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("B"));
+    pItem = aCache.GetItemDataById(1, 2);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::String &&
+                           pItem->GetString().equalsAscii("C"));
+    pItem = aCache.GetItemDataById(1, 3);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
+
+    // Dimension 2 - values only.
+    nMemCount = aCache.GetDimMemberCount(2);
+    CPPUNIT_ASSERT_MESSAGE("wrong dimension member count", nMemCount == 6);
+    pItem = aCache.GetItemDataById(2, 0);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 8);
+    pItem = aCache.GetItemDataById(2, 1);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 12);
+    pItem = aCache.GetItemDataById(2, 2);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 15);
+    pItem = aCache.GetItemDataById(2, 3);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 20);
+    pItem = aCache.GetItemDataById(2, 4);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 30);
+    pItem = aCache.GetItemDataById(2, 5);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", pItem &&
+                           pItem->GetType() == ScDPItemData::Value &&
+                           pItem->GetValue() == 45);
+    pItem = aCache.GetItemDataById(2, 6);
+    CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
+
     m_pDoc->DeleteTab(0);
 }
 
