@@ -27,6 +27,8 @@
 
 $(eval $(call gb_Module_Module,tubes))
 
+ifeq ($(ENABLE_TELEPATHY),TRUE)
+
 $(eval $(call gb_Module_add_targets,tubes,\
 	Library_tubes \
 ))
@@ -34,5 +36,7 @@ $(eval $(call gb_Module_add_targets,tubes,\
 $(eval $(call gb_Module_add_check_targets,tubes,\
     CppunitTest_tubes_test \
 ))
+
+endif
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */
