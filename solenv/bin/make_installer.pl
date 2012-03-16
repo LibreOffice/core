@@ -801,7 +801,8 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
     $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_bundled_extension_blobs( $filesinproductlanguageresolvedarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles8b.log", $filesinproductlanguageresolvedarrayref); }
-    $filesinproductlanguageresolvedarrayref = installer::scriptitems::add_bundled_prereg_extensions( $filesinproductlanguageresolvedarrayref);
+    ($filesinproductlanguageresolvedarrayref,$dirsinproductarrayref) = installer::scriptitems::add_bundled_prereg_extensions(
+        $filesinproductlanguageresolvedarrayref, $dirsinproductarrayref);
     if ( $installer::globals::globallogging ) { installer::files::save_array_of_hashes($loggingdir . "productfiles8c.log", $filesinproductlanguageresolvedarrayref); }
 
     installer::scriptitems::get_Destination_Directory_For_Item_From_Directorylist($filesinproductlanguageresolvedarrayref, $dirsinproductarrayref);

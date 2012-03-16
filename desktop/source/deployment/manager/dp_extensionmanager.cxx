@@ -239,6 +239,8 @@ ExtensionManager::getPackageManager(::rtl::OUString const & repository)
         xPackageManager = getTmpRepository();
     else if (repository.equals(OUSTR("bak")))
         xPackageManager = getBakRepository();
+    else if (repository.equals(OUSTR("bundled_prereg")))
+        xPackageManager = m_xPackageManagerFactory->getPackageManager(repository);
     else
         throw lang::IllegalArgumentException(
             OUSTR("No valid repository name provided."),
@@ -1179,6 +1181,7 @@ uno::Sequence< uno::Sequence<Reference<deploy::XPackage> > >
         uno::Sequence<Reference<deploy::XPackage> > bundledExt =
             getBundledRepository()->getDeployedPackages(xAbort, xCmdEnv);
         addExtensionsToMap(mapExt, bundledExt, OUSTR("bundled"));
+        addExtensionsToMap(mapExt, bundledExt, OUSTR("bundled_prereg"));
 
         //copy the values of the map to a vector for sorting
         ::std::vector< ::std::vector<Reference<deploy::XPackage> > >

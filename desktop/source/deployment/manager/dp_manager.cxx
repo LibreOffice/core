@@ -377,7 +377,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         //configmgr.ini also used $BUNDLED_EXTENSIONS_PREREG to refer to the xcu file
         //which contain the replacement for %origin%.
         that->m_activePackages = OUSTR(
-            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS");
+            "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG");
         that->m_registrationData = OUSTR(
             "vnd.sun.star.expand:$BUNDLED_EXTENSIONS_PREREG");
         that->m_registryCache = OUSTR(
@@ -1481,7 +1481,9 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
         }
         catch (uno::Exception &)
         {
-            OSL_ASSERT(0);
+            // Looks like exceptions being caught here is not an
+            // uncommon case.
+            OSL_TRACE("caught exception in PackageManagerImpl::synchronizeAddedExtensions");
         }
     }
     return bModified;

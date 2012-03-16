@@ -227,6 +227,12 @@ Directory gid_Brand_Dir_Share_Prereg
     Styles = (CREATE);
 End
 
+Directory gid_Brand_Dir_Share_Prereg_Bundled
+    ParentID = gid_Brand_Dir_Share_Prereg;
+    DosName = "bundled";
+    Styles = (CREATE);
+End
+
 Directory gid_Brand_Dir_Share_Extensions_Install
     ParentID = gid_Brand_Dir_Share_Extensions;
     DosName = "install";

@@ -162,6 +162,10 @@ PackageInformationProvider::getPackageLocation( const rtl::OUString& _sExtension
     {
         aLocationURL = getPackageLocation( UNISTRING("bundled"), _sExtensionId );
     }
+    if ( aLocationURL.getLength() == 0 )
+    {
+        aLocationURL = getPackageLocation( UNISTRING("bundled_prereg"), _sExtensionId );
+    }
     if ( aLocationURL.getLength() )
     {
         ::ucbhelper::Content aContent( aLocationURL, NULL );

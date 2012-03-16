@@ -35,6 +35,7 @@ use installer::systemactions;
 
 use File::Spec;
 use SvnRevision;
+use ExtensionsLst;
 
 ################################################################
 # Resolving the GID for the directories defined in setup script
@@ -490,21 +491,61 @@ sub remove_not_required_spellcheckerlanguage_files
     return \@filesarray;
 }
 
+=head3 add_bundled_extension_blobs
+    Add entries for extension blobs to the global file list.
+    Extension blobs, unlike preregistered extensions, are not
+    extracted before included into a pack set.
+
+    The set of extensions to include is taken from the BUNDLED_EXTENSION_BLOBS
+    environment variable (typically set in configure.)
+
+    If that variable is not defined then the content of main/extensions.lst defines
+    the default set.
+
+    Extension blobs are placed in gid_Brand_Dir_Share_Extensions_Install.
+=cut
 sub add_bundled_extension_blobs
 {
     my @filelist = @{$_[0]};
 
+    my @bundle_files = ();
     my $bundleenv = $ENV{'BUNDLED_EXTENSION_BLOBS'};
     my $bundlesrc = $ENV{'TARFILE_LOCATION'};
-    my @bundle_files = split(/\s+/, $bundleenv, -1);
-    foreach my $filename ( @bundle_files) {
+
+    if ($installer::globals::product =~ /(SDK|URE)/i )
+    {
+        # No extensions for the SDK.
+    }
+    elsif (defined $bundleenv)
+    {
+        # Use the list of extensions that was explicitly given to configure.
+        @bundle_files = split(/\s+/, $bundleenv, -1);
+    }
+    else
+    {
+        # Add the default rextensions for the current language set.
+        @bundle_files = ExtensionsLst::GetExtensionList("http|https", @installer::globals::languageproducts);
+    }
+
+    installer::logger::print_message(
+        sprintf("preparing %d extension blob%s for language%s %s:\n    %s\n",
+           $#bundle_files + 1,
+           $#bundle_files!=0 ? "s" : "",
+           $#installer::globals::languageproducts!=0 ? "s" : "",
+           join(" ", @installer::globals::languageproducts),
+           join("\n    ", @bundle_files)));
+
+    foreach my $filename ( @bundle_files)
+    {
         my $basename = File::Basename::basename( $filename);
         my $onefile = {
             'Dir' => 'gid_Brand_Dir_Share_Extensions_Install',
             'Name' => $basename,
             'Styles' => '(PACKED)',
             'UnixRights' => '444',
-            'sourcepath' => $bundlesrc . $installer::globals::separator . $filename
+            'sourcepath' => $bundlesrc . $installer::globals::separator . $filename,
+            'modules' => "gid_Module_Dictionaries",
+            'gid' => "gid_File_Extension_".$basename
         };
         push( @filelist, $onefile);
         push( @installer::globals::logfileinfo, "\tbundling \"$filename\" extension\n");
@@ -513,27 +554,94 @@ sub add_bundled_extension_blobs
     return \@filelist;
 }
 
+=head3 add_bundled_prereg_extensions
+    Add entries for preregistered extensions to the global file list.
+
+    The set of extensions to include is taken from the BUNDLED_PREREG_EXTENSIONS
+    environment variable (typically set in configure.)
+
+    If that variable is not defined then the content of main/extensions.lst defines
+    the default set.
+
+    Preregistered extensions are placed in subdirectories of gid_Brand_Dir_Share_Prereg_Bundled.
+=cut
 sub add_bundled_prereg_extensions
 {
     my @filelist = @{$_[0]};
+    my $dirsref = $_[1];
 
+    my @bundle_files = ();
     my $bundleenv = $ENV{'BUNDLED_PREREG_EXTENSIONS'};
-    my $bundlesrc = $ENV{'TARFILE_LOCATION'};
-    my @bundle_files = split(/\s+/, $bundleenv, -1);
-    foreach my $filename ( @bundle_files) {
+
+    if ($installer::globals::product =~ /(SDK|URE)/i )
+    {
+        # No extensions for the SDK.
+    }
+    elsif (defined $bundleenv)
+    {
+        # Use the list of extensions that was explicitly given to configure.
+        @bundle_files = split(/\s+/, $bundleenv, -1);
+    }
+    else
+    {
+        # Add the default rextensions for the current language set.
+        @bundle_files = ExtensionsLst::GetExtensionList("file", @installer::globals::languageproducts);
+    }
+
+    installer::logger::print_message(
+        sprintf("preparing %d bundled extension%s for language%s %s:\n    %s\n",
+           $#bundle_files + 1,
+           $#bundle_files!=0 ? "s" : "",
+           $#installer::globals::languageproducts!=0 ? "s" : "",
+           join(" ", @installer::globals::languageproducts),
+           join("\n    ", @bundle_files)));
+
+    # Find the prereg directory entry so that we can create a new sub-directory.
+    my $parentdir_gid = "gid_Brand_Dir_Share_Prereg_Bundled";
+    my $parentdir = undef;
+    foreach my $dir (@{$dirsref})
+    {
+        if ($dir->{'gid'} eq $parentdir_gid)
+        {
+            $parentdir = $dir;
+            last;
+        }
+    }
+
+    foreach my $filename ( @bundle_files)
+    {
         my $basename = File::Basename::basename( $filename);
+
+        # Create a new directory into which the extension will be installed.
+        my $dirgid =  $parentdir_gid . "_" . $basename;
+        my $onedir = {
+            'modules' => 'gid_Module_Root_Brand',
+            'ismultilingual' => 0,
+            'Styles' => '(CREATE)',
+            'ParentID' => $parentdir_gid,
+            'specificlanguage' => "",
+            'haslanguagemodule' => 0,
+            'gid' => $dirgid,
+            'HostName' => $parentdir->{'HostName'} . $installer::globals::separator . $basename
+        };
+        push (@{$dirsref}, $onedir);
+
+        # Create a new file entry for the extension.
         my $onefile = {
-            'Dir' => 'gid_Profileitem_Uno_Uno_Bundled_Extensions_Prereg',
+            'Dir' => $dirgid,
             'Name' => $basename,
             'Styles' => '(PACKED,ARCHIVE)',
             'UnixRights' => '444',
-            'sourcepath' => $bundlesrc . $installer::globals::separator . $filename
+            'sourcepath' => File::Spec->catfile($ENV{'OUTDIR'}, "bin", $filename),
+            'specificlanguage' => "",
+            'modules' => "gid_Module_Dictionaries",
+            'gid' => "gid_File_Extension_".$basename
         };
         push( @filelist, $onefile);
         push( @installer::globals::logfileinfo, "\tbundling \"$filename\" extension\n");
     }
 
-    return \@filelist;
+    return (\@filelist, $dirsref);
 }
 
 ################################################################################
