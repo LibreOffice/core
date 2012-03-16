@@ -119,6 +119,7 @@
 #include <drawinglayer/primitive2d/textlayoutdevice.hxx>
 #include <svx/sdr/contact/objectcontacttools.hxx>
 #include <svx/unoapi.hxx>
+#include <comphelper/sequenceasvector.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/matrix/b2dhommatrixtools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -220,6 +221,22 @@ public:
     inline void Ins( const SwRect &rRect, const sal_uInt8 nSCol );
 };
 
+class BorderLines
+{
+    ::comphelper::SequenceAsVector<
+         ::drawinglayer::primitive2d::Primitive2DReference> m_Lines;
+public:
+    void AddBorderLine(
+            ::drawinglayer::primitive2d::Primitive2DReference const& xLine)
+    {
+        m_Lines.push_back(xLine);
+    }
+    drawinglayer::primitive2d::Primitive2DSequence GetBorderLines() const
+    {
+        return m_Lines.getAsConstList();
+    }
+};
+
 //----------------- End of classes for border lines ----------------------
 
 static ViewShell *pGlobalShell = 0;
@@ -253,6 +270,7 @@ static double aEdgeScale = 0.5;
 // be compared with pLines before the work in order to avoid help lines
 // to hide borders.
 // bTablines is sal_True during the Paint of a table.
+static BorderLines *g_pBorderLines = 0;
 static SwLineRects *pLines = 0;
 static SwSubsRects *pSubsLines = 0;
 // global variable for sub-lines of body, header, footer, section and footnote frames.
@@ -335,6 +353,7 @@ class SwSavePaintStatics
     SwFlyFrm           *pSRetoucheFly,
                        *pSRetoucheFly2,
                        *pSFlyOnlyDraw;
+    BorderLines        *pBLines;
     SwLineRects        *pSLines;
     SwSubsRects        *pSSubsLines;
     SwSubsRects*        pSSpecSubsLines;
@@ -360,6 +379,7 @@ SwSavePaintStatics::SwSavePaintStatics() :
     pSRetoucheFly       ( pRetoucheFly      ),
     pSRetoucheFly2      ( pRetoucheFly2     ),
     pSFlyOnlyDraw       ( pFlyOnlyDraw      ),
+    pBLines             ( g_pBorderLines    ),
     pSLines             ( pLines            ),
     pSSubsLines         ( pSubsLines        ),
     pSSpecSubsLines     ( pSpecSubsLines    ),
@@ -384,6 +404,7 @@ SwSavePaintStatics::SwSavePaintStatics() :
     aScaleX = aScaleY = 1.0;
     aMinDistScale = 0.73;
     aEdgeScale = 0.5;
+    g_pBorderLines = 0;
     pLines = 0;
     pSubsLines = 0;
     pSpecSubsLines = 0L;
@@ -398,6 +419,7 @@ SwSavePaintStatics::~SwSavePaintStatics()
     pRetoucheFly       = pSRetoucheFly;
     pRetoucheFly2      = pSRetoucheFly2;
     pFlyOnlyDraw       = pSFlyOnlyDraw;
+    g_pBorderLines     = pBLines;
     pLines             = pSLines;
     pSubsLines         = pSSubsLines;
     pSpecSubsLines     = pSSpecSubsLines;
@@ -2888,6 +2910,7 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                     pSubsLines = new SwSubsRects;
                     pSpecSubsLines = new SwSubsRects;
                 }
+                g_pBorderLines = new BorderLines;
 
                 aPaintRect._Intersection( aRect );
 
@@ -3001,6 +3024,9 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                     DELETEZ( pSubsLines );
                     DELETEZ( pSpecSubsLines );
                 }
+                // fdo#42750: delay painting these until after subsidiary lines
+                ProcessPrimitives(g_pBorderLines->GetBorderLines());
+                DELETEZ(g_pBorderLines);
                 pVout->Leave();
 
                 // #i68597#
@@ -4509,11 +4535,8 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
         ::lcl_SubTopBottom( aRect, rBox, _rAttrs, _rFrm, _rRectFn, bPrtOutputDev );
     }
 
-    // TODO Postpone the processing of the primitives
     if ( lcl_GetLineWidth( pLeftRightBorder ) > 0 )
     {
-        drawinglayer::primitive2d::Primitive2DSequence aSequence( 1 );
-
         double nExtentIS = lcl_GetExtent( pTopBorder, NULL );
         double nExtentIE = lcl_GetExtent( pBottomBorder, NULL );
         double nExtentOS = lcl_GetExtent( NULL, pTopBorder );
@@ -4535,21 +4558,22 @@ void lcl_PaintLeftRightLine( const sal_Bool         _bLeft,
         Color aLeftColor = _bLeft ? pLeftRightBorder->GetColorOut( _bLeft ) : pLeftRightBorder->GetColorIn( _bLeft );
         Color aRightColor = _bLeft ? pLeftRightBorder->GetColorIn( _bLeft ) : pLeftRightBorder->GetColorOut( _bLeft );
 
-        aSequence[0] = new drawinglayer::primitive2d::BorderLinePrimitive2D(
+        drawinglayer::primitive2d::Primitive2DReference xLine =
+            new drawinglayer::primitive2d::BorderLinePrimitive2D(
                 aStart, aEnd, nLeftWidth, pLeftRightBorder->GetDistance(), nRightWidth,
                 nExtentIS, nExtentIE, nExtentOS, nExtentOE,
                 aLeftColor.getBColor(), aRightColor.getBColor(),
                 pLeftRightBorder->GetColorGap().getBColor(),
                 pLeftRightBorder->HasGapColor(), pLeftRightBorder->GetStyle( ) );
 
-        _rFrm.ProcessPrimitives( aSequence );
+        g_pBorderLines->AddBorderLine(xLine);
     }
 }
 
 // OD 19.05.2003 #109667# - merge <lcl_PaintTopLine> and <lcl_PaintBottomLine>
 // into <lcl_PaintTopLine>
 void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
-                             const SwFrm&           _rFrm,
+                             const SwFrm&           ,
                              const SwPageFrm&       /*_rPage*/,
                              const SwRect&          _rOutRect,
                              const SwRect&          /*_rRect*/,
@@ -4586,11 +4610,8 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
                                      (aRect.*_rRectFn->fnGetHeight)() );
     }
 
-    // TODO Postpone the processing of the primitives
     if ( lcl_GetLineWidth( pTopBottomBorder ) > 0 )
     {
-        drawinglayer::primitive2d::Primitive2DSequence aSequence( 1 );
-
         double nExtentIS = lcl_GetExtent( pRightBorder, NULL );
         double nExtentIE = lcl_GetExtent( pLeftBorder, NULL );
         double nExtentOS = lcl_GetExtent( NULL, pRightBorder );
@@ -4612,14 +4633,15 @@ void lcl_PaintTopBottomLine( const sal_Bool         _bTop,
         Color aLeftColor = _bTop ? pTopBottomBorder->GetColorOut( _bTop ) : pTopBottomBorder->GetColorIn( _bTop );
         Color aRightColor = _bTop ? pTopBottomBorder->GetColorIn( _bTop ) : pTopBottomBorder->GetColorOut( _bTop );
 
-        aSequence[0] = new drawinglayer::primitive2d::BorderLinePrimitive2D(
+        drawinglayer::primitive2d::Primitive2DReference xLine =
+            new drawinglayer::primitive2d::BorderLinePrimitive2D(
                 aStart, aEnd, nLeftWidth, pTopBottomBorder->GetDistance(), nRightWidth,
                 nExtentIS, nExtentIE, nExtentOS, nExtentOE,
                 aLeftColor.getBColor(), aRightColor.getBColor(),
                 pTopBottomBorder->GetColorGap().getBColor(),
                 pTopBottomBorder->HasGapColor(), pTopBottomBorder->GetStyle( ) );
 
-        _rFrm.ProcessPrimitives( aSequence );
+        g_pBorderLines->AddBorderLine(xLine);
     }
 }
 
