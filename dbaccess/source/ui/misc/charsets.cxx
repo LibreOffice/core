@@ -111,7 +111,7 @@ namespace dbaui
     //-------------------------------------------------------------------------
     CharsetDisplayDerefHelper::CharsetDisplayDerefHelper(const CharsetDisplayDerefHelper& _rSource)
         :CharsetDisplayDerefHelper_Base(_rSource)
-        ,m_sDisplayName(m_sDisplayName)
+        ,m_sDisplayName(_rSource.m_sDisplayName)
     {
     }
 
