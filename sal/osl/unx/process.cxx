@@ -218,7 +218,7 @@ oslProcessError SAL_CALL osl_searchPath_impl(const sal_Char* pszName, const sal_
  osl_sendResourcePipe
  *********************************************/
 
-sal_Bool osl_sendResourcePipe(oslPipe pPipe, oslSocket pSocket)
+sal_Bool osl_sendResourcePipe(oslPipe /*pPipe*/, oslSocket /*pSocket*/)
 {
     return osl_Process_E_InvalidError;
 }
@@ -227,7 +227,7 @@ sal_Bool osl_sendResourcePipe(oslPipe pPipe, oslSocket pSocket)
  osl_receiveResourcePipe
  *********************************************/
 
-oslSocket osl_receiveResourcePipe(oslPipe pPipe)
+oslSocket osl_receiveResourcePipe(oslPipe /*pPipe*/)
 {
     oslSocket pSocket = 0;
     return pSocket;
