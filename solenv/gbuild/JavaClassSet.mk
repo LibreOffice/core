@@ -162,7 +162,8 @@ $(foreach external,$(2),$(call gb_JavaClassSet_use_external,$(1),$(external)))
 endef
 
 define gb_JavaClassSet_add_package_dependency
-$(call gb_JavaClassSet_get_preparation_target,$(1)) :| $(call gb_Package_get_target,$(2))
+$(call gb_JavaClassSet_get_preparation_target,$(1)) : \
+	$(call gb_Package_get_target,$(2))
 
 endef
 
