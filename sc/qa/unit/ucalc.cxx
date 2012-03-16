@@ -1904,9 +1904,9 @@ void Test::testPivotTableCache()
     aDimName = aCache.GetDimensionName(2);
     CPPUNIT_ASSERT_MESSAGE("wrong dimension name", aDimName.equalsAscii("F3"));
 
-    // In each dimension, member ID values also represent their order;
-    // dimension members are sorted in ascending order.  And values come
-    // before strings.  Also, no duplicate dimension members exist.
+    // In each dimension, member ID values also represent their sort order.
+    // Value items are sorted before string ones.  Also, no duplicate
+    // dimension members should exist.
 
     // Dimension 0 - a mix of strings and values.
     long nMemCount = aCache.GetDimMemberCount(0);
