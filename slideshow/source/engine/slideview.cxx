@@ -206,7 +206,7 @@ void clearRect( ::cppcanvas::CanvasSharedPtr const& pCanvas,
     if( pPolyPoly )
     {
         pPolyPoly->setCompositeOp( cppcanvas::CanvasGraphic::SOURCE );
-        pPolyPoly->setRGBAFillColor( 0x00000000U );
+        pPolyPoly->setRGBAFillColor( 0xFFFFFF00U );
         pPolyPoly->draw();
     }
 
