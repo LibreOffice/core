@@ -596,15 +596,14 @@ namespace
             pdfi::PDFIRawAdaptor aAdaptor( impl_getComponentContext() );
             aAdaptor.setTreeVisitorFactory( createDrawTreeVisitorFactory() );
 
-            ::rtl::OUString aURL, aAbsURL, aBaseURL;
-            osl_getFileURLFromSystemPath( (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_draw.xml"))).pData,
-                                          &aURL.pData );
-            osl_getProcessWorkingDir(&aBaseURL.pData);
-            osl_getAbsoluteFileURL(aBaseURL.pData,aURL.pData,&aAbsURL.pData);
+            ::rtl::OUString tempFileURL;
+            CPPUNIT_ASSERT( osl::File::createTempFile( NULL, NULL, &tempFileURL ) == osl::File::E_None );
+            osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
                                    aAdaptor.odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
-                                                        new OutputWrap(aAbsURL),
+                                                        new OutputWrap(tempFileURL),
                                                         NULL ));
+            osl::File::remove( tempFileURL );
         }
 
         void testOdfWriterExport()
@@ -612,15 +611,14 @@ namespace
             pdfi::PDFIRawAdaptor aAdaptor( impl_getComponentContext() );
             aAdaptor.setTreeVisitorFactory( createWriterTreeVisitorFactory() );
 
-            ::rtl::OUString aURL, aAbsURL, aBaseURL;
-            osl_getFileURLFromSystemPath( (rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("pdfi_unittest_writer.xml"))).pData,
-                                          &aURL.pData );
-            osl_getProcessWorkingDir(&aBaseURL.pData);
-            osl_getAbsoluteFileURL(aBaseURL.pData,aURL.pData,&aAbsURL.pData);
+            ::rtl::OUString tempFileURL;
+            CPPUNIT_ASSERT( osl::File::createTempFile( NULL, NULL, &tempFileURL ) == osl::File::E_None );
+            osl::File::remove( tempFileURL ); // FIXME the below apparently fails silently if the file already exists
             CPPUNIT_ASSERT_MESSAGE("Exporting to ODF",
                                    aAdaptor.odfConvert( getURLFromSrc("/sdext/source/pdfimport/test/testinput.pdf"),
-                                                        new OutputWrap(aAbsURL),
+                                                        new OutputWrap(tempFileURL),
                                                         NULL ));
+            osl::File::remove( tempFileURL );
         }
 
         CPPUNIT_TEST_SUITE(PDFITest);
