@@ -367,18 +367,18 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(if $(filter-out StaticLibrary,$(TARGETTYPE)),user32.lib) \
 		$(if $(DLLTARGET),-out:$(DLLTARGET) -implib:$(1),-out:$(1)); RC=$$?; rm $${RESPONSEFILE} \
 	$(if $(DLLTARGET),; if [ ! -f $(DLLTARGET) ]; then rm -f $(1) && false; fi) \
-        $(if $(filter Library,$(TARGETTYPE)),; if [ -f $(DLLTARGET).manifest ]; then mt.exe $(MTFLAGS) -manifest $(DLLTARGET).manifest -outputresource:$(DLLTARGET)\;2; fi) \
-        $(if $(filter Executable,$(TARGETTYPE)),; if [ -f $(1).manifest ]; then mt.exe $(MTFLAGS) -manifest $(1).manifest -outputresource:$(1)\;1; fi) \
-        ; exit $$RC)
+	$(if $(filter Library,$(TARGETTYPE)),; if [ -f $(DLLTARGET).manifest ]; then mt.exe $(MTFLAGS) -manifest $(DLLTARGET).manifest -outputresource:$(DLLTARGET)\;2; fi) \
+	$(if $(filter Executable,$(TARGETTYPE)),; if [ -f $(1).manifest ]; then mt.exe $(MTFLAGS) -manifest $(1).manifest -outputresource:$(1)\;1; fi) \
+	; exit $$RC)
 endef
 
 
 # Flags common for PE executables (EXEs and DLLs) 
 gb_Windows_PE_TARGETTYPEFLAGS := \
-    -release \
-    -opt:noref \
-    -incremental:no \
-    -debug \
+	-release \
+	-opt:noref \
+	-incremental:no \
+	-debug \
 	-nxcompat \
 	-dynamicbase \
 
@@ -387,8 +387,8 @@ gb_Windows_PE_TARGETTYPEFLAGS := \
 
 gb_Library_DEFS := -D_DLL
 gb_Library_TARGETTYPEFLAGS := \
-    -DLL \
-    $(gb_Windows_PE_TARGETTYPEFLAGS)
+	-DLL \
+	$(gb_Windows_PE_TARGETTYPEFLAGS)
 
 gb_Library_get_rpath :=
 
