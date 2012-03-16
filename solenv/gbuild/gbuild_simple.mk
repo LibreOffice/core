@@ -82,6 +82,13 @@ include $(GBUILDDIR)/Tempfile.mk
 # Include platform/cpu/compiler specific config/definitions
 include $(GBUILDDIR)/platform/$(OS)_$(CPUNAME)_$(COM).mk
 
+ifeq ($(CROSS_COMPILING),YES)
+# We can safely Assume all cross-compilation is from Unix systems.
+gb_Executable_EXT_for_build :=
+else
+gb_Executable_EXT_for_build := $(gb_Executable_EXT)
+endif
+
 ifeq ($(SYSTEM_PYTHON),YES)
 gb_PYTHONTARGET :=
 gb_PYTHON := $(PYTHON)

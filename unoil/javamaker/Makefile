@@ -28,7 +28,7 @@
 gb_PARTIALBUILD := T
 include $(GBUILDDIR)/gbuild_simple.mk
 
-done :
+done : $(OUTDIR)/bin/offapi.rdb $(OUTDIR)/bin/udkapi.rdb $(OUTDIR_FOR_BUILD)/bin/javamaker$(gb_Executable_EXT_for_build)
 	$(call gb_Helper_abbreviate_dirs_native, \
 	$(call gb_Helper_execute,javamaker -BUCR -O. $(OUTDIR)/bin/offapi.rdb -X$(OUTDIR)/bin/udkapi.rdb) && \
 	touch $@)
