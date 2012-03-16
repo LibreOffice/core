@@ -633,7 +633,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
         if (!pEff1->IsRunning())        // keine 522 erzeugen
         {
             //! Changed statt Dirty abfragen !!!
-            if (pEff1->GetDirty() && !bRelRef1)
+            if (pEff1->GetDirty() && !bRelRef1 && pDoc->GetAutoCalc())
                 bDirty = sal_True;
             if (pEff1->IsValue())
             {
@@ -662,7 +662,7 @@ void ScConditionEntry::Interpret( const ScAddress& rPos )
     {
         if (!pEff2->IsRunning())        // keine 522 erzeugen
         {
-            if (pEff2->GetDirty() && !bRelRef2)
+            if (pEff2->GetDirty() && !bRelRef2 && pDoc->GetAutoCalc())
                 bDirty = sal_True;
             if (pEff2->IsValue())
             {
