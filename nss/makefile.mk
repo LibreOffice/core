@@ -97,7 +97,7 @@ OUT2LIB=mozilla/dist/out/lib/*$(DLLPOST) mozilla/dist/out/lib/libcrmf.a
 OUT2BIN=config/nspr-config mozilla/security/nss/nss-config
 
 BUILD_DIR=mozilla/security/nss
-BUILD_ACTION= $(GNUMAKE) nss_build_all
+BUILD_ACTION= $(GNUMAKE) nss_build_all -j1
 #See #i105566# && moz#513024#
 .IF "$(OS)"=="LINUX"
 BUILD_ACTION+=FREEBL_NO_DEPEND=1

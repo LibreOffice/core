@@ -74,7 +74,7 @@ COMPILER_AND_FLAGS=$(CC)
 COMPILER_AND_FLAGS+=-fvisibility=hidden
 .ENDIF
 
-BUILD_ACTION=make build_libs CC='$(COMPILER_AND_FLAGS)'
+BUILD_ACTION=make build_libs CC='$(COMPILER_AND_FLAGS)' -j1
 
 OUT2LIB = libssl.*
 OUT2LIB += libcrypto.*
