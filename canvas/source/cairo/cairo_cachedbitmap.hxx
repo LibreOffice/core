@@ -56,12 +56,12 @@ namespace cairocanvas
         virtual ::sal_Int8 doRedraw( const ::com::sun::star::rendering::ViewState&  rNewState,
                                      const ::com::sun::star::rendering::ViewState&  rOldState,
                                      const ::com::sun::star::uno::Reference<
-                     ::com::sun::star::rendering::XCanvas >&    rTargetCanvas,
+                                     ::com::sun::star::rendering::XCanvas >&        rTargetCanvas,
                                      bool                                           bSameViewTransform );
 
 
-    ::cairo::SurfaceSharedPtr mpSurface;
-    const ::com::sun::star::rendering::RenderState  maRenderState;
+        ::cairo::SurfaceSharedPtr mpSurface;
+        const ::com::sun::star::rendering::RenderState maRenderState;
     };
 }
 

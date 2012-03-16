@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #include <canvas/debug.hxx>
 #include <canvas/verbosetrace.hxx>
 #include <tools/diagnose_ex.h>
@@ -90,7 +89,7 @@ namespace cairocanvas
         CanvasCustomSpriteHelper::disposing();
     }
 
-    void SpriteHelper::redraw( const CairoSharedPtr&    pCairo,
+    void SpriteHelper::redraw( const CairoSharedPtr&      pCairo,
                                const ::basegfx::B2DPoint& rPos,
                                bool&                      /*io_bSurfacesDirty*/,
                                bool                       /*bBufferedUpdate*/ ) const
@@ -103,9 +102,11 @@ namespace cairocanvas
         const double fAlpha( getAlpha() );
         const ::basegfx::B2DHomMatrix aTransform( getTransformation() );
 
-        if( isActive() && !::basegfx::fTools::equalZero( fAlpha ) ) {
+        if( isActive() && !::basegfx::fTools::equalZero( fAlpha ) )
+        {
             OSL_TRACE ("CanvasCustomSprite::redraw called");
-            if( pCairo ) {
+            if( pCairo )
+            {
                 basegfx::B2DVector aSize = getSizePixel();
                 cairo_save( pCairo.get() );
 
@@ -114,7 +115,8 @@ namespace cairocanvas
                 fX = rPos.getX();
                 fY = rPos.getY();
 
-                if( !aTransform.isIdentity() ) {
+                if( !aTransform.isIdentity() )
+                {
                     cairo_matrix_t aMatrix, aInverseMatrix;
                     cairo_matrix_init( &aMatrix,
                                        aTransform.get( 0, 0 ), aTransform.get( 1, 0 ), aTransform.get( 0, 1 ),

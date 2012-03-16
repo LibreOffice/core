@@ -26,7 +26,6 @@
  *
  ************************************************************************/
 
-
 #if defined QUARTZ || defined IOS
 /************************************************************************
  * Mac OS X/Quartz and iOS surface backend for OpenOffice.org Cairo Canvas      *
@@ -145,10 +144,13 @@ namespace cairo
      **/
     CairoSharedPtr QuartzSurface::getCairo() const
     {
-        if (mpSurface.get()){
+        if (mpSurface.get())
+        {
             return CairoSharedPtr( cairo_create(mpSurface.get()),
                                    &cairo_destroy );
-        } else {
+        }
+        else
+        {
             return CairoSharedPtr();
         }
     }
@@ -184,7 +186,7 @@ namespace cairo
      *
      * @return The new surface or NULL
      **/
-void QuartzSurface::Resize( int /* width */, int /* height */ )
+    void QuartzSurface::Resize( int /* width */, int /* height */ )
     {
         OSL_FAIL("not supposed to be called!");
     }
@@ -196,13 +198,15 @@ void QuartzSurface::Resize( int /* width */, int /* height */ )
     void QuartzSurface::flush() const
     {
         // can only flush surfaces with NSView
-        if( !mpView ) return;
+        if( !mpView )
+            return;
 
         OSL_TRACE("Canvas::cairo::QuartzSurface::flush(): flush to NSView");
 
         CGContextRef mrContext = getCGContext();
 
-        if (!mrContext) return;
+        if (!mrContext)
+            return;
 #ifndef IOS
         [mpView lockFocus];
 #endif
@@ -236,8 +240,10 @@ void QuartzSurface::Resize( int /* width */, int /* height */ )
      **/
     int QuartzSurface::getDepth() const
     {
-        if (mpSurface.get()) {
-            switch (cairo_surface_get_content (mpSurface.get())) {
+        if (mpSurface.get())
+        {
+            switch (cairo_surface_get_content (mpSurface.get()))
+            {
                 case CAIRO_CONTENT_ALPHA:       return 8;  break;
                 case CAIRO_CONTENT_COLOR:       return 24; break;
                 case CAIRO_CONTENT_COLOR_ALPHA: return 32; break;
