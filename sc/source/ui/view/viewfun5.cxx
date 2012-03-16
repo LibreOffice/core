@@ -323,9 +323,15 @@ sal_Bool ScViewFunc::PasteDataFormat( sal_uLong nFormatId,
                         aOptions.SetDetectSpecialNumber(pDlg->IsDateConversionSet());
                         aObj.SetExtOptions(aOptions);
                     }
+                    else
+                    {
+                        // prevent error dialog for user cancel action
+                        bRet = true;
+                    }
                 }
+                if(!bRet)
+                    bRet = aObj.ImportStream( *xStream, String(), nFormatId );
                 // mba: clipboard always must contain absolute URLs (could be from alien source)
-                bRet = aObj.ImportStream( *xStream, String(), nFormatId );
             }
             else if (nFormatId == FORMAT_STRING && aDataHelper.GetString( nFormatId, aStr ))
             {
