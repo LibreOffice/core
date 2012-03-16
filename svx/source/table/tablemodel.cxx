@@ -299,7 +299,11 @@ void TableModel::UndoRemoveColumns( sal_Int32 nIndex, ColumnVector& aCols, CellV
 
     sal_Int32 nRows = getRowCountImpl();
     for( sal_Int32 nRow = 0; nRow < nRows; ++nRow )
-        maRows[nRow]->insertColumns( nIndex, nCount, &aIter );
+    {
+        CellVector::iterator aIter2 = aIter + nRow * nCount;
+        DBG_ASSERT(aIter2 < aCells.end(), "sdr::table::TableModel::UndoRemoveColumns(), invalid iterator!");
+        maRows[nRow]->insertColumns( nIndex, nCount, &aIter2 );
+    }
 
     updateColumns();
     setModified(sal_True);
