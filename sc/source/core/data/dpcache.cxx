@@ -756,12 +756,6 @@ public:
 void ScDPCache::PostInit()
 {
     maEmptyRows.build_tree();
-    FieldsType::iterator it = maFields.begin(), itEnd = maFields.end();
-    for (; it != itEnd; ++it)
-    {
-        // Trim excess capacity.
-        ItemsType(it->maItems).swap(it->maItems);
-    }
 }
 
 void ScDPCache::Clear()
