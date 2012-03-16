@@ -25,17 +25,12 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,packimages_images,$(WORKDIR)/CustomTarget/packimages/pack))
-
-$(eval $(call gb_Package_add_customtarget,packimages_images,packimages/pack))
-
-$(eval $(call gb_CustomTarget_add_outdir_dependencies,packimages/pack,\
-	$(gb_Helper_PHONY) \
-))
+$(eval $(call gb_Package_Package,packimages_images,$(call gb_CustomTarget_get_workdir,packimages/images)))
 
 $(eval $(call gb_Package_add_file,packimages_images,bin/images.zip,images.zip))
+$(eval $(call gb_Package_add_file,packimages_images,bin/images_brand.zip,images_brand.zip))
 
-$(foreach theme,$(WITH_THEMES) brand,\
+$(foreach theme,$(WITH_THEMES),\
 $(eval $(call gb_Package_add_file,packimages_images,bin/images_$(theme).zip,images_$(theme).zip)))
 
 # vim: set noet sw=4 ts=4:

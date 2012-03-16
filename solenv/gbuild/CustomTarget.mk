@@ -37,9 +37,14 @@ define gb_CustomTarget__command
 
 endef
 
+# the .dir is for make 3.81, which ignores trailing /
+$(call gb_CustomTarget_get_workdir,%)/.dir :
+	$(if $(wildcard $(dir $@)),,mkdir -p $(dir $@))
+
 $(call gb_CustomTarget_get_target,%) :
 	$(call gb_Output_announce,$*,$(true),MAK,3)
-	$(call gb_CustomTarget__command,$@,$*)
+	$(if $(NEW_STYLE),touch $@,\
+	$(call gb_CustomTarget__command,$@,$*))
 
 .PHONY: $(call gb_CustomTarget_get_clean_target,%)
 $(call gb_CustomTarget_get_clean_target,%) :
@@ -53,8 +58,13 @@ $(SRCDIR)/$(1)/Makefile
 endef
 
 define gb_CustomTarget_CustomTarget
+$(call gb_CustomTarget_get_target,$(1)) : NEW_STYLE := $(2)
+ifeq ($(2),)
 $(call gb_CustomTarget_get_target,$(1)) : \
   $(call gb_CustomTarget__get_makefile,$(1))
+else
+$$(eval $$(call gb_Module_register_target,$(call gb_CustomTarget_get_target,$(1)),$(call gb_CustomTarget_get_clean_target,$(1))))
+endif
 
 endef
 

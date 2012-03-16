@@ -28,6 +28,7 @@
 $(eval $(call gb_Module_Module,packimages))
 
 $(eval $(call gb_Module_add_targets,packimages,\
+	CustomTarget_images \
 	Package_images \
 ))
 
