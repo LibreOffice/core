@@ -94,7 +94,7 @@ DEFINE_XTYPEPROVIDER_11                 (   TabWindow                           
                                             css::beans::XPropertySet
                                         )
 
-DEFINE_XSERVICEINFO_MULTISERVICE        (   TabWindow                           ,
+PRIVATE_DEFINE_XSERVICEINFO_BASE        (   TabWindow                           ,
                                             ::cppu::OWeakObject                 ,
                                             SERVICENAME_TABWINDOW               ,
                                             IMPLEMENTATIONNAME_TABWINDOW

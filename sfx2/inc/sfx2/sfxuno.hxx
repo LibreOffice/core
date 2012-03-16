@@ -141,6 +141,33 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
 #define SFX_DECL_XINTERFACE_XTYPEPROVIDER                                                                                            \
     SFX_DECL_XINTERFACE                                                                                                               \
     SFX_DECL_XTYPEPROVIDER
+
+//************************************************************************************************************************
+//  declaration of      XInterface::queryInterface()
+//                      XInterface::aquire()
+//                      XInterface::release()
+//                      XTypeProvider::getTypes()
+//                      XTypeProvider::getImplementationId()
+//                      XServiceInfo::getImplementationName()
+//                      XServiceInfo::supportsService()
+//                      XServiceInfo::getSupportedServiceNames()
+//                      static xxx::impl_getStaticSupportedServiceNames()
+//                      static xxx::impl_getStaticImplementationName()
+//                      static xxx::impl_createInstance()
+//************************************************************************************************************************
+#define SFX_DECL_XSERVICEINFO_NOFACTORY                                                                                   \
+    /* XServiceInfo */                                                                                                                              \
+    virtual rtl::OUString SAL_CALL getImplementationName() throw( UNORUNTIMEEXCEPTION );                                                            \
+    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& sServiceName ) throw( UNORUNTIMEEXCEPTION );                                    \
+    virtual UNOSEQUENCE< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION );                                          \
+                                                                                                                                                    \
+    /* Helper for XServiceInfo */                                                                                                                   \
+    static UNOSEQUENCE< rtl::OUString > impl_getStaticSupportedServiceNames();                                                                      \
+    static rtl::OUString impl_getStaticImplementationName();                                                                                        \
+                                                                                                                                                    \
+    /* Helper for registry */                                                                                                                       \
+    static UNOREFERENCE< UNOXINTERFACE > SAL_CALL impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION );
+
 //************************************************************************************************************************
 //  declaration of      XInterface::queryInterface()
 //                      XInterface::aquire()
@@ -156,17 +183,7 @@ bool GetEncryptionData_Impl( const SfxItemSet* pSet, ::com::sun::star::uno::Sequ
 //                      static xxx::impl_createFactory()
 //************************************************************************************************************************
 #define SFX_DECL_XSERVICEINFO                                                                                             \
-    /* XServiceInfo */                                                                                                                              \
-    virtual rtl::OUString SAL_CALL getImplementationName() throw( UNORUNTIMEEXCEPTION );                                                            \
-    virtual sal_Bool SAL_CALL supportsService( const rtl::OUString& sServiceName ) throw( UNORUNTIMEEXCEPTION );                                    \
-    virtual UNOSEQUENCE< rtl::OUString > SAL_CALL getSupportedServiceNames() throw( UNORUNTIMEEXCEPTION );                                          \
-                                                                                                                                                    \
-    /* Helper for XServiceInfo */                                                                                                                   \
-    static UNOSEQUENCE< rtl::OUString > impl_getStaticSupportedServiceNames();                                                                      \
-    static rtl::OUString impl_getStaticImplementationName();                                                                                        \
-                                                                                                                                                    \
-    /* Helper for registry */                                                                                                                       \
-    static UNOREFERENCE< UNOXINTERFACE > SAL_CALL impl_createInstance( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager ) throw( UNOEXCEPTION );\
+    SFX_DECL_XSERVICEINFO_NOFACTORY                                                                                       \
     static UNOREFERENCE< UNOXSINGLESERVICEFACTORY > impl_createFactory( const UNOREFERENCE< UNOXMULTISERVICEFACTORY >& xServiceManager );
 
 #define SFX_DECL_XINTERFACE_XTYPEPROVIDER_XSERVICEINFO                                                                                              \

@@ -866,8 +866,6 @@ static sal_Bool lcl_MayBeDBase( SvStream& rStream )
     return aTypeName;
 }
 
-SFX_IMPL_SINGLEFACTORY( ScFilterDetect )
-
 /* XServiceInfo */
 rtl::OUString SAL_CALL ScFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
 {

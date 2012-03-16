@@ -483,7 +483,7 @@ void SfxMultiVarRecordWriter::FlushContent_Impl()
 {
     // Versions-Kennung und Positions-Offset des aktuellen Contents merken;
     // das Positions-Offset ist relativ zur Startposition des ersten Contents
-    assert(_aContentOfs.size() == _nContentCount-1);
+    assert(_aContentOfs.size() == static_cast<size_t>(_nContentCount)-1);
     _aContentOfs.resize(_nContentCount-1);
     _aContentOfs.push_back(
             SFX_REC_CONTENT_HEADER(_nContentVer,_nStartPos,_nContentStartPos));

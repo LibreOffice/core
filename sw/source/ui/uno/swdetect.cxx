@@ -423,8 +423,6 @@ SwFilterDetect::~SwFilterDetect()
     return aTypeName;
 }
 
-SFX_IMPL_SINGLEFACTORY( SwFilterDetect )
-
 /* XServiceInfo */
 rtl::OUString SAL_CALL SwFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
 {

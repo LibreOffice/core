@@ -417,8 +417,6 @@ SmFilterDetect::~SmFilterDetect()
     return aTypeName;
 }
 
-SFX_IMPL_SINGLEFACTORY( SmFilterDetect )
-
 /* XServiceInfo */
 rtl::OUString SAL_CALL SmFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
 {

@@ -84,7 +84,7 @@ public:
                             SwFilterDetect( const REFERENCE < ::com::sun::star::lang::XMultiServiceFactory >& xFactory );
     virtual                 ~SwFilterDetect();
 
-    SFX_DECL_XSERVICEINFO
+    SFX_DECL_XSERVICEINFO_NOFACTORY
 
     //----------------------------------------------------------------------------------
     // XExtendedFilterDetect

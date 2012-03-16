@@ -486,8 +486,6 @@ SdFilterDetect::~SdFilterDetect()
     return aTypeName;
 }
 
-SFX_IMPL_SINGLEFACTORY( SdFilterDetect )
-
 /* XServiceInfo */
 rtl::OUString SAL_CALL SdFilterDetect::getImplementationName() throw( UNORUNTIMEEXCEPTION )
 {
