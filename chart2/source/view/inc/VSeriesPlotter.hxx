@@ -331,7 +331,7 @@ protected: //methods
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         getErrorBarsGroupShape( VDataSeries& rDataSeries
             , const::com::sun::star:: uno::Reference<
-                ::com::sun::star::drawing::XShapes >& xTarget );
+                ::com::sun::star::drawing::XShapes >& xTarget, bool bYError );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
         createDataLabel( const ::com::sun::star::uno::Reference<

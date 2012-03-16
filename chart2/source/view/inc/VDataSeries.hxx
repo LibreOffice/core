@@ -158,7 +158,7 @@ public:
     rtl::OUString       getCID() const;
     rtl::OUString       getSeriesParticle() const;
     rtl::OUString       getPointCID_Stub() const;
-    rtl::OUString       getErrorBarsCID() const;
+    rtl::OUString       getErrorBarsCID( bool bYError ) const;
     rtl::OUString       getLabelsCID() const;
     rtl::OUString       getLabelCID_Stub() const;
     rtl::OUString       getDataCurveCID( sal_Int32 nCurveIndex, bool bAverageLine ) const;

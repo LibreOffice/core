@@ -393,9 +393,10 @@ rtl::OUString VDataSeries::getPointCID_Stub() const
 {
     return m_aPointCID_Stub;
 }
-rtl::OUString VDataSeries::getErrorBarsCID() const
+rtl::OUString VDataSeries::getErrorBarsCID(bool bYError) const
 {
-    rtl::OUString aChildParticle( ObjectIdentifier::getStringForType( OBJECTTYPE_DATA_ERRORS ) );
+    rtl::OUString aChildParticle( ObjectIdentifier::getStringForType(
+                                      bYError ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X ) );
     aChildParticle+=(C2U("="));
 
     return ObjectIdentifier::createClassifiedIdentifierForParticles(

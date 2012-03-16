@@ -365,13 +365,14 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getLabelsGroupShape( VDataSer
 }
 
 uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VDataSeries& rDataSeries
-                                        , const uno::Reference< drawing::XShapes >& xTarget )
+                                        , const uno::Reference< drawing::XShapes >& xTarget
+                                        , bool bYError )
 {
     uno::Reference< drawing::XShapes > xShapes( rDataSeries.m_xErrorBarsGroupShape );
     if(!xShapes.is())
     {
         //create a group shape for this series and add to logic target:
-        xShapes = this->createGroupShape( xTarget,rDataSeries.getErrorBarsCID() );
+        xShapes = this->createGroupShape( xTarget,rDataSeries.getErrorBarsCID(bYError) );
         rDataSeries.m_xErrorBarsGroupShape = xShapes;
     }
     return xShapes;
@@ -941,7 +942,7 @@ void VSeriesPlotter::createErrorBar_X( const drawing::Position3D& rUnscaledLogic
     if( xErrorBarProp.is())
     {
         uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
-            this->getErrorBarsGroupShape(rVDataSeries, xTarget) );
+            this->getErrorBarsGroupShape(rVDataSeries, xTarget, false) );
 
         createErrorBar( xErrorBarsGroup_Shapes
             , rUnscaledLogicPosition, xErrorBarProp
@@ -963,7 +964,7 @@ void VSeriesPlotter::createErrorBar_Y( const drawing::Position3D& rUnscaledLogic
     if( xErrorBarProp.is())
     {
         uno::Reference< drawing::XShapes > xErrorBarsGroup_Shapes(
-            this->getErrorBarsGroupShape(rVDataSeries, xTarget) );
+            this->getErrorBarsGroupShape(rVDataSeries, xTarget, true) );
 
         createErrorBar( xErrorBarsGroup_Shapes
             , rUnscaledLogicPosition, xErrorBarProp
