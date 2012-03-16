@@ -1,5 +1,11 @@
 Interface to Telepathy Tubes.
 
+The idea is to provide 1-1 collaboration between contacts and many-many
+collaboration via MUCs, using Telepathy DBus Tubes over Jabber/XMPP.
+
+First stab is at 1-1 contact channels, hopefully MUCs can be realized using
+the same TeleConference abstraction.
+
 To enable configure LibO with --enable-telepathy
 
 Status 2012-03-16:
@@ -31,3 +37,34 @@ Status 2012-03-16:
 * unsure if the uniquify setup with tp_simple_handler_new_with_factory() would
   work at all, hence trying to have one instance un-uniquified, but to no
   avail
+
+
+TODOs (once those basic problems are solved)
+
+* associate a document with a conference
+  * use SfxObjectShell as an abstraction and broadcast incoming changes?
+  * use UNO API?
+  * first setup just to get something working could share a document
+    accessible by all parties on a network share or some such
+    * may need one master responsible to save the document
+  * later document transfer will be needed, use Telepathy File Transfer
+* dialog to pick own account
+* dialog to pick contact or MUC to work with
+* dialog to accept/reject collaboration requests
+
+
+In applications, e.g. Calc:
+
+* stricter model,view,controller
+* disable all actions we cannot process collaboratively
+* separate input from view
+* preprocess input to determine data type (text, number, date, ...)
+* send typed/categorized data over wire before actually processing in model
+* process serialized input as received
+* Calc specific:
+  * use existing shared document feature with change-tracking enabled to
+    visualize changes
+    * may have the benefit of having already only a subset of trackable change
+      actions available
+  * let ScDocFunc handle also received changes
+* have dialogs send their result item sets over the wire
