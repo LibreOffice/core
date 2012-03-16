@@ -376,12 +376,6 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
     size_t nLen = distance(itBeg, itUniqueEnd);
     rField.maItems.reserve(nLen);
     std::for_each(itBeg, itUniqueEnd, PushBackValue(rField.maItems));
-
-    // The items are actually already sorted.  So, just insert a sequence
-    // of integers from 0 and up.
-    rField.maGlobalOrder.reserve(nLen);
-    for (size_t i = 0; i < nLen; ++i)
-        rField.maGlobalOrder.push_back(i);
 }
 
 }
@@ -1120,24 +1114,9 @@ void ScDPCache::ClearGroupFields()
     std::for_each(maFields.begin(), maFields.end(), ClearGroupItems());
 }
 
-SCROW ScDPCache::GetOrder(long nDim, SCROW nIndex) const
+SCROW ScDPCache::GetOrder(long /*nDim*/, SCROW nIndex) const
 {
-    OSL_ENSURE( nDim >=0 && nDim < mnColumnCount, "ScDPTableDataCache::GetOrder : out of bound" );
-
-    const Field& rField = maFields[nDim];
-    if (rField.maIndexOrder.size() !=  rField.maGlobalOrder.size())
-    { //not inited
-        SCROW nRow  = 0;
-        rField.maIndexOrder.resize(rField.maGlobalOrder.size(), 0);
-        for (size_t i = 0, n = rField.maGlobalOrder.size(); i < n; ++i)
-        {
-            nRow = rField.maGlobalOrder[i];
-            rField.maIndexOrder[nRow] = i;
-        }
-    }
-
-    OSL_ENSURE(nIndex >= 0 && sal::static_int_cast<sal_uInt32>(nIndex) < rField.maIndexOrder.size() , "ScDPTableDataCache::GetOrder");
-    return rField.maIndexOrder[nIndex];
+    return nIndex;
 }
 
 ScDocument* ScDPCache::GetDoc() const

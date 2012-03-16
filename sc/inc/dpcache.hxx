@@ -80,7 +80,10 @@ public:
          */
         boost::scoped_ptr<GroupItems> mpGroup;
 
-        ItemsType maItems; /// Unique values in the field.
+        /**
+         * Unique values in the field, stored in ascending order.
+         */
+        ItemsType maItems;
 
         /**
          * Original source data represented as indices to the unique value
@@ -88,17 +91,6 @@ public:
          * data source.
          */
         IndexArrayType maData;
-
-        /**
-         * Ascending order of field items.
-         */
-        IndexArrayType maGlobalOrder;
-
-        /**
-         * Ranks of each unique data represented by their index.  It's a
-         * reverse mapping of item index to global order index.
-         */
-        mutable IndexArrayType maIndexOrder;
 
         sal_uLong mnNumFormat;
 
