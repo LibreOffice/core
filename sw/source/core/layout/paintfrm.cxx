@@ -32,7 +32,6 @@
 #include <vcl/sound.hxx>
 #include <vcl/lazydelete.hxx>
 #include <tools/poly.hxx>
-#include <svl/svstdarr.hxx>
 #include <svx/xoutbmp.hxx>
 #include <sfx2/progress.hxx>
 #include <editeng/brshitem.hxx>
@@ -48,7 +47,6 @@
 #include <switerator.hxx>
 #include <fmtsrnd.hxx>
 #include <fmtclds.hxx>
-#include <tools/shl.hxx>
 #include <comcore.hrc>
 #include <swmodule.hxx>
 #include <rootfrm.hxx>
@@ -81,7 +79,6 @@
 #include <dbg_lay.hxx>
 #include <accessibilityoptions.hxx>
 #include <docsh.hxx>
-#include <swtable.hxx>
 #include <svx/svdogrp.hxx>
 #include <sortedobjs.hxx>
 #include <EnhancedPDFExportHelper.hxx>
@@ -99,14 +96,14 @@
 #include <ndole.hxx>
 #include <svtools/chartprettypainter.hxx>
 #include <PostItMgr.hxx>
-#include <tools/color.hxx>
 #include <vcl/svapp.hxx>
 
 #define COL_NOTES_SIDEPANE                  RGB_COLORDATA(230,230,230)
 #define COL_NOTES_SIDEPANE_BORDER           RGB_COLORDATA(200,200,200)
 #define COL_NOTES_SIDEPANE_SCROLLAREA       RGB_COLORDATA(230,230,220)
 
-#include <svtools/borderhelper.hxx>
+#include <svtools/borderhelper.hxx> //Need for svtools::DrawLine
+#include <swtable.hxx> //Need for svtools::DrawLine
 
 #include "pagefrm.hrc"
 #include <drawinglayer/geometry/viewinformation2d.hxx>
@@ -125,6 +122,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
+#include <deque>
 #include <algorithm>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
@@ -132,8 +130,6 @@
 
 using namespace ::editeng;
 using namespace ::com::sun::star;
-
-#define GETOBJSHELL()       ((SfxObjectShell*)rSh.GetDoc()->GetDocShell())
 
 //subsidiary lines enabled?
 #define IS_SUBS_TABLE \
@@ -156,8 +152,6 @@ using namespace ::com::sun::star;
                       !pGlobalShell->GetViewOptions()->IsReadonly()&&\
                       !pGlobalShell->GetViewOptions()->IsFormView() &&\
                        SwViewOption::IsObjectBoundaries())
-
-#define SW_MAXBORDERCACHE 20
 
 //Class declaration; here because they are only used in this file
 
@@ -195,25 +189,24 @@ public:
     sal_Bool MakeUnion( const SwRect &rRect );
 };
 
-SV_DECL_VARARR( SwLRects, SwLineRect, 100 )
-
-class SwLineRects : public SwLRects
+class SwLineRects : public std::deque< SwLineRect >
 {
-    sal_uInt16 nLastCount;  //avoid unnecessary cycles in PaintLines
+    std::deque< SwLineRect >::iterator nLastCount;  //avoid unnecessary cycles in PaintLines
 public:
-    SwLineRects() : nLastCount( 0 ) {}
+    SwLineRects() : nLastCount( this->begin() ) {}
     void AddLineRect( const SwRect& rRect,  const Color *pColor, const SvxBorderStyle nStyle,
                       const SwTabFrm *pTab, const sal_uInt8 nSCol );
     void ConnectEdges( OutputDevice *pOut );
     void PaintLines  ( OutputDevice *pOut );
     void LockLines( sal_Bool bLock );
 
-    sal_uInt16 Free() const { return nFree; }
+    //Limit lines to 100
+    bool isFull() const { return this->size()>100 ? true : false; }
 };
 
 class SwSubsRects : public SwLineRects
 {
-    void RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects ); //;-)
+    void RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects );
 public:
     void PaintSubsidiary( OutputDevice *pOut, const SwLineRects *pRects );
 
@@ -436,7 +429,6 @@ SwSavePaintStatics::~SwSavePaintStatics()
 
 //----------------- Implementation for the table borders --------------
 
-SV_IMPL_VARARR( SwLRects, SwLineRect );
 
 SwLineRect::SwLineRect( const SwRect &rRect, const Color *pCol, const SvxBorderStyle nStyl,
                         const SwTabFrm *pT, const sal_uInt8 nSCol ) :
@@ -496,9 +488,10 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
 
     //Loop backwards because lines which can be combined, can usually be painted
     //in the same context.
-    for ( sal_uInt16 i = Count(); i ; )
+
+    for (SwLineRects::iterator it = this->end(); it != this->begin(); --it)
     {
-        SwLineRect &rLRect = operator[](--i);
+        SwLineRect &rLRect = (*it);
         // Test for the orientation, color, table
         if ( rLRect.GetTab() == pTab &&
              !rLRect.IsPainted() && rLRect.GetSubColor() == nSCol &&
@@ -510,7 +503,7 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
                 return;
         }
     }
-    Insert( SwLineRect( rRect, pCol, nStyle, pTab, nSCol ), Count() );
+    this->push_back( SwLineRect( rRect, pCol, nStyle, pTab, nSCol ) );
 }
 
 void SwLineRects::ConnectEdges( OutputDevice *pOut )
@@ -526,9 +519,9 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
 
     SvPtrarr   aCheck( 64 );
 
-    for ( int i = 0; i < (int)Count(); ++i )
+    for (SwLineRects::iterator it = this->begin(); it != this->end(); ++it)
     {
-        SwLineRect &rL1 = operator[](sal_uInt16(i));
+        SwLineRect &rL1 = (*it);
         if ( !rL1.GetTab() || rL1.IsPainted() || rL1.IsLocked() )
             continue;
 
@@ -549,9 +542,9 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
         }
 
         // Collect all lines to possibly link with i1
-        for ( sal_uInt16 i2 = 0; i2 < Count(); ++i2 )
+        for (SwLineRects::iterator it2 = this->begin(); it2 != this->end(); ++it2)
         {
-            SwLineRect &rL2 = operator[](i2);
+            SwLineRect &rL2 = (*it2);
             if ( rL2.GetTab() != rL1.GetTab() ||
                  rL2.IsPainted()              ||
                  rL2.IsLocked()               ||
@@ -616,12 +609,10 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             aIns.Bottom( pLA->Bottom() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            const sal_uInt16 nTmpFree = Free();
-                            Insert( SwLineRect( aIns, rL1.GetColor(), SOLID,
-                                        rL1.GetTab(), SUBCOL_TAB ), Count() );
-                            if ( !nTmpFree )
+                            this->push_back( SwLineRect( aIns, rL1.GetColor(), SOLID,
+                                        rL1.GetTab(), SUBCOL_TAB ) );
+                            if ( isFull() )
                             {
-                                --i;
                                 k = aCheck.Count();
                                 break;
                             }
@@ -657,12 +648,10 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
                             aIns.Right( pLA->Right() );
                             if ( !rL1.IsInside( aIns ) )
                                 continue;
-                            const sal_uInt16 nTmpFree = Free();
-                            Insert( SwLineRect( aIns, rL1.GetColor(), SOLID,
-                                        rL1.GetTab(), SUBCOL_TAB ), Count() );
-                            if ( !nTmpFree )
+                            this->push_back( SwLineRect( aIns, rL1.GetColor(), SOLID,
+                                        rL1.GetTab(), SUBCOL_TAB ) );
+                            if ( isFull() )
                             {
-                                --i;
                                 k = aCheck.Count();
                                 break;
                             }
@@ -677,8 +666,7 @@ void SwLineRects::ConnectEdges( OutputDevice *pOut )
         }
         if ( bRemove )
         {
-            Remove( static_cast<sal_uInt16>(i), 1 );
-            --i;            //Leave none!
+            this->erase( it );
         }
     }
 }
@@ -687,17 +675,18 @@ inline void SwSubsRects::Ins( const SwRect &rRect, const sal_uInt8 nSCol )
 {
     // Lines that are shorted than the largest line width won't be inserted
     if ( rRect.Height() > DEF_LINE_WIDTH_4 || rRect.Width() > DEF_LINE_WIDTH_4 )
-        Insert( SwLineRect( rRect, 0, SOLID, 0, nSCol ), Count());
+        this->push_back( SwLineRect( rRect, 0, SOLID, 0, nSCol ) );
 }
 
 void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
 {
     // All help lines that are covered by any border will be removed or split
-    for ( sal_uInt16 i = 0; i < Count(); ++i )
+
+    for (SwSubsRects::iterator it = this->begin(); it != this->end(); ++it)
     {
         // get a copy instead of a reference, because an <insert> may destroy
         // the object due to a necessary array resize.
-        const SwLineRect aSubsLineRect = SwLineRect( operator[](i) );
+        const SwLineRect aSubsLineRect = SwLineRect(*it);
 
         // add condition <aSubsLineRect.IsLocked()> in order to consider only
         // border lines, which are *not* locked.
@@ -717,9 +706,9 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
             aSubsRect.Top   ( aSubsRect.Top()    - (nPixelSzH+nHalfPixelSzH) );
             aSubsRect.Bottom( aSubsRect.Bottom() + (nPixelSzH+nHalfPixelSzH) );
         }
-        for ( sal_uInt16 k = 0; k < rRects.Count(); ++k )
+        for (SwLineRects::const_iterator itK = rRects.begin(); itK != rRects.end(); ++itK)
         {
-            SwLineRect &rLine = rRects[k];
+            const SwLineRect &rLine = *itK;
 
             // do *not* consider painted or locked border lines.
             // #i1837# - locked border lines have to be considered.
@@ -741,19 +730,18 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Bottom( nTmp );
-                            Insert( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
-                                                aSubsLineRect.GetSubColor() ), Count());
+                            this->push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
+                                                aSubsLineRect.GetSubColor() ) );
                         }
                         nTmp = rLine.Bottom()+nPixelSzH+1;
                         if ( aSubsLineRect.Bottom() > nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Top( nTmp );
-                            Insert( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
-                                                aSubsLineRect.GetSubColor() ), Count());
+                            this->push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
+                                                aSubsLineRect.GetSubColor() ) );
                         }
-                        Remove( i, 1 );
-                        --i;
+                        this->erase(it);
                         break;
                     }
                 }
@@ -767,19 +755,18 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Right( nTmp );
-                            Insert( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
-                                                aSubsLineRect.GetSubColor() ), Count());
+                            this->push_back( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
+                                                aSubsLineRect.GetSubColor() ) );
                         }
                         nTmp = rLine.Right()+nPixelSzW+1;
                         if ( aSubsLineRect.Right() > nTmp )
                         {
                             SwRect aNewSubsRect( aSubsLineRect );
                             aNewSubsRect.Left( nTmp );
-                            Insert( SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
-                                                aSubsLineRect.GetSubColor() ), Count());
+                            this->push_back(  SwLineRect( aNewSubsRect, 0, aSubsLineRect.GetStyle(), 0,
+                                                aSubsLineRect.GetSubColor() ) );
                         }
-                        Remove( i, 1 );
-                        --i;
+                        this->erase(it);
                         break;
                     }
                 }
@@ -790,8 +777,8 @@ void SwSubsRects::RemoveSuperfluousSubsidiaryLines( const SwLineRects &rRects )
 
 void SwLineRects::LockLines( sal_Bool bLock )
 {
-    for ( sal_uInt16 i = 0; i < Count(); ++i )
-        operator[](i).Lock( bLock );
+    for (SwLineRects::iterator it = this->begin(); it != this->end(); ++it)
+       (*it).Lock( bLock );
 }
 
 void lcl_DrawDashedRect( OutputDevice * pOut, SwLineRect & rLRect )
@@ -836,7 +823,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
 {
     // Paint the borders. Sadly two passes are needed.
     // Once for the inside and once for the outside edges of tables
-    if ( Count() != nLastCount )
+    if ( this->end() != nLastCount )
     {
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
@@ -848,19 +835,18 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
         const Color *pLast = 0;
 
         sal_Bool bPaint2nd = sal_False;
-        sal_uInt16 nMinCount = Count();
-        sal_uInt16 i;
+        SwLineRects::iterator nMinCount = this->end();
 
-        for ( i = 0; i < Count(); ++i )
+        for (SwLineRects::iterator it = this->begin(); it != this->end(); ++it)
         {
-            SwLineRect &rLRect = operator[](i);
+            SwLineRect &rLRect = *it;
 
             if ( rLRect.IsPainted() )
                 continue;
 
             if ( rLRect.IsLocked() )
             {
-                nMinCount = Min( nMinCount, i );
+                nMinCount = Min( nMinCount, it );
                 continue;
             }
 
@@ -915,15 +901,15 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                 bPaint2nd = sal_True;
         }
         if ( bPaint2nd )
-            for ( i = 0; i < Count(); ++i )
+            for (SwLineRects::iterator it = this->begin(); it != this->end(); ++it)
             {
-                SwLineRect &rLRect = operator[](i);
+                SwLineRect &rLRect = *it;
                 if ( rLRect.IsPainted() )
                     continue;
 
                 if ( rLRect.IsLocked() )
                 {
-                    nMinCount = Min( nMinCount, i );
+                    nMinCount = Min( nMinCount, it );
                     continue;
                 }
 
@@ -953,20 +939,20 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
 void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                    const SwLineRects *pRects )
 {
-    if ( Count() )
+    if ( !this->empty() )
     {
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
 
         // Remove all help line that are almost covered (tables)
-        for ( sal_uInt16 i = 0; i < Count(); ++i )
+        for (SwSubsRects::iterator it = this->begin(); it != this->end(); ++it)
         {
-            SwLineRect &rLi = operator[](i);
+            SwLineRect &rLi = *it;
             const bool bVerticalSubs = rLi.Height() > rLi.Width();
 
-            for ( sal_uInt16 k = i+1; k < Count(); ++k )
+            for (SwSubsRects::iterator itK = it; itK != this->end(); ++itK)
             {
-                SwLineRect &rLk = operator[](k);
+                SwLineRect &rLk = (*itK);
                 if ( rLi.SSize() == rLk.SSize() )
                 {
                     if ( bVerticalSubs == ( rLk.Height() > rLk.Width() ) )
@@ -979,10 +965,10 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                  ((nLi < rLk.Left() && nLi+21 > rLk.Left()) ||
                                   (nLk < rLi.Left() && nLk+21 > rLi.Left())))
                             {
-                                Remove( k, 1 );
+                                this->erase( itK );
                                 // don't continue with inner loop any more:
                                 // the array may shrink!
-                                --i; k = Count();
+                                itK = this->end();
                             }
                         }
                         else
@@ -993,8 +979,10 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                  ((nLi < rLk.Top() && nLi+21 > rLk.Top()) ||
                                   (nLk < rLi.Top() && nLk+21 > rLi.Top())))
                             {
-                                Remove( k, 1 );
-                                --i; k = Count();
+                                this->erase( itK );
+                                // don't continue with inner loop any more:
+                                // the array may shrink!
+                                itK = this->end();
                             }
                         }
                     }
@@ -1002,10 +990,10 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
             }
         }
 
-        if ( pRects && pRects->Count() )
+        if ( pRects && (!pRects->empty()) )
             RemoveSuperfluousSubsidiaryLines( *pRects );
 
-        if ( Count() )
+        if ( !this->empty() )
         {
             pOut->Push( PUSH_FILLCOLOR|PUSH_LINECOLOR );
             pOut->SetLineColor();
@@ -1020,9 +1008,9 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                 pOut->SetDrawMode( 0 );
             }
 
-            for ( sal_uInt16 i = 0; i < Count(); ++i )
+            for (SwSubsRects::iterator it = this->begin(); it != this->end(); ++it)
             {
-                SwLineRect &rLRect = operator[](i);
+                SwLineRect &rLRect = (*it);
                 // Add condition <!rLRect.IsLocked()> to prevent paint of locked subsidiary lines.
                 if ( !rLRect.IsPainted() &&
                      !rLRect.IsLocked() )
@@ -1707,7 +1695,6 @@ void MA_FASTCALL DrawGraphic( const SvxBrushItem *pBrush,
             else
                 ((SvxBrushItem*)pBrush)->SetDoneLink( STATIC_LINK(
                                     rSh.GetDoc(), SwDoc, BackgroundDone ) );
-            //SfxObjectShell &rObjSh = *GETOBJSHELL();
             const Graphic* pGrf = pBrush->GetGraphic();
             if( pGrf && GRAPHIC_NONE != pGrf->GetType() )
             {
