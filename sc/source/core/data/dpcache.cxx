@@ -370,7 +370,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
     for (sal_uInt16 nCol = nStartCol; nCol <= nEndCol; ++nCol)
     {
         AddLabel(createLabelString(pDoc, nCol, nStartRow, nDocTab));
-        Field& rField = maFields[nCol];
+        Field& rField = maFields[nCol-nStartCol];
         std::vector<Bucket> aBuckets;
         aBuckets.reserve(nEndRow-nStartRow); // skip the topmost label cell.
 
