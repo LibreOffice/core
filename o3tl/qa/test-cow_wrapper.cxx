@@ -97,16 +97,25 @@ public:
 
         {
             aTestObj1 = cow_wrapper_client1( 1 );
+            CPPUNIT_ASSERT_EQUAL(aTestObj1.queryUnmodified(), 1);
             aTestObj2.modify( 2 );
+            CPPUNIT_ASSERT_EQUAL(aTestObj2.queryUnmodified(), 2);
             aTestObj3.modify( 3 );
+            CPPUNIT_ASSERT_EQUAL(aTestObj3.queryUnmodified(), 3);
 
             aTestObj4 = cow_wrapper_client2( 4 );
+            CPPUNIT_ASSERT_EQUAL(aTestObj4.queryUnmodified(), 4);
             aTestObj5.modify( 5 );
+            CPPUNIT_ASSERT_EQUAL(aTestObj5.queryUnmodified(), 5);
             aTestObj6.modify( 6 );
+            CPPUNIT_ASSERT_EQUAL(aTestObj6.queryUnmodified(), 6);
 
             aTestObj7 = cow_wrapper_client3( 7 );
+            CPPUNIT_ASSERT_EQUAL(aTestObj7.queryUnmodified(), 7);
             aTestObj8.modify( 8 );
+            CPPUNIT_ASSERT_EQUAL(aTestObj8.queryUnmodified(), 8);
             aTestObj9.modify( 9 );
+            CPPUNIT_ASSERT_EQUAL(aTestObj9.queryUnmodified(), 9);
         }
         // all three temporaries are dead now
 

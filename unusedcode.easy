@@ -885,9 +885,8 @@ nullcanvas::SpriteCanvasHelper::backgroundPaint(basegfx::B2DRange const&)
 nullcanvas::SpriteCanvasHelper::genericUpdate(basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 nullcanvas::SpriteCanvasHelper::opaqueUpdate(basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 nullcanvas::SpriteCanvasHelper::scrollUpdate(basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
-o3tltests::cow_wrapper_client2::queryUnmodified() const
-o3tltests::cow_wrapper_client3::queryUnmodified() const
 ooo::vba::extractIntFromAny(com::sun::star::uno::Any const&)
+oox::core::PowerPointExport::WriteTextStyleLevel(boost::shared_ptr<sax_fastparser::FastSerializerHelper>, int, int)
 oox::drawingml::ChartExport::exportDataSeq(com::sun::star::uno::Reference<com::sun::star::chart2::data::XDataSequence> const&, int)
 oox::drawingml::ChartExport::exportXAxis(oox::drawingml::AxisIdPair)
 oox::drawingml::ChartExport::exportYAxis(oox::drawingml::AxisIdPair)

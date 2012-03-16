@@ -165,7 +165,7 @@ void cow_wrapper_client::modify( int nVal )
 {
     maImpl->setValue( nVal );
 }
-void cow_wrapper_client::queryUnmodified() const
+int cow_wrapper_client::queryUnmodified() const
 {
     return maImpl->getValue();
 }
