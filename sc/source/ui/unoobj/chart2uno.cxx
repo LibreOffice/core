@@ -761,13 +761,13 @@ void Chart2Positioner::createPositionMap()
                 }
                 else
                 {
-                    if (pCols->Insert(nInsCol, pNewRowTable.get()))
+                    pCol = static_cast<Table*>(pCols->Get(nInsCol));
+                    if (!pCol)
                     {
-                        pCol = pNewRowTable.release();
+                        pCol = pNewRowTable.get();
+                        pCols->Insert(nInsCol, pNewRowTable.release());
                         pNewRowTable.reset(new Table);
                     }
-                    else
-                        pCol = static_cast<Table*>(pCols->Get(nInsCol));
                 }
 
                 sal_uInt32 nInsRow = static_cast<sal_uInt32>(bNoGlue ? nNoGlueRow : nRow1);
@@ -786,7 +786,7 @@ void Chart2Positioner::createPositionMap()
                     if (pCol->Get(nInsRow) == NULL)
                     {
                         if (bExternal)
-                            pCol->Insert(nInsRow, new ScExternalSingleRefToken(nFileId, aTabName, aCellData));
+                            pCol->Insert(nInsRow, new ScExternalSingleRefToken(nFileId, aTabName, aCellData))
                         else
                             pCol->Insert(nInsRow, new ScSingleRefToken(aCellData));
                     }
