@@ -45,6 +45,9 @@ namespace sdr
     } // end of namespace overlay
 } // end of namespace sdr
 
+#ifdef _MSC_VER // broken msvc template instantiation
+#include <svx/sdr/overlay/overlaymanager.hxx>
+#endif
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 class SdrPreRenderDevice
