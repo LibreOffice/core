@@ -277,6 +277,9 @@ void ControllerState::update(
             if( aObjectType == OBJECTTYPE_DATA_AVERAGE_LINE )
                 bMayFormatMeanValue = true;
 
+            if( aObjectType == OBJECTTYPE_DATA_ERRORS_X)
+                bMayFormatXErrorBars = true;
+
             if( aObjectType == OBJECTTYPE_DATA_ERRORS_Y || aObjectType == OBJECTTYPE_DATA_ERRORS )
                 bMayFormatYErrorBars = true;
 
