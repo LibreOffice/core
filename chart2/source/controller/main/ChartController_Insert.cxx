@@ -502,6 +502,7 @@ void ChartController::executeDispatch_InsertErrorBars( bool bYError )
 
         // open dialog
         SfxItemSet aItemSet = aItemConverter.CreateEmptyItemSet();
+        aItemSet.Put(SfxBoolItem(SCHATTR_STAT_ERRORBAR_TYPE,bYError));
         aItemConverter.FillItemSet( aItemSet );
         ObjectPropertiesDialogParameter aDialogParameter = ObjectPropertiesDialogParameter(
             ObjectIdentifier::createClassifiedIdentifierWithParent(

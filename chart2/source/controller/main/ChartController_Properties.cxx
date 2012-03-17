@@ -774,6 +774,10 @@ bool ChartController::executeDlg_ObjectProperties_withoutUndoGuard( const ::rtl:
             return bRet;
 
         SfxItemSet aItemSet = apItemConverter->CreateEmptyItemSet();
+
+        if ( eObjectType == OBJECTTYPE_DATA_ERRORS_X || eObjectType == OBJECTTYPE_DATA_ERRORS_Y )
+            aItemSet.Put(SfxBoolItem(SCHATTR_STAT_ERRORBAR_TYPE, eObjectType == OBJECTTYPE_DATA_ERRORS_Y ));
+
         apItemConverter->FillItemSet( aItemSet );
 
         //-------------------------------------------------------------
