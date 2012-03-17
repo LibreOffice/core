@@ -67,7 +67,7 @@ InsertErrorBarsDialog::InsertErrorBarsDialog(
                                    /* bNoneAvailable = */ true, eType ))
 {
     FreeResource();
-    ObjectType objType = eType == ErrorBarResources::ERROR_BAR_Y ? OBJECTTYPE_DATA_ERRORS : OBJECTTYPE_DATA_ERRORS_X;
+    ObjectType objType = eType == ErrorBarResources::ERROR_BAR_Y ? OBJECTTYPE_DATA_ERRORS_Y : OBJECTTYPE_DATA_ERRORS_X;
 
     this->SetText( ObjectNameProvider::getName_ObjectForAllSeries(objType) );
 
