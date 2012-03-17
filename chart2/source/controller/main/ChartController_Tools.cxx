@@ -553,17 +553,29 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
     {
         OUString aSelObjCID( aSelOID.getObjectCID() );
         ObjectType aObjectType(ObjectIdentifier::getObjectType( aSelObjCID ));
-        if( (OBJECTTYPE_TITLE == aObjectType) || (OBJECTTYPE_LEGEND == aObjectType) )
+
+        switch(aObjectType)
+        {
+        case OBJECTTYPE_TITLE:
+        case OBJECTTYPE_LEGEND:
+        case OBJECTTYPE_DATA_SERIES:
+        case OBJECTTYPE_LEGEND_ENTRY:
+        case OBJECTTYPE_DATA_CURVE_EQUATION:
+        case OBJECTTYPE_DATA_CURVE:
+        case OBJECTTYPE_DATA_AVERAGE_LINE:
+        case OBJECTTYPE_DATA_ERRORS:
+        case OBJECTTYPE_DATA_ERRORS_X:
+        case OBJECTTYPE_DATA_ERRORS_Y:
+        case OBJECTTYPE_DATA_ERRORS_Z:
+        case OBJECTTYPE_DATA_LABELS:
+        case OBJECTTYPE_DATA_LABEL:
+        case OBJECTTYPE_AXIS:
+        case OBJECTTYPE_GRID:
+        case OBJECTTYPE_SUBGRID:
             return true;
-        if( (OBJECTTYPE_DATA_SERIES == aObjectType) || (OBJECTTYPE_LEGEND_ENTRY == aObjectType) )
-            return true;
-        if( (OBJECTTYPE_DATA_CURVE_EQUATION == aObjectType) || (OBJECTTYPE_DATA_CURVE == aObjectType) ||
-            (OBJECTTYPE_DATA_AVERAGE_LINE == aObjectType) || (OBJECTTYPE_DATA_ERRORS == aObjectType))
-            return true;
-        if( (OBJECTTYPE_DATA_LABELS == aObjectType) || (OBJECTTYPE_DATA_LABEL == aObjectType) )
-            return true;
-        if( (OBJECTTYPE_AXIS == aObjectType) || (OBJECTTYPE_GRID == aObjectType) || (OBJECTTYPE_SUBGRID == aObjectType) )
-            return true;
+        default:
+            break;
+        }
     }
     else if ( aSelOID.isAdditionalShape() )
     {
@@ -714,16 +726,29 @@ bool ChartController::executeDispatch_Delete()
             }
 
             case OBJECTTYPE_DATA_ERRORS:
+            case OBJECTTYPE_DATA_ERRORS_X:
+            case OBJECTTYPE_DATA_ERRORS_Y:
+            case OBJECTTYPE_DATA_ERRORS_Z:
             {
                 uno::Reference< beans::XPropertySet > xErrorBarProp(
                     ObjectIdentifier::getObjectPropertySet( aCID, getModel() ));
                 if( xErrorBarProp.is())
                 {
+                    sal_Int16 nId;
+
+                    if ( aObjectType == OBJECTTYPE_DATA_ERRORS_X )
+                        nId = STR_OBJECT_ERROR_BARS_X;
+                    else if ( aObjectType == OBJECTTYPE_DATA_ERRORS_Y ||
+                              aObjectType == OBJECTTYPE_DATA_ERRORS )
+                        nId = STR_OBJECT_ERROR_BARS_Y;
+                    else
+                        nId = STR_OBJECT_ERROR_BARS_Z;
+
                     uno::Reference< frame::XModel > xModel( getModel() );
                     // using assignment for broken gcc 3.3
                     UndoGuard aUndoGuard = UndoGuard(
                         ActionDescriptionProvider::createDescription(
-                            ActionDescriptionProvider::DELETE, String( SchResId( STR_OBJECT_ERROR_BARS_Y ))),
+                            ActionDescriptionProvider::DELETE, String( SchResId( nId ))),
                         m_xUndoManager );
                     {
                         ControllerLockGuard aCtlLockGuard( xModel );
