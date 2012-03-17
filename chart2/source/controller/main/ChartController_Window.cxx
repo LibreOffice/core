@@ -203,11 +203,15 @@ OUString lcl_getFormatCommandForObjectCID( const OUString& rCID )
         case OBJECTTYPE_DATA_AVERAGE_LINE:
             aDispatchCommand = C2U(".uno:FormatMeanValue");
             break;
-        case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_X:
+            aDispatchCommand = C2U(".uno:FormatXErrorBars");
+            break;
+        case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_Y:
-        case OBJECTTYPE_DATA_ERRORS_Z:
             aDispatchCommand = C2U(".uno:FormatYErrorBars");
+            break;
+        case OBJECTTYPE_DATA_ERRORS_Z:
+            aDispatchCommand = C2U(".uno:FormatZErrorBars");
             break;
         case OBJECTTYPE_DATA_CURVE:
             aDispatchCommand = C2U(".uno:FormatTrendline");
@@ -1147,6 +1151,8 @@ void ChartController::execute_Command( const CommandEvent& rCEvt )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatTrendlineEquation") );
                     if( xMeanValue.is() )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatMeanValue") );
+                    if( bHasXErrorBars )
+                        lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatXErrorBars") );
                     if( bHasYErrorBars )
                         lcl_insertMenuCommand( xPopupMenu, xMenuEx, nUniqueId++, C2U(".uno:FormatYErrorBars") );
 

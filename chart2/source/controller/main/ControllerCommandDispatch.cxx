@@ -132,17 +132,20 @@ struct ControllerState
     bool bMayAddTrendlineEquation;
     bool bMayAddR2Value;
     bool bMayAddMeanValue;
+    bool bMayAddXErrorBars;
     bool bMayAddYErrorBars;
 
     bool bMayDeleteTrendline;
     bool bMayDeleteTrendlineEquation;
     bool bMayDeleteR2Value;
     bool bMayDeleteMeanValue;
+    bool bMayDeleteXErrorBars;
     bool bMayDeleteYErrorBars;
 
     bool bMayFormatTrendline;
     bool bMayFormatTrendlineEquation;
     bool bMayFormatMeanValue;
+    bool bMayFormatXErrorBars;
     bool bMayFormatYErrorBars;
 };
 
@@ -159,15 +162,18 @@ ControllerState::ControllerState() :
         bMayAddTrendlineEquation( false ),
         bMayAddR2Value( false ),
         bMayAddMeanValue( false ),
+        bMayAddXErrorBars( false ),
         bMayAddYErrorBars( false ),
         bMayDeleteTrendline( false ),
         bMayDeleteTrendlineEquation( false ),
         bMayDeleteR2Value( false ),
         bMayDeleteMeanValue( false ),
+        bMayDeleteXErrorBars( false ),
         bMayDeleteYErrorBars( false ),
         bMayFormatTrendline( false ),
         bMayFormatTrendlineEquation( false ),
         bMayFormatMeanValue( false ),
+        bMayFormatXErrorBars( false ),
         bMayFormatYErrorBars( false )
 {}
 
@@ -217,15 +223,18 @@ void ControllerState::update(
         bMayAddTrendlineEquation = false;
         bMayAddR2Value = false;
         bMayAddMeanValue = false;
+        bMayAddXErrorBars = false;
         bMayAddYErrorBars = false;
         bMayDeleteTrendline = false;
         bMayDeleteTrendlineEquation = false;
         bMayDeleteR2Value = false;
         bMayDeleteMeanValue = false;
+        bMayDeleteXErrorBars = false;
         bMayDeleteYErrorBars = false;
         bMayFormatTrendline = false;
         bMayFormatTrendlineEquation = false;
         bMayFormatMeanValue = false;
+        bMayFormatXErrorBars = false;
         bMayFormatYErrorBars = false;
         if( bHasSelectedObject )
         {
@@ -257,7 +266,10 @@ void ControllerState::update(
                 if( (OBJECTTYPE_DATA_SERIES == aObjectType || OBJECTTYPE_DATA_POINT == aObjectType)
                     && ChartTypeHelper::isSupportingStatisticProperties( xFirstChartType, nDimensionCount ))
                 {
-                    bMayFormatYErrorBars = bMayDeleteYErrorBars = StatisticsHelper::hasErrorBars( xGivenDataSeries );
+                    bMayFormatXErrorBars = bMayDeleteXErrorBars = StatisticsHelper::hasErrorBars( xGivenDataSeries, false );
+                    bMayAddXErrorBars = ! bMayDeleteXErrorBars;
+
+                    bMayFormatYErrorBars = bMayDeleteYErrorBars = StatisticsHelper::hasErrorBars( xGivenDataSeries, true );
                     bMayAddYErrorBars = ! bMayDeleteYErrorBars;
                 }
             }
@@ -573,6 +585,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:InsertMenuGrids")] = bIsWritable && m_apModelState->bSupportsAxes;
     m_aCommandAvailability[ C2U(".uno:InsertMenuTrendlines")] = bIsWritable && m_apModelState->bSupportsStatistics;
     m_aCommandAvailability[ C2U(".uno:InsertMenuMeanValues")] = bIsWritable && m_apModelState->bSupportsStatistics;
+    m_aCommandAvailability[ C2U(".uno:InsertMenuXErrorBars")] = bIsWritable && m_apModelState->bSupportsStatistics;
     m_aCommandAvailability[ C2U(".uno:InsertMenuYErrorBars")] = bIsWritable && m_apModelState->bSupportsStatistics;
     m_aCommandAvailability[ C2U(".uno:InsertSymbol")] = bIsWritable && m_apControllerState->bIsTextObject;
 
@@ -585,6 +598,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:FormatDataPoint")] = bFormatObjectAvailable;
     m_aCommandAvailability[ C2U(".uno:FormatDataLabels")] = bFormatObjectAvailable;
     m_aCommandAvailability[ C2U(".uno:FormatDataLabel")] = bFormatObjectAvailable;
+    m_aCommandAvailability[ C2U(".uno:FormatXErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatXErrorBars;
     m_aCommandAvailability[ C2U(".uno:FormatYErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatYErrorBars;
     m_aCommandAvailability[ C2U(".uno:FormatMeanValue")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatMeanValue;
     m_aCommandAvailability[ C2U(".uno:FormatTrendline")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayFormatTrendline;
@@ -660,6 +674,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:InsertR2Value")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddR2Value;
     m_aCommandAvailability[ C2U(".uno:DeleteR2Value")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteR2Value;
 
+    m_aCommandAvailability[ C2U(".uno:InsertXErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddXErrorBars;
     m_aCommandAvailability[ C2U(".uno:InsertYErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayAddYErrorBars;
 
     m_aCommandAvailability[ C2U(".uno:DeleteDataLabels")] = bIsWritable;
@@ -667,6 +682,7 @@ void ControllerCommandDispatch::updateCommandAvailability()
     m_aCommandAvailability[ C2U(".uno:DeleteTrendline") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteTrendline;
     m_aCommandAvailability[ C2U(".uno:DeleteTrendlineEquation") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteTrendlineEquation;
     m_aCommandAvailability[ C2U(".uno:DeleteMeanValue") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteMeanValue;
+    m_aCommandAvailability[ C2U(".uno:DeleteXErrorBars")] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteXErrorBars;
     m_aCommandAvailability[ C2U(".uno:DeleteYErrorBars") ] = bIsWritable && bControllerStateIsValid && m_apControllerState->bMayDeleteYErrorBars;
 
     m_aCommandAvailability[ C2U(".uno:ResetDataPoint") ] = bIsWritable;
