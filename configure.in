@@ -8895,7 +8895,7 @@ else
         ;;
     *)
         SYSTEM_LIBPNG=YES
-        AC_MSG_RESULT([no])
+        AC_MSG_RESULT([yes])
         ;;
     esac
 fi
