@@ -432,6 +432,15 @@ rtl::OUString lcl_getGridCIDForCommand( const ::rtl::OString& rDispatchCommand, 
     rtl::OUString aCID( ObjectIdentifier::createClassifiedIdentifierForGrid( xAxis, xChartModel, nSubGridIndex ) );
     return aCID;
 }
+
+rtl::OUString lcl_getErrorCIDForCommand( const ObjectType eDispatchType, const ObjectType &eSelectedType, const ::rtl::OUString &rSelectedCID)
+{
+    if( eSelectedType == eDispatchType )
+        return rSelectedCID;
+
+    return ObjectIdentifier::createClassifiedIdentifierWithParent( eDispatchType, ::rtl::OUString(), rSelectedCID );
+}
+
 rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand, const uno::Reference< XChartDocument > & xChartDocument, const rtl::OUString& rSelectedCID )
 {
     ObjectType eObjectType = OBJECTTYPE_UNKNOWN;
@@ -591,13 +600,15 @@ rtl::OUString lcl_getObjectCIDForCommand( const ::rtl::OString& rDispatchCommand
     }
     //-------------------------------------------------------------------------
     // y error bars
+    else if( rDispatchCommand.equals("FormatXErrorBars") )
+    {
+        return lcl_getErrorCIDForCommand(OBJECTTYPE_DATA_ERRORS_X, eSelectedType, rSelectedCID );
+    }
+    //-------------------------------------------------------------------------
+    // y error bars
     else if( rDispatchCommand.equals("FormatYErrorBars") )
     {
-        if( eSelectedType == OBJECTTYPE_DATA_ERRORS )
-            return rSelectedCID;
-        else
-            return ObjectIdentifier::createClassifiedIdentifierWithParent(
-                OBJECTTYPE_DATA_ERRORS, ::rtl::OUString(), rSelectedCID );
+        return lcl_getErrorCIDForCommand(OBJECTTYPE_DATA_ERRORS_Y, eSelectedType, rSelectedCID );
     }
     //-------------------------------------------------------------------------
     // axis
