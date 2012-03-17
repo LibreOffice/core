@@ -676,7 +676,7 @@ void ChartController::executeDispatch_DeleteTrendlineEquation()
     }
 }
 
-void ChartController::executeDispatch_DeleteYErrorBars()
+void ChartController::executeDispatch_DeleteErrorBars( bool bYError )
 {
     uno::Reference< chart2::XDataSeries > xDataSeries(
         ObjectIdentifier::getDataSeriesForCID( m_aSelection.getSelectedCID(), getModel() ));
@@ -686,7 +686,7 @@ void ChartController::executeDispatch_DeleteYErrorBars()
             ActionDescriptionProvider::createDescription(
                 ActionDescriptionProvider::DELETE, String( SchResId( STR_OBJECT_CURVE ))),
             m_xUndoManager );
-        StatisticsHelper::removeErrorBars( xDataSeries );
+        StatisticsHelper::removeErrorBars( xDataSeries, bYError );
         aUndoGuard.commit();
     }
 }

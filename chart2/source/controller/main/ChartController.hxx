@@ -637,7 +637,7 @@ private:
     void                executeDispatch_DeleteMeanValue();
     void                executeDispatch_DeleteTrendline();
     void                executeDispatch_DeleteTrendlineEquation();
-    void                executeDispatch_DeleteYErrorBars();
+    void                executeDispatch_DeleteErrorBars( bool bYError );
 
     void                executeDispatch_InsertDataLabels();
     void                executeDispatch_InsertDataLabel();

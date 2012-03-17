@@ -1130,8 +1130,10 @@ bool lcl_isFormatObjectCommand( const rtl::OString& aCommand )
         this->executeDispatch_InsertErrorBars(false);
     else if( aCommand.equals("InsertYErrorBars"))
         this->executeDispatch_InsertErrorBars(true);
+    else if( aCommand.equals("DeleteXErrorBars"))
+        this->executeDispatch_DeleteErrorBars(false);
     else if( aCommand.equals("DeleteYErrorBars"))
-        this->executeDispatch_DeleteYErrorBars();
+        this->executeDispatch_DeleteErrorBars(true);
     else if( aCommand.equals("InsertTrendlineEquation"))
          this->executeDispatch_InsertTrendlineEquation();
     else if( aCommand.equals("DeleteTrendlineEquation"))
