@@ -54,7 +54,8 @@ PATCH_FILES=\
     icu4c-escapespace.patch \
     icu4c-strict-c.patch \
     CVE-2011-4599.patch \
-    arm-assembler.patch
+    arm-assembler.patch \
+    icu4c-parallel-buid.patch
 
 .IF "$(OS)"=="ANDROID"
 PATCH_FILES+=\
