@@ -138,7 +138,9 @@ rtl::OUString createLabelString(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB 
     return aDocStr;
 }
 
-void initFromCell(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, ScDPItemData& rData, sal_uLong& rNumFormat)
+void initFromCell(
+    ScDPCache& rCache, ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab,
+    ScDPItemData& rData, sal_uLong& rNumFormat)
 {
     rtl::OUString aDocStr = pDoc->GetString(nCol, nRow, nTab);
     rNumFormat = 0;
@@ -147,7 +149,7 @@ void initFromCell(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, ScDPItem
 
     if (pDoc->GetErrCode(aPos))
     {
-        rData.SetErrorString(aDocStr);
+        rData.SetErrorString(rCache.InternString(aDocStr));
     }
     else if (pDoc->HasValueData(nCol, nRow, nTab))
     {
@@ -157,12 +159,12 @@ void initFromCell(ScDocument* pDoc, SCCOL nCol, SCROW nRow, SCTAB nTab, ScDPItem
     }
     else if (pDoc->HasData(nCol, nRow, nTab))
     {
-        rData.SetString(aDocStr);
+        rData.SetString(rCache.InternString(aDocStr));
     }
 }
 
 void getItemValue(
-    ScDPItemData& rData, const Reference<sdbc::XRow>& xRow, sal_Int32 nType,
+    ScDPCache& rCache, ScDPItemData& rData, const Reference<sdbc::XRow>& xRow, sal_Int32 nType,
     long nCol, const Date& rNullDate, short& rNumType)
 {
     rNumType = NUMBERFORMAT_NUMBER;
@@ -232,7 +234,7 @@ void getItemValue(
             case sdbc::DataType::VARBINARY:
             case sdbc::DataType::LONGVARBINARY:
             default:
-                rData.SetString(xRow->getString(nCol));
+                rData.SetString(rCache.InternString(xRow->getString(nCol)));
         }
     }
     catch (uno::Exception&)
@@ -380,7 +382,7 @@ bool ScDPCache::InitFromDoc(ScDocument* pDoc, const ScRange& rRange)
         {
             SCROW nRow = i + nOffset;
             sal_uLong nNumFormat = 0;
-            initFromCell(pDoc, nCol, nRow, nDocTab, aData, nNumFormat);
+            initFromCell(*this, pDoc, nCol, nRow, nDocTab, aData, nNumFormat);
             aBuckets.push_back(Bucket(aData, 0, i));
 
             if (!aData.IsEmpty())
@@ -444,7 +446,7 @@ bool ScDPCache::InitFromDataBase (const Reference<sdbc::XRowSet>& xRowSet, const
             {
                 SCROW nRow = 0;
                 short nFormatType = NUMBERFORMAT_UNDEFINED;
-                getItemValue(aData, xRow, aColTypes[nCol], nCol+1, rNullDate, nFormatType);
+                getItemValue(*this, aData, xRow, aColTypes[nCol], nCol+1, rNullDate, nFormatType);
                 aBuckets.push_back(Bucket(aData, 0, nRow++));
                 if (!aData.IsEmpty())
                 {
@@ -730,6 +732,7 @@ void ScDPCache::Clear()
     maLabelNames.clear();
     maGroupFields.clear();
     maEmptyRows.clear();
+    maStringPool.clear();
 }
 
 void ScDPCache::AddLabel(const rtl::OUString& rLabel)
@@ -862,6 +865,17 @@ SCCOL ScDPCache::GetDimensionIndex(const rtl::OUString& sName) const
             return static_cast<SCCOL>(i-1);
     }
     return -1;
+}
+
+const rtl::OUString* ScDPCache::InternString(const rtl::OUString& rStr) const
+{
+    StringSetType::iterator it = maStringPool.find(rStr);
+    if (it != maStringPool.end())
+        // In the pool.
+        return &(*it);
+
+    std::pair<StringSetType::iterator, bool> r = maStringPool.insert(rStr);
+    return r.second ? &(*r.first) : NULL;
 }
 
 void ScDPCache::AddReference(ScDPObject* pObj) const

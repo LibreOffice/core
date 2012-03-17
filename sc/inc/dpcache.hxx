@@ -36,6 +36,7 @@
 #include <boost/noncopyable.hpp>
 #include <boost/scoped_ptr.hpp>
 #include <boost/ptr_container/ptr_vector.hpp>
+#include <boost/unordered_set.hpp>
 #include <mdds/flat_segment_tree.hpp>
 
 #include <vector>
@@ -58,6 +59,8 @@ struct ScDPNumGroupInfo;
  */
 class SC_DLLPUBLIC ScDPCache : boost::noncopyable
 {
+    typedef boost::unordered_set<rtl::OUString, rtl::OUStringHash> StringSetType;
+
 public:
     typedef std::vector<ScDPItemData> ItemsType;
     typedef std::set<ScDPObject*> ObjectSetType;
@@ -112,6 +115,7 @@ private:
 
     FieldsType maFields;
     GroupFieldsType maGroupFields;
+    mutable StringSetType maStringPool;
 
     LabelsType maLabelNames;    // Stores dimension names.
     mdds::flat_segment_tree<SCROW, bool> maEmptyRows;
@@ -119,6 +123,7 @@ private:
     bool mbDisposing;
 
 public:
+    const rtl::OUString* InternString(const rtl::OUString& rStr) const;
     void AddReference(ScDPObject* pObj) const;
     void RemoveReference(ScDPObject* pObj) const;
     const ObjectSetType& GetAllReferences() const;

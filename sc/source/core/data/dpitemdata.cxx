@@ -70,6 +70,10 @@ sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
         }
         case String:
         case Error:
+            if (rA.mpString == rB.mpString)
+                // strings may be interned.
+                return 0;
+
             return ScGlobal::GetCollator()->compareString(rA.GetString(), rB.GetString());
         default:
             ;
@@ -78,16 +82,16 @@ sal_Int32 ScDPItemData::Compare(const ScDPItemData& rA, const ScDPItemData& rB)
 }
 
 ScDPItemData::ScDPItemData() :
-    mfValue(0.0), meType(Empty) {}
+    mfValue(0.0), meType(Empty), mbStringInterned(false) {}
 
 ScDPItemData::ScDPItemData(const ScDPItemData& r) :
-    meType(r.meType)
+    meType(r.meType), mbStringInterned(r.mbStringInterned)
 {
     switch (r.meType)
     {
         case String:
         case Error:
-            mpString = new rtl::OUString(*r.mpString);
+            mpString = mbStringInterned ? r.mpString :  new rtl::OUString(*r.mpString);
         break;
         case Value:
         case RangeStart:
@@ -105,12 +109,20 @@ ScDPItemData::ScDPItemData(const ScDPItemData& r) :
 
 void ScDPItemData::DisposeString()
 {
-    if (meType == String || meType == Error)
-        delete mpString;
+    if (!mbStringInterned)
+    {
+        if (meType == String || meType == Error)
+            delete mpString;
+    }
+
+    mbStringInterned = false;
 }
 
 ScDPItemData::ScDPItemData(const rtl::OUString& rStr) :
-    mpString(new rtl::OUString(rStr)), meType(String) {}
+    mpString(new rtl::OUString(rStr)), meType(String), mbStringInterned(false) {}
+
+ScDPItemData::ScDPItemData(const rtl::OUString* pStr) :
+    mpString(pStr), meType(String), mbStringInterned(true) {}
 
 ScDPItemData::ScDPItemData(sal_Int32 nGroupType, sal_Int32 nValue) :
     meType(GroupValue)
@@ -126,7 +138,7 @@ ScDPItemData::~ScDPItemData()
 
 ScDPItemData::Type ScDPItemData::GetType() const
 {
-    return meType;
+    return static_cast<Type>(meType);
 }
 
 void ScDPItemData::SetString(const rtl::OUString& rS)
@@ -134,6 +146,14 @@ void ScDPItemData::SetString(const rtl::OUString& rS)
     DisposeString();
     mpString = new rtl::OUString(rS);
     meType = String;
+}
+
+void ScDPItemData::SetString(const rtl::OUString* pS)
+{
+    DisposeString();
+    mpString = pS;
+    meType = String;
+    mbStringInterned = true;
 }
 
 void ScDPItemData::SetValue(double fVal)
@@ -170,6 +190,12 @@ void ScDPItemData::SetErrorString(const rtl::OUString& rS)
     meType = Error;
 }
 
+void ScDPItemData::SetErrorString(const rtl::OUString* pS)
+{
+    SetString(pS);
+    meType = Error;
+}
+
 bool ScDPItemData::IsCaseInsEqual(const ScDPItemData& r) const
 {
     if (meType != r.meType)
@@ -186,6 +212,9 @@ bool ScDPItemData::IsCaseInsEqual(const ScDPItemData& r) const
         default:
             ;
     }
+
+    if (mbStringInterned && r.mbStringInterned)
+        return mpString == mpString;
 
     return ScGlobal::GetpTransliteration()->isEqual(GetString(), r.GetString());
 }
@@ -225,11 +254,13 @@ ScDPItemData& ScDPItemData::operator= (const ScDPItemData& r)
 {
     DisposeString();
     meType = r.meType;
+    mbStringInterned = false;
     switch (r.meType)
     {
         case String:
         case Error:
-            mpString = new rtl::OUString(*r.mpString);
+            mpString = r.mbStringInterned ? r.mpString : new rtl::OUString(*r.mpString);
+            mbStringInterned = r.mbStringInterned;
         break;
         case Value:
         case RangeStart:
