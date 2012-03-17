@@ -1037,11 +1037,14 @@ SvXMLImportContext *ScXMLDataPilotFieldContext::CreateChildContext( sal_uInt16 n
 void ScXMLDataPilotFieldContext::AddMember(ScDPSaveMember* pMember)
 {
     if (pDim)
+    {
         pDim->AddMember(pMember);
-
-    if (!pMember->GetIsVisible())
-        // This member is hidden.
-        mbHasHiddenMember = true;
+        if (!pMember->GetIsVisible())
+            // This member is hidden.
+            mbHasHiddenMember = true;
+    }
+    else
+        delete pMember;
 }
 
 void ScXMLDataPilotFieldContext::SetSubTotalName(const OUString& rName)
@@ -1636,7 +1639,7 @@ void ScXMLDataPilotMemberContext::EndElement()
 {
     if (bHasName)   // #i53407# don't check sName, empty name is allowed
     {
-        ScDPSaveMember* pMember = new ScDPSaveMember(String(sName));
+        ScDPSaveMember* pMember = new ScDPSaveMember(sName);
         if (!maDisplayName.isEmpty())
             pMember->SetLayoutName(maDisplayName);
         pMember->SetIsVisible(bDisplay);
