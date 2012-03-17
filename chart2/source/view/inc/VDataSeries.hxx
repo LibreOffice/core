@@ -185,7 +185,8 @@ private: //methods
 public: //member
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xGroupShape;
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xLabelsGroupShape;
-    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xErrorBarsGroupShape;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xErrorXBarsGroupShape;
+    ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes > m_xErrorYBarsGroupShape;
 
     //the following group shapes will be created as children of m_xGroupShape on demand
     //they can be used to assure that some parts of a series shape are always in front of others (e.g. symbols in front of lines)

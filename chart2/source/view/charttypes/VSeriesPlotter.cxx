@@ -368,12 +368,15 @@ uno::Reference< drawing::XShapes > VSeriesPlotter::getErrorBarsGroupShape( VData
                                         , const uno::Reference< drawing::XShapes >& xTarget
                                         , bool bYError )
 {
-    uno::Reference< drawing::XShapes > xShapes( rDataSeries.m_xErrorBarsGroupShape );
+    uno::Reference< ::com::sun::star::drawing::XShapes > &rShapeGroup =
+            bYError ? rDataSeries.m_xErrorYBarsGroupShape : rDataSeries.m_xErrorXBarsGroupShape;
+
+    uno::Reference< drawing::XShapes > xShapes( rShapeGroup );
     if(!xShapes.is())
     {
         //create a group shape for this series and add to logic target:
         xShapes = this->createGroupShape( xTarget,rDataSeries.getErrorBarsCID(bYError) );
-        rDataSeries.m_xErrorBarsGroupShape = xShapes;
+        rShapeGroup = xShapes;
     }
     return xShapes;
 

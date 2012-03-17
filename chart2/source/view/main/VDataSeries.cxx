@@ -158,7 +158,8 @@ VDataSeries::VDataSeries( const uno::Reference< XDataSeries >& xDataSeries )
     , m_fLogicZPos(0.0)
     , m_xGroupShape(NULL)
     , m_xLabelsGroupShape(NULL)
-    , m_xErrorBarsGroupShape(NULL)
+    , m_xErrorXBarsGroupShape(NULL)
+    , m_xErrorYBarsGroupShape(NULL)
     , m_xFrontSubGroupShape(NULL)
     , m_xBackSubGroupShape(NULL)
     , m_xDataSeries(xDataSeries)
@@ -333,7 +334,8 @@ void VDataSeries::releaseShapes()
 {
     m_xGroupShape.set(0);
     m_xLabelsGroupShape.set(0);
-    m_xErrorBarsGroupShape.set(0);
+    m_xErrorXBarsGroupShape.set(0);
+    m_xErrorYBarsGroupShape.set(0);
     m_xFrontSubGroupShape.set(0);
     m_xBackSubGroupShape.set(0);
 
