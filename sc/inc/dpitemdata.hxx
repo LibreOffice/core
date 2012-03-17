@@ -44,6 +44,14 @@
 
 class ScDocument;
 
+/**
+ * When assigning a string value, you can also assign an interned string
+ * whose life-cycle is managed by the pivot cache that it belongs to.  Those
+ * methods that take a string pointer assume that the string is interned.
+ *
+ * <p>Do make sure that an item with an interned string won't persist after
+ * the pivot cache has been destroyed or reloaded.</p>
+ */
 class SC_DLLPUBLIC ScDPItemData
 {
     friend class ScDPCache;
