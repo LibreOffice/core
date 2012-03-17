@@ -29,6 +29,8 @@
 #ifndef _SV_SALGDI_H
 #define _SV_SALGDI_H
 
+#include <vector>
+
 #include "basegfx/polygon/b2dpolypolygon.hxx"
 
 #include "premac.h"
@@ -39,9 +41,10 @@
 #include <vcl/fontcapabilities.hxx>
 
 #include "outfont.hxx"
+#include "aqua/salframe.h"
 #include "salgdi.hxx"
 
-#include <vector>
+#include "aqua/salgdicommon.hxx"
 
 class AquaSalFrame;
 class AquaSalBitmap;
@@ -78,19 +81,6 @@ private:
     mutable bool                mbCmapEncodingRead; // true if cmap encoding of Mac font is read
     mutable bool                mbHasCJKSupport; // #i78970# CJK fonts need extra leading
     mutable bool                mbFontCapabilitiesRead;
-};
-
-// abstracting quartz color instead of having to use an CGFloat[] array
-class RGBAColor
-{
-public:
-    RGBAColor( SalColor );
-    RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha ); //NOTUSEDYET
-    const float* AsArray() const    { return &mfRed; }
-    bool IsVisible() const          { return (mfAlpha > 0); }
-    void SetAlpha( float fAlpha )   { mfAlpha = fAlpha; }
-private:
-    float mfRed, mfGreen, mfBlue, mfAlpha;
 };
 
 // -------------------
@@ -357,33 +347,10 @@ private:
     void Pattern50Fill();
     UInt32 getState( ControlState nState );
     UInt32 getTrackState( ControlState nState );
+    bool GetRawFontData( const ImplFontData* pFontData,
+                         std::vector<unsigned char>& rBuffer,
+                         bool* pJustCFF );
 };
-
-class XorEmulation
-{
-public:
-                    XorEmulation();
-    /*final*/       ~XorEmulation();
-
-    void            SetTarget( int nWidth, int nHeight, int nBitmapDepth, CGContextRef, CGLayerRef );
-    bool            UpdateTarget();
-    void            Enable()            { mbIsEnabled = true; }
-    void            Disable()           { mbIsEnabled = false; }
-    bool            IsEnabled() const   { return mbIsEnabled; }
-    CGContextRef    GetTargetContext() const { return mxTargetContext; }
-    CGContextRef    GetMaskContext() const { return (mbIsEnabled ? mxMaskContext : NULL); }
-
-private:
-    CGLayerRef      mxTargetLayer;
-    CGContextRef    mxTargetContext;
-    CGContextRef    mxMaskContext;
-    CGContextRef    mxTempContext;
-    sal_uLong*          mpMaskBuffer;
-    sal_uLong*          mpTempBuffer;
-    int             mnBufferLongs;
-    bool            mbIsEnabled;
-};
-
 
 // --- some trivial inlines
 
@@ -396,20 +363,6 @@ inline void AquaSalGraphics::RefreshRect( const NSRect& rRect )
 {
     RefreshRect( rRect.origin.x, rRect.origin.y, rRect.size.width, rRect.size.height );
 }
-
-inline RGBAColor::RGBAColor( SalColor nSalColor )
-:   mfRed( SALCOLOR_RED(nSalColor) * (1.0/255))
-,   mfGreen( SALCOLOR_GREEN(nSalColor) * (1.0/255))
-,   mfBlue( SALCOLOR_BLUE(nSalColor) * (1.0/255))
-,   mfAlpha( 1.0 )  // opaque
-{}
-
-inline RGBAColor::RGBAColor( float fRed, float fGreen, float fBlue, float fAlpha )
-:   mfRed( fRed )
-,   mfGreen( fGreen )
-,   mfBlue( fBlue )
-,   mfAlpha( fAlpha )
-{}
 
 #endif // _SV_SALGDI_H
 
