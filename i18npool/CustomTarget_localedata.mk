@@ -26,33 +26,38 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-all : $(patsubst %.xml,localedata_%.cxx,$(notdir $(wildcard $(SRC_ROOT)/i18npool/source/localedata/data/*.xml)))
+$(eval $(call gb_CustomTarget_CustomTarget,i18npool/localedata,new_style))
 
-gb_PARTIALBUILD:=T
-include $(GBUILDDIR)/gbuild_simple.mk
+IPLD := $(call gb_CustomTarget_get_workdir,i18npool/localedata)
 
+$(call gb_CustomTarget_get_target,i18npool/localedata) : \
+	$(patsubst %.xml,$(IPLD)/localedata_%.cxx, \
+		$(notdir $(wildcard $(SRCDIR)/i18npool/source/localedata/data/*.xml)))
+
+# TODO: move this to gbuild/
 my_file := file://$(if $(filter $(OS_FOR_BUILD),WNT),/)
 my_components := component/sax/source/expatwrap/expwrap.component
 
-localedata_%.cxx : localedata_%_invis.cxx
-	sed 's/\(^.*get[^;]*$$\)/SAL_DLLPUBLIC_EXPORT \1/' $< > $@
+$(IPLD)/localedata_%.cxx : $(SRCDIR)/i18npool/source/localedata/data/%.xml \
+		$(IPLD)/saxparser.rdb $(call gb_Executable_get_target_for_build,saxparser)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SAX,1)
+	$(call gb_Helper_abbreviate_dirs_native, \
+		$(call gb_Helper_execute,saxparser) $* $< $@.tmp \
+			$(my_file)$(IPLD)/saxparser.rdb $(OUTDIR_FOR_BUILD)/bin/types.rdb \
+			-env:LO_LIB_DIR=$(my_file)$(OUTDIR_FOR_BUILD)/lib \
+			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null 2>&1) && \
+		sed 's/\(^.*get[^;]*$$\)/SAL_DLLPUBLIC_EXPORT \1/' $@.tmp > $@ && \
+		rm $@.tmp)
 
-ifeq ($(OS_FOR_BUILD),WNT)
-localedata_%_invis.cxx : $(SRCDIR)/i18npool/source/localedata/data/%.xml saxparser.rdb \
-	$(OUTDIR)/bin/saxparser$(gb_Executable_EXT)
-	$(call gb_Helper_execute,saxparser $* `cygpath -m $<` $@ $(my_file)`cygpath -m $(WORKDIR)/CustomTarget/i18npool/source/localedata/saxparser.rdb` `cygpath -m $(OUTDIR)/bin/types.rdb` -env:LO_LIB_DIR=$(my_file)`cygpath -m $(OUTDIR)/bin`)
-else
-localedata_%_invis.cxx : $(SRCDIR)/i18npool/source/localedata/data/%.xml saxparser.rdb \
-	$(OUTDIR_FOR_BUILD)/bin/saxparser$(gb_Executable_EXT_for_build)
-	$(call gb_Helper_execute,saxparser $* $< $@ $(my_file)$(WORKDIR_FOR_BUILD)/CustomTarget/i18npool/source/localedata/saxparser.rdb $(OUTDIR_FOR_BUILD)/bin/types.rdb -env:LO_LIB_DIR=$(my_file)$(OUTDIR_FOR_BUILD)/lib)
-endif
+$(IPLD)/saxparser.rdb : $(IPLD)/saxparser.input \
+		$(gb_XSLTPROCTARGET) $(SOLARENV)/bin/packcomponents.xslt
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),RDB,1)
+	$(call gb_Helper_abbreviate_dirs_native, \
+		$(gb_XSLTPROC) --nonet --stringparam prefix $(OUTDIR_FOR_BUILD)/xml/ \
+			-o $@ $(SOLARENV)/bin/packcomponents.xslt $<)
 
-saxparser.rdb : saxparser.input
-	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) --nonet --stringparam prefix $(OUTDIR)/xml/ -o $@ \
-		$(SOLARENV)/bin/packcomponents.xslt saxparser.input)
-
-saxparser.input :
+$(IPLD)/saxparser.input :| $(IPLD)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
 	echo '<list><filename>$(my_components)</filename></list>' > $@
 
-.PHONY: all
 # vim: set noet sw=4 ts=4:

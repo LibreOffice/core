@@ -26,20 +26,20 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-all : $(subst .txt,.cxx,$(notdir $(wildcard $(SRC_ROOT)/i18npool/source/indexentry/data/*.txt)))
+$(eval $(call gb_CustomTarget_CustomTarget,i18npool/indexentry,new_style))
 
-gb_PARTIALBUILD:=T
-include $(GBUILDDIR)/gbuild_simple.mk
+IPIE := $(call gb_CustomTarget_get_workdir,i18npool/indexentry)
 
-%.cxx : %_invis.cxx
-	sed 's/\(^.*get_\)/SAL_DLLPUBLIC_EXPORT \1/' $< > $@
+$(call gb_CustomTarget_get_target,i18npool/indexentry) : \
+	$(patsubst %.txt,$(IPIE)/%.cxx,$(notdir \
+		$(wildcard $(SRCDIR)/i18npool/source/indexentry/data/*.txt)))
 
-%_invis.cxx : $(SRCDIR)/i18npool/source/indexentry/data/%.txt
-ifeq ($(OS_FOR_BUILD),WNT)
-	$(call gb_Helper_execute,genindex_data `cygpath -m $<` $@ $*)
-else
-	$(call gb_Helper_execute,genindex_data $< $@ $*)
-endif
+$(IPIE)/%.cxx : $(SRCDIR)/i18npool/source/indexentry/data/%.txt \
+		$(call gb_Executable_get_target_for_build,genindex_data) | $(IPIE)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IND,1)
+	$(call gb_Helper_abbreviate_dirs_native, \
+		$(call gb_Helper_execute,genindex_data) $< $@.tmp $* && \
+		sed 's/\(^.*get_\)/SAL_DLLPUBLIC_EXPORT \1/' $@.tmp > $@ && \
+		rm $@.tmp)
 
-.PHONY: all
 # vim: set noet sw=4 ts=4:

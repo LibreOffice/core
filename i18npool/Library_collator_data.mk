@@ -28,14 +28,13 @@
 
 $(eval $(call gb_Library_Library,collator_data))
 
-$(eval $(call gb_Library_add_package_headers,collator_data,i18npool_generated))
-
 $(eval $(call gb_Library_add_linked_libs,collator_data,\
     $(gb_STDLIBS) \
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,collator_data,\
-	$(subst $(WORKDIR)/,,$(basename $(wildcard $(WORKDIR)/CustomTarget/i18npool/source/collator/collator_*.cxx))) \
+	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/collator/data/*.txt),\
+		CustomTarget/i18npool/collator/collator_$(notdir $(basename $(txt)))) \
 ))
 
 # vim: set noet sw=4 ts=4:

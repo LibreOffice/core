@@ -28,14 +28,11 @@
 
 $(eval $(call gb_Library_Library,i18npool))
 
-$(eval $(call gb_Library_add_package_headers,i18npool,i18npool_generated))
-
 $(eval $(call gb_Library_set_componentfile,i18npool,i18npool/util/i18npool))
 
 $(eval $(call gb_Library_set_include,i18npool,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/i18npool/inc \
-	-I$(WORKDIR)/CustomTarget/i18npool/source/collator \
 ))
 
 $(eval $(call gb_Library_add_api,i18npool,\
@@ -139,11 +136,16 @@ $(eval $(call gb_Library_add_exception_objects,i18npool,\
 	i18npool/source/transliteration/transliteration_OneToOne \
 ))
 
-BRKFILES := $(subst $(WORKDIR)/,,$(basename $(wildcard $(WORKDIR)/CustomTarget/i18npool/source/breakiterator/*_brk.c))) \
+# collator_unicode.cxx includes generated lrl_include.hxx
+$(call gb_CxxObject_get_target,i18npool/source/collator/collator_unicode) : \
+	INCLUDE += -I$(call gb_CustomTarget_get_workdir,i18npool/collator)
+$(call gb_CxxObject_get_target,i18npool/source/collator/collator_unicode) :| \
+	$(call gb_CustomTarget_get_workdir,i18npool/collator)/lrl_include.hxx
 
 $(eval $(call gb_Library_add_generated_cobjects,i18npool,\
-	CustomTarget/i18npool/source/breakiterator/OpenOffice_dat \
-	$(BRKFILES) \
+	CustomTarget/i18npool/breakiterator/OpenOffice_dat \
+	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/breakiterator/data/*.txt),\
+		CustomTarget/i18npool/breakiterator/$(notdir $(basename $(txt)))_brk) \
 ))
 
 # vim: set noet sw=4 ts=4:

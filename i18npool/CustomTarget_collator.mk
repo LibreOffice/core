@@ -26,21 +26,26 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-all : $(subst .dic,.cxx,$(notdir $(wildcard $(SRC_ROOT)/i18npool/source/textconversion/data/*.dic)))
+$(eval $(call gb_CustomTarget_CustomTarget,i18npool/collator,new_style))
 
-gb_PARTIALBUILD:=T
-include $(GBUILDDIR)/gbuild_simple.mk
+IPCO := $(call gb_CustomTarget_get_workdir,i18npool/collator)
+TXTLIST := $(notdir $(wildcard $(SRCDIR)/i18npool/source/collator/data/*.txt))
 
-%.cxx : %_invis.cxx
-	sed 's/\(^.*get\)/SAL_DLLPUBLIC_EXPORT \1/' $< > $@
+$(call gb_CustomTarget_get_target,i18npool/collator) : \
+	$(IPCO)/lrl_include.hxx $(foreach txt,$(TXTLIST), \
+		$(patsubst %.txt,$(IPCO)/collator_%.cxx,$(txt)))
 
-%_invis.cxx : $(SRCDIR)/i18npool/source/textconversion/data/%.dic
-ifeq ($(OS_FOR_BUILD),WNT)
-	$(call gb_Helper_execute,genconv_dict $* `cygpath -m $<` $@)
-else
-	$(call gb_Helper_execute,genconv_dict $* $< $@)
-endif
+$(IPCO)/collator_%.cxx : $(SRCDIR)/i18npool/source/collator/data/%.txt \
+		$(call gb_Executable_get_target_for_build,gencoll_rule) | $(IPCO)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CLR,1)
+	$(call gb_Helper_abbreviate_dirs_native, \
+		$(call gb_Helper_execute,gencoll_rule) $< $@.tmp $* && \
+		sed 's/\(^.*get_\)/SAL_DLLPUBLIC_EXPORT \1/' $@.tmp > $@ && \
+		rm $@.tmp)
 
+$(IPCO)/lrl_include.hxx : $(SRCDIR)/i18npool/source/collator/data | $(IPCO)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	echo '#define LOCAL_RULE_LANGS "$(sort $(foreach txt,$(TXTLIST), \
+		$(firstword $(subst _, ,$(txt)))))"' > $@
 
-.PHONY: all
 # vim: set noet sw=4 ts=4:

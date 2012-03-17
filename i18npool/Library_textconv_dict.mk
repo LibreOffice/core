@@ -28,8 +28,6 @@
 
 $(eval $(call gb_Library_Library,textconv_dict))
 
-$(eval $(call gb_Library_add_package_headers,textconv_dict,i18npool_generated))
-
 $(eval $(call gb_Library_set_include,textconv_dict,\
 	$$(INCLUDE) \
 	-I$(SRCDIR)/i18npool/inc \
@@ -45,7 +43,8 @@ $(eval $(call gb_Library_add_linked_libs,textconv_dict,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,textconv_dict,\
-	$(subst $(WORKDIR)/,,$(basename $(wildcard $(WORKDIR)/CustomTarget/i18npool/source/textconversion/*.cxx))) \
+	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/textconversion/data/*.dic),\
+		CustomTarget/i18npool/textconversion/$(notdir $(basename $(txt)))) \
 ))
 
 # vim: set noet sw=4 ts=4:

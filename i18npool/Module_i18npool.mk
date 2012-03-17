@@ -29,6 +29,11 @@
 $(eval $(call gb_Module_Module,i18npool))
 
 $(eval $(call gb_Module_add_targets,i18npool,\
+	CustomTarget_breakiterator \
+	CustomTarget_collator \
+	CustomTarget_indexentry \
+	CustomTarget_localedata \
+	CustomTarget_textconversion \
 	Library_collator_data \
 	Library_dict_ja \
 	Library_dict_zh \
@@ -41,7 +46,6 @@ $(eval $(call gb_Module_add_targets,i18npool,\
 	Library_localedata_euro \
 	Library_localedata_others \
 	Library_textconv_dict \
-	Package_generated \
 	Package_inc \
 	Package_xml \
 ))
