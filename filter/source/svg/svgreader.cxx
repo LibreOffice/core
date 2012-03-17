@@ -293,12 +293,13 @@ struct AnnotatingVisitor
                     maCurrState.maViewBox.getWidth() != 0.0 &&
                     maCurrState.maViewBox.getHeight() != 0.0 )
                 {
-                    // transform aViewBox into viewport, such that they
-                    // coincide
+                    // transform aViewBox into viewport, keep aspect ratio
                     aLocalTransform.translate(-maCurrState.maViewBox.getMinX(),
                                               -maCurrState.maViewBox.getMinY());
-                    aLocalTransform.scale(maCurrState.maViewport.getWidth()/maCurrState.maViewBox.getWidth(),
-                                          maCurrState.maViewport.getHeight()/maCurrState.maViewBox.getHeight());
+                    double scaleW = maCurrState.maViewport.getWidth()/maCurrState.maViewBox.getWidth();
+                    double scaleH = maCurrState.maViewport.getHeight()/maCurrState.maViewBox.getHeight();
+                    double scale = (scaleW < scaleH) ? scaleW : scaleH;
+                    aLocalTransform.scale(scale,scale);
                 }
                 maCurrState.maCTM = maCurrState.maCTM*maCurrState.maTransform*aLocalTransform;
 
