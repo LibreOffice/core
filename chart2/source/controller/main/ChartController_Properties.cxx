@@ -256,6 +256,9 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                     break;
 
             case OBJECTTYPE_DATA_ERRORS:
+            case OBJECTTYPE_DATA_ERRORS_X:
+            case OBJECTTYPE_DATA_ERRORS_Y:
+            case OBJECTTYPE_DATA_ERRORS_Z:
                 pItemConverter =  new wrapper::ErrorBarItemConverter(
                     xChartModel, xObjectProperties, rDrawModel.GetItemPool(),
                     rDrawModel, uno::Reference< lang::XMultiServiceFactory >( xChartModel, uno::UNO_QUERY ));
@@ -280,12 +283,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                                         pRefSize );
                     break;
             }
-            case OBJECTTYPE_DATA_ERRORS_X:
-                    break;
-            case OBJECTTYPE_DATA_ERRORS_Y:
-                    break;
-            case OBJECTTYPE_DATA_ERRORS_Z:
-                    break;
             case OBJECTTYPE_DATA_STOCK_RANGE:
                     break;
             case OBJECTTYPE_DATA_STOCK_LOSS:
