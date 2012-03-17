@@ -637,7 +637,8 @@ double lcl_getErrorBarLogicLength(
     uno::Reference< beans::XPropertySet > xProp,
     sal_Int32 nErrorBarStyle,
     sal_Int32 nIndex,
-    bool bPositive )
+    bool bPositive,
+    bool bYError )
 {
     double fResult;
     ::rtl::math::setNan( & fResult );
@@ -706,7 +707,7 @@ double lcl_getErrorBarLogicLength(
                 uno::Reference< chart2::data::XDataSource > xErrorBarData( xProp, uno::UNO_QUERY );
                 if( xErrorBarData.is())
                     fResult = StatisticsHelper::getErrorFromDataSource(
-                        xErrorBarData, nIndex, bPositive);
+                        xErrorBarData, nIndex, bPositive, bYError);
             }
             break;
         }
@@ -851,7 +852,7 @@ void VSeriesPlotter::createErrorBar(
 
         if( bShowPositive )
         {
-            double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, true );
+            double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, true, bYError );
             if( ::rtl::math::isFinite( fLength ) )
             {
                 double fLocalX = fX;
@@ -874,7 +875,7 @@ void VSeriesPlotter::createErrorBar(
 
         if( bShowNegative )
         {
-            double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, false );
+            double fLength = lcl_getErrorBarLogicLength( aData, xErrorBarProperties, nErrorBarStyle, nIndex, false, bYError );
             if( ::rtl::math::isFinite( fLength ) )
             {
                 double fLocalX = fX;
