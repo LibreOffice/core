@@ -90,7 +90,7 @@ using namespace ::std;
 */
 
 template <class T>
-class WRITERFILTER_RESOURCEMODEL_DLLPUBLIC Reference
+class SAL_DLLPUBLIC_TEMPLATE Reference
 {
 public:
     /**
