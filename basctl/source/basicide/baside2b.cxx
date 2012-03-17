@@ -1966,7 +1966,7 @@ sal_Bool WatchTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     return bEdit;
 }
 
-sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+sal_Bool WatchTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
 {
     WatchItem* pItem = (WatchItem*)pEntry->GetUserData();
     String aVName( pItem->maName );

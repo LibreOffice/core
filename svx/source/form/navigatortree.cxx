@@ -1508,7 +1508,7 @@ namespace svxform
     }
 
     //------------------------------------------------------------------------
-    sal_Bool NavigatorTree::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
+    sal_Bool NavigatorTree::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
     {
         RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "svx", "Ocke.Janssen@sun.com", "NavigatorTree::EditedEntry" );
         if (EditingCanceled())

@@ -101,7 +101,7 @@ public:
     virtual void    RequestingChildren( SvLBoxEntry* pParent );
 
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
 
     DECL_LINK(OnSelectionChangeHdl, void *);
     DECL_LINK(OnExpandingHdl, void *);
@@ -997,22 +997,21 @@ bool TreeControlPeer::onEditingEntry( UnoTreeListEntry* pEntry )
     return true;
 }
 
-bool TreeControlPeer::onEditedEntry( UnoTreeListEntry* pEntry, const XubString& rNewText )
+bool TreeControlPeer::onEditedEntry( UnoTreeListEntry* pEntry, const rtl::OUString& rNewText )
 {
     if( mpTreeImpl && pEntry && pEntry->mxNode.is() ) try
     {
         LockGuard aLockGuard( mnEditLock );
-        const OUString aNewText( rNewText );
         if( maTreeEditListeners.getLength() > 0 )
         {
-            maTreeEditListeners.nodeEdited( pEntry->mxNode, aNewText );
+            maTreeEditListeners.nodeEdited( pEntry->mxNode, rNewText );
             return false;
         }
         else
         {
             Reference< XMutableTreeNode > xMutableNode( pEntry->mxNode, UNO_QUERY );
             if( xMutableNode.is() )
-                xMutableNode->setDisplayValue( Any( aNewText ) );
+                xMutableNode->setDisplayValue( Any( rNewText ) );
             else
                 return false;
         }
@@ -1597,7 +1596,7 @@ sal_Bool UnoTreeListBoxImpl::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 
 // --------------------------------------------------------------------
 
-sal_Bool UnoTreeListBoxImpl::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
+sal_Bool UnoTreeListBoxImpl::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
 {
     return mxPeer.is() ? mxPeer->onEditedEntry( dynamic_cast< UnoTreeListEntry* >( pEntry ), rNewText ) : false;
 }

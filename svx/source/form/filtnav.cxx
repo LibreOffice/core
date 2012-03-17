@@ -1224,7 +1224,7 @@ sal_Bool FmFilterNavigator::EditingEntry( SvLBoxEntry* pEntry, Selection& rSelec
 }
 
 //------------------------------------------------------------------------
-sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText )
+sal_Bool FmFilterNavigator::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
 {
     DBG_ASSERT(pEntry == m_pEditingCurrently, "FmFilterNavigator::EditedEntry: suspicious entry!");
     m_pEditingCurrently = NULL;

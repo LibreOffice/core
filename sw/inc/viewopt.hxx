@@ -140,10 +140,10 @@ class SwViewOption
 protected:
     static sal_uInt16   nPixelTwips;// 1 Pixel == ? Twips
 
-    String          sSymbolFont;        // Symbolfont.
-    sal_uInt32          nCoreOptions;       // Bits for ViewShell.
-    sal_uInt32          nCore2Options;      // Bits for ViewShell.
-    sal_uInt32          nUIOptions;         // UI-Bits
+    rtl::OUString   sSymbolFont;        // Symbolfont.
+    sal_uInt32      nCoreOptions;       // Bits for ViewShell.
+    sal_uInt32      nCore2Options;      // Bits for ViewShell.
+    sal_uInt32      nUIOptions;         // UI-Bits
     Color           aRetoucheColor;     // DefaultBackground for BrowseView
     Size            aSnapSize;          // Describes horizontal and vertical snap.
     sal_uInt16          mnViewLayoutColumns;// # columns for edit view
@@ -481,8 +481,8 @@ public:
     void            SetZoomType     (SvxZoomType eZoom_){ eZoom = eZoom_;  }
     void            SetTblDest( sal_uInt8 nNew )    { nTblDest = nNew;  }
 
-    const String&   GetSymbolFont() const {return sSymbolFont;}
-    void            SetSymbolFont(const String& sSet) {sSymbolFont = sSet;}
+    const rtl::OUString& GetSymbolFont() const {return sSymbolFont;}
+    void            SetSymbolFont(const rtl::OUString& sSet) {sSymbolFont = sSet;}
 
     const Color&    GetRetoucheColor() const        { return aRetoucheColor;}
     void            SetRetoucheColor(const Color&r) { aRetoucheColor = r;   }

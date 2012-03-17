@@ -326,24 +326,21 @@ sal_Bool BasicCheckBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
 
 //----------------------------------------------------------------------------
 
-sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewName )
 {
-    sal_Bool bValid = ( rNewText.Len() <= 30 ) && BasicIDE::IsValidSbxName( rNewText );
-    String aCurText( GetEntryText( pEntry, 0 ) );
-    if ( bValid && ( aCurText != rNewText ) )
+    sal_Bool bValid = ( rNewName.getLength() <= 30 ) && BasicIDE::IsValidSbxName( rNewName );
+    rtl::OUString aOldName( GetEntryText( pEntry, 0 ) );
+    if ( bValid && ( aOldName != rNewName ) )
     {
         try
         {
-            ::rtl::OUString aOldName( aCurText );
-            ::rtl::OUString aNewName( rNewText );
-
             Reference< script::XLibraryContainer2 > xModLibContainer( m_aDocument.getLibraryContainer( E_SCRIPTS ), UNO_QUERY );
             if ( xModLibContainer.is() )
-                xModLibContainer->renameLibrary( aOldName, aNewName );
+                xModLibContainer->renameLibrary( aOldName, rNewName );
 
             Reference< script::XLibraryContainer2 > xDlgLibContainer( m_aDocument.getLibraryContainer( E_DIALOGS ), UNO_QUERY );
             if ( xDlgLibContainer.is() )
-                xDlgLibContainer->renameLibrary( aOldName, aNewName );
+                xDlgLibContainer->renameLibrary( aOldName, rNewName );
 
             BasicIDE::MarkDocumentModified( m_aDocument );
             SfxBindings* pBindings = BasicIDE::GetBindingsPtr();
@@ -367,7 +364,7 @@ sal_Bool BasicCheckBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText
 
     if ( !bValid )
     {
-        if ( rNewText.Len() > 30 )
+        if ( rNewName.getLength() > 30 )
             ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_LIBNAMETOLONG ) ) ).Execute();
         else
             ErrorBox( this, WB_OK | WB_DEF_OK, ResId::toString( IDEResId( RID_STR_BADSBXNAME ) ) ).Execute();

@@ -289,7 +289,7 @@ protected:
     virtual void InitEntry(SvLBoxEntry* pEntry, const XubString& rStr, const Image& rImg1, const Image& rImg2, SvLBoxButtonKind eButtonKind);
     virtual sal_Bool Select( SvLBoxEntry* pEntry, sal_Bool bSelect=sal_True );
     virtual sal_Bool EditingEntry( SvLBoxEntry* pEntry, Selection& rSelection );
-    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
 
     virtual sal_Int8    AcceptDrop( const AcceptDropEvent& rEvt );
     virtual sal_Int8    ExecuteDrop( const ExecuteDropEvent& rEvt );

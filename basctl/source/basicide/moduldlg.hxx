@@ -108,7 +108,7 @@ class ExtBasicTreeListBox : public BasicTreeListBox
 {
 protected:
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel  );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
 
     virtual DragDropMode    NotifyStartDrag( TransferDataContainer& rData, SvLBoxEntry* pEntry );
     virtual sal_Bool            NotifyAcceptDrop( SvLBoxEntry* pEntry );
@@ -148,7 +148,7 @@ public:
 
     virtual void    InitEntry( SvLBoxEntry*, const XubString&, const Image&, const Image&, SvLBoxButtonKind eButtonKind );
     virtual sal_Bool    EditingEntry( SvLBoxEntry* pEntry, Selection& rSel );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const String& rNewText );
+    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
 
     void            SetDocument( const ScriptDocument& rDocument ) { m_aDocument = rDocument; }
 

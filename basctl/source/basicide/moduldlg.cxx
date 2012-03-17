@@ -89,7 +89,7 @@ sal_Bool ExtBasicTreeListBox::EditingEntry( SvLBoxEntry* pEntry, Selection& )
     return bRet;
 }
 
-sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rNewText )
+sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText )
 {
     sal_Bool bValid = BasicIDE::IsValidSbxName( rNewText );
     if ( !bValid )
@@ -98,7 +98,7 @@ sal_Bool ExtBasicTreeListBox::EditedEntry( SvLBoxEntry* pEntry, const String& rN
         return sal_False;
     }
 
-    String aCurText( GetEntryText( pEntry ) );
+    rtl::OUString aCurText( GetEntryText( pEntry ) );
     if ( aCurText == rNewText )
         // nothing to do
         return sal_True;

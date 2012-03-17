@@ -81,7 +81,7 @@ namespace dbaui
         }
 
     protected:
-        virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+        virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
 
     private:
         using SvTreeListBox::Select;

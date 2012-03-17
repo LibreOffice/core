@@ -884,7 +884,7 @@ sal_Bool SfxOrganizeListBox_Impl::EditingEntry( SvLBoxEntry* pEntry, Selection& 
     (SV-Handler)
 
     [Cross-references]
-    <SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String& rText)>
+    <SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const rtl::OUString& rText)>
 */
 
 {
@@ -899,7 +899,7 @@ sal_Bool SfxOrganizeListBox_Impl::EditingEntry( SvLBoxEntry* pEntry, Selection& 
 
 //-------------------------------------------------------------------------
 
-sal_Bool SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String& rText)
+sal_Bool SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const rtl::OUString& rText)
 
 /*  [Description]
 
@@ -921,7 +921,7 @@ sal_Bool SfxOrganizeListBox_Impl::EditedEntry(SvLBoxEntry* pEntry, const String&
     delete pDlg->pSuspend;
     pDlg->pSuspend = NULL;
     SvLBoxEntry* pParent = GetParent(pEntry);
-    if( !rText.Len() )
+    if( rText.isEmpty() )
     {
         ErrorBox aBox( this, SfxResId( MSG_ERROR_EMPTY_NAME ) );
         aBox.GrabFocus();

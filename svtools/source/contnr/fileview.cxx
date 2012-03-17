@@ -203,7 +203,7 @@ public:
 
     virtual void    Resize();
     virtual void    KeyInput( const KeyEvent& rKEvt );
-    virtual sal_Bool    EditedEntry( SvLBoxEntry* pEntry, const XubString& rNewText );
+    virtual sal_Bool EditedEntry( SvLBoxEntry* pEntry, const rtl::OUString& rNewText );
 
     void            ClearAll();
     HeaderBar*      GetHeaderBar() const { return mpHeaderBar; }
@@ -1047,7 +1047,7 @@ void ViewTabListBox_Impl::DeleteEntries()
 
 // -----------------------------------------------------------------------
 sal_Bool ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
-                                 const XubString& rNewText )
+                                 const rtl::OUString& rNewText )
 {
     sal_Bool bRet = sal_False;
 
@@ -1087,7 +1087,7 @@ sal_Bool ViewTabListBox_Impl::EditedEntry( SvLBoxEntry* pEntry,
         if ( canRename )
         {
             Any aValue;
-            aValue <<= OUString( rNewText );
+            aValue <<= rNewText;
             aContent.setPropertyValue( aPropName, aValue );
             mpParent->EntryRenamed( aURL, rNewText );
 

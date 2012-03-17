@@ -124,7 +124,7 @@ private:
     void disposeControl();
 
     bool onEditingEntry( UnoTreeListEntry* pEntry );
-    bool onEditedEntry( UnoTreeListEntry* pEntry, const XubString& rNewText );
+    bool onEditedEntry( UnoTreeListEntry* pEntry, const rtl::OUString& rNewText );
 
     void eraseTree( UnoTreeListBoxImpl& rTree );
     void fillTree( UnoTreeListBoxImpl& rTree, const ::com::sun::star::uno::Reference< ::com::sun::star::awt::tree::XTreeDataModel >& xDataModel );

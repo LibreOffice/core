@@ -698,7 +698,7 @@ sal_Bool SvTreeListBox::EditingEntry( SvLBoxEntry*, Selection& )
     return sal_True;
 }
 
-sal_Bool SvTreeListBox::EditedEntry( SvLBoxEntry* /*pEntry*/,const XubString& /*rNewText*/)
+sal_Bool SvTreeListBox::EditedEntry( SvLBoxEntry* /*pEntry*/,const rtl::OUString& /*rNewText*/)
 {
     DBG_CHKTHIS(SvTreeListBox,0);
     return sal_True;
