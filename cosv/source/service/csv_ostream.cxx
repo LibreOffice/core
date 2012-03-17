@@ -42,8 +42,6 @@
 #ifndef CSV_NO_IOSTREAMS
 #else
 
-#include <cosv/streamstr.hxx>
-
 namespace csv
 {
 

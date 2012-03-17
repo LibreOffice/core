@@ -34,11 +34,9 @@
 #include <cosv/streamstr.hxx>
 #include <cosv/std_outp.hxx>
 #include <cosv/tpl/dyn.hxx>
-#include <cosv/string.hxx>
 
 // NOT FULLY DECLARED SERVICES
 #include <string.h>
-#include <cosv/comfunc.hxx>
 
 
 

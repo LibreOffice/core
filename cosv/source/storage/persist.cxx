@@ -37,7 +37,6 @@
 #include <cosv/persist.hxx>
 
 // NOT FULLY DECLARED SERVICES
-#include <cosv/streamstr.hxx>
 #include <cosv/ploc.hxx>
 
 
@@ -61,15 +60,6 @@ Persistent::Exists() const
 
 #elif defined(UNX)
 #include <unistd.h>
-
-/*
-#ifndef __SUNPRO_CC
-#include <unistd.h>
-#else
-#define F_OK    0   // Test for existence of File
-extern int access(const char *, int);
-#endif
-*/
 
 namespace csv
 {
