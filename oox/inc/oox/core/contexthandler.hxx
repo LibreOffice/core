@@ -105,6 +105,10 @@ protected:
 
     void                implSetLocator( const ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XLocator >& rxLocator );
 
+#if _MSC_VER
+    ContextHandler() {} // workaround
+#endif
+
 private:
     ContextHandler&     operator=( const ContextHandler& );
 
