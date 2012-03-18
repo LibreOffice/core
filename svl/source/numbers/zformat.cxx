@@ -3840,7 +3840,7 @@ bool SvNumberformat::ImpGetNumberOutput(double fNumber,
             nPrecExp = 0;
         if (rInfo.nCntPost)    // NachkommaStellen
         {
-            if (rInfo.nCntPost + nPrecExp > 15 && nPrecExp < 15)
+            if ((rInfo.nCntPost + nPrecExp) > 15 && nPrecExp < 15)
             {
                 sStr = ::rtl::math::doubleToUString( fNumber,
                         rtl_math_StringFormat_F, 15-nPrecExp, '.');
