@@ -890,7 +890,7 @@ void OServiceManager::onUnloadingNotify()
     }
     // delete elements from m_ServiceMap
     CIT_DMM it_end2= listDeleteServiceMap.end();
-    for( CIT_DMM it_i2= listDeleteServiceMap.begin(); it_i2 != it_end2; it_i2++)
+    for( CIT_DMM it_i2= listDeleteServiceMap.begin(); it_i2 != it_end2; ++it_i2)
         m_ServiceMap.erase( *it_i2);
 
     // find elements in m_ImplementationNameMap
@@ -914,7 +914,7 @@ void OServiceManager::onUnloadingNotify()
     }
     // delete elements from m_ImplementationNameMap
     CIT_DM it_end4= listDeleteImplementationNameMap.end();
-    for( CIT_DM it_i4= listDeleteImplementationNameMap.begin(); it_i4 != it_end4; it_i4++)
+    for( CIT_DM it_i4= listDeleteImplementationNameMap.begin(); it_i4 != it_end4; ++it_i4)
         m_ImplementationNameMap.erase( *it_i4);
 
     // find elements in m_ImplementationMap
@@ -938,7 +938,7 @@ void OServiceManager::onUnloadingNotify()
     }
     // delete elements from m_ImplementationMap
     CIT_DS it_end6= listDeleteImplementationMap.end();
-    for( CIT_DS it_i6= listDeleteImplementationMap.begin(); it_i6 != it_end6; it_i6++)
+    for( CIT_DS it_i6= listDeleteImplementationMap.begin(); it_i6 != it_end6; ++it_i6)
         m_ImplementationMap.erase( *it_i6);
 
     // remove Event listener before the factories are released.
