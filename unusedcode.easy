@@ -957,7 +957,6 @@ sdext::presenter::PresenterAnimation::PresenterAnimation(unsigned long, unsigned
 sdext::presenter::PresenterAnimator::AddAnimation(boost::shared_ptr<sdext::presenter::PresenterAnimation> const&)
 sdext::presenter::PresenterController::GetAnimator() const
 sdext::presenter::PresenterGeometryHelper::Union(com::sun::star::awt::Rectangle const&, com::sun::star::awt::Rectangle const&)
-sdext::presenter::PresenterHorizontalScrollBar::PresenterHorizontalScrollBar(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, com::sun::star::uno::Reference<com::sun::star::awt::XWindow> const&, boost::shared_ptr<sdext::presenter::PresenterPaintManager> const&, boost::function<void (double)> const&)
 sdext::presenter::PresenterSprite::GetLocation() const
 sdext::presenter::PresenterSprite::GetSize() const
 sdext::presenter::PresenterSprite::SetAlpha(double)

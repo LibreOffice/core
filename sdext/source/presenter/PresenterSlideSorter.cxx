@@ -94,11 +94,7 @@ namespace {
 class PresenterSlideSorter::Layout
 {
 public:
-    enum Orientation { Horizontal, Vertical };
-    Layout (
-        const Orientation eOrientation,
-        const ::rtl::Reference<PresenterScrollBar>& rpHorizontalScrollBar,
-        const ::rtl::Reference<PresenterScrollBar>& rpVerticalScrollBar);
+    Layout (const ::rtl::Reference<PresenterScrollBar>& rpVerticalScrollBar);
 
     void Update (const geometry::RealRectangle2D& rBoundingBox, const double nSlideAspectRatio);
     void SetupVisibleArea (void);
@@ -121,7 +117,6 @@ public:
     sal_Int32 GetLastVisibleSlideIndex (void) const;
     bool SetHorizontalOffset (const double nOffset);
     bool SetVerticalOffset (const double nOffset);
-    Orientation GetOrientation (void) const;
 
     css::geometry::RealRectangle2D maBoundingBox;
     css::geometry::IntegerSize2D maPreviewSize;
@@ -141,8 +136,6 @@ public:
     sal_Int32 mnLastVisibleRow;
 
 private:
-    Orientation meOrientation;
-    ::rtl::Reference<PresenterScrollBar> mpHorizontalScrollBar;
     ::rtl::Reference<PresenterScrollBar> mpVerticalScrollBar;
 
     sal_Int32 GetIndex (const sal_Int32 nRow, const sal_Int32 nColumn) const;
@@ -272,7 +265,6 @@ PresenterSlideSorter::PresenterSlideSorter (
       mbIsPaintPending(true),
       mbIsLayoutPending(true),
       mpLayout(),
-      mpHorizontalScrollBar(),
       mpVerticalScrollBar(),
       mpCloseButton(),
       mpMouseOverManager(),
@@ -318,24 +310,14 @@ PresenterSlideSorter::PresenterSlideSorter (
         // Remember the current slide.
         mnCurrentSlideIndex = mxSlideShowController->getCurrentSlideIndex();
 
-        // Set the orientation.
-        const bool bIsVertical (true);
-
         // Create the scroll bar.
-        if (bIsVertical)
-            mpVerticalScrollBar = ::rtl::Reference<PresenterScrollBar>(
-                new PresenterVerticalScrollBar(
-                    rxContext,
-                    mxWindow,
-                    mpPresenterController->GetPaintManager(),
-                    ::boost::bind(&PresenterSlideSorter::SetVerticalOffset,this,_1)));
-        else
-            mpHorizontalScrollBar = ::rtl::Reference<PresenterScrollBar>(
-                new PresenterHorizontalScrollBar(
-                    rxContext,
-                    mxWindow,
-                    mpPresenterController->GetPaintManager(),
-                    ::boost::bind(&PresenterSlideSorter::SetHorizontalOffset,this,_1)));
+        mpVerticalScrollBar = ::rtl::Reference<PresenterScrollBar>(
+            new PresenterVerticalScrollBar(
+                rxContext,
+                mxWindow,
+                mpPresenterController->GetPaintManager(),
+                ::boost::bind(&PresenterSlideSorter::SetVerticalOffset,this,_1)));
+
         mpCloseButton = PresenterButton::Create(
             rxContext,
             mpPresenterController,
@@ -353,10 +335,7 @@ PresenterSlideSorter::PresenterSlideSorter (
         }
 
         // Create the layout.
-        mpLayout.reset(new Layout(
-            Layout::Vertical,
-            mpHorizontalScrollBar,
-            mpVerticalScrollBar));
+        mpLayout.reset(new Layout(mpVerticalScrollBar));
 
         // Create the preview cache.
         mxPreviewCache = Reference<drawing::XSlidePreviewCache>(
@@ -412,14 +391,6 @@ void SAL_CALL PresenterSlideSorter::disposing (void)
         Reference<lang::XComponent> xComponent (
             static_cast<XWeak*>(mpVerticalScrollBar.get()), UNO_QUERY);
         mpVerticalScrollBar = NULL;
-        if (xComponent.is())
-            xComponent->dispose();
-    }
-    if (mpHorizontalScrollBar.is())
-    {
-        Reference<lang::XComponent> xComponent (
-            static_cast<XWeak*>(mpHorizontalScrollBar.get()), UNO_QUERY);
-        mpHorizontalScrollBar = NULL;
         if (xComponent.is())
             xComponent->dispose();
     }
@@ -486,8 +457,6 @@ void SAL_CALL PresenterSlideSorter::disposing (const lang::EventObject& rEventOb
     else if (rEventObject.Source == mxCanvas)
     {
         mxCanvas = NULL;
-        if (mpHorizontalScrollBar.is())
-            mpHorizontalScrollBar->SetCanvas(NULL);
         mbIsLayoutPending = true;
         mbIsPaintPending = true;
 
@@ -778,57 +747,28 @@ geometry::RealRectangle2D PresenterSlideSorter::PlaceScrollBars (
     if (xSlides.is())
         bIsScrollBarNeeded = mpLayout->IsScrollBarNeeded(xSlides->getCount());
 
-    if (mpLayout->GetOrientation() == Layout::Vertical)
+    if (mpVerticalScrollBar.get() != NULL)
     {
-        if (mpVerticalScrollBar.get() != NULL)
+        if (bIsScrollBarNeeded)
         {
-            if (bIsScrollBarNeeded)
-            {
-                // Place vertical scroll bar at right border.
-                mpVerticalScrollBar->SetPosSize(geometry::RealRectangle2D(
-                    rUpperBox.X2 - mpVerticalScrollBar->GetSize(),
-                    rUpperBox.Y1,
-                    rUpperBox.X2,
-                    rUpperBox.Y2));
-                mpVerticalScrollBar->SetVisible(true);
+            // Place vertical scroll bar at right border.
+            mpVerticalScrollBar->SetPosSize(geometry::RealRectangle2D(
+                rUpperBox.X2 - mpVerticalScrollBar->GetSize(),
+                rUpperBox.Y1,
+                rUpperBox.X2,
+                rUpperBox.Y2));
+            mpVerticalScrollBar->SetVisible(true);
 
-                // Reduce area covered by the scroll bar from the available
-                // space.
-                return geometry::RealRectangle2D(
-                    rUpperBox.X1,
-                    rUpperBox.Y1,
-                    rUpperBox.X2 - mpVerticalScrollBar->GetSize() - gnHorizontalGap,
-                    rUpperBox.Y2);
-            }
-            else
-                mpVerticalScrollBar->SetVisible(false);
+            // Reduce area covered by the scroll bar from the available
+            // space.
+            return geometry::RealRectangle2D(
+                rUpperBox.X1,
+                rUpperBox.Y1,
+                rUpperBox.X2 - mpVerticalScrollBar->GetSize() - gnHorizontalGap,
+                rUpperBox.Y2);
         }
-    }
-    else
-    {
-        if (mpHorizontalScrollBar.get() != NULL)
-        {
-            if (bIsScrollBarNeeded)
-            {
-                // Place horixontal scroll bar at the bottom.
-                mpHorizontalScrollBar->SetPosSize(geometry::RealRectangle2D(
-                    rUpperBox.X1,
-                    rUpperBox.Y2 - mpHorizontalScrollBar->GetSize(),
-                    rUpperBox.X2,
-                    rUpperBox.Y2));
-                mpHorizontalScrollBar->SetVisible(true);
-
-                // Reduce area covered by the scroll bar from the available
-                // space.
-                return geometry::RealRectangle2D(
-                    rUpperBox.X1,
-                    rUpperBox.Y1,
-                    rUpperBox.X2,
-                    rUpperBox.Y2 - mpHorizontalScrollBar->GetSize() - gnVerticalGap);
-            }
-            else
-            mpHorizontalScrollBar->SetVisible(false);
-        }
+        else
+            mpVerticalScrollBar->SetVisible(false);
     }
 
     return rUpperBox;
@@ -1028,8 +968,6 @@ void PresenterSlideSorter::Paint (const awt::Rectangle& rUpdateBox)
     // Give the canvas to the controls.
     if (bCanvasChanged)
     {
-        if (mpHorizontalScrollBar.is())
-            mpHorizontalScrollBar->SetCanvas(mxCanvas);
         if (mpVerticalScrollBar.is())
             mpVerticalScrollBar->SetCanvas(mxCanvas);
         if (mpCloseButton.is())
@@ -1106,10 +1044,6 @@ bool PresenterSlideSorter::ProvideCanvas (void)
         if (xComponent.is())
             xComponent->addEventListener(static_cast<awt::XWindowListener*>(this));
 
-        // Tell the scrollbar about the canvas.
-        if (mpHorizontalScrollBar.is())
-            mpHorizontalScrollBar->SetCanvas(mxCanvas);
-
         mpCurrentSlideFrameRenderer.reset(
             new CurrentSlideFrameRenderer(mxComponentContext, mxCanvas));
     }
@@ -1131,8 +1065,6 @@ void PresenterSlideSorter::ThrowIfDisposed (void)
 //===== PresenterSlideSorter::Layout ==========================================
 
 PresenterSlideSorter::Layout::Layout (
-    const Orientation eOrientation,
-    const ::rtl::Reference<PresenterScrollBar>& rpHorizontalScrollBar,
     const ::rtl::Reference<PresenterScrollBar>& rpVerticalScrollBar)
     : maBoundingBox(),
       maPreviewSize(),
@@ -1150,8 +1082,6 @@ PresenterSlideSorter::Layout::Layout (
       mnLastVisibleColumn(-1),
       mnFirstVisibleRow(-1),
       mnLastVisibleRow(-1),
-      meOrientation(eOrientation),
-      mpHorizontalScrollBar(rpHorizontalScrollBar),
       mpVerticalScrollBar(rpVerticalScrollBar)
 {
 }
@@ -1245,60 +1175,30 @@ void PresenterSlideSorter::Layout::Update (
     maPreviewSize = geometry::IntegerSize2D(floor(nPreviewWidth), floor(nPreviewHeight));
 
     // Reset the offset.
-    if (meOrientation == Horizontal)
-    {
-        mnVerticalOffset = round(-(nHeight
-            - mnRowCount*maPreviewSize.Height - (mnRowCount-1)*mnVerticalGap)
-            / 2);
-        mnHorizontalOffset = 0;
-    }
-    else
-    {
-        mnVerticalOffset = 0;
-        mnHorizontalOffset = round(-(nWidth
-            - mnColumnCount*maPreviewSize.Width
-            - (mnColumnCount-1)*mnHorizontalGap)
-            / 2);
-    }
+    mnVerticalOffset = 0;
+    mnHorizontalOffset = round(-(nWidth
+        - mnColumnCount*maPreviewSize.Width
+        - (mnColumnCount-1)*mnHorizontalGap)
+        / 2);
 }
 
 void PresenterSlideSorter::Layout::SetupVisibleArea (void)
 {
     geometry::RealPoint2D aPoint (GetLocalPosition(
         geometry::RealPoint2D(maBoundingBox.X1, maBoundingBox.Y1)));
-    if (meOrientation == Horizontal)
-    {
-        mnFirstVisibleColumn = ::std::max(sal_Int32(0), GetColumn(aPoint));
-        mnFirstVisibleRow = 0;
-    }
-    else
-    {
-        mnFirstVisibleColumn = 0;
-        mnFirstVisibleRow = ::std::max(sal_Int32(0), GetRow(aPoint));
-    }
+    mnFirstVisibleColumn = 0;
+    mnFirstVisibleRow = ::std::max(sal_Int32(0), GetRow(aPoint));
 
     aPoint = GetLocalPosition(geometry::RealPoint2D( maBoundingBox.X2, maBoundingBox.Y2));
-    if (meOrientation == Horizontal)
-    {
-        mnLastVisibleColumn = GetColumn(aPoint, true);
-        mnLastVisibleRow = mnRowCount - 1;
-    }
-    else
-    {
-        mnLastVisibleColumn = mnColumnCount - 1;
-        mnLastVisibleRow = GetRow(aPoint, true);
-    }
+    mnLastVisibleColumn = mnColumnCount - 1;
+    mnLastVisibleRow = GetRow(aPoint, true);
 }
 
 bool PresenterSlideSorter::Layout::IsScrollBarNeeded (const sal_Int32 nSlideCount)
 {
     geometry::RealPoint2D aBottomRight;
-    if (GetOrientation() == Layout::Vertical)
-        aBottomRight = GetPoint(
-            mnColumnCount * (GetRow(nSlideCount)+1) - 1, +1, +1);
-    else
-        aBottomRight = GetPoint(
-            mnRowCount * (GetColumn(nSlideCount)+1) - 1, +1, +1);
+    aBottomRight = GetPoint(
+        mnColumnCount * (GetRow(nSlideCount)+1) - 1, +1, +1);
     return aBottomRight.X > maBoundingBox.X2-maBoundingBox.X1
         || aBottomRight.Y > maBoundingBox.Y2-maBoundingBox.Y1;
 }
@@ -1464,37 +1364,11 @@ bool PresenterSlideSorter::Layout::SetVerticalOffset (const double nOffset)
         return false;
 }
 
-PresenterSlideSorter::Layout::Orientation
-    PresenterSlideSorter::Layout::GetOrientation (void) const
-{
-    return meOrientation;
-}
-
 void PresenterSlideSorter::Layout::UpdateScrollBars (void)
 {
-    sal_Int32 nTotalColumnCount (0);
     sal_Int32 nTotalRowCount (0);
-    if (meOrientation == Horizontal)
-    {
-        nTotalColumnCount = sal_Int32(ceil(double(mnSlideCount) / double(mnRowCount)));
-        nTotalRowCount = mnRowCount;
-    }
-    else
-    {
-        nTotalColumnCount = mnColumnCount;
-        nTotalRowCount = sal_Int32(ceil(double(mnSlideCount) / double(mnColumnCount)));
-    }
+    nTotalRowCount = sal_Int32(ceil(double(mnSlideCount) / double(mnColumnCount)));
 
-    if (mpHorizontalScrollBar.get() != NULL)
-    {
-        mpHorizontalScrollBar->SetTotalSize(
-            nTotalColumnCount * maPreviewSize.Width
-            + (nTotalColumnCount-1) * mnHorizontalGap
-            + 2*mnHorizontalBorder);
-        mpHorizontalScrollBar->SetThumbPosition(mnHorizontalOffset, false);
-        mpHorizontalScrollBar->SetThumbSize(maBoundingBox.X2 - maBoundingBox.X1 + 1);
-        mpHorizontalScrollBar->SetLineHeight(maPreviewSize.Width);
-    }
     if (mpVerticalScrollBar.get() != NULL)
     {
         mpVerticalScrollBar->SetTotalSize(
@@ -1513,26 +1387,17 @@ sal_Int32 PresenterSlideSorter::Layout::GetIndex (
     const sal_Int32 nRow,
     const sal_Int32 nColumn) const
 {
-    if (meOrientation == Horizontal)
-        return nColumn * mnRowCount + nRow;
-    else
-        return nRow * mnColumnCount + nColumn;
+    return nRow * mnColumnCount + nColumn;
 }
 
 sal_Int32 PresenterSlideSorter::Layout::GetRow (const sal_Int32 nSlideIndex) const
 {
-    if (meOrientation == Horizontal)
-        return nSlideIndex % mnRowCount;
-    else
-        return nSlideIndex / mnColumnCount;
+    return nSlideIndex / mnColumnCount;
 }
 
 sal_Int32 PresenterSlideSorter::Layout::GetColumn (const sal_Int32 nSlideIndex) const
 {
-    if (meOrientation == Horizontal)
-        return nSlideIndex / mnRowCount;
-    else
-        return nSlideIndex % mnColumnCount;
+    return nSlideIndex % mnColumnCount;
 }
 
 //===== PresenterSlideSorter::MouseOverManager ================================
