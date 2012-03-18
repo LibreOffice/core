@@ -150,7 +150,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
     SCCOL nCol2;
     SCROW nRow2;
     pDoc->GetClipStart( nCol1, nRow1 );
-    pDoc->GetClipArea( nCol2, nRow2, sal_True );    // real source area - include filtered rows
+    pDoc->GetClipArea( nCol2, nRow2, true );    // real source area - include filtered rows
     nCol2 = sal::static_int_cast<SCCOL>( nCol2 + nCol1 );
     nRow2 = sal::static_int_cast<SCROW>( nRow2 + nRow1 );
 
@@ -161,7 +161,7 @@ ScTransferObj::ScTransferObj( ScDocument* pClipDoc, const TransferableObjectDesc
 
     SCTAB nTab1=0;
     SCTAB nTab2=0;
-    sal_Bool bFirst = sal_True;
+    bool bFirst = true;
     for (SCTAB i=0; i< pDoc->GetTableCount(); i++)
         if (pDoc->HasTable(i))
         {
@@ -260,7 +260,7 @@ void ScTransferObj::AddSupportedFormats()
 sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 {
     sal_uInt32  nFormat = SotExchange::GetFormat( rFlavor );
-    sal_Bool    bOK = false;
+    bool    bOK = false;
 
     if( HasFormat( nFormat ) )
     {
@@ -308,7 +308,7 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
             if ( nFormat == SOT_FORMATSTR_ID_LINK )
                 bUsedForLink = true;
 
-            sal_Bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
+            bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
             ScRange aReducedBlock = aBlock;
             if ( nFormat == SOT_FORMATSTR_ID_HTML && (aBlock.aEnd.Col() == MAXCOL || aBlock.aEnd.Row() == MAXROW) && aBlock.aStart.Tab() == aBlock.aEnd.Tab() )
@@ -481,7 +481,7 @@ sal_Bool ScTransferObj::WriteObject( SotStorageStreamRef& rxOStm, void* pUserObj
                     delete pSrcStm;
                 }
 
-                bRet = sal_True;
+                bRet = true;
 
                 xWorkStore->dispose();
                 xWorkStore = uno::Reference < embed::XStorage >();
@@ -558,7 +558,7 @@ void ScTransferObj::SetDragSourceFlags( sal_uInt16 nFlags )
 
 void ScTransferObj::SetDragWasInternal()
 {
-    bDragWasInternal = sal_True;
+    bDragWasInternal = true;
 }
 
 void ScTransferObj::SetUseInApi( bool bSet )
@@ -610,7 +610,7 @@ void ScTransferObj::InitDocShell()
 
         ScDocument* pDestDoc = pDocSh->GetDocument();
         ScMarkData aDestMark;
-        aDestMark.SelectTable( 0, sal_True );
+        aDestMark.SelectTable( 0, true );
 
         pDestDoc->SetDocOptions( pDoc->GetDocOptions() );   // #i42666#
 
@@ -663,16 +663,16 @@ void ScTransferObj::InitDocShell()
         //  pDoc is always a Clipboard-document
 
         ScRange aDestRange( nStartX,nStartY,0, nEndX,nEndY,0 );
-        sal_Bool bWasCut = pDoc->IsCutMode();
+        bool bWasCut = pDoc->IsCutMode();
         if (!bWasCut)
-            pDoc->SetClipArea( aDestRange, sal_True );          // Cut
+            pDoc->SetClipArea( aDestRange, true );          // Cut
         pDestDoc->CopyFromClip( aDestRange, aDestMark, IDF_ALL, NULL, pDoc, false );
         pDoc->SetClipArea( aDestRange, bWasCut );
 
         StripRefs( pDoc, nStartX,nStartY, nEndX,nEndY, pDestDoc, 0,0 );
 
         ScRange aMergeRange = aDestRange;
-        pDestDoc->ExtendMerge( aMergeRange, sal_True );
+        pDestDoc->ExtendMerge( aMergeRange, true );
 
         pDoc->CopyDdeLinks( pDestDoc );         // copy values of DDE Links
 
@@ -741,7 +741,7 @@ void ScTransferObj::InitDocShell()
         //pDocSh->SvInPlaceObject::SetVisArea( aNewArea );
         pDocSh->SetVisArea( aNewArea );
 
-        pDocSh->UpdateOle(&aViewData, sal_True);
+        pDocSh->UpdateOle(&aViewData, true);
 
         //! SetDocumentModified?
         if ( pDestDoc->IsChartListenerCollectionNeedsUpdate() )
@@ -803,14 +803,14 @@ void ScTransferObj::StripRefs( ScDocument* pDoc,
         if (pCell->GetCellType() == CELLTYPE_FORMULA)
         {
             ScFormulaCell* pFCell = (ScFormulaCell*) pCell;
-            sal_Bool bOut = false;
+            bool bOut = false;
             ScDetectiveRefIter aRefIter( pFCell );
             while ( !bOut && aRefIter.GetNextRef( aRef ) )
             {
                 if ( aRef.aStart.Tab() != nSrcTab || aRef.aEnd.Tab() != nSrcTab ||
                         aRef.aStart.Col() < nStartX || aRef.aEnd.Col() > nEndX ||
                         aRef.aStart.Row() < nStartY || aRef.aEnd.Row() > nEndY )
-                    bOut = sal_True;
+                    bOut = true;
             }
             if (bOut)
             {
