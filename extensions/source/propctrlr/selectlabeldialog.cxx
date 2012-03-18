@@ -83,14 +83,15 @@ namespace pcr
         m_aControlTree.SetDeselectHdl(LINK(this, OSelectLabelDialog, OnEntrySelected));
 
         // fill the description
-        UniString sDescription = m_aMainDesc.GetText();
+        rtl::OUString sDescription = m_aMainDesc.GetText();
         sal_Int16 nClassID = FormComponentType::CONTROL;
         if (::comphelper::hasProperty(PROPERTY_CLASSID, m_xControlModel))
             nClassID = ::comphelper::getINT16(m_xControlModel->getPropertyValue(PROPERTY_CLASSID));
 
-        sDescription.SearchAndReplace(String::CreateFromAscii("$control_class$"), GetUIHeadlineName(nClassID, makeAny(m_xControlModel)));
-        UniString sName = ::comphelper::getString(m_xControlModel->getPropertyValue(PROPERTY_NAME)).getStr();
-        sDescription.SearchAndReplace(String::CreateFromAscii("$control_name$"), sName);
+        sDescription = sDescription.replaceAll(rtl::OUString("$control_class$"),
+            GetUIHeadlineName(nClassID, makeAny(m_xControlModel)));
+        rtl::OUString sName = ::comphelper::getString(m_xControlModel->getPropertyValue(PROPERTY_NAME));
+        sDescription = sDescription.replaceAll(rtl::OUString("$control_name$"), sName);
         m_aMainDesc.SetText(sDescription);
 
         // search for the root of the form hierarchy
@@ -181,7 +182,7 @@ namespace pcr
             return 0;
 
         sal_Int32 nChildren = 0;
-        UniString sName,sDisplayName;
+        rtl::OUString sName;
         Reference< XPropertySet >  xAsSet;
         for (sal_Int32 i=0; i<xContainer->getCount(); ++i)
         {
@@ -228,10 +229,11 @@ namespace pcr
             // get the label
             if (!::comphelper::hasProperty(PROPERTY_LABEL, xAsSet))
                 continue;
-            sDisplayName = ::comphelper::getString(xAsSet->getPropertyValue(PROPERTY_LABEL)).getStr();
-            sDisplayName += String::CreateFromAscii(" (");
-            sDisplayName += sName;
-            sDisplayName += ')';
+
+            rtl::OUString sDisplayName = rtl::OUStringBuffer(
+                ::comphelper::getString(xAsSet->getPropertyValue(PROPERTY_LABEL))).
+                appendAscii(RTL_CONSTASCII_STRINGPARAM(" (")).append(sName).append(')').
+                makeStringAndClear();
 
             // all requirements met -> insert
             SvLBoxEntry* pCurrent = m_aControlTree.InsertEntry(sDisplayName, m_aRequiredControlImage, m_aRequiredControlImage, pContainerEntry);

@@ -98,10 +98,8 @@ void SizeNotify(ViewShell* pVwSh, const Size &rSize)
     Description:    Notify for page number update
  --------------------------------------------------------------------*/
 
-
-
 void PageNumNotify( ViewShell* pVwSh, sal_uInt16 nPhyNum, sal_uInt16 nVirtNum,
-                                                    const String& rPgStr)
+                                                    const rtl::OUString& rPgStr)
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if ( pSfxVwSh && pSfxVwSh->ISA(SwView) &&
@@ -161,7 +159,7 @@ void RepaintPagePreview( ViewShell* pVwSh, const SwRect& rRect )
         ((SwPagePreView *)pSfxVwSh)->RepaintCoreRect( rRect );
 }
 
-sal_Bool JumpToSwMark( ViewShell* pVwSh, const String& rMark )
+sal_Bool JumpToSwMark( ViewShell* pVwSh, const rtl::OUString& rMark )
 {
     SfxViewShell *pSfxVwSh = pVwSh->GetSfxViewShell();
     if( pSfxVwSh && pSfxVwSh->ISA( SwView ) )

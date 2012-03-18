@@ -36,13 +36,19 @@
 //============================================================================
 struct SvAddressEntry_Impl
 {
-    UniString m_aAddrSpec;
-    UniString m_aRealName;
+    rtl::OUString m_aAddrSpec;
+    rtl::OUString m_aRealName;
 
-    SvAddressEntry_Impl() {};
-    SvAddressEntry_Impl(UniString const & rTheAddrSpec,
-                        UniString const & rTheRealName):
-        m_aAddrSpec(rTheAddrSpec), m_aRealName(rTheRealName) {}
+    SvAddressEntry_Impl()
+    {
+    }
+
+    SvAddressEntry_Impl(const rtl::OUString& rTheAddrSpec,
+                        const rtl::OUString& rTheRealName)
+        : m_aAddrSpec(rTheAddrSpec)
+        , m_aRealName(rTheRealName)
+    {
+    }
 };
 
 //============================================================================
@@ -58,29 +64,24 @@ class SVL_DLLPUBLIC SvAddressParser
     bool m_bHasFirst;
 
 public:
-    SvAddressParser(UniString const & rInput);
+    SvAddressParser(const rtl::OUString& rInput);
 
     ~SvAddressParser();
 
     sal_Int32 Count() const { return m_bHasFirst ? m_aRest.size() + 1 : 0; }
 
-    inline UniString const & GetEmailAddress(sal_Int32 nIndex) const;
+    const rtl::OUString& GetEmailAddress(sal_Int32 nIndex) const
+    {
+        return nIndex == 0 ? m_aFirst.m_aAddrSpec :
+                             m_aRest[ nIndex - 1 ]->m_aAddrSpec;
+    }
 
-    inline UniString const &GetRealName(sal_Int32 nIndex) const;
+    const rtl::OUString& GetRealName(sal_Int32 nIndex) const
+    {
+        return nIndex == 0 ? m_aFirst.m_aRealName :
+                             m_aRest[ nIndex - 1 ]->m_aRealName;
+    }
 };
-
-inline UniString const & SvAddressParser::GetEmailAddress(sal_Int32 nIndex)
-    const
-{
-    return nIndex == 0 ? m_aFirst.m_aAddrSpec :
-                         m_aRest[ nIndex - 1 ]->m_aAddrSpec;
-}
-
-inline UniString const & SvAddressParser::GetRealName(sal_Int32 nIndex) const
-{
-    return nIndex == 0 ? m_aFirst.m_aRealName :
-                         m_aRest[ nIndex - 1 ]->m_aRealName;
-}
 
 #endif // _ADRPARSE_HXX
 

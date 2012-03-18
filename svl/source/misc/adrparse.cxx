@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <tools/inetmime.hxx>
+#include <rtl/ustrbuf.hxx>
 #include <svl/adrparse.hxx>
 
 namespace
@@ -114,14 +115,14 @@ class SvAddressParser_Impl
 
     bool readToken();
 
-    static UniString reparse(sal_Unicode const * pBegin,
+    static rtl::OUString reparse(sal_Unicode const * pBegin,
                              sal_Unicode const * pEnd, bool bAddrSpec);
 
-    static UniString reparseComment(sal_Unicode const * pBegin,
+    static rtl::OUString reparseComment(sal_Unicode const * pBegin,
                                     sal_Unicode const * pEnd);
 
 public:
-    SvAddressParser_Impl(SvAddressParser * pParser, UniString const & rInput);
+    SvAddressParser_Impl(SvAddressParser * pParser, const rtl::OUString& rIn);
 };
 
 inline void SvAddressParser_Impl::resetRealNameAndFirstComment()
@@ -326,11 +327,10 @@ bool SvAddressParser_Impl::readToken()
 
 //============================================================================
 // static
-UniString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
-                                        sal_Unicode const * pEnd,
-                                        bool bAddrSpec)
+rtl::OUString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
+    sal_Unicode const * pEnd, bool bAddrSpec)
 {
-    UniString aResult;
+    rtl::OUStringBuffer aResult;
     TokenType eMode = TOKEN_ATOM;
     bool bEscaped = false;
     bool bEndsWithSpace = false;
@@ -343,44 +343,44 @@ UniString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
             case TOKEN_QUOTED:
                 if (bEscaped)
                 {
-                    aResult += cChar;
+                    aResult.append(cChar);
                     bEscaped = false;
                 }
                 else if (cChar == '"')
                 {
                     if (bAddrSpec)
-                        aResult += cChar;
+                        aResult.append(cChar);
                     eMode = TOKEN_ATOM;
                 }
                 else if (cChar == '\\')
                 {
                     if (bAddrSpec)
-                        aResult += cChar;
+                        aResult.append(cChar);
                     bEscaped = true;
                 }
                 else
-                    aResult += cChar;
+                    aResult.append(cChar);
                 break;
 
             case TOKEN_DOMAIN:
                 if (bEscaped)
                 {
-                    aResult += cChar;
+                    aResult.append(cChar);
                     bEscaped = false;
                 }
                 else if (cChar == ']')
                 {
-                    aResult += cChar;
+                    aResult.append(cChar);
                     eMode = TOKEN_ATOM;
                 }
                 else if (cChar == '\\')
                 {
                     if (bAddrSpec)
-                        aResult += cChar;
+                        aResult.append(cChar);
                     bEscaped = true;
                 }
                 else
-                    aResult += cChar;
+                    aResult.append(cChar);
                 break;
 
             case TOKEN_COMMENT:
@@ -402,7 +402,7 @@ UniString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
                 {
                     if (!bAddrSpec && !bEndsWithSpace)
                     {
-                        aResult += ' ';
+                        aResult.append(' ');
                         bEndsWithSpace = true;
                     }
                 }
@@ -410,7 +410,7 @@ UniString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
                 {
                     if (!bAddrSpec && !bEndsWithSpace)
                     {
-                        aResult += ' ';
+                        aResult.append(' ');
                         bEndsWithSpace = true;
                     }
                     eMode = TOKEN_COMMENT;
@@ -421,45 +421,45 @@ UniString SvAddressParser_Impl::reparse(sal_Unicode const * pBegin,
                     if (cChar == '"')
                     {
                         if (bAddrSpec)
-                            aResult += cChar;
+                            aResult.append(cChar);
                         eMode = TOKEN_QUOTED;
                     }
                     else if (cChar == '[')
                     {
-                        aResult += cChar;
+                        aResult.append(cChar);
                         eMode = TOKEN_QUOTED;
                     }
                     else
-                        aResult += cChar;
+                        aResult.append(cChar);
                 }
                 break;
         }
     }
-    return aResult;
+    return aResult.makeStringAndClear();
 }
 
 //============================================================================
 // static
-UniString SvAddressParser_Impl::reparseComment(sal_Unicode const * pBegin,
-                                               sal_Unicode const * pEnd)
+rtl::OUString SvAddressParser_Impl::reparseComment(sal_Unicode const * pBegin,
+    sal_Unicode const * pEnd)
 {
-    UniString aResult;
+    rtl::OUStringBuffer aResult;
     while (pBegin < pEnd)
     {
         sal_Unicode cChar = *pBegin++;
         if (cChar == '\\')
             cChar = *pBegin++;
-        aResult += cChar;
+        aResult.append(cChar);
     }
-    return aResult;
+    return aResult.makeStringAndClear();
 }
 
 //============================================================================
 SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
-                                           UniString const & rInput)
+                                           const rtl::OUString& rInput)
 {
-    m_pInputPos = rInput.GetBuffer();
-    m_pInputEnd = m_pInputPos + rInput.Len();
+    m_pInputPos = rInput.getStr();
+    m_pInputEnd = m_pInputPos + rInput.getLength();
 
     reset();
     bool bDone = false;
@@ -633,27 +633,25 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                                       &m_aOuterAddrSpec : 0;
                     if (m_pAddrSpec)
                     {
-                        UniString aTheAddrSpec;
+                        rtl::OUString aTheAddrSpec;
                         if (m_pAddrSpec->m_bReparse)
                             aTheAddrSpec = reparse(m_pAddrSpec->m_pBegin,
                                                    m_pAddrSpec->m_pEnd, true);
                         else
                         {
-                            xub_StrLen nLen =
-                                sal::static_int_cast< xub_StrLen >(
+                            sal_Int32 nLen = (
                                     m_pAddrSpec->m_pEnd
                                     - m_pAddrSpec->m_pBegin);
-                            if (nLen == rInput.Len())
+                            if (nLen == rInput.getLength())
                                 aTheAddrSpec = rInput;
                             else
                                 aTheAddrSpec
-                                    = rInput.Copy(
-                                        sal::static_int_cast< xub_StrLen >(
-                                            m_pAddrSpec->m_pBegin
-                                            - rInput.GetBuffer()),
+                                    = rInput.copy(
+                                        (m_pAddrSpec->m_pBegin
+                                            - rInput.getStr()),
                                         nLen);
                         }
-                        UniString aTheRealName;
+                        rtl::OUString aTheRealName;
                         if (!m_pRealNameBegin
                             || (m_pAddrSpec == &m_aOuterAddrSpec
                                && m_pRealNameBegin
@@ -668,31 +666,26 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
                                                      m_pFirstCommentEnd);
                             else
                                 aTheRealName
-                                    = rInput.Copy(
-                                        sal::static_int_cast< xub_StrLen >(
-                                            m_pFirstCommentBegin
-                                            - rInput.GetBuffer()),
-                                        sal::static_int_cast< xub_StrLen >(
-                                            m_pFirstCommentEnd
-                                            - m_pFirstCommentBegin));
+                                    = rInput.copy(
+                                        (m_pFirstCommentBegin
+                                         - rInput.getStr()),
+                                        (m_pFirstCommentEnd
+                                         - m_pFirstCommentBegin));
                         else if (m_bRealNameReparse)
                             aTheRealName = reparse(m_pRealNameBegin,
                                                    m_pRealNameEnd, false);
                         else
                         {
-                            xub_StrLen nLen =
-                                sal::static_int_cast< xub_StrLen >(
-                                    m_pRealNameContentEnd
-                                    - m_pRealNameContentBegin);
-                            if (nLen == rInput.Len())
+                            sal_Int32 nLen =
+                                (m_pRealNameContentEnd
+                                 - m_pRealNameContentBegin);
+                            if (nLen == rInput.getLength())
                                 aTheRealName = rInput;
                             else
                                 aTheRealName
-                                    = rInput.Copy(
-                                        sal::static_int_cast< xub_StrLen >(
-                                            m_pRealNameContentBegin
-                                            - rInput.GetBuffer()),
-                                        nLen);
+                                    = rInput.copy(
+                                        (m_pRealNameContentBegin
+                                         - rInput.getStr()), nLen);
                         }
                         if (pParser->m_bHasFirst)
                             pParser->m_aRest.push_back(new SvAddressEntry_Impl(
@@ -761,7 +754,8 @@ SvAddressParser_Impl::SvAddressParser_Impl(SvAddressParser * pParser,
 //
 //============================================================================
 
-SvAddressParser::SvAddressParser(UniString const & rInput): m_bHasFirst(false)
+SvAddressParser::SvAddressParser(const rtl::OUString& rInput)
+    : m_bHasFirst(false)
 {
     SvAddressParser_Impl aDoParse(this, rInput);
 }

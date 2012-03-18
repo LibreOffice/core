@@ -336,7 +336,7 @@ namespace pcr
     //------------------------------------------------------------------------
     void TabOrderListBox::MoveSelection( long nRelPos )
     {
-        UniString aSelEntryPrevText,aSelEntryNextText;
+        rtl::OUString aSelEntryPrevText, aSelEntryNextText;
         Image  aImage;
         for (long i=0; i<labs(nRelPos); i++)
         {

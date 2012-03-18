@@ -150,9 +150,9 @@ void SvxHyperlinkInternetTp::FillDlgFields ( String& aStrURL )
 
 void SvxHyperlinkInternetTp::setAnonymousFTPUser()
 {
-    maEdLogin.SetText( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM ( sAnonymous ) ) );
+    maEdLogin.SetText(rtl::OUString(sAnonymous));
     SvAddressParser aAddress( SvtUserOptions().GetEmail() );
-    maEdPassword.SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : String() );
+    maEdPassword.SetText( aAddress.Count() ? aAddress.GetEmailAddress(0) : rtl::OUString() );
 
     maFtLogin.Disable ();
     maFtPassword.Disable ();

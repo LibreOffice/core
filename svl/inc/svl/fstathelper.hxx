@@ -30,9 +30,9 @@
 #define _SVTOOLS_FSTATHELPER_HXX
 
 #include "svl/svldllapi.h"
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
 
-class UniString;
 class Date;
 class Time;
 
@@ -48,18 +48,18 @@ namespace FStatHelper {
 
     @return     it was be able to get the date/time stamp
 */
-SVL_DLLPUBLIC sal_Bool GetModifiedDateTimeOfFile( const UniString& rURL,
+SVL_DLLPUBLIC sal_Bool GetModifiedDateTimeOfFile( const rtl::OUString& rURL,
                                     Date* pDate, Time* pTime );
 
 /** Return if under the URL a document exist. This is only a wrapper for the
     UCB.IsContent.
 */
-SVL_DLLPUBLIC sal_Bool IsDocument( const UniString& rURL );
+SVL_DLLPUBLIC sal_Bool IsDocument( const rtl::OUString& rURL );
 
 /** Return if under the URL a folder exist. This is only a wrapper for the
     UCB.isFolder.
 */
-SVL_DLLPUBLIC sal_Bool IsFolder( const UniString& rURL );
+SVL_DLLPUBLIC sal_Bool IsFolder( const rtl::OUString& rURL );
 
 }
 

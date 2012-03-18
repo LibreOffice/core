@@ -171,7 +171,7 @@ enum RndStdIds
 
 extern ResMgr* pSwResMgr;           // Is in swapp0.cxx.
 #define SW_RES(i)       ResId(i,*pSwResMgr)
-#define SW_RESSTR(i)    UniString(ResId(i,*pSwResMgr))
+#define SW_RESSTR(i)    ResId::toString(SW_RES(i))
 
 ::com::sun::star::uno::Reference<
     ::com::sun::star::linguistic2::XSpellChecker1 > GetSpellChecker();

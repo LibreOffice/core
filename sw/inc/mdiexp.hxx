@@ -28,11 +28,11 @@
 #ifndef _MDIEXP_HXX
 #define _MDIEXP_HXX
 
+#include <rtl/ustring.hxx>
 #include <tools/solar.h>
 #include <tblenum.hxx>
 #include <swdllapi.h>
 
-class UniString;
 class SwRect;
 class Size;
 class Dialog;
@@ -48,7 +48,7 @@ extern void SizeNotify(ViewShell* pVwSh, const Size &);
 extern void PageNumNotify( ViewShell* pVwSh,
                             sal_uInt16 nPhyNum,
                             sal_uInt16 nVirtNum,
-                           const UniString& rPg );
+                           const rtl::OUString& rPg );
 
 enum FlyMode { FLY_DRAG_START, FLY_DRAG, FLY_DRAG_END };
 extern void FrameNotify( ViewShell* pVwSh, FlyMode eMode = FLY_DRAG );
@@ -72,7 +72,7 @@ void DelAllGrfCacheEntries( SwDoc* pDoc );
 // Read ChgMode for tables from configuration.
 TblChgMode GetTblChgDefaultMode();
 
-sal_Bool JumpToSwMark( ViewShell* pVwSh, const UniString& rMark );
+sal_Bool JumpToSwMark( ViewShell* pVwSh, const rtl::OUString& rMark );
 
 
 #endif
