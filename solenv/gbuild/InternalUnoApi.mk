@@ -70,6 +70,26 @@ $(foreach rdb,$(2),$(call gb_InternalUnoApi__add_api,$(1),$(rdb)))
 
 endef
 
+# Express that the rdb $(2) depends on rdb $(3).
+#
+# This information is already available in the UnoApiTarget definition
+# for $(2), but this may not be loaded if we are building from a
+# different module. Thus, this is a necessary hack to make generation of
+# headers on demand work.
+#
+# I suppose it would be possible to store the list of required rdbs for
+# a rdb to a file and then load it when headers' generation is requested,
+# but it feels like overkill...
+define gb_InternalUnoApi_add_api_dependency
+$(call gb_UnoApiHeadersTarget_add_rdbfile,$(2),$(3))
+
+endef
+
+define gb_InternalUnoApi_add_api_dependencies
+$(foreach dep,$(3),$(call gb_InternalUnoApi_add_api_dependency,$(1),$(2),$(dep)))
+
+endef
+
 define gb_InternalUnoApi_set_xmlfile
 $(call gb_UnoApiTarget_set_xmlfile,$(1),$(2))
 
