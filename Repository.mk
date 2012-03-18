@@ -429,10 +429,8 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     nullcanvas \
     OGLTrans \
     passwordcontainer \
-    reflection \
     simplecanvas \
     slideshow \
-    stocservices \
     stringresource \
     ucpcmis1 \
     ucpexpand1 \
@@ -485,6 +483,8 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
     javavm \
     namingservice \
     proxyfac \
+    reflection \
+    stocservices \
     streams \
     textinstream \
     textoutstream \
