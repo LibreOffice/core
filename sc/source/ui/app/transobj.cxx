@@ -310,7 +310,20 @@ sal_Bool ScTransferObj::GetData( const datatransfer::DataFlavor& rFlavor )
 
             sal_Bool bIncludeFiltered = pDoc->IsCutMode() || bUsedForLink;
 
-            ScImportExport aObj( pDoc, aBlock );
+            ScRange aReducedBlock = aBlock;
+            if ( nFormat == SOT_FORMATSTR_ID_HTML && (aBlock.aEnd.Col() == MAXCOL || aBlock.aEnd.Row() == MAXROW) && aBlock.aStart.Tab() == aBlock.aEnd.Tab() )
+            {
+                bool bShrunk = false;
+                //shrink the area to allow pasting to external applications
+                SCCOL aStartCol = aReducedBlock.aStart.Col();
+                SCROW aStartRow = aReducedBlock.aStart.Row();
+                SCCOL aEndCol = aReducedBlock.aEnd.Col();
+                SCROW aEndRow = aReducedBlock.aEnd.Row();
+                pDoc->ShrinkToUsedDataArea( bShrunk, aReducedBlock.aStart.Tab(), aStartCol, aStartRow, aEndCol, aEndRow, false);
+                aReducedBlock = ScRange(aStartCol, aStartRow, aReducedBlock.aStart.Tab(), aEndCol, aEndRow, aReducedBlock.aEnd.Tab());
+            }
+
+            ScImportExport aObj( pDoc, aReducedBlock );
             ScExportTextOptions aTextOptions(ScExportTextOptions::None, 0, true);
             if ( bUsedForLink )
             {
