@@ -50,12 +50,12 @@ $$(eval $$(call gb_Module_register_target,$(call gb_InternalUnoApi_get_target,$(
 endef
 
 define gb_InternalUnoApi_add_idlfile
-$(call gb_UnoApiTarget_add_idlfile,$(1),$(2))
+$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(3))
 
 endef
 
 define gb_InternalUnoApi_add_idlfiles
-$(call gb_UnoApiTarget_add_idlfiles,$(1),$(2))
+$(call gb_UnoApiTarget_add_idlfiles,$(1),$(2),$(3))
 
 endef
 
