@@ -28,9 +28,6 @@
 $(eval $(call gb_Pagein_Pagein,common))
 
 # sorted in approx. reverse load order (ld.so.1)
-# TODO: Hmm, so it looks like there are duplicates in the list... Moreover,
-# some that are conditional above are not conditional here (e.g., icule).
-# I have doubts about gconfbe, desktopbe and localebe too.
 $(eval $(call gb_Pagein_add_objects,common,\
     i18npool \
     $(if $(findstring YES,$(SYSTEM_ICU)),,\
@@ -75,19 +72,13 @@ $(eval $(call gb_Pagein_add_objects,common,\
     oovbaapi.rdb \
     deployment \
     deploymentmisc \
-    ucb1 \
     xstor \
-    package2 \
     filterconfig \
     uui \
-    lng \
     svt \
     spl \
-    basegfx \
     avmedia \
     helplinker \
-    vclplug_gen \
-    icule \
     sax \
     gconfbe \
     fsstorage \
