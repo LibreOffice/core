@@ -205,6 +205,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     editeng \
     egi \
     eme \
+    emser \
     epb \
     epg \
     epp \
@@ -408,7 +409,6 @@ ifeq ($(OS),WNT)
 $(eval $(call gb_Helper_register_libraries,PLAINLIBS_OOO, \
     dnd \
     dtrans \
-    emser \
     fop \
     fps \
     ftransl \
