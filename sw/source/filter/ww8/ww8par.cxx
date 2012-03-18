@@ -2360,7 +2360,7 @@ CharSet SwWW8ImplReader::GetCurrentCharSet()
     {
         if (!maFontSrcCharSets.empty())
             eSrcCharSet = maFontSrcCharSets.top();
-        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
+        if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
             eSrcCharSet = vColl[nCharFmt].GetCharSet();
         if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && StyleExists(nAktColl) && nAktColl < vColl.size())
             eSrcCharSet = vColl[nAktColl].GetCharSet();
@@ -2422,7 +2422,7 @@ CharSet SwWW8ImplReader::GetCurrentCJKCharSet()
             eSrcCharSet = maFontSrcCJKCharSets.top();
         if (!vColl.empty())
         {
-            if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && (nCharFmt != -1) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
+            if ((eSrcCharSet == RTL_TEXTENCODING_DONTKNOW) && nCharFmt >= 0 && (size_t)nCharFmt < vColl.size() )
                 eSrcCharSet = vColl[nCharFmt].GetCJKCharSet();
             if (eSrcCharSet == RTL_TEXTENCODING_DONTKNOW && nAktColl < vColl.size())
                 eSrcCharSet = vColl[nAktColl].GetCJKCharSet();
