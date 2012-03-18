@@ -37,92 +37,175 @@
         Styles = (PACKED); \
     End
 
+#define MINGW_DLL_COND(cond,id,name) \
+
+
 #ifdef SYSTEM_EXPAT
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libexpat, libexpat-1.dll )
+#ifdef NEEDS_MINGW_EXPAT_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libexpat, MINGW_EXPAT_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_LIBXSLT
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libxslt, libxslt-1.dll )
+#ifdef NEEDS_MINGW_LIBXSLT_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libxslt, MINGW_LIBXSLT_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_LIBXML
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Zlib,    zlib1.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libxml2, libxml2-2.dll )
+#ifdef NEEDS_MINGW_ZLIB_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Zlib,    MINGW_ZLIB_DLL )
+#endif
+#ifdef NEEDS_MINGW_LIBXML_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libxml2, MINGW_LIBXML_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_DB
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libdb, libdb-4.8.dll )
+#ifdef NEEDS_MINGW_DB_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libdb, MINGW_DB_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_CURL
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libintl,     libintl-8.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libdn,       libidn-11.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libnspr,     libnspr4.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Nssutil,     nssutil3.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libplc,      libplc4.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libplds,     libplds4.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_nss,         nss3.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_ssl,         ssl3.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgpgerror, libgpg-error-0.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgcrypt,   libgcrypt-11.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libssh,      libssh2-1.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libcurl,     libcurl-4.dll )
+#ifdef NEEDS_MINGW_INTL_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libintl,     MINGW_INTL_DLL )
+#endif
+#ifdef NEEDS_MINGW_IDN_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libdn,       MINGW_IDN_DLL )
+#endif
+#ifdef NEEDS_MINGW_NSPR4_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libnspr,     MINGW_NSPR4_DLL )
+#endif
+#ifdef NEEDS_MINGW_NSSUTIL3_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Nssutil,     MINGW_NSSUTIL3_DLL )
+#endif
+#ifdef NEEDS_MINGW_PLC4_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libplc,      MINGW_PLC4_DLL )
+#endif
+#ifdef NEEDS_MINGW_PLDS4_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libplds,     MINGW_PLDS4_DLL )
+#endif
+#ifdef NEEDS_MINGW_NSS3_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_nss,         MINGW_NSS3_DLL )
+#endif
+#ifdef NEEDS_MINGW_SSL3_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_ssl,         MINGW_SSL3_DLL )
+#endif
+#ifdef NEEDS_MINGW_GPG_ERROR_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgpgerror, MINGW_GPG_ERROR_DLL )
+#endif
+#ifdef NEEDS_MINGW_GCRYPT_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgcrypt,   MINGW_GCRYPT_DLL )
+#endif
+#ifdef NEEDS_MINGW_SSH2_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libssh,      MINGW_SSH2_DLL )
+#endif
+#ifdef NEEDS_MINGW_CURL_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libcurl,     MINGW_CURL_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_ICU
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Icui18n, STRING(CONCAT4(icui18n,ICU_MAJOR,ICU_MINOR,.dll)) )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Icuuc,   STRING(CONCAT4(icuuc,ICU_MAJOR,ICU_MINOR,.dll)) )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Icudata, STRING(CONCAT4(icudata,ICU_MAJOR,ICU_MINOR,.dll)) )
+#ifdef NEEDS_MINGW_ICUI18N_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Icui18n, MINGW_ICUI18N_DLL )
+#endif
+#ifdef NEEDS_MINGW_ICUUC_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Icuuc,   MINGW_ICUUC_DLL )
+#endif
+#ifdef NEEDS_MINGW_ICUDATA_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Icudata, MINGW_ICUDATA_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_GRAPHITE
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgrahpite, libgraphite2.dll )
+#ifdef NEEDS_MINGW_GRAPHITE2_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgrahpite, MINGW_GRAPHITE2_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_NEON
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libtasn,   libtasn1-3.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgnutls, libgnutls-26.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libneon,   libneon-27.dll )
+#ifdef NEEDS_MINGW_TASN1_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libtasn,   MINGW_TASN1_DLL )
+#endif
+#ifdef NEEDS_MINGW_GNUTLS_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgnutls, MINGW_GNUTLS_DLL )
+#endif
+#ifdef NEEDS_MINGW_NEON_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libneon,   MINGW_NEON_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_OPENSSL
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libssl, libssl-8.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libcrypto, libcrypto-8.dll )
+#ifdef NEEDS_MINGW_SSL_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libssl, MINGW_SSL_DLL )
+#endif
+#ifdef NEEDS_MINGW_CRYPTO_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libcrypto, MINGW_CRYPTO_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_REDLAND
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libraptor, libraptor-1.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Librasqal, librasqal-2.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libqslite, libsqlite3-0.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Librdf,    librdf-0.dll )
+#ifdef NEEDS_MINGW_RAPTOR_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libraptor, MINGW_RAPTOR_DLL )
+#endif
+#ifdef NEEDS_MINGW_RASQAL_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Librasqal, MINGW_RASQAL_DLL )
+#endif
+#ifdef NEEDS_MINGW_SQLITE3_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libqslite, MINGW_SQLITE3_DLL )
+#endif
+#ifdef NEEDS_MINGW_REDLAND_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Librdf,    MINGW_REDLAND_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_HUNSPELL
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libhunspell, libhunspell-1.3-0.dll )
+#ifdef NEEDS_MINGW_HUNSPELL_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libhunspell, MINGW_HUNSPELL_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_HYPH
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libhyphen, libhyphen-0.dll )
+#ifdef NEEDS_MINGW_HYPHEN_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libhyphen, MINGW_HYPHEN_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_MYTHES
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libmythes, libmythes-1.2-0.dll )
+#ifdef NEEDS_MINGW_MYTHES_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libmythes, MINGW_MYTHES_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_LPSOLVE
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Lpsolve, lpsolve55.dll )
+#ifdef NEEDS_MINGW_LPSOLVE_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Lpsolve, MINGW_LPSOLVE_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_CAIRO
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libfontconfig, libfontconfig-1.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libfreetype,   libfreetype-6.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libpixman,     libpixman-1-0.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libpng,        libpng15-15.dll )
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Libcairo,      libcairo-2.dll )
+#ifdef NEEDS_MINGW_FONTCONFIG_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libfontconfig, MINGW_FONTCONFIG_DLL )
+#endif
+#ifdef NEEDS_MINGW_FREETYPE_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libfreetype,   MINGW_FREETYPE_DLL )
+#endif
+#ifdef NEEDS_MINGW_PIXMAN_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libpixman,     MINGW_PIXMAN_DLL )
+#endif
+#ifdef NEEDS_MINGW_PNG15_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libpng,        MINGW_PNG15_DLL )
+#endif
+#ifdef NEEDS_MINGW_CAIRO_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libcairo,      MINGW_CAIRO_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_LCMS2
-MINGW_DLL( gid_Brand_File_Lib_Mingw_Liblcms2, liblcms2-2.dll )
+#ifdef NEEDS_MINGW_LCMS2_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Liblcms2, MINGW_LCMS2_DLL )
+#endif
 #endif
 
 #if defined(MINGW_GCCDLL)

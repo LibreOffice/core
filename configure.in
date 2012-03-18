@@ -11,7 +11,6 @@ save_CXX=$CXX
 BUILD_TYPE="LibO"
 SCPDEFS=""
 GIT_REPO_NAMES=""
-MINGW_EXTERNAL_DLLS=""
 LO_PATH= # used by path_munge to construct a PATH variable
 
 PathFormat()
@@ -5807,13 +5806,14 @@ if test "$with_system_expat" = "yes"; then
         [AC_MSG_ERROR(expat.h not found. install expat)], [])
     AC_CHECK_LIB([expat], [XML_ParserCreate], [:],
     [AC_MSG_RESULT(expat library not found or functional.)], [])
-    libo_ADD_MINGW_EXTERNAL_DLLS([libexpat],[MINGW_EXTERNAL_DLLS],[libexpat-1.dll])
+    libo_MINGW_CHECK_DLL([EXPAT], [libexpat])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_EXPAT=NO
     BUILD_TYPE="$BUILD_TYPE EXPAT"
 fi
 AC_SUBST(SYSTEM_EXPAT)
+AC_SUBST([MINGW_EXPAT_DLL])
 
 dnl ===================================================================
 dnl Check for system libcdr
@@ -5900,6 +5900,7 @@ if test "$with_system_lcms2" = "yes"; then
     AC_MSG_RESULT([external])
     SYSTEM_LCMS2=YES
     PKG_CHECK_MODULES( LCMS2, lcms2 )
+    libo_MINGW_CHECK_DLL([LCMS2], [liblcms2])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LCMS2=NO
@@ -5908,6 +5909,7 @@ fi
 AC_SUBST(SYSTEM_LCMS2)
 AC_SUBST(LCMS2_CFLAGS)
 AC_SUBST(LCMS2_LIBS)
+AC_SUBST([MINGW_LCMS2_DLL])
 
 dnl ===================================================================
 dnl Check for system cppunit
@@ -6022,7 +6024,7 @@ if test "$with_system_libxml" = "yes"; then
         AC_MSG_ERROR([xsltproc is required])
     fi
 
-    libo_ADD_MINGW_EXTERNAL_DLLS([libxslt],[MINGW_EXTERNAL_DLLS],[libxslt-1.dll])
+    libo_MINGW_CHECK_DLL([LIBXSLT], [libxslt])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXSLT=NO
@@ -6044,6 +6046,7 @@ AC_SUBST(SYSTEM_LIBXSLT_FOR_BUILD)
 AC_SUBST(LIBXSLT_CFLAGS)
 AC_SUBST(LIBXSLT_LIBS)
 AC_SUBST(XSLTPROC)
+AC_SUBST([MINGW_LIBXSLT_DLL])
 
 # ===================================================================
 # Check for system libxml
@@ -6072,7 +6075,8 @@ if test "$with_system_libxml" = "yes"; then
         AC_MSG_ERROR([xmllint is required])
     fi
 
-    libo_ADD_MINGW_EXTERNAL_DLLS([libxml2],[MINGW_EXTERNAL_DLLS],[zlib1.dll libxml2-2.dll])
+    libo_MINGW_CHECK_DLL([LIBXML],[libxml2])
+    libo_MINGW_TRY_DLL([ZLIB],[zlib1])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXML=NO
@@ -6082,7 +6086,8 @@ AC_SUBST(SYSTEM_LIBXML)
 AC_SUBST(LIBXML_CFLAGS)
 AC_SUBST(LIBXML_LIBS)
 AC_SUBST(XMLLINT)
-
+AC_SUBST([MINGW_LIBXML_DLL])
+AC_SUBST([MINGW_ZLIB_DLL])
 dnl ===================================================================
 dnl Checks for Python
 dnl ===================================================================
@@ -6309,7 +6314,7 @@ or install the Berkeley db development package.])
     fi
 
     SCPDEFS="$SCPDEFS -DSYSTEM_DB"
-    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libdb-4.8.dll"
+    libo_MINGW_CHECK_DLL([DB], [libdb])
 elif test $_os != iOS -a $_os != Android; then
     AC_MSG_RESULT([internal])
     SYSTEM_DB=NO
@@ -6321,6 +6326,7 @@ AC_SUBST(SYSTEM_DB)
 AC_SUBST(SYSTEM_DB_CFLAGS)
 AC_SUBST(DB_LIB)
 AC_SUBST(DB_CPPLIB)
+AC_SUBST([MINGW_DB_DLL])
 
 AC_MSG_CHECKING([whether to build the MySQL Connector extension])
 if test "x$enable_ext_mysql_connector" = "xyes" -a "x$enable_extension_integration" != "xno"; then
@@ -6802,7 +6808,18 @@ if test "$with_system_curl" = "yes"; then
         ;;
     esac
 
-    libo_ADD_MINGW_EXTERNAL_DLLS([libcurl],[MINGW_EXTERNAL_DLLS],[libintl-8.dll libidn-11.dll libnspr4.dll nssutil3.dll libplc4.dll libplds4.dll nss3.dll ssl3.dll libgpg-error-0.dll libgcrypt-11.dll libssh2-1.dll libcurl-4.dll])
+    libo_MINGW_CHECK_DLL([CURL], [libcurl])
+    libo_MINGW_TRY_DLL([INTL], [libintl])
+    libo_MINGW_TRY_DLL([IDN], [libidn])
+    libo_MINGW_TRY_DLL([NSPR4], [libnspr4])
+    libo_MINGW_TRY_DLL([NSSUTIL3], [nssutil3])
+    libo_MINGW_TRY_DLL([PLC4], [libplc4])
+    libo_MINGW_TRY_DLL([PLDS4], [libplds4])
+    libo_MINGW_TRY_DLL([NSS3], [nss3])
+    libo_MINGW_TRY_DLL([SSL3], [ssl3])
+    libo_MINGW_TRY_DLL([GPG_ERROR], [libgpg-error])
+    libo_MINGW_TRY_DLL([GCRYPT], [libgcrypt])
+    libo_MINGW_TRY_DLL([SSH2], [libssh2])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_CURL=NO
@@ -6811,6 +6828,18 @@ fi
 AC_SUBST(SYSTEM_CURL)
 AC_SUBST(CURL_CFLAGS)
 AC_SUBST(CURL_LIBS)
+AC_SUBST([MINGW_CURL_DLL])
+AC_SUBST([MINGW_GCRYPT_DLL])
+AC_SUBST([MINGW_GPG_ERROR_DLL])
+AC_SUBST([MINGW_IDN_DLL])
+AC_SUBST([MINGW_INTL_DLL])
+AC_SUBST([MINGW_NSPR4_DLL])
+AC_SUBST([MINGW_NSS3_DLL])
+AC_SUBST([MINGW_NSSUTIL3_DLL])
+AC_SUBST([MINGW_PLC4_DLL])
+AC_SUBST([MINGW_PLDS4_DLL])
+AC_SUBST([MINGW_SSH2_DLL])
+AC_SUBST([MINGW_SSL3_DLL])
 
 dnl ===================================================================
 dnl Check for system boost
@@ -7418,7 +7447,9 @@ if test "$with_system_icu" = "yes"; then
         fi
     fi
 
-    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS icui18n$ICU_MAJOR$ICU_MINOR.dll icuuc$ICU_MAJOR$ICU_MINOR.dll icudata$ICU_MAJOR$ICU_MINOR.dll"
+    libo_MINGW_CHECK_DLL([ICUDATA], [icudata][$ICU_MAJOR][$ICU_MINOR])
+    libo_MINGW_CHECK_DLL([ICU18N], [icui18n][$ICU_MAJOR][$ICU_MINOR])
+    libo_MINGW_CHECK_DLL([ICUUC], [icuuc][$ICU_MAJOR][$ICU_MINOR])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_ICU="NO"
@@ -7434,6 +7465,9 @@ AC_SUBST(ICU_MAJOR)
 AC_SUBST(ICU_MINOR)
 AC_SUBST(ICU_MICRO)
 AC_SUBST(ICU_RECLASSIFIED_CLOSE_PARENTHESIS)
+AC_SUBST([MINGW_ICUDATA_DLL])
+AC_SUBST([MINGW_ICUI18N_DLL])
+AC_SUBST([MINGW_ICUUC_DLL])
 
 dnl ===================================================================
 dnl Graphite
@@ -7448,7 +7482,7 @@ if test "$_os" = "WINNT" -o "$_os" = "Linux" && test "$enable_graphite" = "" -o 
         AC_MSG_RESULT([external])
         SYSTEM_GRAPHITE=YES
         PKG_CHECK_MODULES( GRAPHITE, graphite2 >= 0.9.3 )
-        MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libgraphite2.dll"
+        libo_MINGW_CHECK_DLL([GRAPHITE2], [libgraphite2])
     else
         AC_MSG_RESULT([internal])
         SYSTEM_GRAPHITE=NO
@@ -7461,6 +7495,7 @@ AC_SUBST(ENABLE_GRAPHITE)
 AC_SUBST(SYSTEM_GRAPHITE)
 AC_SUBST(GRAPHITE_LIBS)
 AC_SUBST(GRAPHITE_CFLAGS)
+AC_SUBST([MINGW_GRAPHITE2_DLL])
 
 dnl ===================================================================
 dnl SampleICC
@@ -7647,7 +7682,9 @@ if test "$with_system_neon" = "yes"; then
     NEON_VERSION="`$PKG_CONFIG --modversion neon | $SED 's/\.//g'`"
     NEON_CFLAGS="$NEON_CFLAGS -DSYSTEM_NEON -DUSE_DAV_LOCKS=1"
     SYSTEM_NEON=YES
-    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libtasn1-3.dll libgnutls-26.dll libneon-27.dll"
+    libo_MINGW_CHECK_DLL([NEON], [libneon])
+    libo_MINGW_TRY_DLL([TASN1], [libtasn1])
+    libo_MINGW_TRY_DLL([GNUTLS], [libgnutls])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_NEON=NO
@@ -7659,6 +7696,9 @@ AC_SUBST(SYSTEM_NEON)
 AC_SUBST(NEON_VERSION)
 AC_SUBST(NEON_LIBS)
 AC_SUBST(NEON_CFLAGS)
+AC_SUBST([MINGW_GNUTLS_DLL])
+AC_SUBST([MINGW_NEON_DLL])
+AC_SUBST([MINGW_TASN1_DLL])
 fi
 
 dnl ===================================================================
@@ -7681,7 +7721,8 @@ if test "$with_system_openssl" = "yes"; then
         PKG_CHECK_MODULES( OPENSSL, openssl )
     fi
     SYSTEM_OPENSSL=YES
-    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libssl-8.dll libcrypto-8.dll"
+    libo_MINGW_CHECK_DLL([SSL], [libssl])
+    libo_MINGW_CHECK_DLL([CRYPTO], [libcrypto])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_OPENSSL=NO
@@ -7690,6 +7731,8 @@ fi
 AC_SUBST(SYSTEM_OPENSSL)
 AC_SUBST(OPENSSL_CFLAGS)
 AC_SUBST(OPENSSL_LIBS)
+AC_SUBST([MINGW_SSL_DLL])
+AC_SUBST([MINGW_CRYPTO_DLL])
 
 dnl ===================================================================
 dnl Check for system redland
@@ -7700,7 +7743,10 @@ if test "$with_system_redland" = "yes"; then
     SYSTEM_REDLAND=YES
     dnl versions before 1.0.8 write RDF/XML that is useless for ODF (@xml:base)
     PKG_CHECK_MODULES(REDLAND, redland >= 1.0.8)
-    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libraptor-1.dll librasqal-2.dll libsqlite3-0.dll librdf-0.dll"
+    libo_MINGW_CHECK_DLL([REDLAND], [librdf])
+    libo_MINGW_TRY_DLL([RAPTOR], [libraptor])
+    libo_MINGW_TRY_DLL([RASQAL], [librasqal])
+    libo_MINGW_TRY_DLL([SQLITE3], [libsqlite3])
 else
     AC_MSG_RESULT([internal])
     BUILD_TYPE="$BUILD_TYPE REDLAND"
@@ -7709,6 +7755,10 @@ fi
 AC_SUBST(SYSTEM_REDLAND)
 AC_SUBST(REDLAND_CFLAGS)
 AC_SUBST(REDLAND_LIBS)
+AC_SUBST([MINGW_RAPTOR_DLL])
+AC_SUBST([MINGW_RASQAL_DLL])
+AC_SUBST([MINGW_REDLAND_DLL])
+AC_SUBST([MINGW_SQLITE3_DLL])
 
 dnl ===================================================================
 dnl Check for system hunspell
@@ -7730,7 +7780,7 @@ if test "$with_system_hunspell" = "yes"; then
         HUNSPELL_LIBS=-lhunspell
     fi
     AC_LANG_POP([C++])
-    libo_ADD_MINGW_EXTERNAL_DLLS([libhunspell],[MINGW_EXTERNAL_DLLS],[libhunspell-1.3-0.dll])
+    libo_MINGW_CHECK_DLL([HUNSPELL], [libhunspell-1.3])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HUNSPELL=NO
@@ -7739,6 +7789,7 @@ fi
 AC_SUBST(SYSTEM_HUNSPELL)
 AC_SUBST(HUNSPELL_CFLAGS)
 AC_SUBST(HUNSPELL_LIBS)
+AC_SUBST([MINGW_HUNSPELL_DLL])
 
 dnl ===================================================================
 dnl Checking for altlinuxhyph
@@ -7762,7 +7813,7 @@ if test "$with_system_altlinuxhyph" = "yes"; then
         AC_CHECK_LIB(hnj, hnj_hyphen_hyphenate2, [HYPHEN_LIB=-lhnj],
            [ AC_MSG_ERROR(altlinuxhyph library not found or too old.)], [])
     fi
-    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libhyphen-0.dll"
+    libo_MINGW_CHECK_DLL([HYPHEN], [libhyphen])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_HYPH=NO
@@ -7770,6 +7821,7 @@ else
 fi
 AC_SUBST(SYSTEM_HYPH)
 AC_SUBST(HYPHEN_LIB)
+AC_SUBST([MINGW_HYPHEN_DLL])
 
 dnl ===================================================================
 dnl Checking for mythes
@@ -7794,7 +7846,7 @@ if test "$with_system_mythes" = "yes"; then
     fi
     fi
     AC_LANG_POP([C++])
-    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS libmythes-1.2-0.dll"
+    libo_MINGW_CHECK_DLL([MYTHES], [libmythes-1.2])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_MYTHES=NO
@@ -7803,6 +7855,7 @@ fi
 AC_SUBST(SYSTEM_MYTHES)
 AC_SUBST(MYTHES_CFLAGS)
 AC_SUBST(MYTHES_LIBS)
+AC_SUBST([MINGW_MYTHES_DLL])
 
 dnl ===================================================================
 dnl Checking for lpsolve
@@ -7820,13 +7873,14 @@ if test "$with_system_lpsolve" = "yes"; then
     AC_CHECK_LIB([lpsolve55], [make_lp], [:],
         [ AC_MSG_ERROR(lpsolve library not found or too old.)], [])
     LIBS=$save_LIBS
-    MINGW_EXTERNAL_DLLS="$MINGW_EXTERNAL_DLLS lpsolve55.dll"
+    libo_MINGW_CHECK_DLL([LPSOLVE], [lpsolve55])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LPSOLVE=NO
     BUILD_TYPE="$BUILD_TYPE LPSOLVE"
 fi
 AC_SUBST(SYSTEM_LPSOLVE)
+AC_SUBST([MINGW_LPSOLVE_DLL])
 
 dnl ===================================================================
 dnl Checking for libexttextcat
@@ -9929,7 +9983,11 @@ if test "$enable_cairo_canvas" = "yes" -a "$with_system_cairo" = "yes"; then
             AC_LANG_POP([C])
         fi
     fi
-    libo_ADD_MINGW_EXTERNAL_DLLS([libcairo],[MINGW_EXTERNAL_DLLS],[libfontconfig-1.dll libfreetype-6.dll libpixman-1-0.dll libpng15-15.dll libcairo-2.dll])
+    libo_MINGW_CHECK_DLL([CAIRO], [libcairo])
+    libo_MINGW_TRY_DLL([FONTCONFIG], [libfontconfig])
+    libo_MINGW_TRY_DLL([FREETYPE], [libfreetype])
+    libo_MINGW_TRY_DLL([PIXMAN], [libpixman])
+    libo_MINGW_TRY_DLL([PNG15], [libpng15])
 else
     AC_MSG_RESULT([no])
 
@@ -9955,6 +10013,11 @@ fi
 AC_SUBST(SYSTEM_CAIRO)
 AC_SUBST(CAIRO_CFLAGS)
 AC_SUBST(CAIRO_LIBS)
+AC_SUBST([MINGW_CAIRO_DLL])
+AC_SUBST([MINGW_FONTCONFIG_DLL])
+AC_SUBST([MINGW_FREETYPE_DLL])
+AC_SUBST([MINGW_PIXMAN_DLL])
+AC_SUBST([MINGW_PNG15_DLL])
 
 
 dnl ===================================================================
@@ -11011,20 +11074,6 @@ AC_SUBST(WIN_LS)
 AC_SUBST(WIN_TOUCH)
 
 AC_SUBST(BUILD_TYPE)
-
-if test "$WITH_MINGW" != "yes"; then
-    MINGW_EXTERNAL_DLLS=
-else
-    mingw_dlldir=`$CC -print-sysroot`/mingw/bin
-    for DLL in $MINGW_EXTERNAL_DLLS; do
-        AC_MSG_CHECKING([for $DLL])
-        if ! test -f "$mingw_dlldir/$DLL"; then
-            AC_MSG_ERROR([Could not find $DLL, install the appropriate mingw32-<package>, not only mingw32-<package>-devel.])
-        fi
-        AC_MSG_RESULT([$mingw_dlldir/$DLL])
-    done
-fi
-AC_SUBST(MINGW_EXTERNAL_DLLS)
 
 AC_SUBST(SOLARINC)
 AC_SUBST(SOLARLIB)
