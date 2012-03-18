@@ -177,7 +177,7 @@ void XMLRedlineExport::ExportChangesList(
             // iterate over changes list
             for( ChangesListType::iterator aIter = pChangesList->begin();
                  aIter != pChangesList->end();
-                 aIter++ )
+                 ++aIter )
             {
                 ExportChangedRegion( *aIter );
             }
