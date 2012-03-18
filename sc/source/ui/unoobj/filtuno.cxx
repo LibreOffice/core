@@ -82,7 +82,6 @@ SC_SIMPLE_SERVICE_INFO( ScFilterOptionsObj, SCFILTEROPTIONSOBJ_IMPLNAME, SCFILTE
 
 static void load_CharSet( rtl_TextEncoding &nCharSet, bool bExport )
 {
-    sal_Int32 nChar = 0;
     Sequence<Any> aValues;
     const Any *pProperties;
     Sequence<OUString> aNames(1);
@@ -99,6 +98,7 @@ static void load_CharSet( rtl_TextEncoding &nCharSet, bool bExport )
 
     if( pProperties[0].hasValue() )
     {
+        sal_Int32 nChar = 0;
         pProperties[0] >>= nChar;
         if( nChar >= 0)
         {
