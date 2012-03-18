@@ -32,6 +32,7 @@ gb_ComponentTarget_get_outdir_target = $(OUTDIR)/xml/component/$(1).component
 gb_Executable_get_target = $(OUTDIR)/bin/$(1)$(gb_Executable_EXT)
 gb_Executable_get_target_for_build = $(OUTDIR_FOR_BUILD)/bin/$(1)$(gb_Executable_EXT_for_build)
 gb_Extension_get_outdir_target = $(OUTDIR)/bin/$(1).oxt
+gb_Pagein_get_outdir_target = $(OUTDIR)/bin/pagein-$(1)
 gb_PackagePart_get_destinations = \
 	$(OUTDIR)/bin \
 	$(OUTDIR)/idl \
@@ -107,6 +108,7 @@ gb_ObjCxxObject_get_target = $(WORKDIR)/ObjCxxObject/$(1).o
 gb_ObjCObject_get_target = $(WORKDIR)/ObjCObject/$(1).o
 gb_Package_get_preparation_target = $(WORKDIR)/Package/prepared/$(1)
 gb_Package_get_target = $(WORKDIR)/Package/$(1)
+gb_Pagein_get_target = $(WORKDIR)/Pagein/$(1)
 gb_Pyuno_get_target = $(WORKDIR)/Pyuno/$(1).zip
 gb_Pyuno_get_outdir_target = $(OUTDIR)/bin/$(1).zip
 gb_PyunoFile_get_target = $(WORKDIR)/Pyuno/$(1)/contents/$(2)
@@ -168,6 +170,7 @@ $(eval $(call gb_Helper_make_clean_targets,\
 	Module \
 	PackagePart \
 	Package \
+	Pagein \
 	Pyuno \
 	Rdb \
 	ResTarget \

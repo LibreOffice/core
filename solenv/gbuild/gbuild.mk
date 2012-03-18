@@ -294,6 +294,7 @@ include $(foreach class, \
 	Package \
 	CustomTarget \
 	ExternalLib \
+	Pagein \
 	Pyuno \
 	Rdb \
 	CppunitTest \

@@ -25,16 +25,6 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-# FIXME: Okay, so this is ugly hack, because
-# include $(dir $(realpath $(firstword $(MAKEFILE_LIST))))Pagein.mk
-# does not work from tail_build. I think I should just move Pagein.mk
-# into gbuild proper...
-#
-# On the other side, I wonder how many of our gbuild classes /
-# implementations would break when using with multiple repos as they
-# were originally intended, i.e., with different root dirs.
-include $(SRCDIR)/desktop/Pagein.mk
-
 $(eval $(call gb_Module_Module,desktop))
 
 $(eval $(call gb_Module_add_targets,desktop,\
