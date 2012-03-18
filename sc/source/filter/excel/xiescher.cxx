@@ -2634,9 +2634,11 @@ void XclImpListBoxObj::DoProcessControl( ScfPropertySet& rPropSet ) const
 
         // multi selection: API expects sequence of list entry indexes
         if( bMultiSel )
+        {
             for( ScfUInt8Vec::const_iterator aBeg = maSelection.begin(), aIt = aBeg, aEnd = maSelection.end(); aIt != aEnd; ++aIt )
                 if( *aIt != 0 )
                     aSelVec.push_back( static_cast< sal_Int16 >( aIt - aBeg ) );
+        }
         // single selection: mnSelEntry is one-based, API expects zero-based
         else if( mnSelEntry > 0 )
             aSelVec.push_back( static_cast< sal_Int16 >( mnSelEntry - 1 ) );
