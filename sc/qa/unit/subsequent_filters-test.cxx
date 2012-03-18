@@ -41,6 +41,7 @@
 
 #include <editeng/brshitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <dbdata.hxx>
 
 #define CALC_DEBUG_OUTPUT 0
 #define TEST_BUG_FILES 0
@@ -483,9 +484,23 @@ void ScFiltersTest::testBugFixesODS()
     CPPUNIT_ASSERT_MESSAGE("Failed to load bugFixes.ods", xDocSh.Is());
     ScDocument* pDoc = xDocSh->GetDocument();
 
-    rtl::OUString aCSVFileName;
-    createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bugFix_Sheet2.")), aCSVFileName);
-    testFile(aCSVFileName, pDoc, 1);
+    {
+        // fdo
+        rtl::OUString aCSVFileName;
+        createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("bugFix_Sheet2.")), aCSVFileName);
+        testFile(aCSVFileName, pDoc, 1);
+    }
+
+    {
+        // fdo#40426
+        ScDBData* pDBData = pDoc->GetDBCollection()->getNamedDBs().findByName("DBRange1");
+        CPPUNIT_ASSERT(pDBData);
+        CPPUNIT_ASSERT(pDBData->HasHeader());
+        // no header
+        pDBData = pDoc->GetDBCollection()->getNamedDBs().findByName("DBRange2");
+        CPPUNIT_ASSERT(pDBData);
+        CPPUNIT_ASSERT(!pDBData->HasHeader());
+    }
 
     xDocSh->DoClose();
 }
