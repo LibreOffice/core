@@ -1950,23 +1950,23 @@ dnl ===================================================================
 
 AC_ARG_WITH(system-boost-for-build,
     AS_HELP_STRING([--with-system-boost-for-build],
-        [Use boost/libxslt already on system for build tools (cross-compilation only).]))
+        [Use boost already on system for build tools (cross-compilation only).]))
 
 AC_ARG_WITH(system-cppunit-for-build,
     AS_HELP_STRING([--with-system-cppunit-for-build],
-        [Use cppunit/libxslt already on system for build tools (cross-compilation only).]))
+        [Use cppunit already on system for build tools (cross-compilation only).]))
 
 AC_ARG_WITH(system-db-for-build,
     AS_HELP_STRING([--with-system-db-for-build],
-        [Use db/libxslt already on system for build tools (cross-compilation only).]))
+        [Use db already on system for build tools (cross-compilation only).]))
 
 AC_ARG_WITH(system-expat-for-build,
     AS_HELP_STRING([--with-system-expat-for-build],
-        [Use expat/libxslt already on system for build tools (cross-compilation only).]))
+        [Use expat already on system for build tools (cross-compilation only).]))
 
 AC_ARG_WITH(system-icu-for-build,
     AS_HELP_STRING([--with-system-icu-for-build],
-        [Use icu/libxslt already on system for build tools (cross-compilation only).]))
+        [Use icu already on system for build tools (cross-compilation only).]))
 
 AC_ARG_WITH(system-libxml-for-build,
     AS_HELP_STRING([--with-system-libxml-for-build],
