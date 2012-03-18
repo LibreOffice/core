@@ -1171,9 +1171,11 @@ void WW8TableCellGrid::addShadowCells()
             }
 
             ++aCellIt;
-
-            bBeginningOfCell = (aRect.Left() != aCellIt->left());
-            aRect = aCellIt->getRect();
+            if (aCellIt != aCellEndIt)
+            {
+                bBeginningOfCell = (aRect.Left() != aCellIt->left());
+                aRect = aCellIt->getRect();
+            }
         }
 
         WW8TableCellGridRow::Pointer_t pRow = getRow(*aTopsIt);
