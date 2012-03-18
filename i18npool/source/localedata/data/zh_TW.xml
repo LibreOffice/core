@@ -112,7 +112,7 @@
       <FormatCode>YYYY"年"M"月"D"日"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey7" default="false" type="medium" usage="DATE" formatindex="24">
-      <FormatCode>GGGEE"年"M"月"D"日"</FormatCode>
+      <FormatCode>GGEE"年"M"月"D"日"</FormatCode>
     </FormatElement>
     <FormatElement msgid="DateFormatskey8" default="false" type="long" usage="DATE" formatindex="25">
       <FormatCode>GGGEE"年"M"月"D"日"</FormatCode>
