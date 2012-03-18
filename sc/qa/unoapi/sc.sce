@@ -13,7 +13,7 @@
 -o sc.ScAccessiblePreviewCell
 -o sc.ScAccessiblePreviewHeaderCell
 -o sc.ScAccessiblePreviewTable
--o sc.ScAccessibleSpreadsheet
+# fdo#45337 -o sc.ScAccessibleSpreadsheet
 -o sc.ScAnnotationObj
 -o sc.ScAnnotationShapeObj
 -o sc.ScAnnotationsObj
@@ -80,7 +80,7 @@
 -o sc.ScIndexEnumeration_TableChartsEnumeration
 -o sc.ScIndexEnumeration_TableColumnsEnumeration
 -o sc.ScIndexEnumeration_TableConditionalEntryEnumeration
--o sc.ScIndexEnumeration_TableRowsEnumeration
+# fdo#45337 -o sc.ScIndexEnumeration_TableRowsEnumeration
 -o sc.ScIndexEnumeration_TextFieldEnumeration
 -o sc.ScLabelRangeObj
 -o sc.ScLabelRangesObj
