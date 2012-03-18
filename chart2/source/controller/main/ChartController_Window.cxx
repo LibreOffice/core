@@ -206,7 +206,6 @@ OUString lcl_getFormatCommandForObjectCID( const OUString& rCID )
         case OBJECTTYPE_DATA_ERRORS_X:
             aDispatchCommand = C2U(".uno:FormatXErrorBars");
             break;
-        case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_Y:
             aDispatchCommand = C2U(".uno:FormatYErrorBars");
             break;

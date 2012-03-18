@@ -57,7 +57,6 @@ AccessibleBase* ChartElementFactory::CreateChartElement( const AccessibleElement
         case OBJECTTYPE_DATA_SERIES:
         case OBJECTTYPE_DATA_LABELS:
         case OBJECTTYPE_DATA_LABEL:
-        case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_X:
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:

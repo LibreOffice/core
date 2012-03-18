@@ -283,9 +283,6 @@ rtl::OUString ObjectNameProvider::getName( ObjectType eObjectType, bool bPlural 
         case OBJECTTYPE_DATA_LABEL:
                 aRet=String(SchResId(STR_OBJECT_LABEL));
                 break;
-        case OBJECTTYPE_DATA_ERRORS:
-                aRet=String(SchResId(STR_OBJECT_ERROR_BARS_Y));
-                break;
         case OBJECTTYPE_DATA_ERRORS_X:
                 aRet=String(SchResId(STR_OBJECT_ERROR_BARS_X));
                 break;
@@ -752,7 +749,6 @@ rtl::OUString ObjectNameProvider::getNameForCID(
         case OBJECTTYPE_DATA_POINT:
         case OBJECTTYPE_DATA_LABELS:
         case OBJECTTYPE_DATA_LABEL:
-        case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_X:
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:

@@ -563,7 +563,6 @@ bool ChartController::isObjectDeleteable( const uno::Any& rSelection )
         case OBJECTTYPE_DATA_CURVE_EQUATION:
         case OBJECTTYPE_DATA_CURVE:
         case OBJECTTYPE_DATA_AVERAGE_LINE:
-        case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_X:
         case OBJECTTYPE_DATA_ERRORS_Y:
         case OBJECTTYPE_DATA_ERRORS_Z:
@@ -725,7 +724,6 @@ bool ChartController::executeDispatch_Delete()
                 break;
             }
 
-            case OBJECTTYPE_DATA_ERRORS:
             case OBJECTTYPE_DATA_ERRORS_X:
             case OBJECTTYPE_DATA_ERRORS_Y:
             case OBJECTTYPE_DATA_ERRORS_Z:
@@ -738,8 +736,7 @@ bool ChartController::executeDispatch_Delete()
 
                     if ( aObjectType == OBJECTTYPE_DATA_ERRORS_X )
                         nId = STR_OBJECT_ERROR_BARS_X;
-                    else if ( aObjectType == OBJECTTYPE_DATA_ERRORS_Y ||
-                              aObjectType == OBJECTTYPE_DATA_ERRORS )
+                    else if ( aObjectType == OBJECTTYPE_DATA_ERRORS_Y )
                         nId = STR_OBJECT_ERROR_BARS_Y;
                     else
                         nId = STR_OBJECT_ERROR_BARS_Z;

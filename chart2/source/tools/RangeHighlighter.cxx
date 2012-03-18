@@ -134,8 +134,7 @@ void RangeHighlighter::determineRanges()
                         fillRangesForDataPoint( xDataSeries, nIndex );
                         return;
                     }
-                    else if( OBJECTTYPE_DATA_ERRORS == eObjectType ||
-                             OBJECTTYPE_DATA_ERRORS_X == eObjectType ||
+                    else if( OBJECTTYPE_DATA_ERRORS_X == eObjectType ||
                              OBJECTTYPE_DATA_ERRORS_Y == eObjectType ||
                              OBJECTTYPE_DATA_ERRORS_Z == eObjectType )
                     {

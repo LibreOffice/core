@@ -160,10 +160,9 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
         }
     }
 
-    if( OBJECTTYPE_DATA_ERRORS == m_eObjectType ||
-            m_eObjectType == OBJECTTYPE_DATA_ERRORS_X ||
-            m_eObjectType == OBJECTTYPE_DATA_ERRORS_Y ||
-            m_eObjectType == OBJECTTYPE_DATA_ERRORS_Z)
+    if( m_eObjectType == OBJECTTYPE_DATA_ERRORS_X ||
+        m_eObjectType == OBJECTTYPE_DATA_ERRORS_Y ||
+        m_eObjectType == OBJECTTYPE_DATA_ERRORS_Z)
         m_bHasStatisticProperties = true;
 
     if( OBJECTTYPE_AXIS == m_eObjectType )
@@ -242,7 +241,6 @@ void ObjectPropertiesDialogParameter::init( const uno::Reference< frame::XModel 
                 case OBJECTTYPE_DATA_POINT:
                 case OBJECTTYPE_DATA_LABEL:
                 case OBJECTTYPE_DATA_LABELS:
-                case OBJECTTYPE_DATA_ERRORS:
                 case OBJECTTYPE_DATA_ERRORS_X:
                 case OBJECTTYPE_DATA_ERRORS_Y:
                 case OBJECTTYPE_DATA_ERRORS_Z:
@@ -455,7 +453,6 @@ SchAttribTabDlg::SchAttribTabDlg(Window* pParent,
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));
             break;
 
-        case OBJECTTYPE_DATA_ERRORS:
         case OBJECTTYPE_DATA_ERRORS_Y:
             AddTabPage(TP_YERRORBAR, String(SchResId(STR_PAGE_YERROR_BARS)), ErrorBarsTabPage::Create, NULL);
             AddTabPage(RID_SVXPAGE_LINE, String(SchResId(STR_PAGE_LINE)));

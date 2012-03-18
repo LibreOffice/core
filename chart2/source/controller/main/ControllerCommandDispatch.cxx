@@ -280,7 +280,7 @@ void ControllerState::update(
             if( aObjectType == OBJECTTYPE_DATA_ERRORS_X)
                 bMayFormatXErrorBars = true;
 
-            if( aObjectType == OBJECTTYPE_DATA_ERRORS_Y || aObjectType == OBJECTTYPE_DATA_ERRORS )
+            if( aObjectType == OBJECTTYPE_DATA_ERRORS_Y )
                 bMayFormatYErrorBars = true;
 
             if( aObjectType == OBJECTTYPE_DATA_CURVE )

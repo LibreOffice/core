@@ -875,9 +875,6 @@ OUString ObjectIdentifier::getStringForType( ObjectType eObjectType )
         case OBJECTTYPE_DATA_LABEL:
                 aRet=C2U("DataLabel");
                 break;
-        case OBJECTTYPE_DATA_ERRORS:
-                aRet=C2U("Errors");
-                break;
         case OBJECTTYPE_DATA_ERRORS_X:
                 aRet=C2U("ErrorsX");
                 break;
@@ -963,8 +960,6 @@ ObjectType ObjectIdentifier::getObjectType( const OUString& rCID )
         eRet = OBJECTTYPE_DATA_ERRORS_Y;
     else if( rCID.match(C2U("ErrorsZ"),nLastSign) )
         eRet = OBJECTTYPE_DATA_ERRORS_Z;
-    else if( rCID.match(C2U("Errors"),nLastSign) )
-        eRet = OBJECTTYPE_DATA_ERRORS;
     else if( rCID.match(C2U("Curve"),nLastSign) )
         eRet = OBJECTTYPE_DATA_CURVE;
     else if( rCID.match(C2U("Equation"),nLastSign) )
@@ -1233,7 +1228,6 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
                     }
                     break;
                 }
-            case OBJECTTYPE_DATA_ERRORS:
             case OBJECTTYPE_DATA_ERRORS_X:
             case OBJECTTYPE_DATA_ERRORS_Y:
             case OBJECTTYPE_DATA_ERRORS_Z:
@@ -1250,7 +1244,7 @@ Reference< beans::XPropertySet > ObjectIdentifier::getObjectPropertySet(
 
                             if ( eObjectType == OBJECTTYPE_DATA_ERRORS_X)
                                 errorBar = C2U("ErrorBarX");
-                            else if (eObjectType == OBJECTTYPE_DATA_ERRORS_Y || eObjectType == OBJECTTYPE_DATA_ERRORS)
+                            else if (eObjectType == OBJECTTYPE_DATA_ERRORS_Y)
                                 errorBar = C2U("ErrorBarY");
                             else
                                 errorBar = C2U("ErrorBarZ");

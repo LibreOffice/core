@@ -255,7 +255,6 @@ SAL_WNODEPRECATED_DECLARATIONS_PUSH
                                         wrapper::GraphicPropertyItemConverter::LINE_PROPERTIES );
                     break;
 
-            case OBJECTTYPE_DATA_ERRORS:
             case OBJECTTYPE_DATA_ERRORS_X:
             case OBJECTTYPE_DATA_ERRORS_Y:
             case OBJECTTYPE_DATA_ERRORS_Z:
