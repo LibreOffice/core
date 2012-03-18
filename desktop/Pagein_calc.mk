@@ -27,7 +27,7 @@
 
 $(eval $(call gb_Pagein_Pagein,calc))
 
-$(eval $(call gb_Pagein_add_libs,calc,\
+$(eval $(call gb_Pagein_add_objects,calc,\
     sc \
     scui \
     svx \

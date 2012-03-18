@@ -25,20 +25,16 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-gb_Pagein__istype = $(findstring $(2),$(call gb_Pagein__prefix,$(1)))
-gb_Pagein__prefix = $(firstword $(subst :, ,$(1)))
-gb_Pagein__suffix = $(lastword $(subst :, ,$(1)))
-gb_Pagein__object = $(call gb_Pagein__suffix,$(1))
-gb_Pagein__dir = $(call gb_Pagein__prefix,$(1))
-gb_Pagein__libname = $(notdir $(call gb_Library_get_target,$(call gb_Pagein__suffix,$(1))))
-gb_Pagein__libpath = $(call gb_Pagein__dir,$(1))/$(call gb_Pagein__libname,$(1))
+gb_Pagein_UREPATH := ../ure-link/lib/
+
+gb_Pagein__is_library = $(filter $(1),$(gb_Library_KNOWNLIBS))
+
+gb_Pagein__get_libdir = $(if $(filter URELIB,$(call gb_Library_get_layer,$(1))),$(call gb_Pagein_UREPATH))
+
+gb_Pagein__make_library_path = $(call gb_Pagein__get_libdir,$(1))$(call gb_Library_get_runtime_filename,$(1))
 
 gb_Pagein__make_path = \
-$(if $(call gb_Pagein__istype,$(1),OBJ),\
-    $(call gb_Pagein__object,$(1)),\
-    $(if $(call gb_Pagein__istype,$(1),LIB),\
-        $(call gb_Pagein__libname,$(1)),\
-        $(call gb_Pagein__libpath,$(1))))
+$(if $(call gb_Pagein__is_library,$(1)),$(call gb_Pagein__make_library_path,$(1)),$(1))
 
 define gb_Pagein__command
 $(call gb_Output_announce,$(2),$(true),PAG,5)
@@ -62,33 +58,14 @@ $(call gb_Pagein_get_outdir_target,%) : $(call gb_Pagein_get_target,%)
 
 define gb_Pagein_Pagein
 $(call gb_Pagein_get_target,$(1)) : OBJECTS :=
+$(call gb_Pagein_get_target,$(1)) : $(realpath $(lastword $(MAKEFILE_LIST)))
 $$(eval $$(call gb_Module_register_target,$(call gb_Pagein_get_outdir_target,$(1)),$(call gb_Pagein_get_clean_target,$(1))))
 $(call gb_Pagein_get_outdir_target,$(1)) : $(call gb_Pagein_get_target,$(1))
 
 endef
 
-define gb_Pagein_add_lib
-$(call gb_Pagein_get_target,$(1)) : OBJECTS += LIB:$(2)
-
-endef
-
-define gb_Pagein_add_lib_with_dir
-$(call gb_Pagein_get_target,$(1)) : OBJECTS += $(strip $(3)):$(2)
-
-endef
-
 define gb_Pagein_add_object
-$(call gb_Pagein_get_target,$(1)) : OBJECTS += OBJ:$(2)
-
-endef
-
-define gb_Pagein_add_libs
-$(foreach lib,$(2),$(call gb_Pagein_add_lib,$(1),$(lib)))
-
-endef
-
-define gb_Pagein_add_libs_with_dir
-$(foreach lib,$(2),$(call gb_Pagein_add_lib_with_dir,$(1),$(lib),$(3)))
+$(call gb_Pagein_get_target,$(1)) : OBJECTS += $(2)
 
 endef
 
