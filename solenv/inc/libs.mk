@@ -198,6 +198,12 @@ ZLIB3RDLIB=-lz
 .ELSE
 ZLIB3RDLIB=-lzlib
 .ENDIF
+.IF "$(SYSTEM_MINIZIP)"=="YES"
+MINIZIP3RDLIB=$(MINIZIP_LIBS)
+.ELSE
+# internally, minizip is included in zlib
+MINIZIP3RDLIB=
+.ENDIF
 .IF "$(SYSTEM_JPEG)"=="YES"
 JPEG3RDLIB=-ljpeg
 .ELSE

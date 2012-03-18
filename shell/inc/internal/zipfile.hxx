@@ -33,9 +33,11 @@
 #define _WINDOWS
 #endif
 
-
+#if defined SYSTEM_ZLIB
+#include <minizip/unzip.h>
+#else
 #include <external/zlib/unzip.h>
-
+#endif
 
 #include <string>
 #include <vector>
