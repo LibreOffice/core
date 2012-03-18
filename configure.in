@@ -1965,7 +1965,7 @@ AC_ARG_WITH(system-expat-for-build,
         [Use expat already on system for build tools (cross-compilation only).]))
 
 AC_ARG_WITH(system-icu-for-build,
-    AS_HELP_STRING([--with-system-icu-for-build],
+    AS_HELP_STRING([--with-system-icu-for-build=yes/no/force],
         [Use icu already on system for build tools (cross-compilation only).]))
 
 AC_ARG_WITH(system-libxml-for-build,
@@ -3259,7 +3259,7 @@ if test "$cross_compiling" = "yes"; then
     test -n "$with_system_cppunit_for_build" && sub_conf_opts="$sub_conf_opts --with-system-cppunit"
     test -n "$with_system_db_for_build" && sub_conf_opts="$sub_conf_opts --with-system-db"
     test -n "$with_system_expat_for_build" && sub_conf_opts="$sub_conf_opts --with-system-expat"
-    test -n "$with_system_icu_for_build" && sub_conf_opts="$sub_conf_opts --with-system-icu"
+    test "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" && sub_conf_opts="$sub_conf_opts --with-system-icu"
     test -n "$with_system_libxml_for_build" && sub_conf_opts="$sub_conf_opts --with-system-libxml"
     ./configure \
         --disable-mozilla \
@@ -7436,21 +7436,24 @@ if test "$with_system_icu" = "yes"; then
         AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])
     fi
 
-    if test "$cross_compiling" = "yes" -a "$with_system_icu_for_build" = "yes"; then
+    if test "$cross_compiling" = "yes" -a \( "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force" \); then
         AC_PATH_PROG([ICUCONFIG_FOR_BUILD], [icu-config], [], [$PATH:/usr/sbin:/sbin])
         ICU_VERSION_FOR_BUILD=`$ICUCONFIG_FOR_BUILD --noverify --version 2>/dev/null || $ICUCONFIG_FOR_BUILD --version`
         ICU_MAJOR_FOR_BUILD=`echo $ICU_VERSION_FOR_BUILD | cut -d"." -f1`
         ICU_MINOR_FOR_BUILD=`echo $ICU_VERSION_FOR_BUILD | cut -d"." -f2`
-        AC_CHECKING([if MinGW and system versions of ICU are compatible])
+        AC_MSG_CHECKING([if MinGW and system versions of ICU are compatible])
         if test "$ICU_MAJOR" -eq "$ICU_MAJOR_FOR_BUILD" -a "$ICU_MINOR" -eq "$ICU_MINOR_FOR_BUILD"; then
             AC_MSG_RESULT([yes])
         else
             AC_MSG_RESULT([no])
-            AC_MSG_ERROR([system ICU is not version-compatible with MinGW ICU])
+            if test "$with_system_icu_for_build" != "force"; then
+                AC_MSG_ERROR([System ICU is not version-compatible with MinGW ICU.
+You can use --with-system-icu-for-build=force to use it anyway.])
+            fi
         fi
     fi
 
-    if test "$cross_compiling" != "yes" -o "$with_system_icu_for_build" = "yes"; then
+    if test "$cross_compiling" != "yes" -o "$with_system_icu_for_build" = "yes" -o "$with_system_icu_for_build" = "force"; then
         # using the system icu tools can lead to version confusion, use the
         # ones from the build environment when cross-compiling
         AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
