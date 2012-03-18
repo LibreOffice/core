@@ -252,12 +252,12 @@ public:
     void dump()
     {
         printf("Destinations:\n");
-        for(ScannerTestServiceTokenMap::iterator i=destMap.begin();i!=destMap.end();i++)
+        for(ScannerTestServiceTokenMap::iterator i=destMap.begin();i!=destMap.end();++i)
         {
             printf("  %s\n", i->getStr());
         }
         printf("Ctrls:\n");
-        for(ScannerTestServiceTokenMap::iterator i=ctrlMap.begin();i!=ctrlMap.end();i++)
+        for(ScannerTestServiceTokenMap::iterator i=ctrlMap.begin();i!=ctrlMap.end();++i)
         {
             printf("  %s\n", i->getStr());
         }
