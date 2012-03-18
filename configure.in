@@ -10424,7 +10424,7 @@ if test "$SOLAR_JAVA" != "" -a "$with_junit" != "no"; then
         # check if either class-path entry is available for hamcrest or
         # it's bundled
         if "$JAVA_HOME/bin/jar" tf "$OOO_JUNIT_JAR" |$GREP -q hamcrest || \
-            "$UNZIP" -c "$OOO_JUNIT_JAR" META-INF/MANIFEST.MF |$GREP -q 'Class-Path: hamcrest'; then
+            "$UNZIP" -c "$OOO_JUNIT_JAR" META-INF/MANIFEST.MF |$GREP 'Class-Path:' | $GREP -q 'hamcrest'; then
             AC_MSG_RESULT([$OOO_JUNIT_JAR])
         else
             AC_MSG_ERROR([your junit jar neither sets a classpath nor includes hamcrest; please
