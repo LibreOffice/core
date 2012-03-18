@@ -466,10 +466,8 @@ $(eval $(call gb_Helper_register_libraries,UNOLIBS_OOO, \
     passwordcontainer \
     pdfimport \
     PresenterScreen \
-    reflection \
     simplecanvas \
     slideshow \
-    stocservices \
     stringresource \
 	SunPresentationMinimizer \
     ucpcmis1 \
@@ -515,6 +513,8 @@ endif
 $(eval $(call gb_Helper_register_libraries,UNOLIBS_URE, \
     binaryurp \
     bootstrap \
+    reflection \
+    stocservices \
 ))
 
 $(eval $(call gb_Helper_register_libraries,UNOVERLIBS, \
