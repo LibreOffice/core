@@ -7436,7 +7436,7 @@ if test "$with_system_icu" = "yes"; then
         AC_MSG_ERROR([not suitable, only >= 4.0 supported currently])
     fi
 
-    if test "$cross_compiling" != "yes"; then
+    if test "$cross_compiling" != "yes" -o "$with_system_icu_for_build" = "yes"; then
         # using the system icu tools can lead to version confusion, use the
         # ones from the build environment when cross-compiling
         AC_PATH_PROG(SYSTEM_GENBRK, genbrk, [], [$PATH:/usr/sbin:/sbin])
