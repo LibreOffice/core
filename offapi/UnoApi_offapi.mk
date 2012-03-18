@@ -1131,16 +1131,6 @@ $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sheet,\
 	UniqueCellFormatRangesEnumeration \
 	VolatileResult \
 ))
-$(eval $(call gb_UnoApi_add_idlfiles,offapi,offapi/com/sun/star/sheet/addin,\
-	XAnalysis \
-	XCompatibilityNames \
-	XDateFunctions \
-	XMiscFunctions \
-))
-$(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/sheet/addin,\
-	Analysis \
-	DateFunctions \
-))
 $(eval $(call gb_UnoApi_add_idlfiles_noheader,offapi,offapi/com/sun/star/style,\
 	CellStyle \
 	CharacterProperties \
