@@ -201,32 +201,6 @@ uno::Reference< container::XNameAccess > MimeConfigurationHelper::GetFilterFacto
     return m_xFilterFactory;
 }
 
-//-----------------------------------------------------------------------
-sal_Int32 MimeConfigurationHelper::GetFilterFlags( const ::rtl::OUString& aFilterName )
-{
-    sal_Int32 nFlags = 0;
-    try
-    {
-        if ( !aFilterName.isEmpty() )
-        {
-            uno::Reference< container::XNameAccess > xFilterFactory(
-                GetFilterFactory(),
-                uno::UNO_SET_THROW );
-
-            uno::Any aFilterAny = xFilterFactory->getByName( aFilterName );
-            uno::Sequence< beans::PropertyValue > aData;
-            if ( aFilterAny >>= aData )
-            {
-                SequenceAsHashMap aFilterHM( aData );
-                nFlags = aFilterHM.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")), (sal_Int32)0 );
-            }
-        }
-    } catch( uno::Exception& )
-    {}
-
-    return nFlags;
-}
-
 //-------------------------------------------------------------------------
 ::rtl::OUString MimeConfigurationHelper::GetDocServiceNameFromFilter( const ::rtl::OUString& aFilterName )
 {
@@ -706,6 +680,32 @@ uno::Sequence< beans::NamedValue > MimeConfigurationHelper::GetObjectPropsByDocu
 }
 
 #ifdef WNT
+
+sal_Int32 MimeConfigurationHelper::GetFilterFlags( const ::rtl::OUString& aFilterName )
+{
+    sal_Int32 nFlags = 0;
+    try
+    {
+        if ( !aFilterName.isEmpty() )
+        {
+            uno::Reference< container::XNameAccess > xFilterFactory(
+                GetFilterFactory(),
+                uno::UNO_SET_THROW );
+
+            uno::Any aFilterAny = xFilterFactory->getByName( aFilterName );
+            uno::Sequence< beans::PropertyValue > aData;
+            if ( aFilterAny >>= aData )
+            {
+                SequenceAsHashMap aFilterHM( aData );
+                nFlags = aFilterHM.getUnpackedValueOrDefault( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Flags")), (sal_Int32)0 );
+            }
+        }
+    } catch( uno::Exception& )
+    {}
+
+    return nFlags;
+}
+
 sal_Bool MimeConfigurationHelper::AddFilterNameCheckOwnFile(
                         uno::Sequence< beans::PropertyValue >& aMediaDescr )
 {

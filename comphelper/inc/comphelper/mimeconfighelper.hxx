@@ -112,8 +112,6 @@ public:
     // typedetection related
     ::com::sun::star::uno::Reference< ::com::sun::star::container::XNameAccess > GetFilterFactory();
 
-    sal_Int32 GetFilterFlags( const ::rtl::OUString& aFilterName );
-
     ::rtl::OUString UpdateMediaDescriptorWithFilterName(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
                         sal_Bool bIgnoreType );
@@ -121,6 +119,8 @@ public:
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr,
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue >& aObject );
 #ifdef WNT
+    sal_Int32 GetFilterFlags( const ::rtl::OUString& aFilterName );
+
     sal_Bool AddFilterNameCheckOwnFile(
                         ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& aMediaDescr );
 #endif

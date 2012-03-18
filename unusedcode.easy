@@ -800,7 +800,6 @@ canvas::tools::clipBlit(basegfx::B2IRange&, basegfx::B2IPoint&, basegfx::B2IRang
 cmis::Content::exchangeIdentity(com::sun::star::uno::Reference<com::sun::star::ucb::XContentIdentifier> const&)
 cmis::Content::queryChildren(std::__debug::list<rtl::Reference<cmis::Content>, std::allocator<rtl::Reference<cmis::Content> > >&)
 comphelper::EventLogger::EventLogger(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&, rtl::OUString const&)
-comphelper::MimeConfigurationHelper::GetFilterFlags(rtl::OUString const&)
 comphelper::OPropertyContainerHelper::modifyAttributes(int, int, int)
 comphelper::OSelectionChangeListener::disposeAdapter()
 comphelper::detail::ConfigurationWrapper::getGroupReadWrite(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&) const
