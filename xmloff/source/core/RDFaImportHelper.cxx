@@ -236,7 +236,7 @@ RDFaReader::ReadCURIEs(::rtl::OUString const & i_rCURIEs) const
       }
     }
     while (!CURIEs.isEmpty());
-    if (!vec.size())
+    if (vec.empty())
     {
         OSL_TRACE( "ReadCURIEs: invalid CURIEs" );
     }
