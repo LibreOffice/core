@@ -1,11 +1,111 @@
 Apache OpenOffice
-Copyright 2012, 2011 The Apache Software Foundation
+Copyright 2011, 2012 The Apache Software Foundation
 
 This product includes software developed at
 The Apache Software Foundation (http://www.apache.org/).
+____
+
+Category A Software: Authorized Licenses.
 
 As part of the base system this product also includes code
-from Apache Tomcat, Apache Commons and Apache Lucene.
+from Apache Tomcat, Apache Commons and Apache Lucene, the
+Apache Portable Runtime TLPs from the Apache Software
+Foundation.
+
+The MathMLDTD module uses the DTD for MathML from the World
+Wide Web Consortium under the W3C license. The official
+distribution is available here:
+    http://www.w3.org/Math/DTD/
+
+The Font Manager support in the vcl module and the
+"psprint_config" module contain code copyrighted by
+Adobe Systems Incorporated.
+
+The apple_remote module includes code derived from the Apple
+Remote Control wrapper copyrighted by Martin Kahr and modified
+for OpenOffice.org by Eric Bachard under the same license. The
+original package is available here
+    https://github.com/martinkahr/apple_remote_control
+
+We include the Boost C++ libraries written by various authors
+under similar licenses that have been grouping under the
+Boost Software License. More information about Boost is
+available at:
+    http://www.boost.org/
+
+The connectivity module uses code developed by the HSQL
+Development Group under a BSD-style license. More
+information about HSQL is available here:
+    http://hsqldb.org/
+
+The ICC module includes code developed by the International
+Color Consortium. More information about the ICC is available
+here:
+    http://www.color.org/
+
+We use James Clark's Expat XML parser toolkit library which
+is copyrighted by the Thai Open Source Software Center Ltd
+and Clark Cooper. More information is available here:
+    http://www.libexpat.org/   
+
+The libtextcat module contains fingerprints for the libtextcat
+Library copyrighted by WiseGuys Internet B.V under a BSD-style
+license. More information is available here:
+    http://software.wise-guys.nl/libtextcat/
+
+Optional LDAP support is available through the community
+developed OpenLDAP project:
+    http://www.openldap.org/
+
+OpenSSL is copyrighted (c) 1998-2011 The OpenSSL Project and
+1995-1998 Eric Young.It is also considered strong cryptography
+software so it falls under certain export/import and/or use
+restrictions in some parts of the world. More information
+is available at:
+    http://www.openssl.org/
+
+The scanner support software uses a code header derived from
+the Scanner Access Now Easy project under Public Domain by
+David Mosberger-Tang and Andreas Beck. More information about
+the SANE Project is available here:
+    http://www.sane-project.org/
+
+Likewise, the "twain" module includes a standard header from
+the TWAIN Working Group. More information about TWAIN is
+available here:
+    http://www.twain.org/
+
+The Redland RDF library librdf was written by Dave Beckett
+and is available under the Apache License version 2.
+    http://librdf.org/
+
+STLport is an implementation of the Standard Template
+Library, originally by SGI and further refined by
+Boris Fomitchev. More information at:
+    http://www.stlport.org/
+
+We use the Tango base icon theme under Public Domain by the
+Tango Desktop Project. More information is available here:
+    http://tango.freedesktop.org/
+
+The ucpp preprocessor was written by Thomas Pornin and
+maintained by Louis P. Santillan and is available under
+the "New" BSD license.
+    http://code.google.com/p/ucpp/
+
+The UnixODBC directory contains code by Ke Jin and OpenLink
+Software from the iODBC driver manager available at:
+    http://www.iodbc.org/
+
+The VIGRA "Vision with Generic Algorithms" computer vision
+library was written by Ullrich Köthe and is available under
+the MIT License. More in formation in the Homepage:
+    http://hci.iwr.uni-heidelberg.de/vigra/
+
+Libxml2 is a C parser and toolkit Copyright (C) 2001-2002
+Daniel Veillard, developed for the Gnome project under an
+MIT License.
+    http://xmlsoft.org/
 
 This software contains code derived from the XFree86 Project
 Inc. including code written by Keith Packard from SuSE, Inc,
@@ -21,73 +121,6 @@ The install-sh and mkdepend tools are copyrighted MIT and
 the X Consortium respectively and are available in the
 XFree86 distribution among other places.
 
-The UnixODBC directory contains code by Ke Jin and OpenLink
-Software from the iODBC driver manager available at:
-    http://www.iodbc.org/
-
-The apple_remote module includes code derived from the Apple
-Remote Control wrapper copyrighted by Martin Kahr and modified
-for OpenOffice.org by Eric Bachard under the same license. The
-original package is available here
-    https://github.com/martinkahr/apple_remote_control
-
-The scanner support software uses a code header derived from
-the Scanner Access Now Easy project under Public Domain by
-David Mosberger-Tang and Andreas Beck. More information about
-the SANE Project is available here:
-    http://www.sane-project.org/
-
-Likewise, the "twain" module includes a standard header from
-the TWAIN Working Group. More information about TWAIN is
-available here:
-    http://www.twain.org/
-
-The connectivity module uses code developed by the HSQL
-Development Group under a BSD-style license. More
-information about HSQL is available here:
-    http://hsqldb.org/
-
-The Font Manager support in the vcl module and the
-"psprint_config" module contain code copyrighted by
-Adobe Systems Incorporated.
-
-The ICC module includes code developed by the International
-Color Consortium. More information about the ICC is available
-here:
-    http://www.color.org/
-
-The MathMLDTD module uses the DTD for MathML from the World
-Wide Web Consortium under the W3C license. The official
-distribution is available here:
-    http://www.w3.org/Math/DTD/
-
-The ucpp preprocessor was written by Thomas Pornin and
-maintained by Louis P. Santillan and is available under
-the "New" BSD license.
-    http://code.google.com/p/ucpp/
-
-Optional LDAP support is available through the community
-developed OpenLDAP project:
-    http://www.openldap.org/
-
-We use James Clark's Expat XML parser toolkit library which
-is copyrighted by the Thai Open Source Software Center Ltd
-and Clark Cooper. More information is available here:
-    http://www.libexpat.org/   
-
-The Redland RDF library librdf was written by Dave Beckett
-and is available under the Apache License version 2.
-    http://librdf.org/
-
-The libtextcat module contains fingerprints for the libtextcat
-Library copyrighted by WiseGuys Internet B.V under a BSD-style
-license. More information is available here:
-    http://software.wise-guys.nl/libtextcat/
-
-We use the Tango base icon theme under Public Domain by the
-Tango Desktop Project. More information is available here:
-    http://tango.freedesktop.org/
-
 For general convenience we also include the DejaVu fonts,
 a font family based on the Vera Fonts. More information
 is available here:
@@ -97,13 +130,24 @@ Older versions of Java may require the StAX API, which
 was included in OpenJDK 6. Information about the latest
 version under an Apache License 2.0 is available here:
     http://stax.codehaus.org/
+____
 
-Category B Software
+Category B: Reciprocal Licenses.
 
 As part of its Third-Party Licensing Policy, Apache products
 normally don't ship copyleft code as part of their releases.
 Still Apache releases can contain optional support for
 binaries from some accepted weak copyleft code bases.
+
+We include the Beanshell written by Pat Niemeyer and
+available under Sun Industrial License. More information
+is available here:
+    http://www.beanshell.org/
+
+We can also make use the Cairo 2D Graphics library in some
+platforms for the canvas code. More information is available
+here:
+    http://cairographics.org/
 
 The Open Source SAXON XSLT processor was developed by Michael
 Kay of Saxonica Limited and is available under the MPL at:
@@ -128,6 +172,10 @@ Project available under the MPL here:
 Document signing can be provided by Mozilla's Network Security
 Services (NSS). The NSS sources are available here:
     ftp://ftp.mozilla.org/pub/mozilla.org/security/nss/releases/NSS_3_12_6_RTM/src/
+
+We use the XML Security Library by Alexey Sanin. The code library is
+under an MIT license and the xmlsec-nss under the MPL.
+    http://www.aleksey.com/xmlsec/download/
 
 For convenience we optionally include the Gentium Basic fonts,
 available under the SIL OpenFont License (OFL). The source
