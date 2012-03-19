@@ -2058,6 +2058,9 @@ bool ScDPObject::FillLabelDataForDimension(
         rLabelData.mnOriginalDim = static_cast<long>(nOrigPos);
         rLabelData.maLayoutName = aLayoutName;
         rLabelData.maSubtotalName = aSubtotalName;
+        if (nOrigPos >= 0)
+            // This is a duplicated dimension. Use the original dimension index.
+            nDim = nOrigPos;
         GetHierarchies(nDim, rLabelData.maHiers);
         GetMembers(nDim, GetUsedHierarchy(nDim), rLabelData.maMembers);
         lcl_FillLabelData(rLabelData, xDimProp);
