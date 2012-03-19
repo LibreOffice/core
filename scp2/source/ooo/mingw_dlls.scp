@@ -50,6 +50,9 @@ MINGW_DLL( gid_Brand_File_Lib_Mingw_Libexpat, MINGW_EXPAT_DLL )
 #ifdef NEEDS_MINGW_LIBXSLT_DLL
 MINGW_DLL( gid_Brand_File_Lib_Mingw_Libxslt, MINGW_LIBXSLT_DLL )
 #endif
+#ifdef NEEDS_MINGW_ICONV_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Libxslt, MINGW_ICONV_DLL )
+#endif
 #endif
 
 #ifdef SYSTEM_LIBXML
