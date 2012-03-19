@@ -125,15 +125,7 @@ public:
     {
         acquire();
     }
-/*
-    RegistryTypeManager& operator = ( const RegistryTypeManager& value )
-    {
-        release();
-        m_pImpl = value.m_pImpl;
-        acquire();
-        return *this;
-    }
-*/
+
     using TypeManager::init;
     sal_Bool init(sal_Bool bMerge, const StringVector& regFiles);
 

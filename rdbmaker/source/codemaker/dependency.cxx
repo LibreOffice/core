@@ -113,7 +113,6 @@ sal_Bool TypeDependency::hasDependencies(const OString& type)
 
 void TypeDependency::setGenerated(const OString& type, sal_uInt16 genFlag)
 {
-//  m_pImpl->m_generatedTypes.insert(type);
     if (m_pImpl->m_generatedTypes.count(type) > 0)
         m_pImpl->m_generatedTypes[type]= m_pImpl->m_generatedTypes[type] | genFlag;
     else
@@ -122,12 +121,6 @@ void TypeDependency::setGenerated(const OString& type, sal_uInt16 genFlag)
 
 sal_Bool TypeDependency::isGenerated(const OString& type, sal_uInt16 genFlag)
 {
-/*
-    if (m_pImpl->m_generatedTypes.count(type) > 0)
-        return sal_True;
-
-    return sal_False;
-*/
     if (m_pImpl->m_generatedTypes.count(type) > 0 &&
         m_pImpl->m_generatedTypes[type] & genFlag)
     {
