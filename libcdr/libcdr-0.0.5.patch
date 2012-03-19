@@ -18,18 +18,3 @@
  
  #endif
  
---- misc/libcdr-0.0.5/src/lib/makefile.mk
-+++ misc/build/libcdr-0.0.5/src/lib/makefile.mk
-@@ -32,6 +32,12 @@
- INCPRE+=$(LCMS2_CFLAGS)
- .ELSE
- INCPRE+=$(SOLARVER)$/$(INPATH)$/inc$/lcms2
-+.IF "$(COM)" == "MSC"
-+# lcms2 gets built to use the stdcall calling convention, for some reason.
-+# The lcms2 headers need this in order to decorate functions with stdcall,
-+# so that they will be found when linking.
-+CDEFS+=-DCMS_DLL
-+.ENDIF
- .ENDIF
- 
- .IF "$(SYSTEM_ZLIB)" != "YES"
