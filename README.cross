@@ -208,6 +208,15 @@ $ winedbg soffice.bin
 Would be great to be able to use winedbg --gdb, but it was crashing here :-( -
 but maybe you'll be more lucky.
 
+Tricks of some use with winedbg:
+--------------------------------
+
+To examine OUStrings, you might want to use the following trick (prints 50
+unicode characters of rLibName OUString - the +10 is where the buffer starts):
+
+Wine-dbg>x /50u rLibName->pData+10
+0x0909b6c8: vnd.sun.star.expand:$LO_LIB_DIR/abplo.dll
+
 TODO:
 
 - installation
