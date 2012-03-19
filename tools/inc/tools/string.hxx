@@ -130,8 +130,6 @@ typedef struct _UniStringData
 
 class TOOLS_DLLPUBLIC UniString
 {
-    TOOLS_DLLPRIVATE void InitStringRes( const sal_Char* pUTF8Str, sal_Int32 nLen );
-
 private:
     UniStringData*      mpData;
 

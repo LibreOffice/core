@@ -141,7 +141,6 @@ SrchAttrItemList::_ForEach(unsigned short, unsigned short, unsigned char (*)(Sea
 StgCache::Pos2Page(int)
 StgHeader::SetClassId(ClsId const&)
 SvBorder::SvBorder(Rectangle const&, Rectangle const&)
-SvLBoxBmp::SvLBoxBmp(SvLBoxEntry*, unsigned short, Image)
 SvLBoxButton::Check(SvLBox*, SvLBoxEntry*, unsigned char)
 SvLBoxButtonData::SvLBoxButtonData()
 SvLBoxEntryArr::DeleteAndDestroy(unsigned short, unsigned short)

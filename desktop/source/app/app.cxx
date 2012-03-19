@@ -291,68 +291,70 @@ namespace
         : public rtl::Static< String, WriterCompatibilityVersionOOo11 > {};
 }
 
-void ReplaceStringHookProc( UniString& rStr )
+rtl::OUString ReplaceStringHookProc( const rtl::OUString& rStr )
 {
-    static int nAll = 0, nPro = 0;
+    rtl::OUString sRet(rStr);
 
-    nAll++;
-    if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
+    if ( sRet.indexOf( "%PRODUCT" ) != -1 )
     {
-        String rBrandName = BrandName::get();
-        String rVersion = Version::get();
-        String rAboutBoxVersion = AboutBoxVersion::get();
-        String rAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
-        String rExtension = Extension::get();
-        String rXMLFileFormatName = XMLFileFormatName::get();
-        String rXMLFileFormatVersion = XMLFileFormatVersion::get();
+        rtl::OUString sBrandName = BrandName::get();
+        rtl::OUString sVersion = Version::get();
+        rtl::OUString sAboutBoxVersion = AboutBoxVersion::get();
+        rtl::OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
+        rtl::OUString sExtension = Extension::get();
+        rtl::OUString sXMLFileFormatName = XMLFileFormatName::get();
+        rtl::OUString sXMLFileFormatVersion = XMLFileFormatVersion::get();
 
-        if ( !rBrandName.Len() )
+        if ( sBrandName.isEmpty() )
         {
-            rBrandName = utl::ConfigManager::getProductName();
-            rXMLFileFormatName = utl::ConfigManager::getProductXmlFileFormat();
-            rXMLFileFormatVersion =
+            sBrandName = utl::ConfigManager::getProductName();
+            sXMLFileFormatName = utl::ConfigManager::getProductXmlFileFormat();
+            sXMLFileFormatVersion =
                 utl::ConfigManager::getProductXmlFileFormatVersion();
-            rVersion = utl::ConfigManager::getProductVersion();
-            rAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
-            rAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
-            if ( !rExtension.Len() )
+            sVersion = utl::ConfigManager::getProductVersion();
+            sAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
+            sAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
+            if ( sExtension.isEmpty() )
             {
-                rExtension = utl::ConfigManager::getProductExtension();
+                sExtension = utl::ConfigManager::getProductExtension();
             }
         }
 
-        nPro++;
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", rBrandName );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
-        rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSIONSUFFIX", rAboutBoxVersionSuffix );
-        rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSION", rAboutBoxVersion );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATNAME", rXMLFileFormatName );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTXMLFILEFORMATVERSION", rXMLFileFormatVersion );
+        sRet = sRet.replaceAll( "%PRODUCTNAME", sBrandName );
+        sRet = sRet.replaceAll( "%PRODUCTVERSION", sVersion );
+        sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSIONSUFFIX", sAboutBoxVersionSuffix );
+        sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSION", sAboutBoxVersion );
+        sRet = sRet.replaceAll( "%PRODUCTEXTENSION", sExtension );
+        sRet = sRet.replaceAll( "%PRODUCTXMLFILEFORMATNAME", sXMLFileFormatName );
+        sRet = sRet.replaceAll( "%PRODUCTXMLFILEFORMATVERSION", sXMLFileFormatVersion );
     }
-    if ( rStr.SearchAscii( "%OOOVENDOR" ) != STRING_NOTFOUND )
-    {
-        String rOOOVendor = OOOVendor::get();
 
-        if ( !rOOOVendor.Len() )
+    if ( sRet.indexOf( "%OOOVENDOR" ) != -1 )
+    {
+        rtl::OUString sOOOVendor = OOOVendor::get();
+
+        if ( sOOOVendor.isEmpty() )
         {
-            rOOOVendor = utl::ConfigManager::getVendor();
+            sOOOVendor = utl::ConfigManager::getVendor();
         }
-        rStr.SearchAndReplaceAllAscii( "%OOOVENDOR" ,rOOOVendor );
+
+        sRet = sRet.replaceAll( "%OOOVENDOR", sOOOVendor );
     }
 
-    if ( rStr.SearchAscii( "%WRITERCOMPATIBILITYVERSIONOOO11" ) != STRING_NOTFOUND )
+    if ( sRet.indexOf( "%WRITERCOMPATIBILITYVERSIONOOO11" ) != -1 )
     {
-        String rWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
-        if ( !rWriterCompatibilityVersionOOo11.Len() )
+        rtl::OUString sWriterCompatibilityVersionOOo11 = WriterCompatibilityVersionOOo11::get();
+        if ( sWriterCompatibilityVersionOOo11.isEmpty() )
         {
-            rWriterCompatibilityVersionOOo11 =
+            sWriterCompatibilityVersionOOo11 =
                 utl::ConfigManager::getWriterCompatibilityVersionOOo_1_1();
         }
 
-        rStr.SearchAndReplaceAllAscii( "%WRITERCOMPATIBILITYVERSIONOOO11",
-                                        rWriterCompatibilityVersionOOo11 );
+        sRet = sRet.replaceAll( "%WRITERCOMPATIBILITYVERSIONOOO11",
+                                        sWriterCompatibilityVersionOOo11 );
     }
+
+    return sRet;
 }
 
 static const char      pLastSyncFileName[]     = "lastsynchronized";

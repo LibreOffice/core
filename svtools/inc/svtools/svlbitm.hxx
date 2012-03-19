@@ -141,7 +141,6 @@ class SvLBoxBmp : public SvLBoxItem
 {
     Image aBmp;
 public:
-                    SvLBoxBmp( SvLBoxEntry*, sal_uInt16 nFlags, Image );
                     SvLBoxBmp();
     virtual         ~SvLBoxBmp();
     virtual sal_uInt16  IsA();

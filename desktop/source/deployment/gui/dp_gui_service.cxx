@@ -100,41 +100,38 @@ namespace
         : public rtl::Static< String, Extension > {};
 }
 
-void ReplaceProductNameHookProc( String& rStr )
+rtl::OUString ReplaceProductNameHookProc( const rtl::OUString& rStr )
 {
-    static int nAll = 0, nPro = 0;
+    if (rStr.indexOf( "%PRODUCT" ) == -1)
+        return rStr;
 
-    nAll++;
-    if ( rStr.SearchAscii( "%PRODUCT" ) != STRING_NOTFOUND )
+    rtl::OUString sProductName = ProductName::get();
+    rtl::OUString sVersion = Version::get();
+    rtl::OUString sAboutBoxVersion = AboutBoxVersion::get();
+    rtl::OUString sAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
+    rtl::OUString sExtension = Extension::get();
+    rtl::OUString sOOOVendor = OOOVendor::get();
+
+    if ( sProductName.isEmpty() )
     {
-        String rProductName = ProductName::get();
-        String rVersion = Version::get();
-        String rAboutBoxVersion = AboutBoxVersion::get();
-        String rAboutBoxVersionSuffix = AboutBoxVersionSuffix::get();
-        String rExtension = Extension::get();
-        String rOOOVendor = OOOVendor::get();
-
-        if ( !rProductName.Len() )
+        sProductName = utl::ConfigManager::getProductName();
+        sVersion = utl::ConfigManager::getProductVersion();
+        sAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
+        sAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
+        sOOOVendor = utl::ConfigManager::getVendor();
+        if ( sExtension.isEmpty() )
         {
-            rProductName = utl::ConfigManager::getProductName();
-            rVersion = utl::ConfigManager::getProductVersion();
-            rAboutBoxVersion = utl::ConfigManager::getAboutBoxProductVersion();
-            rAboutBoxVersionSuffix = utl::ConfigManager::getAboutBoxProductVersionSuffix();
-            rOOOVendor = utl::ConfigManager::getVendor();
-            if ( !rExtension.Len() )
-            {
-                rExtension = utl::ConfigManager::getProductExtension();
-            }
+            sExtension = utl::ConfigManager::getProductExtension();
         }
-
-        nPro++;
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTNAME", rProductName );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTVERSION", rVersion );
-        rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSIONSUFFIX", rAboutBoxVersionSuffix );
-        rStr.SearchAndReplaceAllAscii( "%ABOUTBOXPRODUCTVERSION", rAboutBoxVersion );
-        rStr.SearchAndReplaceAllAscii( "%OOOVENDOR", rOOOVendor );
-        rStr.SearchAndReplaceAllAscii( "%PRODUCTEXTENSION", rExtension );
     }
+
+    rtl::OUString sRet = rStr.replaceAll( "%PRODUCTNAME", sProductName );
+    sRet = sRet.replaceAll( "%PRODUCTVERSION", sVersion );
+    sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSIONSUFFIX", sAboutBoxVersionSuffix );
+    sRet = sRet.replaceAll( "%ABOUTBOXPRODUCTVERSION", sAboutBoxVersion );
+    sRet = sRet.replaceAll( "%OOOVENDOR", sOOOVendor );
+    sRet = sRet.replaceAll( "%PRODUCTEXTENSION", sExtension );
+    return sRet;
 }
 
 //==============================================================================

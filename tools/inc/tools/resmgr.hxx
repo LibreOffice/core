@@ -63,7 +63,7 @@ public:
 // - ResMgr -
 // ----------
 
-typedef void (*ResHookProc)( UniString& rStr );
+typedef rtl::OUString (*ResHookProc)( const rtl::OUString& rStr );
 
 // ----------
 // - ResMgr -

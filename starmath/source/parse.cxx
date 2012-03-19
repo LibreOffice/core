@@ -1914,11 +1914,11 @@ void SmParser::Font()
 
 // gets number used as arguments in Math formulas (e.g. 'size' command)
 // Format: no negative numbers, must start with a digit, no exponent notation, ...
-bool lcl_IsNumber(const UniString& rText)
+bool lcl_IsNumber(const rtl::OUString& rText)
 {
     bool bPoint = false;
-    const sal_Unicode* pBuffer = rText.GetBuffer();
-    for(xub_StrLen nPos = 0; nPos < rText.Len(); nPos++, pBuffer++)
+    const sal_Unicode* pBuffer = rText.getStr();
+    for(sal_Int32 nPos = 0; nPos < rText.getLength(); nPos++, pBuffer++)
     {
         const sal_Unicode cChar = *pBuffer;
         if(cChar == '.')

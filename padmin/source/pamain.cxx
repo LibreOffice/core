@@ -60,15 +60,15 @@ public:
     int Main();
     virtual sal_uInt16  Exception( sal_uInt16 nError );
 
-    static void ReadStringHook( String& );
+    static rtl::OUString ReadStringHook( const rtl::OUString& );
 };
 
 MyApp aMyApp;
 
-void MyApp::ReadStringHook( String& rStr )
+rtl::OUString MyApp::ReadStringHook( const rtl::OUString& rStr )
 {
-    rStr.SearchAndReplaceAllAscii(
-        "%PRODUCTNAME", utl::ConfigManager::getProductName() );
+    return rStr.replaceAll(
+        rtl::OUString("%PRODUCTNAME"), utl::ConfigManager::getProductName() );
 };
 
 

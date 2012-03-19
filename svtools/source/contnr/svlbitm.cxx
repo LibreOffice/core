@@ -280,13 +280,6 @@ void SvLBoxString::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
 
 DBG_NAME(SvLBoxBmp);
 
-SvLBoxBmp::SvLBoxBmp( SvLBoxEntry* pEntry, sal_uInt16 nFlags, Image aBitmap ) :
-    SvLBoxItem( pEntry, nFlags )
-{
-    DBG_CTOR(SvLBoxBmp,0);
-    SetBitmap( pEntry, aBitmap);
-}
-
 SvLBoxBmp::SvLBoxBmp() : SvLBoxItem()
 {
     DBG_CTOR(SvLBoxBmp,0);
