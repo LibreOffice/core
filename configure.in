@@ -7479,7 +7479,7 @@ You can use --with-system-icu-for-build=force to use it anyway.])
     fi
 
     libo_MINGW_CHECK_DLL([ICUDATA], [icudata][$ICU_MAJOR][$ICU_MINOR])
-    libo_MINGW_CHECK_DLL([ICU18N], [icui18n][$ICU_MAJOR][$ICU_MINOR])
+    libo_MINGW_CHECK_DLL([ICUI18N], [icui18n][$ICU_MAJOR][$ICU_MINOR])
     libo_MINGW_CHECK_DLL([ICUUC], [icuuc][$ICU_MAJOR][$ICU_MINOR])
 else
     AC_MSG_RESULT([internal])
