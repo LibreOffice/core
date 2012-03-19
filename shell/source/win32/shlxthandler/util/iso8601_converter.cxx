@@ -26,6 +26,10 @@
  *
  ************************************************************************/
 
+#include "sal/config.h"
+
+#include <stdlib.h>
+
 #include "internal/iso8601_converter.hxx"
 #include "internal/utilities.hxx"
 
