@@ -247,8 +247,9 @@ struct Bucket
     ScDPItemData maValue;
     SCROW mnOrderIndex;
     SCROW mnDataIndex;
+    SCROW mnValueSortIndex;
     Bucket(const ScDPItemData& rValue, SCROW nOrder, SCROW nData) :
-        maValue(rValue), mnOrderIndex(nOrder), mnDataIndex(nData) {}
+        maValue(rValue), mnOrderIndex(nOrder), mnDataIndex(nData), mnValueSortIndex(0) {}
 };
 
 struct LessByValue : std::binary_function<Bucket, Bucket, bool>
@@ -256,6 +257,14 @@ struct LessByValue : std::binary_function<Bucket, Bucket, bool>
     bool operator() (const Bucket& left, const Bucket& right) const
     {
         return left.maValue < right.maValue;
+    }
+};
+
+struct LessByValueSortIndex : std::binary_function<Bucket, Bucket, bool>
+{
+    bool operator() (const Bucket& left, const Bucket& right) const
+    {
+        return left.mnValueSortIndex < right.mnValueSortIndex;
     }
 };
 
@@ -297,6 +306,17 @@ public:
     }
 };
 
+class TagValueSortOrder : std::unary_function<Bucket, void>
+{
+    SCROW mnCurIndex;
+public:
+    TagValueSortOrder() : mnCurIndex(0) {}
+    void operator() (Bucket& v)
+    {
+        v.mnValueSortIndex = mnCurIndex++;
+    }
+};
+
 void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
 {
     if (aBuckets.empty())
@@ -304,6 +324,9 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
 
     // Sort by the value.
     std::sort(aBuckets.begin(), aBuckets.end(), LessByValue());
+
+    // Remember this sort order.
+    std::for_each(aBuckets.begin(), aBuckets.end(), TagValueSortOrder());
 
     {
         // Set order index such that unique values have identical index value.
@@ -329,7 +352,7 @@ void processBuckets(std::vector<Bucket>& aBuckets, ScDPCache::Field& rField)
     std::for_each(aBuckets.begin(), aBuckets.end(), PushBackOrderIndex(rField.maData));
 
     // Sort by the value again.
-    std::sort(aBuckets.begin(), aBuckets.end(), LessByValue());
+    std::sort(aBuckets.begin(), aBuckets.end(), LessByValueSortIndex());
 
     // Unique by value.
     std::vector<Bucket>::iterator itUniqueEnd =
