@@ -86,6 +86,8 @@ gb_LinkTarget_LDFLAGS := \
 	$(subst -L../lib , ,$(SOLARLIB)) \
 #man ld says: obsolete	-Wl,-multiply_defined,suppress \
 
+gb_DEBUG_CFLAGS += -fno-inline
+
 # ObjCxxObject class
 
 define gb_ObjCxxObject__command
