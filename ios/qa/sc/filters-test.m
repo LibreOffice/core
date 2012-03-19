@@ -61,37 +61,100 @@ main(int argc, char ** argv)
 - (BOOL)application: (UIApplication *) application
 didFinishLaunchingWithOptions: (NSDictionary *) launchOptions
 {
-  (void) application;
-  (void) launchOptions;
+    int i;
 
-  UIWindow *uiw = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-  uiw.backgroundColor = [UIColor redColor];
-  self.window = uiw;
-  [uiw release];
+    (void) application;
+    (void) launchOptions;
 
-  // See unotest/source/cpp/bootstrapfixturebase.cxx
-  const char *app_root = [[[NSBundle mainBundle] bundlePath] UTF8String];
-  setenv("SRC_ROOT", app_root, 1);
-  setenv("OUTDIR_FOR_BUILD", app_root, 1);
+    UIWindow *uiw = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+    uiw.backgroundColor = [UIColor redColor];
+    self.window = uiw;
+    [uiw release];
 
-  setenv("SAL_LOG", "yes", 1);
+    // See unotest/source/cpp/bootstrapfixturebase.cxx
+    const char *app_root = [[[NSBundle mainBundle] bundlePath] UTF8String];
+    setenv("SRC_ROOT", app_root, 1);
+    setenv("OUTDIR_FOR_BUILD", app_root, 1);
 
-  CppUnitTestPlugIn *iface = cppunitTestPlugIn();
-  iface->initialize(&CppUnit::TestFactoryRegistry::getRegistry(), CppUnit::PlugInParameters());
+    setenv("SAL_LOG", "yes", 1);
 
-  const char *argv[] = {
-      "lo-qa-sc-filters-test",
-      "dummy-testlib",
-      "--headless",
-      "--protector",
-      "dummy-libunoexceptionprotector",
-      "dummy-unoexceptionprotector"
-  };
+    CppUnitTestPlugIn *iface = cppunitTestPlugIn();
+    iface->initialize(&CppUnit::TestFactoryRegistry::getRegistry(), CppUnit::PlugInParameters());
 
-  lo_main(sizeof(argv)/sizeof(*argv), argv);
+    const char *argv[] = {
+        "lo-qa-sc-filters-test",
+        "dummy-testlib",
+        "--headless",
+        "--protector",
+        "dummy-libunoexceptionprotector",
+        "dummy-unoexceptionprotector",
+        "placeholder-uno-types",
+        "placeholder-uno-services"
+    };
 
-  [self.window makeKeyAndVisible];
-  return YES;
+    NSString *app_root_escaped = [[[NSBundle mainBundle] bundlePath] stringByAddingPercentEscapesUsingEncoding: NSUTF8StringEncoding];
+
+    NSString *uno_types = @"-env:UNO_TYPES=";
+
+    uno_types = [uno_types stringByAppendingString: @"file://"];
+    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"udkapi.rdb"]];
+
+    uno_types = [uno_types stringByAppendingString: @" "];
+
+    uno_types = [uno_types stringByAppendingString: @"file://"];
+    uno_types = [uno_types stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: @"types.rdb"]];
+
+    argv[6] = [uno_types UTF8String];
+
+    NSString *uno_services = @"-env:UNO_SERVICES=";
+
+    const char *services[] = {
+        "services.rdb",
+        "ComponentTarget/basic/util/sb.component",
+        "ComponentTarget/chart2/source/controller/chartcontroller.component",
+        "ComponentTarget/chart2/source/tools/charttools.component",
+        "ComponentTarget/chart2/source/model/chartmodel.component",
+        "ComponentTarget/comphelper/util/comphelp.component",
+        "ComponentTarget/eventattacher/source/evtatt.component",
+        "ComponentTarget/fileaccess/source/fileacc.component",
+        "ComponentTarget/filter/source/config/cache/filterconfig1.component",
+        "ComponentTarget/oox/util/oox.component",
+        "ComponentTarget/package/source/xstor/xstor.component",
+        "ComponentTarget/package/util/package2.component",
+        "ComponentTarget/sax/source/expatwrap/expwrap.component",
+        "ComponentTarget/sax/source/fastparser/fastsax.component",
+        "ComponentTarget/sc/util/sc.component",
+        "ComponentTarget/sc/util/scfilt.component",
+        "ComponentTarget/scaddins/source/analysis/analysis.component",
+        "ComponentTarget/scaddins/source/datefunc/date.component",
+        "ComponentTarget/sot/util/sot.component",
+        "ComponentTarget/svl/util/svl.component",
+        "ComponentTarget/toolkit/util/tk.component",
+        "ComponentTarget/ucb/source/ucp/tdoc/ucptdoc1.component",
+        "ComponentTarget/unotools/util/utl.component",
+        "ComponentTarget/unoxml/source/rdf/unordf.component",
+        "ComponentTarget/framework/util/fwk.component",
+        "ComponentTarget/i18npool/util/i18npool.component",
+        "ComponentTarget/sfx2/util/sfx.component",
+        "ComponentTarget/unoxml/source/service/unoxml.component",
+        "ComponentTarget/configmgr/source/configmgr.component",
+        "ComponentTarget/ucb/source/core/ucb1.component",
+        "ComponentTarget/ucb/source/ucp/file/ucpfile1.component"
+    };
+
+    for (i = 0; i < sizeof(services)/sizeof(services[0]); i++) {
+        uno_services = [uno_services stringByAppendingString: @"file://"];
+        uno_services = [uno_services stringByAppendingString: [app_root_escaped stringByAppendingPathComponent: [NSString stringWithUTF8String: services[i]]]];
+        if (i < sizeof(services)/sizeof(services[0]) - 1)
+            uno_services = [uno_services stringByAppendingString: @" "];
+    }
+
+    argv[7] = [uno_services UTF8String];
+
+    lo_main(sizeof(argv)/sizeof(*argv), argv);
+
+    [self.window makeKeyAndVisible];
+    return YES;
 }
 
 @end

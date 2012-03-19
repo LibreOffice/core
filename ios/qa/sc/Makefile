@@ -36,7 +36,8 @@ all: $(APPDIR)/$(APP) stuff
 
 $(APPDIR)/$(APP): $(SRCS)
 	mkdir -p $(APPDIR)
-	$(CXX) -o $@ $(CFLAGS) $(gb_OBJCXXFLAGS) $(SRCS) $(LIBS)
+	$(CXX) -Wl,-map,$(APP).map.mangled -o $@ $(CFLAGS) $(gb_OBJCXXFLAGS) $(SRCS) $(LIBS)
+	c++filt <$(APP).map.mangled >$(APP).map && rm $(APP).map.mangled
 
 stuff:
 # inifile:
@@ -48,6 +49,16 @@ stuff:
 	 echo 'BRAND_BASE_DIR=$${ORIGIN}'; \
 	) >$(APPDIR)/fundamentalrc
 #
+# .rdb files
+	cp $(OUTDIR)/bin/udkapi.rdb $(OUTDIR)/bin/types.rdb $(OUTDIR)/xml/ure/services.rdb $(APPDIR)
+#
+# a bunch of .component files
+	for F in framework/util/fwk i18npool/util/i18npool sfx2/util/sfx ucb/source/core/ucb1 ucb/source/ucp/file/ucpfile1 unoxml/source/service/unoxml configmgr/source/configmgr basic/util/sb chart2/source/controller/chartcontroller chart2/source/tools/charttools chart2/source/model/chartmodel comphelper/util/comphelp eventattacher/source/evtatt fileaccess/source/fileacc filter/source/config/cache/filterconfig1 oox/util/oox package/source/xstor/xstor package/util/package2 sax/source/expatwrap/expwrap sax/source/fastparser/fastsax sc/util/sc sc/util/scfilt scaddins/source/analysis/analysis scaddins/source/datefunc/date sot/util/sot svl/util/svl toolkit/util/tk ucb/source/ucp/tdoc/ucptdoc1 unotools/util/utl unoxml/source/rdf/unordf; do \
+		mkdir -p $(APPDIR)/ComponentTarget/`dirname $$F`; \
+	        cp $(WORKDIR)/ComponentTarget/$$F.component $(APPDIR)/ComponentTarget/$$F.component; \
+	done
+
+#
 # .res files
 #
 # $BRAND_BASE_DIR/program/resource hardcoded in
@@ -55,7 +66,7 @@ stuff:
 # that.
 	mkdir -p $(APPDIR)/program/resource
 	for F in $(OUTDIR)/bin/*.res; do \
-		cp $$F $(APPDIR)/res; \
+		cp $$F $(APPDIR)/program/resource; \
 	done
 
 clean:
