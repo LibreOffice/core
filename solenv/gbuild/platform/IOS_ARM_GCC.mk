@@ -31,8 +31,6 @@ COM := GCC
 
 gb_CPUDEFS := -DARM32
 
-gb_COMPILERDEFAULTOPTFLAGS := -O2
-
 ifeq ($(CC),)
 $(error You must set CC in the environment. See README.cross for example.)
 endif
