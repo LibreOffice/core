@@ -74,6 +74,14 @@ LOCALPYFILES= \
     $(BIN)$/pythonloader.py
 .ENDIF
 
+.IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/HELP//)"
+OOOHELPPACK=
+OOODEVHELPPACK=
+.ELSE
+OOOHELPPACK=ooohelppack
+OOODEVHELPPACK=ooodevhelppack
+.ENDIF
+
 help_exist:=$(shell @find $(L10N_MODULE)/source/ -type d -name "helpcontent2" 2>/dev/null | sed -e "s|/helpcontent2||" -e "s|^.*/||" ) en-US qtz
 
 # do not build key is pseudolanguage for release builds
@@ -93,29 +101,29 @@ ALLTAR  : $(LOCALPYFILES)
 .IF "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
 .IF "$(GUI)"=="WNT"
-ALLTAR : openofficeall ooohelppack
+ALLTAR : openofficeall $(OOOHELPPACK)
 .ELSE
-ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack) $(eq,$(OS),MACOSX $(NULL) lotest_en-US)
+ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US)
 .ENDIF
 .ELSE
 .IF "$(GUI)"=="WNT"
-ALLTAR : openofficeall ooohelppack sdkooall
+ALLTAR : openofficeall $(OOOHELPPACK) sdkooall
 .ELSE
-ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) ooohelppack) $(eq,$(OS),MACOSX $(NULL) lotest_en-US) sdkoo_en-US
+ALLTAR : openoffice_$(defaultlangiso) ooolanguagepack $(eq,$(OS),MACOSX $(NULL) $(OOOHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lotest_en-US) sdkoo_en-US
 .ENDIF
 .ENDIF
 .ELSE # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
 .IF "$(BUILD_TYPE)"=="$(BUILD_TYPE:s/ODK//)"
 .IF "$(GUI)"=="WNT"
-ALLTAR : openofficedevall ooodevhelppack
+ALLTAR : openofficedevall $(OOODEVHELPPACK)
 .ELSE
-ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack) $(eq,$(OS),MACOSX $(NULL) lodevtest_en-US)
+ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) $(OOODEVHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lodevtest_en-US)
 .ENDIF
 .ELSE
 .IF "$(GUI)"=="WNT"
-ALLTAR : openofficedevall ooodevhelppack sdkoodevall
+ALLTAR : openofficedevall $(OOODEVHELPPACK) sdkoodevall
 .ELSE
-ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) ooodevhelppack) $(eq,$(OS),MACOSX $(NULL) lodevtest_en-US) sdkoodev_en-US
+ALLTAR : openofficedev_$(defaultlangiso) ooodevlanguagepack $(eq,$(OS),MACOSX $(NULL) $(OOODEVHELPPACK)) $(eq,$(OS),MACOSX $(NULL) lodevtest_en-US) sdkoodev_en-US
 .ENDIF
 .ENDIF
 .ENDIF # "$(ENABLE_RELEASE_BUILD)"=="TRUE"
