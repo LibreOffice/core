@@ -266,6 +266,12 @@ typedef struct _uno_ExtEnvironment
 typedef void (SAL_CALL * uno_initEnvironmentFunc)( uno_Environment * pEnv );
 #define UNO_INIT_ENVIRONMENT "uno_initEnvironment"
 
+#ifdef DISABLE_DYNLOADING
+/* We link statically and have just one kind of environment */
+void SAL_CALL CPPU_ENV_uno_initEnvironment( uno_Environment * Env )
+     SAL_THROW_EXTERN_C();
+#endif
+
 /** Gets a specific environment. If the specified environment does not exist, then a default one
     is created and registered. The environment revokes itself on last release() call.
 
@@ -374,12 +380,6 @@ CPPU_DLLPUBLIC void SAL_CALL uno_Environment_enter(uno_Environment * pEnv)
 */
 CPPU_DLLPUBLIC int SAL_CALL uno_Environment_isValid(uno_Environment * pEnv, rtl_uString ** pReason)
     SAL_THROW_EXTERN_C();
-
-#ifdef IOS
-/* We link statically on iOS and have just one kind of environment */
-void SAL_CALL gcc3_uno_initEnvironment(uno_Environment *pCppEnv)
-     SAL_THROW_EXTERN_C();
-#endif
 
 #ifdef __cplusplus
 }
