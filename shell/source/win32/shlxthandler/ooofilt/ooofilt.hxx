@@ -165,7 +165,7 @@ private:
     ULONG                     m_ChunkPosition;          // Chunk pointer to specify the current Chunk;
     ULONG                     m_cAttributes;            // Count of attributes
     CFullPropSpec *           m_pAttributes;            // Attributes to filter
-    IStream *                 m_pStream;
+    StreamInterface *         m_pStream;
 
 };
 

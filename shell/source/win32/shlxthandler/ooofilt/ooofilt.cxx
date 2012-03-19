@@ -120,6 +120,8 @@ COooFilter::~COooFilter()
         delete m_pContentReader;
     if (m_pMetaInfoReader)
         delete m_pMetaInfoReader;
+    if (m_pStream)
+        delete m_pStream;
 
     InterlockedDecrement( &g_lInstances );
 }
@@ -640,19 +642,16 @@ SCODE STDMETHODCALLTYPE COooFilter::SaveCompleted(LPCWSTR /*pszFileName*/)
 //--------------------------------------------------------------------------
 SCODE STDMETHODCALLTYPE COooFilter::Load(IStream *pStm)
 {
-    zlib_filefunc_def z_filefunc;
-
-    m_pStream = PrepareIStream( pStm, z_filefunc );
-
+    m_pStream = new BufferStream(pStm);
     try
     {
         if (m_pMetaInfoReader)
             delete m_pMetaInfoReader;
-        m_pMetaInfoReader = new CMetaInfoReader((void*)m_pStream, &z_filefunc);
+        m_pMetaInfoReader = new CMetaInfoReader(m_pStream);
 
         if (m_pContentReader)
             delete m_pContentReader;
-        m_pContentReader = new CContentReader((void*)m_pStream, m_pMetaInfoReader->getDefaultLocale(), &z_filefunc);
+        m_pContentReader = new CContentReader(m_pStream, m_pMetaInfoReader->getDefaultLocale());
     }
     catch (const std::exception&)
     {

@@ -46,7 +46,7 @@ public:
 protected: // protected because its only an implementation relevant class
     CBaseReader( const std::string& DocumentName );
 
-    CBaseReader( void* stream, zlib_filefunc_def* fa );
+    CBaseReader( StreamInterface *stream );
 
     virtual void start_document();
 

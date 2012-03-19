@@ -32,6 +32,7 @@
 #include "internal/basereader.hxx"
 
 class ITag;
+class StreamInterface;
 
 class CContentReader : public CBaseReader
 {
@@ -40,7 +41,7 @@ public:
 
     CContentReader( const std::string& DocumentName, LocaleSet_t const & DocumentLocale );
 
-    CContentReader( void* stream, LocaleSet_t const & DocumentLocale, zlib_filefunc_def* fa );
+    CContentReader( StreamInterface* stream, LocaleSet_t const & DocumentLocale );
 
 
     /** Get the chunkbuffer.

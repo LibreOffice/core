@@ -35,14 +35,6 @@
 #include <vector>
 #include <stack>
 
-#if defined SYSTEM_ZLIB
-#include <zlib.h>
-#include <minizip/ioapi.h>
-#else
-#include <external/zlib/zlib.h>
-#include <external/zlib/ioapi.h>
-#endif
-
 typedef std::vector<std::wstring> StringList_t;
 
 //+-------------------------------------------------------------------------
@@ -88,6 +80,15 @@ typedef ::std::pair <StyleName_t, LocaleSet_t> StyleLocalePair_t;
 typedef ::std::map<StyleName_t, LocaleSet_t>  StyleLocaleMap_t;
 
 const StyleLocalePair_t EMPTY_STYLELOCALE_PAIR = ::std::make_pair(::std::wstring(), EMPTY_LOCALE );
+
+class StreamInterface
+{
+public:
+    virtual ~StreamInterface() {}
+    virtual unsigned long sread (unsigned char* vuf, unsigned long size) = 0;
+    virtual long stell () = 0;
+    virtual long sseek (unsigned long offset, int origin) = 0;
+};
 
 #endif
 

@@ -73,6 +73,7 @@ SLOFILES=$(SLO)$/classfactory.obj\
     $(SLO)$/listviewbuilder.obj\
     $(SLO)$/document_statistic.obj\
     $(SLO)$/thumbviewer.obj\
+    $(SLO)$/stream_helper.obj\
 
 SHL1TARGET=$(TARGET)
 
@@ -128,6 +129,7 @@ SLOFILES_X64= \
     $(SLO_X64)$/listviewbuilder.obj\
     $(SLO_X64)$/document_statistic.obj\
     $(SLO_X64)$/thumbviewer.obj\
+    $(SLO_X64)$/stream_helper.obj\
 
 SHL1TARGET_X64=$(TARGET)
 SHL1LIBS_X64=$(SOLARLIBDIR_X64)$/zlib.lib\
