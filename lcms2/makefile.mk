@@ -39,7 +39,11 @@ TARGET=so_lcms2
 TARFILE_NAME=lcms2-2.3
 TARFILE_MD5=327348d67c979c88c2dec59a23a17d85
 
-PATCH_FILES = lcms2.patch lcms2-windows-export.patch
+PATCH_FILES = lcms2.patch
+
+.IF "$(CROSS_COMPILING)"!="YES"
+PATCH_FILES += lcms2-windows-export.patch
+.ENDIF
 
 .IF "$(SYSTEM_LCMS2)" == "YES"
 @all:
