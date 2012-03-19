@@ -30,7 +30,6 @@ $(eval $(call gb_Executable_Executable,soffice))
 $(eval $(call gb_Executable_set_targettype_gui,soffice,YES))
 
 $(eval $(call gb_Executable_add_linked_libs,soffice,\
-    sal \
     advapi32 \
     shell32 \
     shlwapi \
