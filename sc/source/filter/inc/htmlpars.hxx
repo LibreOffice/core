@@ -39,6 +39,7 @@
 
 #include "rangelst.hxx"
 #include "eeparser.hxx"
+#include "tools/table.hxx"
 
 const sal_uInt32 SC_HTML_FONTSIZES = 7;        // wie Export, HTML-Options
 

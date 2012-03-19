@@ -32,14 +32,16 @@
 #include "address.hxx"
 #include "filter.hxx"
 #include "scdllapi.h"
+#include <map>
 
 class ScDocument;
 class ScEEParser;
 class ScTabEditEngine;
 class SvStream;
-class Table;
 
 struct ScEEParseEntry;
+
+typedef std::map<SCROW, long> RowHeightMap;
 
 class ScEEImport : public ScEEAbsImport
 {
@@ -48,7 +50,7 @@ protected:
     ScDocument*         mpDoc;
     ScEEParser*         mpParser;
     ScTabEditEngine*    mpEngine;
-    Table*              mpRowHeights;
+    RowHeightMap        maRowHeights;
 
     sal_Bool                GraphicSize( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                      ScEEParseEntry* );

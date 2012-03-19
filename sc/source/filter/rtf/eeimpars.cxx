@@ -52,7 +52,6 @@
 #include <unotools/syslocale.hxx>
 #include <unotools/charclass.hxx>
 #include <comphelper/string.hxx>
-#include <tools/table.hxx>
 
 #include "eeimport.hxx"
 #include "global.hxx"
@@ -79,8 +78,7 @@ extern void ScLimitSizeOnDrawPage( Size& rSize, Point& rPos, const Size& rPage )
 ScEEImport::ScEEImport( ScDocument* pDocP, const ScRange& rRange ) :
     maRange( rRange ),
     mpDoc( pDocP ),
-    mpParser( NULL ),
-    mpRowHeights( new Table )
+    mpParser( NULL )
 {
     const ScPatternAttr* pPattern = mpDoc->GetPattern(
         maRange.aStart.Col(), maRange.aStart.Row(), maRange.aStart.Tab() );
@@ -95,7 +93,6 @@ ScEEImport::~ScEEImport()
     // Reihenfolge wichtig, sonst knallt's irgendwann irgendwo in irgendeinem Dtor!
     // Ist gewaehrleistet, da ScEEImport Basisklasse ist
     delete mpEngine;        // nach Parser!
-    delete mpRowHeights;
 }
 
 
@@ -458,11 +455,12 @@ void ScEEImport::WriteToDocument( sal_Bool bSizeColsRows, double nOutputFactor, 
         mpDoc->SetOptimalHeight( 0, nEndRow, 0,
             static_cast< sal_uInt16 >( ScGlobal::nLastRowHeightExtra ), &aVirtDev,
             nPPTX, nPPTY, aZoom, aZoom, false );
-        if ( mpRowHeights->Count() )
+        if ( !maRowHeights.empty() )
         {
             for ( SCROW nRow = nStartRow; nRow <= nEndRow; nRow++ )
             {
-                sal_uInt16 nHeight = (sal_uInt16)(sal_uLong) mpRowHeights->Get( nRow );
+                RowHeightMap::const_iterator it = maRowHeights.find( nRow );
+                sal_uInt16 nHeight = it == maRowHeights.end() ? 0 : it->second;
                 if ( nHeight > mpDoc->GetRowHeight( nRow, nTab ) )
                     mpDoc->SetRowHeight( nRow, nTab, nHeight );
             }
@@ -541,13 +539,11 @@ sal_Bool ScEEImport::GraphicSize( SCCOL nCol, SCROW nRow, SCTAB /*nTab*/, ScEEPa
         nHeight = 1;        // fuer eindeutigen Vergleich
     for ( SCROW nR = nRow; nR < nRow + nRowSpan; nR++ )
     {
-        long nRowHeight = (long) mpRowHeights->Get( nR );
+        RowHeightMap::const_iterator it2 = maRowHeights.find( nR );
+        long nRowHeight = it2 == maRowHeights.end() ? 0 : it2->second;
         if ( nHeight > nRowHeight )
         {
-            if ( nRowHeight )
-                mpRowHeights->Replace( nR, (void*)nHeight );
-            else
-                mpRowHeights->Insert( nR, (void*)nHeight );
+            maRowHeights[ nR ] = nHeight;
         }
     }
     return bHasGraphics;
