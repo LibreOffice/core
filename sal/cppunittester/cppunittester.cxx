@@ -128,7 +128,7 @@ public:
     }
     bool run() const
     {
-#ifdef IOS
+#ifdef DISABLE_DYNLOADING
         // For iOS cppunit plugins aren't really "plugins" (shared
         // libraries), but just static archives. In the real main
         // program of a cppunit app, which calls the lo_main() that
@@ -206,7 +206,7 @@ SAL_IMPLEMENT_MAIN() {
         if (rtl_getAppCommandArgCount() - index < 3) {
             usageFailure();
         }
-#ifndef IOS
+#ifndef DISABLE_DYNLOADING
         rtl::OUString lib(getArgument(index + 1));
         rtl::OUString sym(getArgument(index + 2));
         modules.push_back(new osl::Module(lib, SAL_LOADMODULE_GLOBAL));

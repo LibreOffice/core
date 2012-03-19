@@ -119,7 +119,7 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     return (result);
 }
 
-#elif !defined(NO_DL_FUNCTIONS)
+#else
 #include <dlfcn.h>
 
 oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
@@ -169,17 +169,7 @@ oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
     return (result);
 }
 
-#else  /* NO_DL_FUNCTIONS */
-
-oslProcessError SAL_CALL osl_bootstrap_getExecutableFile_Impl (
-    rtl_uString ** ppFileURL
-) SAL_THROW_EXTERN_C()
-{
-    /* Fallback to ordinary osl_getExecutableFile(). */
-    return osl_getExecutableFile (ppFileURL);
-}
-
-#endif /* NO_DL_FUNCTIONS */
+#endif
 
 /***************************************
  CommandArgs_Impl.

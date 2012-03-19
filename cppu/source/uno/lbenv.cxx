@@ -1061,13 +1061,22 @@ inline void EnvironmentsData::getRegisteredEnvironments(
 static bool loadEnv(OUString const  & cLibStem,
                     uno_Environment * pEnv)
 {
-#ifdef IOS
+#ifdef DISABLE_DYNLOADING
     oslModule hMod;
     uno_initEnvironmentFunc fpInit = NULL;
 
-    if (cLibStem.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("gcc3_uno")) )
-        fpInit = gcc3_uno_initEnvironment;
-    osl_getModuleHandle( NULL, &hMod );
+    if (cLibStem.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno")) )
+        fpInit = CPPU_ENV_uno_initEnvironment;
+    else
+    {
+#if OSL_DEBUG_LEVEL > 1
+        OSL_TRACE( "%s: Unhandled env: %s", __PRETTY_FUNCTION__, OUStringToOString( cLibStem, RTL_TEXTENCODING_ASCII_US).getStr() );
+#endif
+        return false;
+    }
+    // In the DISABLE_DYNLOADING case the functions that hMod is
+    // passed to below don't do anything with it anyway.
+    hMod = 0;
 #else
     // late init with some code from matching uno language binding
     // will be unloaded by environment

@@ -50,8 +50,8 @@ extern "C" int UnicodeToText(char *, size_t, const sal_Unicode *, sal_Int32);
 
 static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
     sal_Bool result = sal_False;
-/* Bah, we do want to use dladdr here also on iOS, I think? */
-#if !defined(NO_DL_FUNCTIONS) || defined(IOS)
+    // We do want to have this functionality also in the
+    // DISABLE_DYNLOADING case, I think?
 #if defined(AIX)
     int size = 4 * 1024;
     char *buf, *filename=NULL;
@@ -115,7 +115,6 @@ static sal_Bool getModulePathFromAddress(void * address, rtl_String ** path) {
         result = sal_False;
     }
 #endif
-#endif
     return result;
 }
 
@@ -158,7 +157,7 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
         "sal.osl", "only either LAZY or NOW");
     if (pModuleName)
     {
-#ifndef NO_DL_FUNCTIONS
+#ifndef DISABLE_DYNLOADING
 #ifdef ANDROID
         (void) nRtldMode;
         void *pLib = lo_dlopen(pModuleName);
@@ -175,10 +174,10 @@ oslModule SAL_CALL osl_loadModuleAscii(const sal_Char *pModuleName, sal_Int32 nR
 #endif
         return ((oslModule)(pLib));
 
-#else   /* NO_DL_FUNCTIONS */
+#else   /* DISABLE_DYNLOADING */
         (void) nRtldMode;
         printf("No DL Functions\n");
-#endif  /* NO_DL_FUNCTIONS */
+#endif  /* DISABLE_DYNLOADING */
     }
     return NULL;
 }
@@ -220,7 +219,7 @@ oslModule osl_loadModuleRelativeAscii(
 sal_Bool SAL_CALL
 osl_getModuleHandle(rtl_uString *, oslModule *pResult)
 {
-#if !defined(NO_DL_FUNCTIONS) || defined(IOS)
+#if !defined(DISABLE_DYNLOADING) || defined(IOS)
     *pResult = (oslModule) RTLD_DEFAULT;
 #else
     *pResult = NULL;
@@ -235,7 +234,7 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 {
     if (hModule)
     {
-#ifndef NO_DL_FUNCTIONS
+#ifndef DISABLE_DYNLOADING
 #ifdef ANDROID
         int nRet = lo_dlclose(hModule);
 #else
@@ -243,7 +242,7 @@ void SAL_CALL osl_unloadModule(oslModule hModule)
 #endif
         SAL_INFO_IF(
             nRet != 0, "sal.osl", "dlclose(" << hModule << "): " << dlerror());
-#endif /* ifndef NO_DL_FUNCTIONS */
+#endif /* ifndef DISABLE_DYNLOADING */
     }
 }
 
@@ -265,8 +264,8 @@ osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
 {
     void *fcnAddr = NULL;
 
-/* We do want to use dlsym on iOS */
-#if !defined(NO_DL_FUNCTIONS) || defined(IOS)
+    // We do want to use dlsym() also in the DISABLE_DYNLOADING case
+    // just to look up symbols in the static executable, I think.
     if (pSymbol)
     {
         fcnAddr = dlsym(Module, pSymbol);
@@ -274,7 +273,6 @@ osl_getAsciiFunctionSymbol(oslModule Module, const sal_Char *pSymbol)
             fcnAddr == 0, "sal.osl",
             "dlsym(" << Module << ", " << pSymbol << "): " << dlerror());
     }
-#endif
 
     return (oslGenericFunction) fcnAddr;
 }

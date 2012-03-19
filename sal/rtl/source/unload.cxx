@@ -42,6 +42,8 @@ using osl::MutexGuard;
 
 //----------------------------------------------------------------------------
 
+#ifndef DISABLE_DYNLOADING
+
 static void rtl_notifyUnloadingListeners();
 
 static sal_Bool isEqualTimeValue ( const TimeValue* time1,  const TimeValue* time2)
@@ -118,14 +120,23 @@ static osl::Mutex& getUnloadingMutex()
     return theUnloadingMutex::get();
 }
 
+#endif
+
 extern "C" void rtl_moduleCount_acquire(rtl_ModuleCount * that )
 {
+#ifdef DISABLE_DYNLOADING
+    (void) that;
+#else
     rtl_StandardModuleCount* pMod= (rtl_StandardModuleCount*)that;
     osl_incrementInterlockedCount( &pMod->counter);
+#endif
 }
 
 extern "C" void rtl_moduleCount_release( rtl_ModuleCount * that )
 {
+#ifdef DISABLE_DYNLOADING
+    (void) that;
+#else
     rtl_StandardModuleCount* pMod= (rtl_StandardModuleCount*)that;
     OSL_ENSURE( pMod->counter >0 , "library counter incorrect" );
     osl_decrementInterlockedCount( &pMod->counter);
@@ -140,8 +151,10 @@ extern "C" void rtl_moduleCount_release( rtl_ModuleCount * that )
             pMod->unusedSince.Nanosec= 0;
         }
     }
+#endif
 }
 
+#ifndef DISABLE_DYNLOADING
 
 struct hashModule
 {
@@ -176,8 +189,15 @@ static ModuleMap& getModuleMap()
     return *g_pMap;
 }
 
+#endif
+
 extern "C" sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, TimeValue * libUnused)
 {
+#ifdef DISABLE_DYNLOADING
+    (void) that;
+    (void) libUnused;
+    return sal_False;
+#else
     if (that->counter == 0)
     {
         MutexGuard guard( getUnloadingMutex());
@@ -187,11 +207,16 @@ extern "C" sal_Bool rtl_moduleCount_canUnload( rtl_StandardModuleCount * that, T
         }
     }
     return (that->counter == 0);
+#endif
 }
 
 
 extern "C" sal_Bool SAL_CALL rtl_registerModuleForUnloading( oslModule module)
 {
+#ifdef DISABLE_DYNLOADING
+    (void) module;
+    return sal_False;
+#else
     MutexGuard guard( getUnloadingMutex());
     ModuleMap& moduleMap= getModuleMap();
     sal_Bool ret= sal_True;
@@ -219,10 +244,14 @@ extern "C" sal_Bool SAL_CALL rtl_registerModuleForUnloading( oslModule module)
             ret= sal_False;
     }
     return ret;
+#endif
 }
 
 extern "C" void SAL_CALL rtl_unregisterModuleForUnloading( oslModule module)
 {
+#ifdef DISABLE_DYNLOADING
+    (void) module;
+#else
     MutexGuard guard( getUnloadingMutex());
 
     ModuleMap& moduleMap= getModuleMap();
@@ -236,10 +265,14 @@ extern "C" void SAL_CALL rtl_unregisterModuleForUnloading( oslModule module)
         if( it->second.first == 0)
             moduleMap.erase( it);
     }
+#endif
 }
 
 extern "C" void SAL_CALL rtl_unloadUnusedModules( TimeValue* libUnused)
 {
+#ifdef DISABLE_DYNLOADING
+    (void) libUnused;
+#else
     MutexGuard guard( getUnloadingMutex());
 
     typedef std::list< oslModule, rtl::Allocator<oslModule> > list_type;
@@ -286,8 +319,10 @@ extern "C" void SAL_CALL rtl_unloadUnusedModules( TimeValue* libUnused)
     {
         moduleMap.erase( *un_it);
     }
+#endif
 }
 
+#ifndef DISABLE_DYNLOADING
 
 // ==============================================================================
 // Unloading Listener Administration
@@ -374,32 +409,45 @@ static inline void recycleCookie( sal_Int32 i)
 }
 
 
+#endif
+
 // calling the function twice with the same arguments will return tow different cookies.
 // The listener will then notified twice.
 
 extern "C"
 sal_Int32 SAL_CALL rtl_addUnloadingListener( rtl_unloadingListenerFunc callback, void* _this)
 {
+#ifdef DISABLE_DYNLOADING
+    (void) callback;
+    (void) _this;
+    return 0;
+#else
     MutexGuard guard( getUnloadingMutex());
 
     sal_Int32 cookie= getCookie();
     ListenerMap& listenerMap= getListenerMap();
     listenerMap[ cookie]= std::make_pair( callback, _this);
     return cookie;
+#endif
 }
 
 
 extern "C"
 void SAL_CALL rtl_removeUnloadingListener( sal_Int32 cookie )
 {
+#ifdef DISABLE_DYNLOADING
+    (void) cookie;
+#else
     MutexGuard guard( getUnloadingMutex());
 
     ListenerMap& listenerMap= getListenerMap();
     size_t removedElements= listenerMap.erase( cookie);
     if( removedElements )
         recycleCookie( cookie);
+#endif
 }
 
+#ifndef DISABLE_DYNLOADING
 
 static void rtl_notifyUnloadingListeners()
 {
@@ -410,5 +458,7 @@ static void rtl_notifyUnloadingListeners()
         callbackFunc( it->second.second);
     }
 }
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

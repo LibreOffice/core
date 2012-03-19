@@ -229,9 +229,16 @@ sal_Bool SAL_CALL DllComponentLoader::writeRegistryInfo(
 
     throw(CannotRegisterImplementationException, RuntimeException)
 {
+#ifdef DISABLE_DYNLOADING
+    (void) xKey;
+    (void) rLibName;
+    OSL_FAIL( "DllComponentLoader::writeRegistryInfo() should not be called I think?" );
+    return sal_False;
+#else
     writeSharedLibComponentInfo(
         expand_url( rLibName ), OUString(), m_xSMgr, xKey );
     return sal_True;
+#endif
 }
 }
 

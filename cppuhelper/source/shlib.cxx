@@ -127,7 +127,8 @@ namespace
     class theAccessDPath : public rtl::Static<buildAccessDPath, theAccessDPath> {};
 }
 
-//------------------------------------------------------------------------------
+#ifndef DISABLE_DYNLOADING
+
 static const ::std::vector< OUString > * getAccessDPath() SAL_THROW(())
 {
     return theAccessDPath::get().getAccessDPath();
@@ -321,6 +322,8 @@ static void getLibEnv(oslModule                lib,
     }
 }
 
+#endif
+
 extern "C" {static void s_getFactory(va_list * pParam)
 {
     component_getFactoryFunc         pSym      = va_arg(*pParam, component_getFactoryFunc);
@@ -361,7 +364,21 @@ Reference< XInterface > invokeComponentFactory(
     uno::Environment env;
     OUString aEnvTypeName;
 
+#ifdef DISABLE_DYNLOADING
+    (void) lib;
+    (void) rPrefix;
+    // It seems that the only UNO components that have
+    // component_getImplementationEnvironment functions are the JDBC
+    // and ADO (whatever that is) database connectivity thingies
+    // neither of which make sense on iOS (which is the only platform
+    // for which DISABLE_DYNLOADING is intended, really). So we can
+    // simoly bypass the getLibEnv() stuff and don't need to wonder
+    // how to find out what function to call at this point if
+    // statically linked.
+    aEnvTypeName = CPPU_CURRENT_LANGUAGE_BINDING_NAME;
+#else
     getLibEnv(lib, &env, &aEnvTypeName, currentEnv, rImplName, rPrefix);
+#endif
 
     OString aImplName(
         OUStringToOString( rImplName, RTL_TEXTENCODING_ASCII_US ) );
@@ -439,7 +456,7 @@ Reference< XInterface > invokeComponentFactory(
 
 } // namespace
 
-#ifdef IOS
+#ifdef DISABLE_DYNLOADING
 extern "C"
 {
     // In stoc/source/bootstrap/services.cxx.
@@ -461,7 +478,7 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
     OUString const & rPrefix )
     SAL_THROW( (loader::CannotActivateFactoryException) )
 {
-#ifndef IOS
+#ifndef DISABLE_DYNLOADING
     OUString sLibName(rLibName);
 
 #ifdef ANDROID
@@ -506,13 +523,20 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
     oslGenericFunction pSym = NULL;
 
-#ifdef IOS
+#ifdef DISABLE_DYNLOADING
     if ( rLibName.equals( OUSTR("bootstrap.uno" SAL_DLLEXTENSION)) )
          pSym = (oslGenericFunction) bootstrap_component_getFactory;
+    else
+    {
+#if OSL_DEBUG_LEVEL > 1
+        OSL_TRACE( "%s: attempting to load unknown library %s", __PRETTY_FUNCTION__, OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
+    }
+#else
 
     if ( pSym == NULL )
         pSym = osl_getFunctionSymbol( lib, aGetFactoryName.pData );
+#endif
 
     if (pSym != 0)
     {
@@ -572,6 +596,8 @@ Reference< XInterface > SAL_CALL invokeStaticComponentFactory(
 
     return xRet;
 }
+
+#ifndef DISABLE_DYNLOADING
 
 //==============================================================================
 extern "C" { static void s_writeInfo(va_list * pParam)
@@ -696,6 +722,8 @@ void SAL_CALL writeSharedLibComponentInfo(
             aExcMsg, Reference< XInterface >() );
     }
 }
+
+#endif // DISABLE_DYNLOADING
 
 }
 

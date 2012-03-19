@@ -50,7 +50,7 @@ namespace cppunittester
     extern "C" typedef LibreOfficeProtector * SAL_CALL ProtectorFactory();
 }
 
-#ifdef IOS
+#ifdef DISABLE_DYNLOADING
 extern "C" CppUnit::Protector *unoexceptionprotector();
 #endif
 

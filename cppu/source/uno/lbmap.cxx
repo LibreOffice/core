@@ -330,7 +330,29 @@ static inline void setNegativeBridge( const OUString & rBridgeName )
     MutexGuard aGuard( rData.aNegativeLibsMutex );
     rData.aNegativeLibs.insert( rBridgeName );
 }
-//==================================================================================================
+
+#ifdef DISABLE_DYNLOADING
+
+static uno_ext_getMappingFunc selectMapFunc( const OUString & rBridgeName )
+    SAL_THROW(())
+{
+    if (rBridgeName.equalsAscii( CPPU_CURRENT_LANGUAGE_BINDING_NAME "_uno" ))
+        return CPPU_ENV_uno_ext_getMapping;
+#ifndef IOS
+    // I don't think the affine or log bridges will be needed on iOS,
+    // and DISABLE_DYNLOADING will hardly be used elsewhere, but if
+    // somebody wants to experiment, need to find out then whether
+    // these are needed.
+    if (rBridgeName.equalsAscii( "affine_uno_uno" ))
+        return affine_uno_uno_ext_getMapping;
+    if (rBridgeName.equalsAscii( "log_uno_uno" ))
+        return log_uno_uno_ext_getMapping;
+#endif
+    return 0;
+}
+
+#else
+
 static inline oslModule loadModule( const OUString & rBridgeName )
     SAL_THROW(())
 {
@@ -353,6 +375,9 @@ static inline oslModule loadModule( const OUString & rBridgeName )
     }
     return 0;
 }
+
+#endif
+
 //==================================================================================================
 static Mapping loadExternalMapping(
     const Environment & rFrom, const Environment & rTo, const OUString & rAddPurpose )
@@ -361,6 +386,43 @@ static Mapping loadExternalMapping(
     OSL_ASSERT( rFrom.is() && rTo.is() );
     if (rFrom.is() && rTo.is())
     {
+#ifdef DISABLE_DYNLOADING
+        OUString aName;
+        uno_ext_getMappingFunc fpGetMapFunc = 0;
+
+        if (EnvDcp::getTypeName(rFrom.getTypeName()).equalsAsciiL( RTL_CONSTASCII_STRINGPARAM(UNO_LB_UNO) ))
+        {
+            aName = getBridgeName( rTo, rFrom, rAddPurpose );
+            fpGetMapFunc = selectMapFunc( aName );
+        }
+        if (! fpGetMapFunc)
+        {
+            aName = getBridgeName( rFrom, rTo, rAddPurpose );
+            fpGetMapFunc = selectMapFunc( aName );
+        }
+        if (! fpGetMapFunc)
+        {
+            aName = getBridgeName( rTo, rFrom, rAddPurpose );
+            fpGetMapFunc = selectMapFunc( aName );
+        }
+
+        if (! fpGetMapFunc)
+        {
+#if OSL_DEBUG_LEVEL > 1
+            OSL_TRACE( "Could not find mapfunc for %s", OUStringToOString( aName, RTL_TEXTENCODING_ASCII_US ).getStr());
+#endif
+            return Mapping();
+        }
+
+        if (fpGetMapFunc)
+        {
+            Mapping aExt;
+            (*fpGetMapFunc)( (uno_Mapping **)&aExt, rFrom.get(), rTo.get() );
+            OSL_ASSERT( aExt.is() );
+            if (aExt.is())
+                return aExt;
+        }
+#else
         // find proper lib
         oslModule hModule = 0;
         OUString aName;
@@ -393,6 +455,7 @@ static Mapping loadExternalMapping(
             ::osl_unloadModule( hModule );
             setNegativeBridge( aName );
         }
+#endif
     }
     return Mapping();
 }

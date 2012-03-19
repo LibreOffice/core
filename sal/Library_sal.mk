@@ -46,7 +46,6 @@ $(eval $(call gb_Library_add_defs,sal,\
 		-DFORCE_SYSALLOC \
 	) \
 	$(if $(filter $(OS),IOS), \
-		-DNO_DL_FUNCTIONS \
 		-DNO_CHILD_PROCESSES \
 	) \
 	$(LFS_CFLAGS) \
