@@ -54,7 +54,6 @@ public:
     static LanguageSelectionStatus getStatus();
 
 private:
-    static const rtl::OUString usFallbackLanguage;
     static rtl::OUString aFoundLanguage;
     static sal_Bool bFoundLanguage;
     static LanguageSelectionStatus m_eStatus;

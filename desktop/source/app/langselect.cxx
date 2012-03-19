@@ -72,8 +72,6 @@ sal_Bool LanguageSelection::bFoundLanguage = sal_False;
 OUString LanguageSelection::aFoundLanguage;
 LanguageSelection::LanguageSelectionStatus LanguageSelection::m_eStatus = LS_STATUS_OK;
 
-const OUString LanguageSelection::usFallbackLanguage(RTL_CONSTASCII_USTRINGPARAM("en-US"));
-
 static sal_Bool existsURL( OUString const& sURL )
 {
     using namespace osl;
@@ -335,11 +333,11 @@ OUString LanguageSelection::getLanguageString()
         }
     }
     // fallback 1: en-US
-    OUString usFB = usFallbackLanguage;
+    OUString usFB(RTL_CONSTASCII_USTRINGPARAM("en-US"));
     if (isInstalledLanguage(usFB))
     {
         bFoundLanguage = sal_True;
-        aFoundLanguage = usFallbackLanguage;
+        aFoundLanguage = OUString(RTL_CONSTASCII_USTRINGPARAM("en-US"));
         return aFoundLanguage;
     }
 
