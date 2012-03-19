@@ -43,7 +43,7 @@ struct ScDPNumGroupInfo
     double mfStep;
 
     SC_DLLPUBLIC ScDPNumGroupInfo();
-    ScDPNumGroupInfo(const ScDPNumGroupInfo& r);
+    SC_DLLPUBLIC ScDPNumGroupInfo(const ScDPNumGroupInfo& r);
 };
 
 #endif
