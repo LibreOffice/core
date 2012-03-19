@@ -67,6 +67,7 @@ public:
     void testN750757();
     void testFdo45563();
     void testFdo43965();
+    void testN751020();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -80,6 +81,7 @@ public:
     CPPUNIT_TEST(testN750757);
     CPPUNIT_TEST(testFdo45563);
     CPPUNIT_TEST(testFdo43965);
+    CPPUNIT_TEST(testN751020);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -372,6 +374,19 @@ void RtfModelTest::testFdo43965()
     uno::Reference<text::XPageCursor> xCursor(xTextViewCursorSupplier->getViewCursor(), uno::UNO_QUERY);
     xCursor->jumpToLastPage();
     CPPUNIT_ASSERT_EQUAL(sal_Int16(2), xCursor->getPage());
+}
+
+void RtfModelTest::testN751020()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("n751020.rtf")));
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    CPPUNIT_ASSERT(xParaEnum->hasMoreElements());
+    uno::Reference<beans::XPropertySet> xPropertySet(xParaEnum->nextElement(), uno::UNO_QUERY);
+    sal_Int32 nValue = 0;
+    xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBottomMargin"))) >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(200)), nValue);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
