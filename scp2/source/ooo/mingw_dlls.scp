@@ -121,6 +121,12 @@ MINGW_DLL( gid_Brand_File_Lib_Mingw_Icudata, MINGW_ICUDATA_DLL )
 #endif
 #endif
 
+#ifdef SYSTEM_JPEG
+#ifdef NEEDS_MINGW_JPEG_DLL
+MINGW_DLL( gid_Brand_File_Lib_Mingw_Jpeg, MINGW_JPEG_DLL )
+#endif
+#endif
+
 #ifdef SYSTEM_GRAPHITE
 #ifdef NEEDS_MINGW_GRAPHITE2_DLL
 MINGW_DLL( gid_Brand_File_Lib_Mingw_Libgrahpite, MINGW_GRAPHITE2_DLL )

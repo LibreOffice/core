@@ -5765,12 +5765,14 @@ if test "$with_system_jpeg" = "yes"; then
         [AC_MSG_ERROR(jpeg.h not found. install libjpeg)], [])
     AC_CHECK_LIB(jpeg, jpeg_resync_to_restart, [ JPEG3RDLIB=-ljpeg ],
     [AC_MSG_CHECKING(jpeg library not found or fuctional)], [])
+    libo_MINGW_CHECK_DLL([JPEG], [libjpeg])
 else
     AC_MSG_RESULT([internal])
     SYSTEM_JPEG=NO
     BUILD_TYPE="$BUILD_TYPE JPEG"
 fi
 AC_SUBST(SYSTEM_JPEG)
+AC_SUBST([MINGW_JPEG_DLL])
 
 dnl ===================================================================
 dnl Check for system clucene

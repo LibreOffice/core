@@ -61,6 +61,7 @@ MINGW_DLLS:= \
     $(MINGW_ICUUC_DLL) \
     $(MINGW_IDN_DLL) \
     $(MINGW_INTL_DLL) \
+    $(MINGW_JPEG_DLL) \
     $(MINGW_LCMS2_DLL) \
     $(MINGW_LIBXML_DLL) \
     $(MINGW_LIBXSLT_DLL) \
