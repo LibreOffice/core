@@ -41,16 +41,15 @@ TARFILE_MD5=327348d67c979c88c2dec59a23a17d85
 
 PATCH_FILES = lcms2.patch
 
-.IF "$(CROSS_COMPILING)"!="YES"
-PATCH_FILES += lcms2-windows-export.patch
-.ENDIF
-
 .IF "$(SYSTEM_LCMS2)" == "YES"
 @all:
     @echo "Using system littlecms2..."
 .ENDIF
 
 .IF "$(GUI)$(COM)"=="WNTMSC"
+
+PATCH_FILES += lcms2-windows-export.patch
+
 CONFIGURE_DIR=.
 
 CONFIGURE_ACTION =
