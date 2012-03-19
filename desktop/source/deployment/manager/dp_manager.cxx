@@ -32,6 +32,7 @@
 #include "dp_platform.hxx"
 #include "dp_manager.h"
 #include "dp_identifier.hxx"
+#include "rtl/oustringostreaminserter.hxx"
 #include "rtl/ustrbuf.hxx"
 #include "rtl/string.hxx"
 #include "rtl/uri.hxx"
@@ -312,6 +313,42 @@ void PackageManagerImpl::initRegistryBackends()
                          m_xComponentContext ) );
 }
 
+// this overcomes previous rumours that the sal API is misleading
+// as to whether a directory is truly read-only or not
+static bool isMacroURLReadOnly( const OUString &rMacro )
+{
+    rtl::OUString aDirURL( rMacro );
+    ::rtl::Bootstrap::expandMacros( aDirURL );
+
+    ::osl::FileBase::RC aErr = ::osl::Directory::create( aDirURL );
+    if ( aErr == ::osl::FileBase::E_None )
+        return false; // it will be writeable
+    if ( aErr != ::osl::FileBase::E_EXIST )
+        return true; // some serious problem creating it
+
+    bool bError;
+    sal_uInt64 nWritten = 0;
+    rtl::OUString aFileURL(
+        aDirURL + rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("/stamp.sys")) );
+    ::osl::File aFile( aFileURL );
+
+    bError = aFile.open( osl_File_OpenFlag_Read |
+                         osl_File_OpenFlag_Write |
+                         osl_File_OpenFlag_Create ) != ::osl::FileBase::E_None;
+    if (!bError)
+        bError = aFile.write( "1", 1, nWritten ) != ::osl::FileBase::E_None;
+    if (aFile.close() != ::osl::FileBase::E_None)
+        bError = true;
+    if (osl::File::remove( aFileURL ) != ::osl::FileBase::E_None)
+        bError = true;
+
+    SAL_INFO(
+        "desktop.deployment",
+        "local url '" << rMacro << "' -> '" << aFileURL << "' "
+            << (bError ? "is" : "is not") << " readonly\n");
+    return bError;
+}
+
 //______________________________________________________________________________
 Reference<deployment::XPackageManager> PackageManagerImpl::create(
     Reference<XComponentContext> const & xComponentContext,
@@ -321,7 +358,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         xComponentContext, context );
     Reference<deployment::XPackageManager> xPackageManager( that );
 
-    OUString packages, logFile, stampURL;
+    OUString packages, logFile, stamp;
     if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("user") )) {
         that->m_activePackages = OUSTR(
             "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/uno_packages");
@@ -342,8 +379,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
         //using virtualization it appears that he/she can. Then a shared extension can
         //be installed but is only visible for the user (because the extension is in
         //the virtual store).
-        stampURL = OUSTR(
-            "vnd.sun.star.expand:$UNO_USER_PACKAGES_CACHE/stamp.sys");
+        stamp = OUSTR("$UNO_USER_PACKAGES_CACHE");
     }
     else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("shared") )) {
         that->m_activePackages = OUSTR(
@@ -354,8 +390,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/registry");
         logFile = OUSTR(
             "vnd.sun.star.expand:$SHARED_EXTENSIONS_USER/log.txt");
-        stampURL = OUSTR(
-            "vnd.sun.star.expand:$UNO_SHARED_PACKAGES_CACHE/stamp.sys");
+        stamp = OUSTR("$UNO_SHARED_PACKAGES_CACHE");
     }
     else if (context.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM("bundled") )) {
         that->m_activePackages = OUSTR(
@@ -394,8 +429,7 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
             "vnd.sun.star.expand:$TMP_EXTENSIONS");
         that->m_registryCache = OUSTR(
             "vnd.sun.star.expand:$TMP_EXTENSIONS/registry");
-        stampURL = OUSTR(
-            "vnd.sun.star.expand:$TMP_EXTENSIONS/stamp.sys");
+        stamp = OUSTR("$TMP_EXTENSIONS");
     }
     else if (! context.matchAsciiL(
                  RTL_CONSTASCII_STRINGPARAM("vnd.sun.star.tdoc:/") )) {
@@ -407,39 +441,9 @@ Reference<deployment::XPackageManager> PackageManagerImpl::create(
     Reference<XCommandEnvironment> xCmdEnv;
 
     try {
-        //There is no stampURL for the bundled folder
-        if (stampURL.getLength() > 0)
-        {
-#define CURRENT_STAMP "1"
-            try {
-                //The osl file API does not allow to find out if one can write
-                //into a folder. Therefore we try to write a file. Then we delete
-                //it, so that it does not hinder uninstallation of OOo
-                // probe writing:
-                ::ucbhelper::Content ucbStamp( stampURL, xCmdEnv );
-                ::rtl::OString stamp(
-                    RTL_CONSTASCII_STRINGPARAM(CURRENT_STAMP) );
-                Reference<io::XInputStream> xData(
-                    ::xmlscript::createInputStream(
-                        ::rtl::ByteSequence(
-                            reinterpret_cast<sal_Int8 const *>(stamp.getStr()),
-                            stamp.getLength() ) ) );
-                ucbStamp.writeStream( xData, true /* replace existing */ );
-                that->m_readOnly = false;
-                erase_path( stampURL, xCmdEnv );
-            }
-            catch (const RuntimeException &) {
-                try {
-                    erase_path( stampURL, xCmdEnv );
-                } catch (...)
-                {
-                }
-                throw;
-            }
-            catch (const Exception &) {
-                that->m_readOnly = true;
-            }
-        }
+        // There is no stamp for the bundled folder:
+        if (!stamp.isEmpty())
+            that->m_readOnly = isMacroURLReadOnly( stamp );
 
         if (!that->m_readOnly && logFile.getLength() > 0)
         {
