@@ -93,7 +93,7 @@ void XDatabaseRange::testGetSortDescriptor()
         {
             sal_Bool bIsSortColumns = true;
             xProp.Value >>= bIsSortColumns;
-            CPPUNIT_ASSERT(bIsSortColumns == false);
+            CPPUNIT_ASSERT(bIsSortColumns == true);
         }
         else if (xProp.Name == rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ContainsHeader")))
         {
