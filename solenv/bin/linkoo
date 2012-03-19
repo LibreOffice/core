@@ -113,7 +113,8 @@ my $brand_program_dir = 'program';
 my $ure_lib_dir = 'ure-link/lib';
 my $win_ure_lib_dir = 'URE/bin';
 
-my @exceptions = ( 'cppuhelper', 'libsunjavaplugin', 'libjvmfwk' );
+my @exceptions = ( 'libsunjavaplugin', 'libjvmfwk' );
+push @exceptions, 'cppuhelper' if ($TARGET ne 'wntgcci.pro');
 
 my $bin;
 $bin = "|\\.bin" if ($TARGET eq 'wntgcci.pro');
@@ -419,6 +420,8 @@ if (!-f "$OOO_INSTALL/" . $brand_program_dir . "/ooenv") {
 
 evilness ('do');
 
-print "\nlinkoo finished, please don't forget to source ooenv before ./soffice.\n";
+print "\nlinkoo finished";
+print ", please don't forget to source ooenv before ./soffice." if ($TARGET ne 'wntgcci.pro');
+print "\n";
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:
