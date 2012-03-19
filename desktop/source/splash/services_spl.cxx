@@ -26,92 +26,32 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/beans/NamedValue.hpp>
-#include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/util/Date.hpp>
-#include <uno/environment.h>
-#include <cppuhelper/factory.hxx>
-#include <unotools/configmgr.hxx>
+#include "sal/config.h"
+
+#include "cppuhelper/factory.hxx"
+#include "cppuhelper/implementationentry.hxx"
+#include "sal/types.h"
 
 #include "splash.hxx"
 
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::beans;
-using namespace ::com::sun::star::registry;
-using namespace ::desktop;
+namespace {
 
-using ::rtl::OUString;
+namespace css = com::sun::star;
 
-static const char* pServices[] =
-{
-    SplashScreen::serviceName,
-    NULL
+static cppu::ImplementationEntry const services[] = {
+    { &desktop::splash::create, &desktop::splash::getImplementationName,
+      &desktop::splash::getSupportedServiceNames,
+      &cppu::createSingleComponentFactory, 0, 0 },
+    { 0, 0, 0, 0, 0, 0 }
 };
 
-static const char* pImplementations[] =
-{
-    SplashScreen::implementationName,
-    NULL
-};
-
-typedef Reference<XInterface>(* fProvider)(const Reference<XMultiServiceFactory>&);
-
-static const fProvider pInstanceProviders[] =
-{
-    SplashScreen::getInstance,
-    NULL
-};
-
-static const char** pSupportedServices[] =
-{
-    SplashScreen::interfaces,
-    NULL
-};
-
-static Sequence<OUString>
-getSupportedServiceNames(int p) {
-    const char **names = pSupportedServices[p];
-    Sequence<OUString> aSeq;
-    for(int i = 0; names[i] != NULL; i++) {
-        aSeq.realloc(i+1);
-        aSeq[i] = OUString::createFromAscii(names[i]);
-    }
-    return aSeq;
 }
 
-extern "C"
+extern "C" SAL_DLLPUBLIC_EXPORT void * SAL_CALL spl_component_getFactory(
+    char const * pImplName, void * pServiceManager, void * pRegistryKey)
 {
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL spl_component_getFactory(
-    const sal_Char* pImplementationName,
-    void* pServiceManager,
-    void*)
-{
-    // Set default return value for this operation - if it failed.
-    if  ( pImplementationName && pServiceManager )
-    {
-        Reference< XSingleServiceFactory > xFactory;
-        Reference< XMultiServiceFactory > xServiceManager(
-            reinterpret_cast< XMultiServiceFactory* >( pServiceManager ) ) ;
-
-        // search implementation
-        for (int i = 0; (pImplementations[i]!=NULL); i++) {
-            if ( strcmp(pImplementations[i], pImplementationName ) == 0 ) {
-                // found implementation
-                xFactory = Reference<XSingleServiceFactory>(cppu::createSingleFactory(
-                    xServiceManager, OUString::createFromAscii(pImplementationName),
-                    pInstanceProviders[i], getSupportedServiceNames(i)));
-                if ( xFactory.is() ) {
-                    // Factory is valid - service was found.
-                    xFactory->acquire();
-                    return xFactory.get();
-                }
-            }
-        } // for()
-    }
-    // Return with result of this operation.
-    return NULL;
+    return cppu::component_getFactoryHelper(
+        pImplName, pServiceManager, pRegistryKey, services);
 }
-} // extern "C"
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

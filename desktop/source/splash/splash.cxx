@@ -35,24 +35,99 @@
 #include <vcl/svapp.hxx>
 #include <vcl/salnativewidgets.hxx>
 
+#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
+#include <com/sun/star/task/XStatusIndicator.hpp>
+#include <cppuhelper/implbase2.hxx>
 #include <rtl/bootstrap.hxx>
 #include <rtl/logfile.hxx>
 #include <rtl/locale.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/math.hxx>
 #include <vcl/graph.hxx>
+#include <vcl/introwin.hxx>
+#include <vcl/virdev.hxx>
 #include <svtools/filter.hxx>
 
 #define NOT_LOADED  ((long)-1)
 
 using namespace ::rtl;
+using namespace ::com::sun::star::lang;
 using namespace ::com::sun::star::registry;
+using namespace ::com::sun::star::task;
+using namespace ::com::sun::star::uno;
 
-namespace desktop
+namespace {
+
+namespace css = com::sun::star;
+
+class  SplashScreen
+    : public ::cppu::WeakImplHelper2< XStatusIndicator, XInitialization >
+    , public IntroWindow
 {
+private:
+    struct FullScreenProgressRatioValue
+    {
+        double _fXRelPos;
+        double _fYRelPos;
+        double _fRelWidth;
+        double _fRelHeight;
+    };
+    enum BitmapMode { BM_FULLSCREEN, BM_DEFAULTMODE };
 
-SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
+    DECL_LINK( AppEventListenerHdl, VclWindowEvent * );
+    virtual ~SplashScreen();
+    void loadConfig();
+    void updateStatus();
+    void SetScreenBitmap(BitmapEx &rBitmap);
+    void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
+
+    static osl::Mutex _aMutex;
+
+    VirtualDevice   _vdev;
+    BitmapEx        _aIntroBmp;
+    Color           _cProgressFrameColor;
+    Color           _cProgressBarColor;
+    bool            _bNativeProgress;
+    OUString        _sAppName;
+    OUString        _sProgressText;
+    std::vector< FullScreenProgressRatioValue > _sFullScreenProgressRatioValues;
+
+    sal_Int32   _iMax;
+    sal_Int32   _iProgress;
+    BitmapMode  _eBitmapMode;
+    sal_Bool    _bPaintBitmap;
+    sal_Bool    _bPaintProgress;
+    sal_Bool    _bVisible;
+    sal_Bool    _bShowLogo;
+    sal_Bool    _bFullScreenSplash;
+    sal_Bool    _bProgressEnd;
+    long _height, _width, _tlx, _tly, _barwidth;
+    long _barheight, _barspace;
+    double _fXPos, _fYPos;
+    double _fWidth, _fHeight;
+    const long _xoffset, _yoffset;
+
+public:
+    SplashScreen();
+
+    // XStatusIndicator
+    virtual void SAL_CALL end() throw ( RuntimeException );
+    virtual void SAL_CALL reset() throw ( RuntimeException );
+    virtual void SAL_CALL setText(const OUString& aText) throw ( RuntimeException );
+    virtual void SAL_CALL setValue(sal_Int32 nValue) throw ( RuntimeException );
+    virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) throw ( RuntimeException );
+
+    // XInitialize
+    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
+        throw ( RuntimeException );
+
+    // workwindow
+    virtual void Paint( const Rectangle& );
+
+};
+
+SplashScreen::SplashScreen()
     : IntroWindow()
     , _vdev(*((IntroWindow*)this))
     , _cProgressFrameColor(sal::static_int_cast< ColorData >(NOT_LOADED))
@@ -78,8 +153,6 @@ SplashScreen::SplashScreen(const Reference< XMultiServiceFactory >& rSMgr)
     , _xoffset(12)
     , _yoffset(18)
 {
-    _rFactory = rSMgr;
-
     loadConfig();
 }
 
@@ -546,32 +619,25 @@ void SplashScreen::Paint( const Rectangle&)
 
 
 // get service instance...
-SplashScreen *SplashScreen::_pINSTANCE = NULL;
 osl::Mutex SplashScreen::_aMutex;
 
-Reference< XInterface > SplashScreen::getInstance(const Reference< XMultiServiceFactory >& rSMgr)
-{
-    if ( _pINSTANCE == 0 )
-    {
-        osl::MutexGuard guard(_aMutex);
-        if (_pINSTANCE == 0)
-            return (XComponent*)new SplashScreen(rSMgr);
-    }
-
-    return (XComponent*)0;
 }
 
-// static service info...
-const char* SplashScreen::interfaces[] =
+css::uno::Reference< css::uno::XInterface > desktop::splash::create(
+    css::uno::Reference< css::uno::XComponentContext > const &)
 {
-    "com.sun.star.task.XStartusIndicator",
-    "com.sun.star.lang.XInitialization",
-    NULL,
-};
-const sal_Char *SplashScreen::serviceName = "com.sun.star.office.SplashScreen";
-const sal_Char *SplashScreen::implementationName = "com.sun.star.office.comp.SplashScreen";
-const sal_Char *SplashScreen::supportedServiceNames[] = {"com.sun.star.office.SplashScreen", NULL};
+    return static_cast< cppu::OWeakObject * >(new SplashScreen);
+}
 
+rtl::OUString desktop::splash::getImplementationName() {
+    return rtl::OUString(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.comp.SplashScreen"));
+}
+
+css::uno::Sequence< rtl::OUString > desktop::splash::getSupportedServiceNames() {
+    rtl::OUString name(
+        RTL_CONSTASCII_USTRINGPARAM("com.sun.star.office.SplashScreen"));
+    return css::uno::Sequence< rtl::OUString >(&name, 1);
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

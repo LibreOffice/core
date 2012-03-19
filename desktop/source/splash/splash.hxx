@@ -26,109 +26,37 @@
  *
  ************************************************************************/
 
-#include <com/sun/star/lang/XServiceInfo.hpp>
-#include <com/sun/star/uno/Exception.hpp>
-#include <com/sun/star/uno/Reference.h>
-#include <com/sun/star/lang/XComponent.hpp>
-#include <com/sun/star/task/XStatusIndicator.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
-#include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/interfacecontainer.h>
-#include <vcl/introwin.hxx>
-#include <vcl/bitmapex.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
-#include <osl/mutex.hxx>
-#include <vcl/virdev.hxx>
+#ifndef INCLUDED_DESKTOP_SOURCE_SPLASH_SPLASH_HXX
+#define INCLUDED_DESKTOP_SOURCE_SPLASH_SPLASH_HXX
 
+#include "sal/config.h"
 
-using namespace ::rtl;
-using namespace ::com::sun::star::uno;
-using namespace ::com::sun::star::lang;
-using namespace ::com::sun::star::task;
+#include "com/sun/star/uno/Reference.hxx"
+#include "com/sun/star/uno/Sequence.hxx"
+#include "sal/types.h"
 
-namespace desktop {
+namespace com { namespace sun { namespace star {
+    namespace uno {
+        class XComponentContext;
+        class XInterface;
+    }
+} } }
+namespace rtl { class OUString; }
 
-class  SplashScreen
-    : public ::cppu::WeakImplHelper2< XStatusIndicator, XInitialization >
-    , public IntroWindow
-{
-private:
-    struct FullScreenProgressRatioValue
-    {
-        double _fXRelPos;
-        double _fYRelPos;
-        double _fRelWidth;
-        double _fRelHeight;
-    };
-    enum BitmapMode { BM_FULLSCREEN, BM_DEFAULTMODE };
+namespace desktop { namespace splash {
 
-    // don't allow anybody but ourselves to create instances of this class
-    SplashScreen(const SplashScreen&);
-    SplashScreen(void);
-    SplashScreen operator =(const SplashScreen&);
+com::sun::star::uno::Reference< com::sun::star::uno::XInterface > SAL_CALL
+create(
+    com::sun::star::uno::Reference< com::sun::star::uno::XComponentContext >
+        const &);
 
-    SplashScreen(const Reference< XMultiServiceFactory >& xFactory);
+rtl::OUString SAL_CALL getImplementationName();
 
-    DECL_LINK( AppEventListenerHdl, VclWindowEvent * );
-    virtual ~SplashScreen();
-    void loadConfig();
-    void updateStatus();
-    void SetScreenBitmap(BitmapEx &rBitmap);
-    void determineProgressRatioValues( double& rXRelPos, double& rYRelPos, double& rRelWidth, double& rRelHeight );
+com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL
+getSupportedServiceNames();
 
-    static  SplashScreen *_pINSTANCE;
+} }
 
-    static osl::Mutex _aMutex;
-    Reference< XMultiServiceFactory > _rFactory;
-
-    VirtualDevice   _vdev;
-    BitmapEx        _aIntroBmp;
-    Color           _cProgressFrameColor;
-    Color           _cProgressBarColor;
-    bool            _bNativeProgress;
-    OUString        _sAppName;
-    OUString        _sProgressText;
-    std::vector< FullScreenProgressRatioValue > _sFullScreenProgressRatioValues;
-
-    sal_Int32   _iMax;
-    sal_Int32   _iProgress;
-    BitmapMode  _eBitmapMode;
-    sal_Bool    _bPaintBitmap;
-    sal_Bool    _bPaintProgress;
-    sal_Bool    _bVisible;
-    sal_Bool    _bShowLogo;
-    sal_Bool    _bFullScreenSplash;
-    sal_Bool    _bProgressEnd;
-    long _height, _width, _tlx, _tly, _barwidth;
-    long _barheight, _barspace;
-    double _fXPos, _fYPos;
-    double _fWidth, _fHeight;
-    const long _xoffset, _yoffset;
-
-public:
-    static const char* interfaces[];
-    static const sal_Char *serviceName;
-    static const sal_Char *implementationName;
-    static const sal_Char *supportedServiceNames[];
-
-    static Reference< XInterface > getInstance(const Reference < XMultiServiceFactory >& xFactory);
-
-    // XStatusIndicator
-    virtual void SAL_CALL end() throw ( RuntimeException );
-    virtual void SAL_CALL reset() throw ( RuntimeException );
-    virtual void SAL_CALL setText(const OUString& aText) throw ( RuntimeException );
-    virtual void SAL_CALL setValue(sal_Int32 nValue) throw ( RuntimeException );
-    virtual void SAL_CALL start(const OUString& aText, sal_Int32 nRange) throw ( RuntimeException );
-
-    // XInitialize
-    virtual void SAL_CALL initialize( const ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any>& aArguments )
-        throw ( RuntimeException );
-
-    // workwindow
-    virtual void Paint( const Rectangle& );
-
-};
-
-}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
