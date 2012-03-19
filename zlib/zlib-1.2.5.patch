@@ -1,6 +1,6 @@
 --- misc/zlib-1.2.5/makefile.mk	Fri Mar 14 10:17:06 2008
 +++ misc/build/zlib-1.2.5/makefile.mk	Fri Mar 14 10:16:56 2008
-@@ -1 +1,67 @@
+@@ -1 +1,63 @@
 -dummy
 +#*************************************************************************
 +#
@@ -31,9 +31,7 @@
 +			$(SLO)$/inflate.obj		\
 +			$(SLO)$/inftrees.obj	\
 +			$(SLO)$/trees.obj		\
-+			$(SLO)$/zutil.obj       \
-+			$(SLO)$/unzip.obj		\
-+			$(SLO)$/ioapi.obj
++			$(SLO)$/zutil.obj
 +
 +
 +LIB1TARGET=$(SLB)$/$(TARGET).lib
@@ -49,9 +47,7 @@
 +			$(SLO_X64)$/inflate.obj		\
 +			$(SLO_X64)$/inftrees.obj	\
 +			$(SLO_X64)$/trees.obj		\
-+			$(SLO_X64)$/zutil.obj       \
-+			$(SLO_X64)$/unzip.obj		\
-+			$(SLO_X64)$/ioapi.obj
++			$(SLO_X64)$/zutil.obj
 +
 +LIB1TARGET_X64=$(SLB_X64)$/$(TARGET).lib
 +LIB1OBJFILES_X64=$(SLOFILES_X64)
