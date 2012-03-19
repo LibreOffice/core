@@ -1349,7 +1349,7 @@ sal_uInt32 ResMgr::GetString( UniString& rStr, const sal_uInt8* pStr )
     UniString aString;
     sal_uInt32 nRet =  GetStringWithoutHook( aString, pStr );
     if ( pImplResHookProc )
-        pImplResHookProc( aString );
+        aString = pImplResHookProc( aString );
     rStr = aString;
     return nRet;
 }
@@ -1754,7 +1754,7 @@ UniString ResMgr::ReadString()
 {
     UniString aRet = ReadStringWithoutHook();
     if ( pImplResHookProc )
-        pImplResHookProc( aRet );
+        aRet = pImplResHookProc( aRet );
     return aRet;
 }
 
