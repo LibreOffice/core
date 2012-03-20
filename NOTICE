@@ -84,10 +84,6 @@ Library, originally by SGI and further refined by
 Boris Fomitchev. More information at:
     http://www.stlport.org/
 
-We use the Tango base icon theme under Public Domain by the
-Tango Desktop Project. More information is available here:
-    http://tango.freedesktop.org/
-
 The ucpp preprocessor was written by Thomas Pornin and
 maintained by Louis P. Santillan and is available under
 the "New" BSD license.
