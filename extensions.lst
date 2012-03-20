@@ -46,21 +46,21 @@
     b7ce02d25eb302e5b23572cdccaea461 http://numbertext.org/tmp/dict-en.oxt
     
     # Canada (en_CA)
-    e545415a4c813075c67ea58ea99802e5 http://extensions.services.openoffice.org/e-files/1263/1/en_CA_2_0_0.oxt
+    e545415a4c813075c67ea58ea99802e5 http://sourceforge.net/projects/aoo-extensions/files/1263/1/en_CA_2_0_0.oxt/download
 
     # USA (en_US)
-    e2eab80772ab1aa09716954219351a80 http://extensions.services.openoffice.org/e-files/1470/1/en_US.oxt
+    e2eab80772ab1aa09716954219351a80 http://sourceforge.net/projects/aoo-extensions/files/1470/1/en_US.oxt/download
 
     # Australia (en_AU)
-    68bfee769199749288c5e1aaf200a1ca http://extensions.services.openoffice.org/e-files/1232/7/dict-en-au-2008-12-15.oxt
+    68bfee769199749288c5e1aaf200a1ca http://sourceforge.net/projects/aoo-extensions/files/1232/7/dict-en-au-2008-12-15.oxt/download
 
     # South Africa (en_ZA)
-    c0c052e01b124a9ca5739facdb3ddbd5 http://extensions.services.openoffice.org/e-files/3089/0/dict-en_ZA-2009.10.22.oxt
+    c0c052e01b124a9ca5739facdb3ddbd5 http://sourceforge.net/projects/aoo-extensions/files/3089/0/dict-en_ZA-2009.10.22.oxt/download
 
     # New Zealand (en_NZ)
-    87123666ecce441b075c0170fa58690c http://extensions.services.openoffice.org/e-files/1665/1/dict-en-nz-2008-12-03.oxt
+    87123666ecce441b075c0170fa58690c http://sourceforge.net/projects/aoo-extensions/files/1665/1/dict-en-nz-2008-12-03.oxt/download
 
 
 # Extensions for german (Germany).
 [ language=de || language=de-DE ]
-    eb3d3397b8034c7fce6e0d78daf914ca http://extensions.services.openoffice.org/e-files/1075/10/dict-de_DE-frami_2011-06-03.oxt
+    eb3d3397b8034c7fce6e0d78daf914ca http://sourceforge.net/projects/aoo-extensions/files/1075/10/dict-de_DE-frami_2011-06-03.oxt/download
