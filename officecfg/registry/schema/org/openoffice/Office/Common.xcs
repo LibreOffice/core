@@ -5627,11 +5627,6 @@
 							<desc>Industrial</desc>
 						</info>
 					</enumeration>
-					<enumeration oor:value="tango">
-						<info>
-							<desc>Tango - the Gnome default theme</desc>
-						</info>
-					</enumeration>
 					<enumeration oor:value="classic">
 						<info>
 							<desc>Classic - the OpenOffice.org 2.0 default theme</desc>
