@@ -866,11 +866,7 @@ nullcanvas::SpriteCanvasHelper::opaqueUpdate(basegfx::B2DConnectedRanges<canvas:
 nullcanvas::SpriteCanvasHelper::scrollUpdate(basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 ooo::vba::extractIntFromAny(com::sun::star::uno::Any const&)
 oox::core::PowerPointExport::WriteTextStyleLevel(boost::shared_ptr<sax_fastparser::FastSerializerHelper>, int, int)
-oox::dump::AxPropertyObjectBase::construct(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&, oox::dump::String const&, bool)
-oox::dump::BinaryStreamObject::BinaryStreamObject(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&)
 oox::dump::Config::requestEncryptionData(comphelper::IDocPasswordVerifier&)
-oox::dump::Config::setNameList(oox::dump::String const&, boost::shared_ptr<oox::dump::NameListBase> const&)
-oox::dump::Config::setStringOption(oox::dump::String const&, oox::dump::String const&)
 oox::dump::ConfigItemBase::readConfigLine(oox::TextInputStream&) const
 oox::dump::DffStreamObject::construct(oox::dump::ObjectBase const&, oox::dump::BinaryInputStreamRef const&, rtl::OUString const&)
 oox::dump::DffStreamObject::construct(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&)
@@ -914,11 +910,8 @@ oox::dump::TextStreamObjectBase::construct(oox::dump::InputObjectBase const&, un
 oox::dump::XmlStreamObject::XmlStreamObject(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&)
 oox::formulaimport::XmlStream::AttributeList::hasAttribute(int) const
 oox::formulaimport::XmlStream::skipElement(int)
-oox::ole::VbaSiteModel::isVisible() const
 oox::ole::WordVbaProjectFilter_createInstance(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 oox::ole::WordVbaProjectFilter_getSupportedServiceNames()
-oox::ppt::PPTShape::findPlaceholder(int, int, std::__debug::vector<boost::shared_ptr<oox::drawingml::Shape>, std::allocator<boost::shared_ptr<oox::drawingml::Shape> > >&)
-oox::xls::ApiTokenIterator::ApiTokenIterator(oox::xls::ApiTokenIterator const&, bool)
 oox::xls::BiffDetector_createInstance(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 oox::xls::BiffDrawingBase::appendRawObject(boost::shared_ptr<oox::xls::BiffDrawingObjectBase> const&)
 oox::xls::BiffDrawingBase::setSkipObj(unsigned short)

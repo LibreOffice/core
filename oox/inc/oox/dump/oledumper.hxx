@@ -331,11 +331,6 @@ protected:
                             const String& rPropNameList,
                             bool b64BitPropFlags = false );
     void                construct(
-                            const OutputObjectBase& rParent,
-                            const BinaryInputStreamRef& rxStrm,
-                            const String& rPropNameList,
-                            bool b64BitPropFlags = false );
-    void                construct(
                             const InputObjectBase& rParent,
                             const String& rPropNameList,
                             bool b64BitPropFlags = false );

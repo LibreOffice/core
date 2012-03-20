@@ -184,15 +184,6 @@ ApiTokenIterator::ApiTokenIterator( const ApiTokenSequence& rTokens, sal_Int32 n
     skipSpaces();
 }
 
-ApiTokenIterator::ApiTokenIterator( const ApiTokenIterator& rIter, bool bSkipSpaces ) :
-    mpToken( rIter.mpToken ),
-    mpTokenEnd( rIter.mpTokenEnd ),
-    mnSpacesOpCode( rIter.mnSpacesOpCode ),
-    mbSkipSpaces( bSkipSpaces )
-{
-    skipSpaces();
-}
-
 ApiTokenIterator& ApiTokenIterator::operator++()
 {
     if( is() )

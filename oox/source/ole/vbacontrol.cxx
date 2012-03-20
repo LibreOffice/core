@@ -225,11 +225,6 @@ bool VbaSiteModel::importBinaryModel( BinaryInputStream& rInStrm )
     return aReader.finalizeImport();
 }
 
-bool VbaSiteModel::isVisible() const
-{
-    return getFlag( mnFlags, VBA_SITE_VISIBLE );
-}
-
 bool VbaSiteModel::isContainer() const
 {
     return !getFlag( mnFlags, VBA_SITE_OSTREAM );

@@ -993,8 +993,6 @@ public:
     inline const StorageRef& getRootStorage() const { return mxCfgData->getRootStorage(); }
     inline const ::rtl::OUString& getSysFileName() const { return mxCfgData->getSysFileName(); }
 
-    void                setStringOption( const String& rKey, const String& rData );
-
     const ::rtl::OUString& getStringOption( const String& rKey, const ::rtl::OUString& rDefault ) const;
     bool                getBoolOption( const String& rKey, bool bDefault ) const;
     template< typename Type >
@@ -1005,7 +1003,6 @@ public:
 
     template< typename ListType >
     ::boost::shared_ptr< ListType > createNameList( const String& rListName );
-    void                setNameList( const String& rListName, const NameListRef& rxList );
     void                eraseNameList( const String& rListName );
     NameListRef         getNameList( const String& rListName ) const;
 
@@ -1791,10 +1788,6 @@ public:
                             const ObjectBase& rParent,
                             const BinaryInputStreamRef& rxStrm,
                             const ::rtl::OUString& rSysFileName );
-
-    explicit            BinaryStreamObject(
-                            const OutputObjectBase& rParent,
-                            const BinaryInputStreamRef& rxStrm );
 
 protected:
     void                dumpBinaryStream( bool bShowOffset = true );

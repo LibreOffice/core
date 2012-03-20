@@ -1050,13 +1050,6 @@ void AxPropertyObjectBase::construct( const ObjectBase& rParent,
     constructAxPropObj( rPropNameList, b64BitPropFlags );
 }
 
-void AxPropertyObjectBase::construct( const OutputObjectBase& rParent,
-        const BinaryInputStreamRef& rxStrm, const String& rPropNameList, bool b64BitPropFlags )
-{
-    OleInputObjectBase::construct( rParent, rxStrm );
-    constructAxPropObj( rPropNameList, b64BitPropFlags );
-}
-
 void AxPropertyObjectBase::construct( const InputObjectBase& rParent,
         const String& rPropNameList, bool b64BitPropFlags )
 {

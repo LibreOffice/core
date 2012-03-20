@@ -1699,11 +1699,6 @@ void Config::construct( const sal_Char* pcEnvVar, const Reference< XComponentCon
             mxCfgData.reset( new SharedConfigData( OUString::createFromAscii( pcFileName ), rxContext, rxRootStrg, rSysFileName, rMediaDesc ) );
 }
 
-void Config::setStringOption( const String& rKey, const String& rData )
-{
-    mxCfgData->setOption( rKey, rData );
-}
-
 const OUString& Config::getStringOption( const String& rKey, const OUString& rDefault ) const
 {
     const OUString* pData = implGetOption( rKey );
@@ -1724,11 +1719,6 @@ bool Config::isDumperEnabled() const
 bool Config::isImportEnabled() const
 {
     return getBoolOption( "enable-import", true );
-}
-
-void Config::setNameList( const String& rListName, const NameListRef& rxList )
-{
-    mxCfgData->setNameList( rListName, rxList );
 }
 
 void Config::eraseNameList( const String& rListName )
@@ -2835,11 +2825,6 @@ void InputObjectBase::dumpItem( const ItemFormat& rItemFmt )
 BinaryStreamObject::BinaryStreamObject( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
 {
     InputObjectBase::construct( rParent, rxStrm, rSysFileName );
-}
-
-BinaryStreamObject::BinaryStreamObject( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm )
-{
-    InputObjectBase::construct( rParent, rxStrm );
 }
 
 void BinaryStreamObject::dumpBinaryStream( bool bShowOffset )
