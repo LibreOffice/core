@@ -246,7 +246,7 @@ ScDBData::~ScDBData()
             aBuf.append(ScGlobal::GetRscString(STR_OPERATION_FILTER));
     }
 
-    if (mpSortParam->bDoSort[0])
+    if (mpSortParam->maKeyState[0].bDoSort)
     {
         if (aBuf.getLength())
             aBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(", "));
@@ -299,13 +299,13 @@ void ScDBData::MoveTo(SCTAB nTab, SCCOL nCol1, SCROW nRow1, SCCOL nCol2, SCROW n
     long nSortDif = bByRow ? nDifX : nDifY;
     long nSortEnd = bByRow ? static_cast<long>(nCol2) : static_cast<long>(nRow2);
 
-    for (i=0; i<MAXSORT; i++)
+    for (i=0; i<mpSortParam->GetSortKeyCount(); i++)
     {
-        mpSortParam->nField[i] += nSortDif;
-        if (mpSortParam->nField[i] > nSortEnd)
+        mpSortParam->maKeyState[i].nField += nSortDif;
+        if (mpSortParam->maKeyState[i].nField > nSortEnd)
         {
-            mpSortParam->nField[i] = 0;
-            mpSortParam->bDoSort[i] = false;
+            mpSortParam->maKeyState[i].nField = 0;
+            mpSortParam->maKeyState[i].bDoSort = false;
         }
     }
 
@@ -460,7 +460,7 @@ bool ScDBData::HasQueryParam() const
 
 bool ScDBData::HasSortParam() const
 {
-    return mpSortParam && mpSortParam->bDoSort[0];
+    return mpSortParam && mpSortParam->maKeyState[0].bDoSort;
 }
 
 bool ScDBData::HasSubTotalParam() const

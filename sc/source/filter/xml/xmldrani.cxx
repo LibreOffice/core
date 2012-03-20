@@ -370,11 +370,11 @@ ScDBData* ScXMLDatabaseRangeContext::ConvertToDBData(const OUString& rName)
         ScSortDescriptor::FillSortParam(aParam, aSortSequence);
 
         SCCOLROW nStartPos = aParam.bByRow ? maRange.aStart.Col() : maRange.aStart.Row();
-        for (size_t i = 0; i < MAXSORT; ++i)
+        for (size_t i = 0; i < aParam.GetSortKeyCount(); ++i)
         {
-            if (!aParam.bDoSort[i])
+            if (!aParam.maKeyState[i].bDoSort)
                 break;
-            aParam.nField[i] += nStartPos;
+            aParam.maKeyState[i].nField += nStartPos;
         }
 
         pData->SetSortParam(aParam);

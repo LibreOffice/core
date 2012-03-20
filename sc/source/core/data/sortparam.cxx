@@ -51,15 +51,10 @@ ScSortParam::ScSortParam( const ScSortParam& r ) :
         bNaturalSort(r.bNaturalSort),bUserDef(r.bUserDef),
         bIncludePattern(r.bIncludePattern),bInplace(r.bInplace),
         nDestTab(r.nDestTab),nDestCol(r.nDestCol),nDestRow(r.nDestRow),
+        maKeyState( r.maKeyState ),
         aCollatorLocale( r.aCollatorLocale ), aCollatorAlgorithm( r.aCollatorAlgorithm ),
         nCompatHeader( r.nCompatHeader )
 {
-    for (sal_uInt16 i=0; i<MAXSORT; i++)
-    {
-        bDoSort[i]    = r.bDoSort[i];
-        nField[i]     = r.nField[i];
-        bAscending[i] = r.bAscending[i];
-    }
 }
 
 //------------------------------------------------------------------------
@@ -76,12 +71,8 @@ void ScSortParam::Clear()
     aCollatorLocale = ::com::sun::star::lang::Locale();
     aCollatorAlgorithm = ::rtl::OUString();
 
-    for (sal_uInt16 i=0; i<MAXSORT; i++)
-    {
-        bDoSort[i]    = false;
-        nField[i]     = 0;
-        bAscending[i] = true;
-    }
+    // Initialize to default size
+    maKeyState.assign( DEFSORT, { false, 0, true } );
 }
 
 //------------------------------------------------------------------------
@@ -103,16 +94,10 @@ ScSortParam& ScSortParam::operator=( const ScSortParam& r )
     nDestTab        = r.nDestTab;
     nDestCol        = r.nDestCol;
     nDestRow        = r.nDestRow;
+    maKeyState      = r.maKeyState;
     aCollatorLocale         = r.aCollatorLocale;
     aCollatorAlgorithm      = r.aCollatorAlgorithm;
     nCompatHeader   = r.nCompatHeader;
-
-    for (sal_uInt16 i=0; i<MAXSORT; i++)
-    {
-        bDoSort[i]    = r.bDoSort[i];
-        nField[i]     = r.nField[i];
-        bAscending[i] = r.bAscending[i];
-    }
 
     return *this;
 }
@@ -125,10 +110,20 @@ bool ScSortParam::operator==( const ScSortParam& rOther ) const
     // Anzahl der Sorts gleich?
     sal_uInt16 nLast      = 0;
     sal_uInt16 nOtherLast = 0;
-    while ( bDoSort[nLast++] && nLast < MAXSORT ) ;
-    while ( rOther.bDoSort[nOtherLast++] && nOtherLast < MAXSORT ) ;
-    nLast--;
-    nOtherLast--;
+    sal_uInt16 nSortSize = GetSortKeyCount();
+
+    if ( !maKeyState.empty() )
+    {
+        while ( maKeyState[nLast++].bDoSort && nLast < nSortSize ) ;
+        nLast--;
+    }
+
+    if ( !rOther.maKeyState.empty() )
+    {
+        while ( rOther.maKeyState[nOtherLast++].bDoSort && nOtherLast < nSortSize ) ;
+        nOtherLast--;
+    }
+
     if (   (nLast           == nOtherLast)
         && (nCol1           == rOther.nCol1)
         && (nRow1           == rOther.nRow1)
@@ -149,14 +144,17 @@ bool ScSortParam::operator==( const ScSortParam& rOther ) const
         && (aCollatorLocale.Country     == rOther.aCollatorLocale.Country)
         && (aCollatorLocale.Variant     == rOther.aCollatorLocale.Variant)
         && (aCollatorAlgorithm          == rOther.aCollatorAlgorithm)
+        && ( !maKeyState.empty() || !rOther.maKeyState.empty() )
         )
     {
         bEqual = true;
         for ( sal_uInt16 i=0; i<=nLast && bEqual; i++ )
-        {
-            bEqual = (nField[i] == rOther.nField[i]) && (bAscending[i]  == rOther.bAscending[i]);
-        }
+            bEqual = ( maKeyState[i].nField == rOther.maKeyState[i].nField ) &&
+                ( maKeyState[i].bAscending  == rOther.maKeyState[i].bAscending );
     }
+    if ( maKeyState.empty() && rOther.maKeyState.empty() )
+        bEqual = true;
+
     return bEqual;
 }
 
@@ -172,6 +170,7 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
         nCompatHeader( rOld.nCompatHeader )
 {
     sal_uInt16 nNewCount = 0;
+    sal_uInt16 nSortSize = GetSortKeyCount();
     sal_uInt16 i;
 
     //  zuerst die Gruppen aus den Teilergebnissen
@@ -179,42 +178,34 @@ ScSortParam::ScSortParam( const ScSubTotalParam& rSub, const ScSortParam& rOld )
         for (i=0; i<MAXSUBTOTAL; i++)
             if (rSub.bGroupActive[i])
             {
-                if (nNewCount < MAXSORT)
+                if (nNewCount < nSortSize)
                 {
-                    bDoSort[nNewCount]    = true;
-                    nField[nNewCount]     = rSub.nField[i];
-                    bAscending[nNewCount] = rSub.bAscending;
+                    maKeyState[nNewCount] = { true, rSub.nField[i], rSub.bAscending };
                     ++nNewCount;
                 }
             }
 
     //  dann dahinter die alten Einstellungen
-    for (i=0; i<MAXSORT; i++)
-        if (rOld.bDoSort[i])
+    for (i=0; i<nSortSize; i++)
+        if (rOld.maKeyState[i].bDoSort)
         {
-            SCCOLROW nThisField = rOld.nField[i];
+            SCCOLROW nThisField = rOld.maKeyState[i].nField;
             bool bDouble = false;
             for (sal_uInt16 j=0; j<nNewCount; j++)
-                if ( nField[j] == nThisField )
+                if ( maKeyState[j].nField == nThisField )
                     bDouble = true;
             if (!bDouble)               // ein Feld nicht zweimal eintragen
             {
-                if (nNewCount < MAXSORT)
+                if (nNewCount < nSortSize)
                 {
-                    bDoSort[nNewCount]    = true;
-                    nField[nNewCount]     = nThisField;
-                    bAscending[nNewCount] = rOld.bAscending[i];
+                    maKeyState[nNewCount] = { true, nThisField, rOld.maKeyState[i].bAscending };
                     ++nNewCount;
                 }
             }
         }
 
-    for (i=nNewCount; i<MAXSORT; i++)       // Rest loeschen
-    {
-        bDoSort[i]    = false;
-        nField[i]     = 0;
-        bAscending[i] = true;
-    }
+    for (i=nNewCount; i<nSortSize; i++)       // Rest loeschen
+        maKeyState.push_back( ScSortKeyState({ false, 0, true }) );
 }
 
 //------------------------------------------------------------------------
@@ -228,15 +219,10 @@ ScSortParam::ScSortParam( const ScQueryParam& rParam, SCCOL nCol ) :
         bInplace(true),
         nDestTab(0),nDestCol(0),nDestRow(0), nCompatHeader(2)
 {
-    bDoSort[0] = true;
-    nField[0] = nCol;
-    bAscending[0] = true;
-    for (sal_uInt16 i=1; i<MAXSORT; i++)
-    {
-        bDoSort[i]    = false;
-        nField[i]     = 0;
-        bAscending[i] = true;
-    }
+    maKeyState.push_back( ScSortKeyState( { true, nCol, true } ) );
+
+    for (sal_uInt16 i=1; i<GetSortKeyCount(); i++)
+        maKeyState.push_back( ScSortKeyState( { false, 0, true } ) );
 }
 
 //------------------------------------------------------------------------
@@ -252,11 +238,11 @@ void ScSortParam::MoveToDest()
         nRow1 = sal::static_int_cast<SCROW>( nRow1 + nDifY );
         nCol2 = sal::static_int_cast<SCCOL>( nCol2 + nDifX );
         nRow2 = sal::static_int_cast<SCROW>( nRow2 + nDifY );
-        for (sal_uInt16 i=0; i<MAXSORT; i++)
+        for (sal_uInt16 i=0; i<GetSortKeyCount(); i++)
             if (bByRow)
-                nField[i] += nDifX;
+                maKeyState[i].nField += nDifX;
             else
-                nField[i] += nDifY;
+                maKeyState[i].nField += nDifY;
 
         bInplace = true;
     }
