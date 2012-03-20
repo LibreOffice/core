@@ -347,10 +347,8 @@ void SAL_CALL UniversalContentBroker::removeEventListener(
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UniversalContentBroker,
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.ucb.UniversalContentBroker" )),
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         UCB_SERVICE_NAME )) );
+                     "com.sun.star.comp.ucb.UniversalContentBroker",
+                     UCB_SERVICE_NAME );
 
 //=========================================================================
 //

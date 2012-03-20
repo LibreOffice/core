@@ -244,10 +244,8 @@ XTYPEPROVIDER_IMPL_4( UcbStore,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UcbStore,
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.ucb.UcbStore" )),
-                     OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         STORE_SERVICE_NAME )) );
+                     "com.sun.star.comp.ucb.UcbStore",
+                     STORE_SERVICE_NAME );
 
 //=========================================================================
 //

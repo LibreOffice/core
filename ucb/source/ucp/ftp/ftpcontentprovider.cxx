@@ -103,8 +103,8 @@ XTYPEPROVIDER_IMPL_3(FTPContentProvider,
 
 XSERVICEINFO_IMPL_1(
     FTPContentProvider,
-    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.FTPContentProvider")),
-    rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(FTP_CONTENT_PROVIDER_SERVICE_NAME)));
+    "com.sun.star.comp.FTPContentProvider",
+    FTP_CONTENT_PROVIDER_SERVICE_NAME);
 
 //=========================================================================
 //

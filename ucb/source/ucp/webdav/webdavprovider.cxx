@@ -93,10 +93,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.WebDAVContentProvider" )),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         WEBDAV_CONTENT_PROVIDER_SERVICE_NAME )) );
+                     "com.sun.star.comp.WebDAVContentProvider",
+                     WEBDAV_CONTENT_PROVIDER_SERVICE_NAME );
 
 //=========================================================================
 //

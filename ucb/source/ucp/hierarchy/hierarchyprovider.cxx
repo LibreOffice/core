@@ -100,10 +100,8 @@ XTYPEPROVIDER_IMPL_4( HierarchyContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( HierarchyContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.ucb.HierarchyContentProvider" )),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME )) );
+                     "com.sun.star.comp.ucb.HierarchyContentProvider",
+                     HIERARCHY_CONTENT_PROVIDER_SERVICE_NAME );
 
 //=========================================================================
 //

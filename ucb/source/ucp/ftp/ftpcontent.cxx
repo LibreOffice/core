@@ -174,11 +174,12 @@ XTYPEPROVIDER_IMPL_6( FTPContent,
 #undef XSERVICEINFO_CREATE_INSTANCE_IMPL
 #define XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )
 
+#undef STATICALLY_LINKED_SERVICE
+#define STATICALLY_LINKED_SERVICE( Class, ImplName, Service, Num )
+
 XSERVICEINFO_IMPL_1( FTPContent,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.comp.FTPContent")),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-                         "com.sun.star.ucb.FTPContent")));
+                     "com.sun.star.comp.FTPContent",
+                     "com.sun.star.ucb.FTPContent" );
 
 
 
