@@ -51,6 +51,7 @@ CustomerInformation	BannerLine	Line	0	44	374	0	1
 CustomerInformation	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
 CustomerInformation	Branding2	Text	3	228	88	13	65537		[ProductName]		
 CustomerInformation	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_35	NameLabel	
+CustomerInformation	CompanyEdit	Edit	21	100	237	17	3	COMPANYNAME	OOO_CONTROL_36	SerialLabel	
 CustomerInformation	CompanyLabel	Text	21	89	75	10	3		OOO_CONTROL_37	CompanyEdit	
 CustomerInformation	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_38		
 CustomerInformation	DlgLine	Line	90	234	284	0	1				
