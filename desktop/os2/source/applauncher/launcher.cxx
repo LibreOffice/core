@@ -104,7 +104,7 @@ int main( int argc, char* argv[])
         sprintf( szMessage, "Execution failed! Contact technical support.\n\nReturn code: %d\nFailing module:%s\n", rc, szFail);
         rc = WinMessageBox( HWND_DESKTOP, HWND_DESKTOP,
                             (PSZ)szMessage,
-                            (PSZ)"Unable to start OpenOffice.org!",
+                            (PSZ)"Unable to start Apache OpenOffice!",
                             0, MB_ERROR | MB_OK);
         WinDestroyMsgQueue( hmq);
         WinTerminate( hab);
