@@ -358,7 +358,10 @@ get_pipe_path( rtl_uString *pAppPath )
     rtl_uString_release( pMd5hash );
     rtl_uString_release( pPath );
     rtl_uString_release( pTmp );
-    rtl_uString_release( pBasePath );
+    if ( pBasePath )
+    {
+        rtl_uString_release( pBasePath );
+    }
     rtl_uString_release( pUserInstallation );
     rtl_uString_release( pAbsUserInstallation );
 
