@@ -346,15 +346,15 @@ void SwFrm::dumpInfosAsXml( xmlTextWriterPtr writer )
 void SwFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
 {
     xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "ptr" ), "%p", this );
-    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "id" ), "%"SAL_PRIuUINT32, GetFrmId() );
+    xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "id" ), "%" SAL_PRIuUINT32, GetFrmId() );
     if ( GetNext( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "next" ), "%"SAL_PRIuUINT32, GetNext()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "next" ), "%" SAL_PRIuUINT32, GetNext()->GetFrmId() );
     if ( GetPrev( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "prev" ), "%"SAL_PRIuUINT32, GetPrev()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "prev" ), "%" SAL_PRIuUINT32, GetPrev()->GetFrmId() );
     if ( GetUpper( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%"SAL_PRIuUINT32, GetUpper()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "upper" ), "%" SAL_PRIuUINT32, GetUpper()->GetFrmId() );
     if ( GetLower( ) )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%"SAL_PRIuUINT32, GetLower()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "lower" ), "%" SAL_PRIuUINT32, GetLower()->GetFrmId() );
     if ( IsTxtFrm(  ) )
     {
         SwTxtFrm *pTxtFrm = ( SwTxtFrm * ) this;
@@ -390,30 +390,30 @@ void SwTxtFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
 {
     SwFrm::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%"SAL_PRIuUINT32, GetFollow()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrmId() );
 
     if (m_pPrecede != NULL)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%"SAL_PRIuUINT32, static_cast<SwTxtFrm*>(m_pPrecede)->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTxtFrm*>(m_pPrecede)->GetFrmId() );
 }
 
 void SwSectionFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
 {
     SwFrm::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%"SAL_PRIuUINT32, GetFollow()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrmId() );
 
     if (m_pPrecede != NULL)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%"SAL_PRIuUINT32, static_cast<SwSectionFrm*>( m_pPrecede )->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwSectionFrm*>( m_pPrecede )->GetFrmId() );
 }
 
 void SwTabFrm::dumpAsXmlAttributes( xmlTextWriterPtr writer )
 {
     SwFrm::dumpAsXmlAttributes( writer );
     if ( HasFollow() )
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%"SAL_PRIuUINT32, GetFollow()->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "follow" ), "%" SAL_PRIuUINT32, GetFollow()->GetFrmId() );
 
     if (m_pPrecede != NULL)
-        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%"SAL_PRIuUINT32, static_cast<SwTabFrm*>( m_pPrecede )->GetFrmId() );
+        xmlTextWriterWriteFormatAttribute( writer, BAD_CAST( "precede" ), "%" SAL_PRIuUINT32, static_cast<SwTabFrm*>( m_pPrecede )->GetFrmId() );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
