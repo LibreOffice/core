@@ -1679,42 +1679,6 @@ sub change_keys_of_scpactions
 }
 
 ############################################################################
-# Removing all xpd only items from installation set (scpactions with
-# the style XPD_ONLY), except an xpd installation set is created
-############################################################################
-
-sub remove_Xpdonly_Items
-{
-    my ($itemsarrayref) = @_;
-
-    my $infoline;
-
-    my @newitemsarray = ();
-
-    for ( my $i = 0; $i <= $#{$itemsarrayref}; $i++ )
-    {
-        my $oneitem = ${$itemsarrayref}[$i];
-        my $styles = "";
-        if ( $oneitem->{'Styles'} ) { $styles = $oneitem->{'Styles'}; }
-
-        if ( $styles =~ /\bXPD_ONLY\b/ )
-        {
-            $infoline = "Removing \"xpd only\" item $oneitem->{'gid'} from the installation set.\n";
-            push( @installer::globals::globallogfileinfo, $infoline);
-
-            next;
-        }
-
-        push(@newitemsarray, $oneitem);
-    }
-
-    $infoline = "\n";
-    push( @installer::globals::globallogfileinfo, $infoline);
-
-    return \@newitemsarray;
-}
-
-############################################################################
 # Removing all language pack files from installation set (files with
 # the style LANGUAGEPACK), except this is a language pack.
 ############################################################################

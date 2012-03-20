@@ -464,17 +464,6 @@ sub check_oxtfiles
     }
 }
 
-#############################################################
-# Check if Java is available to create xpd installer
-#############################################################
-
-sub check_java_for_xpd
-{
-    my ( $allvariables ) = @_;
-
-    if ( ! $installer::globals::solarjavaset ) { $allvariables->{'XPDINSTALLER'} = 0; }
-}
-
 ####################################################################
 # Setting global variable "$installer::globals::addchildprojects"
 ####################################################################

@@ -274,7 +274,6 @@ BEGIN
     $infodirectory = "";
     @currentcontent = ();
     @installsetcontent = ();
-    %xpdpackageinfo = ();
     $signfiles_checked = 0;
     $dosign = 0;
     $pwfile = "";
@@ -291,14 +290,7 @@ BEGIN
     $lastsequence_before_merge = 0;
     $lastcabfilename = "";
 
-    $createdxpddefaultlang = 0;
-    $xpddir = "";
-    $productxpdfile = "setup.xpd";
-    $xpd_files_prepared = 0;
     $defaultlanguage = "";
-    @createdxpdfiles = ();
-    @allxpdfiles = ();
-    $isxpdplatform = 0;
     $javalanguagepath = "";
     $javasettozero = 0;
     $addlicensefile = 1;

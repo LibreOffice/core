@@ -87,7 +87,6 @@ use installer::windows::strip;
 use installer::windows::update;
 use installer::windows::upgrade;
 use installer::worker;
-use installer::xpdinstaller;
 use installer::ziplist;
 
 #################################################
@@ -313,12 +312,6 @@ if ( $installer::globals::iswindowsbuild ) { installer::control::read_encodingli
 
 if ( $allvariableshashref->{'ADD_INCLUDE_FILES'} ) { installer::worker::add_variables_from_inc_to_hashref($allvariableshashref, $includepatharrayref); }
 
-################################################
-# Disable xpd installer, if SOLAR_JAVA not set
-################################################
-
-installer::control::check_java_for_xpd($allvariableshashref);
-
 #####################################
 # Analyzing the setup script
 #####################################
@@ -424,13 +417,6 @@ installer::logger::print_message( "... analyzing scpactions ... \n" );
 
 my $scpactionsinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "ScpAction");
 
-# Note: Don't clean away XPD installer stuff before verified whether
-# OxygenOffice still uses it or not, see insesetoo_native/util/openoffice.lst
-if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || ( ! $installer::globals::isxpdplatform ))
-{
-    $scpactionsinproductarrayref = installer::scriptitems::remove_Xpdonly_Items($scpactionsinproductarrayref);
-}
-
 if ( $installer::globals::languagepack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
 if ( $installer::globals::helppack ) { installer::scriptitems::use_langpack_copy_scpaction($scpactionsinproductarrayref); }
 if ( $allvariableshashref->{'PRODUCTNAME'} eq "LibO-dev" ) { installer::scriptitems::use_devversion_copy_scpaction($scpactionsinproductarrayref); }
@@ -498,11 +484,6 @@ if (!($installer::globals::is_copy_only_project))
     installer::logger::print_message( "... analyzing modules ... \n" );
 
     $modulesinproductarrayref = installer::setupscript::get_all_items_from_script($setupscriptref, "Module");
-
-    if (( ! $allvariableshashref->{'XPDINSTALLER'} ) || ( ! $installer::globals::isxpdplatform ))
-    {
-        $modulesinproductarrayref = installer::scriptitems::remove_Xpdonly_Items($modulesinproductarrayref);
-    }
 
     installer::scriptitems::resolve_assigned_modules($modulesinproductarrayref);
 
@@ -1444,25 +1425,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
 
             } # end of "if ( ! $installer::globals::simple )
 
-            ###########################################
-            # xpd installation mechanism
-            ###########################################
-
-            # Creating the xpd file for the package. This has to happen always
-
-            if ( $installer::globals::isxpdplatform )
-            {
-                if (( ! $installer::globals::languagepack ) && ( ! $installer::globals::helppack ) && ( ! $installer::globals::patch ))
-                {
-                    if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::call_epm != 0 ))
-                    {
-                        installer::xpdinstaller::create_xpd_file($onepackage, $packages, $languagestringref, $allvariableshashref, $modulesinproductarrayref, $installdir, $installer::globals::epmoutpath, $linkpackage, \%installer::globals::xpdpackageinfo);
-                        $installer::globals::xpd_files_prepared = 1;
-                        %installer::globals::xpdpackageinfo = ();
-                    }
-                }
-            }
-
             if ( $installer::globals::makelinuxlinkrpm ) { $k--; }  # decreasing the counter to create the link rpm!
 
         }   # end of "for ( my $k = 0; $k <= $#{$packages}; $k++ )"
@@ -1498,12 +1460,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # Finalizing patch installation sets
             if (( $installer::globals::patch ) && ( $installer::globals::issolarispkgbuild )) { installer::epmfile::finalize_patch($installer::globals::epmoutpath, $allvariableshashref); }
             if (( $installer::globals::patch ) && ( $installer::globals::isrpmbuild )) { installer::epmfile::finalize_linux_patch($installer::globals::epmoutpath, $allvariableshashref, $includepatharrayref); }
-
-            # Copying the xpd installer into the installation set
-            if (( $allvariableshashref->{'XPDINSTALLER'} ) && ( $installer::globals::isxpdplatform ) && ( $installer::globals::xpd_files_prepared ))
-            {
-                installer::xpdinstaller::create_xpd_installer($installdir, $allvariableshashref, $languagestringref);
-            }
 
             chdir($currentdir); # changing back into start directory
         }

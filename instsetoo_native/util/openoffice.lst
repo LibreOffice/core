@@ -62,7 +62,7 @@ LibreOffice
             BASEPRODUCTVERSION 3.6
             PCPFILENAME libreoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 1
             FILEFORMATNAME OpenOffice.org
@@ -75,7 +75,6 @@ LibreOffice
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
             OOODOWNLOADNAME 1
-            XPDINSTALLER 0
             BETAUPGRADECODE
             STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
             CHANGETARGETDIR 1
@@ -124,7 +123,7 @@ LibreOffice_Dev
             REGISTRYLAYERNAME LayerDev
             SERVICETAG_URN urn:uuid:1680b00d-e45c-11de-82d6-080020a9ed93
             UPDATEURL http://update.libreoffice.org/check.php
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             ADDSYSTEMINTEGRATION 1
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
@@ -136,7 +135,6 @@ LibreOffice_Dev
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
             OOODOWNLOADNAME 1
-            XPDINSTALLER 0
             BETAUPGRADECODE
             STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
             CHANGETARGETDIR 1
@@ -392,7 +390,7 @@ OxygenOffice
             BASEPRODUCTVERSION 3.6
             PCPFILENAME openoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
-            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk,userland.txt
+            ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
             REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 1
             FILEFORMATNAME OpenOffice.org
@@ -406,7 +404,6 @@ OxygenOffice
             GLOBALPATCHFILEGID gid_File_Txt_Patchfiles
             SPELLCHECKERFILE spellchecker_selection.txt
             OOODOWNLOADNAME 1
-            XPDINSTALLER 0
             BETAUPGRADECODE
             STUBUPGRADECODE {0E7B27B8-D658-4BF9-98D6-EC361582EB4A}
             CHANGETARGETDIR 1

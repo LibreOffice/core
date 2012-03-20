@@ -271,7 +271,6 @@ sub setglobalvariables
         {
             $installer::globals::issolarispkgbuild = 1;
             $installer::globals::epmoutpath = "packages";
-            $installer::globals::isxpdplatform = 1;
         }
     }
 
@@ -310,7 +309,6 @@ sub setglobalvariables
         if ( $installer::globals::packageformat eq "rpm" )
         {
             $installer::globals::isrpmbuild = 1;
-            $installer::globals::isxpdplatform = 1;
             $installer::globals::epmoutpath = "RPMS";
         }
         if ( $installer::globals::rpm eq "" ) { installer::exiter::exit_program("ERROR: Environment variable \"\$RPM\" has to be defined!", "setglobalvariables"); }
@@ -322,7 +320,6 @@ sub setglobalvariables
         if ( $installer::globals::packageformat eq "rpm" )
         {
             $installer::globals::isrpmbuild = 1;
-            $installer::globals::isxpdplatform = 1;
             $installer::globals::epmoutpath = "RPMS";
             if ( $installer::globals::compiler =~ /unxlngi/ )
             {
