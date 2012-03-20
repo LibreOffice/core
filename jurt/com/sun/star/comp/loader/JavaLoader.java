@@ -277,39 +277,35 @@ public class JavaLoader implements XImplementationLoader,
         //    Normally a string must no be null.
         try {
             if ( locationUrl != null ) {
-                // 1.
                 clazz = RegistrationClassFinder.find( locationUrl );
-            }
-            else {
-                // 2.
+                if (clazz == null) {
+                    throw new CannotActivateFactoryException(
+                        "Cannot activate jar " + locationUrl);
+                }
+            } else {
                 clazz = Class.forName( implementationName );
+                if (clazz == null) {
+                    throw new CannotActivateFactoryException(
+                        "Cannot find class " + implementationName);
+                }
             }
         }
         catch (java.net.MalformedURLException e) {
             CannotActivateFactoryException cae = new CannotActivateFactoryException(
-                    "Can not activate factory because " + e.toString() );
-            cae.fillInStackTrace();
+                    "Can not activate factory because " + e );
+            cae.initCause(e);
             throw cae;
         }
         catch (java.io.IOException e) {
             CannotActivateFactoryException cae = new CannotActivateFactoryException(
-                    "Can not activate factory because " + e.toString() );
-            cae.fillInStackTrace();
+                    "Can not activate factory because " + e );
+            cae.initCause(e);
             throw cae;
         }
         catch (java.lang.ClassNotFoundException e) {
             CannotActivateFactoryException cae = new CannotActivateFactoryException(
-                    "Can not activate factory because " + e.toString() );
-            cae.fillInStackTrace();
-            throw cae;
-        }
-
-        if (null == clazz)
-        {
-            CannotActivateFactoryException cae =
-                new CannotActivateFactoryException(
-                    "Cannot determine activation class!" );
-            cae.fillInStackTrace();
+                    "Can not activate factory because " + e );
+            cae.initCause(e);
             throw cae;
         }
 
