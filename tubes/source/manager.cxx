@@ -66,6 +66,11 @@ using namespace rtl;
 #define LIBO_TP_NAME_PREFIX "LibreOffice"
 
 
+TpAccountManager* TeleManager::mpAccountManager = NULL;
+TeleManager::AccountManagerStatus TeleManager::meAccountManagerStatus = AMS_UNINITIALIZED;
+bool TeleManager::mbAccountManagerReadyHandlerInvoked = false;
+
+
 static void TeleManager_DBusTubeAcceptHandler(
         TpChannel*      pChannel,
         const char*     pAddress,
@@ -118,7 +123,7 @@ static void TeleManager_DBusChannelHandler(
         {
             SAL_INFO( "tubes", "accepting");
             tp_cli_channel_type_dbus_tube_call_accept( pChannel, -1,
-                    TP_SOCKET_ACCESS_CONTROL_LOCALHOST,
+                    TP_SOCKET_ACCESS_CONTROL_CREDENTIALS,
                     TeleManager_DBusTubeAcceptHandler, pUserData, NULL, NULL);
         }
         else
@@ -181,7 +186,7 @@ static void TeleManager_AccountManagerReadyHandler(
     if (!pManager)
         return;
 
-    pManager->setAccountManagerReadyHandlerInvoked( true);
+    TeleManager::setAccountManagerReadyHandlerInvoked( true);
 
     GError* pError = NULL;
     gboolean bPrepared = tp_proxy_prepare_finish( pSourceObject, pResult, &pError);
@@ -192,7 +197,7 @@ static void TeleManager_AccountManagerReadyHandler(
         g_error_free( pError);
     }
 
-    pManager->setAccountManagerReady( bPrepared);
+    TeleManager::setAccountManagerReady( bPrepared);
 }
 
 
@@ -200,14 +205,11 @@ TeleManager::TeleManager( const rtl::OUString& rAccount, const rtl::OUString& rS
     :
         maAccountID( OUStringToOString( rAccount, RTL_TEXTENCODING_UTF8)),
         mpLoop( NULL),
-        mpDBus( NULL),
-        mpAccountManager( NULL),
         mpAccount( NULL),
         mpConnection( NULL),
+        mpDBus( NULL),
         mpClient( NULL),
-        meAccountManagerStatus( AMS_UNINITIALIZED),
-        mbChannelReadyHandlerInvoked( false),
-        mbAccountManagerReadyHandlerInvoked( false)
+        mbChannelReadyHandlerInvoked( false)
 {
     OStringBuffer aBuf(64);
     aBuf.append( RTL_CONSTASCII_STRINGPARAM( LIBO_TP_NAME_PREFIX)).append(
@@ -231,16 +233,14 @@ TeleManager::~TeleManager()
 {
     disconnect();
 
-    if (mpDBus)
-        g_object_unref( mpDBus);
-    if (mpAccountManager)
-        g_object_unref( mpAccountManager);
     if (mpAccount)
         g_object_unref( mpAccount);
     if (mpConnection)
         g_object_unref( mpConnection);
     if (mpClient)
         g_object_unref( mpClient);
+    if (mpDBus)
+        g_object_unref( mpDBus);
 
     if (mpLoop)
         g_main_loop_unref( mpLoop);
@@ -386,7 +386,7 @@ bool TeleManager::startGroupSession( const rtl::OUString& rUConferenceRoom, cons
 
     iterateLoop( &TeleManager::isChannelReadyHandlerInvoked);
 
-    return pConference->getChannel() != NULL;
+    return pConference->getChannel() != NULL && pConference->isTubeOpen();
 }
 
 
@@ -439,7 +439,7 @@ bool TeleManager::startBuddySession( const rtl::OUString& rBuddy )
     g_object_unref( pChannelRequest);
     g_hash_table_unref( pRequest);
 
-    return pConference->getChannel() != NULL;
+    return pConference->getChannel() != NULL && pConference->isTubeOpen();
 }
 
 
@@ -448,6 +448,11 @@ void TeleManager::prepareAccountManager()
     INFO_LOGGER( "TeleManager::prepareAccountManager");
 
     MainLoopFlusher aFlusher( this);
+
+    SAL_INFO_IF( meAccountManagerStatus == AMS_PREPARED, "tubes",
+            "TeleManager::prepareAccountManager: already prepared");
+    if (meAccountManagerStatus == AMS_PREPARED)
+        return;
 
     SAL_WARN_IF( meAccountManagerStatus == AMS_INPREPARATION, "tubes",
             "TeleManager::prepareAccountManager: already in preparation");
@@ -518,24 +523,36 @@ TpAccount* TeleManager::getMyAccount()
 }
 
 
-bool TeleManager::sendPacket( const TelePacket& rPacket ) const
+sal_uInt32 TeleManager::sendPacket( const TelePacket& rPacket ) const
 {
     INFO_LOGGER( "TeleManager::sendPacket");
 
     MainLoopFlusher aFlusher( this);
 
-    bool bToSend = false;
-    bool bSent = true;
+    sal_uInt32 nSent = 0;
     // Access to data ByteStream array forces reference count of one, provide
     // non-const instance here before passing it down to each conference.
     TelePacket aPacket( rPacket);
     for (TeleConferenceVector::const_iterator it = maConferences.begin(); it != maConferences.end(); ++it)
     {
-        bToSend = true;
-        if (!(*it)->sendPacket( aPacket))
-            bSent = false;
+        if ((*it)->sendPacket( aPacket))
+            ++nSent;
+        /* TODO: what if failed? */
     }
-    return bSent && bToSend;
+    return nSent;
+}
+
+
+bool TeleManager::popPacket( TelePacket& rPacket )
+{
+    INFO_LOGGER( "TeleManager::popPacket");
+
+    for (TeleConferenceVector::const_iterator it = maConferences.begin(); it != maConferences.end(); ++it)
+    {
+        if ((*it)->popPacket( rPacket))
+            return true;
+    }
+    return false;
 }
 
 
@@ -615,13 +632,32 @@ rtl::OString TeleManager::getFullObjectPath() const
 }
 
 
+void TeleManager::iterateLoop()
+{
+    GMainContext* pContext = (mpLoop ? g_main_loop_get_context( mpLoop) : NULL);
+    SAL_INFO( "tubes.loop", "TeleManager::iterateLoop: once");
+    g_main_context_iteration( pContext, TRUE);
+}
+
+
 void TeleManager::iterateLoop( CallBackInvokedFunc pFunc )
+{
+    GMainContext* pContext = (mpLoop ? g_main_loop_get_context( mpLoop) : NULL);
+    while (!(*pFunc)())
+    {
+        SAL_INFO( "tubes.loop", "TeleManager::iterateLoop: CallBackInvokedFunc");
+        g_main_context_iteration( pContext, TRUE);
+    }
+}
+
+
+void TeleManager::iterateLoop( ManagerCallBackInvokedFunc pFunc )
 {
     GMainContext* pContext = (mpLoop ? g_main_loop_get_context( mpLoop) : NULL);
     while (!(this->*pFunc)())
     {
+        SAL_INFO( "tubes.loop", "TeleManager::iterateLoop: ManagerCallBackInvokedFunc");
         g_main_context_iteration( pContext, TRUE);
-        SAL_INFO( "tubes.loop", "TeleManager::iterateLoop");
     }
 }
 
@@ -631,8 +667,8 @@ void TeleManager::iterateLoop( const TeleConference* pConference, ConferenceCall
     GMainContext* pContext = (mpLoop ? g_main_loop_get_context( mpLoop) : NULL);
     while (!(pConference->*pFunc)())
     {
+        SAL_INFO( "tubes.loop", "TeleManager::iterateLoop: ConferenceCallBackInvokedFunc");
         g_main_context_iteration( pContext, TRUE);
-        SAL_INFO( "tubes.loop", "TeleManager::iterateLoop conference");
     }
 }
 

@@ -62,6 +62,9 @@ public:
      */
     bool                    sendPacket( TelePacket& rPacket ) const;
 
+    /** Pop a received packet. */
+    bool                    popPacket( TelePacket& rPacket );
+
     /** Queue incoming data as TelePacket */
     void                    queue( const char* pDBusSender, const char* pPacket, int nSize );
 
@@ -75,10 +78,17 @@ public:
     bool                    offerTube();
     bool                    setTube( DBusConnection* pTube );
     bool                    acceptTube( const char* pAddress );
+    /// got tube accepted on other end as well?
+    bool                    isTubeOpen() const { return meTubeChannelState == TP_TUBE_CHANNEL_STATE_OPEN; }
 
     // Only for callbacks.
     void                    setTubeOfferedHandlerInvoked( bool b ) { mbTubeOfferedHandlerInvoked = b; }
     bool                    isTubeOfferedHandlerInvoked() const { return mbTubeOfferedHandlerInvoked; }
+    void                    setTubeChannelStateChangedHandlerInvoked( bool b )
+                                { mbTubeChannelStateChangedHandlerInvoked = b; }
+    bool                    isTubeChannelStateChangedHandlerInvoked() const
+                                { return mbTubeChannelStateChangedHandlerInvoked; }
+    void                    setTubeChannelState( TpTubeChannelState eState ) { meTubeChannelState = eState; }
 
 private:
 
@@ -88,8 +98,10 @@ private:
     TpChannel*              mpChannel;
     DBusConnection*         mpTube;
     TelePacketQueue         maPacketQueue;
+    TpTubeChannelState      meTubeChannelState;
 
     bool                    mbTubeOfferedHandlerInvoked : 1;
+    bool                    mbTubeChannelStateChangedHandlerInvoked : 1;
 
     // hide from the public
     using boost::enable_shared_from_this<TeleConference>::shared_from_this;

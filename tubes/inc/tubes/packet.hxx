@@ -45,17 +45,31 @@ public:
     {
     }
 
-    TelePacket( const TelePacket& r )
+    explicit TelePacket( const TelePacket& r )
         :
             maSender( r.maSender),
             maData( r.maData)
     {
     }
 
+    TelePacket() {}
+
     /** Underlying getArray() ensures reference count is exactly one, hence
         this method is non-const! */
     const char*         getData() { return reinterpret_cast<const char*>( maData.getArray()); }
     sal_Int32           getSize() const { return maData.getLength(); }
+
+    bool                operator==( const TelePacket& r ) const
+                            { return maSender == r.maSender && maData == r.maData; }
+
+    TelePacket&         operator=( const TelePacket& r )
+                            {
+                                if (this == &r)
+                                    return *this;
+                                maSender = r.maSender;
+                                maData = r.maData;
+                                return *this;
+                            }
 
 private:
 

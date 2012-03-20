@@ -93,14 +93,14 @@ static DBusHandlerResult TeleConference_DBusMessageHandler(
                     DBUS_TYPE_INVALID))
         {
             SAL_INFO( "tubes", "TeleConference_DBusMessageHandler: received packet from sender "
-                    << pSender << " with size " << nPacketSize);
+                    << (pSender ? pSender : "(null)") << " with size " << nPacketSize);
             pConference->queue( pSender, pPacketData, nPacketSize);
             return DBUS_HANDLER_RESULT_HANDLED;
         }
         else
         {
             SAL_INFO( "tubes", "TeleConference_DBusMessageHandler: unhandled message from sender "
-                    << pSender << " " << aDBusError.message);
+                    << (pSender ? pSender : "(null)") << " " << aDBusError.message);
             dbus_error_free( &aDBusError);
         }
     }
@@ -148,6 +148,13 @@ static void TeleConference_TubeOfferedHandler(
 {
     INFO_LOGGER_F( "TeleConference_TubeOfferedHandler");
 
+    TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
+    SAL_WARN_IF( !pConference, "tubes", "TeleConference_TubeOfferedHandler: no conference");
+    if (!pConference)
+        return;
+
+    pConference->setTubeOfferedHandlerInvoked( true);
+
     // "can't find contact ... presence" means contact is not a contact.
     /* FIXME: detect and handle */
     SAL_WARN_IF( pError, "tubes", "TeleConference_TubeOfferedHandler: entered with error: " << pError->message);
@@ -158,11 +165,6 @@ static void TeleConference_TubeOfferedHandler(
     if (!pOutAddress)
         return;
 
-    TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
-    SAL_WARN_IF( !pConference, "tubes", "TeleConference_TubeOfferedHandler: no conference");
-    if (!pConference)
-        return;
-
     SAL_WARN_IF( pChannel != pConference->getChannel(), "tubes", "TeleConference_TubeOfferedHandler: not my channel");
     if (pChannel != pConference->getChannel())
         return;
@@ -171,8 +173,6 @@ static void TeleConference_TubeOfferedHandler(
     SAL_WARN_IF( !pManager, "tubes", "TeleConference_TubeOfferedHandler: no manager");
     if (!pManager)
         return;
-
-    pConference->setTubeOfferedHandlerInvoked( true);
 
     DBusError aDBusError;
     dbus_error_init( &aDBusError);
@@ -188,13 +188,42 @@ static void TeleConference_TubeOfferedHandler(
 }
 
 
+static void TeleConference_TubeChannelStateChangedHandler(
+        TpChannel*  pChannel,
+        guint       nState,
+        gpointer    pUserData,
+        GObject*    /*weak_object*/
+        )
+{
+    INFO_LOGGER_F( "TeleConference_TubeChannelStateChangedHandler");
+
+    SAL_INFO( "tubes", "TeleConference_TubeChannelStateChangedHandler: state: " << static_cast<sal_uInt32>(nState));
+
+    TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
+    SAL_WARN_IF( !pConference, "tubes", "TeleConference_DBusMessageHandler: no conference");
+    if (!pConference)
+        return;
+
+    pConference->setTubeChannelStateChangedHandlerInvoked( true);
+
+    SAL_WARN_IF( pChannel != pConference->getChannel(), "tubes",
+            "TeleConference_TubeChannelStateChangedHandler: not my channel");
+    if (pChannel != pConference->getChannel())
+        return;
+
+    pConference->setTubeChannelState( static_cast<TpTubeChannelState>(nState));
+}
+
+
 TeleConference::TeleConference( TeleManager* pManager, TpChannel* pChannel, const rtl::OString& rSessionId )
     :
         maSessionId( rSessionId ),
         mpManager( pManager),
         mpChannel( pChannel),
         mpTube( NULL),
-        mbTubeOfferedHandlerInvoked( false)
+        meTubeChannelState( TP_TUBE_CHANNEL_STATE_NOT_OFFERED),
+        mbTubeOfferedHandlerInvoked( false),
+        mbTubeChannelStateChangedHandlerInvoked( false)
 {
     if (mpChannel)
         g_object_ref( mpChannel);
@@ -265,27 +294,51 @@ bool TeleConference::offerTube()
 
     setTubeOfferedHandlerInvoked( false);
 
-    // There must be a hash table with some content.
+    // We must pass a hash table, it could be empty though.
     /* TODO: anything meaningful to go in here? */
     GHashTable* pParams = tp_asv_new(
             "LibreOffice", G_TYPE_STRING, "Collaboration",
             NULL);
 
     tp_cli_channel_type_dbus_tube_call_offer(
-            mpChannel,                          // proxy
-            -1,                                 // timeout_ms
-            pParams,                            // in_parameters
-            TP_SOCKET_ACCESS_CONTROL_LOCALHOST, // in_access_control
-            TeleConference_TubeOfferedHandler,  // callback
-            this,                               // user_data
-            NULL,                               // destroy
-            NULL);                              // weak_object
+            mpChannel,                              // proxy
+            -1,                                     // timeout_ms
+            pParams,                                // in_parameters
+            TP_SOCKET_ACCESS_CONTROL_CREDENTIALS,   // in_access_control
+            TeleConference_TubeOfferedHandler,      // callback
+            this,                                   // user_data
+            NULL,                                   // destroy
+            NULL);                                  // weak_object
 
     mpManager->iterateLoop( this, &TeleConference::isTubeOfferedHandlerInvoked);
 
     g_hash_table_unref( pParams);
 
-    return true;
+    setTubeChannelStateChangedHandlerInvoked( false);
+
+    /* TODO: remember the TpProxySignalConnection for further use? */
+    GError* pError = NULL;
+    TpProxySignalConnection* pProxySignalConnection =
+        tp_cli_channel_interface_tube_connect_to_tube_channel_state_changed(
+                mpChannel,
+                TeleConference_TubeChannelStateChangedHandler,
+                this,
+                NULL,
+                NULL,
+                &pError);
+
+    if (!pProxySignalConnection || pError)
+    {
+        SAL_WARN_IF( pError, "tubes", "TeleConference::offerTube: channel state changed error: " << pError->message);
+        g_error_free( pError);
+        return false;
+    }
+
+    mpManager->iterateLoop( this, &TeleConference::isTubeChannelStateChangedHandlerInvoked);
+
+    bool bOpen = isTubeOpen();
+    SAL_INFO( "tubes", "TeleConference::offerTube: tube open: " << bOpen);
+    return bOpen;
 }
 
 
@@ -364,8 +417,12 @@ bool TeleConference::sendPacket( TelePacket& rPacket ) const
             DBUS_TYPE_ARRAY, DBUS_TYPE_BYTE, &pPacketData, rPacket.getSize(),
             DBUS_TYPE_INVALID);
 
-    SAL_INFO( "tubes", "TeleConference::sendPacket: from " <<
-            dbus_message_get_sender( pMessage) << " to " << dbus_message_get_destination( pMessage));
+#if defined SAL_LOG_INFO
+    const char* pSrc = dbus_message_get_sender( pMessage);
+    SAL_INFO_IF( pSrc, "tubes", "TeleConference::sendPacket: from " << pSrc);
+    const char* pDst = dbus_message_get_destination( pMessage);
+    SAL_INFO_IF( pDst, "tubes", "TeleConference::sendPacket:  to  " << pDst);
+#endif
 
     bool bSent = dbus_connection_send( mpTube, pMessage, NULL);
     SAL_WARN_IF( !bSent, "tubes", "TeleConference::sendPacket: not sent");
@@ -379,6 +436,18 @@ void TeleConference::queue( const char* pDBusSender, const char* pPacketData, in
     INFO_LOGGER( "TeleConference::queue");
 
     maPacketQueue.push( TelePacket( pDBusSender, pPacketData, nPacketSize));
+}
+
+
+bool TeleConference::popPacket( TelePacket& rPacket )
+{
+    INFO_LOGGER( "TeleConference::popPacket");
+
+    if (maPacketQueue.empty())
+        return false;
+    rPacket = maPacketQueue.front();
+    maPacketQueue.pop();
+    return true;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

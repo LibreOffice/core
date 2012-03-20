@@ -118,15 +118,29 @@ public:
     bool                    startBuddySession( const rtl::OUString& rBuddy );
 
     void                    unregisterConference( TeleConferencePtr pConference );
+
+    /** Connect to DBus and setup client handler. */
     bool                    connect();
+
     void                    disconnect();
+
     void                    acceptTube( TpChannel* pChannel, const char* pAddress );
 
-    /** Only the callback of prepareAccountManager() is to set this. */
-    void                    setAccountManagerReady( bool bPrepared);
+    /** Send data to all registered conferences.
+        
+        @returns to how many conferences the packet was send
+     */
+    sal_uInt32              sendPacket( const TelePacket& rPacket ) const;
 
-    /** Send data to all registered conferences. */
-    bool                    sendPacket( const TelePacket& rPacket ) const;
+    /** Pop a received data packet.
+
+        XXX This needs to be elaborated to pop from a specific conference, or
+        for a specific document. Currently the conferences are simply iterated
+        and the first non-empty queue is popped.
+
+        @returns whether there was any packet to pop
+     */
+    bool                    popPacket( TelePacket& rPacket );
 
     /// "org.freedesktop.Telepathy.Client.LibreOfficeWhatEver"
     rtl::OString            getFullServiceName() const;
@@ -145,12 +159,22 @@ public:
     // Only for callbacks.
     void                    setChannelReadyHandlerInvoked( bool b ) { mbChannelReadyHandlerInvoked = b; }
     bool                    isChannelReadyHandlerInvoked() const { return mbChannelReadyHandlerInvoked; }
-    void                    setAccountManagerReadyHandlerInvoked( bool b ) { mbAccountManagerReadyHandlerInvoked = b; }
-    bool                    isAccountManagerReadyHandlerInvoked() const { return mbAccountManagerReadyHandlerInvoked; }
+    static void             setAccountManagerReadyHandlerInvoked( bool b ) { mbAccountManagerReadyHandlerInvoked = b; }
+    static bool             isAccountManagerReadyHandlerInvoked() { return mbAccountManagerReadyHandlerInvoked; }
 
-    typedef bool (TeleManager::*CallBackInvokedFunc)() const;
+    /** Only the callback of prepareAccountManager() is to set this. */
+    static void             setAccountManagerReady( bool bPrepared);
+
+    /** Iterate our GMainLoop, blocking, unconditionally. */
+    void                    iterateLoop();
+
+    typedef bool (*CallBackInvokedFunc)();
     /** Iterate our GMainLoop, blocking, until the callback is done. */
     void                    iterateLoop( CallBackInvokedFunc pFunc );
+
+    typedef bool (TeleManager::*ManagerCallBackInvokedFunc)() const;
+    /** Iterate our GMainLoop, blocking, until the callback is done. */
+    void                    iterateLoop( ManagerCallBackInvokedFunc pFunc );
 
     typedef bool (TeleConference::*ConferenceCallBackInvokedFunc)() const;
     /** Iterate our GMainLoop, blocking, until the callback is done. */
@@ -165,17 +189,20 @@ private:
     rtl::OString            maService;      // the "WhatEver" part
     TeleConferenceVector    maConferences;
     GMainLoop*              mpLoop;
-    TpDBusDaemon*           mpDBus;
-    TpAccountManager*       mpAccountManager;
     TpAccount*              mpAccount;
     TpConnection*           mpConnection;
+    TpDBusDaemon*           mpDBus;
     TpBaseClient*           mpClient;
-    AccountManagerStatus    meAccountManagerStatus;
 
     bool                    mbChannelReadyHandlerInvoked : 1;
-    bool                    mbAccountManagerReadyHandlerInvoked : 1;
 
     TpAccount*              getMyAccount();
+
+    /* FIXME: currently these leak */
+    /* TODO: make all statics a reference counted impl class */
+    static TpAccountManager*    mpAccountManager;
+    static AccountManagerStatus meAccountManagerStatus;
+    static bool                 mbAccountManagerReadyHandlerInvoked;
 
 };
 
