@@ -71,9 +71,6 @@ InstallWelcome	Cancel	SpawnDialog	CancelSetup	1	0
 InstallWelcome	Next	NewDialog	LicenseAgreement	HIDEEULA <> 1	0
 InstallWelcome	Next	NewDialog	CustomerInformation	HIDEEULA = 1	0
 LanguageInfo1	OK	EndDialog	Return	1	0
-LanguageSelection	Back	NewDialog	CustomerInformation	1	1
-LanguageSelection	Cancel	SpawnDialog	CancelSetup	1	1
-LanguageSelection	Next	NewDialog	SetupType	1	1
 LicenseAgreement	Back	NewDialog	InstallWelcome	1	0
 LicenseAgreement	Cancel	SpawnDialog	CancelSetup	1	0
 LicenseAgreement	Next	NewDialog	CustomerInformation	AgreeToLicense = "Yes"	0

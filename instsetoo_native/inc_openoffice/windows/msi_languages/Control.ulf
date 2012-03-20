@@ -646,12 +646,6 @@ en-US = "Cancel"
 [OOO_CONTROL_266]
 en-US = "&Next >"
 
-[OOO_CONTROL_267]
-en-US = "Please select the product language for [ProductName]."
-
-[OOO_CONTROL_268]
-en-US = "{&MSSansBold8}Language Selection"
-
 [OOO_CONTROL_269]
 en-US = "Repair or remove the program."
 
@@ -723,14 +717,3 @@ en-US  = "Create a start link on desktop"
 
 [OOO_CONTROL_320]
 en-US  = "Remove all older product versions"
-
-[OOO_CONTROL_LANG_1033]
-en-US = "English"
-
-[OOO_CONTROL_LANG_1031]
-en-US = "German"
-
-[OOO_CONTROL_LANG_1034]
-en-US = "Spanish"
-
-
