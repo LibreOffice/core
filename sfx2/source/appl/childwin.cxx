@@ -197,10 +197,8 @@ void SfxChildWindow::Destroy()
 SfxChildWindow::~SfxChildWindow()
 {
     DBG_DTOR(SfxChildWindow,0);
-    if ( pContext )
-        delete pContext;
-    if ( pWindow )
-        delete pWindow;
+    delete pContext;
+    delete pWindow;
     delete pImp;
 }
 
