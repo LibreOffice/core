@@ -65,7 +65,6 @@ public:
 
     void Resize (const css::geometry::RealSize2D& rSize);
     void MoveTo (const css::geometry::RealPoint2D& rLocation);
-    void SetAlpha (const double nAlpha);
 
     void Update (void);
 

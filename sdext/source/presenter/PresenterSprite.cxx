@@ -126,13 +126,6 @@ void PresenterSprite::MoveTo (const css::geometry::RealPoint2D& rLocation)
             );
 }
 
-void PresenterSprite::SetAlpha (const double nAlpha)
-{
-    mnAlpha = nAlpha;
-    if (mxSprite.is())
-        mxSprite->setAlpha(mnAlpha);
-}
-
 void PresenterSprite::Update (void)
 {
     if (mxSpriteFactory.is())

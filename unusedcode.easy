@@ -866,6 +866,7 @@ nullcanvas::SpriteCanvasHelper::opaqueUpdate(basegfx::B2DConnectedRanges<canvas:
 nullcanvas::SpriteCanvasHelper::scrollUpdate(basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 ooo::vba::extractIntFromAny(com::sun::star::uno::Any const&)
 oox::core::PowerPointExport::WriteTextStyleLevel(boost::shared_ptr<sax_fastparser::FastSerializerHelper>, int, int)
+oox::drawingml::TextParagraphProperties::dump() const
 oox::dump::Config::requestEncryptionData(comphelper::IDocPasswordVerifier&)
 oox::dump::ConfigItemBase::readConfigLine(oox::TextInputStream&) const
 oox::dump::DffStreamObject::construct(oox::dump::ObjectBase const&, oox::dump::BinaryInputStreamRef const&, rtl::OUString const&)
@@ -912,7 +913,10 @@ oox::formulaimport::XmlStream::AttributeList::hasAttribute(int) const
 oox::formulaimport::XmlStream::skipElement(int)
 oox::ole::WordVbaProjectFilter_createInstance(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 oox::ole::WordVbaProjectFilter_getSupportedServiceNames()
+oox::ppt::PPTShape::findPlaceholder(int, int, std::__debug::vector<boost::shared_ptr<oox::drawingml::Shape>, std::allocator<boost::shared_ptr<oox::drawingml::Shape> > >&)
 oox::xls::BiffDetector_createInstance(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
+oox::xls::BiffDrawingObjectBase::importObjBiff8(oox::xls::BiffInputStream&)
+oox::xls::BiffDrawingObjectContainer::append(boost::shared_ptr<oox::xls::BiffDrawingObjectBase> const&)
 oox::xls::BiffInputStream::resetRecord(bool, unsigned short)
 oox::xls::BiffOutputStream::fill(unsigned char, int, unsigned long)
 oox::xls::BiffOutputStream::sizeBase() const
@@ -930,6 +934,7 @@ oox::xls::ExcelBiffFilter_getSupportedServiceNames()
 oox::xls::ExcelVbaProjectFilter_createInstance(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 oox::xls::ExcelVbaProjectFilter_getSupportedServiceNames()
 oox::xls::OOXMLFormulaParser_createInstance(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
+oox::xls::prv::BiffOutputRecordBuffer::BiffOutputRecordBuffer(oox::BinaryOutputStream&, unsigned short)
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
 psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterColor&)
 psp::PrinterGfx::GetGlyphBoundRect(unsigned short, Rectangle&)

@@ -341,20 +341,6 @@ bool lcl_isSeriesAttachedToFirstAxis(
     return bResult;
 }
 
-OUString lcl_ConvertRange( const ::rtl::OUString & rRange, const Reference< chart2::XChartDocument > & xDoc )
-{
-    OUString aResult = rRange;
-
-    if( !xDoc.is() )
-        return aResult;
-    Reference< chart2::data::XRangeXMLConversion > xConversion(
-        xDoc->getDataProvider(), uno::UNO_QUERY );
-    if( xConversion.is())
-        aResult = xConversion->convertRangeToXML( rRange );
-    OSL_TRACE("lcl_ConvertRange, the originla formula is %s, the new formula is %s ", rtl::OUStringToOString( rRange, RTL_TEXTENCODING_UTF8 ).getStr(), rtl::OUStringToOString( aResult, RTL_TEXTENCODING_UTF8 ).getStr());
-    return aResult;
-}
-
 typedef ::std::pair< OUString, OUString > tLabelAndValueRange;
 
 OUString lcl_flattenStringSequence( const Sequence< OUString > & rSequence )

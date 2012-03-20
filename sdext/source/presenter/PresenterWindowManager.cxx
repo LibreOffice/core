@@ -1189,36 +1189,6 @@ void PresenterWindowManager::ThrowIfDisposed (void) const
     }
 }
 
-namespace {
-
-//===== ModeChangeAnimation ===================================================
-
-class ModeChangeAnimation : public PresenterAnimation
-{
-public:
-    ModeChangeAnimation (
-        const ::boost::shared_ptr<PresenterSprite>& rpSprite,
-        const Reference<rendering::XSpriteCanvas>& rxCanvas)
-        : PresenterAnimation (0, 1000, 20),
-          mpSprite(rpSprite),
-          mxCanvas(rxCanvas)
-    {
-    }
-
-    virtual void Run (const double nProgress, const sal_uInt64 nCurrentTime)
-    {
-        (void)nCurrentTime;
-        mpSprite->SetAlpha(1.0 - nProgress);
-        mxCanvas->updateScreen(sal_False);
-    }
-
-private:
-    ::boost::shared_ptr<PresenterSprite> mpSprite;
-    Reference<rendering::XSpriteCanvas> mxCanvas;
-};
-
-} // end of anonymous namespace
-
 } } // end of namespace ::sdext::presenter
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

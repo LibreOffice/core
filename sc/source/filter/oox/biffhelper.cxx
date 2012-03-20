@@ -69,45 +69,6 @@ union DecodedDouble
     inline explicit     DecodedDouble( double fValue ) : mfValue( fValue ) {}
 };
 
-bool lclCalcRkFromDouble( sal_Int32& ornRkValue, const DecodedDouble& rDecDbl )
-{
-    // double
-    if( (rDecDbl.maStruct.w32_parts.lsw == 0) && ((rDecDbl.maStruct.w32_parts.msw & 0x3) == 0) )
-    {
-        ornRkValue = static_cast< sal_Int32 >( rDecDbl.maStruct.w32_parts.msw );
-        return true;
-    }
-
-    // integer
-    double fInt = 0.0;
-    double fFrac = modf( rDecDbl.mfValue, &fInt );
-    if( (fFrac == 0.0) && (-536870912.0 <= fInt) && (fInt <= 536870911.0) ) // 2^29
-    {
-        ornRkValue = static_cast< sal_Int32 >( fInt );
-        ornRkValue <<= 2;
-        ornRkValue |= BIFF_RK_INTFLAG;
-        return true;
-    }
-
-    return false;
-}
-
-bool lclCalcRkFromDouble( sal_Int32& ornRkValue, double fValue )
-{
-    DecodedDouble aDecDbl( fValue );
-    if( lclCalcRkFromDouble( ornRkValue, aDecDbl ) )
-        return true;
-
-    aDecDbl.mfValue *= 100.0;
-    if( lclCalcRkFromDouble( ornRkValue, aDecDbl ) )
-    {
-        ornRkValue |= BIFF_RK_100FLAG;
-        return true;
-    }
-
-    return false;
-}
-
 // ----------------------------------------------------------------------------
 
 void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm, sal_Int32 nBytes, BiffType eBiff )

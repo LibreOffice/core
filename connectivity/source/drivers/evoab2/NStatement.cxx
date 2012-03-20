@@ -163,22 +163,6 @@ void SAL_CALL OCommonStatement::close(  ) throw(SQLException, RuntimeException)
 }
 // -------------------------------------------------------------------------
 
-void OCommonStatement::clearMyResultSet () throw (SQLException)
-{
-    ::osl::MutexGuard aGuard( m_aMutex );
-    checkDisposed(OCommonStatement_IBase::rBHelper.bDisposed);
-
-    try
-    {
-        Reference<XCloseable> xCloseable;
-        if ( ::comphelper::query_interface( m_xResultSet.get(), xCloseable ) )
-            xCloseable->close();
-    }
-    catch( const DisposedException& ) { }
-
-    m_xResultSet = Reference< XResultSet >();
-}
-
 EBookQuery *
 OCommonStatement::createTrue()
 { // Not the world's most efficient unconditional true but ...
