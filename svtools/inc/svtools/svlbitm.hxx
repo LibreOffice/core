@@ -145,7 +145,6 @@ public:
     virtual         ~SvLBoxBmp();
     virtual sal_uInt16  IsA();
     void            InitViewData( SvLBox*,SvLBoxEntry*,SvViewDataItem* );
-    void            SetBitmap( SvLBoxEntry*, Image );
     void            Paint( const Point&, SvLBox& rView, sal_uInt16 nFlags,SvLBoxEntry* );
     SvLBoxItem*     Create() const;
     void            Clone( SvLBoxItem* pSource );

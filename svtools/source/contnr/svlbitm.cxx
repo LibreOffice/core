@@ -296,12 +296,6 @@ sal_uInt16 SvLBoxBmp::IsA()
     return SV_ITEM_ID_LBOXBMP;
 }
 
-void SvLBoxBmp::SetBitmap( SvLBoxEntry*, Image aBitmap)
-{
-    DBG_CHKTHIS(SvLBoxBmp,0);
-    aBmp = aBitmap;
-}
-
 void SvLBoxBmp::InitViewData( SvLBox* pView,SvLBoxEntry* pEntry,
     SvViewDataItem* pViewData)
 {
