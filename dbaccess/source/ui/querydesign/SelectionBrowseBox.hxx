@@ -87,6 +87,7 @@ namespace dbaui
 
         String                              m_aFunctionStrings;
         sal_uInt16                          m_nVisibleCount;                // Anzahl der max sichtbaren Zeilen
+        sal_uInt32                          m_nLastSortColumn;              // index of last (highest) sort column
         sal_Bool                            m_bOrderByUnRelated;
         sal_Bool                            m_bGroupByUnRelated;
         sal_Bool                            m_bStopTimer;
