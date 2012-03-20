@@ -184,18 +184,6 @@ InstallWelcome	Image	Bitmap	0	0	125	234	1		ImageBmp
 InstallWelcome	Next	PushButton	230	243	66	17	3		OOO_CONTROL_125	Cancel	
 InstallWelcome	TextLine1	Text	135	8	225	45	65539		OOO_CONTROL_126		
 InstallWelcome	TextLine2	Text	135	55	228	45	65539		OOO_CONTROL_127		
-LicenseAgreement	Agree	RadioButtonGroup	8	190	330	40	3	AgreeToLicense		Back	
-LicenseAgreement	Back	PushButton	164	243	66	17	3		OOO_CONTROL_128	Next	
-LicenseAgreement	Banner	Bitmap	297	0	77	44	1		BannerBmp		
-LicenseAgreement	BannerLine	Line	0	44	374	0	1				
-LicenseAgreement	Branding1	Text	4	229	92	13	3		{&MSSWhiteSerif8}[ProductName]		
-LicenseAgreement	Branding2	Text	3	228	92	13	65537		[ProductName]		
-LicenseAgreement	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_131	Agree	
-LicenseAgreement	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_132		
-LicenseAgreement	DlgLine	Line	95	234	279	0	1				
-LicenseAgreement	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_133		
-LicenseAgreement	Memo	ScrollableText	8	54	358	130	7				
-LicenseAgreement	Next	PushButton	230	243	66	17	3		OOO_CONTROL_134	Cancel	
 MaintenanceType	Back	PushButton	164	243	66	17	3		OOO_CONTROL_135	Next	
 MaintenanceType	Banner	Bitmap	297	0	77	44	1		BannerBmp		
 MaintenanceType	BannerLine	Line	0	44	374	0	1				

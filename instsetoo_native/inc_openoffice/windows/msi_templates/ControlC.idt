@@ -18,8 +18,6 @@ FileTypeDialog	CheckBox3	Enable	&gm_p_Impress=3 OR ( !gm_p_Impress=3 AND &gm_p_I
 FileTypeDialog	CheckBox3	Disable	NOT ( &gm_p_Impress=3 OR ( !gm_p_Impress=3 AND &gm_p_Impress=-1 ) )
 InstallWelcome	Copyright	Hide	SHOWCOPYRIGHT="No"
 InstallWelcome	Copyright	Show	SHOWCOPYRIGHT="Yes"
-LicenseAgreement	Next	Disable	AgreeToLicense <> "Yes"
-LicenseAgreement	Next	Enable	AgreeToLicense = "Yes"
 ReadyToInstall	DlgTitle	Show	ProgressType0="Modify"
 ReadyToInstall	DlgTitle2	Show	ProgressType0="Repair"
 ReadyToInstall	DlgTitle3	Show	ProgressType0="install"

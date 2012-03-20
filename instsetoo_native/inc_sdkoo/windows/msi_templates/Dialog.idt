@@ -15,7 +15,6 @@ FilesInUse	50	50	374	266	19	[ProductName] - [STR_INSTALLATION_WIZARD]	Retry	Retr
 FileTypeDialog	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	CheckBox1	Next	Cancel
 InstallChangeFolder	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	TailText	OK	Cancel
 InstallWelcome	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Next	Next	Cancel
-LicenseAgreement	50	50	374	266	2	[ProductName] - [STR_INSTALLATION_WIZARD]	Agree	Next	Cancel
 MaintenanceType	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	RadioGroup	Next	Cancel
 MaintenanceWelcome	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Next	Next	Cancel
 OutOfSpace	50	50	374	266	3	[ProductName] - [STR_INSTALLATION_WIZARD]	Resume	Resume	Resume

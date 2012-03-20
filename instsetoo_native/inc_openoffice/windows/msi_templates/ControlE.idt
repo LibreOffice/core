@@ -18,8 +18,7 @@ AdminWelcome	Next	NewDialog	AdminNetworkLocation	1	0
 ApplicationInfo1	OK	EndDialog	Return	1	0
 CancelSetup	No	EndDialog	Return	1	0
 CancelSetup	Yes	EndDialog	Exit	1	2
-CustomerInformation	Back	NewDialog	LicenseAgreement	HIDEEULA <> 1	1
-CustomerInformation	Back	NewDialog	InstallWelcome	HIDEEULA = 1	1
+CustomerInformation	Back	NewDialog	InstallWelcome	1	1
 CustomerInformation	Cancel	SpawnDialog	CancelSetup	1	0
 CustomerInformation	Next	[ALLUSERS]	{}	ApplicationUsers = "OnlyCurrentUser" And Privileged	2
 CustomerInformation	Next	[ALLUSERS]	1	ApplicationUsers = "AllUsers" And Privileged	1
@@ -68,12 +67,8 @@ InstallChangeFolder	OK	SetTargetPath	[_BrowseProperty]	1	2
 InstallChangeFolder	Up	DirectoryListUp	0	1	0
 InstallWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	1
 InstallWelcome	Cancel	SpawnDialog	CancelSetup	1	0
-InstallWelcome	Next	NewDialog	LicenseAgreement	HIDEEULA <> 1	0
-InstallWelcome	Next	NewDialog	CustomerInformation	HIDEEULA = 1	0
+InstallWelcome	Next	NewDialog	CustomerInformation	1	0
 LanguageInfo1	OK	EndDialog	Return	1	0
-LicenseAgreement	Back	NewDialog	InstallWelcome	1	0
-LicenseAgreement	Cancel	SpawnDialog	CancelSetup	1	0
-LicenseAgreement	Next	NewDialog	CustomerInformation	AgreeToLicense = "Yes"	0
 MaintenanceType	Back	NewDialog	MaintenanceWelcome	1	0
 MaintenanceType	Cancel	SpawnDialog	CancelSetup	1	0
 MaintenanceType	Next	[ProgressType0]	Modify	_IsMaintenance = "Change"	2

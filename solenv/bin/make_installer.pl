@@ -1720,22 +1720,6 @@ for ( my $n = 0; $n <= $#installer::globals::languageproducts; $n++ )
             # setting the encoding in every table (replacing WINDOWSENCODINGTEMPLATE)
             installer::windows::idtglobal::set_multilanguageonly_condition($languageidtdir);
 
-            # include the license text into the table Control.idt
-
-            if ( ! $allvariableshashref->{'HIDELICENSEDIALOG'} )
-            {
-                my $licensefilesource = installer::windows::idtglobal::get_rtflicensefilesource($onelanguage, $includepatharrayref_lang);
-                my $licensefile = installer::files::read_file($licensefilesource);
-                installer::scpzipfiles::replace_all_ziplistvariables_in_rtffile($licensefile, $allvariablesarrayref, $onelanguage, $loggingdir);
-                my $controltablename = $languageidtdir . $installer::globals::separator . "Control.idt";
-                my $controltable = installer::files::read_file($controltablename);
-                installer::windows::idtglobal::add_licensefile_to_database($licensefile, $controltable);
-                installer::files::save_file($controltablename, $controltable);
-
-                $infoline = "Added licensefile $licensefilesource into database $controltablename\n";
-                push(@installer::globals::logfileinfo, $infoline);
-            }
-
             # include a component into environment table if required
 
             installer::windows::component::set_component_in_environment_table($languageidtdir, $filesinproductlanguageresolvedarrayref);

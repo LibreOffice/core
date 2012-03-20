@@ -17,7 +17,7 @@ AdminWelcome	Cancel	SpawnDialog	CancelSetup	1	0
 AdminWelcome	Next	NewDialog	AdminNetworkLocation	1	0
 CancelSetup	No	EndDialog	Return	1	0
 CancelSetup	Yes	EndDialog	Exit	1	2
-CustomerInformation	Back	NewDialog	LicenseAgreement	1	1
+CustomerInformation	Back	NewDialog	InstallWelcome	1	1
 CustomerInformation	Cancel	SpawnDialog	CancelSetup	1	0
 CustomerInformation	Next	[ALLUSERS]	{}	ApplicationUsers = "OnlyCurrentUser" And Privileged	2
 CustomerInformation	Next	[ALLUSERS]	1	ApplicationUsers = "AllUsers" And Privileged	1
@@ -38,8 +38,7 @@ DatabaseFolder	Cancel	SpawnDialog	CancelSetup	1	1
 DatabaseFolder	ChangeFolder	[_BrowseProperty]	DATABASEDIR	1	2
 DatabaseFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
 DatabaseFolder	Next	NewDialog	SetupType	1	1
-DestinationFolder	Back	NewDialog	LicenseAgreement	HIDEEULA <> 1	0
-DestinationFolder	Back	NewDialog	InstallWelcome	HIDEEULA = 1	0
+DestinationFolder	Back	NewDialog	InstallWelcome	1	0
 DestinationFolder	Cancel	SpawnDialog	CancelSetup	1	1
 DestinationFolder	ChangeFolder	[_BrowseProperty]	INSTALLLOCATION	1	2
 DestinationFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
@@ -60,11 +59,7 @@ InstallChangeFolder	OK	SetTargetPath	[_BrowseProperty]	1	2
 InstallChangeFolder	Up	DirectoryListUp	0	1	0
 InstallWelcome	Back	NewDialog	SplashBitmap	Display_IsBitmapDlg	1
 InstallWelcome	Cancel	SpawnDialog	CancelSetup	1	0
-InstallWelcome	Next	NewDialog	LicenseAgreement	HIDEEULA <> 1	0
-InstallWelcome	Next	NewDialog	DestinationFolder	HIDEEULA = 1	0
-LicenseAgreement	Back	NewDialog	InstallWelcome	1	0
-LicenseAgreement	Cancel	SpawnDialog	CancelSetup	1	0
-LicenseAgreement	Next	NewDialog	DestinationFolder	AgreeToLicense = "Yes"	0
+InstallWelcome	Next	NewDialog	DestinationFolder	1	0
 MaintenanceType	Back	NewDialog	MaintenanceWelcome	1	0
 MaintenanceType	Cancel	SpawnDialog	CancelSetup	1	0
 MaintenanceType	Next	[ProgressType0]	Modify	_IsMaintenance = "Change"	2
