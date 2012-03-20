@@ -1862,7 +1862,7 @@ int UniscribeLayout::GetNextGlyphs( int nLen, sal_GlyphId* pGlyphs, Point& rPos,
             //glyph fallback can keep context as to what characters are the
             //inputs that caused a missing glyph in a given font.
             //
-            //See: fdo#46923/fdo#46750 for extra complexities
+            //See: fdo#46923/fdo#46896/fdo#46750 for extra complexities
             {
                 int dir = 1;
                 int out = rVI.mnMinCharPos;
