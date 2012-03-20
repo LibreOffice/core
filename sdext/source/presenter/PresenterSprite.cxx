@@ -109,11 +109,6 @@ void PresenterSprite::Resize (const css::geometry::RealSize2D& rSize)
         ProvideSprite();
 }
 
-css::geometry::RealSize2D PresenterSprite::GetSize (void) const
-{
-    return maSize;
-}
-
 void PresenterSprite::MoveTo (const css::geometry::RealPoint2D& rLocation)
 {
     maLocation = rLocation;
@@ -129,18 +124,6 @@ void PresenterSprite::MoveTo (const css::geometry::RealPoint2D& rLocation)
                 uno::Sequence<double>(4),
                 rendering::CompositeOperation::SOURCE)
             );
-}
-
-css::geometry::RealPoint2D PresenterSprite::GetLocation (void) const
-{
-    return maLocation;
-}
-
-void PresenterSprite::Transform (const css::geometry::AffineMatrix2D& rTransform)
-{
-    maTransform = rTransform;
-    if (mxSprite.is())
-        mxSprite->transform(maTransform);
 }
 
 void PresenterSprite::SetAlpha (const double nAlpha)

@@ -119,7 +119,6 @@ public:
         GetSlideShowController (void) const;
     rtl::Reference<PresenterPaneContainer> GetPaneContainer (void) const;
     ::rtl::Reference<PresenterPaneBorderPainter> GetPaneBorderPainter (void) const;
-    ::boost::shared_ptr<PresenterAnimator> GetAnimator (void) const;
     ::boost::shared_ptr<PresenterCanvasHelper> GetCanvasHelper (void) const;
     css::uno::Reference<css::drawing::XPresenterHelper> GetPresenterHelper (void) const;
     ::boost::shared_ptr<PresenterPaintManager> GetPaintManager (void) const;

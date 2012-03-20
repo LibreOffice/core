@@ -494,11 +494,6 @@ rtl::Reference<PresenterPaneContainer> PresenterController::GetPaneContainer (vo
     return mpPaneBorderPainter;
 }
 
-::boost::shared_ptr<PresenterAnimator> PresenterController::GetAnimator (void) const
-{
-    return mpAnimator;
-}
-
 ::boost::shared_ptr<PresenterCanvasHelper> PresenterController::GetCanvasHelper (void) const
 {
     return mpCanvasHelper;

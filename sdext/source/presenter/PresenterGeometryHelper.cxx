@@ -161,25 +161,6 @@ bool PresenterGeometryHelper::IsInside (
         && rBox1.Y+rBox1.Height <= rBox2.Y+rBox2.Height;
 }
 
-awt::Rectangle PresenterGeometryHelper::Union (
-    const css::awt::Rectangle& rBox1,
-    const css::awt::Rectangle& rBox2)
-{
-    if (rBox1.Width<=0 || rBox1.Height<=0)
-        return rBox2;
-    else if (rBox2.Width<=0 || rBox2.Height<=0)
-        return rBox1;
-
-    const sal_Int32 nLeft (::std::min(rBox1.X, rBox2.X));
-    const sal_Int32 nTop (::std::min(rBox1.Y, rBox2.Y));
-    const sal_Int32 nRight (::std::max(Right(rBox1), Right(rBox2)));
-    const sal_Int32 nBottom (::std::max(Bottom(rBox1), Bottom(rBox2)));
-    if (nLeft >= nRight || nTop >= nBottom)
-        return awt::Rectangle();
-    else
-        return awt::Rectangle(nLeft,nTop, Width(nLeft,nRight), Height(nTop,nBottom));
-}
-
 geometry::RealRectangle2D PresenterGeometryHelper::Union (
     const geometry::RealRectangle2D& rBox1,
     const geometry::RealRectangle2D& rBox2)

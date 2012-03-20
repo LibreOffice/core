@@ -163,10 +163,6 @@ void SAL_CALL PresenterSpritePane::windowPaint (const awt::PaintEvent& rEvent)
     return mpSprite;
 }
 
-void PresenterSpritePane::ShowTransparentBorder (void)
-{
-}
-
 void PresenterSpritePane::UpdateCanvases (void)
 {
     Reference<XComponent> xContentCanvasComponent (mxContentCanvas, UNO_QUERY);

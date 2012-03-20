@@ -952,13 +952,6 @@ sd::slidesorter::view::(anonymous namespace)::PageObjectRun::GetInnerBoundingBox
 sd::slidesorter::view::Button::IsDown() const
 sd::slidesorter::view::FontProvider::GetFont(OutputDevice const&)
 sdext::presenter::PresenterAnimation::PresenterAnimation(unsigned long, unsigned long, unsigned long)
-sdext::presenter::PresenterController::GetAnimator() const
-sdext::presenter::PresenterGeometryHelper::Union(com::sun::star::awt::Rectangle const&, com::sun::star::awt::Rectangle const&)
-sdext::presenter::PresenterSprite::GetLocation() const
-sdext::presenter::PresenterSprite::GetSize() const
-sdext::presenter::PresenterSprite::SetAlpha(double)
-sdext::presenter::PresenterSprite::Transform(com::sun::star::geometry::AffineMatrix2D const&)
-sdext::presenter::PresenterSpritePane::ShowTransparentBorder()
 sdr::animation::Scheduler::Reset(unsigned int)
 sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
 sdr::contact::ViewContactOfSdrMediaObj::hasPreferredSize() const
