@@ -1756,10 +1756,8 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
             {
                 RTFSprms aAttributes;
                 RTFValue::Pointer_t pValue(new RTFValue(aAttributes));
-                m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PBrcTop, pValue));
-                m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PBrcLeft, pValue));
-                m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PBrcBottom, pValue));
-                m_aStates.top().aParagraphSprms->push_back(make_pair(NS_sprm::LN_PBrcRight, pValue));
+                for (int i = 0; i < 4; i++)
+                    m_aStates.top().aParagraphSprms->push_back(make_pair(lcl_getParagraphBorder(i), pValue));
                 m_aStates.top().nBorderState = BORDER_PARAGRAPH_BOX;
             }
             break;
