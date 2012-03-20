@@ -147,6 +147,10 @@ public:
      */
     void testPivotTableNamedSource();
 
+    /**
+     * Test for pivot table cache.  Each dimension in the pivot cache stores
+     * only unique values that are sorted in ascending order.
+     */
     void testPivotTableCache();
 
     void testSheetCopy();
@@ -1986,6 +1990,52 @@ void Test::testPivotTableCache()
                            pItem->GetValue() == 45);
     pItem = aCache.GetItemDataById(2, 6);
     CPPUNIT_ASSERT_MESSAGE("wrong item value", !pItem);
+
+    {
+        // Check the integrity of the source data.
+        ScDPItemData aTest;
+        long nDim;
+
+        {
+            // Dimension 0: Z, R, A, F, Y, 12
+            nDim = 0;
+            const char* aChecks[] = { "Z", "R", "A", "F", "Y" };
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            {
+                pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
+                aTest.SetString(rtl::OUString::createFromAscii(aChecks[i]));
+                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+            }
+
+            pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, 5, false));
+            aTest.SetValue(12);
+            CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+        }
+
+        {
+            // Dimension 1: A, A, B, B, C, C
+            nDim = 1;
+            const char* aChecks[] = { "A", "A", "B", "B", "C", "C" };
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            {
+                pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
+                aTest.SetString(rtl::OUString::createFromAscii(aChecks[i]));
+                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+            }
+        }
+
+        {
+            // Dimension 2: 30, 20, 45, 12, 8, 15
+            nDim = 2;
+            double aChecks[] = { 30, 20, 45, 12, 8, 15 };
+            for (size_t i = 0; i < SAL_N_ELEMENTS(aChecks); ++i)
+            {
+                pItem = aCache.GetItemDataById(nDim, aCache.GetItemDataId(nDim, i, false));
+                aTest.SetValue(aChecks[i]);
+                CPPUNIT_ASSERT_MESSAGE("wrong data value", pItem && *pItem == aTest);
+            }
+        }
+    }
 
     m_pDoc->DeleteTab(0);
 }
