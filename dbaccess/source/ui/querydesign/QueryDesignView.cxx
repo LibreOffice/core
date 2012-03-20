@@ -2326,9 +2326,9 @@ namespace
 
             OQueryController& rController = static_cast<OQueryController&>(_pView->getController());
             EOrderDir eOrderDir;
-            OTableFieldDescRef aDragLeft = new OTableFieldDesc();
             for( sal_uInt32 i=0 ; i<pNode->count() ; i++ )
             {
+                OTableFieldDescRef aDragLeft = new OTableFieldDesc();
                 eOrderDir = ORDER_ASC;
                 ::connectivity::OSQLParseNode*  pChild = pNode->getChild( i );
 
