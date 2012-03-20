@@ -69,6 +69,7 @@ const String g_strZero = String::CreateFromAscii("0");
 #define CHECKBOX_SIZE       10
 #define HANDLE_ID            0
 #define HANDLE_COLUMN_WITDH 70
+#define SORT_COLUMN_NONE    0xFFFFFFFF
 
 // -----------------------------------------------------------------------------
 namespace
@@ -114,6 +115,7 @@ OSelectionBrowseBox::OSelectionBrowseBox( Window* pParent )
                                   BROWSER_HIDECURSOR | BROWSER_HLINESFULL | BROWSER_VLINESFULL )
                    ,m_aFunctionStrings(ModuleRes(STR_QUERY_FUNCTIONS))
                    ,m_nVisibleCount(0)
+                   ,m_nLastSortColumn(SORT_COLUMN_NONE)
                    ,m_bOrderByUnRelated(sal_True)
                    ,m_bGroupByUnRelated(sal_True)
                    ,m_bStopTimer(sal_False)
@@ -420,6 +422,7 @@ void OSelectionBrowseBox::ClearAll()
             aIter = getFields().rbegin();
         }
     }
+    m_nLastSortColumn = SORT_COLUMN_NONE;
     SetUpdateMode(sal_True);
 }
 //------------------------------------------------------------------------------
@@ -1875,11 +1878,14 @@ void OSelectionBrowseBox::AddCondition( const OTableFieldDescRef& rInfo, const S
 //------------------------------------------------------------------------------
 void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrderDir eDir, sal_uInt32 _nCurrentPos)
 {
+    if (_nCurrentPos == 0)
+        m_nLastSortColumn = SORT_COLUMN_NONE;
+
     Reference< XConnection> xConnection = static_cast<OQueryController&>(getDesignView()->getController()).getConnection();
     if(!xConnection.is())
         return;
     DBG_CHKTHIS(OSelectionBrowseBox,NULL);
-    OSL_ENSURE(!rInfo->IsEmpty(),"AddOrder:: OTableFieldDescRef sollte nicht Empty sein!");
+    OSL_ENSURE(!rInfo->IsEmpty(),"AddOrder:: OTableFieldDescRef should not be Empty!");
     OTableFieldDescRef pEntry;
     Reference<XDatabaseMetaData> xMeta = xConnection->getMetaData();
     ::comphelper::UStringMixEqual bCase(xMeta.is() && xMeta->supportsMixedCaseQuotedIdentifiers());
@@ -1898,7 +1904,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
             bCase(aAlias,rInfo->GetAlias()))
         {
             sal_uInt32 nPos = aIter - rFields.begin();
-            bAppend = _nCurrentPos > nPos;
+            bAppend = (m_nLastSortColumn != SORT_COLUMN_NONE) && (nPos <= m_nLastSortColumn);
             if ( bAppend )
                 aIter = rFields.end();
             else
@@ -1906,6 +1912,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
                 if ( !m_bOrderByUnRelated )
                     pEntry->SetVisible(sal_True);
                 pEntry->SetOrderDir( eDir );
+                m_nLastSortColumn = nPos;
             }
             break;
         }
@@ -1916,6 +1923,7 @@ void OSelectionBrowseBox::AddOrder( const OTableFieldDescRef& rInfo, const EOrde
         OTableFieldDescRef pTmp = InsertField(rInfo, BROWSER_INVALIDID, sal_False, sal_False );
         if(pTmp.is())
         {
+            m_nLastSortColumn = pTmp->GetColumnId() - 1;
             if ( !m_bOrderByUnRelated && !bAppend )
                 pTmp->SetVisible(sal_True);
             pTmp->SetOrderDir( eDir );
