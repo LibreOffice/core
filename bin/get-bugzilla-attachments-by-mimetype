@@ -207,10 +207,13 @@ mimetypes = [
     ('application/x-starwriter', 'sdw'),
     ('application/vnd.stardivision.writer', 'sdw5'),
     ('application/vnd.stardivision.writer-global', 'sgl5'),
+# unusual image mimetypes
+    ('image/cgm', 'cgm'),
+    ('image/x-targa', 'tga'),
 ]
 
 # disabled for now, this would download gigs of pngs/jpegs...
-image_mimetypes = [
+common_image_mimetypes = [
 # graphics
     ('image/svg+xml', 'svg'),
     ('image/x-MS-bmp', 'bmp'),
@@ -229,7 +232,6 @@ image_mimetypes = [
     ('image/x-cmu-raster', 'ras'),
     ('image/x-sgf', 'sgf'),
     ('image/x-svm', 'svm'),
-    ('image/x-targa', 'tga'),
     ('image/tiff', 'tiff'),
     ('image/x-wmf', 'wmf'),
     ('image/x-xbitmap', 'xbm'),
@@ -237,7 +239,6 @@ image_mimetypes = [
     ('image/gif', 'gif'),
     ('image/jpeg', 'jpeg'),
     ('image/png', 'png'),
-    ('image/cgm', 'cgm'),
 ]
 
 for (mimetype,extension) in mimetypes:
