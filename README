@@ -1,22 +1,9 @@
 ﻿Apache OpenOffice (AOO)
 =======================
 
-    The Apache OpenOffice project provdes a full featured office productivity suite
+    The Apache OpenOffice project provides a full featured office productivity suite
     based on open standards and is the continuation of the OpenOffice.org project.
-
-Incubation Disclaimer
-=====================
-
-    Apache OpenOffice is an effort undergoing incubation at The Apache Software Foundation (ASF),
-    sponsored by the name of Apache TLP sponsor. Incubation is required of all newly accepted
-    projects until a further review indicates that the infrastructure, communications, and
-    decision making process have stabilized in a manner consistent with other successful
-    ASF projects. While incubation status is not necessarily a reflection of the completeness or
-    stability of the code, it does indicate that the project has yet to be fully endorsed by the ASF.
-
-Getting started
-===============
-
+    
     For detailed information about Apache OpenOffice please visit 
     http://incubator.apache.org/openofficeorg/
 
@@ -30,10 +17,10 @@ Getting started
         Mac OS X
         OS/2
 
-    OpenOffice is used by million of users worldwide and with more than 100 million
+    OpenOffice is used by millions of users worldwide and with more than 100 million
     downloads it is one of the most successful open source projects.
 
-Getting the latest sources via Subverison
+Getting the latest sources via Subversion
 =========================================
 
     You can always checkout the latest source via subsversion using the following
@@ -46,10 +33,10 @@ Getting the latest sources via Subverison
 Building Apache OpenOffice
 ===========================
 
-    Apache OpenOffice is a big project and depends on several other external libraries
-    and the list of prerquisites is varying for the differnet platforms. 
+    Apache OpenOffice is a big project and depends on several other external libraries.
+    The list of prerequisites varies for the different platforms. 
 
-    A comrephensive and complete building guide can be found in the project wiki under
+    A comprehensive and complete building guide can be found in the project wiki under
 
     http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide
 
@@ -71,10 +58,11 @@ Building Apache OpenOffice
     With having all prerequisites in place you can simply run
 
     cd main
+    autoconf
     ./configure <configure_switches>
     ./bootstrap
     cd instsetoo_native/util
-    ./build --all
+    build --all
 
     The default build will produce a setup version (e.g. setup program on windows, dmg on Mac OS, 
     rpm and deb packages on Linux, pkg packages on Solaris) and an archived version. The output
