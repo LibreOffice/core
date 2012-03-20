@@ -125,8 +125,6 @@ public:
     static BiffDrawingObjectRef importObjBiff4( const WorksheetHelper& rHelper, BiffInputStream& rStrm );
     /** Reads the BIFF5 OBJ record, returns a new drawing object. */
     static BiffDrawingObjectRef importObjBiff5( const WorksheetHelper& rHelper, BiffInputStream& rStrm );
-    /** Reads the BIFF8 OBJ record, returns a new drawing object. */
-    static BiffDrawingObjectRef importObjBiff8( const WorksheetHelper& rHelper, BiffInputStream& rStrm );
 
     /** Sets whether this is an area object (then its width and height must be greater than 0). */
     inline void         setAreaObj( bool bAreaObj ) { mbAreaObj = bAreaObj; }
@@ -451,10 +449,6 @@ public:
     virtual void        notifyShapeInserted(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >& rxShape,
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) = 0;
-
-protected:
-    /** Appends a new drawing object to the list of raw objects (without DFF data). */
-    void                appendRawObject( const BiffDrawingObjectRef& rxDrawingObj );
 
 private:
     typedef RefMap< sal_uInt16, BiffDrawingObjectBase > BiffDrawingObjectMapById;

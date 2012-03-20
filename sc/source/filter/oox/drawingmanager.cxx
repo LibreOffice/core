@@ -389,69 +389,6 @@ BiffDrawingObjectBase::~BiffDrawingObjectBase()
     return xDrawingObj;
 }
 
-/*static*/ BiffDrawingObjectRef BiffDrawingObjectBase::importObjBiff8( const WorksheetHelper& rHelper, BiffInputStream& rStrm )
-{
-    BiffDrawingObjectRef xDrawingObj;
-
-    if( rStrm.getRemaining() >= 10 )
-    {
-        sal_uInt16 nSubRecId, nSubRecSize, nObjType;
-        rStrm >> nSubRecId >> nSubRecSize >> nObjType;
-        OSL_ENSURE( nSubRecId == BIFF_ID_OBJCMO, "BiffDrawingObjectBase::importObjBiff8 - OBJCMO subrecord expected" );
-        if( (nSubRecId == BIFF_ID_OBJCMO) && (nSubRecSize >= 6) )
-        {
-            switch( nObjType )
-            {
-#if 0
-                // in BIFF8, all simple objects support text
-                case BIFF_OBJTYPE_LINE:
-                case BIFF_OBJTYPE_ARC:
-                    xDrawingObj.reset( new XclImpTextObj( rHelper ) );
-                    // lines and arcs may be 2-dimensional
-                    xDrawingObj->setAreaObj( false );
-                break;
-
-                // in BIFF8, all simple objects support text
-                case BIFF_OBJTYPE_RECTANGLE:
-                case BIFF_OBJTYPE_OVAL:
-                case BIFF_OBJTYPE_POLYGON:
-                case BIFF_OBJTYPE_DRAWING:
-                case BIFF_OBJTYPE_TEXT:
-                    xDrawingObj.reset( new XclImpTextObj( rHelper ) );
-                break;
-#endif
-
-                case BIFF_OBJTYPE_GROUP:        xDrawingObj.reset( new BiffGroupObject( rHelper ) );        break;
-#if 0
-                case BIFF_OBJTYPE_CHART:        xDrawingObj.reset( new XclImpChartObj( rHelper ) );         break;
-                case BIFF_OBJTYPE_BUTTON:       xDrawingObj.reset( new XclImpButtonObj( rHelper ) );        break;
-                case BIFF_OBJTYPE_PICTURE:      xDrawingObj.reset( new XclImpPictureObj( rHelper ) );       break;
-                case BIFF_OBJTYPE_CHECKBOX:     xDrawingObj.reset( new XclImpCheckBoxObj( rHelper ) );      break;
-                case BIFF_OBJTYPE_OPTIONBUTTON: xDrawingObj.reset( new XclImpOptionButtonObj( rHelper ) );  break;
-                case BIFF_OBJTYPE_EDIT:         xDrawingObj.reset( new XclImpEditObj( rHelper ) );          break;
-                case BIFF_OBJTYPE_LABEL:        xDrawingObj.reset( new XclImpLabelObj( rHelper ) );         break;
-                case BIFF_OBJTYPE_DIALOG:       xDrawingObj.reset( new XclImpDialogObj( rHelper ) );        break;
-                case BIFF_OBJTYPE_SPIN:         xDrawingObj.reset( new XclImpSpinButtonObj( rHelper ) );    break;
-                case BIFF_OBJTYPE_SCROLLBAR:    xDrawingObj.reset( new XclImpScrollBarObj( rHelper ) );     break;
-                case BIFF_OBJTYPE_LISTBOX:      xDrawingObj.reset( new XclImpListBoxObj( rHelper ) );       break;
-                case BIFF_OBJTYPE_GROUPBOX:     xDrawingObj.reset( new XclImpGroupBoxObj( rHelper ) );      break;
-                case BIFF_OBJTYPE_DROPDOWN:     xDrawingObj.reset( new XclImpDropDownObj( rHelper ) );      break;
-                case BIFF_OBJTYPE_NOTE:         xDrawingObj.reset( new XclImpNoteObj( rHelper ) );          break;
-#endif
-
-                default:
-#if 0
-                    OSL_ENSURE( false, "BiffDrawingObjectBase::importObjBiff8 - unknown object type" );
-#endif
-                    xDrawingObj.reset( new BiffPlaceholderObject( rHelper ) );
-            }
-        }
-    }
-
-    xDrawingObj->importObjBiff8( rStrm );
-    return xDrawingObj;
-}
-
 Reference< XShape > BiffDrawingObjectBase::convertAndInsert( BiffDrawingBase& rDrawing,
         const Reference< XShapes >& rxShapes, const Rectangle* pParentRect ) const
 {
@@ -1285,14 +1222,6 @@ void BiffDrawingBase::importObj( BiffInputStream& rStrm )
     }
 }
 
-void BiffDrawingBase::setSkipObj( sal_uInt16 nObjId )
-{
-    /*  Store identifiers of objects to be skipped in a separate list (the OBJ
-        record may not be read yet). In the finalization phase, all objects
-        registered here will be skipped. */
-    maSkipObjs.push_back( nObjId );
-}
-
 void BiffDrawingBase::finalizeImport()
 {
     Reference< XShapes > xShapes( mxDrawPage, UNO_QUERY );
@@ -1328,14 +1257,6 @@ Reference< XShape > BiffDrawingBase::createAndInsertXShape( const OUString& rSer
     }
     OSL_ENSURE( xShape.is(), "BiffDrawingBase::createAndInsertXShape - cannot instanciate shape object" );
     return xShape;
-}
-
-// protected ------------------------------------------------------------------
-
-void BiffDrawingBase::appendRawObject( const BiffDrawingObjectRef& rxDrawingObj )
-{
-    OSL_ENSURE( rxDrawingObj.get(), "BiffDrawingBase::appendRawObject - unexpected empty object reference" );
-    maRawObjs.append( rxDrawingObj );
 }
 
 // ============================================================================

@@ -212,20 +212,6 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
     return aDecDbl.mfValue;
 }
 
-/*static*/ bool BiffHelper::calcRkFromDouble( sal_Int32& ornRkValue, double fValue )
-{
-    if( lclCalcRkFromDouble( ornRkValue, fValue ) )
-        return true;
-
-    if( lclCalcRkFromDouble( ornRkValue, fValue * 100 ) )
-    {
-        ornRkValue |= BIFF_RK_100FLAG;
-        return true;
-    }
-
-    return false;
-}
-
 /*static*/ double BiffHelper::calcDoubleFromError( sal_uInt8 nErrorCode )
 {
     sal_uInt16 nApiError = 0x7FFF;
@@ -259,13 +245,6 @@ void lclImportImgDataDib( StreamDataSequence& orDataSeq, BiffInputStream& rStrm,
     rtl_TextEncoding eTextEnc = rtl_getTextEncodingFromWindowsCodePage( nCodePage );
     OSL_ENSURE( eTextEnc != RTL_TEXTENCODING_DONTKNOW, "BiffHelper::calcTextEncodingFromCodePage - unknown code page" );
     return eTextEnc;
-}
-
-/*static*/ sal_uInt16 BiffHelper::calcCodePageFromTextEncoding( rtl_TextEncoding eTextEnc )
-{
-    sal_uInt32 nCodePage = rtl_getWindowsCodePageFromTextEncoding( eTextEnc );
-    OSL_ENSURE( (0 < nCodePage) && (nCodePage <= SAL_MAX_UINT16), "BiffHelper::calcCodePageFromTextEncoding - unknown text encoding" );
-    return static_cast< sal_uInt16 >( (nCodePage == 0) ? 1252 : nCodePage );
 }
 
 // BIFF12 import --------------------------------------------------------------

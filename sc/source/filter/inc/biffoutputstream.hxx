@@ -87,7 +87,6 @@ private:
     8224 bytes in BIFF8).
 
     To start writing a record, call startRecord() with the record identifier.
-    Each record must be closed by calling endRecord().
 
     If some data exceeds the record size limit, a CONTINUE record will be
     started automatically and the new data will be written to this record. If
@@ -99,17 +98,10 @@ private:
 class BiffOutputStream : public BinaryOutputStream
 {
 public:
-    explicit            BiffOutputStream(
-                            BinaryOutputStream& rOutStream,
-                            sal_uInt16 nMaxRecSize );
-
     // record control ---------------------------------------------------------
 
     /** Starts a new record. */
     void                startRecord( sal_uInt16 nRecId );
-
-    /** Finishes the current record. Must be called for every started record. */
-    void                endRecord();
 
     /** Sets size of data portion in bytes. 0 or 1 means no portions are used. */
     void                setPortionSize( sal_uInt8 nSize );

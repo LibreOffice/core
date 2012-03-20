@@ -85,26 +85,12 @@ void BiffOutputRecordBuffer::fill( sal_uInt8 nValue, sal_uInt16 nBytes )
 
 // ============================================================================
 
-BiffOutputStream::BiffOutputStream( BinaryOutputStream& rOutStream, sal_uInt16 nMaxRecSize ) :
-    BinaryStreamBase( true ),
-    maRecBuffer( rOutStream, nMaxRecSize ),
-    mnPortionSize( 0 ),
-    mnPortionPos( 0 )
-{
-}
-
 // record control -------------------------------------------------------------
 
 void BiffOutputStream::startRecord( sal_uInt16 nRecId )
 {
     maRecBuffer.startRecord( nRecId );
     setPortionSize( 1 );
-}
-
-void BiffOutputStream::endRecord()
-{
-    setPortionSize( 1 );
-    maRecBuffer.endRecord();
 }
 
 void BiffOutputStream::setPortionSize( sal_uInt8 nSize )

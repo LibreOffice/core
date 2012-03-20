@@ -607,8 +607,6 @@ public:
 
     /** Converts the passed packed number to a double. */
     static double       calcDoubleFromRk( sal_Int32 nRkValue );
-    /** Converts the passed double to a packed number, returns true on success. */
-    static bool         calcRkFromDouble( sal_Int32& ornRkValue, double fValue );
 
     /** Converts the passed BIFF error to a double containing the respective Calc error code. */
     static double       calcDoubleFromError( sal_uInt8 nErrorCode );
@@ -616,8 +614,6 @@ public:
     /** Returns a text encoding from an Windows code page.
         @return  The corresponding text encoding or RTL_TEXTENCODING_DONTKNOW. */
     static rtl_TextEncoding calcTextEncodingFromCodePage( sal_uInt16 nCodePage );
-    /** Returns a Windows code page from a text encoding. */
-    static sal_uInt16   calcCodePageFromTextEncoding( rtl_TextEncoding eTextEnc );
 
     // BIFF12 import ----------------------------------------------------------
 
