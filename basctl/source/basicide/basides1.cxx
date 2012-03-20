@@ -146,6 +146,7 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                 DBG_ASSERT( nWhich, "Wich fuer SearchItem ?" );
                 const SfxPoolItem& rItem = pArgs->Get( nWhich );
                 DBG_ASSERT( rItem.ISA( SvxSearchItem ), "Kein Searchitem!" );
+                IDEWindowTable::const_iterator it;
                 if ( rItem.ISA( SvxSearchItem ) )
                 {
                     // memorize item because of the adjustments...
@@ -155,22 +156,20 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                     if ( ((const SvxSearchItem&)rItem).GetCommand() == SVX_SEARCHCMD_REPLACE_ALL )
                     {
                         sal_uInt16 nActModWindows = 0;
-                        IDEBaseWindow* pWin = aIDEWindowTable.First();
-                        while ( pWin )
+                        for( it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
                         {
+                            IDEBaseWindow* pWin = it->second;
                             if ( !pWin->IsSuspended() && pWin->IsA( TYPE( ModulWindow ) ) )
                                 nActModWindows++;
-                            pWin = aIDEWindowTable.Next();
                         }
 
                         if ( ( nActModWindows <= 1 ) || ( !((const SvxSearchItem&)rItem).GetSelection() && QueryBox( pCurWin, WB_YES_NO|WB_DEF_YES, String( IDEResId( RID_STR_SEARCHALLMODULES ) ) ).Execute() == RET_YES ) )
                         {
-                            pWin = aIDEWindowTable.First();
-                            while ( pWin )
+                            for( it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
                             {
+                                IDEBaseWindow* pWin = it->second;
                                 if ( !pWin->IsSuspended() && pWin->IsA( TYPE( ModulWindow ) ) )
                                     nFound = nFound + ((ModulWindow*)pWin)->StartSearchAndReplace( (const SvxSearchItem&)rItem );
-                                pWin = aIDEWindowTable.Next();
                             }
                         }
                         else
@@ -187,8 +186,15 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                         {
                             // search other modules...
                             sal_Bool bChangeCurWindow = sal_False;
-                            aIDEWindowTable.Seek( pCurWin );
-                            IDEBaseWindow* pWin = aIDEWindowTable.Next();
+                            for( it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
+                                if ( it->second == pCurWin)
+                                    break;
+                            if ( it != aIDEWindowTable.end() )
+                                ++it;
+                            IDEBaseWindow* pWin = NULL;
+                            if ( it != aIDEWindowTable.end() )
+                                pWin = it->second;
+
                             sal_Bool bSearchedFromStart = sal_False;
                             while ( !nFound && !bCanceled && ( pWin || !bSearchedFromStart ) )
                             {
@@ -200,7 +206,9 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                                     QueryBox aQuery(pParent, WB_YES_NO|WB_DEF_YES, ResId::toString(IDEResId(RID_STR_SEARCHFROMSTART)));
                                     if ( aQuery.Execute() == RET_YES )
                                     {
-                                        pWin = aIDEWindowTable.First();
+                                        it = aIDEWindowTable.begin();
+                                        if ( it != aIDEWindowTable.end() )
+                                            pWin = it->second;
                                         bSearchedFromStart = sal_True;
                                     }
                                     else
@@ -222,7 +230,11 @@ void BasicIDEShell::ExecuteCurrent( SfxRequest& rReq )
                                     }
                                 }
                                 if ( pWin && ( pWin != pCurWin ) )
-                                    pWin = aIDEWindowTable.Next();
+                                {
+                                    ++it;
+                                    if ( it != aIDEWindowTable.end() )
+                                        pWin = it->second;
+                                }
                                 else
                                     pWin = 0;
                             }
@@ -453,10 +465,10 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SfxUInt16Item &rTabId = (const SfxUInt16Item&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_TABID );
             const SfxStringItem &rModName = (const SfxStringItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_MODULENAME );
-            IDEBaseWindow* pWin = aIDEWindowTable.Get( rTabId.GetValue() );
             DBG_ASSERT( pWin, "Window nicht im Liste, aber in TabBar ?" );
-            if ( pWin )
+            if ( aIDEWindowTable.find( rTabId.GetValue() ) !=  aIDEWindowTable.end() )
             {
+                IDEBaseWindow* pWin = aIDEWindowTable[ rTabId.GetValue() ];
                 ::rtl::OUString aNewName( rModName.GetValue() );
                 ::rtl::OUString aOldName( pWin->GetName() );
                 if ( aNewName != aOldName )
@@ -490,7 +502,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     else
                     {
                         // set old name in TabWriter
-                        sal_uInt16 nId = (sal_uInt16)aIDEWindowTable.GetKey( pWin );
+                        sal_uInt16 nId = GetIDEWindowId( pWin );
                         DBG_ASSERT( nId, "No entry in Tabbar!" );
                         if ( nId )
                             pTabBar->SetPageText( nId, aOldName );
@@ -523,9 +535,9 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
         case SID_BASICIDE_STOREALLMODULESOURCES:
         case SID_BASICIDE_UPDATEALLMODULESOURCES:
         {
-            IDEBaseWindow* pWin = aIDEWindowTable.First();
-            while ( pWin )
+            for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
             {
+                IDEBaseWindow* pWin = it->second;
                 if ( !pWin->IsSuspended() && pWin->IsA( TYPE( ModulWindow ) ) )
                 {
                     if ( rReq.GetSlot() == SID_BASICIDE_STOREALLMODULESOURCES )
@@ -533,7 +545,6 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
                     else
                         pWin->UpdateData();
                 }
-                pWin = aIDEWindowTable.Next();
             }
         }
         break;
@@ -1192,7 +1203,7 @@ void BasicIDEShell::SetCurWindow( IDEBaseWindow* pNewWin, sal_Bool bUpdateTabBar
         }
         if ( bUpdateTabBar )
         {
-            sal_uLong nKey = aIDEWindowTable.GetKey( pCurWin );
+            sal_uLong nKey = GetIDEWindowId( pCurWin );
             if ( pCurWin && ( pTabBar->GetPagePos( (sal_uInt16)nKey ) == TAB_PAGE_NOTFOUND ) )
                 pTabBar->InsertPage( (sal_uInt16)nKey, pCurWin->GetTitle() );   // has just been faded in
             pTabBar->SetCurPageId( (sal_uInt16)nKey );
@@ -1275,9 +1286,9 @@ IDEBaseWindow* BasicIDEShell::FindApplicationWindow()
 
 IDEBaseWindow* BasicIDEShell::FindWindow( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rName, BasicIDEType nType, sal_Bool bFindSuspended )
 {
-    IDEBaseWindow* pWin = aIDEWindowTable.First();
-    while ( pWin )
+    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
     {
+        IDEBaseWindow* pWin = it->second;
         if ( !pWin->IsSuspended() || bFindSuspended )
         {
             if ( rLibName.isEmpty() || rName.isEmpty() || nType == BASICIDE_TYPE_UNKNOWN )
@@ -1292,7 +1303,6 @@ IDEBaseWindow* BasicIDEShell::FindWindow( const ScriptDocument& rDocument, const
                 return pWin;
             }
         }
-        pWin = aIDEWindowTable.Next();
     }
     return 0;
 }
@@ -1451,9 +1461,9 @@ void BasicIDEShell::Deactivate( sal_Bool bMDI )
 
         // test CanClose to also test during deactivating the BasicIDE whether
         // the sourcecode is too large in one of the modules...
-        for ( sal_uLong nWin = 0; nWin < aIDEWindowTable.Count(); nWin++ )
+        for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin(); it != aIDEWindowTable.end(); ++it )
         {
-            IDEBaseWindow* pWin = aIDEWindowTable.GetObject( nWin );
+            IDEBaseWindow* pWin = it->second;
             if ( /* !pWin->IsSuspended() && */ !pWin->CanClose() )
             {
                 if ( !m_aCurLibName.isEmpty() && ( pWin->IsDocument( m_aCurDocument ) || pWin->GetLibName() != m_aCurLibName ) )

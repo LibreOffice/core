@@ -217,7 +217,7 @@ bool RenameDialog( Window* pErrorParent, const ScriptDocument& rDocument, const 
         ((DialogWindow*)pWin)->UpdateBrowser();
 
         // update tabwriter
-        sal_uInt16 nId = (sal_uInt16)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
+        sal_uInt16 nId = pIDEShell->GetIDEWindowId( pWin );
         DBG_ASSERT( nId, "No entry in Tabbar!" );
         if ( nId )
         {
@@ -338,13 +338,12 @@ void StopBasic()
     if ( pShell )
     {
         IDEWindowTable& rWindows = pShell->GetIDEWindowTable();
-        IDEBaseWindow* pWin = rWindows.First();
-        while ( pWin )
+        for( IDEWindowTable::const_iterator it = rWindows.begin(); it != rWindows.end(); ++it )
         {
+            IDEBaseWindow* pWin = it->second;
             // call BasicStopped manually because the Stop-Notify
             // might not get through otherwise
             pWin->BasicStopped();
-            pWin = rWindows.Next();
         }
     }
     BasicIDE::BasicStopped();

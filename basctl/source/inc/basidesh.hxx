@@ -34,8 +34,8 @@
 #include <com/sun/star/container/XContainerListener.hpp>
 #include <sfx2/viewsh.hxx>
 #include <svx/ifaceids.hxx>
-#include <tools/table.hxx>
 #include <vcl/scrbar.hxx>
+#include <map>
 
 class SfxViewFactory;
 
@@ -60,9 +60,9 @@ class LocalizationMgr;
 struct BasicIDEShell_Impl;
 
 #if _SOLAR__PRIVATE
-DECLARE_TABLE( IDEWindowTable, IDEBaseWindow* )
+typedef std::map<sal_uInt16, IDEBaseWindow*> IDEWindowTable;
 #else
-typedef Table IDEWindowTable;
+typedef std::map<sal_uInt16, void*> IDEWindowTable;
 #endif
 
 namespace BasicIDE
@@ -186,6 +186,7 @@ public:
     ScrollBarBox&       GetScrollBarBox()       { return aScrollBarBox; }
     TabBar*             GetTabBar()             { return (TabBar*)pTabBar; }
     IDEWindowTable&     GetIDEWindowTable()     { return aIDEWindowTable; }
+    sal_uInt16          GetIDEWindowId(const IDEBaseWindow* pWin) const;
 
     SdrView*            GetCurDlgView() const;
 

@@ -208,7 +208,7 @@ bool RenameModule( Window* pErrorParent, const ScriptDocument& rDocument, const 
             pModWin->SetSbModule( (SbModule*)pModWin->GetBasic()->FindModule( rNewName ) );
 
             // update tabwriter
-            sal_uInt16 nId = (sal_uInt16)(pIDEShell->GetIDEWindowTable()).GetKey( pWin );
+            sal_uInt16 nId = pIDEShell->GetIDEWindowId( pWin );
             DBG_ASSERT( nId, "No entry in Tabbar!" );
             if ( nId )
             {

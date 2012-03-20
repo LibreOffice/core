@@ -462,10 +462,10 @@ void BasicIDETabBar::Command( const CommandEvent& rCEvt )
                     if( pBasic )
                     {
                         IDEWindowTable& aIDEWindowTable = pIDEShell->GetIDEWindowTable();
-                        IDEBaseWindow* pWin = aIDEWindowTable.Get( GetCurPageId() );
-                        if( pWin && pWin->ISA( ModulWindow ) )
+                        IDEWindowTable::const_iterator it = aIDEWindowTable.find( GetCurPageId() );
+                        if( it != aIDEWindowTable.end() && it->second->ISA( ModulWindow ) )
                         {
-                            SbModule* pActiveModule = (SbModule*)pBasic->FindModule( pWin->GetName() );
+                            SbModule* pActiveModule = (SbModule*)pBasic->FindModule( it->second->GetName() );
                             if( pActiveModule && ( pActiveModule->GetModuleType() == script::ModuleType::DOCUMENT ) )
                             {
                                 aPopup.EnableItem( SID_BASICIDE_DELETECURRENT, sal_False );
@@ -532,7 +532,7 @@ void BasicIDETabBar::Sort()
             sal_uInt16 nId = GetPageId( i );
             aTabBarSortHelper.nPageId = nId;
             aTabBarSortHelper.aPageText = GetPageText( nId );
-            IDEBaseWindow* pWin = aIDEWindowTable.Get( nId );
+            IDEBaseWindow* pWin = aIDEWindowTable[ nId ];
 
             if ( pWin->IsA( TYPE( ModulWindow ) ) )
             {

@@ -231,13 +231,7 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
     else
     {
         pWin->SetStatus( pWin->GetStatus() & ~BASWIN_SUSPENDED );
-        IDEBaseWindow* pTmp = aIDEWindowTable.First();
-        while ( pTmp && !nKey )
-        {
-            if ( pTmp == pWin )
-                nKey = aIDEWindowTable.GetCurKey();
-            pTmp = aIDEWindowTable.Next();
-        }
+        nKey = GetIDEWindowId( pWin );
         DBG_ASSERT( nKey, "CreateBasWin: Kein Key- Fenster nicht gefunden!" );
     }
     if( nKey && xLib.is() && rDocument.isInVBAMode() )
@@ -269,17 +263,23 @@ ModulWindow* BasicIDEShell::CreateBasWin( const ScriptDocument& rDocument, const
 ModulWindow* BasicIDEShell::FindBasWin( const ScriptDocument& rDocument, const ::rtl::OUString& rLibName, const ::rtl::OUString& rModName, sal_Bool bCreateIfNotExist, sal_Bool bFindSuspended )
 {
     ModulWindow* pModWin = 0;
-    IDEBaseWindow* pWin = aIDEWindowTable.First();
-    while ( pWin && !pModWin )
+    for( IDEWindowTable::const_iterator it = aIDEWindowTable.begin();
+         it != aIDEWindowTable.end(); ++it )
     {
+        IDEBaseWindow* pWin = it->second;
         if ( ( !pWin->IsSuspended() || bFindSuspended ) && pWin->IsA( TYPE( ModulWindow ) ) )
         {
             if ( rLibName.isEmpty() )
+            {
                 pModWin = (ModulWindow*)pWin;
+                break;
+            }
             else if ( pWin->IsDocument( rDocument ) && pWin->GetLibName() == rLibName && pWin->GetName() == rModName )
+            {
                 pModWin = (ModulWindow*)pWin;
+                break;
+            }
         }
-        pWin = aIDEWindowTable.Next();
     }
     if ( !pModWin && bCreateIfNotExist )
         pModWin = CreateBasWin( rDocument, rLibName, rModName );
