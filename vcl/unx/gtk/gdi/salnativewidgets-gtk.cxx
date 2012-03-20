@@ -1027,12 +1027,20 @@ sal_Bool GtkSalGraphics::getNativeControlRegion(  ControlType nType,
             gint arrow_size;
             gint arrow_extent;
             guint horizontal_padding;
-            gfloat arrow_scaling;
+            gfloat arrow_scaling = 0.4; // Default for early GTK versions
 
             gtk_widget_style_get( widget,
                                   "horizontal-padding", &horizontal_padding,
-                                  "arrow-scaling", &arrow_scaling,
                                   NULL );
+
+            // Use arrow-scaling property if available (2.15+), avoid warning otherwise
+            if ( gtk_widget_class_find_style_property( GTK_WIDGET_GET_CLASS( widget ),
+                                                       "arrow-scaling" ) )
+            {
+                gtk_widget_style_get( widget,
+                                      "arrow-scaling", &arrow_scaling,
+                                      NULL );
+            }
 
             child = GTK_BIN( widget )->child;
 
