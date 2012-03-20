@@ -54,7 +54,7 @@ public:
     virtual void SAL_CALL setBorderStyle( sal_Int32 nBorderStyle ) throw (css::uno::RuntimeException);
     virtual sal_Int32 SAL_CALL getTextLength() throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
-    virtual sal_Int32 getBackColor() throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getBackColor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);

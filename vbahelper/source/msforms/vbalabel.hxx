@@ -48,7 +48,7 @@ public:
     virtual rtl::OUString SAL_CALL getAccelerator() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setAccelerator( const rtl::OUString& _accelerator ) throw (css::uno::RuntimeException);
     virtual css::uno::Reference< ov::msforms::XNewFont > SAL_CALL getFont() throw (css::uno::RuntimeException);
-    virtual sal_Int32 getBackColor() throw (css::uno::RuntimeException);
+    virtual sal_Int32 SAL_CALL getBackColor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException);
     virtual sal_Bool SAL_CALL getAutoSize() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
