@@ -21,8 +21,7 @@ CustomerInformation	Back	NewDialog	InstallWelcome	1	1
 CustomerInformation	Cancel	SpawnDialog	CancelSetup	1	0
 CustomerInformation	Next	[ALLUSERS]	{}	ApplicationUsers = "OnlyCurrentUser" And Privileged	2
 CustomerInformation	Next	[ALLUSERS]	1	ApplicationUsers = "AllUsers" And Privileged	1
-CustomerInformation	Next	EndDialog	Exit	(SERIALNUMVALRETRYLIMIT) And (SERIALNUMVALRETRYLIMIT<0) And (SERIALNUMVALRETURN<>SERIALNUMVALSUCCESSRETVAL)	3
-CustomerInformation	Next	NewDialog	SetupType	((Not SERIALNUMVALRETURN) OR (SERIALNUMVALRETURN=SERIALNUMVALSUCCESSRETVAL))	4
+CustomerInformation	Next	NewDialog	SetupType	1	3
 CustomSetup	Back	NewDialog	MaintenanceType	Installed	0
 CustomSetup	Back	NewDialog	SetupType	NOT Installed	0
 CustomSetup	Cancel	SpawnDialog	CancelSetup	1	0
