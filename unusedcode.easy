@@ -951,9 +951,7 @@ sd::slidesorter::model::VisualState::SetVisualStateBlend(double)
 sd::slidesorter::view::(anonymous namespace)::PageObjectRun::GetInnerBoundingBox(sd::slidesorter::view::Layouter const&, int) const
 sd::slidesorter::view::Button::IsDown() const
 sd::slidesorter::view::FontProvider::GetFont(OutputDevice const&)
-sdext::presenter::PresenterAnimation::AddEndCallback(boost::function<void ()> const&)
 sdext::presenter::PresenterAnimation::PresenterAnimation(unsigned long, unsigned long, unsigned long)
-sdext::presenter::PresenterAnimator::AddAnimation(boost::shared_ptr<sdext::presenter::PresenterAnimation> const&)
 sdext::presenter::PresenterController::GetAnimator() const
 sdext::presenter::PresenterGeometryHelper::Union(com::sun::star::awt::Rectangle const&, com::sun::star::awt::Rectangle const&)
 sdext::presenter::PresenterSprite::GetLocation() const
@@ -961,8 +959,6 @@ sdext::presenter::PresenterSprite::GetSize() const
 sdext::presenter::PresenterSprite::SetAlpha(double)
 sdext::presenter::PresenterSprite::Transform(com::sun::star::geometry::AffineMatrix2D const&)
 sdext::presenter::PresenterSpritePane::ShowTransparentBorder()
-sdext::presenter::PresenterWindowManager::GetParentCanvas() const
-sdext::presenter::PresenterWindowManager::GetParentWindow() const
 sdr::animation::Scheduler::Reset(unsigned int)
 sdr::contact::ViewContactOfPageObj::GetReferencedPage() const
 sdr::contact::ViewContactOfSdrMediaObj::hasPreferredSize() const

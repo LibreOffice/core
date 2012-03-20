@@ -52,14 +52,6 @@ PresenterAnimator::~PresenterAnimator (void)
     PresenterTimer::CancelTask(mnCurrentTaskId);
 }
 
-void PresenterAnimator::AddAnimation (const SharedPresenterAnimation& rpAnimation)
-{
-    ::osl::MutexGuard aGuard (m_aMutex);
-
-    maFutureAnimations.insert(AnimationList::value_type(rpAnimation->GetStartTime(), rpAnimation));
-    ScheduleNextRun();
-}
-
 void PresenterAnimator::Process (void)
 {
     ::osl::MutexGuard aGuard (m_aMutex);
@@ -96,8 +88,6 @@ void PresenterAnimator::Process (void)
                 AnimationList::value_type(
                     nCurrentTime + pAnimation->GetStepDuration(),
                     pAnimation));
-        else
-            pAnimation->RunEndCallbacks();
     }
 
     ScheduleNextRun();
@@ -111,7 +101,6 @@ void PresenterAnimator::ActivateAnimations (const sal_uInt64 nCurrentTime)
         SharedPresenterAnimation pAnimation (maFutureAnimations.begin()->second);
         maActiveAnimations.insert(*maFutureAnimations.begin());
         maFutureAnimations.erase(maFutureAnimations.begin());
-        pAnimation->RunStartCallbacks();
     }
 }
 

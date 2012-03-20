@@ -37,8 +37,7 @@
 
 namespace sdext { namespace presenter {
 
-/** Simple animation management.  Call AddAnimation to run animations
-    concurrently or one of the other.  See PresenterAnimation for details of
+/** Simple animation management. See PresenterAnimation for details of
     how to specify animations.
 */
 class PresenterAnimator
@@ -48,11 +47,6 @@ class PresenterAnimator
 public:
     PresenterAnimator (void);
     virtual ~PresenterAnimator (void);
-
-    /** Add an animation.  The time at which to start and end this animation
-        is provided by the animation itself.
-    */
-    void AddAnimation (const SharedPresenterAnimation& rpAnimation);
 
 private:
     typedef ::std::multimap<sal_uInt64,SharedPresenterAnimation> AnimationList;
