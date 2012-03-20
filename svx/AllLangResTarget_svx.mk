@@ -99,6 +99,9 @@ $(call gb_SrsPartTarget_get_target,svx/source/form/datanavi.src) : $(WORKDIR)/in
 $(call gb_SrsPartTarget_get_target,svx/source/form/formshell.src) : $(WORKDIR)/inc/svx/globlmn.hrc
 $(call gb_SrsTarget_get_clean_target,svx/res) : $(WORKDIR)/inc/svx/globlmn.hrc_clean
 
+$(OUTDIR)/inc/svx/globlmn.hrc : $(WORKDIR)/inc/svx/globlmn.hrc
+    $(call gb_Deliver_deliver,$<,$@)
+
 # hack !!!
 # just a temporary - globlmn.hrc about to be removed!
 ifeq ($(strip $(WITH_LANG)),)
