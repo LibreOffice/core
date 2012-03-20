@@ -114,6 +114,14 @@ public:
     //XHelperInterface
     virtual rtl::OUString& getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
+    //General helper methods for properties ( may or maynot be relevant for all
+    //controls
+    sal_Int32 getBackColor() throw (css::uno::RuntimeException);
+    void setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException);
+    sal_Bool getAutoSize() throw (css::uno::RuntimeException);
+    void setAutoSize( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
+    sal_Bool getLocked() throw (css::uno::RuntimeException);
+    void setLocked( sal_Bool bAutoSize ) throw (css::uno::RuntimeException);
 };
 
 

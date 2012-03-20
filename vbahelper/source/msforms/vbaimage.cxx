@@ -56,4 +56,14 @@ ScVbaImage::getServiceNames()
     return aServiceNames;
 }
 
+sal_Int32 SAL_CALL ScVbaImage::getBackColor() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getBackColor();
+}
+
+void SAL_CALL ScVbaImage::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setBackColor( nBackColor );
+}
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

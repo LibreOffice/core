@@ -534,6 +534,8 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
             return new ScVbaSpinButton( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
         case form::FormComponentType::IMAGECONTROL:
             return new ScVbaImage( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
+        case form::FormComponentType::SCROLLBAR:
+            return new ScVbaScrollBar( xVbaParent, xContext, xControlShape, xModel, xGeoHelper.release() );
     }
     throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unsupported control.")), uno::Reference< uno::XInterface >() );
 }
@@ -617,6 +619,46 @@ ScVbaControl::getServiceNames()
         aServiceNames[ 0 ] = rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.excel.Control" ) );
     }
     return aServiceNames;
+}
+
+sal_Int32 nSysCols[] = { 0xC8D0D4, 0x0, 0x6A240A, 0x808080, 0xE4E4E4, 0xFFFFFF, 0x0, 0x0, 0x0, 0xFFFFFF, 0xE4E4E4, 0xE4E4E4, 0x808080, 0x6A240A, 0xFFFFFF, 0xE4E4E4, 0x808080, 0x808080, 0x0, 0xC8D0D4, 0xFFFFFF, 0x404040, 0xE4E4E4, 0x0, 0xE1FFFF };
+
+sal_Int32 ScVbaControl::getBackColor() throw (uno::RuntimeException)
+{
+    sal_Int32 nBackColor = 0;
+    m_xProps->getPropertyValue(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ) ) >>= nBackColor;
+    return nBackColor;
+}
+
+void ScVbaControl::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+{
+    if ( ( nBackColor >= (sal_Int32)0x80000000 ) && ( nBackColor <= (sal_Int32)0x80000018 ) )
+    {
+        nBackColor = nSysCols[ nBackColor - 0x80000000 ];
+    }
+    m_xProps->setPropertyValue(  rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("BackgroundColor") ), uno::makeAny( XLRGBToOORGB( nBackColor ) ) );
+}
+
+sal_Bool ScVbaControl::getAutoSize() throw (uno::RuntimeException)
+{
+    return sal_False;
+}
+
+// currently no implementation for this
+void ScVbaControl::setAutoSize( sal_Bool /*bAutoSize*/ ) throw (uno::RuntimeException)
+{
+}
+
+sal_Bool ScVbaControl::getLocked() throw (uno::RuntimeException)
+{
+    sal_Bool bRes( sal_False );
+    m_xProps->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ) ) >>= bRes;
+    return bRes;
+}
+
+void ScVbaControl::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException)
+{
+    m_xProps->setPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("ReadOnly") ), uno::makeAny( bLocked ) );
 }
 
 typedef cppu::WeakImplHelper1< XControlProvider > ControlProvider_BASE;

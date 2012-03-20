@@ -90,6 +90,26 @@ rtl::OUString& ScVbaLabel::getServiceImplName()
     return sImplName;
 }
 
+sal_Int32 SAL_CALL ScVbaLabel::getBackColor() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getBackColor();
+}
+
+void SAL_CALL ScVbaLabel::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setBackColor( nBackColor );
+}
+
+sal_Bool SAL_CALL ScVbaLabel::getAutoSize() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getAutoSize();
+}
+
+void SAL_CALL ScVbaLabel::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setAutoSize( bAutoSize );
+}
+
 uno::Sequence< rtl::OUString >
 ScVbaLabel::getServiceNames()
 {

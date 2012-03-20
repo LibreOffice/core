@@ -39,6 +39,9 @@ interface XCheckBox: com::sun::star::uno::XInterface
 {
     [attribute] string Caption;
     [attribute] any Value;
+    [attribute] long BackColor;
+    [attribute] boolean AutoSize;
+    [attribute] boolean Locked;
     [attribute, readonly] XNewFont Font;
 };
 

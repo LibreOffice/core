@@ -75,6 +75,7 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,oovbaapi,oovbaapi/ooo/vba,\
     VbMsgBoxStyle \
     VbQueryClose \
     VbStrConv \
+    SystemColorConstants \
     VbTriState \
     VbVarType \
 	XApplicationBase \

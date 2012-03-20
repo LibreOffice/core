@@ -152,6 +152,36 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaTextBox::getFont() throw (uno:
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
+sal_Int32 SAL_CALL ScVbaTextBox::getBackColor() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getBackColor();
+}
+
+void SAL_CALL ScVbaTextBox::setBackColor( sal_Int32 nBackColor ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setBackColor( nBackColor );
+}
+
+sal_Bool SAL_CALL ScVbaTextBox::getAutoSize() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getAutoSize();
+}
+
+void SAL_CALL ScVbaTextBox::setAutoSize( sal_Bool bAutoSize ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setAutoSize( bAutoSize );
+}
+
+sal_Bool SAL_CALL ScVbaTextBox::getLocked() throw (uno::RuntimeException)
+{
+    return ScVbaControl::getLocked();
+}
+
+void SAL_CALL ScVbaTextBox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeException)
+{
+    ScVbaControl::setLocked( bLocked );
+}
+
 rtl::OUString&
 ScVbaTextBox::getServiceImplName()
 {
