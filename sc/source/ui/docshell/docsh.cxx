@@ -2537,7 +2537,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
 
     bIsInplace = rShell.bIsInplace;
 
-    pDocFunc = new ScDocFunc(*this);
+    pDocFunc = new ScDocFuncDirect(*this);
 
     //  SetBaseModel needs exception handling
     ScModelObj::CreateAndSet( this );
@@ -2584,7 +2584,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     bIsInplace = (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
     //  wird zurueckgesetzt, wenn nicht inplace
 
-    pDocFunc = new ScDocFunc(*this);
+    pDocFunc = new ScDocFuncDirect(*this);
 
     //  SetBaseModel needs exception handling
     ScModelObj::CreateAndSet( this );
