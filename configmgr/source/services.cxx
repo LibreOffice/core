@@ -36,7 +36,6 @@
 #include "com/sun/star/uno/XInterface.hpp"
 #include "cppuhelper/factory.hxx"
 #include "cppuhelper/implementationentry.hxx"
-#include "uno/lbnames.h"
 #include "sal/types.h"
 
 #include "configurationprovider.hxx"

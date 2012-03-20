@@ -53,7 +53,6 @@
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"
 #include "typelib/typedescription.hxx"
-#include "uno/lbnames.h"
 
 #include "binaryany.hxx"
 #include "bridge.hxx"

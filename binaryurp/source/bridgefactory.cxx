@@ -41,7 +41,6 @@
 #include "cppuhelper/implementationentry.hxx"
 #include "rtl/ref.hxx"
 #include "sal/types.h"
-#include "uno/lbnames.h"
 
 #include "bridge.hxx"
 #include "bridgefactory.hxx"
