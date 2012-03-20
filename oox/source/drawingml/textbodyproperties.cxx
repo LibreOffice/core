@@ -45,11 +45,6 @@ TextBodyProperties::TextBodyProperties():
 {
 }
 
-void TextBodyProperties::pushToPropMap( PropertyMap& rPropMap ) const
-{
-    rPropMap.insert( maPropertyMap.begin(), maPropertyMap.end() );
-}
-
 /* For Legacy purposes: TODO: Check if it is required at all! */
 void TextBodyProperties::pushVertSimulation()
 {

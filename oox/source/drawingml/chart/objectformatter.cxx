@@ -728,11 +728,6 @@ public:
                             PropertySet& rPropSet,
                             const TextCharacterProperties& rTextProps );
 
-    /** Sets automatic line properties to the passed property set. */
-    void                convertAutomaticLine(
-                            PropertySet& rPropSet,
-                            sal_Int32 nSeriesIdx );
-
     /** Sets automatic fill properties to the passed property set. */
     void                convertAutomaticFill(
                             PropertySet& rPropSet,
@@ -1015,15 +1010,6 @@ void ObjectTypeFormatter::convertFormatting( PropertySet& rPropSet, const ModelR
 void ObjectTypeFormatter::convertTextFormatting( PropertySet& rPropSet, const TextCharacterProperties& rTextProps )
 {
     maTextFormatter.convertFormatting( rPropSet, &rTextProps );
-}
-
-void ObjectTypeFormatter::convertAutomaticLine( PropertySet& rPropSet, sal_Int32 nSeriesIdx )
-{
-    ShapePropertyMap aPropMap( mrModelObjHelper, *mrEntry.mpPropInfo );
-    ModelRef< Shape > xShapeProp;
-    maLineFormatter.convertFormatting( aPropMap, xShapeProp, nSeriesIdx );
-    maEffectFormatter.convertFormatting( aPropMap, xShapeProp, nSeriesIdx );
-    rPropSet.setProperties( aPropMap );
 }
 
 void ObjectTypeFormatter::convertAutomaticFill( PropertySet& rPropSet, sal_Int32 nSeriesIdx )

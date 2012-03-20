@@ -157,9 +157,6 @@ private:
             ::com::sun::star::uno::Reference<
                 ::com::sun::star::chart2::XDataSeries > > & aSeriesSeq,
         sal_Bool bJapaneseCandleSticks, sal_Int32& nAttachedAxis );
-    void exportDataSeq(
-        const com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xValueSeq,
-        sal_Int32 elementTokenId );
     void exportSeriesText(
         const com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XDataSequence >& xValueSeq );
     void exportSeriesCategory(
@@ -176,8 +173,6 @@ private:
     void exportFirstSliceAng();
 
     void exportAxes( );
-    void exportXAxis( AxisIdPair aAxisIdPair );
-    void exportYAxis( AxisIdPair aAxisIdPair );
     void exportAxis( AxisIdPair aAxisIdPair );
     void _exportAxis(
         const ::com::sun::star::uno::Reference< ::com::sun::star::beans::XPropertySet >& xAxisProp,

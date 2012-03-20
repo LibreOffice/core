@@ -117,41 +117,6 @@ namespace drawingml {
 #define GET(variable, propName) \
     if ( GETA(propName) ) \
         mAny >>= variable;
-DBG(
-void lcl_dump_pset(Reference< XPropertySet > rXPropSet)
-{
-    Reference< XPropertySetInfo > info = rXPropSet->getPropertySetInfo ();
-    Sequence< beans::Property > props = info->getProperties ();
-
-    for (int i=0; i < props.getLength (); i++) {
-        OString name = OUStringToOString( props [i].Name, RTL_TEXTENCODING_UTF8);
-        fprintf (stderr,"%30s = ", name.getStr() );
-
-    try {
-        Any value = rXPropSet->getPropertyValue( props [i].Name );
-
-        OUString strValue;
-        sal_Int32 intValue;
-        bool boolValue;
-    LineSpacing spacing;
-
-        if( value >>= strValue )
-            fprintf (stderr,"\"%s\"\n", USS( strValue ) );
-        else if( value >>= intValue )
-            fprintf (stderr,"%" SAL_PRIdINT32 "            (hex: %" SAL_PRIxUINT32 ")\n", intValue, intValue);
-        else if( value >>= boolValue )
-            fprintf (stderr,"%d            (bool)\n", boolValue);
-    else if( value >>= spacing ) {
-        fprintf (stderr, "mode: %d value: %d\n", spacing.Mode, spacing.Height);
-    }
-        else
-            fprintf (stderr,"???           <unhandled type>\n");
-    } catch(const Exception &) {
-        fprintf (stderr,"unable to get '%s' value\n", USS(props [i].Name));
-    }
-    }
-}
-);
 
 // not thread safe
 int DrawingML::mnImageCounter = 1;

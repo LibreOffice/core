@@ -376,11 +376,6 @@ void FillProperties::pushToPropMap( ShapePropertyMap& rPropMap,
 
 // ============================================================================
 
-void GraphicProperties::assignUsed( const GraphicProperties& rSourceProps )
-{
-    maBlipProps.assignUsed( rSourceProps.maBlipProps );
-}
-
 void GraphicProperties::pushToPropMap( PropertyMap& rPropMap, const GraphicHelper& rGraphicHelper, sal_Int32 nPhClr ) const
 {
     if( maBlipProps.mxGraphic.is() )

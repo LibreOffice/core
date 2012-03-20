@@ -47,7 +47,6 @@ struct TextBodyProperties
 
     explicit            TextBodyProperties();
 
-    void                pushToPropMap( PropertyMap& rPropMap ) const;
     void                pushVertSimulation();
 };
 

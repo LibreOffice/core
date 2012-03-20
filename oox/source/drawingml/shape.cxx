@@ -584,18 +584,6 @@ Reference< XShape > Shape::createAndInsert(
     return mxShape;
 }
 
-// the properties of rSource which are not part of rDest are being put into rDest
-void addMissingProperties( const PropertyMap& rSource, PropertyMap& rDest )
-{
-    PropertyMap::const_iterator aSourceIter( rSource.begin() );
-    while( aSourceIter != rSource.end() )
-    {
-        if ( rDest.find( (*aSourceIter ).first ) == rDest.end() )
-            rDest[ (*aSourceIter).first ] <<= (*aSourceIter).second;
-        ++aSourceIter;
-    }
-}
-
 void Shape::setTextBody(const TextBodyPtr & pTextBody)
 {
     mpTextBody = pTextBody;
