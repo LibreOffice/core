@@ -44,7 +44,6 @@ PresenterSprite::PresenterSprite (void)
       mxSprite(),
       maSize(0,0),
       maLocation(0,0),
-      maTransform(1,0,0, 0,1,0),
       mbIsVisible(false),
       mnPriority(0),
       mnAlpha(1.0)
@@ -142,7 +141,6 @@ void PresenterSprite::ProvideSprite (void)
         mxSprite = mxSpriteFactory->createCustomSprite(maSize);
         if (mxSprite.is())
         {
-            mxSprite->transform(maTransform);
             mxSprite->move(maLocation,
                 rendering::ViewState(
                 geometry::AffineMatrix2D(1,0,0, 0,1,0),

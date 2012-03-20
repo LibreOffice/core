@@ -73,7 +73,6 @@ private:
     ::css::uno::Reference<css::rendering::XCustomSprite> mxSprite;
     css::geometry::RealSize2D maSize;
     css::geometry::RealPoint2D maLocation;
-    css::geometry::AffineMatrix2D maTransform;
     bool mbIsVisible;
     double mnPriority;
     double mnAlpha;
