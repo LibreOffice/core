@@ -854,7 +854,7 @@ sal_Bool SbxValue::SetType( SbxDataType t )
                         sal_uInt16 nSlotId = pThisVar
                                     ? ( (sal_Int16) ( pThisVar->GetUserData() & 0xFFFF ) )
                                     : 0;
-                        DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName() == UniString::CreateFromAscii( "Parent" ),
+                        DBG_ASSERT( nSlotId != 5345 || pThisVar->GetName().EqualsAscii("Parent"),
                                     "SID_PARENTOBJECT heisst nicht 'Parent'" );
                         sal_Bool bParentProp = 5345 == nSlotId;
                         if ( !bParentProp )

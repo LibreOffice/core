@@ -205,7 +205,7 @@ static sal_Bool ImplNumericGetValue( const XubString& rStr, double& rValue,
     aStr += aStr2;
 
     // Bereichsueberpruefung
-    double nValue = aStr.ToDouble();
+    double nValue = rtl::OUString(aStr).toDouble();
     if ( bRound )
     {
         if ( !bNegative )

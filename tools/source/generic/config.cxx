@@ -888,7 +888,7 @@ rtl::OString Config::ReadKey(const rtl::OString& rKey) const
 
 // -----------------------------------------------------------------------
 
-UniString Config::ReadKey(const rtl::OString& rKey, rtl_TextEncoding eEncoding) const
+rtl::OUString Config::ReadKey(const rtl::OString& rKey, rtl_TextEncoding eEncoding) const
 {
     if ( mpData->mbIsUTF8BOM )
         eEncoding = RTL_TEXTENCODING_UTF8;

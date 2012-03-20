@@ -105,24 +105,6 @@ sal_Int64 UniString::ToInt64() const
 
 // -----------------------------------------------------------------------
 
-float UniString::ToFloat() const
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-
-    return rtl_ustr_toFloat( mpData->maStr );
-}
-
-// -----------------------------------------------------------------------
-
-double UniString::ToDouble() const
-{
-    DBG_CHKTHIS( UniString, DbgCheckUniString );
-
-    return rtl_ustr_toDouble( mpData->maStr );
-}
-
-// -----------------------------------------------------------------------
-
 xub_StrLen STRING::SearchChar( const STRCODE* pChars, xub_StrLen nIndex ) const
 {
     DBG_CHKTHIS( STRING, DBGCHECKSTRING );

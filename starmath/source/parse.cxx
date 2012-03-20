@@ -1972,8 +1972,8 @@ void SmParser::FontSize()
     Fraction  aValue( 1L );
     if (lcl_IsNumber( m_aCurToken.aText ))
     {
-        double    fTmp;
-        if ((fTmp = m_aCurToken.aText.ToDouble()) != 0.0)
+        double fTmp = rtl::OUString(m_aCurToken.aText).toDouble();
+        if (fTmp != 0.0)
         {
             aValue = fTmp;
 

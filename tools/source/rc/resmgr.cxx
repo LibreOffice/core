@@ -727,7 +727,7 @@ UniString GetTypeRes_Impl( const ResId& rTypeId )
 {
     // Funktion verlassen, falls Resourcefehler in dieser Funktion
     static int bInUse = sal_False;
-    UniString aTypStr( UniString::CreateFromInt32( rTypeId.GetId() ) );
+    rtl::OUString aTypStr(OUString::valueOf(static_cast<sal_Int32>(rTypeId.GetId())));
 
     if ( !bInUse )
     {
@@ -741,7 +741,7 @@ UniString GetTypeRes_Impl( const ResId& rTypeId )
             rTypeId.SetRT( RSC_STRING );
             if ( rTypeId.GetResMgr()->IsAvailable( rTypeId ) )
             {
-                aTypStr = UniString( rTypeId );
+                aTypStr = ResId::toString(rTypeId);
                 // Versions Resource Klassenzeiger ans Ende setzen
                 rTypeId.GetResMgr()->Increment( sizeof( RSHEADER_TYPE ) );
             }

@@ -1592,11 +1592,11 @@ IMPL_LINK( SvtFileDialog, SelectHdl_Impl, SvTabListBox*, pBox )
             else if ( !pUserData->mbIsFolder )
             {
                 _pImp->_pEdFileName->SetText( pUserData->maURL );
-                _pImp->_pEdFileName->SetSelection( Selection( 0, pUserData->maURL.Len() ) );
+                _pImp->_pEdFileName->SetSelection( Selection( 0, pUserData->maURL.getLength() ) );
                 _aPath = pUserData->maURL;
             }
             else
-                _pImp->_pEdFileName->SetText( UniString() );
+                _pImp->_pEdFileName->SetText( rtl::OUString() );
         }
         else
         {
@@ -2153,7 +2153,7 @@ short SvtFileDialog::PrepareExecute()
         // if applicable set respectively create filter for all files
         if ( !bHasAll )
         {
-            SvtFileDialogFilter_Impl* pAllFilter = implAddFilter( aAll, UniString(RTL_CONSTASCII_USTRINGPARAM(FILEDIALOG_FILTER_ALL)) );
+            SvtFileDialogFilter_Impl* pAllFilter = implAddFilter( aAll, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(FILEDIALOG_FILTER_ALL)) );
             _pImp->InsertFilterListEntry( pAllFilter );
             _pImp->SetCurFilter( pAllFilter, aAll );
         }

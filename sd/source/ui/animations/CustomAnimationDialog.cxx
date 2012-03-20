@@ -2104,9 +2104,9 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
             break;
         default:
             {
-                String aText( mpCBRepeat->GetText() );
-                if( aText.Len() )
-                    aRepeatCount <<= aText.ToDouble();
+                rtl::OUString aText( mpCBRepeat->GetText() );
+                if( !aText.isEmpty() )
+                    aRepeatCount <<= aText.toDouble();
             }
         }
 
@@ -2135,10 +2135,10 @@ void CustomAnimationDurationTabPage::update( STLPropertySet* pSet )
     }
     else
     {
-        String aText( mpCBDuration->GetText() );
-        if( aText.Len() )
+        rtl::OUString aText( mpCBDuration->GetText() );
+        if( !aText.isEmpty() )
         {
-            fDuration = aText.ToDouble();
+            fDuration = aText.toDouble();
         }
     }
 

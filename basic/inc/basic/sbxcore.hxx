@@ -38,7 +38,6 @@
 
 class SvStream;
 class String;
-class UniString;
 namespace rtl { class OUString; }
 
 // The following Macro defines four (five) necessary methods within a

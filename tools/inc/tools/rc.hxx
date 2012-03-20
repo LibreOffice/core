@@ -82,7 +82,7 @@ class TOOLS_DLLPUBLIC Resource
     sal_Int16 ReadShortRes()
     { return m_pResMgr->ReadShort(); }
     // read a string from resource data and increment pointer
-    UniString ReadStringRes()
+    rtl::OUString ReadStringRes()
     { return m_pResMgr->ReadString(); }
     // read a byte string from resource data and increment pointer
     rtl::OString ReadByteStringRes()

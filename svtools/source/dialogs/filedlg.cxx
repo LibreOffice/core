@@ -49,12 +49,12 @@ short PathDialog::Execute()
     return n;
 }
 
-UniString PathDialog::GetPath() const
+rtl::OUString PathDialog::GetPath() const
 {
     return pImpFileDlg->GetDialog()->GetPath();
 }
 
-void PathDialog::SetPath( const UniString& rPath )
+void PathDialog::SetPath( const rtl::OUString& rPath )
 {
     pImpFileDlg->GetDialog()->SetPath( rPath );
 }

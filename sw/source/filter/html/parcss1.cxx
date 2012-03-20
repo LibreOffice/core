@@ -360,7 +360,7 @@ CSS1Token CSS1Parser::GetNextToken()
                          !IsEOF() );
 
                 aToken += String(sTmpBuffer.makeStringAndClear());
-                nValue = aToken.ToDouble();
+                nValue = rtl::OUString(aToken).toDouble();
 
                 // White Space ueberlesen
                 while( ( ' ' == cNextCh ||

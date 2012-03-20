@@ -563,8 +563,6 @@ binfilter::String::Search(unsigned short const*, unsigned short) const
 binfilter::String::SearchAndReplaceAll(binfilter::String const&, binfilter::String const&)
 binfilter::String::SearchAndReplaceAllAscii(char const*, binfilter::String const&)
 binfilter::String::SearchChar(unsigned short const*, unsigned short) const
-binfilter::String::ToFloat() const
-binfilter::String::intern() const
 binfilter::SvBools::Insert(binfilter::SvBools const*, unsigned short, unsigned short, unsigned short)
 binfilter::SvBools::Replace(unsigned char const&, unsigned short)
 binfilter::SvBools::Replace(unsigned char const*, unsigned short, unsigned short)

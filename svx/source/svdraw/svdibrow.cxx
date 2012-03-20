@@ -1171,18 +1171,17 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
         pView->GetAttributes(aSet);
 
         SfxItemSet aNewSet(*aSet.GetPool(),pEntry->nWhichId,pEntry->nWhichId);
-        XubString aNewText(pBrowse->GetNewEntryValue());
-        sal_Bool bDel( aNewText.EqualsAscii("del")
-            || aNewText.EqualsAscii("Del")
-            || aNewText.EqualsAscii("DEL")
-            || aNewText.EqualsAscii("default")
-            || aNewText.EqualsAscii("Default")
-            || aNewText.EqualsAscii("DEFAULT"));
+        rtl::OUString aNewText(pBrowse->GetNewEntryValue());
+        sal_Bool bDel( aNewText == "del"
+            || aNewText == "Del"
+            || aNewText == "DEL"
+            || aNewText == "default"
+            || aNewText == "Default"
+            || aNewText == "DEFAULT" );
 
         if (!bDel) {
             SfxPoolItem* pNewItem=aSet.Get(pEntry->nWhichId).Clone();
-            long nLongVal=0;
-            nLongVal = aNewText.ToInt32();
+            long nLongVal = aNewText.toInt32();
             if (pEntry->bCanNum) {
                 if (nLongVal>pEntry->nMax) nLongVal=pEntry->nMax;
                 if (nLongVal<pEntry->nMin) nLongVal=pEntry->nMin;
@@ -1190,18 +1189,18 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
             bool bPairX = true;
             bool bPairY = false;
             sal_uInt16 nSepLen=1;
-            long nLongX = aNewText.ToInt32();
+            long nLongX = aNewText.toInt32();
             long nLongY=0;
-            xub_StrLen nPos = aNewText.Search(sal_Unicode('/'));
-            if (nPos==STRING_NOTFOUND) nPos=aNewText.Search(sal_Unicode(':'));
-            if (nPos==STRING_NOTFOUND) nPos=aNewText.Search(sal_Unicode(' '));
-            if (nPos==STRING_NOTFOUND) { nPos=aNewText.SearchAscii(".."); if (nPos!=STRING_NOTFOUND) nSepLen=2; }
-            if (nPos!=STRING_NOTFOUND) {
+            sal_Int32 nPos = aNewText.indexOf(sal_Unicode('/'));
+            if (nPos==-1) nPos=aNewText.indexOf(sal_Unicode(':'));
+            if (nPos==-1) nPos=aNewText.indexOf(sal_Unicode(' '));
+            if (nPos==-1) { nPos=aNewText.indexOf(".."); if (nPos!=-1) nSepLen=2; }
+            if (nPos!=01)
+            {
                 bPairX=nPos>0;
-                XubString s(aNewText);
-                s.Erase(0,nPos+nSepLen);
-                bPairY = (sal_Bool)aNewText.Len();
-                nLongY = s.ToInt32();
+                rtl::OUString s(aNewText.copy(nPos+nSepLen));
+                bPairY = !aNewText.isEmpty();
+                nLongY = s.toInt32();
             }
             switch (pEntry->eItemType) {
                 case ITEM_BYTE  : ((SfxByteItem  *)pNewItem)->SetValue((sal_uInt8  )nLongVal); break;
@@ -1210,22 +1209,22 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 case ITEM_INT32: {
                     if(HAS_BASE(SdrAngleItem, pNewItem))
                     {
-                        aNewText.SearchAndReplace(sal_Unicode(','), sal_Unicode('.'));
-                        double nVal = aNewText.ToFloat();
+                        aNewText = aNewText.replace(',', '.');
+                        double nVal = aNewText.toFloat();
                         nLongVal = (long)(nVal * 100 + 0.5);
                     }
                     ((SfxInt32Item *)pNewItem)->SetValue((sal_Int32)nLongVal);
                 } break;
-                case ITEM_UINT32: ((SfxUInt32Item*)pNewItem)->SetValue(aNewText.ToInt32()); break;
+                case ITEM_UINT32: ((SfxUInt32Item*)pNewItem)->SetValue(aNewText.toInt32()); break;
                 case ITEM_ENUM  : ((SfxEnumItemInterface*)pNewItem)->SetEnumValue((sal_uInt16)nLongVal); break;
                 case ITEM_BOOL: {
-                    aNewText.ToUpperAscii();
-                    if (aNewText.EqualsAscii("TRUE")) nLongVal=1;
-                    if (aNewText.EqualsAscii("JA")) nLongVal=1;
-                    if (aNewText.EqualsAscii("AN")) nLongVal=1;
-                    if (aNewText.EqualsAscii("EIN")) nLongVal=1;
-                    if (aNewText.EqualsAscii("ON")) nLongVal=1;
-                    if (aNewText.EqualsAscii("YES")) nLongVal=1;
+                    aNewText = aNewText.toAsciiUpperCase();
+                    if (aNewText == "TRUE") nLongVal=1;
+                    if (aNewText == "JA") nLongVal=1;
+                    if (aNewText == "AN") nLongVal=1;
+                    if (aNewText == "EIN") nLongVal=1;
+                    if (aNewText == "ON") nLongVal=1;
+                    if (aNewText == "YES") nLongVal=1;
                     ((SfxBoolItem*)pNewItem)->SetValue((sal_Bool)nLongVal);
                 } break;
                 case ITEM_FLAG  : ((SfxFlagItem  *)pNewItem)->SetValue((sal_uInt16)nLongVal); break;
@@ -1253,7 +1252,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 case ITEM_FONTHEIGHT: {
                     sal_uIntPtr nHgt=0;
                     sal_uInt16 nProp=100;
-                    if (aNewText.Search(sal_Unicode('%'))!=STRING_NOTFOUND) {
+                    if (aNewText.indexOf(sal_Unicode('%')) != -1) {
                         nProp=(sal_uInt16)nLongVal;
                     } else {
                         nHgt=nLongVal;
@@ -1262,7 +1261,7 @@ IMPL_LINK(SdrItemBrowser,ChangedHdl,_SdrItemBrowserControl*,pBrowse)
                 } break;
                 case ITEM_FONTWIDTH: {
                     sal_uInt16 nProp=100;
-                    if (aNewText.Search(sal_Unicode('%'))!=STRING_NOTFOUND) {
+                    if (aNewText.indexOf(sal_Unicode('%')) != -1) {
                         nProp=(sal_uInt16)nLongVal;
                     }
                     ((SvxCharScaleWidthItem*)pNewItem)->SetValue(nProp);

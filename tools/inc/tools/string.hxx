@@ -183,8 +183,6 @@ public:
     static const UniString& EmptyString();
     sal_Int32           ToInt32() const;
     sal_Int64           ToInt64() const;
-    float               ToFloat() const;
-    double              ToDouble() const;
 
     UniString&          Assign( const UniString& rStr );
     UniString&          Assign( const rtl::OUString& rStr );

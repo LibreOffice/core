@@ -46,17 +46,14 @@ private:
     ImpSvFileDlg*       pImpFileDlg;    // Implementation
     Link                aOKHdlLink;     // Link to OK-Handler
 
-protected:
-    UniString           aDfltExt;       // Default - Extension
-
 public:
                         PathDialog( Window* pParent, WinBits nWinStyle = 0, sal_Bool bCreateDir = sal_True );
                         ~PathDialog();
 
     virtual long        OK();
 
-    void                SetPath( const UniString& rNewPath );
-    UniString               GetPath() const;
+    void                SetPath( const rtl::OUString& rNewPath );
+    rtl::OUString       GetPath() const;
 
     void                SetOKHdl( const Link& rLink ) { aOKHdlLink = rLink; }
     const Link&         GetOKHdl() const { return aOKHdlLink; }

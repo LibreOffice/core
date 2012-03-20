@@ -514,7 +514,7 @@ public:
 
     static void writeHeaderFieldBody(INetMIMEOutputSink & rSink,
                                      HeaderFieldType eType,
-                                     const UniString & rBody,
+                                     const rtl::OUString& rBody,
                                      rtl_TextEncoding ePreferredEncoding,
                                      bool bInitialSpace = true);
 
@@ -523,7 +523,7 @@ public:
                                   rtl_TextEncoding eEncoding,
                                   sal_uInt32 & rCharacter);
 
-    static UniString decodeHeaderFieldBody(HeaderFieldType eType,
+    static rtl::OUString decodeHeaderFieldBody(HeaderFieldType eType,
                                            const rtl::OString& rBody);
 
 // #i70651#: Prevent warnings on Mac OS X.
@@ -1237,7 +1237,7 @@ struct INetContentTypeParameter
         within Unicode's Private Use Area (effectively adding 0xF800 to the
         character's numeric value).
      */
-    const UniString m_sValue;
+    const rtl::OUString m_sValue;
 
     /** This is true if the value is successfuly converted to Unicode, and
         false if the value is a special mixture of ISO-LATIN-1 characters and
@@ -1247,7 +1247,7 @@ struct INetContentTypeParameter
 
     INetContentTypeParameter(const rtl::OString& rTheAttribute,
         const rtl::OString& rTheCharset, const rtl::OString& rTheLanguage,
-        const UniString & rTheValue, bool bTheConverted)
+        const rtl::OUString& rTheValue, bool bTheConverted)
     : m_sAttribute(rTheAttribute)
     , m_sCharset(rTheCharset)
     , m_sLanguage(rTheLanguage)

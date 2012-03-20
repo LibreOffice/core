@@ -86,17 +86,13 @@ public:
 
     void            SetText( const XubString& rStr );
     XubString       GetText() const;
-    UniString           GetSelectedText() const         { return maEdit.GetSelected(); }
+    rtl::OUString   GetSelectedText() const         { return maEdit.GetSelected(); }
 
     void            SetSelection( const Selection& rSelection ) { maEdit.SetSelection( rSelection ); }
     Selection       GetSelection() const                        { return maEdit.GetSelection(); }
 
     void            SetReadOnly( sal_Bool bReadOnly = sal_True )    { maEdit.SetReadOnly( bReadOnly ); }
     sal_Bool            IsReadOnly() const                      { return maEdit.IsReadOnly(); }
-
-    //------
-    //manipulate the Button-Text:
-    XubString       GetButtonText() const { return maButtonText; }
 
     //------
     //use this to manipulate the dialog bevore executing it:

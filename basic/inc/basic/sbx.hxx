@@ -44,7 +44,6 @@
 #include <boost/ptr_container/ptr_vector.hpp>
 
 class String;
-class UniString;
 class SvStream;
 class SbxBase;
 class SbxVariable;

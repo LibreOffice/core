@@ -35,7 +35,6 @@
 class SbxBase;
 class SbxObject;
 class String;
-class UniString;
 
 class BASIC_DLLPUBLIC SbxFactory
 {
