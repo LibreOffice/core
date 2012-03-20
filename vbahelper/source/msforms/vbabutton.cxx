@@ -103,6 +103,7 @@ void SAL_CALL ScVbaButton::setBackColor( sal_Int32 nBackColor ) throw (uno::Runt
 
 sal_Int32 SAL_CALL ScVbaButton::getForeColor() throw (uno::RuntimeException)
 {
+    return ScVbaControl::getForeColor();
 }
 
 void SAL_CALL ScVbaButton::setForeColor( sal_Int32 /*nForeColor*/ ) throw (uno::RuntimeException)
