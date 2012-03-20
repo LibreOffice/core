@@ -800,9 +800,9 @@ public class ServiceManager implements XMultiServiceFactory,
                 return enumeration.nextElement();
             } catch (java.util.NoSuchElementException e) {
                 com.sun.star.container.NoSuchElementException ex =
-                        new com.sun.star.container.NoSuchElementException();
-                ex.fillInStackTrace();
-
+                    new com.sun.star.container.NoSuchElementException(
+                        e.toString());
+                ex.initCause(e);
                 throw ex;
             }
         }
