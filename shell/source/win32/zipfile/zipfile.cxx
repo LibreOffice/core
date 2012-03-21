@@ -464,7 +464,7 @@ void ZipFile::GetUncompressedContent(
         strm.opaque = Z_NULL;
         strm.avail_in = 0;
         strm.next_in = Z_NULL;
-        ret = inflateInit(&strm);
+        ret = inflateInit2(&strm,-MAX_WBITS);
         if (ret != Z_OK)
             return;
 
