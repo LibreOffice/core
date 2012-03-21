@@ -36,6 +36,10 @@ $(eval $(call gb_CppunitTest_add_linked_libs,tubes_test, \
     $(gb_STDLIBS) \
 ))
 
+$(eval $(call gb_CppunitTest_add_libs,tubes_test, \
+    $$(TELEPATHY_LIBS) \
+))
+
 $(eval $(call gb_CppunitTest_set_include,tubes_test,\
     -I$(realpath $(SRCDIR)/tubes/inc) \
     $$(TELEPATHY_CFLAGS) \

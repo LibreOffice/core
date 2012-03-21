@@ -28,6 +28,7 @@
 
 #include <sal/precppunit.hxx>
 
+#include <tubes/contact-list.hxx>
 #include <tubes/manager.hxx>
 
 #include <cppunit/TestAssert.h>
@@ -45,6 +46,7 @@ public:
 
     TestTeleTubes();
     ~TestTeleTubes();
+    void testContactList();
     void testSetupManager1();
     void testSetupManager2();
     void testConnect1();
@@ -60,8 +62,11 @@ public:
     void testDestroyManager2();
     void testFailAlways();
 
+    GMainLoop*                  mpMainLoop;
+
     // Order is significant.
     CPPUNIT_TEST_SUITE( TestTeleTubes );
+    CPPUNIT_TEST( testContactList );
     CPPUNIT_TEST( testSetupManager1 );
     CPPUNIT_TEST( testSetupManager2 );
     CPPUNIT_TEST( testConnect1 );
@@ -101,6 +106,57 @@ TestTeleTubes::TestTeleTubes()
 
 TestTeleTubes::~TestTeleTubes()
 {
+}
+
+static void TeleTestTubes_ContactListPrepared( GError *errorOr0, void *user_data )
+{
+    TestTeleTubes *self = reinterpret_cast<TestTeleTubes *>(user_data);
+
+    CPPUNIT_ASSERT( errorOr0 == 0 );
+
+    g_main_loop_quit (self->mpMainLoop);
+}
+
+static gboolean
+timed_out (void *user_data)
+{
+    CPPUNIT_ASSERT( false);
+
+    GMainLoop *loop = reinterpret_cast<GMainLoop *>(user_data);
+
+    g_main_loop_quit (loop);
+    return FALSE;
+}
+
+void TestTeleTubes::testContactList()
+{
+    mpMainLoop = g_main_loop_new (NULL, FALSE);
+
+    ContactList cl;
+    cl.prepare( TeleTestTubes_ContactListPrepared, this );
+    g_timeout_add_seconds (5, timed_out, mpMainLoop);
+    g_main_loop_run (mpMainLoop);
+    g_main_loop_unref (mpMainLoop);
+    mpMainLoop = NULL;
+
+    /* Okay, now everything's prepared, we can get contacts synchronously. */
+    AccountContactPairV pairs;
+
+    pairs = cl.getContacts();
+    guint i;
+
+    CPPUNIT_ASSERT( pairs.size() > 0 );
+
+    for (i = 0; i < pairs.size(); i++)
+    {
+        AccountContactPair pair = pairs[i];
+        g_print ("Account %s; contact %s (%s)\n",
+            tp_account_get_display_name (pair.first),
+            tp_contact_get_alias (pair.second),
+            tp_contact_get_identifier (pair.second));
+        g_object_unref (pair.first);
+        g_object_unref (pair.second);
+    }
 }
 
 void TestTeleTubes::testSetupManager1()
