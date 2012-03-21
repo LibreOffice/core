@@ -188,7 +188,8 @@ else
 GGDB2=-g2
 endif
 
-gb_DEBUG_CFLAGS := $(GGDB2) -finline-limit=0 -fno-inline -fno-default-inline
+gb_DEBUG_CFLAGS := $(GGDB2) -finline-limit=0 -fno-inline
+gb_DEBUG_CXXFLAGS := -fno-default-inline
 
 gb_COMPILERNOOPTFLAGS := -O0
 
