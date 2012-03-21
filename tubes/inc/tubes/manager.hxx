@@ -125,7 +125,7 @@ public:
     void                    acceptTube( TpChannel* pChannel, const char* pAddress );
 
     /** Send data to all registered conferences.
-        
+
         @returns to how many conferences the packet was send
      */
     sal_uInt32              sendPacket( const TelePacket& rPacket ) const;

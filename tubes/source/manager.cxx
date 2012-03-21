@@ -742,7 +742,7 @@ rtl::OString TeleManager::createUuid()
     }
     aBuf[32] = 0;
     return rtl::OString( aBuf);
-} 
+}
 
 
 // static
