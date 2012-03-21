@@ -41,11 +41,11 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Scanner;
 
-// We override NativeActivity so that we can get at the intent of the
+// We extend NativeActivity so that we can get at the intent of the
 // activity and its extra parameters, that we use to tell us what
 // actual LibreOffice "program" to run. I.e. something that on desktop
-// OSes would be a program, but for Androis is actually built as a
-// shared object, with an "lo_main" function.
+// OSes would be a program, but for Android is actually built as a
+// shared object, with a "lo_main" function.
 
 public class Bootstrap extends NativeActivity
 {
