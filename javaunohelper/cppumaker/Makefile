@@ -28,7 +28,7 @@
 gb_PARTIALBUILD := T
 include $(GBUILDDIR)/gbuild_simple.mk
 
-done : $(gb_UnoApiTarget_CPPUMAKERTARGET)
+done : $(gb_UnoApiTarget_CPPUMAKERTARGET) $(OUTDIR)/bin/udkapi.rdb
 	$(call gb_Helper_abbreviate_dirs_native, \
 	$(call gb_Helper_execute,cppumaker -C -BUCR -O. \
 		-Tcom.sun.star.beans.NamedValue \
