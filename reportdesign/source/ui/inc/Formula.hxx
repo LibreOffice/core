@@ -45,8 +45,8 @@ class FunctionManager;
 class OAddFieldWindow;
 
 //============================================================================
-class FormulaDialog : public formula::FormulaModalDialog,
-                      public formula::IFormulaEditorHelper,
+class FormulaDialog : public formula::IFormulaEditorHelper,
+                      public formula::FormulaModalDialog,
                       public formula::IControlReferenceHandler
 {
     ::boost::shared_ptr< formula::IFunctionManager > m_aFunctionManager;
