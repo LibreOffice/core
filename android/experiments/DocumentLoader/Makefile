@@ -1,12 +1,13 @@
-NDK_HOME:=$(shell type -p ndk-build)
-NDK_HOME:=$(shell dirname $(NDK_HOME))
+include ../../../config_host.mk
+
+# The package of this app
+APP_PACKAGE=org.libreoffice.android.examples
 
 SODEST=libs/armeabi-v7a
 OBJLOCAL=obj/local/armeabi-v7a
 
 define COPYSO
-cp $(1) $(SODEST)$(if $(2),/$(2)) && \
-arm-linux-androideabi-strip --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
+cp $(1) $(SODEST)$(if $(2),/$(2)) && $(STRIP) --strip-debug $(SODEST)$(if $(2),/$(2),/$(notdir $(1))) && \
 cp $(1) $(OBJLOCAL)$(if $(2),/$(2))
 endef
 
@@ -18,36 +19,10 @@ endef
 
 all: build-ant
 
-copy-stuff:
+copy-stuff: 
 # First always clean 
 	rm -rf libs $(OBJLOCAL)
 	mkdir -p $(SODEST) $(OBJLOCAL)
-#
-# Copy jar files we need, and even construct one.
-#
-	for F in $(strip \
-		   java_uno \
-		   juh \
-		   jurt \
-		   ridl \
-		   unoloader \
-		  ); do \
-	    $(call COPYJAR,$(OUTDIR)/bin/$${F}.jar); \
-	done
-#
-# lo-bootstrap.jar from ../../Bootstrap
-#
-	cp ../../Bootstrap/lo-bootstrap.jar libs
-#
-# com.sun.star.frame.XComponentLoader is not in any jar
-#
-	cd libs && \
-	    LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib \
-	    DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib \
-	    $(OUTDIR_FOR_BUILD)/bin/javamaker -BUCR -nD \
-		$(OUTDIR)/bin/udkapi.rdb $(OUTDIR)/bin/offapi.rdb \
-		-Tcom.sun.star.frame.XComponentLoader && \
-	    jar cvf more.jar com
 #
 # Copy shared libraries (including UNO components) we need to
 # libs/armeabi-v7a so that ant will include them in the .apk.
@@ -70,8 +45,8 @@ copy-stuff:
 		   lo-bootstrap \
 		   localedata_en \
 		   localedata_others \
+		   mergedlo \
 		   reg \
-		   sal_textenc \
 		   store \
 		   ucbhelper4gcc3 \
 		   uno_cppu \
@@ -87,7 +62,7 @@ copy-stuff:
 	done
 #
 # Then the shared GNU C++ library
-	$(call COPYSO,$(NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libgnustl_shared.so)
+	$(call COPYSO,$(ANDROID_NDK_HOME)/sources/cxx-stl/gnu-libstdc++/libs/armeabi-v7a/libgnustl_shared.so)
 #
 # Then other "assets". Let the directory structure under assets mimic
 # that under solver for now.
@@ -101,20 +76,47 @@ copy-stuff:
 #
 # Then gdbserver and gdb.setup so that we can debug with ndk-gdb.
 #
-	cp $(NDK_HOME)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver $(SODEST)
+	cp $(ANDROID_NDK_HOME)/toolchains/arm-linux-androideabi-4.4.3/prebuilt/gdbserver $(SODEST)
 	echo set solib-search-path ./obj/local/armeabi-v7a >$(SODEST)/gdb.setup
 
 build-ant: copy-stuff
-	unset JAVA_HOME && ant debug
+#
+# Copy jar files we need, and even construct one.
+#
+	for F in $(strip \
+		   java_uno \
+		   juh \
+		   jurt \
+		   ridl \
+		   unoloader \
+		  ); do \
+	    $(call COPYJAR,$(OUTDIR)/bin/$${F}.jar); \
+	done
+#
+# com.sun.star.frame.XComponentLoader is not in any jar
+#
+	cd libs && \
+	    LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib \
+	    DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib \
+	    $(OUTDIR_FOR_BUILD)/bin/javamaker -BUCR -nD \
+		$(OUTDIR)/bin/udkapi.rdb $(OUTDIR)/bin/offapi.rdb \
+		-Tcom.sun.star.frame.XComponentLoader && \
+	    jar cvf more.jar com
+#
+	unset JAVA_HOME && $(ANT) debug
 
 install: copy-stuff
-	unset JAVA_HOME && ant debug install
+	unset JAVA_HOME && $(ANT) debug install
 	@echo
 	@echo 'Run it with something like what "make run" does (see Makefile)'
 	@echo
 
-run: install
+uninstall:
+	$(ANDROID_SDK_HOME)/platform-tools/adb uninstall $(APP_PACKAGE)
+
+run:
 	adb shell am start -n org.libreoffice.android.examples/.DocumentLoader -e input /assets/test1.odt
 
 clean:
-	rm -rf bin assets
+	$(ANT) clean
+	rm -rf assets libs $(SODEST) $(OBJLOCAL)

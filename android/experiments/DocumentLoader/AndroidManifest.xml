@@ -4,7 +4,7 @@
       android:versionCode="1"
       android:versionName="1.0">
     <uses-sdk android:minSdkVersion="9" />
-    <application android:label="@string/app_name"
+    <application android:label="LO Experimental DocumentLoader"
                  android:debuggable="true">
         <activity android:name=".DocumentLoader"
                   android:label="LO DocumentLoader"
