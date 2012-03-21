@@ -583,7 +583,7 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                 char buffer[1024];
                 struct spwd spwdStruct;
                 buffer[0] = '\0';
-#ifndef NEW_SHADOW_API
+#ifdef OLD_SHADOW_API
                 if (getspnam_r(pszUserName, &spwdStruct, buffer, sizeof buffer) != NULL)
 #else
                 if (getspnam_r(pszUserName, &spwdStruct, buffer, sizeof buffer, NULL) == 0)
@@ -597,7 +597,7 @@ osl_psz_loginUser(const sal_Char* pszUserName, const sal_Char* pszPasswd,
                     if (strcmp(spwdStruct.sp_pwdp, cryptPasswd) == 0) {
                         nError = osl_Security_E_None;
                     } else if (getuid() == 0 &&
-#ifndef NEW_SHADOW_API
+#ifdef OLD_SHADOW_API
                                (getspnam_r("root", &spwdStruct, buffer, sizeof buffer) != NULL))
 #else
                                (getspnam_r("root", &spwdStruct, buffer, sizeof buffer, NULL) == 0))
