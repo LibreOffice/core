@@ -66,6 +66,7 @@ copy-stuff:
 		  forlo \
 		  foruilo \
 		  freetype \
+		  frmlo \
 		  gcc3_uno \
 		  i18nisolang1gcc3 \
 		  i18npaperlo \
