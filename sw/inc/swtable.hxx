@@ -326,6 +326,8 @@ public:
 #ifdef DBG_UTIL
     void CheckConsistency() const;
 #endif
+
+    bool HasLayout() const;
 };
 
 class SW_DLLPUBLIC SwTableLine: public SwClient     // Client of FrmFmt.

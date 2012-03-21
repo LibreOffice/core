@@ -631,8 +631,7 @@ void WW8TableInfo::processSwTable(const SwTable * pTable)
 
     WW8TableNodeInfo * pPrev = NULL;
 
-    SwFrmFmt * pFrmFmt = pTable->GetFrmFmt();
-    if (pFrmFmt != NULL && pTable->IsTblComplex())
+    if (pTable->IsTblComplex() && pTable->HasLayout())
     {
         pPrev = processSwTableByLayout(pTable);
 

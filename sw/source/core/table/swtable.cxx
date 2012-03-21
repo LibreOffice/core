@@ -2800,6 +2800,13 @@ void SwTable::RegisterToFormat( SwFmt& rFmt )
     rFmt.Add( this );
 }
 
+bool SwTable::HasLayout() const
+{
+    const SwFrmFmt* pFrmFmt = GetFrmFmt();
+    //a table in a clipboard document doesn't have any layout information
+    return pFrmFmt && SwIterator<SwTabFrm,SwFmt>::FirstElement(*pFrmFmt);
+}
+
 void SwTableLine::RegisterToFormat( SwFmt& rFmt )
 {
     rFmt.Add( this );
