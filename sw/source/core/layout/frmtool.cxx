@@ -692,7 +692,7 @@ SwFlyNotify::~SwFlyNotify()
     {
         pFly->NotifyDrawObj();
     }
-    if ( bPosChgd && aFrm.Pos().X() != WEIT_WECH )
+    if ( bPosChgd && aFrm.Pos().X() != FAR_AWAY )
     {
         // OD 2004-05-10 #i28701# - no direct move of lower Writer fly frames.
         // reason: New positioning and alignment (e.g. to-paragraph anchored,
@@ -2800,7 +2800,7 @@ void Notify( SwFlyFrm *pFly, SwPageFrm *pOld, const SwRect &rOld,
     if ( rOld.Pos() != aFrm.Pos() )
     {   //Positionsaenderung, alten und neuen Bereich invalidieren
         if ( rOld.HasArea() &&
-             rOld.Left()+pFly->GetFmt()->GetLRSpace().GetLeft() < WEIT_WECH )
+             rOld.Left()+pFly->GetFmt()->GetLRSpace().GetLeft() < FAR_AWAY )
         {
             pFly->NotifyBackground( pOld, rOld, PREP_FLY_LEAVE );
         }
@@ -2943,7 +2943,7 @@ void Notify_Background( const SdrObject* pObj,
 
     //Wenn der Frm gerade erstmalig sinnvoll positioniert wurde, braucht der
     //alte Bereich nicht benachrichtigt werden.
-    if ( eHint == PREP_FLY_LEAVE && rRect.Top() == WEIT_WECH )
+    if ( eHint == PREP_FLY_LEAVE && rRect.Top() == FAR_AWAY )
          return;
 
     SwLayoutFrm* pArea;
@@ -3047,7 +3047,7 @@ void Notify_Background( const SdrObject* pObj,
                 if( pAnchoredObj->GetDrawObj() == pObj )
                     continue;
                 SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
-                if ( pFly->Frm().Top() == WEIT_WECH )
+                if ( pFly->Frm().Top() == FAR_AWAY )
                     continue;
 
                 if ( !pFlyFrm ||
@@ -3368,8 +3368,8 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
                         // Note: The Writer fly frame could be the frame itself.
                         SwFlyFrm* pFlyFrm( pTmpFrm->FindFlyFrm() );
                         if ( pFlyFrm &&
-                             pFlyFrm->Frm().Pos().X() == WEIT_WECH &&
-                             pFlyFrm->Frm().Pos().Y() == WEIT_WECH )
+                             pFlyFrm->Frm().Pos().X() == FAR_AWAY &&
+                             pFlyFrm->Frm().Pos().Y() == FAR_AWAY )
                         {
                             SwObjectFormatter::FormatObj( *pFlyFrm );
                         }
@@ -3391,8 +3391,8 @@ SwFrm* GetFrmOfModify( const SwRootFrm* pLayout, SwModify const& rMod, sal_uInt1
                     // nocht nicht "formatiert" sind
                     if( !bCalcFrm && nFrmType & FRM_FLY &&
                         ((SwFlyFrm*)pTmpFrm)->GetAnchorFrm() &&
-                        WEIT_WECH == pTmpFrm->Frm().Pos().X() &&
-                        WEIT_WECH == pTmpFrm->Frm().Pos().Y() )
+                        FAR_AWAY == pTmpFrm->Frm().Pos().X() &&
+                        FAR_AWAY == pTmpFrm->Frm().Pos().Y() )
                         aCalcRect = ((SwFlyFrm*)pTmpFrm)->GetAnchorFrm()->Frm();
                     else
                         aCalcRect = pTmpFrm->Frm();

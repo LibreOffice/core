@@ -2668,7 +2668,7 @@ sal_Bool SwTabFrm::CalcFlyOffsets( SwTwips& rUpper,
                 // #i26945# - correction of conditions,
                 // if Writer fly frame has to be considered:
                 // - no need to check, if top of Writer fly frame differs
-                //   from WEIT_WECH, because its also check, if the Writer
+                //   from FAR_AWAY, because its also check, if the Writer
                 //   fly frame rectangle overlaps with <aRect>
                 // - no check, if bottom of anchor frame is prior the top of
                 //   the table, because Writer fly frames can be negative positioned.
@@ -3842,7 +3842,7 @@ long MA_FASTCALL CalcHeightWidthFlys( const SwFrm *pFrm )
                     const SwFrmFmt& rFrmFmt = pAnchoredObj->GetFrmFmt();
                     const bool bConsiderObj =
                         (rFrmFmt.GetAnchor().GetAnchorId() != FLY_AS_CHAR) &&
-                            pAnchoredObj->GetObjRect().Top() != WEIT_WECH &&
+                            pAnchoredObj->GetObjRect().Top() != FAR_AWAY &&
                             rFrmFmt.GetFollowTextFlow().GetValue() &&
                             pAnchoredObj->GetPageFrm() == pTmp->FindPageFrm();
                     if ( bConsiderObj )
@@ -4773,7 +4773,7 @@ sal_Bool lcl_ArrangeLowers( SwLayoutFrm *pLay, long lYStart, sal_Bool bInva )
                         // #i52904# - no direct move of objects,
                         // whose vertical position doesn't depend on anchor frame.
                         const bool bDirectMove =
-                                WEIT_WECH != pFly->Frm().Top() &&
+                                FAR_AWAY != pFly->Frm().Top() &&
                                 bVertPosDepOnAnchor &&
                                 !pFly->ConsiderObjWrapInfluenceOnObjPos();
                         if ( bDirectMove )

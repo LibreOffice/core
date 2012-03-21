@@ -1805,7 +1805,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                 SwAnchoredObject* pAnchoredObj = (*pFrm->GetDrawObjs())[i];
                 const SwFrmFmt& rFmt = pAnchoredObj->GetFrmFmt();
                 const sal_Bool bFly = pAnchoredObj->ISA(SwFlyFrm);
-                if ((bFly && (WEIT_WECH == pAnchoredObj->GetObjRect().Width()))
+                if ((bFly && (FAR_AWAY == pAnchoredObj->GetObjRect().Width()))
                     || rFmt.GetFrmSize().GetWidthPercent())
                 {
                     continue;
@@ -1824,7 +1824,7 @@ void SwRootFrm::ImplCalcBrowseWidth()
                             // Reactivated old code because
                             // nWidth = pAnchoredObj->GetObjRect().Right()
                             // gives wrong results for objects that are still
-                            // at position WEIT_WECH.
+                            // at position FAR_AWAY.
                             if ( bFly )
                             {
                                 nWidth = rFmt.GetFrmSize().GetWidth();

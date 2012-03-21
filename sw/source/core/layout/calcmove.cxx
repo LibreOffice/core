@@ -669,7 +669,7 @@ void lcl_CheckObjects( SwSortedObjs* pSortedObjs, SwFrm* pFrm, long& rBot )
         if ( pObj->ISA(SwFlyFrm) )
         {
             SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pObj);
-            if( pFly->Frm().Top() != WEIT_WECH &&
+            if( pFly->Frm().Top() != FAR_AWAY &&
                 ( pFrm->IsPageFrm() ? pFly->IsFlyLayFrm() :
                   ( pFly->IsFlyAtCntFrm() &&
                     ( pFrm->IsBodyFrm() ? pFly->GetAnchorFrm()->IsInDocBody() :
@@ -1012,7 +1012,7 @@ sal_Bool SwCntntFrm::MakePrtArea( const SwBorderAttrs &rAttrs )
                     SwAnchoredObject* pObj = (*GetDrawObjs())[i];
                     const SwFrmFmt& rFmt = pObj->GetFrmFmt();
                     const sal_Bool bFly = pObj->ISA(SwFlyFrm);
-                    if ((bFly && (WEIT_WECH == pObj->GetObjRect().Width()))
+                    if ((bFly && (FAR_AWAY == pObj->GetObjRect().Width()))
                         || rFmt.GetFrmSize().GetWidthPercent())
                     {
                         continue;

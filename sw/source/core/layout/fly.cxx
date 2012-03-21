@@ -192,7 +192,7 @@ SwFlyFrm::SwFlyFrm( SwFlyFrmFmt *pFmt, SwFrm* pSib, SwFrm *pAnch ) :
 
     //Und erstmal in den Wald stellen die Kiste, damit bei neuen Dokument nicht
     //unnoetig viel formatiert wird.
-    Frm().Pos().X() = Frm().Pos().Y() = WEIT_WECH;
+    Frm().Pos().X() = Frm().Pos().Y() = FAR_AWAY;
 }
 
 // OD 2004-01-19 #110582#
@@ -1339,7 +1339,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
 
     if ( !bValidSize )
     {
-        if ( Frm().Top() == WEIT_WECH && Frm().Left() == WEIT_WECH )
+        if ( Frm().Top() == FAR_AWAY && Frm().Left() == FAR_AWAY )
         {
             //Sicherheitsschaltung wegnehmen (siehe SwFrm::CTor)
             Frm().Pos().X() = Frm().Pos().Y() = 0;
@@ -1414,7 +1414,7 @@ void SwFlyFrm::Format( const SwBorderAttrs *pAttrs )
                             // OD 06.11.2003 #i22305# - consider
                             // only Writer fly frames, which follow the text flow.
                             if ( pFly->IsFlyLayFrm() &&
-                                 pFly->Frm().Top() != WEIT_WECH &&
+                                 pFly->Frm().Top() != FAR_AWAY &&
                                  pFly->GetFmt()->GetFollowTextFlow().GetValue() )
                             {
                                 SwTwips nDist = -(pFly->Frm().*fnRect->
@@ -2149,7 +2149,7 @@ void SwFrm::AppendFly( SwFlyFrm *pNew )
     SwPageFrm *pPage = FindPageFrm();
     if ( pPage )
     {
-        if ( pNew->IsFlyAtCntFrm() && pNew->Frm().Top() == WEIT_WECH )
+        if ( pNew->IsFlyAtCntFrm() && pNew->Frm().Top() == FAR_AWAY )
         {
             //Versuch die Seitenformatierung von neuen Dokumenten etwas
             //guenstiger zu gestalten.
@@ -2424,7 +2424,7 @@ void SwLayoutFrm::NotifyLowerObjs( const bool _bUnlockPosOfObjs )
             {
                 SwFlyFrm* pFly = static_cast<SwFlyFrm*>(pObj);
 
-                if ( pFly->Frm().Left() == WEIT_WECH )
+                if ( pFly->Frm().Left() == FAR_AWAY )
                     continue;
 
                 if ( pFly->IsAnLower( this ) )

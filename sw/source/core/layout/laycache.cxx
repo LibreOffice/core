@@ -312,7 +312,7 @@ void SwLayoutCache::Write( SvStream &rStream, const SwDoc& rDoc )
                     if ( pAnchoredObj->ISA(SwFlyFrm) )
                     {
                         SwFlyFrm *pFly = static_cast<SwFlyFrm*>(pAnchoredObj);
-                        if( pFly->Frm().Left() != WEIT_WECH &&
+                        if( pFly->Frm().Left() != FAR_AWAY &&
                             !pFly->GetAnchorFrm()->FindFooterOrHeader() )
                         {
                             const SwContact *pC =
@@ -1074,7 +1074,7 @@ void SwLayHelper::_CheckFlyCache( SwPageFrm* pPage )
                 const SwFlyCache* pFlyCache = *aFlyCacheSetIt;
                 SwFlyFrm* pFly = ((SwVirtFlyDrawObj*)*aFlySetIt)->GetFlyFrm();
 
-                if ( pFly->Frm().Left() == WEIT_WECH )
+                if ( pFly->Frm().Left() == FAR_AWAY )
                 {
                     // we get the stored information
                     pFly->Frm().Pos().X() = pFlyCache->Left() +

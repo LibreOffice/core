@@ -1081,7 +1081,7 @@ sal_Bool SwTxtFly::ForEach( const SwRect &rRect, SwRect* pRect, sal_Bool bAvoid 
                             GetMaster() == pAnchoredObj->GetAnchorFrm() ||
                             ((FLY_AT_PARA != rAnchor.GetAnchorId()) &&
                              (FLY_AT_CHAR != rAnchor.GetAnchorId())) ) )
-                        || aRect.Top() == WEIT_WECH )
+                        || aRect.Top() == FAR_AWAY )
                         continue;
                 }
 
