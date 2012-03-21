@@ -201,7 +201,7 @@ sal_Bool ScViewFunc::TestFormatArea( SCCOL nCol, SCROW nRow, SCTAB nTab, sal_Boo
 }
 
 void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
-                                    sal_Bool bAttrChanged, sal_Bool bAddUndo )
+                                   sal_Bool bAttrChanged, sal_Bool bAddUndo )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocument* pDoc = pDocSh->GetDocument();
@@ -215,27 +215,18 @@ void ScViewFunc::DoAutoAttributes( SCCOL nCol, SCROW nRow, SCTAB nTab,
         const ScPatternAttr* pDocOld = pDoc->GetPattern( nCol, nRow, nTab );
         //  pDocOld is only valid till call ApplyPattern!
 
-        ScPatternAttr* pOldPattern = NULL;
-        if ( bAddUndo )
-            pOldPattern = new ScPatternAttr( *pDocOld );
-
         const ScStyleSheet* pSrcStyle = pSource->GetStyleSheet();
+
+        // Ho hum ... - totally untested but looks fun ! :-)
+        ScRange aRange( nCol, nRow, nTab, nCol, nRow, nTab );
+        ScMarkData aMark;
+        aMark.SetMarkArea( aRange );
+
+        ScDocFunc &rFunc = GetViewData()->GetDocFunc();
         if ( pSrcStyle && pSrcStyle != pDocOld->GetStyleSheet() )
-            pDoc->ApplyStyle( nCol, nRow, nTab, *pSrcStyle );
-        pDoc->ApplyPattern( nCol, nRow, nTab, *pSource );
-        AdjustRowHeight( nRow, nRow, sal_True );                //! nicht doppelt ?
+            rFunc.ApplyStyle( aMark, pSrcStyle->GetName(), sal_True, sal_False );
 
-        if ( bAddUndo )
-        {
-            const ScPatternAttr* pNewPattern = pDoc->GetPattern( nCol, nRow, nTab );
-
-            pDocSh->GetUndoManager()->AddUndoAction(
-                        new ScUndoCursorAttr( pDocSh, nCol, nRow, nTab,
-                                              pOldPattern, pNewPattern, pSource,
-                                              sal_True ) );
-
-            delete pOldPattern;     // copied in undo (pool)
-        }
+        rFunc.ApplyAttributes( aMark, *pSource, sal_True, sal_False );
     }
 
     if ( bAttrChanged )                             // value entered with number format?
@@ -348,75 +339,21 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
-    SCTAB nSelCount = rMark.GetSelectCount();
     bool bRecord = pDoc->IsUndoEnabled();
     SCTAB i;
 
+    fprintf( stderr, "EnterData '%s'\n",
+             rtl::OUStringToOString( rString, RTL_TEXTENCODING_UTF8 ).getStr() );
+
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
+    ScDocFunc &rFunc = GetViewData()->GetDocFunc();
     ScDocShellModificator aModificator( *pDocSh );
 
     ScEditableTester aTester( pDoc, nCol,nRow, nCol,nRow, rMark );
     if (aTester.IsEditable())
     {
-        sal_Bool bEditDeleted = false;
-        sal_uInt8 nOldScript = 0;
-
-        ScBaseCell** ppOldCells = NULL;
-        sal_Bool* pHasFormat        = NULL;
-        sal_uLong* pOldFormats      = NULL;
-        SCTAB* pTabs            = NULL;
-        SCTAB nUndoPos = 0;
-        EditTextObject* pUndoData = NULL;
         if ( bRecord )
-        {
-            ppOldCells      = new ScBaseCell*[nSelCount];
-            pHasFormat      = new sal_Bool[nSelCount];
-            pOldFormats     = new sal_uLong[nSelCount];
-            pTabs           = new SCTAB[nSelCount];
-            nUndoPos = 0;
-
-            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-            for (; itr != itrEnd; ++itr)
-            {
-                i = *itr;
-                pTabs[nUndoPos] = i;
-                ScBaseCell* pDocCell;
-                pDoc->GetCell( nCol, nRow, i, pDocCell );
-                if ( pDocCell )
-                {
-                    ppOldCells[nUndoPos] = pDocCell->Clone( *pDoc );
-                    if ( pDocCell->GetCellType() == CELLTYPE_EDIT )
-                        bEditDeleted = sal_True;
-
-                    sal_uInt8 nDocScript = pDoc->GetScriptType( nCol, nRow, i, pDocCell );
-                    if ( nOldScript == 0 )
-                        nOldScript = nDocScript;
-                    else if ( nDocScript != nOldScript )
-                        bEditDeleted = sal_True;
-                }
-                else
-                {
-                    ppOldCells[nUndoPos] = NULL;
-                }
-
-                const SfxPoolItem* pItem;
-                const ScPatternAttr* pPattern = pDoc->GetPattern(nCol, nRow, i);
-                if ( SFX_ITEM_SET == pPattern->GetItemSet().GetItemState(
-                                        ATTR_VALUE_FORMAT,false,&pItem) )
-                {
-                    pHasFormat[nUndoPos] = sal_True;
-                    pOldFormats[nUndoPos] = ((const SfxUInt32Item*)pItem)->GetValue();
-                }
-                else
-                    pHasFormat[nUndoPos] = false;
-
-                ++nUndoPos;
-            }
-
-            OSL_ENSURE( nUndoPos==nSelCount, "nUndoPos!=nSelCount" );
-
-            pUndoData = ( pData ? pData->Clone() : NULL );
-        }
+            rFunc.EnterListAction( STR_UNDO_ENTERDATA );
 
         bool bFormula = false;
 
@@ -568,7 +505,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
 
             ScFormulaCell aCell( pDoc, aPos, pArr,formula::FormulaGrammar::GRAM_DEFAULT, MM_NONE );
             delete pArr;
-            sal_Bool bAutoCalc = pDoc->GetAutoCalc();
+
             SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
             for (; itr != itrEnd; ++itr)
@@ -580,20 +517,15 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                 if ( pFormatter->GetType( nIndex ) == NUMBERFORMAT_TEXT ||
                      ( ( rString.GetChar(0) == '+' || rString.GetChar(0) == '-' ) && nError && rString.Equals( aFormula ) ) )
                 {
+                    ScBaseCell *pCell;
                     if ( pData )
-                    {
-                        ScEditCell* pCell = new ScEditCell( pData, pDoc, NULL );
-                        pDoc->PutCell( aPos, pCell );
-                    }
+                        pCell = new ScEditCell( pData, pDoc, NULL );
                     else
-                    {
-                        ScStringCell* pCell = new ScStringCell( aFormula );
-                        pDoc->PutCell( aPos, pCell );
-                    }
+                        pCell = new ScStringCell( aFormula );
+                    rFunc.PutCell( aPos, pCell, sal_False );
                 }
                 else
                 {
-                    DELETEZ(pUndoData);
                     ScFormulaCell* pCell = new ScFormulaCell( aCell, *pDoc, aPos );
                     if ( nError )
                     {
@@ -602,52 +534,23 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
                         if(pCell->GetCode()->IsHyperLink())
                             pCell->GetCode()->SetHyperLink(false);
                     }
-                    pDoc->PutCell( aPos, pCell );
-                    if ( !bAutoCalc )
-                    {   // calculate just the cell once and set Dirty again
-                        pCell->Interpret();
-                        pCell->SetDirtyVar();
-                        pDoc->PutInFormulaTree( pCell );
-                    }
+                    rFunc.PutCell( aPos, pCell, sal_False );
                 }
             }
         }
         else
         {
             ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-            for (; itr != itrEnd; ++itr)
-                if (pDoc->SetString( nCol, nRow, *itr, rString ))
+            for ( ; itr != itrEnd; ++itr )
+                if ( rFunc.SetNormalString( ScAddress( nCol, nRow, *itr ),
+                                            rString, sal_False ) )
                     bNumFmtChanged = true;
         }
 
-        //  row height must be changed if new text has a different script type
-        ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
-        for (; itr != itrEnd && !bEditDeleted; ++itr)
-            if ( pDoc->GetScriptType( nCol, nRow, *itr ) != nOldScript )
-                bEditDeleted = true;
-
-        HideAllCursors();
-
-        if (bEditDeleted || pDoc->HasAttrib( nCol, nRow, nTab, nCol, nRow, nTab, HASATTR_NEEDHEIGHT ))
-            AdjustRowHeight(nRow,nRow);
-
         sal_Bool bAutoFormat = TestFormatArea(nCol, nRow, nTab, bNumFmtChanged);
+
         if (bAutoFormat)
             DoAutoAttributes(nCol, nRow, nTab, bNumFmtChanged, bRecord);
-
-        if ( bRecord )
-        {   // because of ChangeTrack current first
-             pDocSh->GetUndoManager()->AddUndoAction(
-                new ScUndoEnterData( pDocSh, nCol, nRow, nTab, nUndoPos, pTabs,
-                                     ppOldCells, pHasFormat, pOldFormats,
-                                     rString, pUndoData ) );
-        }
-
-        itr = rMark.begin();
-        for (; itr != itrEnd; ++itr)
-            pDocSh->PostPaintCell( nCol, nRow, *itr );
-
-        ShowAllCursors();
 
         pDocSh->UpdateOle(GetViewData());
 
@@ -656,13 +559,16 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
         if ( pModelObj && pModelObj->HasChangesListeners() )
         {
             ScRangeList aChangeRanges;
+            ScMarkData::iterator itr = rMark.begin(), itrEnd = rMark.end();
             itr = rMark.begin();
             for (; itr != itrEnd; ++itr)
-            {
                 aChangeRanges.Append( ScRange( nCol, nRow, *itr ) );
-            }
+
             pModelObj->NotifyChanges( ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "cell-change" ) ), aChangeRanges );
         }
+
+        if ( bRecord )
+            rFunc.EndListAction();
 
         aModificator.SetDocumentModified();
         lcl_PostRepaintCondFormat( pDoc->GetCondFormat( nCol, nRow, nTab ), pDocSh );

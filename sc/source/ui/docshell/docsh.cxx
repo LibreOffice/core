@@ -2537,7 +2537,7 @@ public:
 
     virtual sal_Bool PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
     {
-        fprintf( stderr, "put cell string '%p' %d\n", pNewCell, bApi );
+        fprintf( stderr, "put cell '%p' type %d %d\n", pNewCell, pNewCell->GetCellType(), bApi );
         return ScDocFunc::PutCell( rPos, pNewCell, bApi );
     }
 

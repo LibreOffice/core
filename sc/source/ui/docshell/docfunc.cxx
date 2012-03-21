@@ -848,12 +848,19 @@ sal_Bool ScDocFunc::PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bo
 
     pDoc->PutCell( rPos, pNewCell );
 
-    //  wegen ChangeTracking darf UndoAction erst nach PutCell angelegt werden
-    if (bUndo)
+    if ( !bXMLLoading && pNewCell->GetCellType() == CELLTYPE_FORMULA && !pDoc->GetAutoCalc() )
     {
+        ScFormulaCell *pFormCell = static_cast<ScFormulaCell *>( pNewCell );
+        // calculate just the cell once and set Dirty again
+        pFormCell->Interpret();
+        pFormCell->SetDirtyVar();
+        pDoc->PutInFormulaTree( pFormCell );
+    }
+
+    // wegen ChangeTracking darf UndoAction erst nach PutCell angelegt werden
+    if (bUndo)
         rDocShell.GetUndoManager()->AddUndoAction(
                 new ScUndoPutCell( &rDocShell, rPos, pUndoCell, pRedoCell, bHeight ) );
-    }
 
     if (bHeight)
         AdjustRowHeight( ScRange(rPos) );
@@ -1272,7 +1279,7 @@ sal_Bool ScDocFunc::ApplyAttributes( const ScMarkData& rMark, const ScPatternAtt
 
 
 sal_Bool ScDocFunc::ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
-                                    sal_Bool bRecord, sal_Bool bApi )
+                                sal_Bool bRecord, sal_Bool bApi )
 {
     ScDocument* pDoc = rDocShell.GetDocument();
     if ( bRecord && !pDoc->IsUndoEnabled() )
