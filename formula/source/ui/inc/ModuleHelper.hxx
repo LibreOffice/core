@@ -31,7 +31,6 @@
 
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <tools/resmgr.hxx>
-#include "formula/formuladllapi.h"
 //.........................................................................
 namespace formula
 {
@@ -41,7 +40,7 @@ namespace formula
     //=========================================================================
     class OModuleClient;
     class OModuleImpl;
-    class FORMULA_DLLPUBLIC OModule
+    class OModule
     {
         friend class OModuleClient;
 
@@ -75,7 +74,7 @@ namespace formula
     //=========================================================================
     /** specialized ResId, using the ressource manager provided by the global module
     */
-    class FORMULA_DLLPUBLIC ModuleRes : public ::ResId
+    class ModuleRes : public ::ResId
     {
     public:
         ModuleRes(sal_uInt16 _nId) : ResId(_nId, *OModule::getResManager()) { }
