@@ -1076,7 +1076,6 @@ sub pick_prj_to_build {
 sub check_platform {
     my $platform = shift;
     return 1 if ($platform eq 'all');
-    return 1 if (($ENV{GUI} eq 'WIN') && ($platform eq 'w'));
     return 1 if (($ENV{GUI} eq 'UNX') && ($platform eq 'u'));
     return 1 if (($ENV{GUI} eq 'WNT') &&
                  (($platform eq 'w') || ($platform eq 'n')));
@@ -1848,11 +1847,6 @@ RETRY:
     close LOGFILE;
     if ( $error_code != 0)
     {
-        if ($ENV{GUI} eq 'WIN' && $retry_counter > 0)
-        {
-            $retry_counter -= 1;
-            system('grep "Error 126\$"') && goto RETRY;
-        }
         system("echo \"log for $path\" >> $build_error_log");
         system("cat $log_file >> $build_error_log");
     }
