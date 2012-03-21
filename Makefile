@@ -485,6 +485,7 @@ findunusedcode:
               | grep -v ^WP6 \
               | grep -v ^WPG \
               | grep -v ^WPS \
+              | grep -v WPXBinaryData \
               > unusedcode.easy
 
 check: dev-install subsequentcheck

@@ -1,4 +1,3 @@
-(anonymous namespace)::writeU8(WPXBinaryData&, int)
 CertificateExtension_XmlSecImpl::setCertExtn(com::sun::star::uno::Sequence<signed char>, com::sun::star::uno::Sequence<signed char>, unsigned char)
 CharPosArray::Insert(CharPosArray const*, unsigned short, unsigned short, unsigned short)
 CharPosArray::Replace(int const&, unsigned short)
