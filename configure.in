@@ -3925,7 +3925,12 @@ if test -n "$with_system_libxslt" -o -n "$with_system_libs" -o \
    AC_MSG_RESULT([external])
    SYSTEM_LIBXSLT=YES
 
-   PKG_CHECK_MODULES_MACHACK(LIBXSLT, xslt-config, libxslt)
+	if test "$_os" != "Darwin"; then
+		PKG_CHECK_MODULES(LIBXSLT, libxslt)
+	else
+		LIBXSLT_CFLAGS=`xslt-config --cflags`
+		LIBXSLT_LDLAGS=`xslt-config --libs`
+	fi
 
    dnl Check for xsltproc
    AC_PATH_PROG(XSLTPROC, xsltproc, no)
@@ -3951,8 +3956,14 @@ if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
 	test "$with_system_libxml" != "no"; then
     AC_MSG_RESULT([external])
     SYSTEM_LIBXML=YES
-    PKG_CHECK_MODULES_MACHACK(LIBXML, xml2-config, libxml-2.0 >= 2.0)
     BUILD_TYPE="$BUILD_TYPE LIBXMLSEC"
+
+	if test "$_os" != "Darwin"; then
+		PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.0)
+	else
+		LIBXML_CFLAGS=`xml2-config --cflags`
+		LIBXML_LDLAGS=`xml2-config --libs`
+	fi
 else
     AC_MSG_RESULT([internal])
     SYSTEM_LIBXML=NO
