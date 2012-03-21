@@ -169,11 +169,6 @@ static void TeleConference_TubeOfferedHandler(
     if (pChannel != pConference->getChannel())
         return;
 
-    TeleManager* pManager = pConference->getManager();
-    SAL_WARN_IF( !pManager, "tubes", "TeleConference_TubeOfferedHandler: no manager");
-    if (!pManager)
-        return;
-
     DBusError aDBusError;
     dbus_error_init( &aDBusError);
     DBusConnection* pTube = dbus_connection_open_private( pOutAddress, &aDBusError);

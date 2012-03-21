@@ -97,7 +97,6 @@ static TeleManager* mpManager2 = NULL;
 // enabled and connected.
 static rtl::OUString sAcc1( RTL_CONSTASCII_USTRINGPARAM( "libo1@localhost.localdomain"));
 static rtl::OUString sAcc2( RTL_CONSTASCII_USTRINGPARAM( "libo2@localhost.localdomain"));
-static rtl::OUString sService( RTL_CONSTASCII_USTRINGPARAM( "TeleTest"));
 static sal_uInt32 nSentPackets = 0;
 
 TestTeleTubes::TestTeleTubes()
@@ -161,12 +160,12 @@ void TestTeleTubes::testContactList()
 
 void TestTeleTubes::testSetupManager1()
 {
-    mpManager1 = new TeleManager( sAcc1, sService, true);
+    mpManager1 = new TeleManager( true);
 }
 
 void TestTeleTubes::testSetupManager2()
 {
-    mpManager2 = new TeleManager( sAcc2, sService);
+    mpManager2 = new TeleManager;
 }
 
 void TestTeleTubes::testPrepareAccountManager1()
@@ -185,13 +184,13 @@ void TestTeleTubes::testPrepareAccountManager2()
 
 void TestTeleTubes::testStartBuddySession1()
 {
-    bool bStarted = mpManager1->startBuddySession( sAcc2);
+    bool bStarted = mpManager1->startBuddySession( sAcc1, sAcc2);
     CPPUNIT_ASSERT( bStarted == true);
 }
 
 void TestTeleTubes::testStartBuddySession2()
 {
-    //bool bStarted = mpManager2->startBuddySession( sAcc1);
+    //bool bStarted = mpManager2->startBuddySession( sAcc2, sAcc1);
     //CPPUNIT_ASSERT( bStarted == true);
 }
 
@@ -203,8 +202,8 @@ void TestTeleTubes::testConnect1()
 
 void TestTeleTubes::testConnect2()
 {
-    //bool bConnected = mpManager2->connect();
-    //CPPUNIT_ASSERT( bConnected == true);
+    bool bConnected = mpManager2->connect();
+    CPPUNIT_ASSERT( bConnected == true);
 }
 
 void TestTeleTubes::testSendPacket()

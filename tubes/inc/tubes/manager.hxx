@@ -44,6 +44,8 @@
 
 typedef ::std::vector<TeleConferencePtr> TeleConferenceVector;
 
+namespace osl { class Mutex; }
+class TeleManagerImpl;
 
 /** Interface to Telepathy DBus Tubes.
 
@@ -68,19 +70,11 @@ public:
     /** Prepare tube manager with account and service to be offered/listened
         to.
 
-        @param rAccount
-            The account (JID) to use. This must be a valid JID that has been
-            setup with Empathy or another Telepathy client providing
-            Jabber/XMPP.
-
-        @param rService
-            "WhatEver", is prepended with "...LibreOffice"
-
         @param bCreateOwnGMainLoop
             Whether to create and iterate an own GMainLoop. For testing
             purposes when no GMainLoop is available.
      */
-    TeleManager( const rtl::OUString& rAccount, const rtl::OUString& rService, bool bCreateOwnGMainLoop = false );
+    TeleManager( bool bCreateOwnGMainLoop = false );
     ~TeleManager();
 
     /** Prepare the Telepathy Account Manager.
@@ -91,11 +85,9 @@ public:
         TODO: this needs some signalling mechanism
      */
     void                    prepareAccountManager();
-    AccountManagerStatus    getAccountManagerStatus() const
-    {
-        return meAccountManagerStatus;
-    }
+    AccountManagerStatus    getAccountManagerStatus() const;
 
+#if 0
     /** Start a group session in a MUC.
 
         @param rConferenceRoom
@@ -109,13 +101,19 @@ public:
      */
     bool                    startGroupSession( const rtl::OUString& rConferenceRoom,
                                                const rtl::OUString& rConferenceServer );
+#endif
 
     /** Start a session with a buddy.
 
+        @param rAccount
+            The account (JID) to use. This must be a valid JID that has been
+            setup with Empathy or another Telepathy client providing
+            Jabber/XMPP.
+
         @param rBuddy
-            The buddy to be connected.
+            The buddy to be connected. Must be a contact of rAccount.
      */
-    bool                    startBuddySession( const rtl::OUString& rBuddy );
+    bool                    startBuddySession( const rtl::OUString& rAccount, const rtl::OUString& rBuddy );
 
     void                    unregisterConference( TeleConferencePtr pConference );
 
@@ -149,9 +147,9 @@ public:
     rtl::OString            getFullObjectPath() const;
 
     /// Only for use with MainLoopFlusher
-    GMainLoop*              getMainLoop() const { return mpLoop; }
+    GMainLoop*              getMainLoop() const;
 
-    GMainContext*           getMainContext() const { return (mpLoop ? g_main_loop_get_context( mpLoop) : NULL); }
+    GMainContext*           getMainContext() const;
 
     static rtl::OString     createUuid();
 
@@ -159,11 +157,11 @@ public:
     // Only for callbacks.
     void                    setChannelReadyHandlerInvoked( bool b ) { mbChannelReadyHandlerInvoked = b; }
     bool                    isChannelReadyHandlerInvoked() const { return mbChannelReadyHandlerInvoked; }
-    static void             setAccountManagerReadyHandlerInvoked( bool b ) { mbAccountManagerReadyHandlerInvoked = b; }
-    static bool             isAccountManagerReadyHandlerInvoked() { return mbAccountManagerReadyHandlerInvoked; }
+    void                    setAccountManagerReadyHandlerInvoked( bool b );
+    bool                    isAccountManagerReadyHandlerInvoked() const;
 
     /** Only the callback of prepareAccountManager() is to set this. */
-    static void             setAccountManagerReady( bool bPrepared);
+    void                    setAccountManagerReady( bool bPrepared);
 
     /** Iterate our GMainLoop, blocking, unconditionally. */
     void                    iterateLoop();
@@ -185,24 +183,19 @@ public:
 
 private:
 
-    rtl::OString            maAccountID;
     rtl::OString            maService;      // the "WhatEver" part
     TeleConferenceVector    maConferences;
-    GMainLoop*              mpLoop;
-    TpAccount*              mpAccount;
-    TpConnection*           mpConnection;
-    TpDBusDaemon*           mpDBus;
-    TpBaseClient*           mpClient;
 
     bool                    mbChannelReadyHandlerInvoked : 1;
 
-    TpAccount*              getMyAccount();
+    TpAccount*              getAccount( const rtl::OString& rAccountID );
 
-    /* FIXME: currently these leak */
-    /* TODO: make all statics a reference counted impl class */
-    static TpAccountManager*    mpAccountManager;
-    static AccountManagerStatus meAccountManagerStatus;
-    static bool                 mbAccountManagerReadyHandlerInvoked;
+    static TeleManagerImpl* pImpl;
+    static sal_uInt32       nRefCount;
+
+    friend class TeleManagerImpl;   // access to mutex
+
+    TUBES_DLLPRIVATE static ::osl::Mutex&   GetMutex();
 
 };
 
