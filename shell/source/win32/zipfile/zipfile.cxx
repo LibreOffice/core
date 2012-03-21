@@ -487,6 +487,7 @@ void ZipFile::GetUncompressedContent(
             ContentBuffer.clear();
             return;
         }
+		(void)inflateEnd(&strm);
     }
 }
 
