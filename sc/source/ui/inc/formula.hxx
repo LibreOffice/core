@@ -56,9 +56,12 @@ class SvLBoxEntry;
 typedef ScTabViewShell* PtrTabViewShell;
 //============================================================================
 
-class ScFormulaDlg : public formula::FormulaDlg,
-                     public IAnyRefDialog,
-                     public formula::IFormulaEditorHelper
+// Order of base classes is important, as pointer to IFormulaEditorHelper base
+// is passed into constructor of FormulaDlg base, which expects the former to
+// outlive itself:
+class ScFormulaDlg : public formula::IFormulaEditorHelper,
+                     public formula::FormulaDlg,
+                     public IAnyRefDialog
 {
     ScFormulaReferenceHelper m_aHelper;
     ScFormulaCell*  pCell;
