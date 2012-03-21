@@ -56,10 +56,6 @@ APP1STDLIBS=	$(CPPULIB)			\
 APP1DEPN=		$(L)$/itools.lib	\
                 $(L)$/sot.lib
 
-.IF "$(GUI)"=="WIN" || "$(GUI)"=="OS200"
-APP1DEF=		$(MISC)$/$(TARGET).def
-.ENDIF
-
 # --- Targets ------------------------------------------------------
 
 ALL : \
@@ -75,23 +71,4 @@ $(BIN)$/applicat.rdb : makefile.mk $(UNOUCRRDB)
          regcomp -register -r applicat.rdb \
              -c i18nsearch.uno$(DLLPOST) \
              -c i18npool.uno$(DLLPOST)
-
-# ------------------------------------------------------------------
-# Windows
-# ------------------------------------------------------------------
-
-.IF "$(GUI)" == "WIN"
-
-$(MISC)$/$(TARGET).def: makefile
-    echo  NAME			$(TARGET)							>$@
-    echo  DESCRIPTION	'StarView - Testprogramm'          >>$@
-    echo  EXETYPE		WINDOWS 						   >>$@
-    echo  STUB			'winSTUB.EXE'                      >>$@
-    echo  PROTMODE										   >>$@
-    echo  CODE			PRELOAD MOVEABLE DISCARDABLE	   >>$@
-    echo  DATA			PRELOAD MOVEABLE MULTIPLE		   >>$@
-    echo  HEAPSIZE		8192							   >>$@
-    echo  STACKSIZE 	32768							   >>$@
-
-.ENDIF
 
