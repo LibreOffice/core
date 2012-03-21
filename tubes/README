@@ -8,6 +8,23 @@ the same TeleConference abstraction.
 
 To enable configure LibO with --enable-telepathy
 
+If you have a Telepathy-enabled LibreOffice installed to /usr (including
+liboapprover) you may also want to install the .service and .client files to
+make everything service-activatable:
+
+    mkdir -p $HOME/.local/share/telepathy/clients
+    ln -s $PWD/tubes/LibreOffice.client \
+          $PWD/tubes/LibreOfficeApprover.client \
+          $HOME/.local/share/telepathy/clients
+
+    mkdir -p $HOME/.local/share/dbus-1/services
+    ln -s $PWD/tubes/org.freedesktop.Telepathy.Client.LibreOfficeApprover.service \
+          $PWD/tubes/org.freedesktop.Telepathy.Client.LibreOffice.service \
+          $HOME/.local/share/dbus-1/services
+
+Otherwise, you need to make sure liboapprover and a Telepathy-enabled
+LibreOffice are running.
+
 Status 2012-03-20:
 
 * no LibO code depends on this module yet, so it is not built in a regular

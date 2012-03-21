@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.freedesktop.Telepathy.Client.LibreOfficeApprover
+Exec=/usr/bin/liboapprover

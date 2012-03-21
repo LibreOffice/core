@@ -1,0 +1,3 @@
+[D-BUS Service]
+Name=org.freedesktop.Telepathy.Client.LibreOffice
+Exec=/usr/bin/libreoffice --calc

@@ -1,0 +1,11 @@
+[org.freedesktop.Telepathy.Client]
+Interfaces = org.freedesktop.Telepathy.Client.Handler;
+
+[org.freedesktop.Telepathy.Client.Handler]
+BypassApproval = false
+
+[org.freedesktop.Telepathy.Client.Handler.HandlerChannelFilter 0]
+org.freedesktop.Telepathy.Channel.TargetHandleType u = 1
+org.freedesktop.Telepathy.Channel.ChannelType s = org.freedesktop.Telepathy.Channel.Type.DBusTube
+org.freedesktop.Telepathy.Channel.Type.DBusTube.ServiceName s = org.libreoffice.calc
+
