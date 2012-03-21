@@ -27,6 +27,7 @@
  */
 
 #include "tubes/manager.hxx"
+#include "tubes/constants.h"
 #include <rtl/strbuf.hxx>
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
@@ -66,6 +67,7 @@ using namespace osl;
 
 TeleManagerImpl* TeleManager::pImpl     = NULL;
 sal_uInt32       TeleManager::nRefCount = 0;
+rtl::OString     TeleManager::aNameSuffix;
 
 
 /** Refcounted singleton implementation class. */
@@ -82,11 +84,6 @@ public:
                             TeleManagerImpl();
                             ~TeleManagerImpl();
 };
-
-
-// To form "org.freedesktop.Telepathy.Client.LibreOfficeWhatEver" (bus name)
-// or "/org/freedesktop/Telepathy/Client/LibreOfficeWhatEver" (object path)
-#define LIBO_TP_NAME_PREFIX "LibreOffice"
 
 
 static void TeleManager_DBusTubeAcceptHandler(
@@ -284,7 +281,7 @@ bool TeleManager::connect()
             pFactory,                       // factory
             TRUE,                           // bypass_approval
             FALSE,                          // requests
-            LIBO_TP_NAME_PREFIX,            // name
+            getFullClientName().getStr(),   // name
             FALSE,                          // uniquify
             TeleManager_DBusChannelHandler, // callback
             this,                           // user_data
@@ -582,6 +579,8 @@ bool TeleManager::popPacket( TelePacket& rPacket )
 
 void TeleManager::unregisterConference( TeleConferencePtr pConference )
 {
+    INFO_LOGGER( "TeleManager::unregisterConference");
+
     TeleConferenceVector::iterator it = ::std::find( maConferences.begin(), maConferences.end(), pConference);
     if (it != maConferences.end())
         maConferences.erase( it);
@@ -640,19 +639,28 @@ void TeleManager::setAccountManagerReady( bool bPrepared)
 }
 
 
-rtl::OString TeleManager::getFullServiceName() const
+rtl::OString TeleManager::getFullClientName()
 {
     OStringBuffer aBuf(64);
-    aBuf.append( RTL_CONSTASCII_STRINGPARAM( TP_CLIENT_BUS_NAME_BASE)).append( LIBO_TP_NAME_PREFIX);
+    aBuf.append( RTL_CONSTASCII_STRINGPARAM( LIBO_CLIENT_SUFFIX)).append( aNameSuffix);
     return aBuf.makeStringAndClear();
 }
 
 
-rtl::OString TeleManager::getFullObjectPath() const
+rtl::OString TeleManager::getFullServiceName()
 {
     OStringBuffer aBuf(64);
-    aBuf.append( RTL_CONSTASCII_STRINGPARAM( TP_CLIENT_OBJECT_PATH_BASE)).append( LIBO_TP_NAME_PREFIX);
+    aBuf.append( RTL_CONSTASCII_STRINGPARAM( LIBO_DTUBE_SERVICE)).append( aNameSuffix);
     return aBuf.makeStringAndClear();
+}
+
+
+rtl::OString TeleManager::getFullObjectPath()
+{
+    OStringBuffer aBuf(64);
+    aBuf.append( '/').append( RTL_CONSTASCII_STRINGPARAM( LIBO_DTUBE_SERVICE)).append( aNameSuffix);
+    OString aStr( aBuf.makeStringAndClear().replace( '.', '/'));
+    return aStr;
 }
 
 
@@ -748,6 +756,13 @@ Mutex& TeleManager::GetMutex()
             pMutex = new Mutex;
     }
     return *pMutex;
+}
+
+
+// static
+void TeleManager::addSuffixToNames( const char* pName )
+{
+    aNameSuffix = pName;
 }
 
 // ===========================================================================

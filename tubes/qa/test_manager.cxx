@@ -46,11 +46,11 @@ public:
 
     TestTeleTubes();
     ~TestTeleTubes();
-    void testContactList();
     void testSetupManager1();
     void testSetupManager2();
     void testConnect1();
     void testConnect2();
+    void testContactList();
     void testPrepareAccountManager1();
     void testPrepareAccountManager2();
     void testStartBuddySession1();
@@ -66,11 +66,11 @@ public:
 
     // Order is significant.
     CPPUNIT_TEST_SUITE( TestTeleTubes );
-    CPPUNIT_TEST( testContactList );
     CPPUNIT_TEST( testSetupManager1 );
     CPPUNIT_TEST( testSetupManager2 );
     CPPUNIT_TEST( testConnect1 );
     CPPUNIT_TEST( testConnect2 );
+    CPPUNIT_TEST( testContactList );
     CPPUNIT_TEST( testPrepareAccountManager1 );
     CPPUNIT_TEST( testPrepareAccountManager2 );
     CPPUNIT_TEST( testStartBuddySession1 );
@@ -83,9 +83,6 @@ public:
     CPPUNIT_TEST( testFailAlways );     // need failure to display SAL_LOG, comment out for real builds
     CPPUNIT_TEST_SUITE_END();
 
-private:
-
-    void runSetupManager( TeleManager* pManager, const rtl::OUString& rBuddy );
 };
 
 // static, not members, so they actually survive cppunit test iteration
@@ -101,6 +98,7 @@ static sal_uInt32 nSentPackets = 0;
 
 TestTeleTubes::TestTeleTubes()
 {
+    TeleManager::addSuffixToNames( "TeleTest");
 }
 
 TestTeleTubes::~TestTeleTubes()

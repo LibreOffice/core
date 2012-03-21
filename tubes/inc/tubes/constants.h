@@ -39,13 +39,11 @@
  * etc. This does not need to include the org.freedesktop.Telepathy.Client
  * stuff.
  */
-#define LIBO_DTUBE_SERVICE \
-    TP_CLIENT_BUS_NAME_BASE "LibreOfficeTeleTest"
+#define LIBO_DTUBE_SERVICE "org.libreoffice.calc"
 
 /* Client name suffix, for passing as 'name' to
  * tp_simple_handler_new_with_am(). */
-#define LIBO_CLIENT_SUFFIX \
-    "LibreOffice"
+#define LIBO_CLIENT_SUFFIX "LibreOffice"
 
 #endif // INCLUDED_TUBES_CONSTANTS_H
 

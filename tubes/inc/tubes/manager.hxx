@@ -140,12 +140,6 @@ public:
      */
     bool                    popPacket( TelePacket& rPacket );
 
-    /// "org.freedesktop.Telepathy.Client.LibreOfficeWhatEver"
-    rtl::OString            getFullServiceName() const;
-
-    /// "/org/freedesktop/Telepathy/Client/LibreOfficeWhatEver"
-    rtl::OString            getFullObjectPath() const;
-
     /// Only for use with MainLoopFlusher
     GMainLoop*              getMainLoop() const;
 
@@ -181,9 +175,28 @@ public:
     /** Iterate our GMainLoop, non-blocking, until nothing pending. */
     void                    flushLoop() const;
 
+    /// "LibreOfficeWhatEver"
+    static rtl::OString     getFullClientName();
+
+    /// "org.libreoffice.calcWhatEver"
+    static rtl::OString     getFullServiceName();
+
+    /// "/org/libreoffice/calcWhatEver"
+    static rtl::OString     getFullObjectPath();
+
+    /** Add a suffix to the client name and DBus tube names, e.g. "WhatEver"
+
+        Normally the client name is LibreOffice and the DBus tube service name
+        is something like org.libreoffice.calc, this modifies the names to
+        "LibreOffice"+pName and "org.libreoffice.calc"+pName to make tests not
+        interfere with the real world. This is not to be used otherwise. If
+        used it must be called before the first TeleManager is instanciated and 
+        connects.
+     */
+    static void             addSuffixToNames( const char* pName );
+
 private:
 
-    rtl::OString            maService;      // the "WhatEver" part
     TeleConferenceVector    maConferences;
 
     bool                    mbChannelReadyHandlerInvoked : 1;
@@ -192,6 +205,7 @@ private:
 
     static TeleManagerImpl* pImpl;
     static sal_uInt32       nRefCount;
+    static rtl::OString     aNameSuffix;
 
     friend class TeleManagerImpl;   // access to mutex
 

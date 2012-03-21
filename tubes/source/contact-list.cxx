@@ -32,6 +32,7 @@
 
 #include <tubes/constants.h>
 #include <tubes/contact-list.hxx>
+#include <tubes/manager.hxx>
 
 ContactList::ContactList()
 {
@@ -76,7 +77,7 @@ contact_supports_libo_dtube (TpContact *contact)
         return FALSE;
 
     return tp_capabilities_supports_dbus_tubes (caps,
-        TP_HANDLE_TYPE_CONTACT, LIBO_DTUBE_SERVICE);
+        TP_HANDLE_TYPE_CONTACT, TeleManager::getFullServiceName().getStr());
 }
 
 typedef ::std::pair< ContactList::PrepareCallback, void * > Foo;
