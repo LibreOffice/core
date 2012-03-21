@@ -95,8 +95,6 @@ public:
     {}
 };
 
-typedef WW8SelBoxInfo* WW8SelBoxInfoPtr;
-
 typedef boost::ptr_vector<WW8SelBoxInfo> WW8MergeGroups;
 
 struct WW8TabBandDesc
@@ -223,9 +221,7 @@ class WW8TabDesc
     void InsertCells( short nIns );
     void AdjustNewBand();
 
-    // durchsucht aMergeGroups, meldet Index der ersten, passenden Gruppe bzw.
-    // -1 Details siehe bei der Implementierung
-    bool FindMergeGroup(short nX1, short nWidth, bool bExact, short& nMGrIdx);
+    WW8SelBoxInfo* FindMergeGroup(short nX1, short nWidth, bool bExact);
 
     // einzelne Box ggfs. in eine Merge-Gruppe aufnehmen
     // (die Merge-Gruppen werden dann spaeter auf einen Schlag abgearbeitet)
@@ -2567,7 +2563,7 @@ void WW8TabDesc::MergeCells()
             for( short j = 0; j < pActBand->nRows; j++, nRow++ )
                 for( short i = 0; i < pActBand->nWwCols; i++ )
                 {
-                    WW8SelBoxInfoPtr pActMGroup = 0;
+                    WW8SelBoxInfo* pActMGroup = 0;
                     //
                     // ggfs. eine neue Merge-Gruppe beginnen
                     //
@@ -2650,11 +2646,15 @@ void WW8TabDesc::MergeCells()
                         // 1. ggfs. alte Mergegruppe(n) schliessen, die
                         // den von unserer neuen Gruppe betroffenen
                         // X-Bereich ueberdecken
-                        short nMGrIdx;
-                        while ( FindMergeGroup( nX1, pActMGroup->nGroupWidth,
-                                                false, nMGrIdx ) )
+                        for (;;)
                         {
-                            aMergeGroups[ nMGrIdx ].bGroupLocked = true;
+                            WW8SelBoxInfo* p = FindMergeGroup(
+                                nX1, pActMGroup->nGroupWidth, false );
+                            if (p == 0)
+                            {
+                                break;
+                            }
+                            p->bGroupLocked = true;
                         }
 
                         // 3. und in Gruppen-Array eintragen
@@ -2736,8 +2736,8 @@ void WW8TabDesc::FinishSwTable()
         // bearbeite alle Merge-Gruppen nacheinander
         for (
                 WW8MergeGroups::iterator groupIt = aMergeGroups.begin();
-                groupIt < aMergeGroups.end();
-                groupIt++)
+                groupIt != aMergeGroups.end();
+                ++groupIt)
         {
             sal_uInt16 nActBoxCount = groupIt->size();
 
@@ -2769,16 +2769,12 @@ void WW8TabDesc::FinishSwTable()
 //            bExact    = Flag, ob Box in dieser Gruppe passen muss,
 //                          oder diese nur zu tangieren braucht
 //
-bool WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact,
-    short& nMGrIdx)
+WW8SelBoxInfo* WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact)
 {
-    nMGrIdx = -1;
     if( !aMergeGroups.empty() )
     {
         // noch als gueltig angesehener Bereich in der Naehe der Grenzen
         const short nToleranz = 4;
-        // die aktuell untersuchte Gruppe
-
         // Boxgrenzen
         short nX2 = nX1 + nWidth;
         // ungefaehre Gruppengrenzen
@@ -2801,7 +2797,7 @@ bool WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact,
                 //
                 if( ( nX1 > nGrX1 ) && ( nX2 < nGrX2 ) )
                 {
-                    nMGrIdx = iGr;  break;
+                    return &rActGroup;
                 }
                 //
                 // hat die Box Bereiche mit der Gruppe gemeinsam?
@@ -2817,13 +2813,13 @@ bool WW8TabDesc::FindMergeGroup(short nX1, short nWidth, bool bExact,
                             || (     ( nX1 <=nGrX1 )
                                         && ( nX2 >=nGrX2 ) ) )
                     {
-                        nMGrIdx = iGr;  break;
+                        return &rActGroup;
                     }
                 }
             }
         }
     }
-    return ( -1 < nMGrIdx );
+    return 0;
 }
 
 bool WW8TabDesc::IsValidCell(short nCol) const
@@ -3330,10 +3326,8 @@ SwTableBox* WW8TabDesc::UpdateTableMergeGroup(  WW8_TCell&     rCell,
         else
         {
             // Gruppe finden
-            short nMGrIdx;
-            if( FindMergeGroup( pActBand->nCenter[ nCol ],
-                                pActBand->nWidth[  nCol ], true, nMGrIdx ) )
-                pTheMergeGroup = &aMergeGroups.at( nMGrIdx );
+            pTheMergeGroup = FindMergeGroup(
+                pActBand->nCenter[ nCol ], pActBand->nWidth[  nCol ], true );
         }
         if( pTheMergeGroup )
         {
