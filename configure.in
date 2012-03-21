@@ -62,6 +62,8 @@ fi
 AC_SUBST(CROSS_COMPILING)
 
 AC_PROG_EGREP
+# AC_PROG_EGREP doesn't set GREP on all systems as well
+AC_PATH_PROG(GREP, grep)
 
 if test "$build_os" = "cygwin"; then
     EXEEXT_FOR_BUILD=.exe
