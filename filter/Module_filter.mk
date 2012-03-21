@@ -78,6 +78,7 @@ endif
 ifneq ($(OS),WNT)
 # TODO, see if it links and runs under windows
 $(eval $(call gb_Module_add_check_targets,filter,\
+    CppunitTest_filter_tga_test \
     CppunitTest_filter_tiff_test \
 ))
 endif
