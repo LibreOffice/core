@@ -262,6 +262,12 @@ SwTxtNode::~SwTxtNode()
         delete pTmpHints;
     }
 
+    // must be removed from outline nodes by now
+#if OSL_DEBUG_LEVEL > 0
+    sal_uInt16 foo;
+    assert(!GetNodes().GetOutLineNds().Seek_Entry(this, &foo));
+#endif
+
     RemoveFromList();
 
     InitSwParaStatistics( false );
