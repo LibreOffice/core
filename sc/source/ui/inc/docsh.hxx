@@ -165,6 +165,8 @@ class SC_DLLPUBLIC ScDocShell: public SfxObjectShell, public SfxListener
 
     SC_DLLPRIVATE void          UseSheetSaveEntries();
 
+    SC_DLLPRIVATE ScDocFunc    *CreateDocFunc();
+
 protected:
 
     virtual void Notify( SfxBroadcaster& rBC, const SfxHint& rHint );

@@ -2500,82 +2500,6 @@ sal_Bool ScDocShell::HasAutomaticTableName( const String& rFilter )
         || rFilter.EqualsAscii( pFilterRtf );
 }
 
-namespace {
-
-class ScDocFuncIntercept : public ScDocFunc
-{
-public:
-    ScDocFuncIntercept( ScDocShell& rDocSh ) : ScDocFunc( rDocSh )
-    {
-        fprintf( stderr, "Interceptor created !\n" );
-    }
-    virtual ~ScDocFuncIntercept() {}
-    virtual void EnterListAction( sal_uInt16 nNameResId )
-    {
-        // Want to group these operations for the other side ...
-        String aUndo( ScGlobal::GetRscString( nNameResId ) );
-    }
-    virtual void EndListAction()
-    {
-    }
-    virtual ScBaseCell* InterpretEnglishString( const ScAddress& rPos, const String& rText,
-                                                const String& rFormulaNmsp,
-                                                const formula::FormulaGrammar::Grammar eGrammar,
-                                                short* pRetFormatType )
-    {
-        fprintf( stderr, "interp. english string '%s'\n",
-                 rtl::OUStringToOString( rText, RTL_TEXTENCODING_UTF8 ).getStr() );
-        return ScDocFunc::InterpretEnglishString( rPos, rText, rFormulaNmsp,
-                                                  eGrammar, pRetFormatType );
-    }
-    virtual sal_Bool SetNormalString( const ScAddress& rPos, const String& rText, sal_Bool bApi )
-    {
-        fprintf( stderr, "set normal string '%s'\n",
-                 rtl::OUStringToOString( rText, RTL_TEXTENCODING_UTF8 ).getStr() );
-        return ScDocFunc::SetNormalString( rPos, rText, bApi );
-    }
-
-    virtual sal_Bool PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
-    {
-        fprintf( stderr, "put cell '%p' type %d %d\n", pNewCell, pNewCell->GetCellType(), bApi );
-        return ScDocFunc::PutCell( rPos, pNewCell, bApi );
-    }
-
-    virtual sal_Bool PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
-                              sal_Bool bInterpret, sal_Bool bApi )
-    {
-        fprintf( stderr, "put data\n" );
-        return ScDocFunc::PutData( rPos, rEngine, bInterpret, bApi );
-    }
-
-    virtual sal_Bool SetCellText( const ScAddress& rPos, const String& rText,
-                                  sal_Bool bInterpret, sal_Bool bEnglish, sal_Bool bApi,
-                                  const String& rFormulaNmsp,
-                                  const formula::FormulaGrammar::Grammar eGrammar )
-    {
-        fprintf( stderr, "set cell text '%s'\n",
-                 rtl::OUStringToOString( rText, RTL_TEXTENCODING_UTF8 ).getStr() );
-        return ScDocFunc::SetCellText( rPos, rText, bInterpret, bEnglish, bApi, rFormulaNmsp, eGrammar );
-    }
-
-    virtual bool ShowNote( const ScAddress& rPos, bool bShow = true )
-    {
-        fprintf( stderr, "%s note\n", bShow ? "show" : "hide" );
-        return ScDocFunc::ShowNote( rPos, bShow );
-    }
-};
-
-static ScDocFunc *
-createDocFunc( ScDocShell *pThis )
-{
-    if (getenv ("INTERCEPT"))
-        return new ScDocFuncIntercept( *pThis );
-    else
-        return new ScDocFuncDirect( *pThis );
-}
-
-} // anonymous namespace
-
 ScDocShell::ScDocShell( const ScDocShell& rShell ) :
     SvRefBase(),
     SotObject(),
@@ -2607,7 +2531,7 @@ ScDocShell::ScDocShell( const ScDocShell& rShell ) :
 
     bIsInplace = rShell.bIsInplace;
 
-    pDocFunc = createDocFunc( this );
+    pDocFunc = CreateDocFunc();
 
     //  SetBaseModel needs exception handling
     ScModelObj::CreateAndSet( this );
@@ -2654,7 +2578,7 @@ ScDocShell::ScDocShell( const sal_uInt64 i_nSfxCreationFlags ) :
     bIsInplace = (GetCreateMode() == SFX_CREATE_MODE_EMBEDDED);
     //  wird zurueckgesetzt, wenn nicht inplace
 
-    pDocFunc = createDocFunc( this );
+    pDocFunc = CreateDocFunc();
 
     //  SetBaseModel needs exception handling
     ScModelObj::CreateAndSet( this );
