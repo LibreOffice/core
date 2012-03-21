@@ -7686,6 +7686,8 @@ if test "$WANT_X11" = "yes" -a  "$test_xrender" = "yes"; then
     else
         AC_MSG_RESULT([internal])
     fi
+else
+    AC_MSG_RESULT([no])
 fi
 
 dnl ===================================================================
