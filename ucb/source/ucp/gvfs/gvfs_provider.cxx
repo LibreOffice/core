@@ -84,10 +84,8 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.comp.GnomeVFSContentProvider" )),
-                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
-            "com.sun.star.ucb.GnomeVFSContentProvider" )) );
+            "com.sun.star.comp.GnomeVFSContentProvider",
+            "com.sun.star.ucb.GnomeVFSContentProvider" );
 //=========================================================================
 //
 // Service factory implementation.
