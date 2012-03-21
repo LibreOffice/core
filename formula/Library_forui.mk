@@ -62,6 +62,7 @@ $(eval $(call gb_Library_add_exception_objects,forui,\
     formula/source/ui/dlg/FormulaHelper \
     formula/source/ui/dlg/funcpage \
     formula/source/ui/dlg/funcutl \
+    formula/source/ui/dlg/omoduleclient \
     formula/source/ui/dlg/parawin \
     formula/source/ui/dlg/structpg \
     formula/source/ui/resource/ModuleHelper \

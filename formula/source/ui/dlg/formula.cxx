@@ -154,7 +154,6 @@ namespace formula
         DECL_LINK(FuncSelHdl, void *);
         DECL_LINK(StructSelHdl, void *);
     public:
-        OModuleClient                                           m_aModuleClient;
         mutable uno::Reference< sheet::XFormulaOpCodeMapper>    m_xOpCodeMapper;
         uno::Sequence< sheet::FormulaToken >                    m_aTokenList;
         ::std::auto_ptr<FormulaTokenArray>                      m_pTokenArray;

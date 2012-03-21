@@ -39,8 +39,8 @@
 
 #include <vector>
 #include "formula/funcutl.hxx"
+#include "formula/omoduleclient.hxx"
 #include "ControlHelper.hxx"
-#include "ModuleHelper.hxx"
 
 namespace formula
 {

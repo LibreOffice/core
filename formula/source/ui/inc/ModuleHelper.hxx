@@ -39,6 +39,7 @@ namespace formula
     //=========================================================================
     //= OModule
     //=========================================================================
+    class OModuleClient;
     class OModuleImpl;
     class FORMULA_DLLPUBLIC OModule
     {
@@ -67,18 +68,6 @@ namespace formula
             @precond m_aMutex is guarded when this method gets called
         */
         static void ensureImpl();
-    };
-
-    //=========================================================================
-    //= OModuleClient
-    //=========================================================================
-    /** base class for objects which uses any global module-specific ressources
-    */
-    class FORMULA_DLLPUBLIC OModuleClient
-    {
-    public:
-        OModuleClient()     { OModule::registerClient(); }
-        ~OModuleClient()    { OModule::revokeClient(); }
     };
 
     //=========================================================================

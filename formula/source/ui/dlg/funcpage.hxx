@@ -41,7 +41,7 @@
 
 #include <boost/shared_ptr.hpp>
 #include <vector>
-#include "ModuleHelper.hxx"
+#include "formula/omoduleclient.hxx"
 //============================================================================
 namespace formula
 {

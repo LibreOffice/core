@@ -32,6 +32,7 @@
 #include <sfx2/basedlgs.hxx>
 #include <memory>
 #include "formula/formuladllapi.h"
+#include "formula/omoduleclient.hxx"
 
 namespace formula
 {
@@ -87,7 +88,13 @@ protected:
     void            Update(const String& _sExp);
 };
 
-class FORMULA_DLLPUBLIC FormulaDlg :   public SfxModelessDialog
+class FORMULA_DLLPUBLIC FormulaDlg:
+    private OModuleClient, public SfxModelessDialog
+        // order of base classes is important, as OModuleClient controls the
+        // lifecycle of the ResMgr passed into SfxModelessDialog (via
+        // formula::ModuleRes), and at least with DBG_UTIL calling TestRes in
+        // ~Resource, the ResMgr must outlive the Resource (from which
+        // SfxModelessDialog ultimately derives)
 {
     friend class FormulaDlg_Impl;
 public:

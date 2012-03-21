@@ -37,7 +37,7 @@
 #include <vcl/tabctrl.hxx>
 #include <svtools/svtreebx.hxx>
 #include "formula/IFunctionDescription.hxx"
-#include "ModuleHelper.hxx"
+#include "formula/omoduleclient.hxx"
 
 //============================================================================
 
