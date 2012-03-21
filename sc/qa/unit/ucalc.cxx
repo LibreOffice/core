@@ -2134,6 +2134,11 @@ void Test::testPivotTableDuplicateDataFields()
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
+    ScPivotParam aParam;
+    pDPObj->FillLabelData(aParam);
+    CPPUNIT_ASSERT_MESSAGE("There should be exactly 4 labels (2 original, 1 data layout, and 1 duplicate dimensions).",
+                           aParam.maLabelArray.size() == 4);
+
     pDPs->FreeTable(pDPObj);
 
     m_pDoc->DeleteTab(1);
