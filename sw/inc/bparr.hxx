@@ -26,8 +26,10 @@
  *
  ************************************************************************/
 
-#ifndef _BPARR_HXX
-#define _BPARR_HXX
+#ifndef SW_BPARR_HXX
+#define SW_BPARR_HXX
+
+#include <assert.h>
 
 #include <tools/solar.h>
 #include <osl/diagnose.h>
@@ -113,7 +115,7 @@ public:
 
 inline sal_uLong BigPtrEntry::GetPos() const
 {
-    OSL_ENSURE( this == pBlock->pData[ nOffset ], "element not in the block" );
+    assert(this == pBlock->pData[ nOffset ]); // element not in the block
     return pBlock->nStart + nOffset;
 }
 

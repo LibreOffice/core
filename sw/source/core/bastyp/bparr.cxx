@@ -43,18 +43,16 @@ const sal_uInt16 nBlockGrowSize = 20;
 
 void CheckIdx( BlockInfo** ppInf, sal_uInt16 nBlock, sal_uLong nSize, sal_uInt16 nCur )
 {
-    OSL_ENSURE( !nSize || nCur < nBlock, "BigPtrArray: CurIndex steht falsch" );
+    assert(!nSize || nCur < nBlock); // BigPtrArray: CurIndex invalid
 
     sal_uLong nIdx = 0;
     for( sal_uInt16 nCnt = 0; nCnt < nBlock; ++nCnt, ++ppInf )
     {
         nIdx += (*ppInf)->nElem;
-        // Array mit Luecken darf es nicht geben
-        OSL_ENSURE( !nCnt || (*(ppInf-1))->nEnd + 1 == (*ppInf)->nStart,
-                    "BigPtrArray: Luecke in der Verwaltung!" );
+        // Array with holes is not allowed
+        assert(!nCnt || (*(ppInf-1))->nEnd + 1 == (*ppInf)->nStart);
     }
-
-    OSL_ENSURE( nIdx == nSize, "BigPtrArray: Anzahl ungueltig" );
+    assert(nIdx == nSize); // invalid count in nSize
 }
 
 #else
@@ -137,8 +135,8 @@ void BigPtrArray::ForEach( sal_uLong nStart, sal_uLong nEnd,
 
 ElementPtr BigPtrArray::operator[]( sal_uLong idx ) const
 {
+    assert(idx < nSize); // operator[]: Index out of bounds
     // weil die Funktion eben doch nicht const ist:
-    OSL_ENSURE( idx < nSize, "operator[]: Index aussserhalb" );
     BigPtrArray* pThis = (BigPtrArray*) this;
     sal_uInt16 cur = Index2Block( idx );
     BlockInfo* p = ppInf[ cur ];
@@ -349,7 +347,7 @@ void BigPtrArray::Insert( const ElementPtr& rElem, sal_uLong pos )
     }
     // Nun haben wir einen freien Block am Wickel: eintragen
     pos -= p->nStart;
-    OSL_ENSURE( pos < MAXENTRY, "falsche Pos" );
+    assert(pos < MAXENTRY);
     if( pos != p->nElem )
     {
         int nCount = p->nElem - sal_uInt16(pos);
@@ -458,8 +456,8 @@ void BigPtrArray::Remove( sal_uLong pos, sal_uLong n )
 
 void BigPtrArray::Replace( sal_uLong idx, const ElementPtr& rElem)
 {
+    assert(idx < nSize); // Index out of bounds
     // weil die Funktion eben doch nicht const ist:
-    OSL_ENSURE( idx < nSize, "Set: Index aussserhalb" );
     BigPtrArray* pThis = (BigPtrArray*) this;
     sal_uInt16 cur = Index2Block( idx );
     BlockInfo* p = ppInf[ cur ];
