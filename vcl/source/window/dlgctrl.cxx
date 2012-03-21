@@ -33,6 +33,7 @@
 #include <window.h>
 
 #include <vcl/event.hxx>
+#include <vcl/layout.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/tabpage.hxx>
 #include <vcl/tabctrl.hxx>
@@ -123,7 +124,7 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
                                 pTabPage = pTempTabPage;
                                 break;
                             }
-                            pTempWindow = pTempWindow->GetWindow( WINDOW_NEXT );
+                            pTempWindow = nextLogicalChildOfParent(pTabControl, pTempWindow);
                         }
                     }
                 }
@@ -141,7 +142,7 @@ static Window* ImplGetSubChildWindow( Window* pParent, sal_uInt16 n, sal_uInt16&
             pWindow = pTabPage;
         else
         {
-            pWindow = pNextWindow->GetWindow( WINDOW_NEXT );
+            pWindow = nextLogicalChildOfParent(pParent, pNextWindow);
             pNextWindow = pWindow;
         }
     }
@@ -828,7 +829,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
         {
             Window* pWindow;
             WinBits nStyle;
-            pWindow = pSWindow->GetWindow( WINDOW_NEXT );
+            pWindow = nextLogicalChildOfParent(this, pSWindow);
             while ( pWindow )
             {
                 pWindow = pWindow->ImplGetWindow();
@@ -844,7 +845,7 @@ sal_Bool Window::ImplDlgCtrl( const KeyEvent& rKEvt, sal_Bool bKeyInput )
                     return sal_True;
                 }
 
-                pWindow = pWindow->GetWindow( WINDOW_NEXT );
+                pWindow = nextLogicalChildOfParent(this, pWindow);
             }
         }
         else

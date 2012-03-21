@@ -28,7 +28,7 @@
 
 #include <vcl/layout.hxx>
 
-Size Box::calculateRequisition() const
+Size VclBox::calculateRequisition() const
 {
     long nMaxChildDimension = 0;
 
@@ -76,14 +76,14 @@ Size Box::calculateRequisition() const
     return aSize;
 }
 
-Size Box::GetOptimalSize(WindowSizeType eType) const
+Size VclBox::GetOptimalSize(WindowSizeType eType) const
 {
     if (eType == WINDOWSIZE_MAXIMUM)
         return Window::GetOptimalSize(eType);
     return calculateRequisition();
 }
 
-void Box::setAllocation(const Size &rAllocation)
+void VclBox::setAllocation(const Size &rAllocation)
 {
     sal_uInt16 nChildren = GetChildCount();
     if (!nChildren)
@@ -205,7 +205,7 @@ void Box::setAllocation(const Size &rAllocation)
     }
 }
 
-void Box::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
+void VclBox::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 {
     Window::SetPosSizePixel(rAllocPos, rAllocation);
     setAllocation(rAllocation);
@@ -216,7 +216,7 @@ void Box::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 #define DEFAULT_CHILD_MIN_WIDTH 85
 #define DEFAULT_CHILD_MIN_HEIGHT 27
 
-Size ButtonBox::calculateRequisition() const
+Size VclButtonBox::calculateRequisition() const
 {
     sal_uInt16 nVisibleChildren = 0;
 
@@ -262,7 +262,7 @@ Size ButtonBox::calculateRequisition() const
 }
 
 
-void ButtonBox::setAllocation(const Size &rAllocation)
+void VclButtonBox::setAllocation(const Size &rAllocation)
 {
     sal_uInt16 nChildren = GetChildCount();
     if (!nChildren)
@@ -318,7 +318,7 @@ void ButtonBox::setAllocation(const Size &rAllocation)
     }
 }
 
-Grid::array_type Grid::assembleGrid() const
+VclGrid::array_type VclGrid::assembleGrid() const
 {
     array_type A;
 
@@ -356,7 +356,7 @@ Grid::array_type Grid::assembleGrid() const
     return A;
 }
 
-bool Grid::isNullGrid(const array_type &A) const
+bool VclGrid::isNullGrid(const array_type &A) const
 {
     sal_Int32 nMaxX = A.shape()[0];
     sal_Int32 nMaxY = A.shape()[1];
@@ -366,7 +366,7 @@ bool Grid::isNullGrid(const array_type &A) const
     return false;
 }
 
-void Grid::calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vector<long> &rHeights) const
+void VclGrid::calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vector<long> &rHeights) const
 {
     sal_Int32 nMaxX = A.shape()[0];
     sal_Int32 nMaxY = A.shape()[1];
@@ -397,14 +397,14 @@ void Grid::calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vector
     }
 }
 
-Size Grid::GetOptimalSize(WindowSizeType eType) const
+Size VclGrid::GetOptimalSize(WindowSizeType eType) const
 {
     if (eType == WINDOWSIZE_MAXIMUM)
         return Window::GetOptimalSize(eType);
     return calculateRequisition();
 }
 
-Size Grid::calculateRequisition() const
+Size VclGrid::calculateRequisition() const
 {
     array_type A = assembleGrid();
 
@@ -444,13 +444,13 @@ Size Grid::calculateRequisition() const
     return Size(nTotalWidth, nTotalHeight);
 }
 
-void Grid::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
+void VclGrid::SetPosSizePixel(const Point& rAllocPos, const Size& rAllocation)
 {
     Window::SetPosSizePixel(rAllocPos, rAllocation);
     setAllocation(rAllocation);
 }
 
-void Grid::setAllocation(const Size& rAllocation)
+void VclGrid::setAllocation(const Size& rAllocation)
 {
     array_type A = assembleGrid();
 
@@ -546,6 +546,15 @@ Size getLegacyBestSizeForChildren(const Window &rWindow)
     aRet.Height() += aTopLeft.Y()*2;
 
     return aRet;
+}
+
+Window* getLegacyNonLayoutParent(Window *pParent)
+{
+    while (pParent && dynamic_cast<const VclContainer*>(pParent))
+    {
+        pParent = pParent->GetParent();
+    }
+    return pParent;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

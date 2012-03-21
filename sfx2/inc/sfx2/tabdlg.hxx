@@ -65,11 +65,11 @@ friend class SfxTabDialogController;
 
     SfxViewFrame*   pFrame;
 
-    VBox vbox;
-    VBox content_area;
+    VclVBox vbox;
+    VclVBox content_area;
     TabControl aTabCtrl;
 
-    HButtonBox action_area;
+    VclHButtonBox action_area;
     OKButton aOKBtn;
     PushButton* pUserBtn;
     CancelButton aCancelBtn;

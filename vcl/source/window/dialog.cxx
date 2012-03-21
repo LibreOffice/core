@@ -46,6 +46,7 @@
 #include <vcl/decoview.hxx>
 #include <vcl/msgbox.hxx>
 #include <vcl/unowrap.hxx>
+#include <iostream>
 
 #ifdef ANDROID
 #include <osl/detail/android-bootstrap.h>
@@ -116,6 +117,31 @@ void ImplHideSplash()
             pSVData->mpIntroWindow->Hide();
 }
 
+//Get next window after pChild of a pTopLevel window as
+//if any intermediate layout widgets didn't exist
+Window * nextLogicalChildOfParent(Window *pTopLevel, Window *pChild)
+{
+    Window *pLastChild = pChild;
+
+    if (dynamic_cast<VclContainer*>(pChild))
+        pChild = pChild->GetWindow(WINDOW_FIRSTCHILD);
+    else
+        pChild = pChild->GetWindow(WINDOW_NEXT);
+
+    while (!pChild)
+    {
+        Window *pParent = pLastChild->GetParent();
+        if (!pParent)
+            return NULL;
+        if (pParent == pTopLevel)
+            return NULL;
+        pLastChild = pParent;
+        pChild = pParent->GetWindow(WINDOW_NEXT);
+    }
+
+    return pChild;
+}
+
 // -----------------------------------------------------------------------
 
 void ImplWindowAutoMnemonic( Window* pWindow )
@@ -130,7 +156,7 @@ void ImplWindowAutoMnemonic( Window* pWindow )
     {
         pChild = pGetChild->ImplGetWindow();
         aMnemonicGenerator.RegisterMnemonic( pChild->GetText() );
-        pGetChild = pGetChild->GetWindow( WINDOW_NEXT );
+        pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);
     }
 
     // Bei TabPages auch noch die Controls vom Dialog beruecksichtigen
@@ -147,7 +173,7 @@ void ImplWindowAutoMnemonic( Window* pWindow )
             {
                 pChild = pGetChild->ImplGetWindow();
                 aMnemonicGenerator.RegisterMnemonic( pChild->GetText() );
-                pGetChild = pGetChild->GetWindow( WINDOW_NEXT );
+                pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);
             }
         }
     }
@@ -164,7 +190,7 @@ void ImplWindowAutoMnemonic( Window* pWindow )
                 pChild->SetText( aText );
         }
 
-        pGetChild = pGetChild->GetWindow( WINDOW_NEXT );
+        pGetChild = nextLogicalChildOfParent(pWindow, pGetChild);
     }
 }
 
@@ -173,9 +199,9 @@ static Window* getActionAreaButtonList(Dialog *pDialog)
     Window* pChild;
     if (pDialog->isLayoutEnabled())
     {
-        Box *pBox = dynamic_cast<Box*>(pDialog->GetWindow(WINDOW_FIRSTCHILD));
-        HButtonBox *pButtonBox = pBox ?
-            dynamic_cast<HButtonBox*>(pBox->GetWindow(WINDOW_LASTCHILD)) : 0;
+        VclBox *pBox = dynamic_cast<VclBox*>(pDialog->GetWindow(WINDOW_FIRSTCHILD));
+        VclButtonBox *pButtonBox = pBox ?
+            dynamic_cast<VclButtonBox*>(pBox->GetWindow(WINDOW_LASTCHILD)) : 0;
         pChild = pButtonBox ? pButtonBox->GetWindow(WINDOW_FIRSTCHILD) : 0;
     }
     else
@@ -968,7 +994,7 @@ void Dialog::Draw( OutputDevice* pDev, const Point& rPos, const Size& rSize, sal
 bool Dialog::isLayoutEnabled() const
 {
     //Has one child, and that child is a container => we're layout enabled
-    return (GetChildCount() == 1 && dynamic_cast<const Box*>(GetChild(0)));
+    return (GetChildCount() == 1 && dynamic_cast<const VclContainer*>(GetChild(0)));
 }
 
 Size Dialog::GetOptimalSize(WindowSizeType eType) const

@@ -1759,25 +1759,13 @@ OKButton::OKButton( Window* pParent, const ResId& rResId ) :
 
 // -----------------------------------------------------------------------
 
-namespace
-{
-    Window* getFirstNonLayoutParent(Window *pParent)
-    {
-        while (pParent && dynamic_cast<const Box*>(pParent))
-        {
-            pParent = pParent->GetParent();
-        }
-        return pParent;
-    }
-}
-
 void OKButton::Click()
 {
     SAL_WARN_IF(!GetClickHdl(), "vcl", "No handler installed for OKButton");
     // close parent if no link set
     if ( !GetClickHdl() )
     {
-        Window* pParent = getFirstNonLayoutParent(GetParent());
+        Window* pParent = getLegacyNonLayoutParent(GetParent());
         if ( pParent->IsSystemWindow() )
         {
             if ( pParent->IsDialog() )
@@ -1844,7 +1832,7 @@ void CancelButton::Click()
     // close parent if link not set
     if ( !GetClickHdl() )
     {
-        Window* pParent = getFirstNonLayoutParent(GetParent());
+        Window* pParent = getLegacyNonLayoutParent(GetParent());
         if ( pParent->IsSystemWindow() )
         {
             if ( pParent->IsDialog() )

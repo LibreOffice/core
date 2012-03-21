@@ -9591,7 +9591,7 @@ void Window::queueResize()
     if (!pParent->IsReallyShown())
     {
         //resize dialog to fit requisition
-        const Box *pContainer = dynamic_cast<const Box*>(pParent->GetChild(0));
+        const Window *pContainer = pParent->GetChild(0);
         Size aSize = pContainer->get_preferred_size();
 
         Size aMax = pParent->GetOptimalSize(WINDOWSIZE_MAXIMUM);

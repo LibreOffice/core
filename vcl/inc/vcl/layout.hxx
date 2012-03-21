@@ -32,20 +32,29 @@
 #include <vcl/window.hxx>
 #include <boost/multi_array.hpp>
 
+class VCL_DLLPUBLIC VclContainer : public Window
+{
+public:
+    VclContainer(Window *pParent) : Window(pParent) {}
+protected:
+    virtual Size calculateRequisition() const = 0;
+    virtual void setAllocation(const Size &rAllocation) = 0;
+};
+
 enum VclPackType
 {
     VCL_PACK_START = 0,
     VCL_PACK_END = 1
 };
 
-class VCL_DLLPUBLIC Box : public Window
+class VCL_DLLPUBLIC VclBox : public VclContainer
 {
 protected:
     bool m_bHomogeneous;
     int m_nSpacing;
 public:
-    Box(Window *pParent, bool bHomogeneous, int nSpacing)
-        : Window(pParent)
+    VclBox(Window *pParent, bool bHomogeneous, int nSpacing)
+        : VclContainer(pParent)
         , m_bHomogeneous(bHomogeneous)
         , m_nSpacing(nSpacing)
     {
@@ -69,11 +78,11 @@ protected:
     virtual void setSecondaryCoordinate(Point &rPos, long) const = 0;
 };
 
-class VCL_DLLPUBLIC VBox : public Box
+class VCL_DLLPUBLIC VclVBox : public VclBox
 {
 public:
-    VBox(Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
-        : Box(pParent, bHomogeneous, nSpacing)
+    VclVBox(Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
+        : VclBox(pParent, bHomogeneous, nSpacing)
     {
     }
 protected:
@@ -111,11 +120,11 @@ protected:
     }
 };
 
-class VCL_DLLPUBLIC HBox : public Box
+class VCL_DLLPUBLIC VclHBox : public VclBox
 {
 public:
-    HBox(Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
-        : Box(pParent, bHomogeneous, nSpacing)
+    VclHBox(Window *pParent, bool bHomogeneous = false, int nSpacing = 0)
+        : VclBox(pParent, bHomogeneous, nSpacing)
     {
     }
 protected:
@@ -153,11 +162,11 @@ protected:
     }
 };
 
-class VCL_DLLPUBLIC ButtonBox : public Box
+class VCL_DLLPUBLIC VclButtonBox : public VclBox
 {
 public:
-    ButtonBox(Window *pParent, int nSpacing)
-        : Box(pParent, true, nSpacing)
+    VclButtonBox(Window *pParent, int nSpacing)
+        : VclBox(pParent, true, nSpacing)
     {
     }
 protected:
@@ -165,11 +174,11 @@ protected:
     virtual void setAllocation(const Size &rAllocation);
 };
 
-class VCL_DLLPUBLIC VButtonBox : public ButtonBox
+class VCL_DLLPUBLIC VclVButtonBox : public VclButtonBox
 {
 public:
-    VButtonBox(Window *pParent, int nSpacing = 0)
-        : ButtonBox(pParent, nSpacing)
+    VclVButtonBox(Window *pParent, int nSpacing = 0)
+        : VclButtonBox(pParent, nSpacing)
     {
     }
 protected:
@@ -207,11 +216,11 @@ protected:
     }
 };
 
-class VCL_DLLPUBLIC HButtonBox : public ButtonBox
+class VCL_DLLPUBLIC VclHButtonBox : public VclButtonBox
 {
 public:
-    HButtonBox(Window *pParent, int nSpacing = 0)
-        : ButtonBox(pParent, nSpacing)
+    VclHButtonBox(Window *pParent, int nSpacing = 0)
+        : VclButtonBox(pParent, nSpacing)
     {
     }
 protected:
@@ -249,7 +258,7 @@ protected:
     }
 };
 
-class VCL_DLLPUBLIC Grid : public Window
+class VCL_DLLPUBLIC VclGrid : public VclContainer
 {
 private:
     bool m_bRowHomogeneous;
@@ -262,11 +271,11 @@ private:
     bool isNullGrid(const array_type& A) const;
     void calcMaxs(const array_type &A, std::vector<long> &rWidths, std::vector<long> &rHeights) const;
 
-    Size calculateRequisition() const;
-    void setAllocation(const Size &rAllocation);
+    virtual Size calculateRequisition() const;
+    virtual void setAllocation(const Size &rAllocation);
 public:
-    Grid(Window *pParent)
-        : Window(pParent)
+    VclGrid(Window *pParent)
+        : VclContainer(pParent)
         , m_bRowHomogeneous(false), m_bColumnHomogeneous(false)
         , m_nRowSpacing(0), m_nColumnSpacing(0)
     {
@@ -313,9 +322,21 @@ public:
 VCL_DLLPUBLIC void setGridAttach(Window &rWidget, sal_Int32 nLeft, sal_Int32 nTop,
     sal_Int32 nWidth = 1, sal_Int32 nHeight = 1);
 
+// retro-fitting utilities //
+
 //Get a Size which is large enough to contain all children with
 //an equal amount of space at top left and bottom right
 Size getLegacyBestSizeForChildren(const Window &rWindow);
+
+//Get first parent which is not a layout widget
+Window* getLegacyNonLayoutParent(Window *pParent);
+
+//Get next window after pChild of a pTopLevel window as
+//if any intermediate layout widgets didn't exist
+//i.e. acts like pChild = pChild->GetWindow(WINDOW_NEXT);
+//in a flat hierarchy where dialogs only have one layer
+//of children
+Window* nextLogicalChildOfParent(Window *pTopLevel, Window *pChild);
 
 #endif
 

@@ -90,8 +90,8 @@ class SvxCharNamePage : public SvxCharBasePage
 {
 
 private:
-    VBox m_aBox;
-    Grid m_aGrid;
+    VclVBox m_aBox;
+    VclGrid m_aGrid;
 
     FixedLine*          m_pWestLine;
     FixedText*          m_pWestFontNameFT;
@@ -192,8 +192,8 @@ class SvxCharEffectsPage : public SvxCharBasePage
 {
 
 private:
-    VBox m_aBox;
-    Grid m_aGrid;
+    VclVBox m_aBox;
+    VclGrid m_aGrid;
 
     FixedText           m_aFontColorFT;
     ColorListBox        m_aFontColorLB;
@@ -278,11 +278,11 @@ class SvxCharPositionPage : public SvxCharBasePage
 {
 
 private:
-    VBox m_aBox;
+    VclVBox m_aBox;
 
     FixedLine           m_aPositionLine;
 
-    Grid m_aPositionGrid;
+    VclGrid m_aPositionGrid;
     RadioButton         m_aHighPosBtn;
     RadioButton         m_aNormalPosBtn;
     RadioButton         m_aLowPosBtn;
@@ -294,20 +294,20 @@ private:
 
     FixedLine           m_aRotationScalingFL;
 
-    HBox m_aRotationBox;
+    VclHBox m_aRotationBox;
     FixedLine           m_aScalingFL;
     RadioButton         m_a0degRB;
     RadioButton         m_a90degRB;
     RadioButton         m_a270degRB;
     CheckBox            m_aFitToLineCB;
 
-    HBox m_aScaleBox;
+    VclHBox m_aScaleBox;
     FixedText           m_aScaleWidthFT;
     MetricField         m_aScaleWidthMF;
 
     FixedLine           m_aKerningLine;
 
-    HBox m_aKerningBox;
+    VclHBox m_aKerningBox;
     ListBox             m_aKerningLB;
     FixedText           m_aKerningFT;
     MetricField         m_aKerningEdit;
@@ -364,8 +364,8 @@ public:
 class SvxCharTwoLinesPage : public SvxCharBasePage
 {
 private:
-    VBox m_aBox;
-    Grid m_aGrid;
+    VclVBox m_aBox;
+    VclGrid m_aGrid;
 
     FixedLine           m_aSwitchOnLine;
     CheckBox            m_aTwoLinesBtn;

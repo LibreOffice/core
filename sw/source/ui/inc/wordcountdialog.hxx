@@ -37,42 +37,42 @@ struct SwDocStat;
 
 class SwWordCountDialog
 {
-    VBox vbox;
-    VBox content_area;
+    VclVBox vbox;
+    VclVBox content_area;
 
-    HBox aCurrentSelection;
+    VclHBox aCurrentSelection;
     FixedText aCurrentSelectionText;
     FixedLine aCurrentSelectionLine;
 
-    VBox aSelectionBox;
-    HBox aSelectionRow1;
+    VclVBox aSelectionBox;
+    VclHBox aSelectionRow1;
     FixedText aCurrentWordFT;
     FixedInfo aCurrentWordFI;
-    HBox aSelectionRow2;
+    VclHBox aSelectionRow2;
     FixedText aCurrentCharacterFT;
     FixedInfo aCurrentCharacterFI;
-    HBox aSelectionRow3;
+    VclHBox aSelectionRow3;
     FixedText aCurrentCharacterExcludingSpacesFT;
     FixedInfo aCurrentCharacterExcludingSpacesFI;
 
-    HBox aDoc;
+    VclHBox aDoc;
     FixedText aDocText;
     FixedLine aDocLine;
 
-    VBox aDocBox;
-    HBox aDocRow1;
+    VclVBox aDocBox;
+    VclHBox aDocRow1;
     FixedText aDocWordFT;
     FixedInfo aDocWordFI;
-    HBox aDocRow2;
+    VclHBox aDocRow2;
     FixedText aDocCharacterFT;
     FixedInfo aDocCharacterFI;
-    HBox aDocRow3;
+    VclHBox aDocRow3;
     FixedText aDocCharacterExcludingSpacesFT;
     FixedInfo aDocCharacterExcludingSpacesFI;
 
     FixedLine aBottomFL;
 
-    HButtonBox action_area;
+    VclHButtonBox action_area;
     OKButton aOK;
     HelpButton aHelp;
 
