@@ -548,18 +548,22 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
             return;
 
         ScSheetDPData aDPData(GetDocPtr(), *pSrcDesc, pCache);
-        const std::vector< SCROW > aOrignial = aDPData.GetColumnEntries( static_cast< long >( GetBaseFieldIndex() ) );
+        long nDim = GetFieldIndex();
+        const std::vector< SCROW > aOrignial = aDPData.GetColumnEntries(nDim);
         // get the string collection with generated grouping elements
         ScDPNumGroupDimension aTmpDim( rNumInfo );
         if( nDatePart != 0 )
             aTmpDim.MakeDateHelper( rNumInfo, mnFieldIdx, nDatePart );
         const std::vector<SCROW>& aMemberIds = aTmpDim.GetNumEntries(
-            static_cast<SCCOL>(GetBaseFieldIndex()), aDPData.GetCacheTable().getCache());
+            static_cast<SCCOL>(nDim), pCache);
         for ( size_t  nIdx = 0 ; nIdx < aMemberIds.size(); nIdx++ )
         {
-            const ScDPItemData* pData = aDPData.GetMemberById(  static_cast< long >( GetBaseFieldIndex() ) , aMemberIds[ nIdx] );
+            const ScDPItemData* pData = aDPData.GetMemberById(nDim , aMemberIds[nIdx]);
             if ( pData )
-                InsertGroupItem( new XclExpPCItem( pData->GetString() ) );
+            {
+                rtl::OUString aStr = pCache->GetFormattedString(nDim, *pData);
+                InsertGroupItem(new XclExpPCItem(aStr));
+            }
         }
     }
 }
