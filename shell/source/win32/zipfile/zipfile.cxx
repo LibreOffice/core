@@ -416,8 +416,6 @@ ZipFile::~ZipFile()
         delete m_pStream;
 }
 
-#define CHUNK 16384
-
 /** Provides an interface to read the uncompressed data of a content of the zip file
 
     @precond    The specified content must exist in this file
