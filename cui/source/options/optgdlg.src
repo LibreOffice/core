@@ -253,7 +253,6 @@ TabPage OFA_TP_VIEW
             < "Galaxy (default)" ; > ;
             < "High Contrast" ; > ;
             < "Industrial" ; > ;
-            < "Tango" ; > ;
             < "Classic" ; > ;
         };
     };
