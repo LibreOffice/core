@@ -114,6 +114,8 @@ namespace formula
         void            EditNextFunc( sal_Bool bForward, xub_StrLen nFStart=NOT_FOUND );
         void            EditThisFunc(xub_StrLen nFStart);
 
+        void            StoreFormEditData(FormEditData* pEditData);
+
         void            UpdateArgInput( sal_uInt16 nOffset, sal_uInt16 nInput );
         void            Update();
         void            Update(const String& _sExp);
@@ -364,7 +366,18 @@ FormulaDlg_Impl::~FormulaDlg_Impl()
         aTimer.Stop();
     }// if(aTimer.IsActive())
     bIsShutDown=sal_True;// Set it in order to PreNotify not to save GetFocus.
-    FormEditData* pData = m_pHelper->getFormEditData();
+
+    aTabCtrl.RemovePage(TP_FUNCTION);
+    aTabCtrl.RemovePage(TP_STRUCT);
+
+    delete pStructPage;
+    delete pFuncPage;
+    delete pParaWin;
+    DeleteArgs();
+}
+
+void FormulaDlg_Impl::StoreFormEditData(FormEditData* pData)
+{
     if (pData) // it won't be destroyed over Close;
     {
         pData->SetFStart((xub_StrLen)pMEdit->GetSelection().Min());
@@ -377,15 +390,8 @@ FormulaDlg_Impl::~FormulaDlg_Impl()
         pData->SetUndoStr(pMEdit->GetText());
         pData->SetMatrixFlag(aBtnMatrix.IsChecked());
     }
-
-    aTabCtrl.RemovePage(TP_FUNCTION);
-    aTabCtrl.RemovePage(TP_STRUCT);
-
-    delete pStructPage;
-    delete pFuncPage;
-    delete pParaWin;
-    DeleteArgs();
 }
+
 // -----------------------------------------------------------------------------
 void FormulaDlg_Impl::PreNotify( NotifyEvent& rNEvt )
 {
@@ -1726,6 +1732,11 @@ long FormulaModalDialog::PreNotify( NotifyEvent& rNEvt )
     return ModalDialog::PreNotify(rNEvt);
 }
 
+void FormulaModalDialog::StoreFormEditData(FormEditData* pData)
+{
+    m_pImpl->StoreFormEditData(pData);
+}
+
 //  --------------------------------------------------------------------------
 //      Initialisation / General functions  for Dialog
 //  --------------------------------------------------------------------------
@@ -1843,6 +1854,12 @@ void FormulaDlg::disableOk()
 {
     m_pImpl->aBtnEnd.Disable();
 }
+
+void FormulaDlg::StoreFormEditData(FormEditData* pData)
+{
+    m_pImpl->StoreFormEditData(pData);
+}
+
 // -----------------------------------------------------------------------------
 const IFunctionDescription* FormulaDlg::getCurrentFunctionDescription() const
 {

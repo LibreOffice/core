@@ -56,6 +56,7 @@ class IFunctionManager;
 class FormulaHelper;
 class RefEdit;
 class RefButton;
+class FormEditData;
 //============================================================================
 class FORMULA_DLLPUBLIC FormulaModalDialog :   public ModalDialog
 {
@@ -86,6 +87,8 @@ protected:
     void            Update();
     sal_Bool            CheckMatrix(String& aFormula /*IN/OUT*/);
     void            Update(const String& _sExp);
+
+    void            StoreFormEditData(FormEditData* pData);
 };
 
 class FORMULA_DLLPUBLIC FormulaDlg:
@@ -140,6 +143,8 @@ protected:
     void            UpdateParaWin(const Selection& _rSelection,const String& _sRefStr);
     RefEdit*        GetActiveEdit();
     void            SetEdSelection();
+
+    void            StoreFormEditData(FormEditData* pData);
 
     const FormulaHelper& GetFormulaHelper() const;
 };

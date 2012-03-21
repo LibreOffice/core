@@ -105,6 +105,8 @@ FormulaDialog::~FormulaDialog()
         boost::scoped_ptr<Window> aTemp2(m_pAddField);
         m_pAddField = NULL;
     }
+
+    StoreFormEditData( m_pFormulaData );
 }
 
 //  --------------------------------------------------------------------------

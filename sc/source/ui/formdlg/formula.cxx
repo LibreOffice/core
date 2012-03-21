@@ -272,6 +272,7 @@ ScFormulaDlg::~ScFormulaDlg()
     {
         //Referenz Inputhandler zuruecksetzen
         pScMod->SetRefInputHdl(NULL);
+        StoreFormEditData(pData);
     } // if (pData) // wird nicht ueber Close zerstoert;
 
     delete pCell;
