@@ -29,7 +29,7 @@ in this Software without prior written authorization from the X Consortium.
 
 #include "def.h"
 #include <string.h>
-void pr( struct inclist *ip, char *file,char *base);
+size_t pr( struct inclist *ip, char *file,char *base);
 
 extern struct   inclist inclist[ MAXFILES ],
             *inclistp;
@@ -94,10 +94,11 @@ void recursive_pr_include(head, file, base)
         recursive_pr_include(head->i_list[ i ], file, base);
 }
 
-void pr(ip, file, base)
+size_t pr(ip, file, base)
     register struct inclist  *ip;
     char    *file, *base;
 {
+    size_t ret;
     static char *lastfile;
     static int  current_len;
     register int    len, i;
@@ -116,18 +117,19 @@ void pr(ip, file, base)
         strcpy(buf+1, ip->i_file);
         current_len += len;
     }
-    fwrite(buf, len, 1, stdout);
+    ret = fwrite(buf, len, 1, stdout);
 
     /*
      * If verbose is set, then print out what this file includes.
      */
     if (! verbose || ip->i_list == NULL || ip->i_notified)
-        return;
+        return ret;
     ip->i_notified = TRUE;
     lastfile = NULL;
     printf("\n# %s includes:", ip->i_file);
     for (i=0; i<ip->i_listlen; i++)
         printf("\n#\t%s", ip->i_list[ i ]->i_incstring);
+    return ret;
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
