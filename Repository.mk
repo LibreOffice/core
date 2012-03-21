@@ -138,6 +138,7 @@ $(eval $(call gb_Helper_register_executables,OOO,\
     soffice.bin \
     unopkg.bin \
     gengal.bin \
+    liboapprover \
 ))
 
 ifeq ($(OS),MACOSX)

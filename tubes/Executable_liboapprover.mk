@@ -1,5 +1,4 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
-#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -13,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2012 Red Hat, Inc., Eike Rathke <erack@redhat.com>
+# Copyright (C) 2012 Collabora Ltd.
 #
 # All Rights Reserved.
 #
@@ -25,19 +24,24 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,tubes))
+$(eval $(call gb_Executable_Executable,liboapprover))
 
-ifeq ($(ENABLE_TELEPATHY),TRUE)
+$(eval $(call gb_Executable_set_targettype_gui,liboapprover,YES))
 
-$(eval $(call gb_Module_add_targets,tubes,\
-	Library_tubes \
-	Executable_liboapprover \
+$(eval $(call gb_Executable_set_include,liboapprover,\
+    $$(INCLUDE) \
+    $(GTK_CFLAGS) \
+    $(TELEPATHY_CFLAGS) \
+    -I$(realpath $(SRCDIR)/tubes/inc) \
 ))
 
-$(eval $(call gb_Module_add_check_targets,tubes,\
-    CppunitTest_tubes_test \
+$(eval $(call gb_Executable_add_libs,liboapprover,\
+    $(GTK_LIBS) \
+    $(TELEPATHY_LIBS) \
 ))
 
-endif
+$(eval $(call gb_Executable_add_cobjects,liboapprover,\
+    tubes/source/approver \
+))
 
-# vim:set shiftwidth=4 tabstop=4 noexpandtab: */
+# vim: set ts=4 sw=4 et:
