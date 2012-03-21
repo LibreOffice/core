@@ -45,16 +45,21 @@ handle_with_cb (GObject *source,
     gpointer user_data)
 {
   TpChannelDispatchOperation *cdo = TP_CHANNEL_DISPATCH_OPERATION (source);
-  GError *error;
+  GtkDialog *dialog = GTK_DIALOG (user_data);
+  GError *error = NULL;
 
   if (!tp_channel_dispatch_operation_handle_with_finish (cdo, result, &error))
     {
       g_print ("HandleWith() failed: %s\n", error->message);
+      gtk_message_dialog_format_secondary_markup (dialog,
+          "<b>Error</b>\n\nAsking LibreOffice to accept the session failed: <i>%s</i>",
+          error->message);
       g_error_free (error);
       return;
     }
 
   g_print ("HandleWith() succeeded\n");
+  gtk_widget_destroy (dialog);
 }
 
 static void
@@ -64,7 +69,7 @@ close_cb (GObject *source,
 
 {
   TpChannelDispatchOperation *cdo = TP_CHANNEL_DISPATCH_OPERATION (source);
-  GError *error;
+  GError *error = NULL;
 
   if (!tp_channel_dispatch_operation_close_channels_finish (cdo, result, &error))
     {
@@ -90,16 +95,19 @@ dialog_response_cb (
         g_print ("Approve channels\n");
 
         tp_channel_dispatch_operation_handle_with_async (cdo, NULL,
-            handle_with_cb, NULL);
+            handle_with_cb, dialog);
+
+        gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_ACCEPT, FALSE);
+        gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_REJECT, FALSE);
     }
     else
     {
         g_print ("Reject channels\n");
 
-        tp_channel_dispatch_operation_close_channels_async (cdo, close_cb, NULL);
+        tp_channel_dispatch_operation_close_channels_async (cdo, close_cb, dialog);
+        gtk_widget_destroy (dialog);
     }
 
-    gtk_widget_destroy (dialog);
     g_object_unref (cdo);
 }
 
