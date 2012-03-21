@@ -1563,7 +1563,7 @@ String lcl_GetNumString( const SwTOXSortTabBase& rBase, sal_Bool bUsePrefix, sal
 {
     String sRet;
 
-    if( !rBase.pTxtMark && rBase.aTOXSources.Count() > 0 )
+    if( !rBase.pTxtMark && !rBase.aTOXSources.empty() )
     {   // only if it's not a Mark
         const SwTxtNode* pNd = rBase.aTOXSources[0].pNd->GetTxtNode();
         if( pNd )
@@ -1721,11 +1721,11 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                     // Place holder for the PageNumber; we only respect the first one
                 {
                     // The count of similiar entries gives the PagerNumber pattern
-                    sal_uInt16 nSize = rBase.aTOXSources.Count();
-                    if( nSize > 0 )
+                    size_t nSize = rBase.aTOXSources.size();
+                    if (nSize > 0)
                     {
                         String aInsStr( cNumRepl );
-                        for(sal_uInt16 i=1; i < nSize; ++i)
+                        for (size_t i = 1; i < nSize; ++i)
                         {
                             aInsStr.AppendAscii( sPageDeli );
                             aInsStr += cNumRepl;
@@ -1740,7 +1740,7 @@ void SwTOXBaseSection::GenerateText( sal_uInt16 nArrayIdx,
                 {
                     // A bit tricky: Find a random Frame
                     const SwTOXSource* pTOXSource = 0;
-                    if(rBase.aTOXSources.Count())
+                    if (!rBase.aTOXSources.empty())
                         pTOXSource = &rBase.aTOXSources[0];
 
                     // #i53420#
@@ -1906,9 +1906,8 @@ void SwTOXBaseSection::UpdatePageNum()
         for(sal_uInt16 nRunInEntry = nCnt; nRunInEntry < nCnt + nRange; nRunInEntry++)
         {
             SwTOXSortTabBase* pSortBase = aSortArr[nRunInEntry];
-            sal_uInt16 nSize = pSortBase->aTOXSources.Count();
-            sal_uInt16 i;
-            for( sal_uInt16 j = 0; j < nSize; ++j )
+            size_t nSize = pSortBase->aTOXSources.size();
+            for (size_t j = 0; j < nSize; ++j)
             {
                 ::SetProgressState( 0, pDoc->GetDocShell() );
 
@@ -1936,6 +1935,7 @@ void SwTOXBaseSection::UpdatePageNum()
                     }
 
                     // Insert as sorted
+                    sal_uInt16 i;
                     for( i = 0; i < aNums.size() && aNums[i] < nPage; ++i )
                         ;
 
@@ -2220,8 +2220,7 @@ void SwTOXBaseSection::InsertSorted(SwTOXSortTabBase* pNew)
                     return;
                 }
                 // If the own entry is already present, add it to the references list
-                pOld->aTOXSources.Insert( pNew->aTOXSources[0],
-                                            pOld->aTOXSources.Count() );
+                pOld->aTOXSources.push_back(pNew->aTOXSources[0]);
 
                 delete pNew;
                 return;

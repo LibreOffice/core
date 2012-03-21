@@ -64,9 +64,6 @@ using ::rtl::OUString;
 
 sal_uInt16 SwTOXSortTabBase::nOpt = 0;
 
-SV_IMPL_VARARR( SwTOXSources, SwTOXSource )
-
-
 SwTOXInternational::SwTOXInternational( LanguageType nLang, sal_uInt16 nOpt,
                                         const String& rSortAlgorithm ) :
     eLang( nLang ),
@@ -164,7 +161,7 @@ SwTOXSortTabBase::SwTOXSortTabBase( TOXSortType nTyp, const SwCntntNode* pNd,
             n = *pTxtMark->GetStart();
         SwTOXSource aTmp( pNd, n,
                     pTxtMark ? pTxtMark->GetTOXMark().IsMainEntry() : sal_False );
-        aTOXSources.Insert( aTmp, aTOXSources.Count() );
+        aTOXSources.push_back(aTmp);
 
         nPos = pNd->GetIndex();
 
