@@ -1814,7 +1814,6 @@ sub run_job {
     my ($job, $path, $registered_name) = @_;
     my $job_to_do = $job;
     my $error_code = 0;
-    my $retry_counter = 10;
 
     print "$registered_name\n";
     return 0 if ( $show );
@@ -1838,7 +1837,7 @@ sub run_job {
             system("$perl $mkout");
         };
     }
-RETRY:
+
     open (MAKE, "$job_to_do 2>&1 |") or return 8;
     open (LOGFILE, "> $log_file") or return 8;
     while (<MAKE>) { print LOGFILE $_; print $_ }
