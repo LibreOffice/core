@@ -75,6 +75,10 @@ public:
 
     DECL_LINK( NotifyDrawUndo, SdrUndoAction* );
 
+    // for grouping multiple operations into one with a new name
+    virtual void            EnterListAction( sal_uInt16 nNameResId );
+    virtual void            EndListAction();
+
     virtual sal_Bool        DetectiveAddPred(const ScAddress& rPos);
     virtual sal_Bool        DetectiveDelPred(const ScAddress& rPos);
     virtual sal_Bool        DetectiveAddSucc(const ScAddress& rPos);

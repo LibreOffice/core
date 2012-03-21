@@ -4966,8 +4966,6 @@ sal_Bool ScDocFunc::InsertAreaLink( const String& rFile, const String& rFilter,
                                 const ScRange& rDestRange, sal_uLong nRefresh,
                                 sal_Bool bFitBlock, sal_Bool bApi )
 {
-    //! auch fuer ScViewFunc::InsertAreaLink benutzen!
-
     ScDocument* pDoc = rDocShell.GetDocument();
     sal_Bool bUndo (pDoc->IsUndoEnabled());
 
@@ -5076,5 +5074,15 @@ void ScDocFunc::ReplaceConditionalFormat( sal_uLong nOldFormat, ScConditionalFor
     SFX_APP()->Broadcast(SfxSimpleHint(SC_HINT_AREAS_CHANGED));
 }
 
+void ScDocFunc::EnterListAction( sal_uInt16 nNameResId )
+{
+    String aUndo( ScGlobal::GetRscString( nNameResId ) );
+    rDocShell.GetUndoManager()->EnterListAction( aUndo, aUndo );
+}
+
+void ScDocFunc::EndListAction()
+{
+    rDocShell.GetUndoManager()->LeaveListAction();
+}
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
