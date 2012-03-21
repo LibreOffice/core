@@ -1,3 +1,25 @@
+/**************************************************************
+ *
+ * Licensed to the Apache Software Foundation (ASF) under one
+ * or more contributor license agreements.  See the NOTICE file
+ * distributed with this work for additional information
+ * regarding copyright ownership.  The ASF licenses this file
+ * to you under the Apache License, Version 2.0 (the
+ * "License"); you may not use this file except in compliance
+ * with the License.  You may obtain a copy of the License at
+ *
+ *   http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the License is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+ * KIND, either express or implied.  See the License for the
+ * specific language governing permissions and limitations
+ * under the License.
+ *
+ *************************************************************/
+
+
 
 /*
  * xwphook.h:
@@ -8,14 +30,9 @@
 
 /*
  *      Copyright (C) 1999-2002 Ulrich M”ller.
- *      This program is free software; you can redistribute it and/or modify
- *      it under the terms of the GNU General Public License as published by
- *      the Free Software Foundation, in version 2 as it comes in the COPYING
- *      file of the XWorkplace main distribution.
- *      This program is distributed in the hope that it will be useful,
- *      but WITHOUT ANY WARRANTY; without even the implied warranty of
- *      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *      GNU General Public License for more details.
+ *      This file is part of the "XWorkplace helpers" source package.
+ *
+ *      2009-06-15 published under LGPL3 with Ulrich Mller permission.
  */
 
 #ifndef XWPHOOK_HEADER_INCLUDED
@@ -79,7 +96,7 @@
 
     typedef struct _PAGERCONFIG
     {
-        BYTE        cDesktopsX,
+        PM_BYTE     cDesktopsX,
                     cDesktopsY,
                 // no. of virtual Desktops (x and y)
                     bStartX,
@@ -236,7 +253,7 @@
                                             // bottom in order not to break binary
                                             // compatibility
 
-        BYTE            bMonitorDrives[30];     // array of 1-byte BOOLs; if any of these
+        PM_BYTE         bMonitorDrives[30];     // array of 1-byte BOOLs; if any of these
                 // is "1", the corresponding drive letter
                 // will be monitored for media change
                 // (index 1 = A, index 2 = B, index 3 = C, ...).
@@ -492,7 +509,7 @@
         USHORT  usAction;
                         // The action (relative to the plugin) defined for
                         // this event.
-        BYTE    abSetup[16];
+        PM_BYTE abSetup[16];
                         // A private area possibly refining the action.
     } MOUSEMAPPING, *PMOUSEMAPPING;
 
