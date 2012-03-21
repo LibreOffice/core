@@ -35,7 +35,11 @@
 #include <gtk/gtk.h>
 
 #if defined ENABLE_GTK_PRINT || GTK_CHECK_VERSION(3,0,0)
+#if GTK_CHECK_VERSION(2,14,0)
 #include <gtk/gtkunixprint.h>
+#else
+#include <gtk/gtkpagesetupunixdialog.h>
+#endif
 
 #if !GTK_CHECK_VERSION(3,0,0)
 #include <osl/module.hxx>
