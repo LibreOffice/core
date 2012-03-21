@@ -88,10 +88,10 @@ public:
     String          GetAutoSumFormula( const ScRangeList& rRangeList, bool bSubTotal, const ScAddress& rAddr );
 
     void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
-                               sal_Bool bRecord = sal_True, const EditTextObject* pData = NULL );
+                               const EditTextObject* pData = NULL );
+    void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                               const EditTextObject* pData, bool bTestSimple = false );
     void            EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& rValue );
-    void            EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextObject* pData,
-                                sal_Bool bRecord = sal_True, sal_Bool bTestSimple = false );
 
     void            EnterMatrix( const String& rString, ::formula::FormulaGrammar::Grammar eGram );
     void            EnterBlock( const String& rString, const EditTextObject* pData );

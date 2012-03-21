@@ -342,15 +342,15 @@ sal_Bool lcl_AddFunction( ScAppOptions& rAppOpt, sal_uInt16 nOpCode )
 
 //  input - undo OK
 
-void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const String& rString,
-                            sal_Bool bRecord, const EditTextObject* pData )
+void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                            const String& rString,
+                            const EditTextObject* pData )
 {
     ScDocument* pDoc = GetViewData()->GetDocument();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     SCTAB nSelCount = rMark.GetSelectCount();
+    bool bRecord = pDoc->IsUndoEnabled();
     SCTAB i;
-    if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = false;
 
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocShellModificator aModificator( *pDocSh );
@@ -716,14 +716,13 @@ void ScViewFunc::EnterValue( SCCOL nCol, SCROW nRow, SCTAB nTab, const double& r
     }
 }
 
-void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextObject* pData,
-                            sal_Bool bRecord, sal_Bool bTestSimple )
+void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
+                            const EditTextObject* pData, bool bTestSimple )
 {
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScMarkData& rMark = GetViewData()->GetMarkData();
     ScDocument* pDoc = pDocSh->GetDocument();
-    if (bRecord && !pDoc->IsUndoEnabled())
-        bRecord = false;
+    bool bRecord = pDoc->IsUndoEnabled();
 
     ScDocShellModificator aModificator( *pDocSh );
 
@@ -812,7 +811,7 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab, const EditTextOb
             if (bCommon)
                 AdjustRowHeight(nRow,nRow);
 
-            EnterData(nCol,nRow,nTab,aString,bRecord);
+            EnterData(nCol,nRow,nTab,aString);
         }
         else
         {

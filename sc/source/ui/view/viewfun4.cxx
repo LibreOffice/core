@@ -130,15 +130,19 @@ void ScViewFunc::PasteRTF( SCCOL nStartCol, SCROW nStartRow,
             }
 
             SCROW nRow = nStartRow;
+
+            // Temporarily turn off undo generation for this lot
+            bool bUndoEnabled = pDoc->IsUndoEnabled();
+            pDoc->EnableUndo( false );
             for( sal_uInt16 n = 0; n < nParCnt; n++ )
             {
                 EditTextObject* pObject = pEngine->CreateTextObject( n );
-                EnterData( nStartCol, nRow, nTab, pObject, false, sal_True );
-                            // kein Undo, auf einfache Strings testen
+                EnterData( nStartCol, nRow, nTab, pObject, true );
                 delete pObject;
                 if( ++nRow > MAXROW )
                     break;
             }
+            pDoc->EnableUndo(bUndoEnabled);
 
             if (bRecord)
             {
