@@ -149,7 +149,8 @@ sal_Int16 lcl_IntToRelation(const uno::Any& rVal)
 {
     sal_Int16 eRet = text::RelOrientation::FRAME;
     sal_Int16 nVal = 0;
-    rVal >>= nVal;
+    if (!(rVal >>= nVal))
+        SAL_WARN("sw.core", "lcl_IntToRelation: read from Any failed!");
     switch(nVal)
     {
         case  text::RelOrientation::PRINT_AREA:         eRet =   text::RelOrientation::PRINT_AREA           ; break;
