@@ -1657,14 +1657,13 @@ FormulaModalDialog::FormulaModalDialog( Window* pParent
                                             , bool _bSupportFunctionResult
                                             , bool _bSupportResult
                                             , bool _bSupportMatrix
-                                            , IFormulaEditorHelper* _pHelper
                                             , IFunctionManager* _pFunctionMgr
                                             , IControlReferenceHandler* _pDlg ) :
         ModalDialog( pParent, ModuleRes(RID_FORMULADLG_FORMULA_MODAL) ),
         m_pImpl( new FormulaDlg_Impl(this,_bSupportFunctionResult
                                             , _bSupportResult
                                             , _bSupportMatrix
-                                            ,_pHelper,_pFunctionMgr,_pDlg))
+                                            ,this,_pFunctionMgr,_pDlg))
 {
     FreeResource();
     SetText(m_pImpl->aTitle1);
@@ -1745,12 +1744,12 @@ FormulaDlg::FormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                             , bool _bSupportFunctionResult
                             , bool _bSupportResult
                             , bool _bSupportMatrix
-                            , IFormulaEditorHelper* _pHelper,IFunctionManager* _pFunctionMgr,IControlReferenceHandler* _pDlg ) :
+                            , IFunctionManager* _pFunctionMgr, IControlReferenceHandler* _pDlg ) :
         SfxModelessDialog( pB, pCW, pParent, ModuleRes(RID_FORMULADLG_FORMULA) ),
         m_pImpl( new FormulaDlg_Impl(this, _bSupportFunctionResult
                                             , _bSupportResult
                                             , _bSupportMatrix
-                                            ,_pHelper,_pFunctionMgr,_pDlg))
+                                            , this, _pFunctionMgr, _pDlg))
 {
     FreeResource();
     if(GetHelpId().isEmpty())    //Hack which hides the HelpId for a model Dialog in SfxModelessDialog

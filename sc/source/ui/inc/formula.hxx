@@ -43,7 +43,6 @@
 #include "formula/formula.hxx"
 #include "IAnyRefDialog.hxx"
 #include "anyrefdg.hxx"
-#include <formula/IFunctionDescription.hxx>
 
 class ScViewData;
 class ScDocument;
@@ -56,11 +55,7 @@ class SvLBoxEntry;
 typedef ScTabViewShell* PtrTabViewShell;
 //============================================================================
 
-// Order of base classes is important, as pointer to IFormulaEditorHelper base
-// is passed into constructor of FormulaDlg base, which expects the former to
-// outlive itself:
-class ScFormulaDlg : public formula::IFormulaEditorHelper,
-                     public formula::FormulaDlg,
+class ScFormulaDlg : public formula::FormulaDlg,
                      public IAnyRefDialog
 {
     ScFormulaReferenceHelper m_aHelper;

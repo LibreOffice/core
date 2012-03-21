@@ -60,7 +60,7 @@ FormulaDialog::FormulaDialog(Window* pParent
                              , const ::boost::shared_ptr< IFunctionManager >&  _pFunctionMgr
                              , const ::rtl::OUString& _sFormula
                              , const ::com::sun::star::uno::Reference < ::com::sun::star::beans::XPropertySet >& _xRowSet)
-    : FormulaModalDialog( pParent, false,false,false,this,_pFunctionMgr.get(),this)
+    : FormulaModalDialog( pParent, false,false,false,_pFunctionMgr.get(),this)
     ,m_aFunctionManager(_pFunctionMgr)
     ,m_pFormulaData(new FormEditData())
     ,m_pAddField(NULL)

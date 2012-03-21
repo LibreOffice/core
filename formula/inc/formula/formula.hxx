@@ -33,6 +33,7 @@
 #include <memory>
 #include "formula/formuladllapi.h"
 #include "formula/omoduleclient.hxx"
+#include <formula/IFunctionDescription.hxx>
 
 namespace formula
 {
@@ -48,7 +49,6 @@ enum FormulaDlgMode { FORMULA_FORMDLG_FORMULA, FORMULA_FORMDLG_ARGS, FORMULA_FOR
 
 //============================================================================
 
-class IFormulaEditorHelper;
 class FormulaDlg_Impl;
 class IControlReferenceHandler;
 class IFunctionDescription;
@@ -58,7 +58,7 @@ class RefEdit;
 class RefButton;
 class FormEditData;
 //============================================================================
-class FORMULA_DLLPUBLIC FormulaModalDialog :   public ModalDialog
+class FORMULA_DLLPUBLIC FormulaModalDialog :   public ModalDialog, public formula::IFormulaEditorHelper
 {
     friend class FormulaDlg_Impl;
 public:
@@ -66,7 +66,6 @@ public:
                                             , bool _bSupportFunctionResult
                                             , bool _bSupportResult
                                             , bool _bSupportMatrix
-                                            ,IFormulaEditorHelper* _pHelper
                                             ,IFunctionManager* _pFunctionMgr
                                             ,IControlReferenceHandler* _pDlg = NULL );
                     virtual ~FormulaModalDialog();
@@ -92,7 +91,7 @@ protected:
 };
 
 class FORMULA_DLLPUBLIC FormulaDlg:
-    private OModuleClient, public SfxModelessDialog
+    private OModuleClient, public SfxModelessDialog, public IFormulaEditorHelper
         // order of base classes is important, as OModuleClient controls the
         // lifecycle of the ResMgr passed into SfxModelessDialog (via
         // formula::ModuleRes), and at least with DBG_UTIL calling TestRes in
@@ -107,7 +106,6 @@ public:
                                     , bool _bSupportFunctionResult
                                     , bool _bSupportResult
                                     , bool _bSupportMatrix
-                                    , IFormulaEditorHelper* _pHelper
                                     , IFunctionManager* _pFunctionMgr
                                     , IControlReferenceHandler* _pDlg = NULL );
                     virtual ~FormulaDlg();

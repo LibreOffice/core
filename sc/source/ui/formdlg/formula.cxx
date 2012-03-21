@@ -84,7 +84,7 @@ ScAddress ScFormulaDlg::aCursorPos;
 
 ScFormulaDlg::ScFormulaDlg( SfxBindings* pB, SfxChildWindow* pCW,
                                     Window* pParent, ScViewData* pViewData,formula::IFunctionManager* _pFunctionMgr )
-    : formula::FormulaDlg( pB, pCW, pParent, true,true,true,this, _pFunctionMgr,this)
+    : formula::FormulaDlg( pB, pCW, pParent, true,true,true, _pFunctionMgr,this)
     , m_aHelper(this,pB)
 {
     m_aHelper.SetWindow(this);
