@@ -30,6 +30,7 @@
 
 #include <telepathy-glib/telepathy-glib.h>
 
+#include <tubes/constants.h>
 #include <tubes/contact-list.hxx>
 
 ContactList::ContactList()
@@ -65,17 +66,6 @@ ContactList::~ContactList()
     g_object_unref(mpAccountManager);
     mpAccountManager = NULL;
 }
-
-/* FIXME: Should be something like
- *
- *   org.libreoffice.calc
- *   org.libreoffice.writer
- *
- * etc. This does not need to include the org.freedesktop.Telepathy.Client
- * stuff.
- */
-#define LIBO_DTUBE_SERVICE \
-    TP_CLIENT_BUS_NAME_BASE "LibreOfficeTeleTest"
 
 static gboolean
 contact_supports_libo_dtube (TpContact *contact)
