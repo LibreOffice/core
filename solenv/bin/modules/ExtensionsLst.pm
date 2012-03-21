@@ -280,7 +280,8 @@ sub EvaluateSelector($$)
 
 =head3 ProcessURL
     Check that the given line contains an optional MD5 sum followed by
-    a URL for one of the protocols file, http, https
+    a URL for one of the protocols file, http, https,
+    followed by an optional file name (which is necessary when it is not the last part of the URL.)
     Return an array that contains the protocol, the name, the original
     URL, and the MD5 sum from the beginning of the line.
     The name of the URL depends on its protocol:
@@ -292,18 +293,32 @@ sub ProcessURL ($)
     my $line = shift;
 
     # Check that we are looking at a valid URL.
-    if ($line =~ /^\s*(\w{32}\s+)?([a-zA-Z]+)(:\/\/.*?\/)([^\/ \t]+)\s*$/)
+    if ($line =~ /^\s*((\w{32})\s+)?([a-zA-Z]+)(:\/\/.*?\/)([^\/ \t]+)(\s+\"[^\"]+\")?\s*$/)
     {
-        my ($md5, $protocol, $name) = ($1,$2,$4);
-        my $URL = $2.$3.$4;
+        my ($md5, $protocol, $url_name, $optional_name) = ($2,$3,$5,$6);
+        my $URL = $3.$4.$5;
 
         die "invalid URL protocol on line $LineNo:\n$line\n" if $protocol !~ /(file|http|https)/;
 
-        # For file URLs we use everything after :// as name.
-        if ($protocol eq "file")
+        # Determine the name.  If an optional name is given then use that.
+        if (defined $optional_name)
         {
-            $URL =~ /:\/\/(.*)$/;
+            die if $optional_name !~ /^\s+\"([^\"]+)\"$/;
             $name = $1;
+        }
+        else
+        {
+            if ($protocol eq "file")
+            {
+                # For file URLs we use everything after :// as name, or the .
+                $URL =~ /:\/\/(.*)$/;
+                $name = $1;
+            }
+            else
+            {
+                # For http and https use the last part of the URL.
+                $name = $url_name;
+            }
         }
 
         return [$protocol, $name, $URL, $md5];
@@ -430,6 +445,7 @@ sub Download (@)
         # Open a .part file for writing.
         my $filename = File::Spec->catfile($download_path, $name);
         my $temporary_filename = $filename . ".part";
+        print "downloading to $temporary_filename\n";
         open my $out, ">$temporary_filename";
         binmode($out);
 
@@ -440,8 +456,23 @@ sub Download (@)
         my $agent = LWP::UserAgent->new();
         $agent->timeout(10);
         $agent->show_progress(1);
+        my $last_was_redirect = 0;
+        $agent->add_handler('response_redirect'
+                            => sub{
+                                $last_was_redirect = 1;
+                                return;
+                            });
         $agent->add_handler('response_data'
                             => sub{
+                                if ($last_was_redirect)
+                                {
+                                    $last_was_redirect = 0;
+                                    # Throw away the data we got so far.
+                                    $md5->reset();
+                                    close $out;
+                                    open $out, ">$temporary_filename";
+                                    binmode($out);
+                                }
                                 my($response,$agent,$h,$data)=@_;
                                 print $out $data;
                                 $md5->add($data);
@@ -455,15 +486,21 @@ sub Download (@)
         {
             if (defined $md5sum && length($md5sum)==32)
             {
-                if ($md5sum eq $md5->digest())
+                my $file_md5 = $md5->hexdigest();
+                if ($md5sum eq $file_md5)
                 {
                     print "md5 is OK\n";
                 }
                 else
                 {
                     unlink($temporary_filename);
-                    die "downloaded file has the wrong md5 checksum";
+                    die "downloaded file has the wrong md5 checksum: $file_md5 instead of $md5sum";
                 }
+            }
+            else
+            {
+                print "md5 is not present\n";
+                printf "   is %s, length is %d\n", $md5sum, length(md5sum);
             }
 
             rename($temporary_filename, $filename) || die "can not rename $temporary_filename to $filename";
