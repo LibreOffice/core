@@ -577,4 +577,9 @@ main/i18npool/source/breakiterator/data/sent.txt
 # files with SANE API, public domain
 main/sane/inc/sane.h
 
-
+# files with BSD license
+main/unixODBC/inc/iodbcunix.h
+main/unixODBC/inc/sql.h
+main/unixODBC/inc/sqlext.h
+main/unixODBC/inc/sqltypes.h
+main/unixODBC/inc/sqlucode.h
