@@ -38,13 +38,13 @@ namespace {
 
 rtl::OUString cellToString( ScBaseCell *pCell )
 {
-    (void)pCell;
+    (void)pCell; // FIXME: implement me
     return rtl::OUString();
 }
 
 ScBaseCell *stringToCell( const rtl::OUString &rString )
 {
-    (void)rString;
+    (void)rString; // FIXME: implement me
     return NULL;
 }
 
@@ -66,18 +66,18 @@ public:
       appendSeparator();
   }
 
-  void appendString( const String &rStr )
-  {
-      String aQuoted( rStr );
-      if ( ScGlobal::FindUnquoted( aQuoted, sal_Unicode( '"' ) ) != STRING_NOTFOUND )
-          ScGlobal::AddQuotes( aQuoted, sal_Unicode( '"' ) );
-      aMessage.append( aQuoted );
-      appendSeparator();
-  }
-
   void appendString( const rtl::OUString &rStr )
   {
-      aMessage.append( String( rStr ) );
+      if ( rStr.indexOf( sal_Unicode( '"' ) ) >= 0 ||
+           rStr.indexOf( sal_Unicode( ';' ) ) >= 0 )
+      {
+          String aQuoted( rStr );
+          ScGlobal::AddQuotes( aQuoted, sal_Unicode( '"' ) );
+          aMessage.append( aQuoted );
+      }
+      else
+          aMessage.append( rStr );
+      appendSeparator();
   }
 
   void appendAddress( const ScAddress &rPos )
@@ -124,38 +124,49 @@ public:
     {
         // will need to handle escaping etc.
         // Surely someone else wrote this before ! [!?]
-        sal_Int32 n = 0, nStart = 0;
         enum {
-            IN_TEXT, CHECK_QUOTE
-        } eState = IN_TEXT;
+            IN_TEXT, CHECK_QUOTE, FIND_LAST_QUOTE, SKIP_SEMI
+        } eState = CHECK_QUOTE;
 
-        while (n < rString.getLength())
+        sal_Int32 nStart = 0;
+        for (sal_Int32 n = 0; n < rString.getLength(); n++)
         {
+            if (rString[n] == '\\')
+            {
+                n++; // skip next char
+                continue;
+            }
             switch (eState) {
             case CHECK_QUOTE:
                 if (rString[n] == '"')
                 {
-                    xub_StrLen nLen = ScGlobal::FindUnquoted( rString, '"', n + 1 );
-                    if (nLen == STRING_NOTFOUND)
-                    {
-                        fprintf( stderr, "Error: no closing '\"' \n" );
-                        nLen = rString.getLength();
-                    }
-                    maArgs.push_back( rString.copy( n + 1, nLen - n - 1 ) );
-                    n = nLen;
-                    if ( nLen < rString.getLength() && rString[ nLen + 1 ] )
-                        ;
-                    eState = IN_TEXT;
+                    nStart = n + 1;
+                    eState = FIND_LAST_QUOTE;
                     break;
-                } // drop through
+                }
+                // else drop through
             case IN_TEXT:
                 if (rString[n] == ';')
                 {
-                    maArgs.push_back( rString.copy( nStart, n ) );
-                    n = nStart = n + 1;
+                    maArgs.push_back( rString.copy( nStart, n - nStart ) );
+                    nStart = n + 1;
                     eState = CHECK_QUOTE;
-                } else
-                    n++;
+                }
+                break;
+            case FIND_LAST_QUOTE:
+                if (rString[n] == '"')
+                {
+                    maArgs.push_back( rString.copy( nStart, n - nStart ) );
+                    eState = SKIP_SEMI;
+                    break;
+                }
+                break;
+            case SKIP_SEMI:
+                if (rString[n] == ';')
+                {
+                    nStart = n + 1;
+                    eState = CHECK_QUOTE;
+                }
                 break;
             }
         }
