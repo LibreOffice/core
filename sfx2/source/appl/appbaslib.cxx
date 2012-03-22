@@ -183,16 +183,7 @@ Sequence< OUString > SfxApplicationDialogLibraryContainer::impl_getStaticSupport
 
 OUString SfxApplicationDialogLibraryContainer::impl_getStaticImplementationName()
 {
-    static OUString aImplName;
-    static sal_Bool bNeedsInit = sal_True;
-
-    MutexGuard aGuard( Mutex::getGlobalMutex() );
-    if( bNeedsInit )
-    {
-        aImplName = OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.comp.sfx2.ApplicationDialogLibraryContainer"));
-        bNeedsInit = sal_False;
-    }
-    return aImplName;
+    return OUString("com.sun.star.comp.sfx2.ApplicationDialogLibraryContainer");
 }
 
 Reference< XInterface > SAL_CALL SfxApplicationDialogLibraryContainer::impl_createInstance

@@ -223,12 +223,12 @@ void SAL_CALL JobExecutor::trigger( const ::rtl::OUString& sEvent ) throw(css::u
 
 void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent ) throw(css::uno::RuntimeException)
 {
-    static ::rtl::OUString EVENT_ON_NEW             = DECLARE_ASCII("OnNew"             ); // Doc UI  event
-    static ::rtl::OUString EVENT_ON_LOAD            = DECLARE_ASCII("OnLoad"            ); // Doc UI  event
-    static ::rtl::OUString EVENT_ON_CREATE          = DECLARE_ASCII("OnCreate"          ); // Doc API event
-    static ::rtl::OUString EVENT_ON_LOAD_FINISHED   = DECLARE_ASCII("OnLoadFinished"    ); // Doc API event
-    static ::rtl::OUString EVENT_ON_DOCUMENT_OPENED = DECLARE_ASCII("onDocumentOpened"  ); // Job UI  event : OnNew    or OnLoad
-    static ::rtl::OUString EVENT_ON_DOCUMENT_ADDED  = DECLARE_ASCII("onDocumentAdded"   ); // Job API event : OnCreate or OnLoadFinished
+    const char EVENT_ON_NEW[] = "OnNew";                            // Doc UI  event
+    const char EVENT_ON_LOAD[] = "OnLoad";                          // Doc UI  event
+    const char EVENT_ON_CREATE[] = "OnCreate";                      // Doc API event
+    const char EVENT_ON_LOAD_FINISHED[] = "OnLoadFinished";         // Doc API event
+    ::rtl::OUString EVENT_ON_DOCUMENT_OPENED("onDocumentOpened");   // Job UI  event : OnNew    or OnLoad
+    ::rtl::OUString EVENT_ON_DOCUMENT_ADDED("onDocumentAdded");     // Job API event : OnCreate or OnLoadFinished
 
     /* SAFE { */
     ReadGuard aReadLock(m_aLock);
@@ -251,8 +251,8 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
 
     // Special feature: If the events "OnNew" or "OnLoad" occures - we generate our own event "onDocumentOpened".
     if (
-        (aEvent.EventName.equals(EVENT_ON_NEW )) ||
-        (aEvent.EventName.equals(EVENT_ON_LOAD))
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_NEW))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_LOAD)))
        )
     {
         if (m_lEvents.find(EVENT_ON_DOCUMENT_OPENED) != m_lEvents.end())
@@ -261,8 +261,8 @@ void SAL_CALL JobExecutor::notifyEvent( const css::document::EventObject& aEvent
 
     // Special feature: If the events "OnCreate" or "OnLoadFinished" occures - we generate our own event "onDocumentAdded".
     if (
-        (aEvent.EventName.equals(EVENT_ON_CREATE       )) ||
-        (aEvent.EventName.equals(EVENT_ON_LOAD_FINISHED))
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_CREATE))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_LOAD_FINISHED)))
        )
     {
         if (m_lEvents.find(EVENT_ON_DOCUMENT_ADDED) != m_lEvents.end())
