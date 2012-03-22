@@ -45,17 +45,17 @@ struct ImplementationEntry
     /** Function that returns the implementation-name of the implementation
        (same as XServiceInfo.getImplementationName() ).
      */
-     rtl::OUString ( SAL_CALL * getImplementationName )();
+     rtl::OUString SAL_CALL ( * getImplementationName )();
 
     /** Function that returns all supported servicenames of the implementation
        ( same as XServiceInfo.getSupportedServiceNames() ).
     */
-     com::sun::star::uno::Sequence< rtl::OUString > ( SAL_CALL * getSupportedServiceNames ) ();
+     com::sun::star::uno::Sequence< rtl::OUString > SAL_CALL ( * getSupportedServiceNames ) ();
 
     /** Function that creates a SingleComponentFactory.
     */
-     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory >
-     ( SAL_CALL * createFactory )(
+     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XSingleComponentFactory > SAL_CALL
+     ( * createFactory )(
          ComponentFactoryFunc fptr,
          ::rtl::OUString const & rImplementationName,
          ::com::sun::star::uno::Sequence< ::rtl::OUString > const & rServiceNames,
