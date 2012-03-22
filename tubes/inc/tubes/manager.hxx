@@ -113,7 +113,7 @@ public:
         @param rBuddy
             The buddy to be connected. Must be a contact of rAccount.
      */
-    bool                    startBuddySession( TpAccount *pAccount, const rtl::OUString& rBuddy );
+    bool                    startBuddySession( TpAccount *pAccount, const rtl::OString& rBuddy );
 
     void                    unregisterConference( TeleConferencePtr pConference );
 

@@ -91,8 +91,8 @@ private:
     rtl::OUString             maTestConfigIniURL;
     rtl::Bootstrap            maTestConfig;
 
-    rtl::OUString             maAcc1;
-    rtl::OUString             maAcc2;
+    rtl::OString              maOffererIdentifier;
+    rtl::OString              maAccepterIdentifier;
 };
 
 // static, not members, so they actually survive cppunit test iteration
@@ -107,10 +107,15 @@ TestTeleTubes::TestTeleTubes()
 {
     TeleManager::addSuffixToNames( "TeleTest");
 
+    rtl::OUString aOffererIdentifier;
     CPPUNIT_ASSERT_MESSAGE( "See README for how to set up test-config.ini",
-        maTestConfig.getFrom("offerer", maAcc1));
+        maTestConfig.getFrom("offerer", aOffererIdentifier));
+    maOffererIdentifier = OUStringToOString( aOffererIdentifier, RTL_TEXTENCODING_UTF8);
+
+    rtl::OUString aAccepterIdentifier;
     CPPUNIT_ASSERT_MESSAGE( "See README for how to set up test-config.ini",
-        maTestConfig.getFrom("accepter", maAcc2));
+        maTestConfig.getFrom("accepter", aAccepterIdentifier));
+    maAccepterIdentifier = OUStringToOString( aAccepterIdentifier, RTL_TEXTENCODING_UTF8);
 }
 
 TestTeleTubes::~TestTeleTubes()
@@ -194,9 +199,9 @@ void TestTeleTubes::testPrepareAccountManager2()
 
 void TestTeleTubes::testStartBuddySession1()
 {
-    TpAccount *pAcc1 = mpManager1->getAccount( OUStringToOString( maAcc1, RTL_TEXTENCODING_UTF8));
+    TpAccount *pAcc1 = mpManager1->getAccount(maOffererIdentifier);
     CPPUNIT_ASSERT ( pAcc1 != 0);
-    bool bStarted = mpManager1->startBuddySession( pAcc1, maAcc2);
+    bool bStarted = mpManager1->startBuddySession( pAcc1, maAccepterIdentifier);
     CPPUNIT_ASSERT( bStarted == true);
 }
 

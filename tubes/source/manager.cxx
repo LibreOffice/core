@@ -392,7 +392,7 @@ bool TeleManager::startGroupSession( const rtl::OUString& rUConferenceRoom, cons
 
 
 /* TODO: factor out common code with startGroupSession() */
-bool TeleManager::startBuddySession( TpAccount *pAccount, const rtl::OUString& rBuddy )
+bool TeleManager::startBuddySession( TpAccount *pAccount, const rtl::OString& rBuddy )
 {
     INFO_LOGGER( "TeleManager::startBuddySession");
 
@@ -405,16 +405,15 @@ bool TeleManager::startBuddySession( TpAccount *pAccount, const rtl::OUString& r
 
     /* TODO: associate the document with this session and conference */
 
-    OString aTarget( OUStringToOString( rBuddy, RTL_TEXTENCODING_UTF8));
-    pConference->setTarget( aTarget);
+    pConference->setTarget( rBuddy);
 
     SAL_INFO( "tubes", "TeleManager::startBuddySession: creating channel request from "
-            << tp_account_get_path_suffix( pAccount) << " to " << aTarget.getStr());
+            << tp_account_get_path_suffix( pAccount) << " to " << rBuddy.getStr());
 
     GHashTable* pRequest = tp_asv_new(
             TP_PROP_CHANNEL_CHANNEL_TYPE, G_TYPE_STRING, TP_IFACE_CHANNEL_TYPE_DBUS_TUBE,
             TP_PROP_CHANNEL_TARGET_HANDLE_TYPE, TP_TYPE_HANDLE, TP_HANDLE_TYPE_CONTACT,
-            TP_PROP_CHANNEL_TARGET_ID, G_TYPE_STRING, aTarget.getStr(),
+            TP_PROP_CHANNEL_TARGET_ID, G_TYPE_STRING, rBuddy.getStr(),
             TP_PROP_CHANNEL_TYPE_DBUS_TUBE_SERVICE_NAME, G_TYPE_STRING, getFullServiceName().getStr(),
             NULL);
 
