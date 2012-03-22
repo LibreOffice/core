@@ -468,6 +468,7 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             if ( aIDEWindowTable.find( rTabId.GetValue() ) !=  aIDEWindowTable.end() )
             {
                 IDEBaseWindow* pWin = aIDEWindowTable[ rTabId.GetValue() ];
+                DBG_ASSERT( pWin, "Window nicht im Liste, aber in TabBar ?" );
                 ::rtl::OUString aNewName( rModName.GetValue() );
                 ::rtl::OUString aOldName( pWin->GetName() );
                 if ( aNewName != aOldName )
