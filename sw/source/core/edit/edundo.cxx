@@ -142,6 +142,10 @@ bool SwEditShell::Undo(sal_uInt16 const nCount)
                     .getStr());
         }
 
+        if (bRestoreCrsr)
+        {   // fdo#39003 Pop does not touch the rest of the cursor ring
+            KillPams(); // so call this first to get rid of unwanted cursors
+        }
         Pop( !bRestoreCrsr );
 
         GetDoc()->SetRedlineMode( eOld );
