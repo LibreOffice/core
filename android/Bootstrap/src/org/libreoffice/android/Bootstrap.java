@@ -51,6 +51,11 @@ public class Bootstrap extends NativeActivity
 {
     private static String TAG = "lo-bootstrap";
 
+    // Native methods in this class are all implemented in
+    // sal/android/lo-bootstrap.c as the lo-bootstrap library is loaded with
+    // System.loadLibrary() and Android's JNI works only to such libraries, it
+    // seems.
+
     private static native boolean setup(String dataDir,
                                         String apkFile,
                                         String[] ld_library_path);
@@ -78,6 +83,15 @@ public class Bootstrap extends NativeActivity
 
     // Wrapper for putenv()
     public static native void putenv(String string);
+
+    // A wrapper for InitVCL() in libvcl (svmain.cxx), called indirectly
+    // through the lo-bootstrap library
+    public static native void initVCL();
+
+    // A wrapper for osl_setCommandArgs(). Before calling
+    // osl_setCommandArgs(), argv[0] is prefixed with the parent directory of
+    // where the lo-bootstrap library is.
+    public static native void setCommandArgs(String[] argv);
 
     public static void setup(Activity activity)
     {

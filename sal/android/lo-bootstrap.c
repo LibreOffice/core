@@ -533,7 +533,43 @@ Java_org_libreoffice_android_Bootstrap_setup__Ljava_lang_String_2Ljava_lang_Stri
     return JNI_TRUE;
 }
 
-// public statuc native boolean setup(int lo_main_ptr,
+static jboolean
+get_jni_string_array(JNIEnv *env,
+                     const char *function_and_parameter_name,
+                     jobject strv,
+                     int *argc,
+                     const char ***argv)
+{
+    jclass StringArray;
+    int i;
+
+    StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
+    if (StringArray == NULL) {
+        LOGE("Could not find String[] class");
+        return JNI_FALSE;
+    }
+
+    if (!(*env)->IsInstanceOf(env, strv, StringArray)) {
+        LOGE("%s is not a String[]?", function_and_parameter_name);
+        return JNI_FALSE;
+    }
+
+    *argc = (*env)->GetArrayLength(env, strv);
+    *argv = malloc(sizeof(char *) * (*argc+1));
+
+    for (i = 0; i < *argc; i++) {
+        const char *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, strv, i), NULL);
+        (*argv)[i] = strdup(s);
+        (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, strv, i), s);
+        /* LOGI("argv[%d] = %s", i, lo_main_argv[i]); */
+    }
+    (*argv)[*argc] = NULL;
+
+    return JNI_TRUE;
+}
+
+
+// public static native boolean setup(int lo_main_ptr,
 //                                    Object lo_main_argument,
 //                                    int lo_main_delay);
 
@@ -545,34 +581,12 @@ Java_org_libreoffice_android_Bootstrap_setup__ILjava_lang_Object_2I(JNIEnv* env,
                                                                     jobject lo_main_argument,
                                                                     jint lo_main_delay)
 {
-    jclass StringArray;
-    int i;
-
     (void) clazz;
 
     lo_main = lo_main_ptr;
 
-    StringArray = (*env)->FindClass(env, "[Ljava/lang/String;");
-    if (StringArray == NULL) {
-        LOGE("Could not find String[] class");
+    if (!get_jni_string_array(env, "setup: lo_main_argument", lo_main_argument, &lo_main_argc, &lo_main_argv))
         return JNI_FALSE;
-    }
-
-    if (!(*env)->IsInstanceOf(env, lo_main_argument, StringArray)) {
-        LOGE("lo_main_argument is not a String[]?");
-        return JNI_FALSE;
-    }
-
-    lo_main_argc = (*env)->GetArrayLength(env, lo_main_argument);
-    lo_main_argv = malloc(sizeof(char *) * (lo_main_argc+1));
-
-    for (i = 0; i < lo_main_argc; i++) {
-        const char *s = (*env)->GetStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), NULL);
-        lo_main_argv[i] = strdup(s);
-        (*env)->ReleaseStringUTFChars(env, (*env)->GetObjectArrayElement(env, lo_main_argument, i), s);
-        /* LOGI("argv[%d] = %s", i, lo_main_argv[i]); */
-    }
-    lo_main_argv[lo_main_argc] = NULL;
 
     sleep_time = lo_main_delay;
 
@@ -1484,6 +1498,8 @@ extract_files(const char *prefix)
     lo_apk_closedir(tree);
 }
 
+// public static native void patch_libgnustl_shared();
+
 __attribute__ ((visibility("default")))
 void
 Java_org_libreoffice_android_Bootstrap_patch_libgnustl_shared(JNIEnv* env,
@@ -1493,6 +1509,72 @@ Java_org_libreoffice_android_Bootstrap_patch_libgnustl_shared(JNIEnv* env,
     (void) clazz;
 
     patch_libgnustl_shared();
+}
+
+/* Android's JNI works only to libraries loaded through Java's
+ * System.loadLibrary(), it seems. Not to functions loaded by a dlopen() call
+ * in native code. For instance, to call a function in libvcllo.so, we need to
+ * have its JNI wrapper here, and then call the VCL function from it. Oh well,
+ * one could say it's clean to have all the Android-specific JNI functions
+ * here in this file.
+ */
+
+// public static native void initVCL();
+
+__attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_Bootstrap_initVCL(JNIEnv* env,
+                                               jobject clazz)
+{
+    void (*InitVCLWrapper)(void);
+    (void) env;
+    (void) clazz;
+
+    /* This obviously should be called only after libvcllo.so has been loaded */
+
+    InitVCLWrapper = dlsym(RTLD_DEFAULT, "InitVCLWrapper");
+    if (InitVCLWrapper == NULL) {
+        LOGE("InitVCL: InitVCLWrapper not found");
+        return;
+    }
+    (*InitVCLWrapper)();
+}
+
+__attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_Bootstrap_setCommandArgs(JNIEnv* env,
+                                                      jobject clazz,
+                                                      jobject argv)
+{
+    char **c_argv;
+    int c_argc;
+    Dl_info lo_bootstrap_info;
+    void (*osl_setCommandArgs)(int, char **);
+
+    (void) clazz;
+
+    if (!get_jni_string_array(env, "setCommandArgs :argv", argv, &c_argc, (const char ***) &c_argv))
+        return;
+
+    if (lo_dladdr(Java_org_libreoffice_android_Bootstrap_setCommandArgs, &lo_bootstrap_info) != 0) {
+        char *new_argv0 = malloc(strlen(lo_bootstrap_info.dli_fname) + strlen(c_argv[0]));
+        char *slash;
+        strcpy(new_argv0, lo_bootstrap_info.dli_fname);
+        slash = strrchr(new_argv0, '/');
+        if (slash != NULL)
+            *slash = '\0';
+        slash = strrchr(new_argv0, '/');
+        strcpy(slash+1, c_argv[0]);
+        free(c_argv[0]);
+        c_argv[0] = new_argv0;
+    }
+
+    osl_setCommandArgs = dlsym(RTLD_DEFAULT, "osl_setCommandArgs");
+    if (osl_setCommandArgs == NULL) {
+        LOGE("setCommandArgs: osl_setCommandArgs not found");
+        return;
+    }
+    (*osl_setCommandArgs)(c_argc, c_argv);
 }
 
 __attribute__ ((visibility("default")))
