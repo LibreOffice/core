@@ -27,9 +27,11 @@
 
 # http:// URLs can be prefixed by an MD5 checksum.  If that is present then it is an error if
 # the file pointed to by the URL has a different MD5 checksum.
+# When the downloaded file name is not the last part of the URL (everything after the final /) then
+# the name has to be specified after the URL enclosed in double quotes.
 
 
-# Some extensions that are (or are not) installed indepently of the language.
+# Some extensions that are installed indepently of the language.
 
 [ language=all && ENABLE_PRESENTER_SCREEN=YES ]
     file://presenter/presenter-screen.oxt
