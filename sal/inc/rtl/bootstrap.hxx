@@ -41,9 +41,9 @@ namespace rtl
 
     public:
         /**
-           @see rtl_bootstrap_setIniFileName()
+         * @see rtl_bootstrap_setIniFileName()
          */
-        static inline void SAL_CALL setIniFilename( const ::rtl::OUString &sFile );
+        static inline void SAL_CALL setIniFilename( const ::rtl::OUString &sFileUri );
 
         /** Retrieves a bootstrap parameter
            @param sName name of the bootstrap value. case insensitive.
