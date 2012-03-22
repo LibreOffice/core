@@ -186,7 +186,7 @@ public:
     virtual sal_Bool        ResizeMatrix( const ScRange& rOldRange, const ScAddress& rNewEnd, sal_Bool bApi );
 
     virtual sal_Bool        MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
-                                 sal_Bool bRecord, sal_Bool bApi );
+                                        sal_Bool bRecord, sal_Bool bApi );
     virtual sal_Bool        UnmergeCells( const ScRange& rRange, sal_Bool bRecord, sal_Bool bApi );
     virtual bool            UnmergeCells( const ScCellMergeOption& rOption, sal_Bool bRecord, sal_Bool bApi );
 

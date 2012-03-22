@@ -36,6 +36,19 @@
 
 namespace {
 
+rtl::OUString cellToString( ScBaseCell *pCell )
+{
+    (void)pCell;
+    return rtl::OUString();
+}
+
+ScBaseCell *stringToCell( const rtl::OUString &rString )
+{
+    (void)rString;
+    return NULL;
+}
+
+
 // Ye noddy mangling - needs improvement ...
 // method name ';' then arguments ; separated
 class ScChangeOpWriter
@@ -53,16 +66,18 @@ public:
       appendSeparator();
   }
 
-  void appendString( const rtl::OUString &rStr )
+  void appendString( const String &rStr )
   {
-      aMessage.append( rStr );
+      String aQuoted( rStr );
+      if ( ScGlobal::FindUnquoted( aQuoted, sal_Unicode( '"' ) ) != STRING_NOTFOUND )
+          ScGlobal::AddQuotes( aQuoted, sal_Unicode( '"' ) );
+      aMessage.append( aQuoted );
       appendSeparator();
   }
 
-  void appendString( const String &rStr )
+  void appendString( const rtl::OUString &rStr )
   {
-      aMessage.append( rStr );
-      appendSeparator();
+      aMessage.append( String( rStr ) );
   }
 
   void appendAddress( const ScAddress &rPos )
@@ -85,6 +100,11 @@ public:
       appendSeparator();
   }
 
+  void appendCell( ScBaseCell *pCell )
+  {
+      appendString( cellToString( pCell ) );
+  }
+
   rtl::OString toString()
   {
       return rtl::OUStringToOString( aMessage.toString(), RTL_TEXTENCODING_UTF8 );
@@ -96,19 +116,59 @@ struct ProtocolError {
 };
 
 class ScChangeOpReader {
-    std::vector< rtl::OString > maArgs;
+    std::vector< rtl::OUString > maArgs;
 
 public:
 
-    ScChangeOpReader( const rtl::OString &rString)
+    ScChangeOpReader( const rtl::OUString &rString)
     {
         // will need to handle escaping etc.
-        for (sal_Int32 n = 0; n >= 0 && n < rString.getLength();)
-            maArgs.push_back( rString.getToken( 0, ';', n ) );
+        // Surely someone else wrote this before ! [!?]
+        sal_Int32 n = 0, nStart = 0;
+        enum {
+            IN_TEXT, CHECK_QUOTE
+        } eState = IN_TEXT;
+
+        while (n < rString.getLength())
+        {
+            switch (eState) {
+            case CHECK_QUOTE:
+                if (rString[n] == '"')
+                {
+                    xub_StrLen nLen = ScGlobal::FindUnquoted( rString, '"', n + 1 );
+                    if (nLen == STRING_NOTFOUND)
+                    {
+                        fprintf( stderr, "Error: no closing '\"' \n" );
+                        nLen = rString.getLength();
+                    }
+                    maArgs.push_back( rString.copy( n + 1, nLen - n - 1 ) );
+                    n = nLen;
+                    if ( nLen < rString.getLength() && rString[ nLen + 1 ] )
+                        ;
+                    eState = IN_TEXT;
+                    break;
+                } // drop through
+            case IN_TEXT:
+                if (rString[n] == ';')
+                {
+                    maArgs.push_back( rString.copy( nStart, n ) );
+                    n = nStart = n + 1;
+                    eState = CHECK_QUOTE;
+                } else
+                    n++;
+                break;
+            }
+        }
+        if ( nStart < rString.getLength())
+            maArgs.push_back( rString.copy( nStart, rString.getLength() - nStart ) );
+
+        for (size_t i = 0; i < maArgs.size(); i++)
+            fprintf( stderr, "arg %d: '%s'\n", (int)i,
+                     rtl::OUStringToOString( maArgs[i], RTL_TEXTENCODING_UTF8).getStr() );
     }
     ~ScChangeOpReader() {}
 
-    rtl::OString getMethod()
+    rtl::OUString getMethod()
     {
         return maArgs[0];
     }
@@ -118,9 +178,11 @@ public:
     rtl::OUString getString( sal_Int32 n )
     {
         if (n > 0 && (size_t)n < getArgCount() )
-            return rtl::OUString( maArgs[n].getStr(), maArgs[n].getLength(),
-                                  RTL_TEXTENCODING_UTF8 );
-        else
+        {
+            String aUStr( maArgs[ n ] );
+            ScGlobal::EraseQuotes( aUStr );
+            return aUStr;
+        } else
             return rtl::OUString();
     }
 
@@ -132,12 +194,19 @@ public:
         return aAddr;
     }
 
+    sal_Int32 getInt( sal_Int32 n )
+    {
+        return getString( n ).toInt32();
+    }
+
     bool getBool( sal_Int32 n )
     {
-        if (n > 0 && (size_t)n < getArgCount() )
-            return maArgs[n].equalsIgnoreAsciiCase( "true" );
-        else
-            return false;
+        return getString( n ).equalsIgnoreAsciiCase( "true" );
+    }
+
+    ScBaseCell *getCell( sal_Int32 n )
+    {
+        return stringToCell( getString( n ) );
     }
 };
 
@@ -158,11 +227,31 @@ public:
     void RecvMessage( const rtl::OString &rString )
     {
         try {
-            ScChangeOpReader aReader( rString );
+            ScChangeOpReader aReader( rtl::OUString( rString.getStr(),
+                                                     rString.getLength(),
+                                                     RTL_TEXTENCODING_UTF8 ) );
             // FIXME: have some hash to enumeration mapping here
             if ( aReader.getMethod() == "setNormalString" )
                 mpChain->SetNormalString( aReader.getAddress( 1 ), aReader.getString( 2 ),
                                           aReader.getBool( 3 ) );
+            else if ( aReader.getMethod() == "putCell" )
+            {
+                ScBaseCell *pNewCell = aReader.getCell( 2 );
+                if ( pNewCell )
+                    mpChain->PutCell( aReader.getAddress( 1 ), pNewCell, aReader.getBool( 3 ) );
+            }
+            else if ( aReader.getMethod() == "enterListAction" )
+                mpChain->EnterListAction( aReader.getInt( 1 ) );
+            else if ( aReader.getMethod() == "endListAction" )
+                mpChain->EndListAction();
+            else if ( aReader.getMethod() == "showNote" )
+                mpChain->ShowNote( aReader.getAddress( 1 ), aReader.getBool( 2 ) );
+            else if ( aReader.getMethod() == "setNoteText" )
+                mpChain->SetNoteText( aReader.getAddress( 1 ), aReader.getString( 2 ),
+                                      aReader.getBool( 3 ) );
+            else if ( aReader.getMethod() == "renameTable" )
+                mpChain->RenameTable( aReader.getInt( 1 ), aReader.getString( 2 ),
+                                      aReader.getBool( 3 ), aReader.getBool( 4 ) );
             else
                 fprintf( stderr, "Error: unknown message '%s' (%d)\n",
                          rString.getStr(), (int)aReader.getArgCount() );
@@ -197,9 +286,14 @@ public:
     {
         // Want to group these operations for the other side ...
         String aUndo( ScGlobal::GetRscString( nNameResId ) );
+        ScChangeOpWriter aOp( "enterListAction" );
+        aOp.appendInt( nNameResId ); // nasty but translate-able ...
+        SendMessage( aOp );
     }
     virtual void EndListAction()
     {
+        ScChangeOpWriter aOp( "endListAction" );
+        SendMessage( aOp );
     }
 
     virtual sal_Bool SetNormalString( const ScAddress& rPos, const String& rText, sal_Bool bApi )
@@ -209,14 +303,18 @@ public:
         aOp.appendString( rText );
         aOp.appendBool( bApi );
         SendMessage( aOp );
-        //        return mpChain->SetNormalString( rPos, rText, bApi );
         return true; // needs some code auditing action
     }
 
     virtual sal_Bool PutCell( const ScAddress& rPos, ScBaseCell* pNewCell, sal_Bool bApi )
     {
         fprintf( stderr, "put cell '%p' type %d %d\n", pNewCell, pNewCell->GetCellType(), bApi );
-        return mpChain->PutCell( rPos, pNewCell, bApi );
+        ScChangeOpWriter aOp( "putCell" );
+        aOp.appendAddress( rPos );
+        aOp.appendCell( pNewCell );
+        aOp.appendBool( bApi );
+        SendMessage( aOp );
+        return true; // needs some code auditing action
     }
 
     virtual sal_Bool PutData( const ScAddress& rPos, ScEditEngineDefaulter& rEngine,
@@ -238,8 +336,55 @@ public:
 
     virtual bool ShowNote( const ScAddress& rPos, bool bShow = true )
     {
-        fprintf( stderr, "%s note\n", bShow ? "show" : "hide" );
-        return mpChain->ShowNote( rPos, bShow );
+        ScChangeOpWriter aOp( "showNote" );
+        aOp.appendAddress( rPos );
+        aOp.appendBool( bShow );
+        SendMessage( aOp );
+        return true; // needs some code auditing action
+    }
+
+    virtual bool SetNoteText( const ScAddress& rPos, const String& rNoteText, sal_Bool bApi )
+    {
+        ScChangeOpWriter aOp( "setNoteText" );
+        aOp.appendAddress( rPos );
+        aOp.appendString( rNoteText );
+        aOp.appendBool( bApi );
+        SendMessage( aOp );
+        return true; // needs some code auditing action
+    }
+
+    virtual sal_Bool RenameTable( SCTAB nTab, const String& rName,
+                                  sal_Bool bRecord, sal_Bool bApi )
+    {
+        ScChangeOpWriter aOp( "renameTable" );
+        aOp.appendInt( nTab );
+        aOp.appendString( rName );
+        aOp.appendBool( bRecord );
+        aOp.appendBool( bApi );
+        SendMessage( aOp );
+        return true; // needs some code auditing action
+    }
+
+    virtual sal_Bool ApplyAttributes( const ScMarkData& rMark, const ScPatternAttr& rPattern,
+                                      sal_Bool bRecord, sal_Bool bApi )
+    {
+        fprintf( stderr, "Apply Attributes\n" );
+        return mpChain->ApplyAttributes( rMark, rPattern, bRecord, bApi );
+    }
+
+    virtual sal_Bool ApplyStyle( const ScMarkData& rMark, const String& rStyleName,
+                                 sal_Bool bRecord, sal_Bool bApi )
+    {
+        fprintf( stderr, "Apply Style '%s'\n",
+                 rtl::OUStringToOString( rStyleName, RTL_TEXTENCODING_UTF8 ).getStr() );
+        return mpChain->ApplyStyle( rMark, rStyleName, bRecord, bApi );
+    }
+
+    virtual sal_Bool MergeCells( const ScCellMergeOption& rOption, sal_Bool bContents,
+                                 sal_Bool bRecord, sal_Bool bApi )
+    {
+        fprintf( stderr, "Merge cells\n" );
+        return mpChain->MergeCells( rOption, bContents, bRecord, bApi );
     }
 };
 
