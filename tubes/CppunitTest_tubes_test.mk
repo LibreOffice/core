@@ -33,6 +33,7 @@ $(eval $(call gb_CppunitTest_add_exception_objects,tubes_test, \
 $(eval $(call gb_CppunitTest_add_linked_libs,tubes_test, \
     tubes \
     sal \
+    unotest \
     $(gb_STDLIBS) \
 ))
 
@@ -42,6 +43,7 @@ $(eval $(call gb_CppunitTest_add_libs,tubes_test, \
 
 $(eval $(call gb_CppunitTest_set_include,tubes_test,\
     -I$(realpath $(SRCDIR)/tubes/inc) \
+    -I$(realpath $(OUTDIR)/inc/udkapi) \
     $$(TELEPATHY_CFLAGS) \
     $$(INCLUDE) \
 ))

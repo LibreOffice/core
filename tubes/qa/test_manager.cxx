@@ -37,10 +37,12 @@
 #include <cppunit/plugin/TestPlugIn.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
+#include <rtl/bootstrap.hxx>
+#include <unotest/bootstrapfixturebase.hxx>
 
 namespace {
 
-class TestTeleTubes: public CppUnit::TestFixture
+class TestTeleTubes: public test::BootstrapFixtureBase
 {
 public:
 
@@ -83,22 +85,28 @@ public:
     CPPUNIT_TEST( testFailAlways );     // need failure to display SAL_LOG, comment out for real builds
     CPPUNIT_TEST_SUITE_END();
 
+private:
+// XXX The Jabber accounts specified in test-config.ini need to be setup in
+// Empathy, enabled, connected, and on each other's rosters.
+    rtl::Bootstrap            maTestConfig;
+
+    rtl::OUString             maAcc1;
+    rtl::OUString             maAcc2;
 };
 
 // static, not members, so they actually survive cppunit test iteration
 static TeleManager* mpManager1 = NULL;
 static TeleManager* mpManager2 = NULL;
 
-// XXX The accounts need to be setup in Empathy and a jabber daemon needs
-// to be running on localhost.localdomain and both accounts need to be
-// enabled and connected.
-static rtl::OUString sAcc1( RTL_CONSTASCII_USTRINGPARAM( "libo1@localhost.localdomain"));
-static rtl::OUString sAcc2( RTL_CONSTASCII_USTRINGPARAM( "libo2@localhost.localdomain"));
 static sal_uInt32 nSentPackets = 0;
 
 TestTeleTubes::TestTeleTubes()
+    : maTestConfig(getURLFromSrc("/tubes/test-config.ini"))
 {
     TeleManager::addSuffixToNames( "TeleTest");
+
+    CPPUNIT_ASSERT( maTestConfig.getFrom("offerer", maAcc1));
+    CPPUNIT_ASSERT( maTestConfig.getFrom("accepter", maAcc2));
 }
 
 TestTeleTubes::~TestTeleTubes()
@@ -182,7 +190,7 @@ void TestTeleTubes::testPrepareAccountManager2()
 
 void TestTeleTubes::testStartBuddySession1()
 {
-    bool bStarted = mpManager1->startBuddySession( sAcc1, sAcc2);
+    bool bStarted = mpManager1->startBuddySession( maAcc1, maAcc2);
     CPPUNIT_ASSERT( bStarted == true);
 }
 
