@@ -440,54 +440,6 @@ void SwLayouter::InsertObjForTmpConsiderWrapInfluence(
 
     _rDoc.GetLayouter()->mpObjsTmpConsiderWrapInfl->Insert( _rAnchoredObj );
 }
-// #i40155#
-void SwLayouter::ClearFrmsNotToWrap( const SwDoc& _rDoc )
-{
-    if ( _rDoc.GetLayouter() )
-    {
-        const_cast<SwDoc&>(_rDoc).GetLayouter()->maFrmsNotToWrap.clear();
-    }
-}
-
-void SwLayouter::InsertFrmNotToWrap( const SwDoc& _rDoc,
-                                             const SwFrm& _rFrm )
-{
-    if ( !_rDoc.GetLayouter() )
-    {
-        const_cast<SwDoc&>(_rDoc).SetLayouter( new SwLayouter() );
-    }
-
-    if ( !SwLayouter::FrmNotToWrap( _rDoc, _rFrm ) )
-    {
-        const_cast<SwDoc&>(_rDoc).GetLayouter()->maFrmsNotToWrap.push_back( &_rFrm );
-    }
-}
-
-bool SwLayouter::FrmNotToWrap( const IDocumentLayoutAccess& _rDLA,
-                               const SwFrm& _rFrm )
-{
-    const SwLayouter* pLayouter = _rDLA.GetLayouter();
-    if ( !pLayouter )
-    {
-        return false;
-    }
-    else
-    {
-        bool bFrmNotToWrap( false );
-        std::vector< const SwFrm* >::const_iterator aIter =
-                            pLayouter->maFrmsNotToWrap.begin();
-        for ( ; aIter != pLayouter->maFrmsNotToWrap.end(); ++aIter )
-        {
-            const SwFrm* pFrm = *(aIter);
-            if ( pFrm == &_rFrm )
-            {
-                bFrmNotToWrap = true;
-                break;
-            }
-        }
-        return bFrmNotToWrap;
-    }
-}
 
 void LOOPING_LOUIE_LIGHT( bool bCondition, const SwTxtFrm& rTxtFrm )
 {
