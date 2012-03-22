@@ -583,3 +583,7 @@ main/unixODBC/inc/sql.h
 main/unixODBC/inc/sqlext.h
 main/unixODBC/inc/sqltypes.h
 main/unixODBC/inc/sqlucode.h
+
+# files with "The TWAIN License", see http://www.twain.org/license.shtm. Covered
+# in the main/NOTICE file as required
+main/twain/inc/twain.h
