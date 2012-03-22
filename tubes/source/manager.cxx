@@ -392,18 +392,11 @@ bool TeleManager::startGroupSession( const rtl::OUString& rUConferenceRoom, cons
 
 
 /* TODO: factor out common code with startGroupSession() */
-bool TeleManager::startBuddySession( const rtl::OUString& rAccount, const rtl::OUString& rBuddy )
+bool TeleManager::startBuddySession( TpAccount *pAccount, const rtl::OUString& rBuddy )
 {
     INFO_LOGGER( "TeleManager::startBuddySession");
 
     MainLoopFlusher aFlusher( this);
-
-    OString aAccountID( OUStringToOString( rAccount, RTL_TEXTENCODING_UTF8));
-
-    TpAccount* pAccount = getAccount( aAccountID);
-    SAL_WARN_IF( !pAccount, "tubes", "TeleManager::startBuddySession: no account");
-    if (!pAccount)
-        return false;
 
     OString aSessionId( TeleManager::createUuid());
 
@@ -416,7 +409,7 @@ bool TeleManager::startBuddySession( const rtl::OUString& rAccount, const rtl::O
     pConference->setTarget( aTarget);
 
     SAL_INFO( "tubes", "TeleManager::startBuddySession: creating channel request from "
-            << aAccountID.getStr() << " to " << aTarget.getStr());
+            << tp_account_get_path_suffix( pAccount) << " to " << aTarget.getStr());
 
     GHashTable* pRequest = tp_asv_new(
             TP_PROP_CHANNEL_CHANNEL_TYPE, G_TYPE_STRING, TP_IFACE_CHANNEL_TYPE_DBUS_TUBE,

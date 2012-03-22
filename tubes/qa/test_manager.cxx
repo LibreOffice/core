@@ -190,7 +190,9 @@ void TestTeleTubes::testPrepareAccountManager2()
 
 void TestTeleTubes::testStartBuddySession1()
 {
-    bool bStarted = mpManager1->startBuddySession( maAcc1, maAcc2);
+    TpAccount *pAcc1 = mpManager1->getAccount( OUStringToOString( maAcc1, RTL_TEXTENCODING_UTF8));
+    CPPUNIT_ASSERT ( pAcc1 != 0);
+    bool bStarted = mpManager1->startBuddySession( pAcc1, maAcc2);
     CPPUNIT_ASSERT( bStarted == true);
 }
 

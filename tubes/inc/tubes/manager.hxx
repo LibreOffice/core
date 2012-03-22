@@ -113,7 +113,7 @@ public:
         @param rBuddy
             The buddy to be connected. Must be a contact of rAccount.
      */
-    bool                    startBuddySession( const rtl::OUString& rAccount, const rtl::OUString& rBuddy );
+    bool                    startBuddySession( TpAccount *pAccount, const rtl::OUString& rBuddy );
 
     void                    unregisterConference( TeleConferencePtr pConference );
 
@@ -195,13 +195,13 @@ public:
      */
     static void             addSuffixToNames( const char* pName );
 
+    TpAccount*              getAccount( const rtl::OString& rAccountID );
+
 private:
 
     TeleConferenceVector    maConferences;
 
     bool                    mbChannelReadyHandlerInvoked : 1;
-
-    TpAccount*              getAccount( const rtl::OString& rAccountID );
 
     static TeleManagerImpl* pImpl;
     static sal_uInt32       nRefCount;
