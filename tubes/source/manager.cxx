@@ -127,6 +127,7 @@ static void TeleManager_DBusChannelHandler(
         TpHandleChannelsContext*    pContext,
         gpointer                    pUserData)
 {
+    bool aAccepted = false;
     INFO_LOGGER_F( "TeleManager_DBusChannelHandler");
 
     TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
@@ -146,6 +147,7 @@ static void TeleManager_DBusChannelHandler(
         if (tp_channel_get_channel_type_id( pChannel) == TP_IFACE_QUARK_CHANNEL_TYPE_DBUS_TUBE)
         {
             SAL_INFO( "tubes", "accepting");
+            aAccepted = true;
             g_object_ref( pAccount);
             tp_cli_channel_type_dbus_tube_call_accept( pChannel, -1,
                     TP_SOCKET_ACCESS_CONTROL_CREDENTIALS,
@@ -158,7 +160,15 @@ static void TeleManager_DBusChannelHandler(
         }
     }
 
-    tp_handle_channels_context_accept( pContext);
+    if (aAccepted)
+        tp_handle_channels_context_accept( pContext);
+    else
+    {
+        GError aError = { TP_ERRORS, TP_ERROR_CONFUSED,
+            "None of these channels were LibreOffice D-Bus tubes; "
+            "why did the Channel Dispatcher give them to us?" };
+        tp_handle_channels_context_fail( pContext, &aError);
+    }
 }
 
 
