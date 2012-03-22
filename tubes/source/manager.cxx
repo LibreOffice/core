@@ -303,7 +303,7 @@ bool TeleManager::connect()
 
     pImpl->mpClient = tp_simple_handler_new_with_factory(
             pFactory,                       // factory
-            TRUE,                           // bypass_approval
+            FALSE,                          // bypass_approval
             FALSE,                          // requests
             getFullClientName().getStr(),   // name
             FALSE,                          // uniquify
