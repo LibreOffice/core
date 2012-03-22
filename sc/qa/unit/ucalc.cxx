@@ -162,6 +162,8 @@ public:
 
     void testPivotTableNormalGrouping();
 
+    void testPivotTableNumberGrouping();
+
     void testSheetCopy();
     void testSheetMove();
     void testExternalRef();
@@ -219,6 +221,7 @@ public:
     CPPUNIT_TEST(testPivotTableCache);
     CPPUNIT_TEST(testPivotTableDuplicateDataFields);
     CPPUNIT_TEST(testPivotTableNormalGrouping);
+    CPPUNIT_TEST(testPivotTableNumberGrouping);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -2162,6 +2165,9 @@ void Test::testPivotTableDuplicateDataFields()
                            aParam.maLabelArray.size() == 4);
 
     pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size() == 0);
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2313,6 +2319,106 @@ void Test::testPivotTableNormalGrouping()
         bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "D, E, F grouped by Group2.");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size() == 0);
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableNumberGrouping()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Order", "Score" },
+        { "43", "171" },
+        { "18", "20"  },
+        { "69", "159" },
+        { "95", "19"  },
+        { "96", "163" },
+        { "46", "70"  },
+        { "22", "36"  },
+        { "81", "49"  },
+        { "54", "61"  },
+        { "39", "62"  },
+        { "86", "17"  },
+        { "34", "0"   },
+        { "30", "25"  },
+        { "24", "103" },
+        { "16", "59"  },
+        { "24", "119" },
+        { "15", "86"  },
+        { "69", "170" }
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Order", sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Score", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("No save data !?", pSaveData);
+    ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
+    CPPUNIT_ASSERT_MESSAGE("No dimension data !?", pDimData);
+
+    {
+        ScDPNumGroupInfo aInfo;
+        aInfo.mbEnable = true;
+        aInfo.mbAutoStart = false;
+        aInfo.mbAutoEnd = false;
+        aInfo.mbDateValues = false;
+        aInfo.mbIntegerOnly = true;
+        aInfo.mfStart = 30;
+        aInfo.mfEnd = 60;
+        aInfo.mfStep = 10;
+        ScDPSaveNumGroupDimension aGroup(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Order")), aInfo);
+        pDimData->AddNumGroupDimension(aGroup);
+    }
+
+    pDPObj->SetSaveData(*pSaveData);
+    ScRange aOutRange = refreshGroups(pDPs, pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Order", 0 },
+            { "<30",   "423" },
+            { "30-39", "87"  },
+            { "40-49", "241" },
+            { "50-60", "61"  },
+            { ">60",   "577" },
+            { "Total Result", "1389" }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Order grouped by numbers");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size() == 0);
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
