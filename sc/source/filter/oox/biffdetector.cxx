@@ -64,11 +64,6 @@ OUString BiffDetector_getImplementationName()
     return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.BiffDetector" );
 }
 
-Reference< XInterface > SAL_CALL BiffDetector_createInstance( const Reference< XComponentContext >& rxContext ) throw( Exception )
-{
-    return static_cast< ::cppu::OWeakObject* >( new BiffDetector( rxContext ) );
-}
-
 // ============================================================================
 
 BiffDetector::BiffDetector( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :

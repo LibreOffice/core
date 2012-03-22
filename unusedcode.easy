@@ -877,15 +877,7 @@ oox::dump::TextStreamObjectBase::construct(oox::dump::InputObjectBase const&, un
 oox::dump::XmlStreamObject::XmlStreamObject(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&)
 oox::formulaimport::XmlStream::AttributeList::hasAttribute(int) const
 oox::formulaimport::XmlStream::skipElement(int)
-oox::ole::WordVbaProjectFilter_createInstance(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
-oox::ole::WordVbaProjectFilter_getSupportedServiceNames()
 oox::ppt::PPTShape::findPlaceholder(int, int, std::__debug::vector<boost::shared_ptr<oox::drawingml::Shape>, std::allocator<boost::shared_ptr<oox::drawingml::Shape> > >&)
-oox::xls::BiffDetector_createInstance(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
-oox::xls::BiffDrawingObjectBase::importObjBiff8(oox::xls::BiffInputStream&)
-oox::xls::BiffDrawingObjectContainer::append(boost::shared_ptr<oox::xls::BiffDrawingObjectBase> const&)
-oox::xls::BiffInputStream::resetRecord(bool, unsigned short)
-oox::xls::BiffOutputStream::fill(unsigned char, int, unsigned long)
-oox::xls::BiffOutputStream::sizeBase() const
 oox::xls::BiffOutputStream::startRecord(unsigned short)
 oox::xls::BiffOutputStream::tellBase() const
 oox::xls::BinAddress::write(oox::xls::BiffOutputStream&, bool, bool) const
@@ -895,11 +887,6 @@ oox::xls::CellBlock::CellBlock(oox::xls::WorksheetHelper const&, oox::ValueRange
 oox::xls::CellBlock::isBefore(oox::ValueRange const&) const
 oox::xls::CellBlock::isExpandable(oox::ValueRange const&) const
 oox::xls::CellBlock::startNextRow()
-oox::xls::ExcelBiffFilter_createInstance(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
-oox::xls::ExcelBiffFilter_getSupportedServiceNames()
-oox::xls::ExcelVbaProjectFilter_createInstance(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
-oox::xls::ExcelVbaProjectFilter_getSupportedServiceNames()
-oox::xls::OOXMLFormulaParser_createInstance(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 oox::xls::prv::BiffOutputRecordBuffer::BiffOutputRecordBuffer(oox::BinaryOutputStream&, unsigned short)
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
 psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterColor&)

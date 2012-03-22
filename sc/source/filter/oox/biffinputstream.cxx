@@ -213,17 +213,6 @@ bool BiffInputStream::startRecordByHandle( sal_Int64 nRecHandle )
     return startNextRecord();
 }
 
-void BiffInputStream::resetRecord( bool bContLookup, sal_uInt16 nAltContId )
-{
-    if( isInRecord() )
-    {
-        mbCont = bContLookup;
-        mnAltContId = nAltContId;
-        restartRecord( true );
-        maRecBuffer.enableDecoder( true );
-    }
-}
-
 void BiffInputStream::rewindRecord()
 {
     rewindToRecord( mnRecHandle );

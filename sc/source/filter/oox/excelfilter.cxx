@@ -212,20 +212,6 @@ OUString SAL_CALL ExcelBiffFilter_getImplementationName() throw()
     return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelBiffFilter" );
 }
 
-Sequence< OUString > SAL_CALL ExcelBiffFilter_getSupportedServiceNames() throw()
-{
-    Sequence< OUString > aSeq( 2 );
-    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
-    aSeq[ 1 ] = CREATE_OUSTRING( "com.sun.star.document.ExportFilter" );
-    return aSeq;
-}
-
-Reference< XInterface > SAL_CALL ExcelBiffFilter_createInstance(
-        const Reference< XComponentContext >& rxContext ) throw( Exception )
-{
-    return static_cast< ::cppu::OWeakObject* >( new ExcelBiffFilter( rxContext ) );
-}
-
 // ----------------------------------------------------------------------------
 
 ExcelBiffFilter::ExcelBiffFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
@@ -293,19 +279,6 @@ OUString ExcelBiffFilter::implGetImplementationName() const
 OUString SAL_CALL ExcelVbaProjectFilter_getImplementationName() throw()
 {
     return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelVbaProjectFilter" );
-}
-
-Sequence< OUString > SAL_CALL ExcelVbaProjectFilter_getSupportedServiceNames() throw()
-{
-    Sequence< OUString > aSeq( 1 );
-    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
-    return aSeq;
-}
-
-Reference< XInterface > SAL_CALL ExcelVbaProjectFilter_createInstance(
-        const Reference< XComponentContext >& rxContext ) throw( Exception )
-{
-    return static_cast< ::cppu::OWeakObject* >( new ExcelVbaProjectFilter( rxContext ) );
 }
 
 // ----------------------------------------------------------------------------

@@ -95,8 +95,6 @@ public:
     /** Returns true, if the object list is empty. */
     inline bool         empty() const { return maObjects.empty(); }
 
-    /** Appends the passed object to the list of objects. */
-    void                append( const BiffDrawingObjectRef& rxDrawingObj );
     /** Tries to insert the passed object into the last group or appends it. */
     void                insertGrouped( const BiffDrawingObjectRef& rxDrawingObj );
 
@@ -197,8 +195,6 @@ private:
     void                importObjBiff4( BiffInputStream& rStrm );
     /** Reads the contents of a BIFF5 OBJ record. */
     void                importObjBiff5( BiffInputStream& rStrm );
-    /** Reads the contents of a BIFF8 OBJ record. */
-    void                importObjBiff8( BiffInputStream& rStrm );
 
 private:
     ShapeAnchor         maAnchor;       /// Position of the drawing object.

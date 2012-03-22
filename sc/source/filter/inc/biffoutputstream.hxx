@@ -110,8 +110,6 @@ public:
 
     /** Returns the absolute position in the wrapped binary stream. */
     sal_Int64           tellBase() const;
-    /** Returns the total size of the wrapped binary stream. */
-    sal_Int64           sizeBase() const;
 
     // BinaryOutputStream interface (stream write access) ---------------------
 
@@ -119,9 +117,6 @@ public:
     virtual void        writeData( const StreamDataSequence& rData, size_t nAtomSize = 1 );
     /** Writes nBytes bytes from the passed buffer pMem. */
     virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 );
-
-    /** Writes a sequence of nBytes bytes with the passed value. */
-    void                fill( sal_uInt8 nValue, sal_Int32 nBytes, size_t nAtomSize = 1 );
 
     /** Stream operator for all data types supported by the writeValue() function. */
     template< typename Type >

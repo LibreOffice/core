@@ -107,11 +107,6 @@ sal_Int64 BiffOutputStream::tellBase() const
     return maRecBuffer.getBaseStream().tell();
 }
 
-sal_Int64 BiffOutputStream::sizeBase() const
-{
-    return maRecBuffer.getBaseStream().size();
-}
-
 // BinaryOutputStream interface (stream write access) -------------------------
 
 void BiffOutputStream::writeData( const StreamDataSequence& rData, size_t nAtomSize )
@@ -133,17 +128,6 @@ void BiffOutputStream::writeMemory( const void* pMem, sal_Int32 nBytes, size_t n
             pnBuffer += nBlockSize;
             nBytesLeft -= nBlockSize;
         }
-    }
-}
-
-void BiffOutputStream::fill( sal_uInt8 nValue, sal_Int32 nBytes, size_t nAtomSize )
-{
-    sal_Int32 nBytesLeft = nBytes;
-    while( nBytesLeft > 0 )
-    {
-        sal_uInt16 nBlockSize = prepareWriteBlock( nBytesLeft, nAtomSize );
-        maRecBuffer.fill( nValue, nBlockSize );
-        nBytesLeft -= nBlockSize;
     }
 }
 

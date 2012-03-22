@@ -129,16 +129,7 @@ private:
     Trying to read over the record limits results in a stream error. The
     isValid() function indicates that by returning false. From now on the data
     returned by the read functions is undefined. The error state will be reset,
-    if the record is reset (with the function resetRecord()), or if the next
-    record is started.
-
-    To switch off the automatic lookup of CONTINUE records, use resetRecord()
-    with false parameter. This is useful e.g. on import of drawing layer data,
-    where sometimes solely CONTINUE records will occur. The automatic lookup
-    keeps switched off until the method resetRecord() is called with parameter
-    true. All other settings done on the stream (e.g. alternative CONTINUE
-    record identifier, enabled decryption, NUL substitution character) will be
-    reset to default values, if a new record is started.
+    if the next record is started.
 
     The import stream supports decrypting the stream data. The contents of a
     record (not the record header) will be encrypted by Excel if the file has
@@ -188,22 +179,6 @@ public:
         @return  False = no record found (invalid handle passed).
      */
     bool                startRecordByHandle( sal_Int64 nRecHandle );
-
-    /** Sets stream pointer to begin of record content.
-
-        @param bContLookup
-            Automatic CONTINUE lookup on/off. In difference to other stream
-            settings, this setting is persistent until next call of this
-            function (because it is wanted to receive the next CONTINUE records
-            separately).
-        @param nAltContId
-            Sets an alternative record identifier for content continuation.
-            This value is reset automatically when a new record is started with
-            startNextRecord().
-     */
-    void                resetRecord(
-                            bool bContLookup,
-                            sal_uInt16 nAltContId = BIFF_ID_UNKNOWN );
 
     /** Sets stream pointer before current record and invalidates stream.
 

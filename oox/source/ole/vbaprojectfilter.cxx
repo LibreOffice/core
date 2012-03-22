@@ -77,19 +77,6 @@ OUString SAL_CALL WordVbaProjectFilter_getImplementationName() throw()
     return CREATE_OUSTRING( "com.sun.star.comp.oox.WordVbaProjectFilter" );
 }
 
-Sequence< OUString > SAL_CALL WordVbaProjectFilter_getSupportedServiceNames() throw()
-{
-    Sequence< OUString > aSeq( 1 );
-    aSeq[ 0 ] = CREATE_OUSTRING( "com.sun.star.document.ImportFilter" );
-    return aSeq;
-}
-
-Reference< XInterface > SAL_CALL WordVbaProjectFilter_createInstance(
-        const Reference< XComponentContext >& rxContext ) throw( Exception )
-{
-    return static_cast< ::cppu::OWeakObject* >( new WordVbaProjectFilter( rxContext ) );
-}
-
 // ----------------------------------------------------------------------------
 
 WordVbaProjectFilter::WordVbaProjectFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :

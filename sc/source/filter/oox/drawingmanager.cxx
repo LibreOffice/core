@@ -230,11 +230,6 @@ BiffDrawingObjectContainer::BiffDrawingObjectContainer()
 {
 }
 
-void BiffDrawingObjectContainer::append( const BiffDrawingObjectRef& rxDrawingObj )
-{
-    maObjects.push_back( rxDrawingObj );
-}
-
 void BiffDrawingObjectContainer::insertGrouped( const BiffDrawingObjectRef& rxDrawingObj )
 {
     if( !maObjects.empty() )
@@ -743,72 +738,6 @@ void BiffDrawingObjectBase::importObjBiff5( BiffInputStream& rStrm )
     mbVisible = getFlag( nObjFlags, BIFF_OBJ_VISIBLE );
     mbPrintable = getFlag( nObjFlags, BIFF_OBJ_PRINTABLE );
     implReadObjBiff5( rStrm, nNameLen, nMacroSize );
-}
-
-void BiffDrawingObjectBase::importObjBiff8( BiffInputStream& rStrm )
-{
-    // back to beginning
-    rStrm.seekToStart();
-
-    bool bLoop = true;
-    while( bLoop && (rStrm.getRemaining() >= 4) )
-    {
-        sal_uInt16 nSubRecId, nSubRecSize;
-        rStrm >> nSubRecId >> nSubRecSize;
-        sal_Int64 nStrmPos = rStrm.tell();
-        // sometimes the last subrecord has an invalid length (OBJLBSDATA) -> min()
-        nSubRecSize = static_cast< sal_uInt16 >( ::std::min< sal_Int64 >( nSubRecSize, rStrm.getRemaining() ) );
-
-        switch( nSubRecId )
-        {
-            case BIFF_ID_OBJCMO:
-                OSL_ENSURE( rStrm.tell() == 4, "BiffDrawingObjectBase::importObjBiff8 - unexpected OBJCMO subrecord" );
-                if( (rStrm.tell() == 4) && (nSubRecSize >= 6) )
-                {
-                    sal_uInt16 nObjFlags;
-                    rStrm >> mnObjType >> mnObjId >> nObjFlags;
-                    mbPrintable = getFlag( nObjFlags, BIFF_OBJCMO_PRINTABLE );
-                }
-            break;
-            case BIFF_ID_OBJMACRO:
-                readMacroBiff8( rStrm );
-            break;
-            case BIFF_ID_OBJEND:
-                bLoop = false;
-            break;
-            default:
-                implReadObjBiff8SubRec( rStrm, nSubRecId, nSubRecSize );
-        }
-
-        // seek to end of subrecord
-        rStrm.seek( nStrmPos + nSubRecSize );
-    }
-
-    /*  Call doReadObj8SubRec() with BIFF_ID_OBJEND for further stream
-        processing (e.g. charts), even if the OBJEND subrecord is missing. */
-    implReadObjBiff8SubRec( rStrm, BIFF_ID_OBJEND, 0 );
-
-    /*  Pictures that Excel reads from BIFF5 and writes to BIFF8 still have the
-        IMGDATA record following the OBJ record (but they use the image data
-        stored in DFF). The IMGDATA record may be continued by several CONTINUE
-        records. But the last CONTINUE record may be in fact an MSODRAWING
-        record that contains the DFF data of the next drawing object! So we
-        have to skip just enough CONTINUE records to look at the next
-        MSODRAWING/CONTINUE record. */
-    if( (rStrm.getNextRecId() == BIFF3_ID_IMGDATA) && rStrm.startNextRecord() )
-    {
-        rStrm.skip( 4 );
-        sal_Int64 nDataSize = rStrm.readuInt32();
-        nDataSize -= rStrm.getRemaining();
-        // skip following CONTINUE records until IMGDATA ends
-        while( (nDataSize > 0) && (rStrm.getNextRecId() == BIFF_ID_CONT) && rStrm.startNextRecord() )
-        {
-            OSL_ENSURE( nDataSize >= rStrm.getRemaining(), "BiffDrawingObjectBase::importObjBiff8 - CONTINUE too long" );
-            nDataSize -= ::std::min( rStrm.getRemaining(), nDataSize );
-        }
-        OSL_ENSURE( nDataSize == 0, "BiffDrawingObjectBase::importObjBiff8 - missing CONTINUE records" );
-        // next record may be MSODRAWING or CONTINUE or anything else
-    }
 }
 
 // ============================================================================
