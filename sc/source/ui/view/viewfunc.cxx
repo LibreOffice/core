@@ -342,9 +342,6 @@ void ScViewFunc::EnterData( SCCOL nCol, SCROW nRow, SCTAB nTab,
     bool bRecord = pDoc->IsUndoEnabled();
     SCTAB i;
 
-    fprintf( stderr, "EnterData '%s'\n",
-             rtl::OUStringToOString( rString, RTL_TEXTENCODING_UTF8 ).getStr() );
-
     ScDocShell* pDocSh = GetViewData()->GetDocShell();
     ScDocFunc &rFunc = GetViewData()->GetDocFunc();
     ScDocShellModificator aModificator( *pDocSh );
