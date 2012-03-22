@@ -34,6 +34,10 @@ gb_TMPDIR:=$(if $(TMPDIR),$(TMPDIR),/tmp)
 include $(GBUILDDIR)/platform/com_GCC_defs.mk
 include $(GBUILDDIR)/platform/windows.mk
 
+gb_CCVER := $(shell $(gb_CC) -dumpversion | $(gb_AWK) -F. -- \
+    '{ print $$1*10000+$$2*100+$$3 }')
+gb_GccLess470 := $(shell expr $(gb_CCVER) \< 40700)
+
 gb_RC := $(WINDRES)
 
 ifeq ($(GXX_INCLUDE_PATH),)
@@ -45,7 +49,14 @@ gb_COMPILERDEFS += \
 	-D_NATIVE_WCHAR_T_DEFINED \
 	-D_MSC_EXTENSIONS \
 	-D_FORCENAMELESSUNION \
-	-DBOOST_MEM_FN_ENABLE_CDECL \
+
+# Until GCC 4.6, MinGW used __cdecl by default, and BOOST_MEM_FN_ENABLE_CDECL
+# would result in ambiguous calls to overloaded boost::bind; since GCC 4.7,
+# MinGW uses __thiscall by default, so now needs BOOST_MEM_FN_ENABLE_CDECL for
+# uses of boost::bind with functions annotated with SAL_CALL:
+ifeq ($(gb_GccLess470),0)
+gb_COMPILERDEFS += -DBOOST_MEM_FN_ENABLE_CDECL
+endif
 
 gb_RCDEFS := \
 	 -DWINVER=0x0400 \
