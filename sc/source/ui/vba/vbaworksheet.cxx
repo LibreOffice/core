@@ -67,7 +67,6 @@
 #include <ooo/vba/excel/XlSheetVisibility.hpp>
 #include <ooo/vba/excel/XWorkbook.hpp>
 #include <ooo/vba/XControlProvider.hpp>
-#include <ooo/vba/excel/XlSheetVisibility.hpp>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>

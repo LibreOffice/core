@@ -38,7 +38,6 @@
 #include <editeng/boxitem.hxx>
 #include <svx/fmshell.hxx>
 #include <editeng/sizeitem.hxx>
-#include <editeng/boxitem.hxx>
 #include <svx/prtqry.hxx>
 #include <sfx2/request.hxx>
 #include <sfx2/printer.hxx>
@@ -90,7 +89,6 @@
 #include "drawview.hxx"
 #include "fupoor.hxx"
 #include "navsett.hxx"
-#include "sc.hrc"
 #include "scabstdlg.hxx"
 #include "externalrefmgr.hxx"
 #include "docoptio.hxx"

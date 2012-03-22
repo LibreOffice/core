@@ -50,7 +50,6 @@
 
 #include <sax/tools/converter.hxx>
 
-#include <svl/zforlist.hxx>
 #include <svl/zformat.hxx>
 #include <svl/languageoptions.hxx>
 

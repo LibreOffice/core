@@ -109,7 +109,6 @@
 #include <com/sun/star/script/ModuleInfo.hpp>
 #include <com/sun/star/container/XIndexContainer.hpp>
 #include <cppuhelper/component_context.hxx>
-#include <sfx2/app.hxx>
 #include "xltoolbar.hxx"
 #include <oox/ole/vbaproject.hxx>
 #include <oox/ole/olestorage.hxx>

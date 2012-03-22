@@ -97,7 +97,6 @@
 #include "printfun.hxx"
 #include "pfuncache.hxx"
 #include "scmod.hxx"
-#include "rangeutl.hxx"
 #include "ViewSettingsSequenceDefines.hxx"
 #include "sheetevents.hxx"
 #include "sc.hrc"

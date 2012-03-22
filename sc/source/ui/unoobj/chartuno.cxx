@@ -34,7 +34,6 @@
 #include <com/sun/star/chart2/data/XDataReceiver.hpp>
 #include <com/sun/star/chart/ChartDataRowSource.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
-#include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/table/CellRangeAddress.hpp>
 
 #include <svx/svditer.hxx>

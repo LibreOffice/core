@@ -44,7 +44,6 @@
 #include "global.hxx"
 #include "rechead.hxx"
 #include "stlpool.hxx"
-#include "stlsheet.hxx"
 #include "brdcst.hxx"
 #include "tabprotection.hxx"
 #include "globstr.hrc"

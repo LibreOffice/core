@@ -59,7 +59,6 @@
 #include <comphelper/storagehelper.hxx>
 #include <comphelper/string.hxx>
 
-#include <sot/formats.hxx>
 #define SOT_FORMATSTR_ID_STARCALC_CURRENT   SOT_FORMATSTR_ID_STARCALC_50
 
 #include "viewfunc.hxx"

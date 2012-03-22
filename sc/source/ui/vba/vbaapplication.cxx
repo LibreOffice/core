@@ -115,12 +115,8 @@
 #include <vbahelper/helperdecl.hxx>
 #include "excelvbahelper.hxx"
 
-#include <basic/sbmeth.hxx>
 #include <basic/sbmod.hxx>
-#include <basic/sbstar.hxx>
-#include <basic/sbx.hxx>
 #include <basic/sbxobj.hxx>
-#include <basic/sbuno.hxx>
 
 #include "vbafiledialog.hxx"
 using namespace ::ooo::vba;

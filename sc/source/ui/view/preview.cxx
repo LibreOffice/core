@@ -66,7 +66,6 @@
 #include <svx/algitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <editeng/ulspitem.hxx>
-#include <editeng/sizeitem.hxx>
 #include "attrib.hxx"
 #include "pagepar.hxx"
 #include <com/sun/star/accessibility/XAccessible.hpp>

@@ -60,7 +60,6 @@
 #include <svl/documentlockfile.hxx>
 #include <svl/sharecontrolfile.hxx>
 #include <unotools/charclass.hxx>
-#include <vcl/virdev.hxx>
 #include "chgtrack.hxx"
 #include "chgviset.hxx"
 #include <sfx2/request.hxx>

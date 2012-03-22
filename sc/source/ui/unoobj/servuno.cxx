@@ -69,14 +69,8 @@
 #include <basic/basmgr.hxx>
 #include <sfx2/app.hxx>
 
-#include <comphelper/processfactory.hxx>
-#include <com/sun/star/document/XCodeNameQuery.hpp>
-#include <com/sun/star/drawing/XDrawPagesSupplier.hpp>
-#include <com/sun/star/form/XFormsSupplier.hpp>
-#include <com/sun/star/script/ScriptEventDescriptor.hpp>
 #include <comphelper/componentcontext.hxx>
 #include <cppuhelper/component_context.hxx>
-#include <vbahelper/vbaaccesshelper.hxx>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 using namespace ::com::sun::star;

@@ -75,7 +75,6 @@
 #include <xmloff/nmspmap.hxx>
 #include <xmloff/families.hxx>
 #include <xmloff/numehelp.hxx>
-#include <xmloff/xmluconv.hxx>
 #include <xmloff/txtparae.hxx>
 #include <xmloff/xmlcnitm.hxx>
 #include <xmloff/xmlerror.hxx>
@@ -90,7 +89,6 @@
 #include <svl/zforlist.hxx>
 #include <svx/unoshape.hxx>
 #include <comphelper/extract.hxx>
-#include <editeng/eeitem.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <svx/svdobj.hxx>
 #include <svx/svdocapt.hxx>
@@ -121,7 +119,6 @@
 #include <com/sun/star/sheet/XNamedRange.hpp>
 #include <com/sun/star/sheet/XCellRangeReferrer.hpp>
 #include <com/sun/star/sheet/NamedRangeFlag.hpp>
-#include <com/sun/star/container/XNamed.hpp>
 #include <com/sun/star/sheet/XSheetLinkable.hpp>
 #include <com/sun/star/form/XFormsSupplier2.hpp>
 #include <com/sun/star/io/XActiveDataSource.hpp>

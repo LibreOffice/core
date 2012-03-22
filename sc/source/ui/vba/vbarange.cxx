@@ -92,7 +92,6 @@
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/awt/XDevice.hpp>
 
-#include <com/sun/star/sheet/XCellRangeMovement.hpp>
 #include <com/sun/star/sheet/XSubTotalCalculatable.hpp>
 #include <com/sun/star/sheet/XSubTotalDescriptor.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hdl>

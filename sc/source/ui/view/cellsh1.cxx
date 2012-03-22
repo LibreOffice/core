@@ -92,7 +92,6 @@
 #include "postit.hxx"
 #include "clipparam.hxx"
 #include "pivot.hxx"
-#include "dpobject.hxx"
 #include "dpsdbtab.hxx"     // ScImportSourceDesc
 #include "dpshttab.hxx"     // ScSheetSourceDesc
 #include "dbdata.hxx"
@@ -102,7 +101,6 @@
 
 #include "globstr.hrc"
 #include "scui_def.hxx"
-#include <svx/svxdlg.hxx>
 #include <svx/dialogs.hrc>
 #include "scabstdlg.hxx"
 

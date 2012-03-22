@@ -53,7 +53,6 @@
 #include "refupdat.hxx"
 #include "stlpool.hxx"
 #include "stlsheet.hxx"
-#include "pivot.hxx"
 
 using ::com::sun::star::sheet::DataPilotFieldReference;
 using ::rtl::OUString;

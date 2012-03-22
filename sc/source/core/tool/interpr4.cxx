@@ -40,7 +40,6 @@
 #include <basic/sbxobj.hxx>
 #include <basic/sbuno.hxx>
 #include <svl/zforlist.hxx>
-#include <svl/zforlist.hxx>
 #include <rtl/logfile.hxx>
 #include <stdlib.h>
 #include <string.h>

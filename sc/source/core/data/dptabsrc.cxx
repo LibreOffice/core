@@ -63,7 +63,6 @@
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
-#include <com/sun/star/sheet/DataPilotFieldFilter.hpp>
 #include <com/sun/star/sheet/DataPilotFieldReferenceType.hpp>
 #include <com/sun/star/sheet/DataPilotFieldSortMode.hpp>
 #include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>

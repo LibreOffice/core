@@ -53,8 +53,6 @@
 #include "drawview.hxx"
 #include "scresid.hxx"
 #include <svx/svdobj.hxx>
-#include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 #include <svx/drawitem.hxx>
 #include <svx/xtable.hxx>
 
@@ -62,7 +60,6 @@
 #include "scslots.hxx"
 
 #include "userdat.hxx"
-#include <sfx2/objsh.hxx>
 #include <svl/macitem.hxx>
 #include <sfx2/evntconf.hxx>
 #include <sfx2/viewsh.hxx>

@@ -51,7 +51,6 @@
 #include <sfx2/docfile.hxx>
 #include <sfx2/printer.hxx>
 
-#include <svx/zoomslideritem.hxx>
 #include "prevwsh.hxx"
 #include "preview.hxx"
 #include "printfun.hxx"
@@ -79,7 +78,6 @@
 #include <svx/zoom_def.hxx>
 #include <com/sun/star/document/XDocumentProperties.hpp>
 
-#include "sc.hrc"
 #include "scabstdlg.hxx"
 //  for mouse wheel
 #define MINZOOM_SLIDER 10

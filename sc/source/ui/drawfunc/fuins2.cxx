@@ -60,7 +60,6 @@
 #include <cppuhelper/component_context.hxx>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XSynchronousFrameLoader.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>

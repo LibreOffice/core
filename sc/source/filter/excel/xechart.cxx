@@ -43,7 +43,6 @@
 #include <com/sun/star/chart/TimeInterval.hpp>
 #include <com/sun/star/chart/TimeUnit.hpp>
 #include <com/sun/star/chart/XAxisSupplier.hpp>
-#include <com/sun/star/chart/XChartDocument.hpp>
 #include <com/sun/star/chart/XDiagramPositioning.hpp>
 #include <com/sun/star/chart2/XChartDocument.hpp>
 #include <com/sun/star/chart2/XDiagram.hpp>

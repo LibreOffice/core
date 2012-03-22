@@ -92,10 +92,6 @@
 #include "tabbgcolor.hxx"
 #include "clipparam.hxx"
 
-#include <basic/sbstar.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
-#include <com/sun/star/script/XLibraryContainer.hpp>
-
 #include <boost/scoped_ptr.hpp>
 #include <vector>
 #include <memory>

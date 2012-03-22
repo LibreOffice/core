@@ -60,7 +60,6 @@
 
 #include "viewfunc.hxx"
 #include "docsh.hxx"
-#include "docsh.hxx"
 #include "document.hxx"
 #include "docpool.hxx"
 #include "globstr.hrc"

@@ -63,7 +63,6 @@
 #include "filter.hxx"
 #include "global.hxx"
 #include "document.hxx"
-#include "scitems.hxx"
 #include "attrib.hxx"
 #include "patattr.hxx"
 #include "stlpool.hxx"

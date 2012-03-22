@@ -32,8 +32,6 @@
 #include "xlstyle.hxx"
 #include "xestyle.hxx"
 #include "xestream.hxx"
-#include "xlstyle.hxx"
-#include "xestyle.hxx"
 #include "xestring.hxx"
 
 using namespace ::oox;

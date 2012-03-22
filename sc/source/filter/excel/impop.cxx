@@ -61,7 +61,6 @@
 #include "olinetab.hxx"
 #include "stlsheet.hxx"
 #include "stlpool.hxx"
-#include "compiler.hxx"
 #include "viewopti.hxx"
 #include "docoptio.hxx"
 #include "scextopt.hxx"

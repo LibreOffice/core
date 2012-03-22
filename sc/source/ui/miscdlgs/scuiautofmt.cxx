@@ -53,7 +53,6 @@
 #include "scmod.hxx"
 #include "attrib.hxx"
 #include "zforauto.hxx"
-#include "scitems.hxx"
 #include "global.hxx"
 #include "globstr.hrc"
 #include "autoform.hxx"
