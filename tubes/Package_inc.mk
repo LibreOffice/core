@@ -1,5 +1,4 @@
 # -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
-#
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -25,20 +24,16 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Module_Module,tubes))
+$(eval $(call gb_Package_Package,tubes_inc,$(SRCDIR)/tubes/inc))
 
-ifeq ($(ENABLE_TELEPATHY),TRUE)
+$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/conference.hxx,tubes/conference.hxx))
+$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/constants.h,tubes/constants.h))
+$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/contact-list.hxx,tubes/contact-list.hxx))
+$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/file-transfer-helper.h,tubes/file-transfer-helper.h))
+$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/manager.hxx,tubes/manager.hxx))
+$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/packet.hxx,tubes/packet.hxx))
+$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/tubesdllapi.h,tubes/tubesdllapi.h))
 
-$(eval $(call gb_Module_add_targets,tubes,\
-	Library_tubes \
-	Package_inc \
-	Executable_liboapprover \
-))
+#$(eval $(call gb_Package_add_file,tubes_inc,inc/tubes/,tubes/))
 
-$(eval $(call gb_Module_add_check_targets,tubes,\
-    CppunitTest_tubes_test \
-))
-
-endif
-
-# vim:set shiftwidth=4 tabstop=4 noexpandtab: */
+# vim: set noet sw=4 ts=4:
