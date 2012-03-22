@@ -1898,7 +1898,6 @@ void SwDoc::ClearSwLayouterEntries()
 {
     SwLayouter::ClearMovedFwdFrms( *this );
     SwLayouter::ClearObjsTmpConsiderWrapInfluence( *this );
-    SwLayouter::ClearFrmsNotToWrap( *this );
     // #i65250#
     SwLayouter::ClearMoveBwdLayoutInfo( *this );
 }

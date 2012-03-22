@@ -296,9 +296,6 @@ bool SwObjectFormatterTxtFrm::DoFormatObj( SwAnchoredObject& _rAnchoredObj,
                       mrAnchorTxtFrm.GetFollow() &&
                       mrAnchorTxtFrm.GetFollow()->GetOfst() == 0 )
             {
-                SwLayouter::InsertFrmNotToWrap(
-                                *(mrAnchorTxtFrm.FindPageFrm()->GetFmt()->GetDoc()),
-                                mrAnchorTxtFrm );
                 SwLayouter::RemoveMovedFwdFrm(
                                 *(mrAnchorTxtFrm.FindPageFrm()->GetFmt()->GetDoc()),
                                 mrAnchorTxtFrm );
@@ -467,9 +464,6 @@ bool SwObjectFormatterTxtFrm::DoFormatObjs()
                   mrAnchorTxtFrm.GetFollow() &&
                   mrAnchorTxtFrm.GetFollow()->GetOfst() == 0 )
         {
-            SwLayouter::InsertFrmNotToWrap(
-                            *(mrAnchorTxtFrm.FindPageFrm()->GetFmt()->GetDoc()),
-                            mrAnchorTxtFrm );
             SwLayouter::RemoveMovedFwdFrm(
                             *(mrAnchorTxtFrm.FindPageFrm()->GetFmt()->GetDoc()),
                             mrAnchorTxtFrm );

@@ -892,8 +892,7 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
     const IDocumentSettingAccess* pIDSA = pCurrFrm->GetTxtNode()->getIDocumentSettingAccess();
     // #i40155# - check, if frame is marked not to wrap
     const sal_Bool bWrapAllowed = ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
-                                    ( !pCurrFrm->IsInFtn() && !bFooterHeader ) ) &&
-                                      !SwLayouter::FrmNotToWrap( *pCurrFrm->GetTxtNode()->getIDocumentLayoutAccess(), *pCurrFrm );
+                                    ( !pCurrFrm->IsInFtn() && !bFooterHeader ) );
 
     bOn = sal_False;
 

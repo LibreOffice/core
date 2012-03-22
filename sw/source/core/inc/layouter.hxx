@@ -68,9 +68,6 @@ class SwLayouter
     SwMovedFwdFrmsByObjPos* mpMovedFwdFrms;
     // --> #i35911#
     SwObjsMarkedAsTmpConsiderWrapInfluence* mpObjsTmpConsiderWrapInfl;
-    // --> #i40155# - data structure to collect frames, which are
-    // marked not to wrap around objects.
-    std::vector< const SwFrm* > maFrmsNotToWrap;
 
 public:
     // --> #i65250#
@@ -148,12 +145,6 @@ public:
     static void InsertObjForTmpConsiderWrapInfluence(
                                         const SwDoc& _rDoc,
                                         SwAnchoredObject& _rAnchoredObj );
-    // --> #i40155#
-    static void ClearFrmsNotToWrap( const SwDoc& _rDoc );
-    static void InsertFrmNotToWrap( const SwDoc& _rDoc,
-                                    const SwFrm& _rFrm );
-    static bool FrmNotToWrap( const IDocumentLayoutAccess& _rIDLA,
-                              const SwFrm& _rFrm );
     // --> #i65250#
     static bool MoveBwdSuppressed( const SwDoc& p_rDoc,
                                    const SwFlowFrm& p_rFlowFrm,
