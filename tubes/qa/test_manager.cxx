@@ -66,6 +66,7 @@ public:
     void testFailAlways();
 
     GMainLoop*                  mpMainLoop;
+    void spinMainLoop();
 
     // Order is significant.
     CPPUNIT_TEST_SUITE( TestTeleTubes );
@@ -105,6 +106,17 @@ static TpContact*   mpAccepterContact = NULL;
 
 static sal_uInt32 nSentPackets = 0;
 
+static gboolean
+timed_out (void *user_data)
+{
+    CPPUNIT_ASSERT_MESSAGE( "Test took longer than ten seconds!", false);
+
+    GMainLoop *loop = reinterpret_cast<GMainLoop *>(user_data);
+
+    g_main_loop_quit (loop);
+    return FALSE;
+}
+
 TestTeleTubes::TestTeleTubes()
     : maTestConfigIniURL(getURLFromSrc("/tubes/qa/test-config.ini")),
       maTestConfig(maTestConfigIniURL)
@@ -120,10 +132,15 @@ TestTeleTubes::TestTeleTubes()
     CPPUNIT_ASSERT_MESSAGE( "See README for how to set up test-config.ini",
         maTestConfig.getFrom("accepter", aAccepterIdentifier));
     maAccepterIdentifier = OUStringToOString( aAccepterIdentifier, RTL_TEXTENCODING_UTF8);
+
+    mpMainLoop = g_main_loop_new (NULL, FALSE);
+    g_timeout_add_seconds (10, timed_out, mpMainLoop);
 }
 
 TestTeleTubes::~TestTeleTubes()
 {
+    g_main_loop_unref( mpMainLoop);
+    mpMainLoop = NULL;
 }
 
 static void TeleTestTubes_ContactListPrepared( GError *errorOr0, void *user_data )
@@ -135,27 +152,16 @@ static void TeleTestTubes_ContactListPrepared( GError *errorOr0, void *user_data
     g_main_loop_quit (self->mpMainLoop);
 }
 
-static gboolean
-timed_out (void *user_data)
+void TestTeleTubes::spinMainLoop()
 {
-    CPPUNIT_ASSERT( false);
-
-    GMainLoop *loop = reinterpret_cast<GMainLoop *>(user_data);
-
-    g_main_loop_quit (loop);
-    return FALSE;
+    g_main_loop_run( mpMainLoop);
 }
 
 void TestTeleTubes::testContactList()
 {
-    mpMainLoop = g_main_loop_new (NULL, FALSE);
-
     ContactList cl;
     cl.prepare( TeleTestTubes_ContactListPrepared, this );
-    g_timeout_add_seconds (5, timed_out, mpMainLoop);
-    g_main_loop_run (mpMainLoop);
-    g_main_loop_unref (mpMainLoop);
-    mpMainLoop = NULL;
+    spinMainLoop();
 
     /* Okay, now everything's prepared, we can get contacts synchronously. */
     AccountContactPairV pairs;
