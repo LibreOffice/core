@@ -270,6 +270,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
             }
             if (ppArgs[0] != 0)
             {
+#if !defined(ANDROID) && !defined(IOS) // No use searching PATH on Android or iOS
                 /* see @ osl_getExecutableFile(). */
                 if (rtl_ustr_indexOfChar (rtl_uString_getStr(ppArgs[0]), sal_Unicode('/')) == -1)
                 {
@@ -289,7 +290,7 @@ void SAL_CALL osl_setCommandArgs (int argc, char ** argv)
                         rtl_uString_release (pSearchPath);
                     }
                 }
-
+#endif
                 rtl_uString * pArg0 = 0;
                 if (realpath_u (ppArgs[0], &pArg0))
                 {
