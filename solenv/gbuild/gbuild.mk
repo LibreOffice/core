@@ -113,7 +113,11 @@ endif
 
 # for clean, setuplocal and removelocal goals we switch off dependencies
 ifneq ($(filter cleanpackmodule clean setuplocal removelocal showdeliverables help debugrun,$(MAKECMDGOALS)),)
+ifdef TINDERBUILD
 gb_FULLDEPS := $(false)
+else
+gb_FULLDEPS := $(false)
+endif
 else
 gb_FULLDEPS := $(true)
 endif
