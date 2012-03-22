@@ -44,7 +44,6 @@
 #include <com/sun/star/lang/XTypeProvider.hpp>
 #include <com/sun/star/container/XContentEnumerationAccess.hpp>
 
-#include <stdio.h>
 using namespace ::rtl;
 using namespace ::osl;
 using namespace ::com::sun::star::uno;

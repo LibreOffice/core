@@ -28,7 +28,6 @@
 
 #include <sal/types.h>
 
-//#     #include <rtl/tres.h>
 #include <testshl/tresstatewrapper.hxx>
 #include "stringhelper.hxx"
 #include <rtl/string.hxx>

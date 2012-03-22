@@ -34,7 +34,6 @@
 #include <rtl/logfile.h>
 #include <osl/process.h>
 #include <osl/time.h>
-#include <osl/time.h>
 #include <osl/mutex.hxx>
 #include <rtl/bootstrap.h>
 #include <rtl/oustringostreaminserter.hxx>
