@@ -465,7 +465,6 @@ void BasicIDEShell::ExecuteGlobal( SfxRequest& rReq )
             DBG_ASSERT( rReq.GetArgs(), "arguments expected" );
             const SfxUInt16Item &rTabId = (const SfxUInt16Item&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_TABID );
             const SfxStringItem &rModName = (const SfxStringItem&)rReq.GetArgs()->Get(SID_BASICIDE_ARG_MODULENAME );
-            DBG_ASSERT( pWin, "Window nicht im Liste, aber in TabBar ?" );
             if ( aIDEWindowTable.find( rTabId.GetValue() ) !=  aIDEWindowTable.end() )
             {
                 IDEBaseWindow* pWin = aIDEWindowTable[ rTabId.GetValue() ];
