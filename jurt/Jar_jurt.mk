@@ -36,6 +36,9 @@ $(eval $(call gb_Jar_set_packageroot,jurt,com))
 
 $(eval $(call gb_Jar_set_manifest,jurt,$(SRCDIR)/jurt/util/manifest))
 
+$(eval $(call gb_Jar_set_jarclasspath,jurt, \
+    ridl.jar unoloader.jar ../../lib/ ../bin/))
+
 $(eval $(call gb_Jar_add_sourcefiles,jurt,\
     jurt/com/sun/star/comp/bridgefactory/BridgeFactory \
     jurt/com/sun/star/comp/connections/Acceptor \

@@ -35,6 +35,8 @@ $(eval $(call gb_Jar_add_jars,juh,\
 
 $(eval $(call gb_Jar_set_packageroot,juh,com))
 
+$(eval $(call gb_Jar_set_jarclasspath,juh,ridl.jar jurt.jar ../../lib/ ../bin/))
+
 $(eval $(call gb_Jar_set_manifest,juh,$(SRCDIR)/javaunohelper/util/manifest))
 
 $(eval $(call gb_Jar_set_componentfile,juh,javaunohelper/util/juh,URE))
