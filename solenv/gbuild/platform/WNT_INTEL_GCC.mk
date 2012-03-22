@@ -84,8 +84,11 @@ endif
 gb_LinkTarget_EXCEPTIONFLAGS += \
 	-fno-enforce-eh-specs \
 
+# At least sal defines its own __main, which would cause DLLs linking against
+# sal to pick up sal's __main instead of the one from MinGW's dllcrt2.o:
 gb_LinkTarget_LDFLAGS := \
 	-Wl,--export-all-symbols \
+	-Wl,--exclude-symbols,__main \
 	-Wl,--enable-stdcall-fixup \
 	-Wl,--enable-runtime-pseudo-reloc-v2 \
 	$(subst -L../lib , ,$(SOLARLIB)) \
