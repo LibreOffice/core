@@ -46,7 +46,7 @@ class TeleConference : public boost::enable_shared_from_this<TeleConference>
 {
 public:
 
-    TeleConference( TeleManager* pManager, TpChannel* pChannel, const rtl::OString& rSessionId );
+    TeleConference( TeleManager* pManager, TpAccount *pAccount, TpChannel* pChannel, const rtl::OString& rSessionId );
     ~TeleConference();
 
     /// Close channel and call finalize()
@@ -71,7 +71,7 @@ public:
     // --- following only to be called only by manager's callbacks ---
     // TODO: make friends instead
 
-    void                    setChannel( TpChannel* pChannel );
+    void                    setChannel( TpAccount* pAccount, TpChannel* pChannel );
     TpChannel*              getChannel() const  { return mpChannel; }
     bool                    offerTube();
     bool                    setTube( DBusConnection* pTube );
@@ -92,6 +92,7 @@ private:
 
     rtl::OString            maSessionId;
     TeleManager*            mpManager;
+    TpAccount*              mpAccount;
     TpChannel*              mpChannel;
     DBusConnection*         mpTube;
     TelePacketQueue         maPacketQueue;

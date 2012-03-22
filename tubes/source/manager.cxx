@@ -91,26 +91,35 @@ static void TeleManager_DBusTubeAcceptHandler(
         const char*     pAddress,
         const GError*   pError,
         gpointer        pUserData,
-        GObject*        /*weak_object*/)
+        GObject*        pWeakObject)
 {
     INFO_LOGGER_F( "TeleManager_DBusTubeAcceptHandler");
 
+    TpAccount* pAccount = TP_ACCOUNT(pWeakObject);
+
     SAL_WARN_IF( pError, "tubes", "TeleManager_DBusTubeAcceptHandler: entered with error: " << pError->message);
     if (pError)
+    {
+        g_object_unref(pAccount);
         return;
+    }
 
     TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
     SAL_WARN_IF( !pManager, "tubes", "TeleManager_DBusTubeAcceptHandler: no manager");
     if (!pManager)
+    {
+        g_object_unref(pAccount);
         return;
+    }
 
-    pManager->acceptTube( pChannel, pAddress);
+    pManager->acceptTube( pAccount, pChannel, pAddress);
+    g_object_unref (pAccount);
 }
 
 
 static void TeleManager_DBusChannelHandler(
         TpSimpleHandler*            /*handler*/,
-        TpAccount*                  /*account*/,
+        TpAccount*                  pAccount,
         TpConnection*               /*connection*/,
         GList*                      pChannels,
         GList*                      /*requests_satisfied*/,
@@ -137,9 +146,11 @@ static void TeleManager_DBusChannelHandler(
         if (tp_channel_get_channel_type_id( pChannel) == TP_IFACE_QUARK_CHANNEL_TYPE_DBUS_TUBE)
         {
             SAL_INFO( "tubes", "accepting");
+            g_object_ref( pAccount);
             tp_cli_channel_type_dbus_tube_call_accept( pChannel, -1,
                     TP_SOCKET_ACCESS_CONTROL_CREDENTIALS,
-                    TeleManager_DBusTubeAcceptHandler, pUserData, NULL, NULL);
+                    TeleManager_DBusTubeAcceptHandler, pUserData, NULL,
+                    G_OBJECT (pAccount));
         }
         else
         {
@@ -171,9 +182,10 @@ static void TeleManager_ChannelReadyHandler(
 
     pManager->setChannelReadyHandlerInvoked( true);
 
+    TpAccountChannelRequest* pChannelRequest = TP_ACCOUNT_CHANNEL_REQUEST( pSourceObject);
     GError* pError = NULL;
     TpChannel * pChannel = tp_account_channel_request_create_and_handle_channel_finish(
-            TP_ACCOUNT_CHANNEL_REQUEST( pSourceObject), pResult, NULL, &pError);
+            pChannelRequest, pResult, NULL, &pError);
     if (!pChannel)
     {
         // "account isn't Enabled" means just that..
@@ -183,7 +195,8 @@ static void TeleManager_ChannelReadyHandler(
         return;
     }
 
-    pConference->setChannel( pChannel);
+    pConference->setChannel( tp_account_channel_request_get_account( pChannelRequest),
+            pChannel);
     pConference->offerTube();
 }
 
@@ -400,7 +413,7 @@ bool TeleManager::startBuddySession( TpAccount *pAccount, TpContact *pBuddy )
 
     OString aSessionId( TeleManager::createUuid());
 
-    TeleConferencePtr pConference( new TeleConference( this, NULL, aSessionId));
+    TeleConferencePtr pConference( new TeleConference( this, NULL, NULL, aSessionId));
     maConferences.push_back( pConference);
 
     /* TODO: associate the document with this session and conference */
@@ -606,7 +619,7 @@ void TeleManager::disconnect()
 }
 
 
-void TeleManager::acceptTube( TpChannel* pChannel, const char* pAddress )
+void TeleManager::acceptTube( TpAccount* pAccount, TpChannel* pChannel, const char* pAddress )
 {
     INFO_LOGGER( "TeleManager::acceptTube");
 
@@ -618,7 +631,7 @@ void TeleManager::acceptTube( TpChannel* pChannel, const char* pAddress )
     if (!pChannel || !pAddress)
         return;
 
-    TeleConferencePtr pConference( new TeleConference( this, pChannel, ""));
+    TeleConferencePtr pConference( new TeleConference( this, pAccount, pChannel, ""));
     maConferences.push_back( pConference);
     pConference->acceptTube( pAddress);
 }

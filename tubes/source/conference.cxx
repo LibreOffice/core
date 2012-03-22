@@ -210,16 +210,20 @@ static void TeleConference_TubeChannelStateChangedHandler(
 }
 
 
-TeleConference::TeleConference( TeleManager* pManager, TpChannel* pChannel, const rtl::OString& rSessionId )
+TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpChannel* pChannel, const rtl::OString& rSessionId )
     :
         maSessionId( rSessionId ),
         mpManager( pManager),
+        mpAccount( pAccount),
         mpChannel( pChannel),
         mpTube( NULL),
         meTubeChannelState( TP_TUBE_CHANNEL_STATE_NOT_OFFERED),
         mbTubeOfferedHandlerInvoked( false),
         mbTubeChannelStateChangedHandlerInvoked( false)
 {
+    if (mpAccount)
+        g_object_ref( mpAccount);
+
     if (mpChannel)
         g_object_ref( mpChannel);
 }
@@ -231,14 +235,21 @@ TeleConference::~TeleConference()
 }
 
 
-void TeleConference::setChannel( TpChannel* pChannel )
+void TeleConference::setChannel( TpAccount *pAccount, TpChannel* pChannel )
 {
     OSL_ENSURE( !mpChannel, "TeleConference::setChannel: already have channel");
     if (mpChannel)
         g_object_unref( mpChannel);
+    if (mpAccount)
+        g_object_unref( mpAccount);
+
     mpChannel = pChannel;
     if (mpChannel)
         g_object_ref( mpChannel);
+
+    mpAccount = pAccount;
+    if (mpAccount)
+        g_object_ref( mpAccount);
 }
 
 
@@ -366,6 +377,12 @@ void TeleConference::finalize()
     {
         g_object_unref( mpChannel);
         mpChannel = NULL;
+    }
+
+    if (mpAccount)
+    {
+        g_object_unref( mpAccount);
+        mpAccount = NULL;
     }
 
     if (mpTube)

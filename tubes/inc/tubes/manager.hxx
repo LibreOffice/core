@@ -120,7 +120,7 @@ public:
 
     void                    disconnect();
 
-    void                    acceptTube( TpChannel* pChannel, const char* pAddress );
+    void                    acceptTube( TpAccount* pAccount, TpChannel* pChannel, const char* pAddress );
 
     /** Send data to all registered conferences.
 
