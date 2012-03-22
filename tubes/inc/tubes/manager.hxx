@@ -105,15 +105,13 @@ public:
 
     /** Start a session with a buddy.
 
-        @param rAccount
-            The account (JID) to use. This must be a valid JID that has been
-            setup with Empathy or another Telepathy client providing
-            Jabber/XMPP.
+        @param pAccount
+            The account to use. This must be a valid Jabber account.
 
-        @param rBuddy
+        @param pBuddy
             The buddy to be connected. Must be a contact of rAccount.
      */
-    bool                    startBuddySession( TpAccount *pAccount, const rtl::OString& rBuddy );
+    bool                    startBuddySession( TpAccount *pAccount, TpContact *pBuddy);
 
     void                    unregisterConference( TeleConferencePtr pConference );
 

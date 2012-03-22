@@ -224,8 +224,10 @@ void TestTeleTubes::testPrepareAccountManager2()
 void TestTeleTubes::testStartBuddySession1()
 {
     TpAccount *pAcc1 = mpManager1->getAccount(maOffererIdentifier);
-    CPPUNIT_ASSERT ( pAcc1 != 0);
-    bool bStarted = mpManager1->startBuddySession( pAcc1, maAccepterIdentifier);
+    CPPUNIT_ASSERT( pAcc1 != 0);
+    /* This has to run after testContactList has run successfully. */
+    CPPUNIT_ASSERT( mpAccepterContact != 0);
+    bool bStarted = mpManager1->startBuddySession( pAcc1, mpAccepterContact);
     CPPUNIT_ASSERT( bStarted == true);
 }
 

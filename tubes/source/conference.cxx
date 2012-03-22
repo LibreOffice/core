@@ -231,12 +231,6 @@ TeleConference::~TeleConference()
 }
 
 
-void TeleConference::setTarget( const rtl::OString& rTarget )
-{
-    maTarget = rTarget;
-}
-
-
 void TeleConference::setChannel( TpChannel* pChannel )
 {
     OSL_ENSURE( !mpChannel, "TeleConference::setChannel: already have channel");

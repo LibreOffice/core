@@ -71,8 +71,6 @@ public:
     // --- following only to be called only by manager's callbacks ---
     // TODO: make friends instead
 
-    /// "buddy@jabber.example.org" or "room@conference.example.org" or "UUID"
-    void                    setTarget( const rtl::OString& rTarget );
     void                    setChannel( TpChannel* pChannel );
     TpChannel*              getChannel() const  { return mpChannel; }
     bool                    offerTube();
@@ -92,7 +90,6 @@ public:
 
 private:
 
-    rtl::OString            maTarget;
     rtl::OString            maSessionId;
     TeleManager*            mpManager;
     TpChannel*              mpChannel;
