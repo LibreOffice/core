@@ -56,6 +56,11 @@
 #include <ole2.h>   // for _beginthreadex
 #endif
 
+#ifdef ANDROID
+#include <cppuhelper/bootstrap.hxx>
+#include <jni.h>
+#endif
+
 // [ed 5/14/02 Add in explicit check for quartz graphics.  OS X will define
 // unx for both quartz and X11 graphics, but we include svunx.h only if we're
 // building X11 graphics layers.
@@ -326,6 +331,23 @@ sal_Bool InitVCL( const ::com::sun::star::uno::Reference< ::com::sun::star::lang
 
     return sal_True;
 }
+
+#ifdef ANDROID
+
+extern "C" __attribute__ ((visibility("default"))) void
+InitVCLWrapper()
+{
+    uno::Reference<uno::XComponentContext> xContext( cppu::defaultBootstrap_InitialComponentContext() );
+    uno::Reference<lang::XMultiComponentFactory> xFactory( xContext->getServiceManager() );
+
+    uno::Reference<lang::XMultiServiceFactory> xSM( xFactory, uno::UNO_QUERY_THROW );
+
+    comphelper::setProcessServiceFactory( xSM );
+
+    InitVCL( xSM );
+}
+
+#endif
 
 namespace
 {
