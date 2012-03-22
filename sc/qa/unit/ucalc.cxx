@@ -59,6 +59,7 @@
 #include "dpshttab.hxx"
 #include "dpobject.hxx"
 #include "dpsave.hxx"
+#include "dpdimsave.hxx"
 #include "dpcache.hxx"
 
 #include "formula/IFunctionDescription.hxx"
@@ -159,6 +160,8 @@ public:
      */
     void testPivotTableDuplicateDataFields();
 
+    void testPivotTableNormalGrouping();
+
     void testSheetCopy();
     void testSheetMove();
     void testExternalRef();
@@ -215,6 +218,7 @@ public:
     CPPUNIT_TEST(testPivotTableNamedSource);
     CPPUNIT_TEST(testPivotTableCache);
     CPPUNIT_TEST(testPivotTableDuplicateDataFields);
+    CPPUNIT_TEST(testPivotTableNormalGrouping);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -1289,6 +1293,25 @@ ScDPObject* createDPFromRange(
     return createDPFromSourceDesc(pDoc, aSheetDesc, aFields, nFieldCount, bFilterButton);
 }
 
+ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
+{
+    // We need to first create group data in the cache, then the group data in
+    // the object.
+    std::set<ScDPObject*> aRefs;
+    bool bSuccess = pDPs->ReloadGroupsInCache(pDPObj, aRefs);
+    CPPUNIT_ASSERT_MESSAGE("Failed to reload group data in cache.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("There should be only one table linked to this cache.", aRefs.size() == 1);
+    pDPObj->ReloadGroupTableData();
+
+    bool bOverFlow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
+
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+    return aOutRange;
+}
+
 class AutoCalcSwitch
 {
     ScDocument* mpDoc;
@@ -2083,7 +2106,6 @@ void Test::testPivotTableDuplicateDataFields()
     CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
-    pDPObj->GetSource();
 
     bool bOverFlow = false;
     ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
@@ -2140,6 +2162,157 @@ void Test::testPivotTableDuplicateDataFields()
                            aParam.maLabelArray.size() == 4);
 
     pDPs->FreeTable(pDPObj);
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableNormalGrouping()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Name", "Value" },
+        { "A", "1" },
+        { "B", "2" },
+        { "C", "3" },
+        { "D", "4" },
+        { "E", "5" },
+        { "F", "6" },
+        { "G", "7" }
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Name",  sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    bool bOverFlow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
+
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][2] = {
+            { "Name", 0 },
+            { "A", "1" },
+            { "B", "2" },
+            { "C", "3" },
+            { "D", "4" },
+            { "E", "5" },
+            { "F", "6" },
+            { "G", "7" },
+            { "Total Result", "28" }
+        };
+
+        bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Initial output without grouping");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("No save data !?", pSaveData);
+    ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
+    CPPUNIT_ASSERT_MESSAGE("Failed to create dimension data.", pDimData);
+
+    rtl::OUString aGroupPrefix(RTL_CONSTASCII_USTRINGPARAM("Group"));
+    rtl::OUString aBaseDimName(RTL_CONSTASCII_USTRINGPARAM("Name"));
+    rtl::OUString aGroupDimName =
+        pDimData->CreateGroupDimName(aBaseDimName, *pDPObj, false, NULL);
+
+    {
+        // Group A, B and C together.
+        ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
+        rtl::OUString aGroupName = aGroupDim.CreateGroupName(aGroupPrefix);
+        CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName.equalsAscii("Group1"));
+
+        ScDPSaveGroupItem aGroup(aGroupName);
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("A")));
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("B")));
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("C")));
+        aGroupDim.AddGroupItem(aGroup);
+        pDimData->AddGroupDimension(aGroupDim);
+
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aGroupDimName);
+        pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
+        pSaveData->SetPosition(pDim, 0); // Set it before the base dimension.
+    }
+
+    pDPObj->SetSaveData(*pSaveData);
+    aOutRange = refreshGroups(pDPs, pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Name2", "Name", 0 },
+            { "D", "D", "4" },
+            { "E", "E", "5" },
+            { "F", "F", "6" },
+            { "G", "G", "7" },
+            { "Group1", "A", "1" },
+            { 0,        "B", "2" },
+            { 0,        "C", "3" },
+            { "Total Result", 0, "28" }
+        };
+
+        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "A, B, C grouped by Group1.");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    pSaveData = pDPObj->GetSaveData();
+    pDimData = pSaveData->GetDimensionData();
+
+    {
+        // Group D, E, F together.
+        ScDPSaveGroupDimension* pGroupDim = pDimData->GetGroupDimAccForBase(aBaseDimName);
+        CPPUNIT_ASSERT_MESSAGE("There should be an existing group dimension.", pGroupDim);
+        rtl::OUString aGroupName = pGroupDim->CreateGroupName(aGroupPrefix);
+        CPPUNIT_ASSERT_MESSAGE("Unexpected group name", aGroupName.equalsAscii("Group2"));
+
+        ScDPSaveGroupItem aGroup(aGroupName);
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("D")));
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("E")));
+        aGroup.AddElement(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("F")));
+        pGroupDim->AddGroupItem(aGroup);
+    }
+
+    pDPObj->SetSaveData(*pSaveData);
+    aOutRange = refreshGroups(pDPs, pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][3] = {
+            { "Name2", "Name", 0 },
+            { "G", "G", "7" },
+            { "Group1", "A", "1" },
+            { 0,        "B", "2" },
+            { 0,        "C", "3" },
+            { "Group2", "D", "4" },
+            { 0,        "E", "5" },
+            { 0,        "F", "6" },
+            { "Total Result", 0, "28" }
+        };
+
+        bSuccess = checkDPTableOutput<3>(m_pDoc, aOutRange, aOutputCheck, "D, E, F grouped by Group2.");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
