@@ -309,9 +309,10 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                 ScTokenPtrMap::iterator tokenIter = pCol->begin();
                 for (SCROW nRow = 0; !bFoundValues && nRow < nSmallestValueRowIndex; ++nRow)
                 {
-                    if (tokenIter != pCol->end() && nRow>=nHeaderRowCount)
+                    ScToken* pToken =
+                        tokenIter == pCol->end() ? 0 : tokenIter->second;
+                    if (pToken && nRow>=nHeaderRowCount)
                     {
-                        ScToken* pToken = tokenIter->second;
                         ScRange aRange;
                         bool bExternal = false;
                         StackVar eType = pToken->GetType();
