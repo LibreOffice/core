@@ -463,17 +463,17 @@ sub get_downloadname_productname
 {
     my ($allvariables) = @_;
 
-    my $start = "OOo";
+    my $start = "Apache_OpenOffice_incubating";
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "OpenOffice.org" ) { $start = "OOo"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "OpenOffice.org" ) { $start .= ""; }
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "OOo-dev" ) { $start = "OOo-Dev"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "OOo-dev" ) { $start .= "-Dev"; }
 
-    if (( $allvariables->{'PRODUCTNAME'} eq "OpenOffice.org" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "OOo-SDK"; }
+    if (( $allvariables->{'PRODUCTNAME'} eq "OpenOffice.org" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start .= "-SDK"; }
 
-    if (( $allvariables->{'PRODUCTNAME'} eq "OOo-dev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start = "OOo-Dev-SDK"; }
+    if (( $allvariables->{'PRODUCTNAME'} eq "OOo-dev" ) && ( $allvariables->{'POSTVERSIONEXTENSION'} eq "SDK" )) { $start .= "-Dev-SDK"; }
 
-    if ( $allvariables->{'PRODUCTNAME'} eq "URE" ) { $start = "OOo-URE"; }
+    if ( $allvariables->{'PRODUCTNAME'} eq "URE" ) { $start .= "-URE"; }
 
     return $start;
 }
@@ -1879,7 +1879,7 @@ sub create_link_tree
 {
     my ($sourcedownloadfile, $destfilename, $versionstring) = @_;
 
-    if ( ! $installer::globals::ooouploaddir ) { installer::exiter::exit_program("ERROR: Directory for OOo upload not defined!", "create_link_tree"); }
+    if ( ! $installer::globals::ooouploaddir ) { installer::exiter::exit_program("ERROR: Directory for AOO upload not defined!", "create_link_tree"); }
     my $versiondir = $installer::globals::ooouploaddir . $installer::globals::separator . $versionstring;
     my $infoline = "Directory for the link: $versiondir\n";
     push(@installer::globals::logfileinfo, $infoline);
@@ -2096,7 +2096,7 @@ sub create_download_sets
 }
 
 ####################################################
-# Creating OOo upload tree
+# Creating AOO upload tree
 ####################################################
 
 sub create_download_link_tree
