@@ -50,29 +50,38 @@ public class DocumentLoader
 
             Bootstrap.setup(this);
 
-            Bootstrap.dlopen("libjuh.so");
-
-            // Load more shlibs here explicitly in advance because
-            // that makes debugging work better, sigh
-            Bootstrap.dlopen("libuno_cppu.so");
-            Bootstrap.dlopen("libuno_salhelpergcc3.so");
-            Bootstrap.dlopen("libuno_cppuhelpergcc3.so");
-            Bootstrap.dlopen("libbootstrap.uno.so");
-            Bootstrap.dlopen("libgcc3_uno.so");
-            Bootstrap.dlopen("libjava_uno.so");
+            // Load a lot of shlibs here explicitly in advance because that
+            // makes debugging work better, sigh
+            Bootstrap.dlopen("libvcllo.so");
             
-            Bootstrap.putenv("UNO_TYPES=file:///assets/bin/udkapi.rdb file:///assets/bin/types.rdb");
-            Bootstrap.putenv("UNO_SERVICES=file:///assets/xml/ure/services.rdb");
-            // Bootstrap.putenv("INIFILENAME=vnd.sun.star.pathname:/assets/uno.ini");
-
             com.sun.star.uno.XComponentContext xContext = null;
 
             xContext = com.sun.star.comp.helper.Bootstrap.defaultBootstrap_InitialComponentContext();
 
             Log.i(TAG, "xContext is" + (xContext!=null ? " not" : "") + " null");
 
+            Log.i(TAG, "Sleeping NOW");
+            Thread.sleep(20000);
+
             com.sun.star.lang.XMultiComponentFactory xMCF =
                 xContext.getServiceManager();
+
+            Log.i(TAG, "xMCF is" + (xMCF!=null ? " not" : "") + " null");
+
+            String input = getIntent().getStringExtra("input");
+            if (input == null)
+                input = "/assets/test1.odt";
+
+            // We need to fake up abn argv, and the argv[0] even needs to
+            // point to some file name that we can pretend is the "program".
+            // setCommandArgs() will prefix argv[0] with the app's data
+            // directory.
+
+            String[] argv = { "lo-document-loader", input };
+
+            Bootstrap.setCommandArgs(argv);
+
+            Bootstrap.initVCL();
 
             Object oDesktop = xMCF.createInstanceWithContext(
                 "com.sun.star.frame.Desktop", xContext);
@@ -86,18 +95,14 @@ public class DocumentLoader
 
             Log.i(TAG, "xCompLoader is" + (xCompLoader!=null ? " not" : "") + " null");
 
-            String input = getIntent().getStringExtra("input");
-            if (input == null)
-                input = "/assets/test1.odt";
-
-            String sUrl = "file://" + input;
-
             // Loading the wanted document
             com.sun.star.beans.PropertyValue propertyValues[] =
                 new com.sun.star.beans.PropertyValue[1];
             propertyValues[0] = new com.sun.star.beans.PropertyValue();
             propertyValues[0].Name = "Hidden";
             propertyValues[0].Value = new Boolean(true);
+
+            String sUrl = "file://" + input;
 
             Object oDoc =
                 xCompLoader.loadComponentFromURL
