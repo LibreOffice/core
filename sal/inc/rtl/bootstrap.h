@@ -118,8 +118,8 @@ extern "C" {
 
     <p>
     Must be called before rtl_bootstrap_get(). May not be called twice.
-    If it is never called, a the filename executable.ini (win)
-    or execuablerc (unx) is assumed.
+    If it is never called, the filename is based on the name of the executable,
+    with the suffix ".ini" on Windows or "rc" on Unix.
 
     @param pFileUri URL of the ini file; must not be null, must not be the empty
     string
