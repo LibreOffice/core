@@ -256,13 +256,8 @@ typedef void *                   sal_Handle;
 #endif // defined(_MSC_VER)
 #   define SAL_DLLPRIVATE
 #   define SAL_DLLPUBLIC_TEMPLATE
-#if defined(_MSC_VER)
 #   define SAL_CALL         __cdecl
 #   define SAL_CALL_ELLIPSE __cdecl
-#else
-#   define SAL_CALL
-#   define SAL_CALL_ELLIPSE
-#endif
 #elif defined SAL_UNX
 #   if   defined(__SUNPRO_CC) && (__SUNPRO_CC >= 0x550)
 #     define SAL_DLLPUBLIC_EXPORT  __global
