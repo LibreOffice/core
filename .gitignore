@@ -130,3 +130,6 @@ test/user-template/user/psprint/pspfontcache
 # Somepeople love debugging
 gdbtrace.log
 valgrind.log
+
+# Tubes test stuff
+/tubes/qa/test-config.ini

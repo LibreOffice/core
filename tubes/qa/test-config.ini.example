@@ -1,0 +1,5 @@
+# Locally-configured Jabber accounts used by Tubes test suite.  These accounts
+# must both be signed in and on each others' contact lists for the tests to
+# work.
+offerer=libo1@localhost.localdomain
+accepter=libo2@localhost.localdomain

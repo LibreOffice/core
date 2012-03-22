@@ -37,12 +37,10 @@ Status 2012-03-20:
     is silenced down ... :-(
 
 * for the cppunittest needed:
-  * a jabber daemon running on localhost.localdomain
-  * two accounts configured in Empathy
-    * libo1@localhost.localdomain
-    * libo2@localhost.localdomain
-  * libo1 and libo2 must be contacts/buddies of each other
-  * both accounts need to be online in Empathy
+  * Configure two Jabber accounts in Empathy
+  * Both must be online and on each other's contact list
+  * Copy qa/test-config.ini.example to qa/test-config.ini, and specify those
+    two accounts' JIDs in it.
 
 * very nasty GMainLoop handling for cppunittest, HOPEFULLY we will get rid of
   that in a real LibO

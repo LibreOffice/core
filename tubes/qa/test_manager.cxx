@@ -88,6 +88,7 @@ public:
 private:
 // XXX The Jabber accounts specified in test-config.ini need to be setup in
 // Empathy, enabled, connected, and on each other's rosters.
+    rtl::OUString             maTestConfigIniURL;
     rtl::Bootstrap            maTestConfig;
 
     rtl::OUString             maAcc1;
@@ -101,12 +102,15 @@ static TeleManager* mpManager2 = NULL;
 static sal_uInt32 nSentPackets = 0;
 
 TestTeleTubes::TestTeleTubes()
-    : maTestConfig(getURLFromSrc("/tubes/test-config.ini"))
+    : maTestConfigIniURL(getURLFromSrc("/tubes/qa/test-config.ini")),
+      maTestConfig(maTestConfigIniURL)
 {
     TeleManager::addSuffixToNames( "TeleTest");
 
-    CPPUNIT_ASSERT( maTestConfig.getFrom("offerer", maAcc1));
-    CPPUNIT_ASSERT( maTestConfig.getFrom("accepter", maAcc2));
+    CPPUNIT_ASSERT_MESSAGE( "See README for how to set up test-config.ini",
+        maTestConfig.getFrom("offerer", maAcc1));
+    CPPUNIT_ASSERT_MESSAGE( "See README for how to set up test-config.ini",
+        maTestConfig.getFrom("accepter", maAcc2));
 }
 
 TestTeleTubes::~TestTeleTubes()
