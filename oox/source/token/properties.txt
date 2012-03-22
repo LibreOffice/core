@@ -498,6 +498,7 @@ VerticalAlign
 VerticalSplitMode
 VerticalSplitPositionTwips
 VertOrientPosition
+VertOrientRelation
 ViewBox
 Visible
 VisibleFlag

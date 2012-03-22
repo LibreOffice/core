@@ -156,7 +156,7 @@ inline sal_Int64 convertHmmToEmu( sal_Int32 nValue )
 /** Converts the passed 64-bit integer value from EMUs to 1/100 mm. */
 inline sal_Int32 convertEmuToHmm( sal_Int64 nValue )
 {
-    return getLimitedValue< sal_Int32, sal_Int64 >( (nValue + EMU_PER_HMM / 2) / EMU_PER_HMM, 0, SAL_MAX_INT32 );
+    return getLimitedValue< sal_Int32, sal_Int64 >( (nValue + EMU_PER_HMM / 2) / EMU_PER_HMM, SAL_MIN_INT32, SAL_MAX_INT32 );
 }
 
 // ============================================================================

@@ -42,6 +42,7 @@
 #include <com/sun/star/text/XTextContent.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextFrame.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "oox/drawingml/shapepropertymap.hxx"
@@ -59,6 +60,7 @@
 using ::com::sun::star::beans::XPropertySet;
 using ::com::sun::star::uno::Any;
 
+using namespace ::com::sun::star;
 using namespace ::com::sun::star::text;
 
 namespace oox {
@@ -524,10 +526,20 @@ Reference< XShape > ComplexShape::implConvertAndInsert( const Reference< XShapes
         if( xShape.is() )
         {
             OUString aGraphicUrl = rFilter.getGraphicHelper().importEmbeddedGraphicObject( aGraphicPath );
+            PropertySet aPropSet( xShape );
             if( !aGraphicUrl.isEmpty() )
             {
-                PropertySet aPropSet( xShape );
                 aPropSet.setProperty( PROP_GraphicURL, aGraphicUrl );
+            }
+            // If the shape has an absolute position, set the properties accordingly.
+            if (maTypeModel.maPosition.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("absolute")))
+            {
+                aPropSet.setProperty(PROP_HoriOrientPosition, rShapeRect.X);
+                aPropSet.setProperty(PROP_VertOrientPosition, rShapeRect.Y);
+            }
+            if (maTypeModel.maPositionVerticalRelative.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("page")))
+            {
+                aPropSet.setProperty(PROP_VertOrientRelation, text::RelOrientation::PAGE_FRAME);
             }
         }
         return xShape;
