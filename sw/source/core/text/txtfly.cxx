@@ -1378,7 +1378,14 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
 
     const SwSortedObjs *pSorted = pPage->GetSortedObjs();
     const sal_uInt32 nCount = pSorted ? pSorted->Count() : 0;
-    const sal_Bool bWrapAllowed = !SwLayouter::FrmNotToWrap( *pCurrFrm->GetTxtNode()->getIDocumentLayoutAccess(), *pCurrFrm );
+    // --> #108724# Page header/footer content doesn't have to wrap around
+    //              floating screen objects
+    const bool bFooterHeader = 0 != pCurrFrm->FindFooterOrHeader();
+    const IDocumentSettingAccess* pIDSA = pCurrFrm->GetTxtNode()->getIDocumentSettingAccess();
+    // #i40155# - check, if frame is marked not to wrap
+    const sal_Bool bWrapAllowed = ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) ||
+                                    ( !pCurrFrm->IsInFtn() && !bFooterHeader ) ) &&
+                                      !SwLayouter::FrmNotToWrap( *pCurrFrm->GetTxtNode()->getIDocumentLayoutAccess(), *pCurrFrm );
 
     bOn = sal_False;
 
@@ -1390,7 +1397,6 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
         // #i28701# - consider complete frame area for new
         // text wrapping
         SwRect aRect;
-        const IDocumentSettingAccess* pIDSA = pCurrFrm->GetTxtNode()->getIDocumentSettingAccess();
         if ( pIDSA->get(IDocumentSettingAccess::USE_FORMER_TEXT_WRAPPING) )
         {
             aRect = pCurrFrm->Prt();
@@ -1406,7 +1412,6 @@ SwAnchoredObjList* SwTxtFly::InitAnchoredObjList()
         const long nRight = (aRect.*fnRect->fnGetRight)() - 1;
         const long nLeft = (aRect.*fnRect->fnGetLeft)() + 1;
         const sal_Bool bR2L = pCurrFrm->IsRightToLeft();
-        const bool bFooterHeader = ( pCurrFrm->FindFooterOrHeader() != NULL );
 
         const IDocumentDrawModelAccess* pIDDMA = pCurrFrm->GetTxtNode()->getIDocumentDrawModelAccess();
 
