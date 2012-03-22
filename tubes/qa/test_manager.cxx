@@ -59,6 +59,7 @@ public:
     void testStartBuddySession2();
     void testSendPacket();
     void testReceivePacket();
+    void testSendFile();
     void testFlushLoops();
     void testDestroyManager1();
     void testDestroyManager2();
@@ -81,6 +82,7 @@ public:
     CPPUNIT_TEST( testStartBuddySession2 );
     CPPUNIT_TEST( testSendPacket );
     CPPUNIT_TEST( testReceivePacket );
+    CPPUNIT_TEST( testSendFile );
     CPPUNIT_TEST( testFlushLoops );
     CPPUNIT_TEST( testDestroyManager1 );
     CPPUNIT_TEST( testDestroyManager2 );
@@ -283,6 +285,25 @@ void TestTeleTubes::testReceivePacket()
             mpManager1->iterateLoop();
     } while (nReceivedPackets < nSentPackets);
     CPPUNIT_ASSERT( nReceivedPackets == nSentPackets);
+}
+
+static void TestTeleTubes_FileSent( bool success, void *user_data)
+{
+    TestTeleTubes *self = reinterpret_cast<TestTeleTubes *>(user_data);
+
+    CPPUNIT_ASSERT( success);
+    g_main_loop_quit (self->mpMainLoop);
+}
+
+void TestTeleTubes::testSendFile()
+{
+    TpAccount *pAcc1 = mpManager1->getAccount(maOffererIdentifier);
+    CPPUNIT_ASSERT( pAcc1 != 0);
+    /* This has to run after testContactList has run successfully. */
+    CPPUNIT_ASSERT( mpAccepterContact != 0);
+    mpManager1->sendFile( maTestConfigIniURL,
+        TestTeleTubes_FileSent, this);
+    spinMainLoop();
 }
 
 void TestTeleTubes::testFlushLoops()

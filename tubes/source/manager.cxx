@@ -591,6 +591,17 @@ bool TeleManager::popPacket( TelePacket& rPacket )
     return false;
 }
 
+void TeleManager::sendFile( rtl::OUString &localUri, TeleConference::FileSentCallback pCallback, void* pUserData)
+{
+    INFO_LOGGER( "TeleManager::sendFile");
+
+    /* TODO: pluralize */
+    for (TeleConferenceVector::const_iterator it = maConferences.begin(); it != maConferences.end(); ++it)
+    {
+        (*it)->sendFile( localUri, pCallback, pUserData);
+        return;
+    }
+}
 
 void TeleManager::unregisterConference( TeleConferencePtr pConference )
 {

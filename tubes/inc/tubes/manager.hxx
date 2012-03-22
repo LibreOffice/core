@@ -138,6 +138,8 @@ public:
      */
     bool                    popPacket( TelePacket& rPacket );
 
+    void                    sendFile( rtl::OUString &localUri, TeleConference::FileSentCallback pCallback, void* pUserData);
+
     /// Only for use with MainLoopFlusher
     GMainLoop*              getMainLoop() const;
 

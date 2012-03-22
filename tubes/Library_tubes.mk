@@ -61,4 +61,8 @@ $(eval $(call gb_Library_add_exception_objects,tubes,\
 	tubes/source/contact-list \
 ))
 
+$(eval $(call gb_Library_add_cobjects,tubes,\
+	tubes/source/file-transfer-helper \
+))
+
 # vim:set shiftwidth=4 tabstop=4 noexpandtab: */

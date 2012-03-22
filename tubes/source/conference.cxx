@@ -445,6 +445,82 @@ void TeleConference::queue( const char* pDBusSender, const char* pPacketData, in
 }
 
 
+class SendFileRequest {
+public:
+    SendFileRequest( TeleConference *pSelf,
+        TeleConference::FileSentCallback pCallback, void* pUserData)
+        : mpSelf(pSelf)
+        , mpCallback(pCallback)
+        , mpUserData(pUserData) {};
+
+    /* FIXME: make a shared pointer? */
+    TeleConference*                     mpSelf;
+    TeleConference::FileSentCallback    mpCallback;
+    void*                               mpUserData;
+};
+
+static void TeleConference_TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer user_data)
+{
+    SendFileRequest *request = reinterpret_cast<SendFileRequest *>(user_data);
+
+    request->mpCallback(true, request->mpUserData);
+    delete request;
+    g_object_unref (handler);
+}
+
+static void TeleConference_TransferError( EmpathyFTHandler *handler, const GError *error, gpointer user_data)
+{
+    SendFileRequest *request = reinterpret_cast<SendFileRequest *>(user_data);
+
+    SAL_INFO( "tubes", "TeleConference_TransferError: " << error->message);
+
+    request->mpCallback(false, request->mpUserData);
+    delete request;
+    g_object_unref (handler);
+}
+
+static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gpointer user_data)
+{
+    SendFileRequest *request = reinterpret_cast<SendFileRequest *>(user_data);
+
+    if ( error != 0 )
+    {
+        request->mpCallback(error == 0, request->mpUserData);
+        delete request;
+        g_object_unref (handler);
+    }
+    else
+    {
+        g_signal_connect(handler, "transfer-done",
+            G_CALLBACK (TeleConference_TransferDone), request);
+        g_signal_connect(handler, "transfer-error",
+            G_CALLBACK (TeleConference_TransferError), request);
+        empathy_ft_handler_start_transfer(handler);
+    }
+}
+
+
+void TeleConference::sendFile( rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData)
+{
+    INFO_LOGGER( "TeleConference::sendFile");
+
+    SAL_WARN_IF( ( !mpAccount || !mpChannel), "tubes",
+        "can't send a file before the tube is set up");
+    if ( !mpAccount || !mpChannel)
+        return;
+
+    GFile *pSource = g_file_new_for_uri(
+        OUStringToOString( localUri, RTL_TEXTENCODING_UTF8).getStr() );
+    SendFileRequest *pReq = new SendFileRequest( this, pCallback, pUserData);
+
+    empathy_ft_handler_new_outgoing( mpAccount,
+        tp_channel_get_target_contact( mpChannel),
+        pSource,
+        0,
+        &TeleConference_FTReady, pReq);
+}
+
+
 bool TeleConference::popPacket( TelePacket& rPacket )
 {
     INFO_LOGGER( "TeleConference::popPacket");

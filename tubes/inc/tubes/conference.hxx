@@ -31,8 +31,10 @@
 
 #include <sal/config.h>
 #include "tubes/packet.hxx"
+#include "tubes/file-transfer-helper.h"
 #include <boost/shared_ptr.hpp>
 #include <boost/enable_shared_from_this.hpp>
+#include <rtl/ustring.hxx>
 #include <telepathy-glib/telepathy-glib.h>
 #include <dbus/dbus-glib-lowlevel.h>
 #include <queue>
@@ -67,6 +69,10 @@ public:
 
     /** Queue incoming data as TelePacket */
     void                    queue( const char* pDBusSender, const char* pPacket, int nSize );
+
+
+    typedef void          (*FileSentCallback)( bool aSuccess, void* pUserData);
+    void                    sendFile( rtl::OUString &localUri, FileSentCallback pCallback, void* pUserData);
 
     // --- following only to be called only by manager's callbacks ---
     // TODO: make friends instead
