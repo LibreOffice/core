@@ -34,6 +34,14 @@
 #include "docsh.hxx"
 #include "docfunc.hxx"
 
+// new file send/recv fun ...
+#include <unotools/tempfile.hxx>
+#include <unotools/localfilehelper.hxx>
+#include <comphelper/mediadescriptor.hxx>
+#include <com/sun/star/document/XDocumentRecovery.hpp>
+
+namespace css = ::com::sun::star;
+
 namespace {
 
 rtl::OUString cellToString( ScBaseCell *pCell )
@@ -282,6 +290,32 @@ class ScDocFuncSend : public ScDocFunc
         mpChain->RecvMessage( rOp.toString() );
     }
 
+    void SendFile( const rtl::OUString &rURL )
+    {
+        (void)rURL;
+
+        String aTmpPath = utl::TempFile::CreateTempName();
+        aTmpPath.Append( rtl::OUString( ".ods" ) );
+
+        rtl::OUString aFileURL;
+        ::utl::LocalFileHelper::ConvertPhysicalNameToURL( aTmpPath, aFileURL );
+
+        ::comphelper::MediaDescriptor aDescriptor;
+        // some issue with hyperlinks:
+        aDescriptor[::comphelper::MediaDescriptor::PROP_DOCUMENTBASEURL()] <<= ::rtl::OUString();
+        try {
+            css::uno::Reference< css::document::XDocumentRecovery > xDocRecovery(
+                        rDocShell.GetBaseModel(), css::uno::UNO_QUERY_THROW);
+
+            xDocRecovery->storeToRecoveryFile( aFileURL, aDescriptor.getAsConstPropertyValueList() );
+        } catch (const css::uno::Exception &ex) {
+            fprintf( stderr, "exception foo !\n" );
+        }
+
+        fprintf( stderr, "Temp file is '%s'\n",
+                 rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+}
+
 public:
     // FIXME: really ScDocFunc should be an abstract base, so
     // we don't need the rDocSh hack/pointer
@@ -314,6 +348,10 @@ public:
         aOp.appendString( rText );
         aOp.appendBool( bApi );
         SendMessage( aOp );
+
+        if ( rtl::OUString( rText ) == "saveme" )
+            SendFile( rText );
+
         return true; // needs some code auditing action
     }
 

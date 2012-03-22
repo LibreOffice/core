@@ -58,7 +58,7 @@ class ScConditionalFormat;
 
 class ScDocFunc
 {
-private:
+protected:
     ScDocShell&        rDocShell;
 
     sal_Bool        AdjustRowHeight( const ScRange& rRange, sal_Bool bPaint = true );
@@ -68,7 +68,6 @@ private:
                                     sal_Bool& rCancel, sal_Bool bApi );
     void            NotifyInputHandler( const ScAddress& rPos );
 
-protected:
                         ScDocFunc( ScDocShell& rDocSh ): rDocShell(rDocSh) {}
 public:
     virtual             ~ScDocFunc() {}
