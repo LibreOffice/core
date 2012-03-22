@@ -62,6 +62,7 @@ public:
     void testFlushLoops();
     void testDestroyManager1();
     void testDestroyManager2();
+    void testDestroyAccepterContact();
     void testFailAlways();
 
     GMainLoop*                  mpMainLoop;
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST( testFlushLoops );
     CPPUNIT_TEST( testDestroyManager1 );
     CPPUNIT_TEST( testDestroyManager2 );
+    CPPUNIT_TEST( testDestroyAccepterContact );
     CPPUNIT_TEST( testFailAlways );     // need failure to display SAL_LOG, comment out for real builds
     CPPUNIT_TEST_SUITE_END();
 
@@ -98,6 +100,8 @@ private:
 // static, not members, so they actually survive cppunit test iteration
 static TeleManager* mpManager1 = NULL;
 static TeleManager* mpManager2 = NULL;
+
+static TpContact*   mpAccepterContact = NULL;
 
 static sal_uInt32 nSentPackets = 0;
 
@@ -159,18 +163,38 @@ void TestTeleTubes::testContactList()
     pairs = cl.getContacts();
     guint i;
 
-    CPPUNIT_ASSERT( pairs.size() > 0 );
+    /* FIXME: this is racy, because we can't be 100% sure that MC has finished
+     * discovering what we support and passing that on to the connection
+     * manager...
+     */
+
+    /* Both our accounts are meant to be signed in, and they both should be
+     * capable of LibreOffice tubes because this test runs after we register
+     * our handler. */
+    CPPUNIT_ASSERT_MESSAGE(
+        "Make sure both your test accounts are signed in "
+        "and are on each other's contact lists",
+        pairs.size() > 0 );
+    CPPUNIT_ASSERT(!mpAccepterContact);
 
     for (i = 0; i < pairs.size(); i++)
     {
         AccountContactPair pair = pairs[i];
-        g_print ("Account %s; contact %s (%s)\n",
-            tp_account_get_display_name (pair.first),
-            tp_contact_get_alias (pair.second),
-            tp_contact_get_identifier (pair.second));
+
+        /* FIXME: verify that pair.first is the offerer account */
+        if (tp_contact_get_identifier(pair.second) == maAccepterIdentifier) {
+            mpAccepterContact = pair.second;
+            g_object_ref(mpAccepterContact);
+        }
         g_object_unref (pair.first);
         g_object_unref (pair.second);
     }
+
+    CPPUNIT_ASSERT_MESSAGE(
+        "Couldn't find accepter contact. "
+        "Make sure both your test accounts are signed in "
+        "and are on each other's contact lists",
+        mpAccepterContact);
 }
 
 void TestTeleTubes::testSetupManager1()
@@ -269,6 +293,14 @@ void TestTeleTubes::testDestroyManager2()
 {
     delete mpManager2;
     mpManager2 = NULL;
+}
+
+void TestTeleTubes::testDestroyAccepterContact()
+{
+    if (mpAccepterContact) {
+        g_object_unref(mpAccepterContact);
+        mpAccepterContact = NULL;
+    }
 }
 
 void TestTeleTubes::testFailAlways()
