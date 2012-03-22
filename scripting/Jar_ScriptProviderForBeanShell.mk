@@ -45,10 +45,10 @@ $(eval $(call gb_Jar_set_manifest,ScriptProviderForBeanShell,$(SRCDIR)/scripting
 #TODO: Ensure "file://$(BSH_JAR)" is a proper file URL:
 ifeq ($(SYSTEM_BSH),YES)
 $(eval $(call gb_Jar_set_jarclasspath,ScriptProviderForBeanShell, \
-    unoil.jar ScriptFramework.jar file://$(BSH_JAR)))
+    ScriptFramework.jar file://$(BSH_JAR)))
 else
 $(eval $(call gb_Jar_set_jarclasspath,ScriptProviderForBeanShell, \
-    unoil.jar ScriptFramework.jar bsh.jar))
+    ScriptFramework.jar bsh.jar))
 endif
 
 $(eval $(call gb_Jar_set_componentfile,ScriptProviderForBeanShell,scripting/java/ScriptProviderForBeanShell,OOO))

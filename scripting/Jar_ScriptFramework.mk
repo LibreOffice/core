@@ -37,6 +37,8 @@ $(eval $(call gb_Jar_add_jars,ScriptFramework,\
 
 $(eval $(call gb_Jar_set_componentfile,ScriptFramework,scripting/java/ScriptFramework,OOO))
 
+$(eval $(call gb_Jar_set_manifest,ScriptFramework,$(SRCDIR)/scripting/java/Framework/MANIFEST.MF))
+
 $(eval $(call gb_Jar_set_packageroot,ScriptFramework,com))
 
 $(eval $(call gb_Jar_add_sourcefiles,ScriptFramework,\
