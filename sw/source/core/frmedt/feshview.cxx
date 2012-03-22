@@ -1163,13 +1163,13 @@ sal_Bool SwFEShell::ShouldObjectBeSelected(const Point& rPt)
                                     dynamic_cast<const SwTxtFrm*>(pCntntFrm);
                             if ( pTxtFrm )
                             {
-                                SwPosition* pPos =
-                                    new SwPosition( *(pTxtFrm->GetTxtNode()) );
+                                SwPosition aPos( *(pTxtFrm->GetTxtNode()) );
                                 Point aTmpPt( rPt );
-                                if ( pTxtFrm->GetKeyCrsrOfst( pPos, aTmpPt ) )
+                                if (pTxtFrm->GetKeyCrsrOfst(&aPos, aTmpPt))
                                 {
                                     SwRect aCursorCharRect;
-                                    if ( pTxtFrm->GetCharRect( aCursorCharRect, *pPos ) )
+                                    if (pTxtFrm->GetCharRect(aCursorCharRect,
+                                                aPos))
                                     {
                                         if ( aCursorCharRect.IsOver( SwRect( pObj->GetLastBoundRect() ) ) )
                                         {
