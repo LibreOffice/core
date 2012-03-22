@@ -63,7 +63,6 @@
 /* enable it if you whish to migrate old user settings (using the old cfg schema) on demand ....
    disable it in case only the new schema must be used.
  */
-#define MIGRATE_OLD_USER_PATHES
 
 namespace framework
 {
@@ -213,10 +212,9 @@ class PathSettings : public  css::lang::XTypeProvider             ,
         /** filter "real user defined paths" from the old configuration schema
             and set it as UserPaths on the new schema.
             Can be removed with new major release ... */
-        #ifdef MIGRATE_OLD_USER_PATHES
+
         void impl_mergeOldUserPaths(      PathSettings::PathInfo& rPath,
                                      const OUStringList&           lOld );
-        #endif
 
         /** reload one path directly from the new configuration schema (because
             it was updated by any external code) */
