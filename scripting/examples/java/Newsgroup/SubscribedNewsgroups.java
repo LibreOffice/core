@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 import java.io.*;
 import java.util.Vector;
 

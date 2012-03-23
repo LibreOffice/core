@@ -7,7 +7,7 @@
                 Prints "Helo World".
             </description>
         </locale>
-        <functionname value="HelloWorld.printHW"/>
+        <functionname value="org.libreoffice.example.java_scripts.HelloWorld.printHW"/>
         <logicalname value="HelloWorld.printHW"/>
         <languagedepprops>
             <prop name="classpath" value="HelloWorld.jar"/>

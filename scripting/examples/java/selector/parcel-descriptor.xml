@@ -8,7 +8,7 @@
                 Prototype Script Selector GUI for StarOffice
             </description>
         </locale>
-        <functionname value="ScriptSelector.showOrganizer"/>
+        <functionname value="org.libreoffice.example.java_scripts.ScriptSelector.showOrganizer"/>
         <logicalname value="ScriptSelector.showOrganizer"/>
         <languagedepprops>
           <prop name="classpath" value="selector.jar"/>

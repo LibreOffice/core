@@ -39,4 +39,6 @@ $(eval $(call gb_Jar_add_sourcefiles,MemoryUsage,\
 	scripting/examples/java/MemoryUsage/MemoryUsage \
 ))
 
+$(eval $(call gb_Jar_set_packageroot,MemoryUsage,org))
+
 # vim: set noet sw=4 ts=4:

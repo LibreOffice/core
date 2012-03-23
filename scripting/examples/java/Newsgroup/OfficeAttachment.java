@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 //import com.sun.star.frame.XComponentLoader;
 import java.io.*;
 import com.sun.star.lang.XComponent;

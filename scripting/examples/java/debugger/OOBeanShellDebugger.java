@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 import javax.swing.JFrame;
 import javax.swing.JTextArea;
 import javax.swing.JPanel;

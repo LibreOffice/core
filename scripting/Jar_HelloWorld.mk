@@ -39,4 +39,6 @@ $(eval $(call gb_Jar_add_sourcefiles,HelloWorld,\
 	scripting/examples/java/HelloWorld/HelloWorld \
 ))
 
+$(eval $(call gb_Jar_set_packageroot,HelloWorld,org))
+
 # vim: set noet sw=4 ts=4:

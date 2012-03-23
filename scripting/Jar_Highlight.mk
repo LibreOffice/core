@@ -39,4 +39,6 @@ $(eval $(call gb_Jar_add_sourcefiles,Highlight,\
 	scripting/examples/java/Highlight/HighlightText \
 ))
 
+$(eval $(call gb_Jar_set_packageroot,Highlight,org))
+
 # vim: set noet sw=4 ts=4:

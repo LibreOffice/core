@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
