@@ -31,9 +31,11 @@
 #include <tubes/conference.hxx>
 #include <tubes/contact-list.hxx>
 
-ScCollaboration::ScCollaboration( const Link& rLink )
+ScCollaboration::ScCollaboration( const Link& rLinkPacket,
+                                  const Link& rLinkFile )
     :
-        maLink( rLink),
+        maLinkPacket( rLinkPacket ),
+        maLinkFile( rLinkFile ),
         mpAccount( NULL),
         mpContact( NULL),
         mpManager( NULL)
@@ -51,11 +53,28 @@ ScCollaboration::~ScCollaboration()
 }
 
 
+void ScCollaboration::receivedFile( rtl::OUString &rFileURL )
+{
+    fprintf( stderr, "file recieved '%s'\n",
+             rtl::OUStringToOString( rFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
+    if ( maLinkFile.IsSet() )
+        maLinkFile.Call( &rFileURL );
+}
+
+extern "C" {
+    void file_recv_cb( rtl::OUString &localUri, void* pUserData )
+    {
+        ScCollaboration *pCollab = reinterpret_cast<ScCollaboration *>( pUserData );
+        pCollab->receivedFile( localUri );
+    }
+}
+
 bool ScCollaboration::initManager()
 {
-    mpManager = new TeleManager( maLink);
+    mpManager = new TeleManager( maLinkPacket );
     bool bOk = mpManager->connect();
     mpManager->prepareAccountManager();
+    mpManager->setFileReceivedCallback( file_recv_cb, (void *)this );
     return bOk;
 }
 
@@ -95,6 +114,18 @@ bool ScCollaboration::recvPacket( rtl::OString& rString, TeleConference* pConfer
     bool bOk = (pConference ? pConference->popPacket( aPacket) : mpManager->popPacket( aPacket));
     rString = rtl::OString( aPacket.getData(), aPacket.getSize());
     return bOk;
+}
+
+extern "C" {
+    static void file_sent_cb( bool aSuccess, void* /* pUserData */ )
+    {
+        fprintf( stderr, "File send %s\n", aSuccess ? "success" : "failed" );
+    }
+}
+
+void ScCollaboration::sendFile( rtl::OUString &rFileURL )
+{
+    mpManager->sendFile( rFileURL, file_sent_cb, NULL );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

@@ -36,7 +36,7 @@ typedef struct _TpContact TpContact;
 typedef struct _TpAccount TpAccount;
 class TeleManager;
 class TeleConference;
-namespace rtl { class OString; }
+namespace rtl { class OString; class OUString; }
 
 class ScCollaboration
 {
@@ -44,8 +44,11 @@ public:
 
     /** @param rLink
             Callback when a packet is received, called with TeleConference*
+        @param rLink
+            Callback when a file is received, called with TeleConference*
      */
-                            ScCollaboration( const Link& rLink );
+                            ScCollaboration( const Link& rLinkPacket,
+                                             const Link& rLinkFile );
                             ~ScCollaboration();
 
     bool                    initManager();
@@ -53,10 +56,13 @@ public:
     bool                    startCollaboration();
     bool                    sendPacket( const rtl::OString& rString );
     bool                    recvPacket( rtl::OString& rString, TeleConference* pConference );
+    void                    sendFile( rtl::OUString &rFileURL );
+    void                    receivedFile( rtl::OUString &rFileURL );
 
 private:
 
-    Link            maLink;
+    Link            maLinkPacket;
+    Link            maLinkFile;
     TpAccount*      mpAccount;
     TpContact*      mpContact;
     TeleManager*    mpManager;

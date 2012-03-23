@@ -37,9 +37,12 @@
 #include <tubes/conference.hxx>
 
 // new file send/recv fun ...
+#include <com/sun/star/uno/Sequence.hxx>
 #include <unotools/tempfile.hxx>
 #include <unotools/localfilehelper.hxx>
 #include <comphelper/mediadescriptor.hxx>
+#include <com/sun/star/frame/XLoadable.hpp>
+#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/document/XDocumentRecovery.hpp>
 
 namespace css = ::com::sun::star;
@@ -253,6 +256,7 @@ public:
     }
 
     DECL_LINK( ReceiverCallback, TeleConference* );
+    DECL_LINK( ReceiveFileCallback, rtl::OUString * );
 
     void RecvMessage( const rtl::OString &rString )
     {
@@ -299,6 +303,38 @@ IMPL_LINK( ScDocFuncRecv, ReceiverCallback, TeleConference*, pConference )
     return 0;
 }
 
+IMPL_LINK( ScDocFuncRecv, ReceiveFileCallback, rtl::OUString *, pStr )
+{
+    fprintf( stderr, "incoming file '%s'\n",
+             rtl::OUStringToOString( *pStr, RTL_TEXTENCODING_UTF8 ).getStr() );
+
+    css::uno::Sequence < css::beans::PropertyValue > aLoadArgs(5);
+    aLoadArgs[0].Name = rtl::OUString( "URL" );
+    aLoadArgs[0].Value <<= (*pStr);
+    aLoadArgs[1].Name = rtl::OUString( "FilterName" );
+    aLoadArgs[1].Value <<= rtl::OUString( "calc8" );
+    aLoadArgs[2].Name = rtl::OUString( "Referer" );
+    aLoadArgs[2].Value <<= rtl::OUString( "" );
+    // no interaction handler ?
+    aLoadArgs[3].Name = rtl::OUString( "MacroExecutionMode" );
+    aLoadArgs[3].Value <<= sal_Int32( 3 );
+    aLoadArgs[4].Name = rtl::OUString( "UpdateDocMode" );
+    aLoadArgs[4].Value <<= sal_Int32( 2 );
+
+    try
+    {
+        css::uno::Reference < css::frame::XLoadable > xLoad(
+                rDocShell.GetBaseModel(), css::uno::UNO_QUERY_THROW );
+        xLoad->load( aLoadArgs );
+    }
+    catch ( css::uno::Exception& )
+    {
+        fprintf( stderr, "exception when loading !\n" );
+    }
+
+    return 0;
+}
+
 class ScDocFuncSend : public ScDocFunc
 {
     ScDocFuncRecv *mpChain;
@@ -337,7 +373,9 @@ class ScDocFuncSend : public ScDocFunc
 
         fprintf( stderr, "Temp file is '%s'\n",
                  rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-}
+
+        mpCollab->sendFile( aFileURL );
+    }
 
 public:
     // FIXME: really ScDocFunc should be an abstract base, so
@@ -478,7 +516,9 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
         ScDocFuncRecv* pReceiver = new ScDocFuncRecv( *this, new ScDocFuncDirect( *this ) );
         ScDocFuncSend* pSender = new ScDocFuncSend( *this, pReceiver );
         bool bOk = true;
-        ScCollaboration* pCollab = new ScCollaboration( LINK( pReceiver, ScDocFuncRecv, ReceiverCallback));
+        ScCollaboration* pCollab = new ScCollaboration(
+                LINK( pReceiver, ScDocFuncRecv, ReceiverCallback),
+                LINK( pReceiver, ScDocFuncRecv, ReceiveFileCallback) );
         bOk = bOk && pCollab->initManager();
         bOk = bOk && pCollab->initAccountContact();
         bOk = bOk && pCollab->startCollaboration();
