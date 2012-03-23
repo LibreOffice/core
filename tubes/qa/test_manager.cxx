@@ -331,7 +331,7 @@ void TestTeleTubes::testSendFile()
     CPPUNIT_ASSERT( maFileSentSuccess);
     CPPUNIT_ASSERT_MESSAGE(
         OUStringToOString( maFileReceivedUri, RTL_TEXTENCODING_UTF8).getStr(),
-        maFileReceivedUri == "file:///tmp/fixme.ods");
+        maFileReceivedUri == "file:///tmp/LibreOffice-collab-test-config.ini");
 }
 
 void TestTeleTubes::testFlushLoops()

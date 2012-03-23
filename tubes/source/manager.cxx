@@ -212,7 +212,13 @@ TeleManager_IncomingHandlerReady (
         return;
     }
 
-    GFile *pDestination = g_file_new_for_uri( "file:///tmp/fixme.ods");
+    /* The filename suggested by the sender, which in our case is the last bit
+     * of whatever URI got passed to ::sendFile()
+     */
+    const char* pFileName = empathy_ft_handler_get_filename( pHandler);
+    char* pLocalUri = g_strdup_printf( "file:///tmp/LibreOffice-collab-%s", pFileName);
+    GFile *pDestination = g_file_new_for_uri( pLocalUri);
+    g_free( pLocalUri);
 
     empathy_ft_handler_incoming_set_destination( pHandler, pDestination);
     g_object_unref( pDestination);
