@@ -56,16 +56,16 @@ namespace css = com::sun::star;
 
 namespace
 {
-    static const ::rtl::OUString s_sAccessibility(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Accessibility"));
-    static const ::rtl::OUString s_sAutoDetectSystemHC(RTL_CONSTASCII_USTRINGPARAM("AutoDetectSystemHC"));
-    static const ::rtl::OUString s_sIsForPagePreviews(RTL_CONSTASCII_USTRINGPARAM("IsForPagePreviews"));
-    static const ::rtl::OUString s_sIsHelpTipsDisappear(RTL_CONSTASCII_USTRINGPARAM("IsHelpTipsDisappear"));
-    static const ::rtl::OUString s_sHelpTipSeconds(RTL_CONSTASCII_USTRINGPARAM("HelpTipSeconds"));
-    static const ::rtl::OUString s_sIsAllowAnimatedGraphics(RTL_CONSTASCII_USTRINGPARAM("IsAllowAnimatedGraphics"));
-    static const ::rtl::OUString s_sIsAllowAnimatedText(RTL_CONSTASCII_USTRINGPARAM("IsAllowAnimatedText"));
-    static const ::rtl::OUString s_sIsAutomaticFontColor(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticFontColor"));
-    static const ::rtl::OUString s_sIsSystemFont(RTL_CONSTASCII_USTRINGPARAM("IsSystemFont"));
-    static const ::rtl::OUString s_sIsSelectionInReadonly(RTL_CONSTASCII_USTRINGPARAM("IsSelectionInReadonly"));
+    const char s_sAccessibility[] = "org.openoffice.Office.Common/Accessibility";
+    const char s_sAutoDetectSystemHC[] = "AutoDetectSystemHC";
+    const char s_sIsForPagePreviews[] = "IsForPagePreviews";
+    const char s_sIsHelpTipsDisappear[] = "IsHelpTipsDisappear";
+    const char s_sHelpTipSeconds[] = "HelpTipSeconds";
+    const char s_sIsAllowAnimatedGraphics[] = "IsAllowAnimatedGraphics";
+    const char s_sIsAllowAnimatedText[] = "IsAllowAnimatedText";
+    const char s_sIsAutomaticFontColor[] = "IsAutomaticFontColor";
+    const char s_sIsSystemFont[] = "IsSystemFont";
+    const char s_sIsSelectionInReadonly[] = "IsSelectionInReadonly";
 }
 
 // class SvtAccessibilityOptions_Impl ---------------------------------------------
