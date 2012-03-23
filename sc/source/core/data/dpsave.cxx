@@ -1246,7 +1246,7 @@ void ScDPSaveData::BuildAllDimensionMembers(ScDPTableData* pData)
         for (size_t j = 0; j < mMemberCount; ++j)
         {
             const ScDPItemData* pMemberData = pData->GetMemberById( nDimIndex, rMembers[j] );
-            ::rtl::OUString aMemName = pMemberData->GetString();
+            rtl::OUString aMemName = pData->GetFormattedString(nDimIndex, *pMemberData);
             if (iter->GetExistingMemberByName(aMemName))
                 // this member instance already exists. nothing to do.
                 continue;
