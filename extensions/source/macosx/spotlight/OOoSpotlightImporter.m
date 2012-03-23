@@ -441,7 +441,7 @@ NSData *getUncompressedData(NSFileHandle *file, NSString *name)
 {
     NSFileHandle* unzipFile = nil;
     
-    if ([pathToFile length] == 0)
+    if ([pathToFile length] != 0)
     {
         unzipFile = [NSFileHandle fileHandleForReadingAtPath: pathToFile];
     }
