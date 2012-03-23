@@ -170,7 +170,8 @@ void lclSetXShapeRect( const Reference< XShape >& rxShape, const Rectangle& rSha
 
 // ============================================================================
 
-ShapeTypeModel::ShapeTypeModel()
+ShapeTypeModel::ShapeTypeModel():
+    mbAutoHeight( sal_False )
 {
 }
 
@@ -424,6 +425,12 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
 {
     Reference< XShape > xShape = mrDrawing.createAndInsertXShape( maService, rxShapes, rShapeRect );
     convertShapeProperties( xShape );
+
+    if ( maService.equalsAscii( "com.sun.star.text.TextFrame" ) )
+    {
+        PropertySet( xShape ).setAnyProperty( PROP_FrameIsAutomaticHeight, makeAny( maTypeModel.mbAutoHeight ) );
+        PropertySet( xShape ).setAnyProperty( PROP_SizeType, makeAny( maTypeModel.mbAutoHeight ? SizeType::MIN : SizeType::FIX ) );
+    }
 
     // Import Legacy Fragments (if any)
     if( xShape.is() && !maShapeModel.maLegacyDiagramPath.isEmpty() )

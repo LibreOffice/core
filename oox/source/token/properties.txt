@@ -179,6 +179,7 @@ FooterIsDynamicHeight
 FooterIsOn
 FooterIsShared
 FormulaConvention
+FrameIsAutomaticHeight
 Function
 GapwidthSequence
 Geometry3D
@@ -416,6 +417,7 @@ Size
 Size100thMM
 SizePixel
 SizeProtect
+SizeType
 SkipDuplicates
 SortInfo
 Sound
