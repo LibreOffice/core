@@ -388,21 +388,6 @@ SV_DECL_IMPL_REF(SvRefBase)
 
 SV_DECL_REF_LIST(SvRefBase,SvRefBase*)
 
-class SvWeakBase;
-class SvWeakHdl : public SvRefBase
-{
-    friend class SvWeakBase;
-    SvWeakBase* _pObj;
-public:
-    void ResetWeakBase( ) { _pObj = 0; }
-private:
-    SvWeakHdl( SvWeakBase* pObj ) : _pObj( pObj ) {}
-public:
-    SvWeakBase* GetObj() { return _pObj; }
-};
-
-SV_DECL_IMPL_REF( SvWeakHdl )
-
 class SvCompatWeakHdl : public SvRefBase
 {
     friend class SvCompatWeakBase;
@@ -415,17 +400,6 @@ public:
 
 SV_DECL_IMPL_REF( SvCompatWeakHdl )
 
-class SvWeakBase
-{
-    SvWeakHdlRef _xHdl;
-public:
-    SvWeakHdl* GetHdl() { return _xHdl; }
-
-    // Wg CompilerWarnung nicht ueber Initializer
-    SvWeakBase() { _xHdl = new SvWeakHdl( this ); }
-    ~SvWeakBase() { _xHdl->ResetWeakBase(); }
-};
-
 class SvCompatWeakBase
 {
     SvCompatWeakHdlRef _xHdl;
@@ -437,10 +411,10 @@ public:
     ~SvCompatWeakBase() { _xHdl->ResetWeakBase(); }
 };
 
-#define SV_DECL_WEAK_IMPL( ClassName, HdlName )                     \
+#define SV_DECL_COMPAT_WEAK( ClassName )                            \
 class ClassName##Weak                                               \
 {                                                                   \
-    HdlName _xHdl;                                                  \
+    SvCompatWeakHdlRef _xHdl;                                       \
 public:                                                             \
     inline               ClassName##Weak( ) {}                      \
     inline               ClassName##Weak( ClassName* pObj ) {       \
@@ -448,7 +422,7 @@ public:                                                             \
     inline void          Clear() { _xHdl.Clear(); }                 \
     inline ClassName##Weak& operator = ( ClassName * pObj ) {       \
         _xHdl = pObj ? pObj->GetHdl() : 0; return *this; }          \
-    inline sal_Bool            Is() const {                             \
+    inline sal_Bool            Is() const {                         \
         return _xHdl.Is() && _xHdl->GetObj(); }                     \
     inline ClassName *     operator &  () const {                   \
         return (ClassName*) ( _xHdl.Is() ? _xHdl->GetObj() : 0 ); } \
@@ -459,11 +433,6 @@ public:                                                             \
     inline operator ClassName * () const {                          \
         return (ClassName*) (_xHdl.Is() ? _xHdl->GetObj() : 0 ); }  \
 };
-
-#define SV_DECL_WEAK( ClassName ) SV_DECL_WEAK_IMPL( ClassName, SvWeakHdlRef )
-#define SV_DECL_COMPAT_WEAK( ClassName ) SV_DECL_WEAK_IMPL( ClassName, SvCompatWeakHdlRef )
-
-SV_DECL_WEAK( SvWeakBase )
 
 #endif // _Weak_HXX
 
