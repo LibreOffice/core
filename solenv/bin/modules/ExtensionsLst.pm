@@ -454,7 +454,7 @@ sub Download (@)
 
         # Download the extension.
         my $agent = LWP::UserAgent->new();
-        $agent->timeout(10);
+        $agent->timeout(120);
         $agent->show_progress(1);
         my $last_was_redirect = 0;
         $agent->add_handler('response_redirect'
