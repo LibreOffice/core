@@ -223,9 +223,12 @@ public:
     {
         m_Lines.push_back(xLine);
     }
-    drawinglayer::primitive2d::Primitive2DSequence GetBorderLines() const
+    drawinglayer::primitive2d::Primitive2DSequence GetBorderLines_Clear()
     {
-        return m_Lines.getAsConstList();
+        ::comphelper::SequenceAsVector<
+            ::drawinglayer::primitive2d::Primitive2DReference> lines;
+        ::std::swap(m_Lines, lines);
+        return lines.getAsConstList();
     }
 };
 
@@ -3000,6 +3003,16 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 }
 
                 pLines->PaintLines( pSh->GetOut() );
+                if ( pSh->GetWin() )
+                {
+                    pSubsLines->PaintSubsidiary( pSh->GetOut(), pLines );
+                    DELETEZ( pSubsLines );
+                    DELETEZ( pSpecSubsLines );
+                }
+                // fdo#42750: delay painting these until after subsidiary lines
+                // fdo#45562: delay painting these until after hell layer
+                // fdo#47717: but do it before heaven layer
+                ProcessPrimitives(g_pBorderLines->GetBorderLines_Clear());
 
                 if ( pSh->Imp()->HasDrawView() )
                 {
@@ -3016,14 +3029,8 @@ SwRootFrm::Paint(SwRect const& rRect, SwPrintData const*const pPrintData) const
                 if ( bExtraData )
                     pPage->RefreshExtraData( aPaintRect );
 
-                if ( pSh->GetWin() )
-                {
-                    pSubsLines->PaintSubsidiary( pSh->GetOut(), pLines );
-                    DELETEZ( pSubsLines );
-                    DELETEZ( pSpecSubsLines );
-                }
-                // fdo#42750: delay painting these until after subsidiary lines
-                ProcessPrimitives(g_pBorderLines->GetBorderLines());
+                // have to paint frame borders added in heaven layer here...
+                ProcessPrimitives(g_pBorderLines->GetBorderLines_Clear());
                 DELETEZ(g_pBorderLines);
                 pVout->Leave();
 
