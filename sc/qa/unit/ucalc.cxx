@@ -75,6 +75,7 @@
 #include <sfx2/docfile.hxx>
 
 #include <com/sun/star/sheet/DataPilotFieldOrientation.hpp>
+#include <com/sun/star/sheet/DataPilotFieldGroupBy.hpp>
 #include <com/sun/star/sheet/GeneralFunction.hpp>
 
 #include <ucbhelper/contentbroker.hxx>
@@ -161,8 +162,8 @@ public:
     void testPivotTableDuplicateDataFields();
 
     void testPivotTableNormalGrouping();
-
     void testPivotTableNumberGrouping();
+    void testPivotTableDateGrouping();
 
     void testSheetCopy();
     void testSheetMove();
@@ -222,6 +223,7 @@ public:
     CPPUNIT_TEST(testPivotTableDuplicateDataFields);
     CPPUNIT_TEST(testPivotTableNormalGrouping);
     CPPUNIT_TEST(testPivotTableNumberGrouping);
+    CPPUNIT_TEST(testPivotTableDateGrouping);
     CPPUNIT_TEST(testSheetCopy);
     CPPUNIT_TEST(testSheetMove);
     CPPUNIT_TEST(testExternalRef);
@@ -1245,7 +1247,6 @@ ScDPObject* createDPFromSourceDesc(
         ScDPSaveDimension* pDim = aSaveData.GetNewDimensionByName(aDimName);
         pDim->SetOrientation(static_cast<sal_uInt16>(aFields[i].eOrient));
         pDim->SetUsedHierarchy(0);
-        pDim->SetShowEmpty(true);
 
         if (aFields[i].eOrient == sheet::DataPilotFieldOrientation_DATA)
         {
@@ -2412,6 +2413,123 @@ void Test::testPivotTableNumberGrouping()
         };
 
         bSuccess = checkDPTableOutput<2>(m_pDoc, aOutRange, aOutputCheck, "Order grouped by numbers");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    pDPs->FreeTable(pDPObj);
+    CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
+    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size() == 0);
+
+    m_pDoc->DeleteTab(1);
+    m_pDoc->DeleteTab(0);
+}
+
+void Test::testPivotTableDateGrouping()
+{
+    m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("Data")));
+    m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Table")));
+
+    // Raw data
+    const char* aData[][2] = {
+        { "Date", "Value" },
+        { "2011-01-01", "1" },
+        { "2011-03-02", "2" },
+        { "2012-01-04", "3" },
+        { "2012-02-23", "4" },
+        { "2012-02-24", "5" },
+        { "2012-03-15", "6" },
+        { "2011-09-03", "7" },
+        { "2012-12-25", "8" }
+    };
+
+    // Dimension definition
+    DPFieldDef aFields[] = {
+        { "Date", sheet::DataPilotFieldOrientation_ROW, 0 },
+        { "Value", sheet::DataPilotFieldOrientation_DATA, sheet::GeneralFunction_SUM },
+    };
+
+    ScAddress aPos(1,1,0);
+    ScRange aDataRange = insertRangeData(m_pDoc, aPos, aData, SAL_N_ELEMENTS(aData));
+    CPPUNIT_ASSERT_MESSAGE("failed to insert range data at correct position", aDataRange.aStart == aPos);
+
+    ScDPObject* pDPObj = createDPFromRange(
+        m_pDoc, aDataRange, aFields, SAL_N_ELEMENTS(aFields), false);
+
+    ScDPCollection* pDPs = m_pDoc->GetDPCollection();
+    bool bSuccess = pDPs->InsertNewTable(pDPObj);
+
+    CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
+    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount() == 1);
+    pDPObj->SetName(pDPs->CreateNewName());
+
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
+    CPPUNIT_ASSERT_MESSAGE("No save data !?", pSaveData);
+    ScDPDimensionSaveData* pDimData = pSaveData->GetDimensionData();
+    CPPUNIT_ASSERT_MESSAGE("No dimension data !?", pDimData);
+
+    rtl::OUString aBaseDimName(RTL_CONSTASCII_USTRINGPARAM("Date"));
+
+    ScDPNumGroupInfo aInfo;
+    aInfo.mbEnable = true;
+    aInfo.mbAutoStart = true;
+    aInfo.mbAutoEnd = true;
+    {
+        // Turn the Date dimension into months.  The first of the date
+        // dimensions is always a number-group dimension which replaces the
+        // original dimension.
+        ScDPSaveNumGroupDimension aGroup(aBaseDimName, aInfo, sheet::DataPilotFieldGroupBy::MONTHS);
+        pDimData->AddNumGroupDimension(aGroup);
+    }
+
+    {
+        // Add quarter dimension.  This will be an additional dimension.
+        rtl::OUString aGroupDimName =
+            pDimData->CreateDateGroupDimName(
+                sheet::DataPilotFieldGroupBy::QUARTERS, *pDPObj, true, NULL);
+        ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
+        aGroupDim.SetDateInfo(aInfo, sheet::DataPilotFieldGroupBy::QUARTERS);
+        pDimData->AddGroupDimension(aGroupDim);
+
+        // Set orientation.
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aGroupDimName);
+        pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
+        pSaveData->SetPosition(pDim, 0); // set it to the left end.
+    }
+
+    {
+        // Add year dimension.  This is a new dimension also.
+        rtl::OUString aGroupDimName =
+            pDimData->CreateDateGroupDimName(
+                sheet::DataPilotFieldGroupBy::YEARS, *pDPObj, true, NULL);
+        ScDPSaveGroupDimension aGroupDim(aBaseDimName, aGroupDimName);
+        aGroupDim.SetDateInfo(aInfo, sheet::DataPilotFieldGroupBy::YEARS);
+        pDimData->AddGroupDimension(aGroupDim);
+
+        // Set orientation.
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(aGroupDimName);
+        pDim->SetOrientation(sheet::DataPilotFieldOrientation_ROW);
+        pSaveData->SetPosition(pDim, 0); // set it to the left end.
+    }
+
+    pDPObj->SetSaveData(*pSaveData);
+    ScRange aOutRange = refreshGroups(pDPs, pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][4] = {
+            { "Years", "Quarters", "Date", 0 },
+            { "2011", "Q1", "Jan", "1" },
+            { 0, 0,         "Mar", "2" },
+            { 0,      "Q3", "Sep", "7" },
+            { "2012", "Q1", "Jan", "3" },
+            { 0, 0,         "Feb", "9" },
+            { 0, 0,         "Mar", "6" },
+            { 0,      "Q4", "Dec", "8" },
+            { "Total Result", 0, 0, "36" },
+        };
+
+        bSuccess = checkDPTableOutput<4>(m_pDoc, aOutRange, aOutputCheck, "Years, quarters and months date groups.");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
