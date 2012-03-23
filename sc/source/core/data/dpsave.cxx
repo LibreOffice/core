@@ -615,7 +615,7 @@ void ScDPSaveDimension::WriteToSource( const uno::Reference<uno::XInterface>& xD
         nHierCount = xHiers->getCount();
     }
 
-    sal_Bool bHasHiddenMember = false;
+    bool bHasHiddenMember = false;
 
     for (long nHier=0; nHier<nHierCount; nHier++)
     {
