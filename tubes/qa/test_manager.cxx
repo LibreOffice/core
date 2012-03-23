@@ -154,15 +154,6 @@ TestTeleTubes::~TestTeleTubes()
     mpMainLoop = NULL;
 }
 
-static void TeleTestTubes_ContactListPrepared( GError *errorOr0, void *user_data )
-{
-    TestTeleTubes *self = reinterpret_cast<TestTeleTubes *>(user_data);
-
-    CPPUNIT_ASSERT( errorOr0 == 0 );
-
-    g_main_loop_quit (self->mpMainLoop);
-}
-
 void TestTeleTubes::spinMainLoop()
 {
     g_main_loop_run( mpMainLoop);
