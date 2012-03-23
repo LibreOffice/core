@@ -400,7 +400,7 @@ void TeleConference::finalize()
 }
 
 
-bool TeleConference::sendPacket( TelePacket& rPacket ) const
+bool TeleConference::sendPacket( TelePacket& rPacket )
 {
     INFO_LOGGER( "TeleConference::sendPacket");
 
@@ -432,18 +432,29 @@ bool TeleConference::sendPacket( TelePacket& rPacket ) const
 
     bool bSent = dbus_connection_send( mpTube, pMessage, NULL);
     SAL_WARN_IF( !bSent, "tubes", "TeleConference::sendPacket: not sent");
+
+    /* FIXME: need to impose an ordering on packets. */
+    queue( rPacket );
+
     dbus_message_unref( pMessage);
     return bSent;
 }
 
 
-void TeleConference::queue( const char* pDBusSender, const char* pPacketData, int nPacketSize )
+void TeleConference::queue( TelePacket &rPacket )
 {
     INFO_LOGGER( "TeleConference::queue");
 
-    maPacketQueue.push( TelePacket( pDBusSender, pPacketData, nPacketSize));
+    maPacketQueue.push( rPacket);
 
     getManager()->callbackOnRecieved( this);
+}
+
+
+void TeleConference::queue( const char* pDBusSender, const char* pPacketData, int nPacketSize )
+{
+    TelePacket aPacket( pDBusSender, pPacketData, nPacketSize );
+    queue( aPacket );
 }
 
 

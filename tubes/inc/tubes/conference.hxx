@@ -63,13 +63,14 @@ public:
     /** @param rPacket
             non-const on purpose, see TelePacket::getData()
      */
-    bool                    sendPacket( TelePacket& rPacket ) const;
+    bool                    sendPacket( TelePacket& rPacket );
 
     /** Pop a received packet. */
     TUBES_DLLPUBLIC bool    popPacket( TelePacket& rPacket );
 
     /** Queue incoming data as TelePacket */
     void                    queue( const char* pDBusSender, const char* pPacket, int nSize );
+    void                    queue( TelePacket &rPacket );
 
 
     typedef void          (*FileSentCallback)( bool aSuccess, void* pUserData);

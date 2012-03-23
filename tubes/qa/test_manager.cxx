@@ -279,6 +279,11 @@ void TestTeleTubes::testReceivePacket()
     TelePacket aPacket( "", RTL_CONSTASCII_STRINGPARAM( "from 1 to 2"));
     TelePacket aReceived;
     sal_uInt32 nReceivedPackets = 0;
+    /* We expect to get every packet we send pushed onto the queue to be echoed
+     * locally; and since we are also listening at the "other end", we expect
+     * to receive a copy of each packet as well.
+     */
+    sal_uInt32 nExpectedPackets = nSentPackets * 2;
     bool bOk;
     do
     {
@@ -291,10 +296,10 @@ void TestTeleTubes::testReceivePacket()
                 CPPUNIT_ASSERT( aPacket == aReceived);
             }
         } while (bOk);
-        if (nReceivedPackets < nSentPackets)
+        if (nReceivedPackets < nExpectedPackets)
             mpManager1->iterateLoop();
-    } while (nReceivedPackets < nSentPackets);
-    CPPUNIT_ASSERT( nReceivedPackets == nSentPackets);
+    } while (nReceivedPackets < nExpectedPackets);
+    CPPUNIT_ASSERT( nReceivedPackets == nExpectedPackets);
 }
 
 void TestTeleTubes::FileSent( bool success, void *user_data)
