@@ -509,9 +509,10 @@ public:
 SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
 {
     // FIXME: the chains should be auto-ptrs, so should be collab
+    const char* pEnv;
     if (getenv ("INTERCEPT"))
         return new ScDocFuncSend( *this, new ScDocFuncRecv( *this, new ScDocFuncDirect( *this ) ) );
-    else if (getenv ("LIBO_TUBES"))
+    else if ((pEnv = getenv ("LIBO_TUBES")) != NULL)
     {
         ScDocFuncRecv* pReceiver = new ScDocFuncRecv( *this, new ScDocFuncDirect( *this ) );
         ScDocFuncSend* pSender = new ScDocFuncSend( *this, pReceiver );
@@ -521,7 +522,8 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
                 LINK( pReceiver, ScDocFuncRecv, ReceiveFileCallback) );
         bOk = bOk && pCollab->initManager();
         bOk = bOk && pCollab->initAccountContact();
-        bOk = bOk && pCollab->startCollaboration();
+        if (!strcmp( pEnv, "master"))
+            bOk = bOk && pCollab->startCollaboration();
         if (bOk)
         {
             pReceiver->SetCollaboration( pCollab);
