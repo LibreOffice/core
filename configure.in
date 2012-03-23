@@ -3929,7 +3929,7 @@ if test -n "$with_system_libxslt" -o -n "$with_system_libs" -o \
 		PKG_CHECK_MODULES(LIBXSLT, libxslt)
 	else
 		LIBXSLT_CFLAGS=`xslt-config --cflags`
-		LIBXSLT_LDLAGS=`xslt-config --libs`
+		LIBXSLT_LIBS=`xslt-config --libs`
 	fi
 
    dnl Check for xsltproc
@@ -3962,7 +3962,7 @@ if test -n "$with_system_libxml" -o -n "$with_system_libs" -o \
 		PKG_CHECK_MODULES(LIBXML, libxml-2.0 >= 2.0)
 	else
 		LIBXML_CFLAGS=`xml2-config --cflags`
-		LIBXML_LDLAGS=`xml2-config --libs`
+		LIBXML_LIBS=`xml2-config --libs`
 	fi
 else
     AC_MSG_RESULT([internal])
