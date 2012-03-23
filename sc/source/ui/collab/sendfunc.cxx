@@ -327,9 +327,10 @@ IMPL_LINK( ScDocFuncRecv, ReceiveFileCallback, rtl::OUString *, pStr )
                 rDocShell.GetBaseModel(), css::uno::UNO_QUERY_THROW );
         xLoad->load( aLoadArgs );
     }
-    catch ( css::uno::Exception& )
+    catch ( css::uno::Exception& e )
     {
-        fprintf( stderr, "exception when loading !\n" );
+        fprintf( stderr, "exception when loading '%s' !\n",
+                 rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
 
     return 0;
