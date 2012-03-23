@@ -1607,6 +1607,7 @@ void SdXMLImExSvgDElement::AddPolygon(
 
         // bezier poly, handle curves
         bool  bDidWriteStart(false);
+        sal_Int32 nStartX(0), nStartY(0);
 
         for(sal_Int32 a(0L); a < nCnt; a++)
         {
@@ -2081,6 +2082,8 @@ void SdXMLImExSvgDElement::AddPolygon(
 
                         // remember start written
                         bDidWriteStart = true;
+                        nStartX = nX;
+                        nStartY = nY;
                     }
 
                     // remember new last position
@@ -2101,6 +2104,13 @@ void SdXMLImExSvgDElement::AddPolygon(
                 aNewString += String(sal_Unicode('z'));
             else
                 aNewString += String(sal_Unicode('Z'));
+
+            // update current point - we're back at the start
+            if( bDidWriteStart )
+            {
+                mnLastX = nStartX;
+                mnLastY = nStartY;
+            }
         }
 
         // append new string
