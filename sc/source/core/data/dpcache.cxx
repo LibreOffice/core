@@ -1126,4 +1126,51 @@ long ScDPCache::GetColumnCount() const
     return mnColumnCount;
 }
 
+#if DEBUG_PIVOT_TABLE
+
+#include <iostream>
+using std::cout;
+using std::endl;
+
+namespace {
+
+std::ostream& operator<< (::std::ostream& os, const rtl::OUString& str)
+{
+    return os << ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
+}
+
+}
+
+void ScDPCache::Dump() const
+{
+    cout << "--- pivot cache dump" << endl;
+    {
+        FieldsType::const_iterator it = maFields.begin(), itEnd = maFields.end();
+        for (size_t i = 0; it != itEnd; ++it, ++i)
+        {
+            const Field& fld = *it;
+            cout << "* source field: " << GetDimensionName(i) << endl;
+            cout << "    item count: " << fld.maItems.size() << endl;
+            if (fld.mpGroup)
+            {
+                cout << "    group item count: " << fld.mpGroup->maItems.size() << endl;
+            }
+        }
+    }
+
+    {
+        GroupFieldsType::const_iterator it = maGroupFields.begin(), itEnd = maGroupFields.end();
+        for (; it != itEnd; ++it)
+        {
+            const GroupItems& gi = *it;
+            cout << "* group field: (unnamed)" << endl;
+            cout << "    item count: " << gi.maItems.size() << endl;
+        }
+    }
+
+    cout << "---" << endl;
+}
+
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

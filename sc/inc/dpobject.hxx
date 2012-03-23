@@ -35,6 +35,8 @@
 #include "dpoutput.hxx"
 #include "dptypes.hxx"
 #include "pivot.hxx"
+#include "dpmacros.hxx"
+
 #include <com/sun/star/sheet/XDimensionsSupplier.hpp>
 
 #include <set>
@@ -259,6 +261,10 @@ public:
         std::vector<PivotField>* pRefPageFields = NULL );
 
     static bool         IsOrientationAllowed( sal_uInt16 nOrient, sal_Int32 nDimFlags );
+
+#if DEBUG_PIVOT_TABLE
+    void DumpCache() const;
+#endif
 };
 
 

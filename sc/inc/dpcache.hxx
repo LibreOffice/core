@@ -31,6 +31,7 @@
 
 #include "global.hxx"
 #include "dpnumgroupinfo.hxx"
+#include "dpmacros.hxx"
 #include "tools/date.hxx"
 
 #include <boost/noncopyable.hpp>
@@ -159,6 +160,10 @@ public:
 
     ScDPCache(ScDocument* pDoc);
     ~ScDPCache();
+
+#if DEBUG_PIVOT_TABLE
+    void Dump() const;
+#endif
 
 private:
     void PostInit();

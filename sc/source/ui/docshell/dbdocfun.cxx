@@ -1327,9 +1327,6 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 if ( pNewObj == pOldObj && pDestObj->IsImportData() )
                     pDestObj->ClearTableData();
 
-                if (pDestObj->HasGroups())
-                    pDestObj->ReloadGroupTableData();
-
                 pDestObj->InvalidateData();             // before getting the new output area
 
                 //  make sure the table has a name (not set by dialog)
@@ -1479,7 +1476,7 @@ sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
         ScDPObject* pObj = *it;
         if (bHasGroups)
             // Re-build table data for each pivot table when the original contains group fields.
-            pObj->ClearTableData();
+            pObj->ReloadGroupTableData();
 
         // This action is intentionally not undoable since it modifies cache.
         DataPilotUpdate(pObj, pObj, false, bApi);

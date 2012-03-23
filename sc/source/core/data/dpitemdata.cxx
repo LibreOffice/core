@@ -294,7 +294,7 @@ sal_uInt8 ScDPItemData::GetCellType() const
     return SC_VALTYPE_STRING;
 }
 
-#if DEBUG_DP_ITEM_DATA
+#if DEBUG_PIVOT_TABLE
 void ScDPItemData::Dump(const char* msg) const
 {
     printf("--- (%s)\n", msg);

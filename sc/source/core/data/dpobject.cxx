@@ -2524,6 +2524,20 @@ uno::Reference<sheet::XDimensionsSupplier> ScDPObject::CreateSource( const ScDPS
     return xRet;
 }
 
+#if DEBUG_PIVOT_TABLE
+void ScDPObject::DumpCache() const
+{
+    if (!mpTableData)
+        return;
+
+    const ScDPCache* pCache = mpTableData->GetCacheTable().getCache();
+    if (!pCache)
+        return;
+
+    pCache->Dump();
+}
+#endif
+
 ScDPCollection::SheetCaches::SheetCaches(ScDocument* pDoc) : mpDoc(pDoc) {}
 
 namespace {

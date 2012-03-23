@@ -591,8 +591,9 @@ String lcl_MakePivotTabName( const String& rPrefix, SCTAB nNumber )
     return aName;
 }
 
-bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, sal_Bool bNewTable,
-                                const ScDPObject& rSource, sal_Bool bApi )
+bool ScDBFunc::MakePivotTable(
+    const ScDPSaveData& rData, const ScRange& rDest, bool bNewTable,
+    const ScDPObject& rSource, bool bApi )
 {
     //  error message if no fields are set
     //  this must be removed when drag&drop of fields from a toolbox is available
@@ -605,7 +606,7 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
 
     ScDocShell* pDocSh  = GetViewData()->GetDocShell();
     ScDocument* pDoc    = GetViewData()->GetDocument();
-    sal_Bool bUndo(pDoc->IsUndoEnabled());
+    bool bUndo = pDoc->IsUndoEnabled();
 
     ScRange aDestRange = rDest;
     if ( bNewTable )
@@ -626,7 +627,7 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
         while ( !pDoc->InsertTab( nNewTab, lcl_MakePivotTabName( aName, i ) ) && i <= MAXTAB )
             i++;
 
-        sal_Bool bAppend = ( nNewTab+1 == pDoc->GetTableCount() );
+        bool bAppend = ( nNewTab+1 == pDoc->GetTableCount() );
         if (bUndo)
         {
             pDocSh->GetUndoManager()->AddUndoAction(
@@ -634,7 +635,7 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
         }
 
         GetViewData()->InsertTab( nNewTab );
-        SetTabNo( nNewTab, sal_True );
+        SetTabNo(nNewTab, true);
 
         aDestRange = ScRange( 0, 0, nNewTab );
     }
@@ -664,7 +665,7 @@ bool ScDBFunc::MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, 
     bool bAllowMove = (pDPObj != NULL);   // allow re-positioning when editing existing table
 
     ScDBDocFunc aFunc( *pDocSh );
-    bool bSuccess = aFunc.DataPilotUpdate( pDPObj, &aObj, sal_True, false, bAllowMove );
+    bool bSuccess = aFunc.DataPilotUpdate(pDPObj, &aObj, true, false, bAllowMove);
 
     CursorPosChanged();     // shells may be switched
 

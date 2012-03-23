@@ -35,12 +35,11 @@
 #include "sal/types.h"
 #include "tools/solar.h"
 #include "rtl/ustring.hxx"
+#include "dpmacros.hxx"
 
 #include <vector>
 
 #include <boost/unordered_map.hpp>
-
-#define DEBUG_DP_ITEM_DATA 0
 
 class ScDocument;
 
@@ -119,7 +118,7 @@ public:
 
     sal_uInt8 GetCellType() const;
 
-#if DEBUG_DP_ITEM_DATA
+#if DEBUG_PIVOT_TABLE
     void Dump(const char* msg) const;
 #endif
 };

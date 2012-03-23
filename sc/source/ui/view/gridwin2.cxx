@@ -599,6 +599,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     }
     pDim->UpdateMemberVisibility(aResult);
 
+    pDPObj->ReloadGroupTableData();
     ScDBDocFunc aFunc(*pViewData->GetDocShell());
     aFunc.DataPilotUpdate(pDPObj, pDPObj, true, false);
 }

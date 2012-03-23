@@ -85,8 +85,10 @@ public:
 
     void            Consolidate( const ScConsolidateParam& rParam, sal_Bool bRecord = sal_True );
 
-    bool            MakePivotTable( const ScDPSaveData& rData, const ScRange& rDest, sal_Bool bNewTable,
-                                    const ScDPObject& rSource, sal_Bool bApi = false );
+    bool MakePivotTable(
+        const ScDPSaveData& rData, const ScRange& rDest, bool bNewTable,
+        const ScDPObject& rSource, bool bApi = false );
+
     void            DeletePivotTable();
     void            RecalcPivotTable();
     bool HasSelectionForDateGroup( ScDPNumGroupInfo& rOldInfo, sal_Int32& rParts );
