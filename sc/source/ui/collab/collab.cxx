@@ -83,12 +83,15 @@ bool ScCollaboration::initAccountContact()
 {
     ContactList* pContactList = mpManager->getContactList();
     AccountContactPairV aVec( pContactList->getContacts());
+
+    fprintf( stderr, "%u contacts\n", (int) aVec.size() );
     if (aVec.empty())
         return false;
 
     /* TODO: select a pair, for now just take the first */
     mpAccount = aVec[0].first;
     mpContact = aVec[0].second;
+    fprintf( stderr, "picked %s\n", tp_contact_get_identifier( mpContact ) );
     return true;
 }
 
