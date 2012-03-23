@@ -111,11 +111,11 @@ ifneq ($(gb_DEBUGLEVEL),0)
 gb_SYMBOL := $(true)
 endif
 
-# for clean, setuplocal and removelocal goals we switch off dependencies
-ifneq ($(filter cleanpackmodule clean setuplocal removelocal showdeliverables help debugrun,$(MAKECMDGOALS)),)
+ifneq ($(nodep),)
 gb_FULLDEPS := $(false)
 else
-ifdef TINDERBUILD
+# for clean, setuplocal and removelocal goals we switch off dependencies
+ifneq ($(filter cleanpackmodule clean setuplocal removelocal showdeliverables help debugrun,$(MAKECMDGOALS)),)
 gb_FULLDEPS := $(false)
 else
 gb_FULLDEPS := $(true)
