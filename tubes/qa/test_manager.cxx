@@ -79,9 +79,9 @@ public:
     CPPUNIT_TEST( testSetupManager2 );
     CPPUNIT_TEST( testConnect1 );
     CPPUNIT_TEST( testConnect2 );
-    CPPUNIT_TEST( testContactList );
     CPPUNIT_TEST( testPrepareAccountManager1 );
     CPPUNIT_TEST( testPrepareAccountManager2 );
+    CPPUNIT_TEST( testContactList );
     CPPUNIT_TEST( testStartBuddySession1 );
     CPPUNIT_TEST( testStartBuddySession2 );
     CPPUNIT_TEST( testSendPacket );
