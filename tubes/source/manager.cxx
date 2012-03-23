@@ -394,8 +394,6 @@ bool TeleManager::connect()
 
     MutexGuard aGuard( GetMutex());
 
-    MainLoopFlusher aFlusher( this);
-
     /* TODO: also check whether client could be registered and retry if not? */
     SAL_INFO_IF( pImpl->mpDBus && pImpl->mpClient, "tubes", "TeleManager::connect: already connected");
     if (pImpl->mpDBus && pImpl->mpClient)
@@ -510,8 +508,6 @@ bool TeleManager::startGroupSession( const rtl::OUString& rUConferenceRoom, cons
 {
     INFO_LOGGER( "TeleManager::startGroupSession");
 
-    MainLoopFlusher aFlusher( this);
-
     if (!getMyAccount())
         return false;
 
@@ -574,8 +570,6 @@ bool TeleManager::startBuddySession( TpAccount *pAccount, TpContact *pBuddy )
 {
     INFO_LOGGER( "TeleManager::startBuddySession");
 
-    MainLoopFlusher aFlusher( this);
-
     OString aSessionId( TeleManager::createUuid());
 
     TeleConferencePtr pConference( new TeleConference( this, NULL, NULL, aSessionId));
@@ -621,8 +615,6 @@ void TeleManager::prepareAccountManager()
     INFO_LOGGER( "TeleManager::prepareAccountManager");
 
     MutexGuard aGuard( GetMutex());
-
-    MainLoopFlusher aFlusher( this);
 
     SAL_INFO_IF( pImpl->meAccountManagerStatus == AMS_PREPARED, "tubes",
             "TeleManager::prepareAccountManager: already prepared");
@@ -677,8 +669,6 @@ TpAccount* TeleManager::getAccount( const rtl::OString& rAccountID )
 {
     INFO_LOGGER( "TeleManager::getMyAccount");
 
-    MainLoopFlusher aFlusher( this);
-
     SAL_WARN_IF( pImpl->meAccountManagerStatus != AMS_PREPARED, "tubes",
             "TeleManager::getMyAccount: Account Manager not prepared");
     if (pImpl->meAccountManagerStatus != AMS_PREPARED)
@@ -714,8 +704,6 @@ TpAccount* TeleManager::getAccount( const rtl::OString& rAccountID )
 sal_uInt32 TeleManager::sendPacket( const TelePacket& rPacket ) const
 {
     INFO_LOGGER( "TeleManager::sendPacket");
-
-    MainLoopFlusher aFlusher( this);
 
     sal_uInt32 nSent = 0;
     // Access to data ByteStream array forces reference count of one, provide
@@ -785,8 +773,6 @@ void TeleManager::disconnect()
 {
     INFO_LOGGER( "TeleManager::disconnect");
 
-    //! No MainLoopFlusher here!
-
     if (!pImpl->mpClient)
         return;
 
@@ -817,8 +803,6 @@ void TeleManager::acceptTube( TpAccount* pAccount, TpChannel* pChannel, const ch
     INFO_LOGGER( "TeleManager::acceptTube");
 
     SAL_INFO( "tubes", "TeleManager::acceptTube: address " << pAddress);
-
-    MainLoopFlusher aFlusher( this);
 
     SAL_WARN_IF( !pChannel || !pAddress, "tubes", "TeleManager::acceptTube: no channel or no address");
     if (!pChannel || !pAddress)

@@ -238,34 +238,6 @@ private:
 };
 
 
-/** The most ugly workaround for not having a GMainLoop running, i.e. in
-    cppunittest.
- */
-class MainLoopFlusher
-{
-public:
-    explicit MainLoopFlusher( const TeleManager* pManager )
-        :
-            mpManager( pManager)
-    {
-        flush();
-    }
-
-    ~MainLoopFlusher()
-    {
-        flush();
-    }
-
-    void flush() const
-    {
-        mpManager->flushLoop();
-    }
-
-private:
-    const TeleManager* mpManager;
-};
-
-
 #endif // INCLUDED_TUBES_MANAGER_HXX
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
