@@ -33,6 +33,7 @@
 typedef int NSColorRenderingIntent;
 #endif
 
+#import <zlib.h>
 #import "OOoSpotlightImporter.h"
 #import "OOoMetaDataParser.h"
 #import "OOoContentDataParser.h"
@@ -42,6 +43,299 @@ typedef int NSColorRenderingIntent;
 
 /* a dictionary to hold the UTIs */
 static NSDictionary *uti2kind;
+
+typedef struct {
+    unsigned short min_version;
+    unsigned short general_flag;
+    unsigned short compression;
+    unsigned short lastmod_time;
+    unsigned short lastmod_date;
+    unsigned crc32;
+    unsigned compressed_size;
+    unsigned uncompressed_size;
+    unsigned short filename_size;
+    unsigned short extra_field_size;
+    NSString *filename;
+    NSString *extra_field;
+} LocalFileHeader;
+
+typedef struct {
+    unsigned short creator_version;
+    unsigned short min_version;
+    unsigned short general_flag;
+    unsigned short compression;
+    unsigned short lastmod_time;
+    unsigned short lastmod_date;
+    unsigned crc32;
+    unsigned compressed_size;
+    unsigned uncompressed_size;
+    unsigned short filename_size;
+    unsigned short extra_field_size;
+    unsigned short file_comment_size;
+    unsigned short disk_num;
+    unsigned short internal_attr;
+    unsigned external_attr;
+    unsigned offset;
+    NSString *filename;
+    NSString *extra_field;
+    NSString *file_comment;
+} CentralDirectoryEntry;
+
+typedef struct {
+    unsigned short disk_num;
+    unsigned short cdir_disk;
+    unsigned short disk_entries;
+    unsigned short cdir_entries;
+    unsigned cdir_size;
+    unsigned cdir_offset;
+    unsigned short comment_size;
+    NSString *comment;
+} CentralDirectoryEnd;
+
+#define CDIR_ENTRY_SIG (0x02014b50)
+#define LOC_FILE_HEADER_SIG (0x04034b50)
+#define CDIR_END_SIG (0x06054b50)
+
+static unsigned char readByte(NSFileHandle *file)
+{
+    if (file  == nil)
+        return 0;
+    NSData* tmpBuf = [file readDataOfLength: 1];
+    if (tmpBuf == nil)
+        return 0;
+    unsigned char *d = (unsigned char*)[tmpBuf bytes];
+    return *d;
+}
+
+static unsigned short readShort(NSFileHandle *file)
+{
+    unsigned short p0 = (unsigned short)readByte(file);
+    unsigned short p1 = (unsigned short)readByte(file);
+    return (unsigned short)(p0|(p1<<8));
+}
+
+static unsigned readInt(NSFileHandle *file)
+{
+    unsigned p0 = (unsigned)readByte(file);
+    unsigned p1 = (unsigned)readByte(file);
+    unsigned p2 = (unsigned)readByte(file);
+    unsigned p3 = (unsigned)readByte(file);
+    return (unsigned)(p0|(p1<<8)|(p2<<16)|(p3<<24));
+}
+
+static bool readCentralDirectoryEnd(NSFileHandle *file, CentralDirectoryEnd *end)
+{
+    unsigned signature = readInt(file);
+    if (signature != CDIR_END_SIG)
+        return false;
+
+    end->disk_num = readShort(file);
+    end->cdir_disk = readShort(file);
+    end->disk_entries = readShort(file);
+    end->cdir_entries = readShort(file);
+    end->cdir_size = readInt(file);
+    end->cdir_offset = readInt(file);
+    end->comment_size = readShort(file);
+    NSData *data = [file readDataOfLength: end->comment_size];
+    end->comment = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return true;
+}
+
+static bool readCentralDirectoryEntry(NSFileHandle *file, CentralDirectoryEntry *entry)
+{
+    unsigned signature = readInt(file);
+    if (signature != CDIR_ENTRY_SIG)
+        return false;
+
+    entry->creator_version = readShort(file);
+    entry->min_version = readShort(file);
+    entry->general_flag = readShort(file);
+    entry->compression = readShort(file);
+    entry->lastmod_time = readShort(file);
+    entry->lastmod_date = readShort(file);
+    entry->crc32 = readInt(file);
+    entry->compressed_size = readInt(file);
+    entry->uncompressed_size = readInt(file);
+    entry->filename_size = readShort(file);
+    entry->extra_field_size = readShort(file);
+    entry->file_comment_size = readShort(file);
+    entry->disk_num = readShort(file);
+    entry->internal_attr = readShort(file);
+    entry->external_attr = readInt(file);
+    entry->offset = readInt(file);
+    NSData *data = [file readDataOfLength: entry->filename_size];
+    entry->filename = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    data = [file readDataOfLength: entry->extra_field_size];
+    entry->extra_field = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    data = [file readDataOfLength: entry->file_comment_size];
+    entry->file_comment = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return true;
+}
+
+static bool readLocalFileHeader(NSFileHandle *file, LocalFileHeader *header)
+{
+    unsigned signature = readInt(file);
+    if (signature != LOC_FILE_HEADER_SIG)
+        return false;
+
+    header->min_version = readShort(file);
+    header->general_flag = readShort(file);
+    header->compression = readShort(file);
+    header->lastmod_time = readShort(file);
+    header->lastmod_date = readShort(file);
+    header->crc32 = readInt(file);
+    header->compressed_size = readInt(file);
+    header->uncompressed_size = readInt(file);
+    header->filename_size = readShort(file);
+    header->extra_field_size = readShort(file);
+    NSData *data = [file readDataOfLength: header->filename_size];
+    header->filename = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    data = [file readDataOfLength: header->extra_field_size];
+    header->extra_field = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+    return true;
+}
+
+static bool areHeadersConsistent(const LocalFileHeader *header, const CentralDirectoryEntry *entry)
+{
+    if (header->min_version != entry->min_version)
+        return false;
+    if (header->general_flag != entry->general_flag)
+        return false;
+    if (header->compression != entry->compression)
+        return false;
+    if (!(header->general_flag & 0x08))
+    {
+        if (header->crc32 != entry->crc32)
+            return false;
+        if (header->compressed_size != entry->compressed_size)
+            return false;
+        if (header->uncompressed_size != entry->uncompressed_size)
+            return false;
+    }
+    return true;
+}
+
+static bool findCentralDirectoryEnd(NSFileHandle *file)
+{
+    [file seekToEndOfFile];
+    unsigned long long fileLength = [file offsetInFile];
+    [file seekToFileOffset: 0];
+
+    while ([file offsetInFile] < fileLength)
+    {
+        unsigned long long offset = [file offsetInFile];
+        unsigned signature = readInt(file);
+        if (signature == CDIR_END_SIG)
+        {
+            [file seekToFileOffset: (offset - 4)];
+            return true;
+        }
+        else
+            [file seekToFileOffset: (offset - 3)];
+    }
+    return false;
+}
+
+static bool isZipFile(NSFileHandle *file)
+{
+    if (!findCentralDirectoryEnd(file))
+        return false;
+    CentralDirectoryEnd end;
+    if (!readCentralDirectoryEnd(file, &end))
+        return false;
+    [file seekToFileOffset: end.cdir_offset];
+    CentralDirectoryEntry entry;
+    if (!readCentralDirectoryEntry(file, &entry))
+        return false;
+    [file seekToFileOffset: entry.offset];
+    LocalFileHeader header;
+    if (!readLocalFileHeader(file, &header))
+        return false;
+    if (!areHeadersConsistent(&header, &entry))
+        return false;
+    return true;
+}
+
+static bool findDataStream(NSFileHandle *file, CentralDirectoryEntry *entry, NSString *name)
+{
+    [file seekToEndOfFile];
+    unsigned long long fileLength = [file offsetInFile];
+    if (!findCentralDirectoryEnd(file))
+        return false;
+    CentralDirectoryEnd end;
+    if (!readCentralDirectoryEnd(file, &end))
+        return false;
+    [file seekToFileOffset: end.cdir_offset];
+    do
+    {
+        if (!readCentralDirectoryEntry(file, entry))
+            return false;
+        if ([entry->filename compare: name] == NSOrderedSame)
+            break;
+    }
+    while ( [file offsetInFile] < fileLength && [file offsetInFile] < end.cdir_offset + end.cdir_size);
+    if ([entry->filename compare: name] != NSOrderedSame)
+        return false;
+    [file seekToFileOffset: entry->offset];
+    LocalFileHeader header;
+    if (!readLocalFileHeader(file, &header))
+        return false;
+    if (!areHeadersConsistent(&header, entry))
+        return false;
+    return true;
+}
+
+NSData *getUncompressedData(NSFileHandle *file, NSString *name)
+{
+    CentralDirectoryEntry entry;
+    if (!findDataStream(file, &entry, name))
+        return nil;
+    if (!entry.compression)
+        return [file readDataOfLength: entry.compressed_size];
+    else
+    {
+        int ret;
+        z_stream strm;
+
+        /* allocate inflate state */
+        strm.zalloc = Z_NULL;
+        strm.zfree = Z_NULL;
+        strm.opaque = Z_NULL;
+        strm.avail_in = 0;
+        strm.next_in = Z_NULL;
+        ret = inflateInit2(&strm,-MAX_WBITS);
+        if (ret != Z_OK)
+            return nil;
+
+        NSData *compressedData = [file readDataOfLength: entry.compressed_size];
+
+        strm.avail_in = [compressedData length];
+        strm.next_in = (Bytef *)[compressedData bytes];
+
+        Bytef *uncompressedData = (Bytef *)malloc(entry.uncompressed_size);
+        if (!uncompressedData)
+        {
+            (void)inflateEnd(&strm);
+            return nil;
+        }
+        strm.avail_out = entry.uncompressed_size;
+        strm.next_out = uncompressedData;
+        ret = inflate(&strm, Z_FINISH);
+        switch (ret)
+        {
+        case Z_NEED_DICT:
+        case Z_DATA_ERROR:
+        case Z_MEM_ERROR:
+            (void)inflateEnd(&strm);
+            free(uncompressedData);
+            return nil;
+        }
+        (void)inflateEnd(&strm);
+        NSData *returnBuffer = [NSData dataWithBytes:(const void *)uncompressedData length:entry.uncompressed_size];
+        free(uncompressedData);
+        return returnBuffer;
+    }
+}
 
 @implementation OOoSpotlightImporter
 
@@ -93,7 +387,7 @@ static NSDictionary *uti2kind;
     }
     
     //first check to see if this is a valid zipped file that contains a file "meta.xml"
-    unzFile unzipFile = [self openZipFileAtPath:pathToFile];
+    NSFileHandle *unzipFile = [self openZipFileAtPath:pathToFile];
 
     //
     if (unzipFile == nil) {
@@ -104,7 +398,7 @@ static NSDictionary *uti2kind;
     //first get the metadata
     NSData *metaData = [self metaDataFileFromZip:unzipFile];
     if (metaData == nil) {
-        unzClose(unzipFile);
+        [unzipFile closeFile];
         return YES;
     }
 
@@ -122,7 +416,7 @@ static NSDictionary *uti2kind;
     //and now get the content
     NSData *contentData = [self contentDataFileFromZip:unzipFile];
     if (contentData == nil) {
-        unzClose(unzipFile);
+        [unzipFile closeFile];
         return YES;
     }
     
@@ -137,21 +431,19 @@ static NSDictionary *uti2kind;
     [contentData release];
     [parser2 release];
 
-    unzClose(unzipFile);
+    [unzipFile closeFile];
     
     return YES;
 }
 
 /* openZipFileAtPath returns the file as a valid data structure or nil otherwise*/
-- (unzFile)openZipFileAtPath:(NSString*)pathToFile
+- (NSFileHandle*)openZipFileAtPath:(NSString*)pathToFile
 {
-    unzFile unzipFile = nil;
+    NSFileHandle* unzipFile = nil;
     
-    const char *zipfilename = [pathToFile UTF8String];
-    
-    if (zipfilename != nil)
+    if ([pathToFile length] == 0)
     {
-        unzipFile = unzOpen(zipfilename);
+        unzipFile = [NSFileHandle fileHandleForReadingAtPath: pathToFile];
     }
     
     if (unzipFile == nil)
@@ -159,7 +451,12 @@ static NSDictionary *uti2kind;
         //NSLog(@"Cannot open %s",zipfilename);
         return nil;
     }
-    
+
+    if (!isZipFile(unzipFile))
+    {
+        [unzipFile closeFile];
+        return nil;
+    }    
     //NSLog(@"%s opened",zipfilename);
     
     return unzipFile;
@@ -167,76 +464,20 @@ static NSDictionary *uti2kind;
 
 /* metaDataFileFromZip extracts the file meta.xml from the zip file and returns it as an NSData* structure 
    or nil if the metadata is not present */
-- (NSData*) metaDataFileFromZip:(unzFile)unzipFile
+- (NSData*) metaDataFileFromZip:(NSFileHandle*)unzipFile
 {
-    //search and set the cursor to meta.xml
-    if (unzLocateFile(unzipFile, "meta.xml", CASESENSITIVITY) != UNZ_OK) {
-        //we hit an error, do cleanup
-        unzCloseCurrentFile(unzipFile);
+    if (unzipFile == nil)
         return nil;
-    }
-    
-    //open the current file
-    if (unzOpenCurrentFile(unzipFile) != UNZ_OK) {
-        //we hit an error, do cleanup
-        unzCloseCurrentFile(unzipFile); 
-        unzClose(unzipFile);
-        return nil;
-    }
-
-    NSMutableData *data = [NSMutableData new];
-
-    unsigned buffer[BUFFER_SIZE];
-    int bytesRead = 0;
-    while ((bytesRead = unzReadCurrentFile(unzipFile, buffer, sizeof(buffer))) > 0) {
-        //append the data until we are finished
-        [data appendData:[NSData dataWithBytes:(const void *)buffer length:bytesRead]];
-    }
-    
-    //we no longer need the file, so close it
-    unzCloseCurrentFile(unzipFile);
-    
-    NSData *returnValue = [NSData dataWithData:data];
-    [data release];
-    
-    return returnValue;
+    return getUncompressedData(unzipFile, @"meta.xml");
 }
 
 /* contentDataFileFromZip extracts the file content.xml from the zip file and returns it as an NSData* structure 
    or nil if the metadata is not present */
-- (NSData*) contentDataFileFromZip:(unzFile)unzipFile
+- (NSData*) contentDataFileFromZip:(NSFileHandle*)unzipFile
 {
-    //search and set the cursor to content.xml
-    if (unzLocateFile(unzipFile, "content.xml", CASESENSITIVITY) != UNZ_OK) {
-        //we hit an error, do cleanup
-        unzCloseCurrentFile(unzipFile);
+    if (unzipFile == nil)
         return nil;
-    }
-    
-    //open the current file
-    if (unzOpenCurrentFile(unzipFile) != UNZ_OK) {
-        //we hit an error, do cleanup
-        unzCloseCurrentFile(unzipFile); 
-        unzClose(unzipFile);
-        return nil;
-    }
-    
-    NSMutableData *data = [NSMutableData new];
-    
-    unsigned buffer[BUFFER_SIZE];
-    int bytesRead = 0;
-    while ((bytesRead = unzReadCurrentFile(unzipFile, buffer, sizeof(buffer))) > 0) {
-        //append the data
-        [data appendData:[NSData dataWithBytes:(const void *)buffer length:bytesRead]];
-    }
-    
-    //we no longer need the file, so close it
-    unzCloseCurrentFile(unzipFile);
-    
-    NSData *returnValue = [NSData dataWithData:data];
-    [data release];
-    
-    return returnValue;
+    return getUncompressedData(unzipFile, @"content.xml");
 }
 
 
