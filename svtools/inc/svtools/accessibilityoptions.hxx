@@ -40,8 +40,8 @@ class SVT_DLLPUBLIC SvtAccessibilityOptions:
     public utl::detail::Options, private SfxListener
 {
 private:
-    static SvtAccessibilityOptions_Impl* volatile sm_pSingleImplConfig;
-    static sal_Int32                     volatile sm_nAccessibilityRefCount;
+    static SvtAccessibilityOptions_Impl* sm_pSingleImplConfig;
+    static sal_Int32                     sm_nAccessibilityRefCount;
 
 public:
     SvtAccessibilityOptions();

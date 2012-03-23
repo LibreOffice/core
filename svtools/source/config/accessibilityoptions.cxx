@@ -94,8 +94,8 @@ public:
 
 // initialization of static members --------------------------------------
 
-SvtAccessibilityOptions_Impl* volatile  SvtAccessibilityOptions::sm_pSingleImplConfig =NULL;
-sal_Int32                     volatile  SvtAccessibilityOptions::sm_nAccessibilityRefCount(0);
+SvtAccessibilityOptions_Impl* SvtAccessibilityOptions::sm_pSingleImplConfig =NULL;
+sal_Int32                     SvtAccessibilityOptions::sm_nAccessibilityRefCount(0);
 
 namespace
 {
