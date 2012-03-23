@@ -48,6 +48,7 @@ ValueSetItem::ValueSetItem( ValueSet& rParent )
     : mrParent(rParent)
     , mnId(0)
     , meType(VALUESETITEM_NONE)
+    , mbVisible(true)
     , mpData(NULL)
     , mpxAcc(NULL)
 {
