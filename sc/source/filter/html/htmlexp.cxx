@@ -769,7 +769,11 @@ void ScHTMLExport::WriteTables()
             while( nCol <= nEndCol )
             {
                 if( pDoc->ColHidden(nCol, nTab) )
+                {
+                    ++nCol;
                     continue;
+                }
+
                 if( nWidth != ToPixel( pDoc->GetColWidth( nCol, nTab ) ) )
                 {
                     if( nSpan != 0 )
