@@ -1139,6 +1139,12 @@ std::ostream& operator<< (::std::ostream& os, const rtl::OUString& str)
     return os << ::rtl::OUStringToOString(str, RTL_TEXTENCODING_UTF8).getStr();
 }
 
+void dumpItems(const ScDPCache& rCache, long nDim, const ScDPCache::ItemsType& rItems, size_t nOffset)
+{
+    for (size_t i = 0; i < rItems.size(); ++i)
+        cout << "      " << (i+nOffset) << ": " << rCache.GetFormattedString(nDim, rItems[i]) << endl;
+}
+
 }
 
 void ScDPCache::Dump() const
@@ -1149,22 +1155,25 @@ void ScDPCache::Dump() const
         for (size_t i = 0; it != itEnd; ++it, ++i)
         {
             const Field& fld = *it;
-            cout << "* source field: " << GetDimensionName(i) << endl;
+            cout << "* source dimension: " << GetDimensionName(i) << " (ID = " << i << ")" << endl;
             cout << "    item count: " << fld.maItems.size() << endl;
+            dumpItems(*this, i, fld.maItems, 0);
             if (fld.mpGroup)
             {
                 cout << "    group item count: " << fld.mpGroup->maItems.size() << endl;
+                dumpItems(*this, i, fld.mpGroup->maItems, fld.maItems.size());
             }
         }
     }
 
     {
         GroupFieldsType::const_iterator it = maGroupFields.begin(), itEnd = maGroupFields.end();
-        for (; it != itEnd; ++it)
+        for (size_t i = maFields.size(); it != itEnd; ++it, ++i)
         {
             const GroupItems& gi = *it;
-            cout << "* group field: (unnamed)" << endl;
+            cout << "* group dimension: (unnamed) (ID = " << i << ")" << endl;
             cout << "    item count: " << gi.maItems.size() << endl;
+            dumpItems(*this, i, gi.maItems, 0);
         }
     }
 
