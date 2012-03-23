@@ -683,7 +683,7 @@ bool TeleManager::isAccountManagerReadyHandlerInvoked() const
     return pImpl->mbAccountManagerReadyHandlerInvoked;
 }
 
-ContactList* TeleManager::getContactList()
+ContactList* TeleManager::getContactList() const
 {
     return pImpl->mpContactList;
 }

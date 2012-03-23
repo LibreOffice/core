@@ -9,19 +9,20 @@ ModelessDialog RID_SCDLG_CONTACTS
     Hide = FALSE ;
     Moveable = TRUE ;
     Closeable = TRUE ;
-    Size = MAP_APPFONT ( 320 , 480 ) ;
+    Size = MAP_APPFONT ( 220 , 200 ) ;
+    OutputSize = TRUE ;
     Text [ en-US ] = "Contacts" ;
 
     FixedLine FL_LABEL
     {
         Pos = MAP_APPFONT ( 6 , 3 ) ;
         Size = MAP_APPFONT ( 400 , 8 ) ;
-        Text [ en-US ] = "Here are your contacts" ;
+        Text [ en-US ] = "Select a contact to collaborate with" ;
     };
     Control CTL_LIST
     {
-        Pos = MAP_APPFONT ( 21 , 38 ) ;
-        Size = MAP_APPFONT ( 177 , 130 ) ;
+        Pos = MAP_APPFONT ( 8 , 10 ) ;
+        Size = MAP_APPFONT ( 200 , 190 ) ;
         Border = TRUE ;
         TabStop = TRUE ;
     };

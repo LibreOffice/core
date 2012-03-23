@@ -30,15 +30,20 @@
 
 #include <vector>
 #include "collab.hxx"
+#include "contacts.hrc"
+#include "scresid.hxx"
+#include <tubes/manager.hxx>
 #include <tubes/conference.hxx>
-#include <vcl/syswin.hxx>
+#include <tubes/contact-list.hxx>
+#include <vcl/fixed.hxx>
+#include <vcl/dialog.hxx>
 #include <svx/simptabl.hxx>
 
-// #define CONTACTS
+#define CONTACTS_DLG
 
 #ifdef CONTACTS_DLG
 namespace {
-class TubeContacts : ModelessDialog
+class TubeContacts : public ModelessDialog
 {
     FixedLine               maLabel;
     SvxSimpleTableContainer maListContainer;
@@ -46,24 +51,69 @@ class TubeContacts : ModelessDialog
 
 public:
     TubeContacts() :
-        ModelessDialog( NULL, RID_SCDLG_CONTACTS ),
+        ModelessDialog( NULL, ScResId( RID_SCDLG_CONTACTS ) ),
         maLabel( this, ScResId( FL_LABEL ) ),
         maListContainer( this, ScResId( CTL_LIST ) ),
-        maList( maListContainer ),
+        maList( maListContainer )
     {
-        SetMinOutputSizePixel( Size( 640, 480 ) );
+        static long aStaticTabs[]=
+        {
+            3 /* count */, 0, 20, 80, 150, 200
+        };
+
+        maList.SvxSimpleTable::SetTabs( aStaticTabs );
+        String sHeader( '\t' );
+        sHeader += String( ScResId( STR_HEADER_ALIAS ) );
+        sHeader += '\t';
+        sHeader += String( ScResId( STR_HEADER_NAME ) );
+        sHeader += '\t';
+        maList.InsertHeaderEntry( sHeader, HEADERBAR_APPEND, HIB_LEFT );
         Show();
     }
     virtual ~TubeContacts() {}
+
+    static rtl::OUString fromUTF8( const char *pStr )
+    {
+        return rtl::OStringToOUString( rtl::OString( pStr, strlen( pStr ) ),
+                                       RTL_TEXTENCODING_UTF8 );
+    }
+
+    void Populate( const TeleManager &rManager )
+    {
+        ContactList *pContacts = rManager.getContactList();
+        if ( pContacts )
+        {
+            fprintf( stderr, "contacts !\n" );
+            AccountContactPairV aPairs = pContacts->getContacts();
+            AccountContactPairV::iterator it;
+            for( it = aPairs.begin(); it != aPairs.end(); it++ )
+            {
+                fprintf( stderr, "'%s' => '%s' '%s'\n",
+                         tp_account_get_display_name( it->first ),
+                         tp_contact_get_alias( it->second ),
+                         tp_contact_get_identifier( it->second ) );
+                rtl::OUStringBuffer aEntry( 128 );
+                aEntry.append( sal_Unicode( '\t' ) );
+                aEntry.append( fromUTF8 ( tp_contact_get_alias( it->second ) ) );
+                aEntry.append( sal_Unicode( '\t' ) );
+                aEntry.append( fromUTF8 ( tp_contact_get_identifier( it->second ) ) );
+                aEntry.append( sal_Unicode( '\t' ) );
+                SvLBoxEntry* pEntry = maList.InsertEntry( aEntry.makeStringAndClear() );
+                // FIXME: ref the TpContact ...
+                pEntry->SetUserData( it->second );
+            }
+        }
+    }
 };
 } // anonymous namespace
 #endif
 
 namespace tubes {
-void createContacts()
+void createContacts( const TeleManager &rManager )
 {
 #ifdef CONTACTS_DLG
-    new TubeContacts();
+    TubeContacts *pContacts = new TubeContacts();
+    pContacts->Populate( rManager );
 #endif
 }
 }

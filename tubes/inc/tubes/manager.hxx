@@ -96,7 +96,7 @@ public:
     /** Fetches the contact list. Returns 0 before connect() is called successfully.
         Is non-functional until prepareAccountManager().
      */
-    ContactList*            getContactList();
+    ContactList*            getContactList() const;
 
 #if 0
     /** Start a group session in a MUC.

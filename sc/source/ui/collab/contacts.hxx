@@ -32,8 +32,9 @@
 #include "collab.hxx"
 #include <tubes/conference.hxx>
 
+class TeleManager;
 namespace tubes {
-    void createContacts();
+    void createContacts( const TeleManager &rContacts );
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

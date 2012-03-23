@@ -35,6 +35,7 @@
 #include "docfunc.hxx"
 #include "collab.hxx"
 #include "contacts.hxx"
+#include <tubes/manager.hxx>
 #include <tubes/conference.hxx>
 
 // new file send/recv fun ...
@@ -451,7 +452,7 @@ public:
             SendFile( rText );
 
         if ( rtl::OUString( rText ) == "contacts" )
-            tubes::createContacts();
+            tubes::createContacts( TeleManager::get() );
 
         return true; // needs some code auditing action
     }
