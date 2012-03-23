@@ -62,7 +62,6 @@ LibreOffice
             PCPFILENAME libreoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
-            REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 1
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
@@ -390,7 +389,6 @@ OxygenOffice
             PCPFILENAME openoffice.pcp
             UPDATEURL http://update.libreoffice.org/check.php
             ADD_INCLUDE_FILES cliureversion.mk,clioootypesversion.mk
-            REMOVE_UPGRADE_CODE_FILE upgradecode_remove_ooo.txt
             ADDSYSTEMINTEGRATION 1
             FILEFORMATNAME OpenOffice.org
             FILEFORMATVERSION 1.0
