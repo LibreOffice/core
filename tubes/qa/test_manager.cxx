@@ -69,6 +69,8 @@ public:
     GMainLoop*                  mpMainLoop;
     void spinMainLoop();
 
+    static void FileSent( bool success, void *user_data);
+
     // Order is significant.
     CPPUNIT_TEST_SUITE( TestTeleTubes );
     CPPUNIT_TEST( testSetupManager1 );
@@ -98,6 +100,8 @@ private:
 
     rtl::OString              maOffererIdentifier;
     rtl::OString              maAccepterIdentifier;
+
+    bool                      maFileSentSuccess;
 };
 
 // static, not members, so they actually survive cppunit test iteration
@@ -287,11 +291,11 @@ void TestTeleTubes::testReceivePacket()
     CPPUNIT_ASSERT( nReceivedPackets == nSentPackets);
 }
 
-static void TestTeleTubes_FileSent( bool success, void *user_data)
+void TestTeleTubes::FileSent( bool success, void *user_data)
 {
     TestTeleTubes *self = reinterpret_cast<TestTeleTubes *>(user_data);
 
-    CPPUNIT_ASSERT( success);
+    self->maFileSentSuccess = success;
     g_main_loop_quit (self->mpMainLoop);
 }
 
@@ -302,8 +306,10 @@ void TestTeleTubes::testSendFile()
     /* This has to run after testContactList has run successfully. */
     CPPUNIT_ASSERT( mpAccepterContact != 0);
     mpManager1->sendFile( maTestConfigIniURL,
-        TestTeleTubes_FileSent, this);
+        &TestTeleTubes::FileSent, this);
     spinMainLoop();
+
+    CPPUNIT_ASSERT( maFileSentSuccess);
 }
 
 void TestTeleTubes::testFlushLoops()
