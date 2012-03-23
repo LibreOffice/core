@@ -31,10 +31,8 @@
 #include <tubes/conference.hxx>
 #include <tubes/contact-list.hxx>
 
-ScCollaboration::ScCollaboration( const Link& rLinkPacket,
-                                  const Link& rLinkFile )
+ScCollaboration::ScCollaboration( const Link& rLinkFile )
     :
-        maLinkPacket( rLinkPacket ),
         maLinkFile( rLinkFile ),
         mpAccount( NULL),
         mpContact( NULL),
@@ -69,9 +67,17 @@ extern "C" {
     }
 }
 
+void ScCollaboration::packetReceivedCallback( TeleConference *pConference )
+{
+    /* Relay the signal out… */
+    sigPacketReceived( pConference);
+}
+
 bool ScCollaboration::initManager()
 {
-    mpManager = new TeleManager( maLinkPacket );
+    mpManager = new TeleManager();
+    mpManager->sigPacketReceived.connect(
+        boost::bind( &ScCollaboration::packetReceivedCallback, this, _1 ));
     bool bOk = mpManager->connect();
     mpManager->prepareAccountManager();
     mpManager->setFileReceivedCallback( file_recv_cb, (void *)this );

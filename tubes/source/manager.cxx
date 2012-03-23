@@ -354,9 +354,8 @@ static void TeleManager_AccountManagerReadyHandler(
 }
 
 
-TeleManager::TeleManager( const Link& rLink, bool bCreateOwnGMainLoop )
+TeleManager::TeleManager( bool bCreateOwnGMainLoop )
     :
-        maLink( rLink),
         mbChannelReadyHandlerInvoked( false)
 {
     // The glib object types need to be initialized, else we aren't going
@@ -719,13 +718,11 @@ sal_uInt32 TeleManager::sendPacket( const TelePacket& rPacket ) const
 }
 
 
-long TeleManager::callbackOnRecieved( TeleConference* pConference ) const
+void TeleManager::callbackOnRecieved( TeleConference* pConference ) const
 {
     INFO_LOGGER( "TeleManager::callbackOnRecieved");
 
-    if (maLink.IsSet())
-        return maLink.Call( pConference);
-    return 0;
+    sigPacketReceived( pConference );
 }
 
 

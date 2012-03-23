@@ -65,7 +65,8 @@ public:
     void testDestroyManager2();
     void testDestroyAccepterContact();
     void testFailAlways();
-    DECL_STATIC_LINK( TestTeleTubes, ReceiverCallback, TeleConference* );
+
+    void ReceiverCallback( TeleConference* pConference );
 
     GMainLoop*                  mpMainLoop;
     void spinMainLoop();
@@ -107,6 +108,8 @@ private:
 
     bool                      maFileSentSuccess;
     rtl::OUString             maFileReceivedUri;
+
+    sal_uInt32                mnPacketReceivedEmissions;
 };
 
 // static, not members, so they actually survive cppunit test iteration
@@ -130,7 +133,8 @@ timed_out (void *user_data)
 
 TestTeleTubes::TestTeleTubes()
     : maTestConfigIniURL(getURLFromSrc("/tubes/qa/test-config.ini")),
-      maTestConfig(maTestConfigIniURL)
+      maTestConfig(maTestConfigIniURL),
+      mnPacketReceivedEmissions(0)
 {
     TeleManager::addSuffixToNames( "TeleTest");
 
@@ -207,12 +211,12 @@ void TestTeleTubes::testContactList()
 
 void TestTeleTubes::testSetupManager1()
 {
-    mpManager1 = new TeleManager( STATIC_LINK( this, TestTeleTubes, ReceiverCallback), true);
+    mpManager1 = new TeleManager( true);
 }
 
 void TestTeleTubes::testSetupManager2()
 {
-    mpManager2 = new TeleManager( STATIC_LINK( this, TestTeleTubes, ReceiverCallback));
+    mpManager2 = new TeleManager();
 }
 
 void TestTeleTubes::testPrepareAccountManager1()
@@ -229,14 +233,14 @@ void TestTeleTubes::testPrepareAccountManager2()
     CPPUNIT_ASSERT( eStatus == TeleManager::AMS_PREPARED);
 }
 
-IMPL_STATIC_LINK_NOINSTANCE( TestTeleTubes, ReceiverCallback, TeleConference*, pConference )
+void TestTeleTubes::ReceiverCallback( TeleConference* pConference )
 {
     SAL_INFO( "tubes", "TestTeleTubes::ReceiverCallback: " << pConference);
     if (pConference)
     {
         // we could pop a packet here
+        mnPacketReceivedEmissions++;
     }
-    return 0;
 }
 
 void TestTeleTubes::testStartBuddySession1()
@@ -270,8 +274,11 @@ void TestTeleTubes::testConnect2()
 void TestTeleTubes::testSendPacket()
 {
     TelePacket aPacket( "", RTL_CONSTASCII_STRINGPARAM( "from 1 to 2"));
+
+    mpManager1->sigPacketReceived.connect( boost::bind( &TestTeleTubes::ReceiverCallback, this, _1 ) );
     nSentPackets = mpManager1->sendPacket( aPacket);
     CPPUNIT_ASSERT( nSentPackets == 2); // expect out+in conference, as own instance accepted self
+    CPPUNIT_ASSERT( mnPacketReceivedEmissions == 2 );
 }
 
 void TestTeleTubes::testReceivePacket()
@@ -285,6 +292,7 @@ void TestTeleTubes::testReceivePacket()
      */
     sal_uInt32 nExpectedPackets = nSentPackets * 2;
     bool bOk;
+
     do
     {
         do

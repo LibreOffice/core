@@ -40,6 +40,7 @@
 #include <tools/link.hxx>
 #include <telepathy-glib/telepathy-glib.h>
 #include <vector>
+#include <boost/signals2.hpp>
 
 // For testing purposes, we might need more in future.
 #define LIBO_TUBES_DBUS_MSG_METHOD "LibOMsg"
@@ -72,15 +73,11 @@ public:
     /** Prepare tube manager with account and service to be offered/listened
         to.
 
-        @param rLink
-            Callback when a packet is received. Called with a TeleConference*
-            pointing to the instance that received the packet.
-
         @param bCreateOwnGMainLoop
             Whether to create and iterate an own GMainLoop. For testing
             purposes when no GMainLoop is available.
      */
-    TeleManager( const Link& rLink, bool bCreateOwnGMainLoop = false );
+    TeleManager( bool bCreateOwnGMainLoop = false );
     ~TeleManager();
 
     /** Prepare the Telepathy Account Manager. Requires connect() to have succeeded.
@@ -139,8 +136,12 @@ public:
      */
     sal_uInt32              sendPacket( const TelePacket& rPacket ) const;
 
-    /** Calls the callback Link set with ctor. */
-    long                    callbackOnRecieved( TeleConference* pConference ) const;
+    /** Emitted when a packet is received, with a TeleConference*
+        pointing to the instance that received the packet.
+     */
+    boost::signals2::signal<void (TeleConference*)> sigPacketReceived;
+    /* FIXME: listen to a signal on the conference rather than having it call us */
+    void                    callbackOnRecieved( TeleConference* pConference ) const;
 
     /** Pop a received data packet.
 
@@ -218,8 +219,6 @@ public:
     static void             TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer user_data);
 
 private:
-
-    Link                    maLink;
     TeleConferenceVector    maConferences;
 
     bool                    mbChannelReadyHandlerInvoked : 1;
