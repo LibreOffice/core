@@ -140,6 +140,9 @@ public:
 
     void                    sendFile( rtl::OUString &localUri, TeleConference::FileSentCallback pCallback, void* pUserData);
 
+    typedef void          (*FileReceivedCallback)( rtl::OUString &localUri, void* pUserData );
+    void                    setFileReceivedCallback( FileReceivedCallback callback, void* pUserData );
+
     /// Only for use with MainLoopFlusher
     GMainLoop*              getMainLoop() const;
 
@@ -197,6 +200,9 @@ public:
 
     TpAccount*              getAccount( const rtl::OString& rAccountID );
 
+/* Callbacks; not for use outside this class. */
+    static void             TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer user_data);
+
 private:
 
     TeleConferenceVector    maConferences;
@@ -206,6 +212,9 @@ private:
     static TeleManagerImpl* pImpl;
     static sal_uInt32       nRefCount;
     static rtl::OString     aNameSuffix;
+
+    FileReceivedCallback    mpFileReceivedCallback;
+    void                   *mpFileReceivedCallbackData;
 
     friend class TeleManagerImpl;   // access to mutex
 

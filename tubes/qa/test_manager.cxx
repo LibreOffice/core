@@ -70,6 +70,7 @@ public:
     void spinMainLoop();
 
     static void FileSent( bool success, void *user_data);
+    static void FileReceived( rtl::OUString& aUri, void *user_data);
 
     // Order is significant.
     CPPUNIT_TEST_SUITE( TestTeleTubes );
@@ -102,6 +103,7 @@ private:
     rtl::OString              maAccepterIdentifier;
 
     bool                      maFileSentSuccess;
+    rtl::OUString             maFileReceivedUri;
 };
 
 // static, not members, so they actually survive cppunit test iteration
@@ -299,17 +301,33 @@ void TestTeleTubes::FileSent( bool success, void *user_data)
     g_main_loop_quit (self->mpMainLoop);
 }
 
+void TestTeleTubes::FileReceived( rtl::OUString& aUri, void *user_data)
+{
+    TestTeleTubes *self = reinterpret_cast<TestTeleTubes *>(user_data);
+
+    self->maFileReceivedUri = aUri;
+    g_main_loop_quit (self->mpMainLoop);
+}
+
 void TestTeleTubes::testSendFile()
 {
     TpAccount *pAcc1 = mpManager1->getAccount(maOffererIdentifier);
     CPPUNIT_ASSERT( pAcc1 != 0);
     /* This has to run after testContactList has run successfully. */
     CPPUNIT_ASSERT( mpAccepterContact != 0);
+
+    mpManager1->setFileReceivedCallback(&TestTeleTubes::FileReceived, this);
+
     mpManager1->sendFile( maTestConfigIniURL,
         &TestTeleTubes::FileSent, this);
+    /* Waiting for two events: FileSent and FileReceived both quit the mainloop */
+    spinMainLoop();
     spinMainLoop();
 
     CPPUNIT_ASSERT( maFileSentSuccess);
+    CPPUNIT_ASSERT_MESSAGE(
+        OUStringToOString( maFileReceivedUri, RTL_TEXTENCODING_UTF8).getStr(),
+        maFileReceivedUri == "file:///tmp/fixme.ods");
 }
 
 void TestTeleTubes::testFlushLoops()

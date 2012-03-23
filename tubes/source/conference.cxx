@@ -479,7 +479,7 @@ static void TeleConference_TransferError( EmpathyFTHandler *handler, const GErro
     g_object_unref (handler);
 }
 
-static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gpointer user_data)
+void TeleConference::FTReady( EmpathyFTHandler *handler, GError *error, gpointer user_data)
 {
     SendFileRequest *request = reinterpret_cast<SendFileRequest *>(user_data);
 
@@ -495,6 +495,7 @@ static void TeleConference_FTReady( EmpathyFTHandler *handler, GError *error, gp
             G_CALLBACK (TeleConference_TransferDone), request);
         g_signal_connect(handler, "transfer-error",
             G_CALLBACK (TeleConference_TransferError), request);
+        empathy_ft_handler_set_service_name(handler, request->mpSelf->mpManager->getFullServiceName().getStr());
         empathy_ft_handler_start_transfer(handler);
     }
 }
@@ -517,7 +518,7 @@ void TeleConference::sendFile( rtl::OUString &localUri, FileSentCallback pCallba
         tp_channel_get_target_contact( mpChannel),
         pSource,
         0,
-        &TeleConference_FTReady, pReq);
+        &TeleConference::FTReady, pReq);
 }
 
 

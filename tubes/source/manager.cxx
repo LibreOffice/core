@@ -31,6 +31,7 @@
 #include <rtl/strbuf.hxx>
 #include <rtl/uuid.h>
 #include <osl/mutex.hxx>
+#include <cstring>
 
 
 #if defined SAL_LOG_INFO
@@ -77,6 +78,7 @@ public:
     GMainLoop*                          mpLoop;
     TpDBusDaemon*                       mpDBus;
     TpBaseClient*                       mpClient;
+    TpBaseClient*                       mpFileTransferClient;
     TpAccountManager*                   mpAccountManager;
     TeleManager::AccountManagerStatus   meAccountManagerStatus;
     bool                                mbAccountManagerReadyHandlerInvoked;
@@ -172,6 +174,102 @@ static void TeleManager_DBusChannelHandler(
     }
 }
 
+void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer pUserData)
+{
+    TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
+
+    SAL_INFO( "tubes", "TeleConference_TransferDone: hooray!");
+    GFile *gfile = empathy_ft_handler_get_gfile( handler);
+    char *uri = g_file_get_uri( gfile);
+    rtl::OUString aUri( uri, strlen( uri), RTL_TEXTENCODING_UTF8);
+    g_free( uri);
+
+    pManager->mpFileReceivedCallback( aUri, pManager->mpFileReceivedCallbackData);
+
+    //g_object_unref( handler);
+}
+
+static void TeleManager_TransferError( EmpathyFTHandler *handler, const GError *error, void*)
+{
+    SAL_INFO( "tubes", "TeleConference_TransferError: " << error->message);
+
+    //g_object_unref( handler);
+}
+
+static void
+TeleManager_IncomingHandlerReady (
+    EmpathyFTHandler*   pHandler,
+    GError*             pError,
+    void*               pUserData)
+{
+    TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
+
+    if (pError)
+    {
+        SAL_INFO ("tubes", "failed to prepare incoming transfer: " << pError->message);
+        g_object_unref( pHandler);
+        return;
+    }
+
+    GFile *pDestination = g_file_new_for_uri( "file:///tmp/fixme.ods");
+
+    empathy_ft_handler_incoming_set_destination( pHandler, pDestination);
+    g_object_unref( pDestination);
+
+    g_signal_connect( pHandler, "transfer-done", G_CALLBACK (&TeleManager::TransferDone), pManager);
+    g_signal_connect( pHandler, "transfer-error", G_CALLBACK (TeleManager_TransferError), pManager);
+    empathy_ft_handler_start_transfer( pHandler);
+}
+
+static void TeleManager_FileTransferHandler(
+        TpSimpleHandler*            /*handler*/,
+        TpAccount*                  /*Account*/,
+        TpConnection*               /*connection*/,
+        GList*                      pChannels,
+        GList*                      /*requests_satisfied*/,
+        gint64                      /*user_action_time*/,
+        TpHandleChannelsContext*    pContext,
+        gpointer                    pUserData)
+{
+    bool aAccepted = false;
+    INFO_LOGGER_F( "TeleManager_FileTransferHandler");
+
+    TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
+    SAL_WARN_IF( !pManager, "tubes", "TeleManager_FileTransferHandler: no manager");
+    if (!pManager)
+        return;
+
+    for (GList* p = pChannels; p; p = p->next)
+    {
+        TpChannel* pChannel = TP_CHANNEL(p->data);
+
+        SAL_INFO( "tubes", "TeleManager_FileTransferHandler: incoming dbus channel: "
+                << tp_channel_get_identifier( pChannel));
+
+        if (TP_IS_FILE_TRANSFER_CHANNEL( pChannel))
+        {
+            SAL_INFO( "tubes", "accepting file transfer");
+            empathy_ft_handler_new_incoming( TP_FILE_TRANSFER_CHANNEL( pChannel),
+                TeleManager_IncomingHandlerReady, pManager);
+            aAccepted = true;
+        }
+        else
+        {
+            SAL_INFO( "tubes", "ignored");
+        }
+    }
+
+    if (aAccepted)
+        tp_handle_channels_context_accept( pContext);
+    else
+    {
+        GError *pError = g_error_new_literal( TP_ERRORS, TP_ERROR_CONFUSED,
+            "None of these channels were file transfers; "
+            "why did the Channel Dispatcher give them to us?");
+        tp_handle_channels_context_fail( pContext, pError);
+        g_clear_error (&pError);
+    }
+}
 
 static void TeleManager_ChannelReadyHandler(
         GObject*        pSourceObject,
@@ -296,13 +394,13 @@ bool TeleManager::connect()
         return false;
     }
 
-    TpSimpleClientFactory* pFactory = tp_simple_client_factory_new( pImpl->mpDBus);
+    TpAutomaticClientFactory* pFactory = tp_automatic_client_factory_new( pImpl->mpDBus);
     SAL_WARN_IF( !pFactory, "tubes", "TeleManager::connect: no client factory");
     if (!pFactory)
         return false;
 
     pImpl->mpClient = tp_simple_handler_new_with_factory(
-            pFactory,                       // factory
+            TP_SIMPLE_CLIENT_FACTORY (pFactory), // factory
             FALSE,                          // bypass_approval
             FALSE,                          // requests
             getFullClientName().getStr(),   // name
@@ -345,6 +443,36 @@ bool TeleManager::connect()
 
     SAL_INFO( "tubes", "TeleManager::connect: bus name: " << tp_base_client_get_bus_name( pImpl->mpClient));
     SAL_INFO( "tubes", "TeleManager::connect: object path: " << tp_base_client_get_object_path( pImpl->mpClient));
+
+    /* Register a second "head" for incoming file transfers. This uses a more
+     * specific filter than Empathy's handler by matching on the file
+     * transfer's ServiceName property, and uses bypass_approval to ensure the
+     * user isn't prompted before the channel gets passed to us.
+     */
+    pImpl->mpFileTransferClient = tp_simple_handler_new_with_factory (
+            TP_SIMPLE_CLIENT_FACTORY( pFactory),            // factory
+            TRUE,                                           // bypass_approval
+            FALSE,                                          // requests
+            getFullClientName().getStr(),                   // name
+            TRUE,                                           // uniquify to get a different bus name to the main client, above
+            TeleManager_FileTransferHandler,                // callback
+            this,                                           // user_data
+            NULL                                            // destroy
+            );
+    tp_base_client_take_handler_filter( pImpl->mpFileTransferClient,
+            tp_asv_new(
+                TP_PROP_CHANNEL_CHANNEL_TYPE, G_TYPE_STRING, TP_IFACE_CHANNEL_TYPE_FILE_TRANSFER,
+                TP_PROP_CHANNEL_TARGET_HANDLE_TYPE, G_TYPE_UINT, TP_HANDLE_TYPE_CONTACT,
+                TP_PROP_CHANNEL_INTERFACE_FILE_TRANSFER_METADATA_SERVICE_NAME, G_TYPE_STRING, getFullServiceName().getStr(),
+                NULL));
+
+    if (!tp_base_client_register( pImpl->mpFileTransferClient, &pError))
+    {
+        /* This shouldn't fail if registering the main handler succeeded */
+        SAL_WARN( "tubes", "TeleManager::connect: error registering file transfer handler: " << pError->message);
+        g_error_free( pError);
+        return false;
+    }
 
     return true;
 }
@@ -603,6 +731,12 @@ void TeleManager::sendFile( rtl::OUString &localUri, TeleConference::FileSentCal
     }
 }
 
+void TeleManager::setFileReceivedCallback( TeleManager::FileReceivedCallback callback, void* pUserData )
+{
+    mpFileReceivedCallback = callback;
+    mpFileReceivedCallbackData = pUserData;
+}
+
 void TeleManager::unregisterConference( TeleConferencePtr pConference )
 {
     INFO_LOGGER( "TeleManager::unregisterConference");
@@ -624,6 +758,9 @@ void TeleManager::disconnect()
 
     tp_base_client_unregister( pImpl->mpClient);
     pImpl->mpClient = NULL;
+
+    tp_base_client_unregister( pImpl->mpFileTransferClient);
+    pImpl->mpFileTransferClient = NULL;
 
     size_t nSize = maConferences.size();
     for (size_t i=0; i < nSize; /*nop*/)
@@ -798,6 +935,7 @@ TeleManagerImpl::TeleManagerImpl()
         mpLoop( NULL),
         mpDBus( NULL),
         mpClient( NULL),
+        mpFileTransferClient( NULL),
         mpAccountManager( NULL),
         meAccountManagerStatus( TeleManager::AMS_UNINITIALIZED),
         mbAccountManagerReadyHandlerInvoked( false)
@@ -809,6 +947,8 @@ TeleManagerImpl::~TeleManagerImpl()
 {
     if (mpClient)
         g_object_unref( mpClient);
+    if (mpFileTransferClient)
+        g_object_unref( mpFileTransferClient);
     if (mpDBus)
         g_object_unref( mpDBus);
     if (mpAccountManager)

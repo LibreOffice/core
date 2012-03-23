@@ -90,6 +90,9 @@ void empathy_ft_handler_new_outgoing (
     gint64 action_time,
     EmpathyFTHandlerReadyCallback callback,
     gpointer user_data);
+void empathy_ft_handler_set_service_name (
+    EmpathyFTHandler *self,
+    const gchar *service_name);
 
 void empathy_ft_handler_new_incoming (TpFileTransferChannel *channel,
     EmpathyFTHandlerReadyCallback callback,

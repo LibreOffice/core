@@ -94,6 +94,8 @@ public:
                                 { return mbTubeChannelStateChangedHandlerInvoked; }
     void                    setTubeChannelState( TpTubeChannelState eState ) { meTubeChannelState = eState; }
 
+    static void             FTReady( EmpathyFTHandler *handler, GError *error, gpointer user_data);
+
 private:
 
     rtl::OString            maSessionId;

@@ -134,6 +134,7 @@ struct _EmpathyFTHandlerPriv {
   guint64 mtime;
   gchar *content_hash;
   TpFileHashType content_hash_type;
+  gchar *service_name;
 
   gint64 user_action_time;
 
@@ -260,6 +261,11 @@ do_dispose (GObject *object)
 
   priv->dispose_run = TRUE;
 
+  if (priv->account != NULL) {
+    g_object_unref (priv->account);
+    priv->account = NULL;
+  }
+
   if (priv->contact != NULL) {
     g_object_unref (priv->contact);
     priv->contact = NULL;
@@ -309,6 +315,9 @@ do_finalize (GObject *object)
 
   g_free (priv->content_hash);
   priv->content_hash = NULL;
+
+  g_free (priv->service_name);
+  priv->service_name = NULL;
 
   G_OBJECT_CLASS (empathy_ft_handler_parent_class)->finalize (object);
 }
@@ -907,6 +916,9 @@ ft_handler_populate_outgoing_request (EmpathyFTHandler *handler)
       TP_PROP_CHANNEL_TYPE_FILE_TRANSFER_URI, G_TYPE_STRING, uri,
       NULL);
 
+  if (priv->service_name != NULL)
+    tp_asv_set_string (priv->request, TP_PROP_CHANNEL_INTERFACE_FILE_TRANSFER_METADATA_SERVICE_NAME, priv->service_name);
+
   g_free (uri);
 }
 
@@ -1358,11 +1370,11 @@ channel_prepared_cb (
 
   properties = tp_channel_borrow_immutable_properties (TP_CHANNEL (channel));
 
-  priv->content_hash = g_value_dup_string (
-      g_hash_table_lookup (properties, "ContentHash"));
+  priv->content_hash = g_strdup (
+      tp_asv_get_string (properties, "ContentHash"));
 
-  priv->content_hash_type = g_value_get_uint (
-      g_hash_table_lookup (properties, "ContentHashType"));
+  priv->content_hash_type = tp_asv_get_uint32 (
+      properties, "ContentHashType", NULL);
 
   priv->contact = g_object_ref (tp_channel_get_target_contact (TP_CHANNEL (channel)));
 
@@ -1424,6 +1436,15 @@ empathy_ft_handler_new_outgoing (
       G_FILE_ATTRIBUTE_TIME_MODIFIED,
       G_FILE_QUERY_INFO_NONE, G_PRIORITY_DEFAULT,
       NULL, (GAsyncReadyCallback) ft_handler_gfile_ready_cb, data);
+}
+
+void
+empathy_ft_handler_set_service_name (
+    EmpathyFTHandler *self,
+    const gchar *service_name)
+{
+  g_free (self->priv->service_name);
+  self->priv->service_name = g_strdup (service_name);
 }
 
 /**
