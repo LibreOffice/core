@@ -80,7 +80,8 @@ PersistentMap::~PersistentMap()
 PersistentMap::PersistentMap( OUString const & url )
     : m_db( 0 )
 {
-    try {
+    try
+    {
         rtl::OUString fileURL = expandUnoRcUrl(url);
         if ( File::getSystemPathFromFileURL( fileURL, m_sysPath ) != File::E_None )
             OSL_ASSERT( false );
@@ -94,7 +95,8 @@ PersistentMap::PersistentMap( OUString const & url )
         if (err != 0)
             throw_rtexc(err);
     }
-    catch (DbException & exc) {
+    catch (const DbException & exc)
+    {
         throw_rtexc( exc.get_errno(), exc.what() );
     }
 }

@@ -81,7 +81,8 @@ namespace
         if (pSharedEnv == NULL)
         {
             db_env_create(&pSharedEnv, 0);
-            pSharedEnv->open(pSharedEnv, NULL, DB_CREATE | DB_INIT_MPOOL | DB_PRIVATE | DB_THREAD, 0);
+            // xxx todo: DB_THREAD currently not used
+            pSharedEnv->open(pSharedEnv, NULL, DB_CREATE | DB_INIT_MPOOL | DB_PRIVATE /*| DB_THREAD*/, 0);
         }
         ++nSharedEnv;
         return pSharedEnv;
