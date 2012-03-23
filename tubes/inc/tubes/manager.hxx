@@ -80,6 +80,9 @@ public:
     TeleManager( bool bCreateOwnGMainLoop = false );
     ~TeleManager();
 
+    static TeleManager     *get();
+    void                    unref();
+
     /** Prepare the Telepathy Account Manager. Requires connect() to have succeeded.
 
         Invokes an async call that is not ready until meAccountManagerStatus is
@@ -227,13 +230,19 @@ private:
     static sal_uInt32       nRefCount;
     static rtl::OString     aNameSuffix;
 
+    /* FIXME: double-singletonning is bad. These two are used by ::get and
+     * ::unref, and are a quick hack so that we can have a demo working.
+     */
+    static TeleManager*     pSingleton;
+    static sal_uInt32       nAnotherRefCount;
+    TUBES_DLLPRIVATE static ::osl::Mutex&   GetAnotherMutex();
+
     FileReceivedCallback    mpFileReceivedCallback;
     void                   *mpFileReceivedCallbackData;
 
     friend class TeleManagerImpl;   // access to mutex
 
     TUBES_DLLPRIVATE static ::osl::Mutex&   GetMutex();
-
 };
 
 

@@ -47,7 +47,9 @@ ScCollaboration::~ScCollaboration()
         g_object_unref( mpAccount);
     if (mpContact)
         g_object_unref( mpContact);
-    delete mpManager;
+
+    mpManager->unref();
+    mpManager = NULL;
 }
 
 
@@ -75,13 +77,13 @@ void ScCollaboration::packetReceivedCallback( TeleConference *pConference )
 
 bool ScCollaboration::initManager()
 {
-    mpManager = new TeleManager();
+    mpManager = TeleManager::get();
     mpManager->sigPacketReceived.connect(
         boost::bind( &ScCollaboration::packetReceivedCallback, this, _1 ));
-    bool bOk = mpManager->connect();
+    mpManager->connect();
     mpManager->prepareAccountManager();
     mpManager->setFileReceivedCallback( file_recv_cb, (void *)this );
-    return bOk;
+    return true;
 }
 
 

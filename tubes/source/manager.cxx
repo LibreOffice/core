@@ -70,6 +70,9 @@ TeleManagerImpl* TeleManager::pImpl     = NULL;
 sal_uInt32       TeleManager::nRefCount = 0;
 rtl::OString     TeleManager::aNameSuffix;
 
+sal_uInt32       TeleManager::nAnotherRefCount = 0;
+TeleManager*     TeleManager::pSingleton = NULL;
+
 
 /** Refcounted singleton implementation class. */
 class TeleManagerImpl
@@ -383,6 +386,27 @@ TeleManager::~TeleManager()
 
         delete pImpl;
         pImpl = NULL;
+    }
+}
+
+TeleManager *
+TeleManager::get()
+{
+    MutexGuard aGuard( GetAnotherMutex());
+    if (!pSingleton)
+        pSingleton = new TeleManager();
+
+    nAnotherRefCount++;
+    return pSingleton;
+}
+
+void
+TeleManager::unref()
+{
+    MutexGuard aGuard( GetAnotherMutex());
+    if (--nAnotherRefCount == 0) {
+        delete pSingleton;
+        pSingleton = NULL;
     }
 }
 
@@ -920,6 +944,18 @@ rtl::OString TeleManager::createUuid()
 
 // static
 Mutex& TeleManager::GetMutex()
+{
+    static Mutex* pMutex = NULL;
+    if (!pMutex)
+    {
+        MutexGuard aGuard( Mutex::getGlobalMutex());
+        if (!pMutex)
+            pMutex = new Mutex;
+    }
+    return *pMutex;
+}
+
+Mutex& TeleManager::GetAnotherMutex()
 {
     static Mutex* pMutex = NULL;
     if (!pMutex)
