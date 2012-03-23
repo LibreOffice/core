@@ -523,9 +523,11 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
                 LINK( pReceiver, ScDocFuncRecv, ReceiverCallback),
                 LINK( pReceiver, ScDocFuncRecv, ReceiveFileCallback) );
         bOk = bOk && pCollab->initManager();
-        bOk = bOk && pCollab->initAccountContact();
         if (!strcmp( pEnv, "master"))
+        {
+            bOk = bOk && pCollab->initAccountContact();
             bOk = bOk && pCollab->startCollaboration();
+        }
         if (bOk)
         {
             pReceiver->SetCollaboration( pCollab);

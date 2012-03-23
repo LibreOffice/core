@@ -874,7 +874,6 @@ void TeleManager::iterateLoop( CallBackInvokedFunc pFunc )
     GMainContext* pContext = getMainContext();
     while (!(*pFunc)())
     {
-        SAL_INFO( "tubes.loop", "TeleManager::iterateLoop: CallBackInvokedFunc");
         g_main_context_iteration( pContext, TRUE);
     }
 }
@@ -885,7 +884,6 @@ void TeleManager::iterateLoop( ManagerCallBackInvokedFunc pFunc )
     GMainContext* pContext = getMainContext();
     while (!(this->*pFunc)())
     {
-        SAL_INFO( "tubes.loop", "TeleManager::iterateLoop: ManagerCallBackInvokedFunc");
         g_main_context_iteration( pContext, TRUE);
     }
 }
@@ -896,7 +894,6 @@ void TeleManager::iterateLoop( const TeleConference* pConference, ConferenceCall
     GMainContext* pContext = getMainContext();
     while (!(pConference->*pFunc)())
     {
-        SAL_INFO( "tubes.loop", "TeleManager::iterateLoop: ConferenceCallBackInvokedFunc");
         g_main_context_iteration( pContext, TRUE);
     }
 }
