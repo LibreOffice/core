@@ -652,4 +652,15 @@ main/x11_extensions/inc/randrproto.h
 main/x11_extensions/inc/render.h
 main/x11_extensions/inc/renderproto.h
 
+# findings from af: The libtextcat version 2.2 library is under BSD license
+# It was released 2003 by WiseGuys Internet B.V. (http://software.wise-guys.nl:1080/libtextcat/index.html ).
+# No problem there. It's BSD license (with advertising).
+# Asking on the list what category this may be
+# A case for https://issues.apache.org/jira/browse/LEGAL-130
+main/libtextcat/data/new_fingerprints/fpdb.conf
 
+# (C) 1988, 1989, 1990 by Adobe Systems Incorporated
+# permissive license, but not categorized by Apache (not A, B or X)
+# A case for https://issues.apache.org/jira/browse/LEGAL-130
+main/vcl/unx/generic/fontmanager/parseAFM.cxx
+main/vcl/unx/generic/fontmanager/parseAFM.hxx 
