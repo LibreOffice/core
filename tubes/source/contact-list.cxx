@@ -92,6 +92,7 @@ AccountContactPairV ContactList::getContacts()
     {
       TpAccount *account = reinterpret_cast<TpAccount *>(accounts->data);
       TpConnection *connection = tp_account_get_connection (account);
+      TpContact *self;
       GPtrArray *contacts;
       guint i;
 
@@ -103,13 +104,15 @@ AccountContactPairV ContactList::getContacts()
               TP_CONTACT_LIST_STATE_SUCCESS)
         continue;
 
+      self = tp_connection_get_self_contact (connection);
       contacts = tp_connection_dup_contact_list (connection);
       for (i = 0; i < contacts->len; i++)
         {
           TpContact *contact =
               reinterpret_cast<TpContact *>(g_ptr_array_index (contacts, i));
 
-          if (contact_supports_libo_dtube (contact))
+          if (contact != self &&
+              contact_supports_libo_dtube (contact))
             {
               g_object_ref (account);
               g_object_ref (contact);
