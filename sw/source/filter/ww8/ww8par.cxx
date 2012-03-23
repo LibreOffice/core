@@ -165,7 +165,6 @@ using namespace nsHdFtFlags;
 #include <unotools/pathoptions.hxx>
 #include <com/sun/star/ucb/XSimpleFileAccess.hpp>
 
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/script/vba/XVBACompatibility.hpp>
 #include <com/sun/star/document/XImporter.hpp>

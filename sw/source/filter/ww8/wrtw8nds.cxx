@@ -34,10 +34,6 @@
 #include <functional>
 #include <iostream>
 
-#if OSL_DEBUG_LEVEL > 1
-#include <cstdio>
-#endif
-
 #include <hintids.hxx>
 #include <comphelper/string.hxx>
 #include <tools/urlobj.hxx>

@@ -39,12 +39,10 @@
 #include <sfx2/sfxmodelfactory.hxx>
 #include <svl/stritem.hxx>
 
-#include <test/bootstrapfixture.hxx>
 #include <rtl/strbuf.hxx>
 #include <osl/file.hxx>
 
 #include <com/sun/star/frame/XDesktop.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 
 #include <string>
 #include <iostream>

@@ -81,8 +81,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 
-#include <comphelper/processfactory.hxx>
-
 #include <vcl/svapp.hxx>
 #include <rtl/ustring.hxx>
 

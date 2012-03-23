@@ -35,7 +35,6 @@
 #include <swdtflvr.hxx>
 #include <svtools/svtdata.hxx>
 #include <svtools/svtools.hrc>
-#include <svtools/svtdata.hxx>
 #include <wrtsh.hrc>
 #include <sfx2/sfx.hrc>
 
