@@ -170,6 +170,7 @@ class ScMatrixImpl
     ScMatrix::DensityType meType;
     ScInterpreter* pErrorInterpreter;
     bool            mbCloneIfConst; // Whether the matrix is cloned with a CloneIfConst() call.
+    MatrixImplType::size_pair_type  maCachedSize;
 
     ScMatrixImpl();
     ScMatrixImpl(const ScMatrixImpl&);
@@ -244,6 +245,7 @@ ScMatrixImpl::ScMatrixImpl(SCSIZE nC, SCSIZE nR, ScMatrix::DensityType eType) :
     pErrorInterpreter(NULL),
     mbCloneIfConst(true)
 {
+    maCachedSize = maMat.size();
 }
 
 ScMatrixImpl::~ScMatrixImpl()
@@ -254,6 +256,7 @@ ScMatrixImpl::~ScMatrixImpl()
 void ScMatrixImpl::Clear()
 {
     maMat.clear();
+    maCachedSize = maMat.size();
 }
 
 void ScMatrixImpl::SetImmutable(bool bVal)
@@ -269,6 +272,7 @@ bool ScMatrixImpl::IsImmutable() const
 void ScMatrixImpl::Resize(SCSIZE nC, SCSIZE nR)
 {
     maMat.resize(nR, nC);
+    maCachedSize = maMat.size();
 }
 
 ScMatrix::DensityType ScMatrixImpl::GetDensityType() const
@@ -283,21 +287,18 @@ void ScMatrixImpl::SetErrorInterpreter( ScInterpreter* p)
 
 void ScMatrixImpl::GetDimensions( SCSIZE& rC, SCSIZE& rR) const
 {
-    MatrixImplType::size_pair_type aDims = maMat.size();
-    rR = aDims.first;
-    rC = aDims.second;
+    rR = maCachedSize.first;
+    rC = maCachedSize.second;
 }
 
 SCSIZE ScMatrixImpl::GetElementCount() const
 {
-    MatrixImplType::size_pair_type aDims = maMat.size();
-    return aDims.first * aDims.second;
+    return maCachedSize.first * maCachedSize.second;
 }
 
 bool ScMatrixImpl::ValidColRow( SCSIZE nC, SCSIZE nR) const
 {
-    MatrixImplType::size_pair_type aDims = maMat.size();
-    return nR < aDims.first && nC < aDims.second;
+    return nR < maCachedSize.first && nC < maCachedSize.second;
 }
 
 SCSIZE ScMatrixImpl::CalcOffset( SCSIZE nC, SCSIZE nR) const
@@ -307,21 +308,19 @@ SCSIZE ScMatrixImpl::CalcOffset( SCSIZE nC, SCSIZE nR) const
 
 bool ScMatrixImpl::ValidColRowReplicated( SCSIZE & rC, SCSIZE & rR ) const
 {
-    pair<size_t, size_t> aDims = maMat.size();
-
-    if (aDims.second == 1 && aDims.first == 1)
+    if (maCachedSize.second == 1 && maCachedSize.first == 1)
     {
         rC = 0;
         rR = 0;
         return true;
     }
-    else if (aDims.second == 1 && rR < aDims.first)
+    else if (maCachedSize.second == 1 && rR < maCachedSize.first)
     {
         // single column matrix.
         rC = 0;
         return true;
     }
-    else if (aDims.first == 1 && rC < aDims.second)
+    else if (maCachedSize.first == 1 && rC < maCachedSize.second)
     {
         // single row matrix.
         rR = 0;
@@ -645,8 +644,7 @@ bool ScMatrixImpl::IsNumeric() const
 
 void ScMatrixImpl::MatCopy(ScMatrixImpl& mRes) const
 {
-    MatrixImplType::size_pair_type s1 = maMat.size(), s2 = mRes.maMat.size();
-    if (s1.first > s2.first || s1.second > s2.second)
+    if (maCachedSize.first > mRes.maCachedSize.first || maCachedSize.second > mRes.maCachedSize.second)
     {
         // destination matrix is not large enough.
         OSL_FAIL("ScMatrixImpl::MatCopy: dimension error");
@@ -654,12 +652,14 @@ void ScMatrixImpl::MatCopy(ScMatrixImpl& mRes) const
     }
 
     mRes.maMat.assign(maMat);
+    mRes.maCachedSize = mRes.maMat.size();
 }
 
 void ScMatrixImpl::MatTrans(ScMatrixImpl& mRes) const
 {
     mRes.maMat = maMat;
     mRes.maMat.transpose();
+    mRes.maCachedSize = mRes.maMat.size();
 }
 
 void ScMatrixImpl::FillDouble( double fVal, SCSIZE nC1, SCSIZE nR1, SCSIZE nC2, SCSIZE nR2 )
@@ -726,8 +726,7 @@ template <typename _Evaluator>
 bool EvalMatrix(const MatrixImplType& rMat)
 {
     _Evaluator aEval;
-    pair<size_t,size_t> aDim = rMat.size();
-    size_t nRows = aDim.first, nCols = aDim.second;
+    size_t nRows = rMat.size().first, nCols = rMat.size().second;
     for (size_t i = 0; i < nRows; ++i)
     {
         for (size_t j = 0; j < nCols; ++j)
@@ -917,7 +916,7 @@ size_t ScMatrixImpl::Count(bool bCountStrings) const
 
 void ScMatrixImpl::CalcPosition(SCSIZE nIndex, SCSIZE& rC, SCSIZE& rR) const
 {
-    SCSIZE nRowSize = maMat.size().first;
+    SCSIZE nRowSize = maCachedSize.first;
     rC = nIndex / nRowSize;
     rR = nIndex - rC*nRowSize;
 }
