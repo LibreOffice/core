@@ -91,7 +91,9 @@ public:
     CPPUNIT_TEST( testDestroyManager1 );
     CPPUNIT_TEST( testDestroyManager2 );
     CPPUNIT_TEST( testDestroyAccepterContact );
-    CPPUNIT_TEST( testFailAlways );     // need failure to display SAL_LOG, comment out for real builds
+#if 0
+    CPPUNIT_TEST( testFailAlways );     // test failure displays SAL_LOG, uncomment for debugging
+#endif
     CPPUNIT_TEST_SUITE_END();
 
 private:
