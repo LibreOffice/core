@@ -1177,7 +1177,8 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
 
     // calculate max number of needed kashidas
     int nKashidaCount = 0;
-    for( GlyphVector::iterator pG = m_GlyphItems.begin(), pGEnd = m_GlyphItems.end(); pG != pGEnd; ++pG )
+    for (GlyphVector::iterator pG = m_GlyphItems.begin();
+            pG != m_GlyphItems.end(); ++pG)
     {
         // only inject kashidas in RTL contexts
         if( !pG->IsRTLGlyph() )
