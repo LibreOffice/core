@@ -864,7 +864,6 @@ rtl::OString TeleManager::getFullObjectPath()
 void TeleManager::iterateLoop()
 {
     GMainContext* pContext = getMainContext();
-    SAL_INFO( "tubes.loop", "TeleManager::iterateLoop: once");
     g_main_context_iteration( pContext, TRUE);
 }
 
@@ -906,7 +905,6 @@ void TeleManager::flushLoop() const
         GMainContext* pContext = g_main_loop_get_context( pImpl->mpLoop);
         while (g_main_context_iteration( pContext, FALSE))
         {
-            SAL_INFO( "tubes.loop", "TeleManager::flushLoop");
         }
     }
 }
