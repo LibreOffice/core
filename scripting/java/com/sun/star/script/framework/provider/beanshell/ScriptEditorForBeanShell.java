@@ -202,7 +202,8 @@ public class ScriptEditorForBeanShell
             try {
                 ClassLoader cl = null;
                 try {
-                    cl = ClassLoaderFactory.getURLClassLoader( entry );
+                    cl = ClassLoaderFactory.getURLClassLoader(
+                        context.getComponentContext(), entry );
                 }
                 catch (Exception ignore) // TODO re-examine error handling
                 {
