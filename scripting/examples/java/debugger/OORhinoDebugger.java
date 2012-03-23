@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 import javax.swing.SwingUtilities;
 import java.io.InputStream;
 

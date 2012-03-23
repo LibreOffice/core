@@ -7,7 +7,7 @@
                 Text highlighting
             </description>
         </locale>
-        <functionname value="MemoryUsage.updateMemoryUsage"/>
+        <functionname value="org.libreoffice.example.java_scripts.MemoryUsage.updateMemoryUsage"/>
         <logicalname value="MemoryUtils.MemUsage"/>
         <languagedepprops>
             <prop name="classpath" value="MemoryUsage.jar"/>

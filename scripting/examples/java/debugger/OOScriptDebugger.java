@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 import java.io.InputStream;
 import drafts.com.sun.star.script.framework.runtime.XScriptContext;
 

@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 import java.io.File;
 import java.io.InputStream;
 import java.io.IOException;
