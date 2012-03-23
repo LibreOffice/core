@@ -60,7 +60,7 @@ echo :
     @echo ###########################   N O T E  ######################################
     @echo . 
     @echo To run the test you have to provide the path to the  office location. It must
-    @echo contain the ure (d:\myOffice\OpenOffice.org\URE).
+    @echo contain the ure (d:\myOffice\LibreOffice\URE).
     @echo Also an office must be installed with full system integration.
     @echo Example:
     @echo dmake run office="d:\myOffice"
@@ -87,7 +87,7 @@ CT_NOOFFICE = -NoOffice
 # --- Targets ------------------------------------------------------
 
 RUN: $(MISC)$/copyassemblies.done
-    java -cp $(CLASSPATH) -DSystemRoot=$(SystemRoot) -Dcli_test_program=$(BIN)$/runtests.exe -Dpath="$(office)"\OpenOffice.org\URE\bin $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST)
+    java -cp $(CLASSPATH) -DSystemRoot=$(SystemRoot) -Dcli_test_program=$(BIN)$/runtests.exe -Dpath="$(office)"\LibreOffice\URE\bin $(CT_APP) $(CT_NOOFFICE) $(CT_TESTBASE) $(CT_TEST)
 
 run: RUN
 

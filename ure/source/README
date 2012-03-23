@@ -234,7 +234,7 @@ rpm --relocate on Linux.  The URE is designed so that multiple instances of the
 URE can coexist on a single system in different locations.
 
 On Windows, the path to the installed URE is stored in the registry under the
-path "HKEY_CLASSES_ROOT\Software\OpenOffice.org\URE" and key "Path".
+path "HKEY_CLASSES_ROOT\Software\LibreOffice\URE" and key "Path".
 
 
 UNO Deployment Variables

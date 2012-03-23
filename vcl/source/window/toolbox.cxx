@@ -5986,7 +5986,7 @@ void ToolBox::ImplDisableFlatButtons()
         HKEY hkey;
 
         if( ERROR_SUCCESS == RegOpenKey(HKEY_CURRENT_USER,
-            "Software\\OpenOffice.org\\Accessibility\\AtToolSupport",
+            "Software\\LibreOffice\\Accessibility\\AtToolSupport",
             &hkey) )
         {
             DWORD dwType = 0;

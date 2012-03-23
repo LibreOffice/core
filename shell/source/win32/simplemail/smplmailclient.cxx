@@ -80,7 +80,7 @@ namespace /* private */
     {
         rtl::OUString altSenddocUrl;
         HKEY hkey;
-        LONG lret = RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\OpenOffice.org\\SendAsEMailClient", &hkey);
+        LONG lret = RegOpenKeyW(HKEY_CURRENT_USER, L"Software\\LibreOffice\\SendAsEMailClient", &hkey);
         if (lret == ERROR_SUCCESS)
         {
             wchar_t buff[MAX_PATH];

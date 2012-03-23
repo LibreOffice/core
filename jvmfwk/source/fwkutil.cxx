@@ -78,7 +78,7 @@ bool isAccessibilitySupportDesired()
 #ifdef WNT
     HKEY    hKey = 0;
     if (RegOpenKeyEx(HKEY_CURRENT_USER,
-                     "Software\\OpenOffice.org\\Accessibility\\AtToolSupport",
+                     "Software\\LibreOffice\\Accessibility\\AtToolSupport",
                      0, KEY_READ, &hKey) == ERROR_SUCCESS)
     {
         DWORD   dwType = 0;

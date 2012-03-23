@@ -291,7 +291,7 @@ void CrashReportParams::ReadFromRegistry()
 
     if ( ERROR_SUCCESS == RegReadValue(
         HKEY_CURRENT_USER,
-        TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+        TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
         TEXT("HTTPProxyServer"),
         szBuffer,
         sizeof(szBuffer) ) )
@@ -301,7 +301,7 @@ void CrashReportParams::ReadFromRegistry()
 
     if ( ERROR_SUCCESS == RegReadValue(
         HKEY_CURRENT_USER,
-        TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+        TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
         TEXT("HTTPProxyPort"),
         &dwProxyPort,
         sizeof(dwProxyPort) ) )
@@ -312,7 +312,7 @@ void CrashReportParams::ReadFromRegistry()
 
     if ( ERROR_SUCCESS == RegReadValue(
         HKEY_CURRENT_USER,
-        TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+        TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
         TEXT("ReturnAddress"),
         szBuffer,
         sizeof(szBuffer) ) )
@@ -320,14 +320,14 @@ void CrashReportParams::ReadFromRegistry()
 
     RegReadValue(
         HKEY_CURRENT_USER,
-        TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+        TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
         TEXT("AllowContact"),
         &fAllowContact,
         sizeof(fAllowContact) );
 
     RegReadValue(
         HKEY_CURRENT_USER,
-        TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+        TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
         TEXT("HTTPConnection"),
         &uInternetConnection,
         sizeof(uInternetConnection) );
@@ -339,7 +339,7 @@ void CrashReportParams::WriteToRegistry()
 {
     RegWriteValue(
         HKEY_CURRENT_USER,
-        TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+        TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
         TEXT("HTTPProxyServer"), REG_SZ,
         sProxyServer.c_str(),
         sizeof(TCHAR) * (sProxyServer.length() + 1) );
@@ -349,14 +349,14 @@ void CrashReportParams::WriteToRegistry()
 
     RegWriteValue(
         HKEY_CURRENT_USER,
-        TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+        TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
         TEXT("HTTPProxyPort"), REG_DWORD,
         &dwProxyPort,
         sizeof(DWORD) );
 
     RegWriteValue(
         HKEY_CURRENT_USER,
-        TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+        TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
         TEXT("AllowContact"), REG_DWORD,
         &fAllowContact,
         sizeof(DWORD) );
@@ -364,14 +364,14 @@ void CrashReportParams::WriteToRegistry()
 
     RegWriteValue(
         HKEY_CURRENT_USER,
-        TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+        TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
         TEXT("HTTPConnection"), REG_DWORD,
         &uInternetConnection,
         sizeof(DWORD) );
 
     RegWriteValue(
         HKEY_CURRENT_USER,
-        TEXT("SOFTWARE\\OpenOffice.org\\CrashReport"),
+        TEXT("SOFTWARE\\LibreOffice\\CrashReport"),
         TEXT("ReturnAddress"), REG_SZ,
         sEmail.c_str(),
         sizeof(TCHAR) * (sEmail.length() + 1) );
