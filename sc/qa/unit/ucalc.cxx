@@ -1297,6 +1297,17 @@ ScDPObject* createDPFromRange(
     return createDPFromSourceDesc(pDoc, aSheetDesc, aFields, nFieldCount, bFilterButton);
 }
 
+ScRange refresh(ScDPObject* pDPObj)
+{
+    bool bOverFlow = false;
+    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
+    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
+
+    pDPObj->Output(aOutRange.aStart);
+    aOutRange = pDPObj->GetOutRange();
+    return aOutRange;
+}
+
 ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
 {
     // We need to first create group data in the cache, then the group data in
@@ -1307,13 +1318,7 @@ ScRange refreshGroups(ScDPCollection* pDPs, ScDPObject* pDPObj)
     CPPUNIT_ASSERT_MESSAGE("There should be only one table linked to this cache.", aRefs.size() == 1);
     pDPObj->ReloadGroupTableData();
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
-    return aOutRange;
+    return refresh(pDPObj);
 }
 
 class AutoCalcSwitch
@@ -1554,13 +1559,7 @@ void Test::testPivotTableLabels()
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
-
+    ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][5] = {
@@ -1616,13 +1615,7 @@ void Test::testPivotTableDateLabels()
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
-
+    ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][5] = {
@@ -1705,12 +1698,7 @@ void Test::testPivotTableFilters()
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
+    ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
@@ -1743,8 +1731,7 @@ void Test::testPivotTableFilters()
     OUString aPage(RTL_CONSTASCII_USTRINGPARAM("A"));
     pDim->SetCurrentPage(&aPage);
     pDPObj->SetSaveData(aSaveData);
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
+    aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
@@ -1773,8 +1760,7 @@ void Test::testPivotTableFilters()
     rEntry.GetQueryItem().mfVal = 1;
     aDesc.SetQueryParam(aQueryParam);
     pDPObj->SetSheetDesc(aDesc);
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
+    aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
@@ -1852,12 +1838,7 @@ void Test::testPivotTableNamedSource()
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
+    ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][5] = {
@@ -2111,12 +2092,7 @@ void Test::testPivotTableDuplicateDataFields()
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
+    ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][3] = {
@@ -2142,10 +2118,7 @@ void Test::testPivotTableDuplicateDataFields()
     pDPObj->SetSaveData(*pSaveData);
 
     // Refresh the table output.
-    aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
+    aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][3] = {
@@ -2212,12 +2185,7 @@ void Test::testPivotTableNormalGrouping()
                            pDPs->GetCount() == 1);
     pDPObj->SetName(pDPs->CreateNewName());
 
-    bool bOverFlow = false;
-    ScRange aOutRange = pDPObj->GetNewOutputRange(bOverFlow);
-    CPPUNIT_ASSERT_MESSAGE("Table overflow!?", !bOverFlow);
-
-    pDPObj->Output(aOutRange.aStart);
-    aOutRange = pDPObj->GetOutRange();
+    ScRange aOutRange = refresh(pDPObj);
     {
         // Expected output table content.  0 = empty cell
         const char* aOutputCheck[][2] = {
@@ -2530,6 +2498,34 @@ void Test::testPivotTableDateGrouping()
         };
 
         bSuccess = checkDPTableOutput<4>(m_pDoc, aOutRange, aOutputCheck, "Years, quarters and months date groups.");
+        CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
+    }
+
+    {
+        // Let's hide year 2012.
+        pSaveData = pDPObj->GetSaveData();
+        ScDPSaveDimension* pDim = pSaveData->GetDimensionByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Years")));
+        CPPUNIT_ASSERT_MESSAGE("Years dimension should exist.", pDim);
+        ScDPSaveMember* pMem = pDim->GetMemberByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("2012")));
+        CPPUNIT_ASSERT_MESSAGE("Member should exist.", pMem);
+        pMem->SetIsVisible(false);
+    }
+    pDPObj->SetSaveData(*pSaveData);
+    pDPObj->ReloadGroupTableData();
+    pDPObj->InvalidateData();
+
+    aOutRange = refresh(pDPObj);
+    {
+        // Expected output table content.  0 = empty cell
+        const char* aOutputCheck[][4] = {
+            { "Years", "Quarters", "Date", 0 },
+            { "2011", "Q1", "Jan", "1" },
+            { 0, 0,         "Mar", "2" },
+            { 0,      "Q3", "Sep", "7" },
+            { "Total Result", 0, 0, "10" },
+        };
+
+        bSuccess = checkDPTableOutput<4>(m_pDoc, aOutRange, aOutputCheck, "Year 2012 data now hidden");
         CPPUNIT_ASSERT_MESSAGE("Table output check failed", bSuccess);
     }
 
