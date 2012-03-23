@@ -59,6 +59,7 @@ ContactList::ContactList(TpAccountManager *pAccountManager)
      */
     tp_simple_client_factory_add_contact_features_varargs (factory,
         TP_CONTACT_FEATURE_ALIAS,
+        TP_CONTACT_FEATURE_AVATAR_DATA,
         TP_CONTACT_FEATURE_CAPABILITIES,
         TP_CONTACT_FEATURE_INVALID);
 }
