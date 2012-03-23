@@ -1201,6 +1201,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         {
             pG2 = m_GlyphItems.insert(pG2, GlyphItem( pG->mnCharPos, nKashidaIndex, aPos,
                                                       GlyphItem::IS_IN_CLUSTER|GlyphItem::IS_RTL_GLYPH, nKashidaWidth ));
+            ++pG2;
             aPos.X() += nKashidaWidth;
         }
 
@@ -1209,6 +1210,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         {
             pG2 = m_GlyphItems.insert(pG2, GlyphItem( pG->mnCharPos, nKashidaIndex, aPos,
                                                       GlyphItem::IS_IN_CLUSTER|GlyphItem::IS_RTL_GLYPH, nKashidaCount ? nGapWidth : nGapWidth/2 ));
+            ++pG2;
             aPos.X() += nGapWidth;
         }
         pG = pG2;
