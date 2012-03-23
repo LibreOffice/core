@@ -343,14 +343,14 @@ TeleManager::TeleManager( const Link& rLink, bool bCreateOwnGMainLoop )
         maLink( rLink),
         mbChannelReadyHandlerInvoked( false)
 {
+    // The glib object types need to be initialized, else we aren't going
+    // anywhere.
+    g_type_init();
+
     MutexGuard aGuard( GetMutex());
     ++nRefCount;
     if (!pImpl)
         pImpl = new TeleManagerImpl;
-
-    // The glib object types need to be initialized, else we aren't going
-    // anywhere.
-    g_type_init();
 
     // We need a main loop, else no callbacks.
     /* TODO: could the loop be run in another thread? */
