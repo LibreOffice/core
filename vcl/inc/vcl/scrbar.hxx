@@ -162,7 +162,6 @@ private:
 
 public:
                     ScrollBarBox( Window* pParent, WinBits nStyle = 0 );
-                    ScrollBarBox( Window* pParent, const ResId& rResId );
 
     virtual void    StateChanged( StateChangedType nType );
     virtual void    DataChanged( const DataChangedEvent& rDCEvt );

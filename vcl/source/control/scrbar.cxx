@@ -1536,16 +1536,6 @@ ScrollBarBox::ScrollBarBox( Window* pParent, WinBits nStyle ) :
 
 // -----------------------------------------------------------------------
 
-ScrollBarBox::ScrollBarBox( Window* pParent, const ResId& rResId ) :
-    Window( WINDOW_SCROLLBARBOX )
-{
-    rResId.SetRT( RSC_SCROLLBAR );
-    ImplInit( pParent, ImplInitRes( rResId ) );
-    ImplLoadRes( rResId );
-}
-
-// -----------------------------------------------------------------------
-
 void ScrollBarBox::ImplInitSettings()
 {
     // Hack, damit man auch DockingWindows ohne Hintergrund bauen kann
