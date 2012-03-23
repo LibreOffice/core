@@ -374,7 +374,8 @@ class ScDocFuncSend : public ScDocFunc
         fprintf( stderr, "Temp file is '%s'\n",
                  rtl::OUStringToOString( aFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
 
-        mpCollab->sendFile( aFileURL );
+        if ( mpCollab )
+            mpCollab->sendFile( aFileURL );
     }
 
 public:
