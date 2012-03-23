@@ -564,6 +564,9 @@ void ScDPObject::ReloadGroupTableData()
         // No dimension data. Most likey it doesn't have any group dimensions.
         return;
 
+    if (!mpTableData)
+        return;
+
     ScDPGroupTableData* pData = dynamic_cast<ScDPGroupTableData*>(mpTableData.get());
     if (pData)
     {

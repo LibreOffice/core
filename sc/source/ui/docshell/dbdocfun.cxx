@@ -1328,7 +1328,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                     pDestObj->ClearTableData();
 
                 if (pDestObj->HasGroups())
-                    pDestObj->ClearTableData();
+                    pDestObj->ReloadGroupTableData();
 
                 pDestObj->InvalidateData();             // before getting the new output area
 
