@@ -28,7 +28,6 @@
 
 
 #include <svtools/accessibilityoptions.hxx>
-#include "configitems/accessibilityoptions_const.hxx"
 
 #include <unotools/configmgr.hxx>
 #include <com/sun/star/uno/Any.hxx>
@@ -55,6 +54,19 @@ namespace css = com::sun::star;
 
 #define HELP_TIP_TIMEOUT 0xffff     // max. timeout setting to pretend a non-timeout
 
+namespace
+{
+    static const ::rtl::OUString s_sAccessibility(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/Accessibility"));
+    static const ::rtl::OUString s_sAutoDetectSystemHC(RTL_CONSTASCII_USTRINGPARAM("AutoDetectSystemHC"));
+    static const ::rtl::OUString s_sIsForPagePreviews(RTL_CONSTASCII_USTRINGPARAM("IsForPagePreviews"));
+    static const ::rtl::OUString s_sIsHelpTipsDisappear(RTL_CONSTASCII_USTRINGPARAM("IsHelpTipsDisappear"));
+    static const ::rtl::OUString s_sHelpTipSeconds(RTL_CONSTASCII_USTRINGPARAM("HelpTipSeconds"));
+    static const ::rtl::OUString s_sIsAllowAnimatedGraphics(RTL_CONSTASCII_USTRINGPARAM("IsAllowAnimatedGraphics"));
+    static const ::rtl::OUString s_sIsAllowAnimatedText(RTL_CONSTASCII_USTRINGPARAM("IsAllowAnimatedText"));
+    static const ::rtl::OUString s_sIsAutomaticFontColor(RTL_CONSTASCII_USTRINGPARAM("IsAutomaticFontColor"));
+    static const ::rtl::OUString s_sIsSystemFont(RTL_CONSTASCII_USTRINGPARAM("IsSystemFont"));
+    static const ::rtl::OUString s_sIsSelectionInReadonly(RTL_CONSTASCII_USTRINGPARAM("IsSelectionInReadonly"));
+}
 
 // class SvtAccessibilityOptions_Impl ---------------------------------------------
 
