@@ -945,13 +945,16 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
 
         // Remove all help line that are almost covered (tables)
-        for (SwSubsRects::iterator it = this->begin(); it != this->end(); ++it)
+        SwSubsRects::iterator it = this->begin();
+        while ( it != this->end() )
         {
             SwLineRect &rLi = *it;
             const bool bVerticalSubs = rLi.Height() > rLi.Width();
 
-            for (SwSubsRects::iterator itK = it; itK != this->end(); ++itK)
+            SwSubsRects::iterator itK = it;
+            while ( itK != this->end() )
             {
+                bool bRemoved = false;
                 SwLineRect &rLk = (*itK);
                 if ( rLi.SSize() == rLk.SSize() )
                 {
@@ -969,6 +972,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                 // don't continue with inner loop any more:
                                 // the array may shrink!
                                 itK = this->end();
+                                bRemoved = true;
                             }
                         }
                         else
@@ -983,11 +987,17 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                 // don't continue with inner loop any more:
                                 // the array may shrink!
                                 itK = this->end();
+                                bRemoved = true;
                             }
                         }
                     }
                 }
+
+                if ( !bRemoved )
+                    ++itK;
             }
+
+            ++it;
         }
 
         if ( pRects && (!pRects->empty()) )
@@ -1008,7 +1018,7 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                 pOut->SetDrawMode( 0 );
             }
 
-            for (SwSubsRects::iterator it = this->begin(); it != this->end(); ++it)
+            for (it = this->begin(); it != this->end(); ++it)
             {
                 SwLineRect &rLRect = (*it);
                 // Add condition <!rLRect.IsLocked()> to prevent paint of locked subsidiary lines.
