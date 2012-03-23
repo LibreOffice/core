@@ -8,7 +8,7 @@
       <description>Script that starts debuggers for JavaScript and BeanShell
       </description>
     </locale>
-    <logicalname value="_$DebugRunner.Debug" />
+    <logicalname value="org.libreoffice.example.java_scripts._$DebugRunner.Debug" />
     <functionname value="DebugRunner.go" />
     <languagedepprops>
       <prop name="classpath" value="debugger.jar"/>

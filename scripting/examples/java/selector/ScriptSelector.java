@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 import javax.swing.*;
 import javax.swing.tree.*;
 import javax.swing.table.*;

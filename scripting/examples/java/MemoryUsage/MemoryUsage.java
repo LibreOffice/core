@@ -1,3 +1,5 @@
+package org.libreoffice.example.java_scripts;
+
 import java.util.Random;
 import java.util.Date;
 import com.sun.star.uno.UnoRuntime;
