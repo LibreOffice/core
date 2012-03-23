@@ -55,14 +55,15 @@ bool ScCollaboration::initManager()
 {
     mpManager = new TeleManager( maLink);
     bool bOk = mpManager->connect();
+    mpManager->prepareAccountManager();
     return bOk;
 }
 
 
 bool ScCollaboration::initAccountContact()
 {
-    ContactList aContacts;
-    AccountContactPairV aVec( aContacts.getContacts());
+    ContactList* pContactList = mpManager->getContactList();
+    AccountContactPairV aVec( pContactList->getContacts());
     if (aVec.empty())
         return false;
 
