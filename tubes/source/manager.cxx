@@ -668,9 +668,7 @@ TpAccount* TeleManager::getAccount( const rtl::OString& rAccountID )
     for (GList* pA = pAccounts; pA; pA = pA->next)
     {
         TpAccount* pAcc = TP_ACCOUNT( pA->data);
-        const GHashTable* pPar = tp_account_get_parameters( pAcc);
-        const gchar* pID = tp_asv_get_string( pPar, "account");
-        SAL_WARN_IF( !pID, "tubes", "TeleManager::getMyAccount: account without account??");
+        const gchar* pID = tp_account_get_normalized_name( pAcc);
         if (pID && rAccountID == pID)
         {
             pAccount = pAcc;
