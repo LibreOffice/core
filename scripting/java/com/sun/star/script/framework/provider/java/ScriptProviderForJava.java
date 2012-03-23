@@ -88,8 +88,13 @@ public class ScriptProviderForJava
             }
             catch ( com.sun.star.uno.RuntimeException re )
             {
-                throw new ScriptFrameworkErrorException( "Failed to create script object: " + re.getMessage(),
-                    null, scriptData.getLanguageName(), language, ScriptFrameworkErrorType.UNKNOWN );
+                ScriptFrameworkErrorException e2 =
+                    new ScriptFrameworkErrorException(
+                        "Failed to create script object: " + re,
+                        null, scriptData.getLanguageName(), language,
+                        ScriptFrameworkErrorType.UNKNOWN );
+                e2.initCause( re );
+                throw e2;
             }
 
         }
@@ -158,9 +163,11 @@ class ScriptImpl implements XScript
         catch ( Exception e )
         {
             LogUtils.DEBUG( LogUtils.getTrace( e ) );
-            throw new com.sun.star.uno.RuntimeException(
-                "Error constructing  ScriptProvider: "
-                + e.getMessage() );
+            com.sun.star.uno.RuntimeException e2 =
+                new com.sun.star.uno.RuntimeException(
+                    "Error constructing ScriptProvider: " + e );
+            e2.initCause( e );
+            throw e2;
         }
 
         LogUtils.DEBUG("ScriptImpl [java] script data = " + metaData );
@@ -211,26 +218,35 @@ class ScriptImpl implements XScript
             catch (MalformedURLException mfe )
             {
                 // Framework error
-                throw new ScriptFrameworkErrorException(
-                    mfe.getMessage(), null,
-                    metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.MALFORMED_URL );
+                ScriptFrameworkErrorException e2 =
+                    new ScriptFrameworkErrorException(
+                        mfe.toString(), null,
+                        metaData.getLanguageName(), metaData.getLanguage(),
+                        ScriptFrameworkErrorType.MALFORMED_URL );
+                e2.initCause( mfe );
+                throw e2;
             }
             catch (NoSuitableClassLoaderException ncl )
             {
                 // Framework error
-                throw new ScriptFrameworkErrorException(
-                    ncl.getMessage(), null,
-                    metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.UNKNOWN );
+                ScriptFrameworkErrorException e2 =
+                    new ScriptFrameworkErrorException(
+                        ncl.toString(), null,
+                        metaData.getLanguageName(), metaData.getLanguage(),
+                        ScriptFrameworkErrorType.UNKNOWN );
+                e2.initCause( ncl );
+                throw e2;
             }
             catch (ArrayStoreException e )
             {
                 // Framework error
-                throw new ScriptFrameworkErrorException(
-                    e.getMessage(), null,
-                    metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.UNKNOWN );
+                ScriptFrameworkErrorException e2 =
+                    new ScriptFrameworkErrorException(
+                        e.toString(), null,
+                        metaData.getLanguageName(), metaData.getLanguage(),
+                        ScriptFrameworkErrorType.UNKNOWN );
+                e2.initCause( e );
+                throw e2;
             }
 
             ArrayList invocationArgList = new ArrayList();
@@ -281,19 +297,25 @@ class ScriptImpl implements XScript
                 catch( NoSuchMethodException e )
                 {
                     // Framework error
-                    throw new ScriptFrameworkErrorException(
-                        e.getMessage(), null,
-                        metaData.getLanguageName(), metaData.getLanguage(),
-                        ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
+                    ScriptFrameworkErrorException e2 =
+                        new ScriptFrameworkErrorException(
+                            e.toString(), null,
+                            metaData.getLanguageName(), metaData.getLanguage(),
+                            ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
+                    e2.initCause( e );
+                    throw e2;
                 }
             }
             catch ( ClassNotFoundException e )
             {
                 // Framework error
-                throw new ScriptFrameworkErrorException(
-                    e.getMessage(), null,
-                    metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
+                ScriptFrameworkErrorException e2 =
+                    new ScriptFrameworkErrorException(
+                        e.toString(), null,
+                        metaData.getLanguageName(), metaData.getLanguage(),
+                        ScriptFrameworkErrorType.NO_SUCH_SCRIPT );
+                e2.initCause( e );
+                throw e2;
             }
 
             LogUtils.DEBUG( "Starting Invoke on Proxy ..." );
@@ -310,18 +332,23 @@ class ScriptImpl implements XScript
             }
             catch ( java.lang.IllegalArgumentException iae )
             {
-                throw new ScriptFrameworkErrorException(
-                    iae.getMessage(), null,
-                    metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.UNKNOWN );
-
+                ScriptFrameworkErrorException e2 =
+                    new ScriptFrameworkErrorException(
+                        iae.getMessage(), null,
+                        metaData.getLanguageName(), metaData.getLanguage(),
+                        ScriptFrameworkErrorType.UNKNOWN );
+                e2.initCause( iae );
+                throw e2;
             }
             catch ( java.lang.IllegalAccessException ia )
             {
-                throw new ScriptFrameworkErrorException(
-                    ia.getMessage(), null,
-                    metaData.getLanguageName(), metaData.getLanguage(),
-                    ScriptFrameworkErrorType.UNKNOWN );
+                ScriptFrameworkErrorException e2 =
+                    new ScriptFrameworkErrorException(
+                        ia.toString(), null,
+                        metaData.getLanguageName(), metaData.getLanguage(),
+                        ScriptFrameworkErrorType.UNKNOWN );
+                e2.initCause( ia );
+                throw e2;
             }
             catch ( java.lang.reflect.InvocationTargetException ite )
             {
