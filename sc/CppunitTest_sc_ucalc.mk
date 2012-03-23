@@ -43,6 +43,12 @@ $(call gb_CxxObject_get_target,sc/qa/unit/ucalc): \
     $(WORKDIR)/AllLangRes/frm \
     $(WORKDIR)/AllLangRes/sc \
 
+ifeq ($(ENABLE_TELEPATHY),TRUE)
+$(eval $(call gb_Library_add_linked_libs,sc_ucalc,\
+	tubes \
+))
+endif
+
 $(eval $(call gb_CppunitTest_use_libraries,sc_ucalc, \
     avmedia \
     basegfx \

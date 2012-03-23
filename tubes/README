@@ -25,6 +25,24 @@ make everything service-activatable:
 Otherwise, you need to make sure liboapprover and a Telepathy-enabled
 LibreOffice are running.
 
+Status 2012-03-23:
+
+* To do interesting things with this code build and run calc thus:
+
+	SAL_LOG=1 LIBO_TUBES=slave ./soffice -calc   # user one
+	SAL_LOG=1 LIBO_TUBES=master ./soffice -calc  # user two
+
+	hope that a nasty race-condition doesn't occur during startup:
+which is flagged by "we are supposed to handle only one channel" you
+hit it: bang - just try again.
+
+	you also require only a single jabber connection enabled (in
+empathy) and to have your opponent added and approved on both sides.
+
+	Now type simple strings into cells, rename sheets, or type
+'saveme' to transfer your document as-is to the other side ...
+
+
 Status 2012-03-20:
 
 * no LibO code depends on this module yet, so it is not built in a regular
