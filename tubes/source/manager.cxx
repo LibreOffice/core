@@ -187,14 +187,14 @@ void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel
 
     pManager->mpFileReceivedCallback( aUri, pManager->mpFileReceivedCallbackData);
 
-    //g_object_unref( handler);
+    g_object_unref( handler);
 }
 
 static void TeleManager_TransferError( EmpathyFTHandler *handler, const GError *error, void*)
 {
     SAL_INFO( "tubes", "TeleConference_TransferError: " << error->message);
 
-    //g_object_unref( handler);
+    g_object_unref( handler);
 }
 
 static void
