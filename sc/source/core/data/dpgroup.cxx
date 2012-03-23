@@ -899,8 +899,7 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
 
         if ( pDateHelper )
         {
-            const ScDPItemData* pData  =
-                GetCacheTable().getCache()->GetItemDataById(nSourceDim, rItems[i]);
+            const ScDPItemData* pData = pCache->GetItemDataById(nSourceDim, rItems[i]);
             if (pData->GetType() == ScDPItemData::Value)
             {
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
@@ -911,7 +910,7 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
                     pDateHelper->GetDatePart(), nPartValue, pFormatter, rNumInfo.mfStart, rNumInfo.mfEnd);
 
                 ScDPItemData aItem(pDateHelper->GetDatePart(), nPartValue);
-                rItems[i] = GetCacheTable().getCache()->GetIdByItemData(nColumn, aItem);
+                rItems[i] = pCache->GetIdByItemData(nColumn, aItem);
             }
         }
     }
@@ -1058,12 +1057,31 @@ long ScDPGroupTableData::GetSourceDim( long nDim )
     }
     return nDim;
 }
- long ScDPGroupTableData::Compare( long nDim, long nDataId1, long nDataId2)
+
+long ScDPGroupTableData::Compare(long nDim, long nDataId1, long nDataId2)
 {
     if ( getIsDataLayoutDimension(nDim) )
         return 0;
     return ScDPItemData::Compare( *GetMemberById(nDim,  nDataId1),*GetMemberById(nDim,  nDataId2) );
 }
-// -----------------------------------------------------------------------
+
+#if DEBUG_PIVOT_TABLE
+#include <iostream>
+using std::cout;
+using std::endl;
+
+void ScDPGroupTableData::Dump() const
+{
+    cout << "--- ScDPGroupTableData" << endl;
+    for (long i = 0; i < nSourceCount; ++i)
+    {
+        cout << "* dimension: " << i << endl;
+        const ScDPNumGroupDimension& rGrp = pNumGroups[i];
+        const ScDPNumGroupInfo& rInfo = rGrp.GetInfo();
+        cout << "  num group enabled: " << rInfo.mbEnable << endl;
+    }
+    cout << "---" << endl;
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

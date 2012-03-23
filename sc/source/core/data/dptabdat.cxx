@@ -236,7 +236,7 @@ void ScDPTableData::CalcResultsFromCacheTable(const ScDPCacheTable& rCacheTable,
 }
 
 void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRow,
-                                const vector<long>& rDims, vector< SCROW/*ScDPItemData*/>& rItemData)
+                                const vector<long>& rDims, vector<SCROW>& rItemData)
 {
     sal_Int32 nDimSize = rDims.size();
     for (sal_Int32 i = 0; i < nDimSize; ++i)
@@ -255,7 +255,6 @@ void ScDPTableData::GetItemData(const ScDPCacheTable& rCacheTable, sal_Int32 nRo
 
         SCROW nId= rCacheTable.getCache()->GetItemDataId( static_cast<SCCOL>(nDim), static_cast<SCROW>(nRow), IsRepeatIfEmpty());
         rItemData.push_back( nId );
-
     }
 }
 
@@ -314,6 +313,11 @@ long ScDPTableData::Compare( long nDim, long nDataId1, long nDataId2)
     else
         return -1;
 }
-// -----------------------------------------------------------------------
+
+#if DEBUG_PIVOT_TABLE
+void ScDPTableData::Dump() const
+{
+}
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

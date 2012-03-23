@@ -33,7 +33,8 @@
 #include "dpoutput.hxx"
 #include "dpcachetable.hxx"
 #include "dpcache.hxx"
-#include <tools/string.hxx>
+#include "dpmacros.hxx"
+
 #include "svl/zforlist.hxx"
 
 #include <vector>
@@ -171,6 +172,11 @@ public:
     virtual SCROW                        GetIdOfItemData( long  nDim, const ScDPItemData& rData );
     virtual long                GetSourceDim( long nDim );
     virtual long                Compare( long nDim, long nDataId1, long nDataId2);
+
+#if DEBUG_PIVOT_TABLE
+    virtual void Dump() const;
+#endif
+
 protected:
     /** This structure stores vector arrays that hold intermediate data for
         each row during cache table iteration. */

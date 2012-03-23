@@ -3546,10 +3546,10 @@ void ScDPDataDimension::ProcessData( const vector< SCROW >& aDataMembers, const 
         // always first member for data layout dim
         if ( bIsDataLayout || ( !aDataMembers.empty() && pMember->IsNamedItem(aDataMembers[0]) ) )
         {
-            vector</*ScDPItemData*/SCROW> aChildDataMembers;
+            vector<SCROW> aChildDataMembers;
             if (aDataMembers.size() > 1)
             {
-                vector</*ScDPItemData*/SCROW >::const_iterator itr = aDataMembers.begin();
+                vector<SCROW>::const_iterator itr = aDataMembers.begin();
                 aChildDataMembers.insert(aChildDataMembers.begin(), ++itr, aDataMembers.end());
             }
             pMember->ProcessData( aChildDataMembers, aValues, rSubState );

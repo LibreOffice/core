@@ -45,4 +45,22 @@ ScDPNumGroupInfo::ScDPNumGroupInfo(const ScDPNumGroupInfo& r) :
     mfStart(r.mfStart),
     mfEnd(r.mfEnd), mfStep(r.mfStep) {}
 
+#if DEBUG_PIVOT_TABLE
+#include <iostream>
+using std::cout;
+using std::endl;
+
+void ScDPNumGroupInfo::Dump() const
+{
+    cout << "--- ScDPNumGroupInfo" << endl;
+    cout << "  enabled: " << mbEnable << endl;
+    cout << "  auto start: " << mbAutoStart << endl;
+    cout << "  auto end: " << mbAutoEnd << endl;
+    cout << "  start: " << mfStart << endl;
+    cout << "  end: " << mfEnd << endl;
+    cout << "  step: " << mfStep << endl;
+    cout << "---" << endl;
+}
+#endif
+
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

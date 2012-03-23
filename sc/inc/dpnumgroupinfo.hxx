@@ -30,6 +30,7 @@
 #define __SC_DPNUMGROUPINFO_HXX__
 
 #include "scdllapi.h"
+#include "dpmacros.hxx"
 
 struct ScDPNumGroupInfo
 {
@@ -44,6 +45,10 @@ struct ScDPNumGroupInfo
 
     SC_DLLPUBLIC ScDPNumGroupInfo();
     SC_DLLPUBLIC ScDPNumGroupInfo(const ScDPNumGroupInfo& r);
+
+#if DEBUG_PIVOT_TABLE
+    void Dump() const;
+#endif
 };
 
 #endif

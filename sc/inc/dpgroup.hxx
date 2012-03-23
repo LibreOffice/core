@@ -214,6 +214,10 @@ public:
                                                const ScDPItemData& rBaseData, long nBaseIndex ) const;
     virtual sal_Bool                    HasCommonElement( const ScDPItemData& rFirstData, long nFirstIndex,
                                                       const ScDPItemData& rSecondData, long nSecondIndex ) const;
+
+#if DEBUG_PIVOT_TABLE
+    virtual void Dump() const;
+#endif
 };
 
 
