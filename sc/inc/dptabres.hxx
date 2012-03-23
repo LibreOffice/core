@@ -506,15 +506,15 @@ private:
     const ScDPResultData*   pResultData;
     MemberArray             maMemberArray;
     MemberHash              maMemberHash;
-    sal_Bool                    bInitialized;
-    String                  aDimensionName;     //! or ptr to IntDimension?
-    sal_Bool                    bIsDataLayout;      //! or ptr to IntDimension?
-    sal_Bool                    bSortByData;
-    sal_Bool                    bSortAscending;
+    rtl::OUString           aDimensionName;     //! or ptr to IntDimension?
     long                    nSortMeasure;
     ScMemberSortOrder       aMemberOrder;       // used when sorted by measure
-    sal_Bool                    bAutoShow;
-    sal_Bool                    bAutoTopItems;
+    bool                    bIsDataLayout:1;      //! or ptr to IntDimension?
+    bool                    bSortByData:1;
+    bool                    bSortAscending:1;
+    bool                    bAutoShow:1;
+    bool                    bAutoTopItems:1;
+    bool                    bInitialized:1;
     long                    nAutoMeasure;
     long                    nAutoCount;
 

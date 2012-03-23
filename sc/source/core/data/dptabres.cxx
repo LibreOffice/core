@@ -2719,13 +2719,13 @@ sal_Bool ScDPGroupCompare::TestIncluded( const ScDPMember& rMember )
 
 ScDPResultDimension::ScDPResultDimension( const ScDPResultData* pData ) :
     pResultData( pData ),
-    bInitialized( false ),
+    nSortMeasure( 0 ),
     bIsDataLayout( false ),
     bSortByData( false ),
     bSortAscending( false ),
-    nSortMeasure( 0 ),
     bAutoShow( false ),
     bAutoTopItems( false ),
+    bInitialized( false ),
     nAutoMeasure( 0 ),
     nAutoCount( 0 )
 {
@@ -2786,7 +2786,7 @@ void ScDPResultDimension::InitFrom( const vector<ScDPDimension*>& ppDim, const v
     const sheet::DataPilotFieldAutoShowInfo& rAutoInfo = pThisLevel->GetAutoShow();
     if ( rAutoInfo.IsEnabled )
     {
-        bAutoShow     = sal_True;
+        bAutoShow     = true;
         bAutoTopItems = ( rAutoInfo.ShowItemsMode == sheet::DataPilotFieldShowItemsMode::FROM_TOP );
         nAutoMeasure  = pThisLevel->GetAutoMeasure();
         nAutoCount    = rAutoInfo.ItemCount;
@@ -2796,7 +2796,7 @@ void ScDPResultDimension::InitFrom( const vector<ScDPDimension*>& ppDim, const v
     const sheet::DataPilotFieldSortInfo& rSortInfo = pThisLevel->GetSortInfo();
     if ( rSortInfo.Mode == sheet::DataPilotFieldSortMode::DATA )
     {
-        bSortByData = sal_True;
+        bSortByData = true;
         bSortAscending = rSortInfo.IsAscending;
         nSortMeasure = pThisLevel->GetSortMeasure();
     }
@@ -2820,12 +2820,12 @@ void ScDPResultDimension::InitFrom( const vector<ScDPDimension*>& ppDim, const v
             ScDPParentDimData aData( i, pThisDim, pThisLevel, pMember);
             ScDPResultMember* pNew = AddMember( aData );
 
-            rInitState.AddMember( nDimSource, /*aMemberData*/pNew->GetDataId() );
+            rInitState.AddMember(nDimSource, pNew->GetDataId());
             pNew->InitFrom( ppDim, ppLev, nPos+1, rInitState, bInitChild  );
             rInitState.RemoveMember();
         }
     }
-    bInitialized = sal_True;
+    bInitialized = true;
 }
 
 void ScDPResultDimension::LateInitFrom(
@@ -3976,7 +3976,7 @@ void ScDPResultDimension::InitWithMembers(
         if ( pResultMember )
         {
             rInitState.AddMember( nDimSource, pResultMember->GetDataId()  );
-            pResultMember->LateInitFrom( rParams /*ppDim, ppLev*/, pItemData, nPos+1 , rInitState );
+            pResultMember->LateInitFrom(rParams, pItemData, nPos+1, rInitState);
             rInitState.RemoveMember();
         }
     }
