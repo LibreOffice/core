@@ -68,6 +68,7 @@ public:
     void testFdo45563();
     void testFdo43965();
     void testN751020();
+    void testFdo47326();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -82,6 +83,7 @@ public:
     CPPUNIT_TEST(testFdo45563);
     CPPUNIT_TEST(testFdo43965);
     CPPUNIT_TEST(testN751020);
+    CPPUNIT_TEST(testFdo47326);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -387,6 +389,13 @@ void RtfModelTest::testN751020()
     sal_Int32 nValue = 0;
     xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ParaBottomMargin"))) >>= nValue;
     CPPUNIT_ASSERT_EQUAL(sal_Int32(TWIP_TO_MM100(200)), nValue);
+}
+
+void RtfModelTest::testFdo47326()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo47326.rtf")));
+    // This was 15 only, as \super buffered text, then the contents of it got lost.
+    CPPUNIT_ASSERT_EQUAL(19, getLength());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);

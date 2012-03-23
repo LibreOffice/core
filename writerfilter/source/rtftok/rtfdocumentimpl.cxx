@@ -1932,6 +1932,14 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
                 m_aStates.top().aCharacterSprms->push_back(make_pair(NS_ooxml::LN_EG_RPrBase_vertAlign, pValue));
             }
             break;
+        case RTF_NOSUPERSUB:
+            if (m_pCurrentBuffer == &m_aSuperBuffer)
+            {
+                replayBuffer(m_aSuperBuffer);
+                m_pCurrentBuffer = 0;
+            }
+            m_aStates.top().aCharacterSprms.erase(NS_ooxml::LN_EG_RPrBase_vertAlign);
+            break;
         case RTF_LINEPPAGE:
         case RTF_LINECONT:
             {
