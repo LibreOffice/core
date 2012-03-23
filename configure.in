@@ -2139,7 +2139,7 @@ AC_SUBST(SYSBASE)
 dnl ===================================================================
 dnl  Checks if ccache is available
 dnl ===================================================================
-if test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" \); then
+if test "$enable_ccache" = "yes" -o \( "$enable_ccache" = "" -a "$enable_icecream" != "yes" -a "$build_os" != "cygwin" \); then
     case "%$CC%$CXX%" in
     # If $CC and/or $CXX already contain "ccache" (possibly suffixed with some verison number etc),
     # assume that's good then
@@ -2519,31 +2519,6 @@ if test "$GCC" = "yes"; then
 fi
 AC_SUBST(COM_GCC_IS_CLANG)
 
-#
-# prefix C with ccache if needed
-#
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-    if test "$CCACHE" != ""; then
-        AC_MSG_CHECKING([whether $CC is already ccached])
-
-        AC_LANG_PUSH([C])
-        save_CFLAGS=$CFLAGS
-        CFLAGS="$CFLAGS --ccache-skip -O2"
-        dnl an empty program will do, we're checking the compiler flags
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
-                          [use_ccache=yes], [use_ccache=no])
-        if test $use_ccache = yes; then
-            AC_MSG_RESULT([yes])
-        else
-            CC="$CCACHE $CC"
-            AC_MSG_RESULT([no])
-        fi
-        CFLAGS=$save_CFLAGS
-        AC_LANG_POP([C])
-    fi
-
-fi
-
 HAVE_LD_BSYMBOLIC_FUNCTIONS=
 if test "$GCC" = "yes"; then
     AC_MSG_CHECKING( for -Bsymbolic-functions linker support )
@@ -2796,6 +2771,31 @@ AC_SUBST(COMEX)
 PathFormat "$MSPDB_PATH"
 MSPDB_PATH="$formatted_path"
 AC_SUBST(SHOWINCLUDES_PREFIX)
+
+#
+# prefix C with ccache if needed
+#
+if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
+    if test "$CCACHE" != ""; then
+        AC_MSG_CHECKING([whether $CC is already ccached])
+
+        AC_LANG_PUSH([C])
+        save_CFLAGS=$CFLAGS
+        CFLAGS="$CFLAGS --ccache-skip -O2"
+        dnl an empty program will do, we're checking the compiler flags
+        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+                          [use_ccache=yes], [use_ccache=no])
+        if test $use_ccache = yes; then
+            AC_MSG_RESULT([yes])
+        else
+            CC="$CCACHE $CC"
+            AC_MSG_RESULT([no])
+        fi
+        CFLAGS=$save_CFLAGS
+        AC_LANG_POP([C])
+    fi
+
+fi
 
 #
 # determine CPU, CPUNAME, GUI, GUIBASE, ...
@@ -3980,24 +3980,22 @@ fi
 #
 # prefx CXX with ccache if needed
 #
-if test "$_os" != "WINNT" -o "$WITH_MINGW" = "yes"; then
-    if test "$CCACHE" != ""; then
-        AC_MSG_CHECKING([whether $CXX is already ccached])
-        AC_LANG_PUSH([C++])
-        save_CXXFLAGS=$CXXFLAGS
-        CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
-        dnl an empty program will do, we're checking the compiler flags
-        AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
-                          [use_ccache=yes], [use_ccache=no])
-        if test $use_ccache = yes; then
-            AC_MSG_RESULT([yes])
-        else
-            CXX="$CCACHE $CXX"
-            AC_MSG_RESULT([no])
-        fi
-        CXXFLAGS=$save_CXXFLAGS
-        AC_LANG_POP([C++])
+if test "$CCACHE" != ""; then
+    AC_MSG_CHECKING([whether $CXX is already ccached])
+    AC_LANG_PUSH([C++])
+    save_CXXFLAGS=$CXXFLAGS
+    CXXFLAGS="$CXXFLAGS --ccache-skip -O2"
+    dnl an empty program will do, we're checking the compiler flags
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([],[])],
+                      [use_ccache=yes], [use_ccache=no])
+    if test $use_ccache = yes; then
+        AC_MSG_RESULT([yes])
+    else
+        CXX="$CCACHE $CXX"
+        AC_MSG_RESULT([no])
     fi
+    CXXFLAGS=$save_CXXFLAGS
+    AC_LANG_POP([C++])
 fi
 
 dnl ===================================================================
