@@ -80,6 +80,7 @@ struct ShapeTypeModel
     ::rtl::OUString     maMarginLeft;           /// X position of the shape bounding box to shape anchor (number with unit).
     ::rtl::OUString     maMarginTop;            /// Y position of the shape bounding box to shape anchor (number with unit).
     ::rtl::OUString     maPositionVerticalRelative; /// The Y position is relative to this.
+    sal_Bool            mbAutoHeight;           /// If true, the height value is a minimum value (mostly used for textboxes)
 
     StrokeModel         maStrokeModel;          /// Border line formatting.
     FillModel           maFillModel;            /// Shape fill formatting.
