@@ -1196,10 +1196,11 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         nKashidaCount = 0;
         Point aPos = pG->maLinearPos;
         aPos.X() -= nGapWidth; // cluster is already right aligned
+        int const nCharPos = pG->mnCharPos;
         GlyphVector::iterator pG2 = pG;
         for(; nGapWidth > nKashidaWidth; nGapWidth -= nKashidaWidth, ++nKashidaCount )
         {
-            pG2 = m_GlyphItems.insert(pG2, GlyphItem( pG->mnCharPos, nKashidaIndex, aPos,
+            pG2 = m_GlyphItems.insert(pG2, GlyphItem(nCharPos, nKashidaIndex, aPos,
                                                       GlyphItem::IS_IN_CLUSTER|GlyphItem::IS_RTL_GLYPH, nKashidaWidth ));
             ++pG2;
             aPos.X() += nKashidaWidth;
@@ -1208,7 +1209,7 @@ void GenericSalLayout::KashidaJustify( long nKashidaIndex, int nKashidaWidth )
         // fixup rightmost kashida for gap remainder
         if( nGapWidth > 0 )
         {
-            pG2 = m_GlyphItems.insert(pG2, GlyphItem( pG->mnCharPos, nKashidaIndex, aPos,
+            pG2 = m_GlyphItems.insert(pG2, GlyphItem(nCharPos, nKashidaIndex, aPos,
                                                       GlyphItem::IS_IN_CLUSTER|GlyphItem::IS_RTL_GLYPH, nKashidaCount ? nGapWidth : nGapWidth/2 ));
             ++pG2;
             aPos.X() += nGapWidth;
