@@ -797,7 +797,6 @@ void ScOutputData::DrawBackground()
     sal_Bool bShowProt = bSyntaxMode && pDoc->IsTabProtected(nTab);
     sal_Bool bDoAll = bShowProt || bPagebreakMode || bSolidBackground;
 
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     sal_Bool bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -915,7 +914,6 @@ void ScOutputData::DrawExtraShadow(sal_Bool bLeft, sal_Bool bTop, sal_Bool bRigh
     pDev->SetLineColor();
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     sal_Bool bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
     Color aAutoTextColor;
     if ( bCellContrast )
@@ -1126,7 +1124,6 @@ void ScOutputData::DrawFrame()
     Color aSingleColor;
     sal_Bool bUseSingleColor = false;
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     sal_Bool bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
 
     //  if a Calc OLE object is embedded in Draw/Impress, the VCL DrawMode is used
@@ -1325,7 +1322,6 @@ void ScOutputData::DrawRotatedFrame( const Color* pForceColor )
     const SfxItemSet*    pCondSet;
 
     const StyleSettings& rStyleSettings = Application::GetSettings().GetStyleSettings();
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     sal_Bool bCellContrast = bUseStyleColor && rStyleSettings.GetHighContrastMode();
 
     //  color (pForceColor) is determined externally, including DrawMode changes

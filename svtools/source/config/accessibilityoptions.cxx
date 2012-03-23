@@ -545,11 +545,6 @@ void SvtAccessibilityOptions::Commit()
 
 // -----------------------------------------------------------------------
 
-sal_Bool SvtAccessibilityOptions::GetIsForBorders() const
-{
-    OSL_FAIL( "SvtAccessibilityOptions::GetIsForBorders: is obsolete!" );
-    return sal_False;
-}
 sal_Bool SvtAccessibilityOptions::GetAutoDetectSystemHC() const
 {
     return sm_pSingleImplConfig->GetAutoDetectSystemHC();

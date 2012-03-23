@@ -205,7 +205,6 @@ ScDrawStringsVars::ScDrawStringsVars(ScOutputData* pData, sal_Bool bPTL) :
     bPixelToLogic( bPTL )
 {
     ScModule* pScMod = SC_MOD();
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     bCellContrast = pOutput->bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -2231,7 +2230,6 @@ void ScOutputData::DrawEditParam::setPatternToEngine(bool bUseStyleColor)
         return;
 
     sal_Int32 nConfBackColor = SC_MOD()->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     bool bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 
@@ -4668,7 +4666,6 @@ void ScOutputData::DrawRotated(sal_Bool bPixelToLogic)
 
     ScModule* pScMod = SC_MOD();
     sal_Int32 nConfBackColor = pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor;
-    //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
     sal_Bool bCellContrast = bUseStyleColor &&
             Application::GetSettings().GetStyleSettings().GetHighContrastMode();
 

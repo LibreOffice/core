@@ -2029,7 +2029,6 @@ bool ScInputHandler::StartTable( sal_Unicode cTyped, bool bFromCommand, bool bIn
                 Color aBackCol = ((const SvxBrushItem&)
                                 pPattern->GetItem( ATTR_BACKGROUND )).GetColor();
                 ScModule* pScMod = SC_MOD();
-                //  SvtAccessibilityOptions::GetIsForBorders is no longer used (always assumed TRUE)
                 if ( aBackCol.GetTransparency() > 0 ||
                         Application::GetSettings().GetStyleSettings().GetHighContrastMode() )
                     aBackCol.SetColor( pScMod->GetColorConfig().GetColorValue(svtools::DOCCOLOR).nColor );

@@ -48,7 +48,6 @@ public:
     virtual ~SvtAccessibilityOptions();
 
     // get & set config entries
-    sal_Bool    GetIsForBorders() const;        // obsolete!
     sal_Bool    GetIsForPagePreviews() const;
     sal_Bool    GetIsHelpTipsDisappear() const;
     sal_Bool    GetIsAllowAnimatedGraphics() const;

@@ -968,8 +968,7 @@ void AutoFmtPreview::NotifyChange( const SwTableAutoFmt& rNewData )
 void AutoFmtPreview::DoPaint( const Rectangle& /*rRect*/ )
 {
     sal_uInt32 nOldDrawMode = aVD.GetDrawMode();
-    if( GetSettings().GetStyleSettings().GetHighContrastMode() &&
-            SW_MOD()->GetAccessibilityOptions().GetIsForBorders() )
+    if( GetSettings().GetStyleSettings().GetHighContrastMode() )
         aVD.SetDrawMode( DRAWMODE_SETTINGSLINE | DRAWMODE_SETTINGSFILL | DRAWMODE_SETTINGSTEXT | DRAWMODE_SETTINGSGRADIENT );
 
     Bitmap  thePreview;
