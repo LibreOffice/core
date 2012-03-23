@@ -78,7 +78,7 @@ PersistentMap::~PersistentMap()
 
 //______________________________________________________________________________
 PersistentMap::PersistentMap( OUString const & url )
-    : m_db( 0, 0 )
+    : m_db( 0 )
 {
     try {
         rtl::OUString fileURL = expandUnoRcUrl(url);
@@ -101,7 +101,7 @@ PersistentMap::PersistentMap( OUString const & url )
 
 //______________________________________________________________________________
 PersistentMap::PersistentMap()
-    : m_db( 0, 0 )
+    : m_db( 0 )
 {
     try {
         // xxx todo: DB_THREAD, DB_DBT_MALLOC currently not used

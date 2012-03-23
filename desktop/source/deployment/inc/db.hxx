@@ -47,7 +47,6 @@ extern "C" {
 
 namespace berkeleydbproxy {
 
-    class DbEnv;
     class Dbc;
     class Dbt;
 
@@ -68,11 +67,6 @@ namespace berkeleydbproxy {
 
     class DESKTOP_DEPLOYMENTMISC_DLLPUBLIC DbEnv : boost::noncopyable
     {
-        friend class Db;
-
-    private:
-        DB_ENV* m_pDBENV;
-
     public:
         static char *strerror(int);
     };
@@ -83,7 +77,7 @@ namespace berkeleydbproxy {
         DB* m_pDBP;
 
     public:
-        Db(DbEnv* dbbenv,u_int32_t flags);
+        Db(u_int32_t flags);
         ~Db();
 
         int close(u_int32_t flags);

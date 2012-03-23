@@ -49,16 +49,17 @@ namespace berkeleydbproxy {
 
 //----------------------------------------------------------------------------
 
-char *DbEnv::strerror(int error) {
+char *DbEnv::strerror(int error)
+{
     return (db_strerror(error));
 }
 
 //----------------------------------------------------------------------------
 
-Db::Db(DbEnv* pDbenv,u_int32_t flags)
-: m_pDBP(0)
+Db::Db(u_int32_t flags)
+    : m_pDBP(0)
 {
-    db_internal::check_error( db_create(&m_pDBP,pDbenv ? pDbenv->m_pDBENV:0,flags),"Db::Db" );
+    db_internal::check_error( db_create(&m_pDBP, NULL, flags),"Db::Db" );
 }
 
 
