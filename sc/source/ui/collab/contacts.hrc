@@ -1,0 +1,7 @@
+#include "sc.hrc"   // -> RID_SCDLG_CONTACTS
+
+#define FL_LABEL             1
+#define CTL_LIST             2
+
+#define STR_HEADER_ALIAS     20
+#define STR_HEADER_FEATURES  21

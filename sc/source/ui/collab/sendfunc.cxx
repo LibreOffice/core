@@ -34,6 +34,7 @@
 #include "docsh.hxx"
 #include "docfunc.hxx"
 #include "collab.hxx"
+#include "contacts.hxx"
 #include <tubes/conference.hxx>
 
 // new file send/recv fun ...
@@ -451,6 +452,9 @@ public:
 
         if ( rtl::OUString( rText ) == "saveme" )
             SendFile( rText );
+
+        if ( rtl::OUString( rText ) == "contacts" )
+            tubes::createContacts();
 
         return true; // needs some code auditing action
     }

@@ -337,6 +337,7 @@ $(eval $(call gb_Library_add_exception_objects,sc,\
 	sc/source/ui/cctrl/tbinsert \
 	sc/source/ui/cctrl/tbzoomsliderctrl \
 	sc/source/ui/collab/collab \
+	sc/source/ui/collab/contacts \
 	sc/source/ui/collab/sendfunc \
 	sc/source/ui/dbgui/asciiopt \
 	sc/source/ui/dbgui/consdlg \
