@@ -310,6 +310,13 @@ static void TeleManager_ChannelReadyHandler(
     pConference->offerTube();
 }
 
+static gboolean caps_hack_timeout_cb (void *pUserData)
+{
+    TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
+
+    pManager->setAccountManagerReadyHandlerInvoked( true);
+    return FALSE;
+}
 
 static void TeleManager_AccountManagerReadyHandler(
         GObject*        pSourceObject,
@@ -324,7 +331,9 @@ static void TeleManager_AccountManagerReadyHandler(
     if (!pManager)
         return;
 
-    pManager->setAccountManagerReadyHandlerInvoked( true);
+    // Hack
+    // pManager->setAccountManagerReadyHandlerInvoked( true);
+    g_timeout_add_seconds( 2, caps_hack_timeout_cb, pManager);
 
     GError* pError = NULL;
     gboolean bPrepared = tp_proxy_prepare_finish( pSourceObject, pResult, &pError);
@@ -601,13 +610,6 @@ bool TeleManager::startBuddySession( TpAccount *pAccount, TpContact *pBuddy )
     return pConference->getChannel() != NULL && pConference->isTubeOpen();
 }
 
-
-static gboolean timeout_cb( void* pData)
-{
-    g_main_loop_quit( reinterpret_cast<GMainLoop*>( pData));
-    return FALSE;
-}
-
 void TeleManager::prepareAccountManager()
 {
     INFO_LOGGER( "TeleManager::prepareAccountManager");
@@ -640,11 +642,6 @@ void TeleManager::prepareAccountManager()
     tp_proxy_prepare_async( pImpl->mpAccountManager, NULL, TeleManager_AccountManagerReadyHandler, this);
 
     iterateLoop( &TeleManager::isAccountManagerReadyHandlerInvoked);
-
-    /* Hack to make sure that our capabilities update from one account has
-     * propagated via the network and back to the other account. Sorry. */
-    g_timeout_add_seconds( 2, timeout_cb, pImpl->mpLoop);
-    g_main_loop_run( pImpl->mpLoop);
 }
 
 
