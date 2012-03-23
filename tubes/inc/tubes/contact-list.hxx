@@ -42,11 +42,8 @@ typedef ::std::vector< AccountContactPair > AccountContactPairV;
 class TUBES_DLLPUBLIC ContactList
 {
 public:
-    ContactList();
+    ContactList(TpAccountManager *pAccountManager);
     ~ContactList();
-
-    typedef void (*PrepareCallback)( GError *errorOr0, void *user_data );
-    void                    prepare( PrepareCallback callback, void *user_data );
 
     AccountContactPairV     getContacts();
 

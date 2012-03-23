@@ -34,11 +34,12 @@
 #include <tubes/contact-list.hxx>
 #include <tubes/manager.hxx>
 
-ContactList::ContactList()
+ContactList::ContactList(TpAccountManager *pAccountManager)
+    : mpAccountManager(pAccountManager)
 {
-    g_type_init();
-
-    mpAccountManager = tp_account_manager_dup ();
+    SAL_WARN_IF( !mpAccountManager, "tubes",
+        "ContactList::ContactList: passed a null account manager");
+    g_object_ref( mpAccountManager);
 
     /* Tell the client factory (which creates and prepares proxy objects) to
      * get the features we need ready before giving us any objects.
@@ -78,40 +79,6 @@ contact_supports_libo_dtube (TpContact *contact)
 
     return tp_capabilities_supports_dbus_tubes (caps,
         TP_HANDLE_TYPE_CONTACT, TeleManager::getFullServiceName().getStr());
-}
-
-typedef ::std::pair< ContactList::PrepareCallback, void * > Foo;
-
-static void
-account_manager_prepared_cb (GObject *object,
-    GAsyncResult *res,
-    gpointer user_data)
-{
-    Foo *data = reinterpret_cast<Foo *>(user_data);
-    GError *error = NULL;
-
-    if (!tp_proxy_prepare_finish (object, res, &error))
-    {
-        data->first( error, data->second );
-        g_clear_error(&error);
-    }
-    else
-    {
-        data->first( NULL, data->second );
-    }
-
-    delete data;
-}
-
-void ContactList::prepare(
-    ContactList::PrepareCallback callback,
-    void* user_data)
-{
-    Foo *data = new Foo(callback, user_data);
-
-    /* This will call back immediately (in an idle) if the manager is already
-     * prepared, which is fine-ish */
-    tp_proxy_prepare_async (mpAccountManager, NULL, account_manager_prepared_cb, data);
 }
 
 AccountContactPairV ContactList::getContacts()

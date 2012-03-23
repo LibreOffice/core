@@ -168,14 +168,14 @@ void TestTeleTubes::spinMainLoop()
 
 void TestTeleTubes::testContactList()
 {
-    ContactList cl;
-    cl.prepare( TeleTestTubes_ContactListPrepared, this );
-    spinMainLoop();
+    CPPUNIT_ASSERT( mpManager1);
+    CPPUNIT_ASSERT( mpManager1->getAccountManagerStatus() == TeleManager::AMS_PREPARED);
 
-    /* Okay, now everything's prepared, we can get contacts synchronously. */
+    ContactList *cl = mpManager1->getContactList();
+
     AccountContactPairV pairs;
 
-    pairs = cl.getContacts();
+    pairs = cl->getContacts();
     guint i;
 
     /* FIXME: this is racy, because we can't be 100% sure that MC has finished

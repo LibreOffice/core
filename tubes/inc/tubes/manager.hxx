@@ -33,6 +33,7 @@
 #include "tubes/tubesdllapi.h"
 #include "tubes/conference.hxx"
 #include "tubes/packet.hxx"
+#include "tubes/contact-list.hxx"
 #include <rtl/ustring.hxx>
 #include <salhelper/thread.hxx>
 #include <rtl/ref.hxx>
@@ -82,7 +83,7 @@ public:
     TeleManager( const Link& rLink, bool bCreateOwnGMainLoop = false );
     ~TeleManager();
 
-    /** Prepare the Telepathy Account Manager.
+    /** Prepare the Telepathy Account Manager. Requires connect() to have succeeded.
 
         Invokes an async call that is not ready until meAccountManagerStatus is
         set! Until that is AMS_PREPARED nothing else will work.
@@ -91,6 +92,11 @@ public:
      */
     void                    prepareAccountManager();
     AccountManagerStatus    getAccountManagerStatus() const;
+
+    /** Fetches the contact list. Returns 0 before connect() is called successfully.
+        Is non-functional until prepareAccountManager().
+     */
+    ContactList*            getContactList();
 
 #if 0
     /** Start a group session in a MUC.

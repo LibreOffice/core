@@ -82,6 +82,7 @@ public:
     TpAccountManager*                   mpAccountManager;
     TeleManager::AccountManagerStatus   meAccountManagerStatus;
     bool                                mbAccountManagerReadyHandlerInvoked;
+    ContactList*                        mpContactList;
 
                             TeleManagerImpl();
                             ~TeleManagerImpl();
@@ -400,6 +401,15 @@ bool TeleManager::connect()
     if (!pFactory)
         return false;
 
+    TpAccountManager* pAccountManager = tp_account_manager_new_with_factory (
+        TP_SIMPLE_CLIENT_FACTORY (pFactory));
+    tp_account_manager_set_default( pAccountManager);
+
+    /* Takes our ref. */
+    pImpl->mpAccountManager = pAccountManager;
+
+    pImpl->mpContactList = new ContactList(pAccountManager);
+
     pImpl->mpClient = tp_simple_handler_new_with_factory(
             TP_SIMPLE_CLIENT_FACTORY (pFactory), // factory
             FALSE,                          // bypass_approval
@@ -613,13 +623,10 @@ void TeleManager::prepareAccountManager()
     SAL_WARN_IF( pImpl->meAccountManagerStatus != AMS_UNINITIALIZED, "tubes",
             "TeleManager::prepareAccountManager: yet another attempt");
 
+    SAL_WARN_IF( !pImpl->mpAccountManager, "tubes",
+            "TeleManager::prepareAccountManager: called before ::connect()");
     if (!pImpl->mpAccountManager)
-    {
-        pImpl->mpAccountManager = tp_account_manager_dup();
-        SAL_WARN_IF( !pImpl->mpAccountManager, "tubes", "TeleManager::prepareAccountManager: no account manager");
-        if (!pImpl->mpAccountManager)
-            return;
-    }
+        return;
 
     pImpl->meAccountManagerStatus = AMS_INPREPARATION;
     setAccountManagerReadyHandlerInvoked( false);
@@ -647,6 +654,10 @@ bool TeleManager::isAccountManagerReadyHandlerInvoked() const
     return pImpl->mbAccountManagerReadyHandlerInvoked;
 }
 
+ContactList* TeleManager::getContactList()
+{
+    return pImpl->mpContactList;
+}
 
 TpAccount* TeleManager::getAccount( const rtl::OString& rAccountID )
 {
@@ -962,6 +973,8 @@ TeleManagerImpl::~TeleManagerImpl()
         g_object_unref( mpDBus);
     if (mpAccountManager)
         g_object_unref( mpAccountManager);
+    if (mpContactList)
+        delete mpContactList;
     if (mpLoop)
         g_main_loop_unref( mpLoop);
 }
