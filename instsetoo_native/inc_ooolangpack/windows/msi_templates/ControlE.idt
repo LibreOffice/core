@@ -32,11 +32,6 @@ CustomSetup	Next	[_IsSetupTypeMin]	Custom	1	0
 CustomSetup	Next	NewDialog	OutOfSpace	OutOfNoRbDiskSpace = 1	0
 CustomSetup	Next	NewDialog	ReadyToInstall	OutOfNoRbDiskSpace <> 1	0
 CustomSetupTips	OK	EndDialog	Return	1	1
-DatabaseFolder	Back	NewDialog	CustomerInformation	1	1
-DatabaseFolder	Cancel	SpawnDialog	CancelSetup	1	1
-DatabaseFolder	ChangeFolder	[_BrowseProperty]	DATABASEDIR	1	2
-DatabaseFolder	ChangeFolder	SpawnDialog	InstallChangeFolder	1	1
-DatabaseFolder	Next	NewDialog	SetupType	1	1
 DestinationFolder	Back	NewDialog	InstallWelcome	1	0
 DestinationFolder	Cancel	SpawnDialog	CancelSetup	1	1
 DestinationFolder	ChangeFolder	[_BrowseProperty]	INSTALLLOCATION	1	2

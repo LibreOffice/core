@@ -98,20 +98,6 @@ CustomSetupTips	InstallText	Text	60	105	300	20	3		OOO_CONTROL_69
 CustomSetupTips	MenuText	Text	50	52	300	36	3		OOO_CONTROL_70		
 CustomSetupTips	OK	PushButton	301	243	66	17	3		OOO_CONTROL_72		
 CustomSetupTips	PartialText	Text	60	130	300	20	3		OOO_CONTROL_73		
-DatabaseFolder	Back	PushButton	164	243	66	17	3		OOO_CONTROL_74	Next	
-DatabaseFolder	Banner	Bitmap	297	0	77	44	1		BannerBmp		
-DatabaseFolder	BannerLine	Line	0	44	374	0	1				
-DatabaseFolder	Branding1	Text	4	229	88	13	3		{&MSSWhiteSerif8}[ProductName]		
-DatabaseFolder	Branding2	Text	3	228	88	13	65537		[ProductName]		
-DatabaseFolder	Cancel	PushButton	301	243	66	17	3		OOO_CONTROL_77	ChangeFolder	
-DatabaseFolder	ChangeFolder	PushButton	301	65	66	17	3		OOO_CONTROL_78	Back	
-DatabaseFolder	DatabaseFolder	Icon	21	52	24	24	5242881		OpenFolderIco		
-DatabaseFolder	DlgDesc	Text	21	23	272	25	65539		OOO_CONTROL_79		
-DatabaseFolder	DlgLine	Line	90	234	284	0	1				
-DatabaseFolder	DlgTitle	Text	13	6	280	25	65539		OOO_CONTROL_80		
-DatabaseFolder	Location	Text	57	65	240	40	3	_BrowseProperty	OOO_CONTROL_81		
-DatabaseFolder	LocLabel	Text	57	52	290	10	3		OOO_CONTROL_82		
-DatabaseFolder	Next	PushButton	230	243	66	17	3		OOO_CONTROL_83	Cancel	
 DestinationFolder	Back	PushButton	164	243	66	17	3		OOO_CONTROL_84	Next	
 DestinationFolder	Banner	Bitmap	297	0	77	44	1		BannerBmp		
 DestinationFolder	BannerLine	Line	0	44	374	0	1				

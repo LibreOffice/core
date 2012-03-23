@@ -172,30 +172,6 @@ en-US = "OK"
 [OOO_CONTROL_73]
 en-US = "Will have some subfeatures installed to the local hard drive. (Available only if the feature has subfeatures.)"
 
-[OOO_CONTROL_74]
-en-US = "< &Back"
-
-[OOO_CONTROL_77]
-en-US = "Cancel"
-
-[OOO_CONTROL_78]
-en-US = "&Change..."
-
-[OOO_CONTROL_79]
-en-US = "Click Next to install to this folder, or click Change to install to a different folder."
-
-[OOO_CONTROL_80]
-en-US = "{&MSSansBold8}Database Folder"
-
-[OOO_CONTROL_81]
-en-US = "[DATABASEDIR]"
-
-[OOO_CONTROL_82]
-en-US = "Install [ProductName] database to:"
-
-[OOO_CONTROL_83]
-en-US = "&Next >"
-
 [OOO_CONTROL_84]
 en-US = "< &Back"
 
