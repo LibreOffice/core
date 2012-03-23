@@ -66,13 +66,13 @@ public:
     void testDestroyAccepterContact();
     void testFailAlways();
 
-    void ReceiverCallback( TeleConference* pConference );
+    void ReceiverCallback( TeleConference* pConference, const TelePacket &rPacket );
 
     GMainLoop*                  mpMainLoop;
     void spinMainLoop();
 
     static void FileSent( bool success, void *user_data);
-    static void FileReceived( rtl::OUString& aUri, void *user_data);
+    void FileReceived( rtl::OUString& aUri );
 
     // Order is significant.
     CPPUNIT_TEST_SUITE( TestTeleTubes );
@@ -233,7 +233,7 @@ void TestTeleTubes::testPrepareAccountManager2()
     CPPUNIT_ASSERT( eStatus == TeleManager::AMS_PREPARED);
 }
 
-void TestTeleTubes::ReceiverCallback( TeleConference* pConference )
+void TestTeleTubes::ReceiverCallback( TeleConference* pConference, const TelePacket & )
 {
     SAL_INFO( "tubes", "TestTeleTubes::ReceiverCallback: " << pConference);
     if (pConference)
@@ -275,7 +275,7 @@ void TestTeleTubes::testSendPacket()
 {
     TelePacket aPacket( "", RTL_CONSTASCII_STRINGPARAM( "from 1 to 2"));
 
-    mpManager1->sigPacketReceived.connect( boost::bind( &TestTeleTubes::ReceiverCallback, this, _1 ) );
+    mpManager1->sigPacketReceived.connect( boost::bind( &TestTeleTubes::ReceiverCallback, this, _1, _2 ) );
     nSentPackets = mpManager1->sendPacket( aPacket);
     CPPUNIT_ASSERT( nSentPackets == 2); // expect out+in conference, as own instance accepted self
     CPPUNIT_ASSERT( mnPacketReceivedEmissions == 2 );
@@ -318,12 +318,10 @@ void TestTeleTubes::FileSent( bool success, void *user_data)
     g_main_loop_quit (self->mpMainLoop);
 }
 
-void TestTeleTubes::FileReceived( rtl::OUString& aUri, void *user_data)
+void TestTeleTubes::FileReceived( rtl::OUString& aUri )
 {
-    TestTeleTubes *self = reinterpret_cast<TestTeleTubes *>(user_data);
-
-    self->maFileReceivedUri = aUri;
-    g_main_loop_quit (self->mpMainLoop);
+    maFileReceivedUri = aUri;
+    g_main_loop_quit (mpMainLoop);
 }
 
 void TestTeleTubes::testSendFile()
@@ -333,7 +331,8 @@ void TestTeleTubes::testSendFile()
     /* This has to run after testContactList has run successfully. */
     CPPUNIT_ASSERT( mpAccepterContact != 0);
 
-    mpManager1->setFileReceivedCallback(&TestTeleTubes::FileReceived, this);
+    mpManager1->sigFileReceived.connect(
+        boost::bind(&TestTeleTubes::FileReceived, this, _1));
 
     mpManager1->sendFile( maTestConfigIniURL,
         &TestTeleTubes::FileSent, this);

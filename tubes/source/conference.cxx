@@ -447,7 +447,7 @@ void TeleConference::queue( TelePacket &rPacket )
 
     maPacketQueue.push( rPacket);
 
-    getManager()->callbackOnRecieved( this);
+    getManager()->callbackOnRecieved( this, rPacket);
 }
 
 

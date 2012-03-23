@@ -261,7 +261,7 @@ public:
         mpCollab = pCollab;
     }
 
-    void packetReceived( TeleConference* pConference);
+    void packetReceived( TeleConference* pConference, const rtl::OString & );
     DECL_LINK( ReceiveFileCallback, rtl::OUString * );
 
     void RecvMessage( const rtl::OString &rString )
@@ -301,11 +301,9 @@ public:
     }
 };
 
-void ScDocFuncRecv::packetReceived( TeleConference* pConference)
+void ScDocFuncRecv::packetReceived( TeleConference* pConference, const rtl::OString &rStr)
 {
-    rtl::OString aStr;
-    if (mpCollab && mpCollab->recvPacket( aStr, pConference))
-        RecvMessage( aStr);
+    RecvMessage( rStr);
 }
 
 IMPL_LINK( ScDocFuncRecv, ReceiveFileCallback, rtl::OUString *, pStr )
@@ -557,7 +555,7 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
         ScCollaboration* pCollab = new ScCollaboration(
                 LINK( pReceiver, ScDocFuncRecv, ReceiveFileCallback) );
         pCollab->sigPacketReceived.connect(
-            boost::bind( &ScDocFuncRecv::packetReceived, pReceiver, _1 ));
+            boost::bind( &ScDocFuncRecv::packetReceived, pReceiver, _1, _2 ));
         bOk = bOk && pCollab->initManager();
         if (!strcmp( pEnv, "master"))
         {

@@ -188,7 +188,7 @@ void TeleManager::TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel
     rtl::OUString aUri( uri, strlen( uri), RTL_TEXTENCODING_UTF8);
     g_free( uri);
 
-    pManager->mpFileReceivedCallback( aUri, pManager->mpFileReceivedCallbackData);
+    pManager->sigFileReceived( aUri );
 
     g_object_unref( handler);
 }
@@ -742,11 +742,11 @@ sal_uInt32 TeleManager::sendPacket( const TelePacket& rPacket ) const
 }
 
 
-void TeleManager::callbackOnRecieved( TeleConference* pConference ) const
+void TeleManager::callbackOnRecieved( TeleConference* pConference, TelePacket& rPacket) const
 {
     INFO_LOGGER( "TeleManager::callbackOnRecieved");
 
-    sigPacketReceived( pConference );
+    sigPacketReceived( pConference, rPacket );
 }
 
 
@@ -772,12 +772,6 @@ void TeleManager::sendFile( rtl::OUString &localUri, TeleConference::FileSentCal
         (*it)->sendFile( localUri, pCallback, pUserData);
         return;
     }
-}
-
-void TeleManager::setFileReceivedCallback( TeleManager::FileReceivedCallback callback, void* pUserData )
-{
-    mpFileReceivedCallback = callback;
-    mpFileReceivedCallbackData = pUserData;
 }
 
 void TeleManager::unregisterConference( TeleConferencePtr pConference )

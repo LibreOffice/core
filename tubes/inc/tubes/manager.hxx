@@ -142,9 +142,9 @@ public:
     /** Emitted when a packet is received, with a TeleConference*
         pointing to the instance that received the packet.
      */
-    boost::signals2::signal<void (TeleConference*)> sigPacketReceived;
+    boost::signals2::signal<void (TeleConference*, TelePacket&)> sigPacketReceived;
     /* FIXME: listen to a signal on the conference rather than having it call us */
-    void                    callbackOnRecieved( TeleConference* pConference ) const;
+    void                    callbackOnRecieved( TeleConference* pConference, TelePacket& rPacket ) const;
 
     /** Pop a received data packet.
 
@@ -158,8 +158,7 @@ public:
 
     void                    sendFile( rtl::OUString &localUri, TeleConference::FileSentCallback pCallback, void* pUserData);
 
-    typedef void          (*FileReceivedCallback)( rtl::OUString &localUri, void* pUserData );
-    void                    setFileReceivedCallback( FileReceivedCallback callback, void* pUserData );
+    boost::signals2::signal<void ( rtl::OUString &localUri )> sigFileReceived;
 
     /// Only for use with MainLoopFlusher
     GMainLoop*              getMainLoop() const;
@@ -236,9 +235,6 @@ private:
     static TeleManager*     pSingleton;
     static sal_uInt32       nAnotherRefCount;
     TUBES_DLLPRIVATE static ::osl::Mutex&   GetAnotherMutex();
-
-    FileReceivedCallback    mpFileReceivedCallback;
-    void                   *mpFileReceivedCallbackData;
 
     friend class TeleManagerImpl;   // access to mutex
 

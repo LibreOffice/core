@@ -61,28 +61,22 @@ void ScCollaboration::receivedFile( rtl::OUString &rFileURL )
         maLinkFile.Call( &rFileURL );
 }
 
-extern "C" {
-    void file_recv_cb( rtl::OUString &localUri, void* pUserData )
-    {
-        ScCollaboration *pCollab = reinterpret_cast<ScCollaboration *>( pUserData );
-        pCollab->receivedFile( localUri );
-    }
-}
-
-void ScCollaboration::packetReceivedCallback( TeleConference *pConference )
+void ScCollaboration::packetReceivedCallback( TeleConference *pConference, TelePacket &rPacket )
 {
+    rtl::OString aString( rPacket.getData(), rPacket.getSize());
     /* Relay the signal out… */
-    sigPacketReceived( pConference);
+    sigPacketReceived( pConference, aString);
 }
 
 bool ScCollaboration::initManager()
 {
     mpManager = TeleManager::get();
     mpManager->sigPacketReceived.connect(
-        boost::bind( &ScCollaboration::packetReceivedCallback, this, _1 ));
+        boost::bind( &ScCollaboration::packetReceivedCallback, this, _1, _2 ));
     mpManager->connect();
     mpManager->prepareAccountManager();
-    mpManager->setFileReceivedCallback( file_recv_cb, (void *)this );
+    mpManager->sigFileReceived.connect(
+        boost::bind( &ScCollaboration::receivedFile, this, _1 ));
     return true;
 }
 
@@ -118,14 +112,6 @@ bool ScCollaboration::sendPacket( const rtl::OString& rString )
     return bOk;
 }
 
-
-bool ScCollaboration::recvPacket( rtl::OString& rString, TeleConference* pConference )
-{
-    TelePacket aPacket;
-    bool bOk = (pConference ? pConference->popPacket( aPacket) : mpManager->popPacket( aPacket));
-    rString = rtl::OString( aPacket.getData(), aPacket.getSize());
-    return bOk;
-}
 
 extern "C" {
     static void file_sent_cb( bool aSuccess, void* /* pUserData */ )

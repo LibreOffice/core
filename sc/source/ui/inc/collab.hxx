@@ -37,6 +37,7 @@ typedef struct _TpContact TpContact;
 typedef struct _TpAccount TpAccount;
 class TeleManager;
 class TeleConference;
+class TelePacket;
 namespace rtl { class OString; class OUString; }
 
 class ScCollaboration
@@ -56,14 +57,14 @@ public:
     bool                    sendPacket( const rtl::OString& rString );
     /** Emitted when a packet is received
      */
-    boost::signals2::signal<void (TeleConference*)> sigPacketReceived;
+    boost::signals2::signal<void (TeleConference*, rtl::OString& rString )> sigPacketReceived;
     bool                    recvPacket( rtl::OString& rString, TeleConference* pConference );
 
     void                    sendFile( rtl::OUString &rFileURL );
     void                    receivedFile( rtl::OUString &rFileURL );
 
     /* Internal callbacks */
-    void                    packetReceivedCallback( TeleConference *pConference );
+    void                    packetReceivedCallback( TeleConference *pConference, TelePacket &rPacket );
 
 private:
 
