@@ -31,41 +31,9 @@
 #include <vector>
 #include "collab.hxx"
 #include <tubes/conference.hxx>
-#include <vcl/syswin.hxx>
-#include <svx/simptabl.hxx>
-
-// #define CONTACTS
-
-#ifdef CONTACTS_DLG
-namespace {
-class TubeContacts : ModelessDialog
-{
-    FixedLine               maLabel;
-    SvxSimpleTableContainer maListContainer;
-    SvxSimpleTable          maList;
-
-public:
-    TubeContacts() :
-        ModelessDialog( NULL, RID_SCDLG_CONTACTS ),
-        maLabel( this, ScResId( FL_LABEL ) ),
-        maListContainer( this, ScResId( CTL_LIST ) ),
-        maList( maListContainer ),
-    {
-        SetMinOutputSizePixel( Size( 640, 480 ) );
-        Show();
-    }
-    virtual ~TubeContacts() {}
-};
-} // anonymous namespace
-#endif
 
 namespace tubes {
-void createContacts()
-{
-#ifdef CONTACTS_DLG
-    new TubeContacts();
-#endif
-}
+    void createContacts();
 }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
