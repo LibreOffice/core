@@ -253,7 +253,7 @@ void SAL_CALL SfxMediumHandler_Impl::handle( const com::sun::star::uno::Referenc
 }
 
 //----------------------------------------------------------------
-class SfxMedium_Impl : public SvCompatWeakBase
+class SfxMedium_Impl
 {
 public:
     ::ucbhelper::Content aContent;
@@ -323,8 +323,7 @@ public:
 
 //------------------------------------------------------------------
 SfxMedium_Impl::SfxMedium_Impl( SfxMedium* pAntiImplP )
- :  SvCompatWeakBase( pAntiImplP ),
-    bUpdatePickList(sal_True),
+ :  bUpdatePickList(sal_True),
     bIsTemp( sal_False ),
     bForceSynchron( sal_False ),
     bDownloadDone( sal_True ),
@@ -3038,12 +3037,6 @@ SvKeyValueIterator* SfxMedium::GetHeaderAttributes_Impl()
     }
 
     return pImp->xAttributes;
-}
-//----------------------------------------------------------------
-
-SvCompatWeakHdl* SfxMedium::GetHdl()
-{
-    return pImp->GetHdl();
 }
 
 ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >  SfxMedium::GetInputStream()

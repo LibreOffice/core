@@ -110,8 +110,6 @@ class SFX2_DLLPUBLIC SfxMedium : public SvRefBase
 
 public:
 
-    SvCompatWeakHdl*    GetHdl();
-
                         SfxMedium();
                         SfxMedium( const String &rName,
                                    StreamMode nOpenMode,
@@ -299,7 +297,6 @@ public:
 };
 
 SV_DECL_IMPL_REF( SfxMedium )
-SV_DECL_COMPAT_WEAK( SfxMedium )
 
 typedef ::std::vector< SfxMedium* > SfxMediumList;
 
