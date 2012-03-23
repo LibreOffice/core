@@ -343,11 +343,7 @@ public:\
 class TOOLS_DLLPUBLIC SvRefBase
 {
     sal_uIntPtr nRefCount;
-#if defined (GCC) && (defined (C281) || defined (C290) || defined (C291))
-public:
-#else
 protected:
-#endif
     virtual         ~SvRefBase();
     virtual void    QueryDelete();
 public:

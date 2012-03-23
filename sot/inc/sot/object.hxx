@@ -289,11 +289,7 @@ friend class SvObject;
                 bSVObject:1,        // Ist Proxy, dann TRUE wenn andere Seite SV ist
                 bInClose:1;         // TRUE, im DoClose
 
-#if defined (GCC) && (defined (C281) || defined (C290) || defined (C291))
-public:
-#else
 protected:
-#endif
     virtual             ~SotObject();
     void                SetExtern() { bOwner = sal_False; }
     virtual sal_Bool        Close();
