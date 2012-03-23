@@ -31,9 +31,8 @@
 #include <tubes/conference.hxx>
 #include <tubes/contact-list.hxx>
 
-ScCollaboration::ScCollaboration( const Link& rLinkFile )
+ScCollaboration::ScCollaboration()
     :
-        maLinkFile( rLinkFile ),
         mpAccount( NULL),
         mpContact( NULL),
         mpManager( NULL)
@@ -57,8 +56,7 @@ void ScCollaboration::receivedFile( rtl::OUString &rFileURL )
 {
     fprintf( stderr, "file recieved '%s'\n",
              rtl::OUStringToOString( rFileURL, RTL_TEXTENCODING_UTF8 ).getStr() );
-    if ( maLinkFile.IsSet() )
-        maLinkFile.Call( &rFileURL );
+    sigFileReceived( &rFileURL );
 }
 
 void ScCollaboration::packetReceivedCallback( TeleConference *pConference, TelePacket &rPacket )

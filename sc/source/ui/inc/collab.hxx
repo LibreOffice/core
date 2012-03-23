@@ -30,7 +30,6 @@
 #define INCLUDED_SC_COLLAB_HXX
 
 #include <sal/config.h>
-#include <tools/link.hxx>
 #include <boost/signals2.hpp>
 
 typedef struct _TpContact TpContact;
@@ -44,10 +43,7 @@ class ScCollaboration
 {
 public:
 
-    /** @param rLink
-            Callback when a file is received, called with TeleConference*
-     */
-                            ScCollaboration( const Link& rLinkFile );
+                            ScCollaboration();
                             ~ScCollaboration();
 
     bool                    initManager();
@@ -61,14 +57,16 @@ public:
     bool                    recvPacket( rtl::OString& rString, TeleConference* pConference );
 
     void                    sendFile( rtl::OUString &rFileURL );
-    void                    receivedFile( rtl::OUString &rFileURL );
+    /** Emitted when a file is received
+     */
+    boost::signals2::signal<void ( rtl::OUString *pFileURL )> sigFileReceived;
 
     /* Internal callbacks */
     void                    packetReceivedCallback( TeleConference *pConference, TelePacket &rPacket );
+    void                    receivedFile( rtl::OUString &rFileURL );
 
 private:
 
-    Link            maLinkFile;
     TpAccount*      mpAccount;
     TpContact*      mpContact;
     TeleManager*    mpManager;

@@ -262,6 +262,7 @@ public:
     }
 
     void packetReceived( TeleConference* pConference, const rtl::OString & );
+    void fileReceived( rtl::OUString *rStr );
     DECL_LINK( ReceiveFileCallback, rtl::OUString * );
 
     void RecvMessage( const rtl::OString &rString )
@@ -301,12 +302,12 @@ public:
     }
 };
 
-void ScDocFuncRecv::packetReceived( TeleConference* pConference, const rtl::OString &rStr)
+void ScDocFuncRecv::packetReceived( TeleConference*, const rtl::OString &rStr)
 {
     RecvMessage( rStr);
 }
 
-IMPL_LINK( ScDocFuncRecv, ReceiveFileCallback, rtl::OUString *, pStr )
+void ScDocFuncRecv::fileReceived( rtl::OUString *pStr )
 {
     fprintf( stderr, "incoming file '%s'\n",
              rtl::OUStringToOString( *pStr, RTL_TEXTENCODING_UTF8 ).getStr() );
@@ -362,8 +363,6 @@ IMPL_LINK( ScDocFuncRecv, ReceiveFileCallback, rtl::OUString *, pStr )
         fprintf( stderr, "exception when loading '%s' !\n",
                  rtl::OUStringToOString( e.Message, RTL_TEXTENCODING_UTF8 ).getStr() );
     }
-
-    return 0;
 }
 
 class ScDocFuncSend : public ScDocFunc
@@ -552,10 +551,11 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
         ScDocFuncRecv* pReceiver = new ScDocFuncRecv( *this, new ScDocFuncDirect( *this ) );
         ScDocFuncSend* pSender = new ScDocFuncSend( *this, pReceiver );
         bool bOk = true;
-        ScCollaboration* pCollab = new ScCollaboration(
-                LINK( pReceiver, ScDocFuncRecv, ReceiveFileCallback) );
+        ScCollaboration* pCollab = new ScCollaboration();
         pCollab->sigPacketReceived.connect(
             boost::bind( &ScDocFuncRecv::packetReceived, pReceiver, _1, _2 ));
+        pCollab->sigFileReceived.connect(
+            boost::bind( &ScDocFuncRecv::fileReceived, pReceiver, _1));
         bOk = bOk && pCollab->initManager();
         if (!strcmp( pEnv, "master"))
         {
