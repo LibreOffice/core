@@ -478,7 +478,7 @@ struct FileMapping
     sal_uInt32  m_nSize;
     oslFileHandle m_hFile;
 
-    FileMapping() : m_pAddr(0), m_nSize(0), m_hFile() {}
+    FileMapping() : m_pAddr(0), m_nSize(0), m_hFile(0) {}
 
     bool operator != (FileMapping const & rhs) const
     {
