@@ -338,8 +338,9 @@ static void TeleManager_AccountManagerReadyHandler(
 }
 
 
-TeleManager::TeleManager( bool bCreateOwnGMainLoop )
+TeleManager::TeleManager( const Link& rLink, bool bCreateOwnGMainLoop )
     :
+        maLink( rLink),
         mbChannelReadyHandlerInvoked( false)
 {
     MutexGuard aGuard( GetMutex());
@@ -702,6 +703,16 @@ sal_uInt32 TeleManager::sendPacket( const TelePacket& rPacket ) const
         /* TODO: what if failed? */
     }
     return nSent;
+}
+
+
+long TeleManager::callbackOnRecieved( TeleConference* pConference ) const
+{
+    INFO_LOGGER( "TeleManager::callbackOnRecieved");
+
+    if (maLink.IsSet())
+        return maLink.Call( pConference);
+    return 0;
 }
 
 

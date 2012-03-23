@@ -33,6 +33,8 @@
 #include "cell.hxx"
 #include "docsh.hxx"
 #include "docfunc.hxx"
+#include "collab.hxx"
+#include <tubes/conference.hxx>
 
 // new file send/recv fun ...
 #include <unotools/tempfile.hxx>
@@ -233,15 +235,24 @@ public:
 class ScDocFuncRecv : public ScDocFunc
 {
     ScDocFunc *mpChain;
+    ScCollaboration* mpCollab;
 public:
     // FIXME: really ScDocFunc should be an abstract base
     ScDocFuncRecv( ScDocShell& rDocSh, ScDocFunc *pChain )
         : ScDocFunc( rDocSh ),
-          mpChain( pChain )
+          mpChain( pChain ),
+          mpCollab( NULL)
     {
         fprintf( stderr, "Receiver created !\n" );
     }
     virtual ~ScDocFuncRecv() {}
+
+    void SetCollaboration( ScCollaboration* pCollab )
+    {
+        mpCollab = pCollab;
+    }
+
+    DECL_LINK( ReceiverCallback, TeleConference* );
 
     void RecvMessage( const rtl::OString &rString )
     {
@@ -280,14 +291,26 @@ public:
     }
 };
 
+IMPL_LINK( ScDocFuncRecv, ReceiverCallback, TeleConference*, pConference )
+{
+    rtl::OString aStr;
+    if (mpCollab && mpCollab->recvPacket( aStr, pConference))
+        RecvMessage( aStr);
+    return 0;
+}
+
 class ScDocFuncSend : public ScDocFunc
 {
     ScDocFuncRecv *mpChain;
+    ScCollaboration* mpCollab;
 
     void SendMessage( ScChangeOpWriter &rOp )
     {
         fprintf( stderr, "Op: '%s'\n", rOp.toString().getStr() );
-        mpChain->RecvMessage( rOp.toString() );
+        if (mpCollab)
+            mpCollab->sendPacket( rOp.toString());
+        else
+            mpChain->RecvMessage( rOp.toString() );
     }
 
     void SendFile( const rtl::OUString &rURL )
@@ -321,11 +344,17 @@ public:
     // we don't need the rDocSh hack/pointer
     ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncRecv *pChain )
             : ScDocFunc( rDocSh ),
-            mpChain( pChain )
+            mpChain( pChain ),
+            mpCollab( NULL)
     {
         fprintf( stderr, "Sender created !\n" );
     }
     virtual ~ScDocFuncSend() {}
+
+    void SetCollaboration( ScCollaboration* pCollab )
+    {
+        mpCollab = pCollab;
+    }
 
     virtual void EnterListAction( sal_uInt16 nNameResId )
     {
@@ -441,9 +470,30 @@ public:
 
 SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
 {
-    // FIXME: the chains should be auto-ptrs.
+    // FIXME: the chains should be auto-ptrs, so should be collab
     if (getenv ("INTERCEPT"))
         return new ScDocFuncSend( *this, new ScDocFuncRecv( *this, new ScDocFuncDirect( *this ) ) );
+    else if (getenv ("LIBO_TUBES"))
+    {
+        ScDocFuncRecv* pReceiver = new ScDocFuncRecv( *this, new ScDocFuncDirect( *this ) );
+        ScDocFuncSend* pSender = new ScDocFuncSend( *this, pReceiver );
+        bool bOk = true;
+        ScCollaboration* pCollab = new ScCollaboration( LINK( pReceiver, ScDocFuncRecv, ReceiverCallback));
+        bOk = bOk && pCollab->initManager();
+        bOk = bOk && pCollab->initAccountContact();
+        bOk = bOk && pCollab->startCollaboration();
+        if (bOk)
+        {
+            pReceiver->SetCollaboration( pCollab);
+            pSender->SetCollaboration( pCollab);
+        }
+        else
+        {
+            fprintf( stderr, "Could not start collaboration.\n");
+            delete pCollab;
+        }
+        return pSender;
+    }
     else
         return new ScDocFuncDirect( *this );
 }

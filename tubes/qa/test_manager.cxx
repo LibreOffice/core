@@ -65,6 +65,7 @@ public:
     void testDestroyManager2();
     void testDestroyAccepterContact();
     void testFailAlways();
+    DECL_STATIC_LINK( TestTeleTubes, ReceiverCallback, TeleConference* );
 
     GMainLoop*                  mpMainLoop;
     void spinMainLoop();
@@ -213,12 +214,12 @@ void TestTeleTubes::testContactList()
 
 void TestTeleTubes::testSetupManager1()
 {
-    mpManager1 = new TeleManager( true);
+    mpManager1 = new TeleManager( STATIC_LINK( this, TestTeleTubes, ReceiverCallback), true);
 }
 
 void TestTeleTubes::testSetupManager2()
 {
-    mpManager2 = new TeleManager;
+    mpManager2 = new TeleManager( STATIC_LINK( this, TestTeleTubes, ReceiverCallback));
 }
 
 void TestTeleTubes::testPrepareAccountManager1()
@@ -233,6 +234,16 @@ void TestTeleTubes::testPrepareAccountManager2()
     mpManager2->prepareAccountManager();
     TeleManager::AccountManagerStatus eStatus = mpManager2->getAccountManagerStatus();
     CPPUNIT_ASSERT( eStatus == TeleManager::AMS_PREPARED);
+}
+
+IMPL_STATIC_LINK_NOINSTANCE( TestTeleTubes, ReceiverCallback, TeleConference*, pConference )
+{
+    SAL_INFO( "tubes", "TestTeleTubes::ReceiverCallback: " << pConference);
+    if (pConference)
+    {
+        // we could pop a packet here
+    }
+    return 0;
 }
 
 void TestTeleTubes::testStartBuddySession1()

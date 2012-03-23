@@ -442,6 +442,8 @@ void TeleConference::queue( const char* pDBusSender, const char* pPacketData, in
     INFO_LOGGER( "TeleConference::queue");
 
     maPacketQueue.push( TelePacket( pDBusSender, pPacketData, nPacketSize));
+
+    getManager()->callbackOnRecieved( this);
 }
 
 

@@ -30,6 +30,7 @@
 #define INCLUDED_TUBES_CONFERENCE_HXX
 
 #include <sal/config.h>
+#include "tubes/tubesdllapi.h"
 #include "tubes/packet.hxx"
 #include "tubes/file-transfer-helper.h"
 #include <boost/shared_ptr.hpp>
@@ -65,7 +66,7 @@ public:
     bool                    sendPacket( TelePacket& rPacket ) const;
 
     /** Pop a received packet. */
-    bool                    popPacket( TelePacket& rPacket );
+    TUBES_DLLPUBLIC bool    popPacket( TelePacket& rPacket );
 
     /** Queue incoming data as TelePacket */
     void                    queue( const char* pDBusSender, const char* pPacket, int nSize );

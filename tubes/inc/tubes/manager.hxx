@@ -36,6 +36,7 @@
 #include <rtl/ustring.hxx>
 #include <salhelper/thread.hxx>
 #include <rtl/ref.hxx>
+#include <tools/link.hxx>
 #include <telepathy-glib/telepathy-glib.h>
 #include <vector>
 
@@ -70,11 +71,15 @@ public:
     /** Prepare tube manager with account and service to be offered/listened
         to.
 
+        @param rLink
+            Callback when a packet is received. Called with a TeleConference*
+            pointing to the instance that received the packet.
+
         @param bCreateOwnGMainLoop
             Whether to create and iterate an own GMainLoop. For testing
             purposes when no GMainLoop is available.
      */
-    TeleManager( bool bCreateOwnGMainLoop = false );
+    TeleManager( const Link& rLink, bool bCreateOwnGMainLoop = false );
     ~TeleManager();
 
     /** Prepare the Telepathy Account Manager.
@@ -109,9 +114,9 @@ public:
             The account to use. This must be a valid Jabber account.
 
         @param pBuddy
-            The buddy to be connected. Must be a contact of rAccount.
+            The buddy to be connected. Must be a contact of pAccount.
      */
-    bool                    startBuddySession( TpAccount *pAccount, TpContact *pBuddy);
+    bool                    startBuddySession( TpAccount *pAccount, TpContact *pBuddy );
 
     void                    unregisterConference( TeleConferencePtr pConference );
 
@@ -127,6 +132,9 @@ public:
         @returns to how many conferences the packet was send
      */
     sal_uInt32              sendPacket( const TelePacket& rPacket ) const;
+
+    /** Calls the callback Link set with ctor. */
+    long                    callbackOnRecieved( TeleConference* pConference ) const;
 
     /** Pop a received data packet.
 
@@ -205,6 +213,7 @@ public:
 
 private:
 
+    Link                    maLink;
     TeleConferenceVector    maConferences;
 
     bool                    mbChannelReadyHandlerInvoked : 1;
