@@ -584,6 +584,18 @@ void ScDPObject::ReloadGroupTableData()
     bSettingsChanged = true;
 }
 
+bool ScDPObject::HasGroups() const
+{
+    if (!pSaveData)
+        return false;
+
+    const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
+    if (!pDimData)
+        return false;
+
+    return pDimData->HasGroupDimensions();
+}
+
 void ScDPObject::ClearSource()
 {
     Reference< XComponent > xObjectComp( xSource, UNO_QUERY );

@@ -1327,6 +1327,9 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 if ( pNewObj == pOldObj && pDestObj->IsImportData() )
                     pDestObj->ClearTableData();
 
+                if (pDestObj->HasGroups())
+                    pDestObj->ClearTableData();
+
                 pDestObj->InvalidateData();             // before getting the new output area
 
                 //  make sure the table has a name (not set by dialog)

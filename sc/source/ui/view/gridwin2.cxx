@@ -552,9 +552,8 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
         return;
 
     ScDPObject* pDPObj = pDPData->mpDPObj;
-    ScDPObject aNewDPObj(*pDPObj);
-    aNewDPObj.BuildAllDimensionMembers();
-    ScDPSaveData* pSaveData = aNewDPObj.GetSaveData();
+    pDPObj->BuildAllDimensionMembers();
+    ScDPSaveData* pSaveData = pDPObj->GetSaveData();
 
     bool bIsDataLayout;
     OUString aDimName = pDPObj->GetDimName(pDPData->mnDim, bIsDataLayout);
@@ -601,7 +600,7 @@ void ScGridWindow::UpdateDPFromFieldPopupMenu()
     pDim->UpdateMemberVisibility(aResult);
 
     ScDBDocFunc aFunc(*pViewData->GetDocShell());
-    aFunc.DataPilotUpdate(pDPObj, &aNewDPObj, true, false);
+    aFunc.DataPilotUpdate(pDPObj, pDPObj, true, false);
 }
 
 void ScGridWindow::UpdateVisibleRange()
