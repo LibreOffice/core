@@ -465,7 +465,7 @@ bool createParameterT(const tPointVecType aUniquePoints, double* t)
             {
                 dx = aUniquePoints[i].first - aUniquePoints[i-1].first;
                 dy = aUniquePoints[i].second - aUniquePoints[i-1].second;
-                fDiffMax = (abs(dx)>abs(dy)) ? abs(dx) : abs(dy);
+                fDiffMax = (fabs(dx)>fabs(dy)) ? fabs(dx) : fabs(dy);
                 // same as above, so should not be zero
                 dx /= fDiffMax;
                 dy /= fDiffMax;
