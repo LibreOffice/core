@@ -553,6 +553,10 @@ Resource RID_GLOBSTR
     {
         Text [ en-US ] = "Data" ;
     };
+    String STR_PIVOT_GROUP
+    {
+        Text [ en-US ] = "Group" ;
+    };
     String STR_PIVOTFUNC_SUM
     {
         Text [ en-US ] = "SUM" ;

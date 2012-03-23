@@ -1221,8 +1221,7 @@ void ScDBFunc::GroupDataPilot()
     }
     rtl::OUString aGroupDimName = pGroupDimension->GetGroupDimName();
 
-    //! localized prefix string
-    rtl::OUString aGroupName = pGroupDimension->CreateGroupName( String::CreateFromAscii("Group") );
+    rtl::OUString aGroupName = pGroupDimension->CreateGroupName(ScGlobal::GetRscString(STR_PIVOT_GROUP));
     ScDPSaveGroupItem aGroup( aGroupName );
     ScDPUniqueStringSet::const_iterator it = aEntries.begin(), itEnd = aEntries.end();
     for (; it != itEnd; ++it)
