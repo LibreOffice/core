@@ -1,4 +1,4 @@
-﻿Apache OpenOffice (AOO)
+Apache OpenOffice (AOO)
 =======================
 
     The Apache OpenOffice project provides a full featured office productivity suite
@@ -23,10 +23,10 @@
 Getting the latest sources via Subversion
 =========================================
 
-    You can always checkout the latest source via subsversion using the following
+    You can always checkout the latest source via subversion using the following
     command:
 
-    svn co https://svn.apache.org/repos/asf/incubator/ooo/trunk ooo
+    svn co https://svn.apache.org/repos/asf/incubator/ooo/trunk aoo
 
     For further information visit http://incubator.apache.org/openofficeorg/source.html
 
@@ -40,7 +40,7 @@ Building Apache OpenOffice
 
     http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide
 
-    Here you can a complete list of prerequisites
+    The complete list of prerequisites is documented at
 
     http://wiki.services.openoffice.org/wiki/Documentation/Building_Guide/Build_Requirements
 
@@ -57,7 +57,7 @@ Building Apache OpenOffice
 
     With having all prerequisites in place you can simply run
 
-    cd main
+    cd aoo/main
     autoconf
     ./configure <configure_switches>
     ./bootstrap
