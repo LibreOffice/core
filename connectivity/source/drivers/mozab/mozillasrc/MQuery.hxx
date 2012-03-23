@@ -236,17 +236,12 @@ namespace connectivity
             sal_uInt32                      InsertLoginInfo(OConnection* _pCon);
 
             void                            setAddressbook( ::rtl::OUString&);
-            ::rtl::OUString                 getAddressbook(void) const;
 
             const OColumnAlias&             getColumnAlias() const { return m_rColumnAlias; }
 
             void                            setExpression( MQueryExpression &_expr );
 
             void                            setMaxNrOfReturns( const sal_Int32);
-            sal_Int32                       getMaxNrOfReturns(void) const;
-
-            void                            setQuerySubDirs( sal_Bool&);
-            sal_Bool                        getQuerySubDirs(void) const;
 
             sal_Int32                       getRowCount( void );
             sal_uInt32                      getRealRowCount( void );

@@ -146,15 +146,6 @@ void MQuery::setAddressbook(::rtl::OUString &ab)
     OSL_TRACE("\tOUT MQuery::setAddressbook()");
 }
 // -------------------------------------------------------------------------
-::rtl::OUString MQuery::getAddressbook() const
-{
-    OSL_TRACE("IN MQuery::getAddressbook()");
-
-    OSL_TRACE("\tOUT MQuery::getAddressbook()");
-
-    return(m_aAddressbook);
-}
-// -------------------------------------------------------------------------
 void MQuery::setMaxNrOfReturns(const sal_Int32 mnr)
 {
     OSL_TRACE( "IN MQuery::setMaxNrOfReturns()" );
@@ -162,33 +153,6 @@ void MQuery::setMaxNrOfReturns(const sal_Int32 mnr)
 
     m_nMaxNrOfReturns = mnr;
     OSL_TRACE("\tOUT MQuery::setMaxNrOfReturns()" );
-}
-// -------------------------------------------------------------------------
-sal_Int32 MQuery::getMaxNrOfReturns() const
-{
-    OSL_TRACE("IN MQuery::getMaxNrOfReturns()");
-
-    OSL_TRACE("\tOUT MQuery::getMaxNrOfReturns()");
-
-    return(m_nMaxNrOfReturns);
-}
-// -------------------------------------------------------------------------
-void MQuery::setQuerySubDirs(sal_Bool &qsd)
-{
-    OSL_TRACE("IN MQuery::setQuerySubDirs()");
-    ::osl::MutexGuard aGuard(m_aMutex);
-
-    m_bQuerySubDirs = qsd;
-    OSL_TRACE("\tOUT MQuery::setQuerySubDirs()");
-}
-// -------------------------------------------------------------------------
-sal_Bool MQuery::getQuerySubDirs() const
-{
-    OSL_TRACE("IN MQuery::getQuerySubDirs()");
-
-    OSL_TRACE("\tOUT MQuery::getQuerySubDirs()");
-
-    return(m_bQuerySubDirs);
 }
 // -------------------------------------------------------------------------
 void MQuery::setExpression( MQueryExpression &_expr )

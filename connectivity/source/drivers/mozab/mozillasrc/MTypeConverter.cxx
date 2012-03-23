@@ -47,24 +47,11 @@ void MTypeConverter::ouStringToNsString(::rtl::OUString const &ous, nsString &ns
     nss = mozString; // temp.
 }
 // -------------------------------------------------------------------------
-::rtl::OUString MTypeConverter::nsACStringToOUString( const nsACString& _source )
-{
-    const char* buffer = _source.BeginReading();
-    const char* bufferEnd = _source.EndReading();
-    return ::rtl::OUString( buffer, static_cast<sal_Int32>(bufferEnd - buffer), RTL_TEXTENCODING_ASCII_US );
-}
-// -------------------------------------------------------------------------
 ::rtl::OString MTypeConverter::nsACStringToOString( const nsACString& _source )
 {
     const char* buffer = _source.BeginReading();
     const char* bufferEnd = _source.EndReading();
     return ::rtl::OString( buffer, static_cast<sal_Int32>(bufferEnd - buffer) );
-}
-// -------------------------------------------------------------------------
-void MTypeConverter::asciiOUStringToNsACString( const ::rtl::OUString& _asciiString, nsACString& _dest )
-{
-    ::rtl::OString sAsciiVersion( _asciiString.getStr(), _asciiString.getLength(), RTL_TEXTENCODING_ASCII_US );
-    asciiToNsACString( sAsciiVersion.getStr(), _dest );
 }
 // -------------------------------------------------------------------------
 void MTypeConverter::asciiToNsACString( const sal_Char* _asciiString, nsACString& _dest )
@@ -95,37 +82,12 @@ void MTypeConverter::prUnicharToOUString(PRUnichar const *pru, ::rtl::OUString &
     ous = _ous;
 }
 // -------------------------------------------------------------------------
-char *MTypeConverter::ouStringToCCharStringUtf8(::rtl::OUString const &ous)
-{
-    // Convert to ::rtl::OString,
-    ::rtl::OString os(rtl::OUStringToOString(ous, RTL_TEXTENCODING_UTF8));
-
-    const char *cs = os.getStr();
-
-    return(strdup(cs));
-}
-// -------------------------------------------------------------------------
 char *MTypeConverter::ouStringToCCharStringAscii(::rtl::OUString const &ous)
 {
     // Convert ::rtl::OUString to ::rtl::OString,
     ::rtl::OString os(rtl::OUStringToOString(ous, RTL_TEXTENCODING_ASCII_US));
 
     return(strdup(os.getStr()));
-}
-// -------------------------------------------------------------------------
-char *MTypeConverter::nsStringToCCharStringAscii(nsString const &nss)
-{
-    char cs[1024];
-    nss.ToCString(cs, 1024);
-
-    return(strdup(cs));
-}
-// -------------------------------------------------------------------------
-::std::string MTypeConverter::ouStringToStlString(::rtl::OUString const &ous)
-{
-    // Convert ::rtl::OUString to ::rtl::OString.
-    ::rtl::OString os(rtl::OUStringToOString(ous,RTL_TEXTENCODING_ASCII_US));
-    return( ::std::string(os.getStr()));
 }
 // -------------------------------------------------------------------------
 

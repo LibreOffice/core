@@ -805,19 +805,10 @@ connectivity::OSortIndex::GetValue(int) const
 connectivity::SQLError::getSQLState(int) const
 connectivity::file::OStatement_Base::reset()
 connectivity::file::OStatement_Base::setWarning(com::sun::star::sdbc::SQLWarning const&)
-connectivity::mozab::MQuery::getAddressbook() const
-connectivity::mozab::MQuery::getMaxNrOfReturns() const
-connectivity::mozab::MQuery::getQuerySubDirs() const
-connectivity::mozab::MQuery::setQuerySubDirs(unsigned char&)
 connectivity::mozab::MQueryHelper::atEnd() const
 connectivity::mozab::MQueryHelper::hasMore() const
 connectivity::mozab::MQueryHelper::next()
 connectivity::mozab::MQueryHelper::rewind()
-connectivity::mozab::MTypeConverter::asciiOUStringToNsACString(rtl::OUString const&, nsACString_internal&)
-connectivity::mozab::MTypeConverter::nsACStringToOUString(nsACString_internal const&)
-connectivity::mozab::MTypeConverter::nsStringToCCharStringAscii(nsString const&)
-connectivity::mozab::MTypeConverter::ouStringToCCharStringUtf8(rtl::OUString const&)
-connectivity::mozab::MTypeConverter::ouStringToStlString(rtl::OUString const&)
 connectivity::mozab::OCatalog::getDot()
 connectivity::mozab::OPreparedStatement::checkParameterIndex(int)
 connectivity::mozab::OResultSet::initializeRow(rtl::Reference<connectivity::ODeleteVector<connectivity::ORowSetValue> >&, int)
