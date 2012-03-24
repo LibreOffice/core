@@ -48,8 +48,6 @@ LIBGSFVERSION=1.14.19
 TARFILE_NAME=$(PRJNAME)-$(LIBGSFVERSION)
 TARFILE_MD5=3a84ac2da37cae5bf7ce616228c6fbde
 
-.IF "$(OS)"=="MACOSX" || "$(OS)"=="WNT"
-
 .IF "$(OS)" == "WNT"
 PATCH_FILES=libgsf-1.14.19.windows.patch
 
@@ -60,15 +58,21 @@ ADDITIONAL_FILES=\
     gsf/makefile.mk \
     gsf/gsf-config.h
 
-.ELSE
+.ENDIF
+
+.IF "$(OS)"=="MACOSX"
 PATCH_FILES=libgsf-1.14.19.patch
+
+LOADER_PATTERN:=-Wl,-dylib_file,@loader_path/REPLACEME:$(SOLARLIBDIR)/REPLACEME
+LOADER_LIBS:=glib-2.0.0 gmodule-2.0.0 gobject-2.0.0 gthread-2.0.0
+EXTRA_LINKFLAGS+=$(foreach,lib,$(LOADER_LIBS) $(subst,REPLACEME,lib$(lib).dylib $(LOADER_PATTERN)))
 
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  ./configure \
                  --prefix=/@.__________________________________________________$(EXTRPATH) \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(LIBXML_CFLAGS) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
-                 LDFLAGS="-L$(SOLARLIBDIR) $(eq,$(OS),MACOSX $(EXTRA_LINKFLAGS) $(NULL))" \
+                 LDFLAGS="-L$(SOLARLIBDIR) $(EXTRA_LINKFLAGS)" \
                  --without-python \
                  --without-bonobo \
                  --with-bz2 \
@@ -84,7 +88,7 @@ CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  GDK_PIXBUF_LIBS="-lgdk_pixbuf-2.0"
                  
                  
-CONFIGURE_FLAGS=$(eq,$(OS),MACOSX CPPFLAGS="$(EXTRA_CDEFS)" $(NULL))
+CONFIGURE_FLAGS=CPPFLAGS="$(EXTRA_CDEFS)"
 
 .IF "$(CROSS_COMPILING)"=="YES"
 CONFIGURE_FLAGS+=--build=$(BUILD_PLATFORM) --host=$(HOST_PLATFORM)
@@ -94,9 +98,6 @@ BUILD_ACTION=$(AUGMENT_LIBRARY_PATH) \
              $(GNUMAKE)
 BUILD_DIR=$(CONFIGURE_DIR)
 
-.ENDIF
-
-.IF "$(OS)"=="MACOSX"
 OUT2LIB+=gsf/.libs/libgsf-1.114.dylib
 .ENDIF
 
@@ -148,8 +149,6 @@ OUT2INC+=gsf/gsf-utils.h
 OUT2INC+=gsf/gsf-input-http.h
 OUT2INC+=gsf/gsf-outfile-zip.h
 OUT2INC+=gsf/gsf.h
-
-.ENDIF
 
 # --- Targets ------------------------------------------------------
 

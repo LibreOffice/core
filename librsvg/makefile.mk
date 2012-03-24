@@ -53,6 +53,10 @@ TARFILE_MD5=d7a242ca43e33e1b63d3073f9d46a6a8
 
 PATCH_FILES=librsvg-2.32.1.patch
 
+LOADER_PATTERN:=-Wl,-dylib_file,@loader_path/REPLACEME:$(SOLARLIBDIR)/REPLACEME
+LOADER_LIBS:=cairo.2 gio-2.0.0 glib-2.0.0 gmodule-2.0.0 gobject-2.0.0 gthread-2.0.0 intl.8 pango-1.0.0
+EXTRA_LINKFLAGS+=$(foreach,lib,$(LOADER_LIBS) $(subst,REPLACEME,lib$(lib).dylib $(LOADER_PATTERN)))
+
 .IF "$(LIBXML_LIBS)" == ""
 LIBXML_LIBS=-lxml2
 .ENDIF

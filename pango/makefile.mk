@@ -53,13 +53,16 @@ TARFILE_MD5=22ad1c8d3fda7e73b0798035f3dd96bc
 
 PATCH_FILES=pango-1.28.3.patch
 
-CONFIGURE_LDFLAGS="-L$(SOLARLIBDIR)"
+LOADER_PATTERN:=-Wl,-dylib_file,@loader_path/REPLACEME:$(SOLARLIBDIR)/REPLACEME
+LOADER_LIBS:=glib-2.0.0 gthread-2.0.0
+EXTRA_LINKFLAGS+=$(foreach,lib,$(LOADER_LIBS) $(subst,REPLACEME,lib$(lib).dylib $(LOADER_PATTERN)))
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                  ./configure --prefix=/@.__________________________________________________$(EXTRPATH) --disable-dependency-tracking --disable-doc-cross-references \
                  CFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
                  CXXFLAGS="$(ARCH_FLAGS) $(EXTRA_CFLAGS) $(EXTRA_CDEFS) -I$(SOLARINCDIR) -I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
-                 LDFLAGS="$(CONFIGURE_LDFLAGS)" \
+                 LDFLAGS="-L$(SOLARLIBDIR) $(EXTRA_LINKFLAGS)" \
                  CAIRO_CFLAGS="-I$(SOLARINCDIR) -I$(SOLARINCDIR)/cairo" \
                  CAIRO_LIBS="-lcairo" \
                  GLIB_CFLAGS="-I$(SOLARINCDIR)/external/glib-2.0" \

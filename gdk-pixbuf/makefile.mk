@@ -50,6 +50,11 @@ TARFILE_MD5=a7d6c5f2fe2d481149ed3ba807b5c043
 .IF "$(OS)"=="MACOSX"
 
 PATCH_FILES=gdk-pixbuf-2.23.0.patch
+
+LOADER_PATTERN:=-Wl,-dylib_file,@loader_path/REPLACEME:$(SOLARLIBDIR)/REPLACEME
+LOADER_LIBS:=glib-2.0.0 gmodule-2.0.0 gobject-2.0.0 gthread-2.0.0
+EXTRA_LINKFLAGS+=$(foreach,lib,$(LOADER_LIBS) $(subst,REPLACEME,lib$(lib).dylib $(LOADER_PATTERN)))
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=$(AUGMENT_LIBRARY_PATH) \
                 BASE_DEPENDENCIES_CFLAGS="-I$(SOLARINCDIR)/external -I$(SOLARINCDIR)/external/glib-2.0" \
