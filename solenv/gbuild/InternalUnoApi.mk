@@ -25,13 +25,8 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(call gb_InternalUnoApi_get_target,%) :
-	$(call gb_Output_announce,$*,$(true),UNI,4)
-	$(call gb_Deliver_deliver,$(call gb_UnoApiTarget_get_target,$*),$@)
-
 .PHONY : $(call gb_InternalUnoApi_get_clean_target,%)
 $(call gb_InternalUnoApi_get_clean_target,%) :
-	$(call gb_Output_announce,$*,$(false),UNI,4)
 	$(call gb_Helper_abbreviate_dirs_native,\
 		rm -f $(call gb_InternalUnoApi_get_target,$*))
 
