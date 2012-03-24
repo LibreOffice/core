@@ -213,7 +213,7 @@ class PPTWriter : public PPTWriterBase, public PPTExBulletProvider
         sal_uInt32          mnShapeMasterTitle;
         sal_uInt32          mnShapeMasterBody;
 
-        List                maHyperlink;
+        std::vector<EPPTHyperlink>  maHyperlink;
 
         ppt::ExSoundCollection  maSoundCollection;
 

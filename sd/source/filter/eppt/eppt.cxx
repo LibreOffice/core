@@ -465,8 +465,6 @@ PPTWriter::~PPTWriter()
     while( aStyleSheetIter < maStyleSheetList.end() )
         delete *aStyleSheetIter++;
 
-    for ( pPtr = maHyperlink.First(); pPtr; pPtr = maHyperlink.Next() )
-        delete (EPPTHyperlink*)pPtr;
     for ( pPtr = maExOleObj.First(); pPtr; pPtr = maExOleObj.Next() )
         delete (PPTExOleObjEntry*)pPtr;
 
@@ -962,7 +960,7 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
     rStrm << (sal_uInt32)0;         // property size
     rStrm << (sal_uInt32)0;         // property count
 
-    for ( EPPTHyperlink* pLink = (EPPTHyperlink*)maHyperlink.First(); pLink; pLink = (EPPTHyperlink*)maHyperlink.Next() )
+    for ( std::vector<EPPTHyperlink>::const_iterator pIter = maHyperlink.begin(); pIter != maHyperlink.end(); ++pIter )
     {
         nParaCount += 6;
         rStrm   << (sal_uInt32)3    // Type VT_I4
@@ -986,15 +984,15 @@ sal_Bool PPTWriter::ImplCreateHyperBlob( SvMemoryStream& rStrm )
         //          = 7 :    "         "      " " (PPT) text range
         //          = 8 :    "         "      " " (Project) task
 
-        sal_uInt32 nUrlLen = pLink->aURL.Len();
-        const sal_Unicode* pUrl = pLink->aURL.GetBuffer();
+        sal_uInt32 nUrlLen = pIter->aURL.Len();
+        const sal_Unicode* pUrl = pIter->aURL.GetBuffer();
 
         sal_uInt32 nInfo = 7;
 
         rStrm   << (sal_uInt32)3    // Type VT_I4
                 << nInfo;       // Info
 
-        switch( pLink->nType & 0xff )
+        switch( pIter->nType & 0xff )
         {
             case 1 :        // click action to slidenumber
             {

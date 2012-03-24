@@ -413,7 +413,7 @@ sal_uInt32 PPTWriter::ImplInsertBookmarkURL( const String& rBookmarkURL, const s
         if ( !aRelUrl.isEmpty() )
             sBookmarkURL = aRelUrl;
     }
-    maHyperlink.Insert( new EPPTHyperlink( sBookmarkURL, nType ), LIST_APPEND );
+    maHyperlink.push_back( EPPTHyperlink( sBookmarkURL, nType ) );
 
     *mpExEmbed  << (sal_uInt16)0xf
                 << (sal_uInt16)EPP_ExHyperlink
