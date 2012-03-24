@@ -3233,6 +3233,12 @@ int RTFDocumentImpl::popState()
         Mapper().startShape(xShape);
         Mapper().endShape();
     }
+    else if (m_aStates.top().nDestinationState == DESTINATION_SHAPE && m_aStates.top().aFrame.inFrame())
+    {
+        m_aStates.top().resetFrame();
+        parBreak();
+        m_bNeedPap = true;
+    }
 
     // See if we need to end a track change
     RTFValue::Pointer_t pTrackchange = m_aStates.top().aCharacterSprms.find(NS_ooxml::LN_trackchange);
@@ -3460,6 +3466,11 @@ RTFFrame::RTFFrame(RTFParserState* pParserState)
 
 void RTFFrame::setSprm(Id nId, Id nValue)
 {
+    if (m_pParserState->m_pDocumentImpl->getFirstRun())
+    {
+        m_pParserState->m_pDocumentImpl->checkFirstRun();
+        m_pParserState->m_pDocumentImpl->setNeedPar(false);
+    }
     switch (nId)
     {
         case NS_sprm::LN_PDxaWidth:

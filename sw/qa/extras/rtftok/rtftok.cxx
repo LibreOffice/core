@@ -33,6 +33,7 @@
 #include <com/sun/star/table/BorderLineStyle.hpp>
 #include <com/sun/star/text/RelOrientation.hpp>
 #include <com/sun/star/text/SizeType.hpp>
+#include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <com/sun/star/text/XPageCursor.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
@@ -69,6 +70,7 @@ public:
     void testFdo43965();
     void testN751020();
     void testFdo47326();
+    void testFdo47036();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -84,6 +86,7 @@ public:
     CPPUNIT_TEST(testFdo43965);
     CPPUNIT_TEST(testN751020);
     CPPUNIT_TEST(testFdo47326);
+    CPPUNIT_TEST(testFdo47036);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -396,6 +399,25 @@ void RtfModelTest::testFdo47326()
     load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo47326.rtf")));
     // This was 15 only, as \super buffered text, then the contents of it got lost.
     CPPUNIT_ASSERT_EQUAL(19, getLength());
+}
+
+void RtfModelTest::testFdo47036()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo47036.rtf")));
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+    int nAtCharacter = 0;
+    for (int i = 0; i < xDraws->getCount(); ++i)
+    {
+        uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(i), uno::UNO_QUERY);
+        text::TextContentAnchorType eValue;
+        xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorType"))) >>= eValue;
+        if (eValue == text::TextContentAnchorType_AT_CHARACTER)
+            nAtCharacter++;
+    }
+    // The image at the document start was ignored.
+    CPPUNIT_ASSERT_EQUAL(1, nAtCharacter);
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
