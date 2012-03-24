@@ -204,26 +204,40 @@ namespace writerfilter {
                 RTFBmpStyles nStyle;
         };
 
+        class RTFParserState;
+
         /// Stores the properties of a frame
         class RTFFrame
         {
-            public:
-                RTFFrame();
+            private:
+                RTFParserState* m_pParserState;
                 sal_Int32 nX, nY, nW, nH;
                 sal_Int32 nHoriPadding, nVertPadding;
                 sal_Int32 nHoriAlign, nHoriAnchor, nVertAlign, nVertAnchor;
+            public:
+                RTFFrame(RTFParserState* pParserState);
                 sal_Int16 nAnchorType;
 
                 /// Convert the stored properties to Sprms
                 RTFSprms getSprms();
+                /// Store a property
+                void setSprm(Id nId, Id nValue);
                 bool hasProperties();
+                /// If we got tokens indicating we're in a frame.
+                bool inFrame();
         };
+
+        class RTFDocumentImpl;
 
         /// State of the parser, which gets saved / restored when changing groups.
         class RTFParserState
         {
             public:
-                RTFParserState();
+                RTFParserState(RTFDocumentImpl* pDocumentImpl);
+                /// Resets aFrame.
+                void resetFrame();
+
+                RTFDocumentImpl* m_pDocumentImpl;
                 RTFInternalState nInternalState;
                 RTFDesitnationState nDestinationState;
                 RTFBorderState nBorderState;
@@ -343,6 +357,13 @@ namespace writerfilter {
                 int dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam);
                 int dispatchValue(RTFKeyword nKeyword, int nParam);
 
+                /// If this is the first run of the document, starts the initial paragraph.
+                void checkFirstRun();
+                /// If the initial paragraph is started.
+                bool getFirstRun();
+                /// If we need to add a dummy paragraph before a section break.
+                void setNeedPar(bool bNeedPar);
+
             private:
                 SvStream& Strm();
                 sal_uInt32 getColorTable(sal_uInt32 nIndex);
@@ -357,13 +378,9 @@ namespace writerfilter {
                 void text(rtl::OUString& rString);
                 void parBreak();
                 void tableBreak();
-                /// If this is the first run of the document, starts the initial paragraph.
-                void checkFirstRun();
                 void checkNeedPap();
                 void sectBreak(bool bFinal);
                 void replayBuffer(RTFBuffer_t& rBuffer);
-                /// If we got tokens indicating we're in a frame.
-                bool inFrame();
                 /// If we have some unicode or hex characters to send.
                 void checkUnicode(bool bUnicode = true, bool bHex = true);
 
@@ -395,7 +412,6 @@ namespace writerfilter {
                 bool m_bNeedPap;
                 /// If we need to emit a CR at the end of substream.
                 bool m_bNeedCr;
-                /// If we need to add a dummy paragraph before a section break.
                 bool m_bNeedPar;
                 /// The list table and list override table combined.
                 RTFSprms m_aListTableSprms;

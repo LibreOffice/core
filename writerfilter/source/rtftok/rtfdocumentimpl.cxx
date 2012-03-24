@@ -243,7 +243,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_xFrame(xFrame),
     m_xStatusIndicator(xStatusIndicator),
     m_nGroup(0),
-    m_aDefaultState(),
+    m_aDefaultState(this),
     m_bSkipUnknown(false),
     m_aFontEncodings(),
     m_aFontIndexes(),
@@ -387,6 +387,16 @@ void RTFDocumentImpl::checkFirstRun()
         Mapper().startParagraphGroup();
         m_bFirstRun = false;
     }
+}
+
+bool RTFDocumentImpl::getFirstRun()
+{
+    return m_bFirstRun;
+}
+
+void RTFDocumentImpl::setNeedPar(bool bNeedPar)
+{
+    m_bNeedPar = bNeedPar;
 }
 
 void RTFDocumentImpl::checkNeedPap()
@@ -780,12 +790,12 @@ int RTFDocumentImpl::resolveChars(char ch)
     return 0;
 }
 
-bool RTFDocumentImpl::inFrame()
+bool RTFFrame::inFrame()
 {
-    return m_aStates.top().aFrame.nW > 0
-        || m_aStates.top().aFrame.nH > 0
-        || m_aStates.top().aFrame.nX > 0
-        || m_aStates.top().aFrame.nY > 0;
+    return nW > 0
+        || nH > 0
+        || nX > 0
+        || nY > 0;
 }
 
 void RTFDocumentImpl::text(OUString& rString)
@@ -1073,7 +1083,7 @@ int RTFDocumentImpl::dispatchDestination(RTFKeyword nKeyword)
             m_aStates.top().nDestinationState = DESTINATION_LEVELNUMBERS;
             break;
         case RTF_SHPPICT:
-            m_aStates.top().aFrame = RTFFrame();
+            m_aStates.top().resetFrame();
             m_aStates.top().nDestinationState = DESTINATION_SHPPICT;
             break;
         case RTF_PICT:
@@ -1344,7 +1354,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
                 }
                 // but don't emit properties yet, since they may change till the first text token arrives
                 m_bNeedPap = true;
-                m_bWasInFrame = inFrame();
+                m_bWasInFrame = m_aStates.top().aFrame.inFrame();
                 if (!m_bWasInFrame)
                     m_bNeedPar = false;
                 if (m_bHasPage)
@@ -1730,7 +1740,7 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PARD:
             m_aStates.top().aParagraphSprms = m_aDefaultState.aParagraphSprms;
             m_aStates.top().aParagraphAttributes = m_aDefaultState.aParagraphAttributes;
-            m_aStates.top().aFrame = RTFFrame();
+            m_aStates.top().resetFrame();
             m_pCurrentBuffer = 0;
             break;
         case RTF_SECTD:
@@ -1978,25 +1988,25 @@ int RTFDocumentImpl::dispatchFlag(RTFKeyword nKeyword)
         case RTF_PNGBLIP:
             m_aStates.top().aPicture.nStyle = BMPSTYLE_PNG;
             break;
-        case RTF_POSYT: m_aStates.top().aFrame.nVertAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_top; break;
-        case RTF_POSYB: m_aStates.top().aFrame.nVertAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_bottom; break;
-        case RTF_POSYC: m_aStates.top().aFrame.nVertAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_center; break;
-        case RTF_POSYIN: m_aStates.top().aFrame.nVertAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_inside; break;
-        case RTF_POSYOUT: m_aStates.top().aFrame.nVertAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_outside; break;
-        case RTF_POSYIL: m_aStates.top().aFrame.nVertAlign = NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_inline; break;
+        case RTF_POSYT: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_top); break;
+        case RTF_POSYB: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_bottom); break;
+        case RTF_POSYC: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_center); break;
+        case RTF_POSYIN: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_inside); break;
+        case RTF_POSYOUT: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_outside); break;
+        case RTF_POSYIL: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, NS_ooxml::LN_Value_wordprocessingml_ST_YAlign_inline); break;
 
-        case RTF_PHMRG: m_aStates.top().aFrame.nHoriAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_margin; break;
-        case RTF_PVMRG: m_aStates.top().aFrame.nVertAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_margin; break;
-        case RTF_PHPG: m_aStates.top().aFrame.nHoriAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_page; break;
-        case RTF_PVPG: m_aStates.top().aFrame.nVertAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_page; break;
-        case RTF_PHCOL: m_aStates.top().aFrame.nHoriAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_text; break;
-        case RTF_PVPARA: m_aStates.top().aFrame.nVertAnchor = NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_text; break;
+        case RTF_PHMRG: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_margin); break;
+        case RTF_PVMRG: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_margin); break;
+        case RTF_PHPG: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_page); break;
+        case RTF_PVPG: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_page); break;
+        case RTF_PHCOL: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_HAnchor_text); break;
+        case RTF_PVPARA: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor, NS_ooxml::LN_Value_wordprocessingml_ST_VAnchor_text); break;
 
-        case RTF_POSXC: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_center; break;
-        case RTF_POSXI: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_inside; break;
-        case RTF_POSXO: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_outside; break;
-        case RTF_POSXL: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_left; break;
-        case RTF_POSXR: m_aStates.top().aFrame.nHoriAlign = NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right; break;
+        case RTF_POSXC: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_center); break;
+        case RTF_POSXI: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_inside); break;
+        case RTF_POSXO: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_outside); break;
+        case RTF_POSXL: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_left); break;
+        case RTF_POSXR: m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, NS_ooxml::LN_Value_wordprocessingml_ST_XAlign_right); break;
 
         case RTF_DPLINE:
                 {
@@ -2132,21 +2142,21 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
         return 0;
 
     // Frame size / position.
-    sal_Int32 *pSprm = 0;
+    Id nId = 0;
     switch (nKeyword)
     {
-        case RTF_ABSW: pSprm = &m_aStates.top().aFrame.nW; break;
-        case RTF_ABSH: pSprm = &m_aStates.top().aFrame.nH; break;
-        case RTF_POSX: pSprm = &m_aStates.top().aFrame.nX; m_aStates.top().aFrame.nHoriAlign = 0; break;
-        case RTF_POSY: pSprm = &m_aStates.top().aFrame.nY; m_aStates.top().aFrame.nVertAlign = 0; break;
+        case RTF_ABSW: nId = NS_sprm::LN_PDxaWidth; break;
+        case RTF_ABSH: nId = NS_sprm::LN_PWHeightAbs; break;
+        case RTF_POSX: nId = NS_ooxml::LN_CT_FramePr_x; m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, 0); break;
+        case RTF_POSY: nId = NS_ooxml::LN_CT_FramePr_y; m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, 0); break;
         default: break;
     }
-    if (pSprm)
+    if (nId > 0)
     {
         m_bNeedPap = true;
         // Don't try to support text frames inside tables for now.
         if (m_pCurrentBuffer != &m_aTableBuffer)
-            *pSprm = nParam;
+            m_aStates.top().aFrame.setSprm(nId, nParam);
         return 0;
     }
 
@@ -2635,26 +2645,27 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             lcl_putNestedSprm(m_aDefaultState.aParagraphSprms, NS_ooxml::LN_EG_SectPrContents_endnotePr, NS_ooxml::LN_EG_FtnEdnNumProps_numStart, pIntValue);
             break;
         case RTF_DFRMTXTX:
-            m_aStates.top().aFrame.nHoriPadding = nParam;
+            m_aStates.top().aFrame.setSprm(NS_sprm::LN_PDxaFromText, nParam);
             break;
         case RTF_DFRMTXTY:
-            m_aStates.top().aFrame.nVertPadding = nParam;
+            m_aStates.top().aFrame.setSprm(NS_sprm::LN_PDyaFromText, nParam);
             break;
         case RTF_DXFRTEXT:
-            m_aStates.top().aFrame.nVertPadding = m_aStates.top().aFrame.nHoriPadding = nParam;
+            m_aStates.top().aFrame.setSprm(NS_sprm::LN_PDxaFromText, nParam);
+            m_aStates.top().aFrame.setSprm(NS_sprm::LN_PDyaFromText, nParam);
             break;
         case RTF_FLYVERT:
             {
                 RTFVertOrient aVertOrient(nParam);
-                m_aStates.top().aFrame.nVertAlign = aVertOrient.GetAlign();
-                m_aStates.top().aFrame.nVertAnchor = aVertOrient.GetAnchor();
+                m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_yAlign, aVertOrient.GetAlign());
+                m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_vAnchor, aVertOrient.GetAnchor());
             }
             break;
         case RTF_FLYHORZ:
             {
                 RTFHoriOrient aHoriOrient(nParam);
-                m_aStates.top().aFrame.nHoriAlign = aHoriOrient.GetAlign();
-                m_aStates.top().aFrame.nHoriAnchor = aHoriOrient.GetAnchor();
+                m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_xAlign, aHoriOrient.GetAlign());
+                m_aStates.top().aFrame.setSprm(NS_ooxml::LN_CT_FramePr_hAnchor, aHoriOrient.GetAnchor());
             }
             break;
         case RTF_FLYANCHOR:
@@ -2792,7 +2803,7 @@ int RTFDocumentImpl::pushState()
 
     checkUnicode();
     m_nGroupStartPos = Strm().Tell();
-    RTFParserState aState;
+    RTFParserState aState(this);
     if (m_aStates.empty())
         aState = m_aDefaultState;
     else
@@ -2879,7 +2890,6 @@ int RTFDocumentImpl::popState()
     bool bPopShapeProperties = false;
     bool bPopPictureProperties = false;
     bool bFaltEnd = false;
-    RTFFrame aFrame;
     bool bPopFrame = false;
     RTFParserState aState(m_aStates.top());
 
@@ -3206,10 +3216,7 @@ int RTFDocumentImpl::popState()
     }
     else if (m_aStates.top().nDestinationState == DESTINATION_FLYMAINCONTENT
             || m_aStates.top().nDestinationState == DESTINATION_SHPPICT)
-    {
-        aFrame = m_aStates.top().aFrame;
         bPopFrame = true;
-    }
     else if (m_aStates.top().nDestinationState == DESTINATION_DRAWINGOBJECT && m_aStates.top().aDrawingObject.xShape.is())
     {
         RTFDrawingObject& rDrawing = m_aStates.top().aDrawingObject;
@@ -3282,7 +3289,7 @@ int RTFDocumentImpl::popState()
     else if (bFaltEnd)
         m_aStates.top().aTableSprms = aSprms;
     else if (bPopFrame)
-        m_aStates.top().aFrame = aFrame;
+        m_aStates.top().aFrame = aState.aFrame;
     if (bPopPictureProperties)
     {
         m_aStates.top().aPicture = aPicture;
@@ -3365,8 +3372,9 @@ void RTFDocumentImpl::checkUnicode(bool bUnicode, bool bHex)
     }
 }
 
-RTFParserState::RTFParserState()
-    : nInternalState(INTERNAL_NORMAL),
+RTFParserState::RTFParserState(RTFDocumentImpl *pDocumentImpl)
+    : m_pDocumentImpl(pDocumentImpl),
+    nInternalState(INTERNAL_NORMAL),
     nDestinationState(DESTINATION_NORMAL),
     nBorderState(BORDER_NONE),
     aTableSprms(),
@@ -3394,7 +3402,7 @@ RTFParserState::RTFParserState()
     aPicture(),
     aShape(),
     aDrawingObject(),
-    aFrame(),
+    aFrame(this),
     nCellX(0),
     nCells(0),
     bIsCjk(false),
@@ -3404,6 +3412,11 @@ RTFParserState::RTFParserState()
     nHour(0),
     nMinute(0)
 {
+}
+
+void RTFParserState::resetFrame()
+{
+    aFrame = RTFFrame(this);
 }
 
 RTFColorTableEntry::RTFColorTableEntry()
@@ -3429,8 +3442,9 @@ RTFPicture::RTFPicture()
 {
 }
 
-RTFFrame::RTFFrame()
-    : nX(0),
+RTFFrame::RTFFrame(RTFParserState* pParserState)
+    : m_pParserState(pParserState),
+    nX(0),
     nY(0),
     nW(0),
     nH(0),
@@ -3442,6 +3456,45 @@ RTFFrame::RTFFrame()
     nVertAnchor(0),
     nAnchorType(0)
 {
+}
+
+void RTFFrame::setSprm(Id nId, Id nValue)
+{
+    switch (nId)
+    {
+        case NS_sprm::LN_PDxaWidth:
+            nW = nValue;
+            break;
+        case NS_sprm::LN_PWHeightAbs:
+            nH = nValue;
+            break;
+        case NS_ooxml::LN_CT_FramePr_x:
+            nX = nValue;
+            break;
+        case NS_ooxml::LN_CT_FramePr_y:
+            nY = nValue;
+            break;
+        case NS_sprm::LN_PDxaFromText:
+            nHoriPadding = nValue;
+            break;
+        case NS_sprm::LN_PDyaFromText:
+            nVertPadding = nValue;
+            break;
+        case NS_ooxml::LN_CT_FramePr_xAlign:
+            nHoriAlign = nValue;
+            break;
+        case NS_ooxml::LN_CT_FramePr_hAnchor:
+            nHoriAnchor = nValue;
+            break;
+        case NS_ooxml::LN_CT_FramePr_yAlign:
+            nVertAlign = nValue;
+            break;
+        case NS_ooxml::LN_CT_FramePr_vAnchor:
+            nVertAnchor = nValue;
+            break;
+        default:
+            break;
+    }
 }
 
 RTFSprms RTFFrame::getSprms()
