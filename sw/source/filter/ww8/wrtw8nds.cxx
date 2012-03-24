@@ -1708,7 +1708,7 @@ void MSWordExportBase::GetSortedBookmarks( const SwTxtNode& rNode, xub_StrLen nA
         IMarkVector aSortedEnd;
         IMarkVector aSortedStart;
         for ( IMarkVector::const_iterator it = aMarksStart.begin(), end = aMarksStart.end();
-              it < end; ++it )
+              it != end; ++it )
         {
             IMark* pMark = (*it);
 

@@ -133,7 +133,7 @@ void DocxExport::AppendBookmarks( const SwTxtNode& rNode, xub_StrLen nAktPos, xu
     if ( GetBookmarks( rNode, nAktPos, nAktPos + nLen, aMarks ) )
     {
         for ( IMarkVector::const_iterator it = aMarks.begin(), end = aMarks.end();
-              it < end; ++it )
+              it != end; ++it )
         {
             IMark* pMark = (*it);
 

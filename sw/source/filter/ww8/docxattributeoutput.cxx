@@ -606,7 +606,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
 {
     // Write the start bookmarks
     for ( std::vector< OString >::const_iterator it = m_rMarksStart.begin(), end = m_rMarksStart.end();
-          it < end; ++it )
+          it != end; ++it )
     {
         const OString& rName = *it;
 
@@ -622,7 +622,7 @@ void DocxAttributeOutput::DoWriteBookmarks()
 
     // export the end bookmarks
     for ( std::vector< OString >::const_iterator it = m_rMarksEnd.begin(), end = m_rMarksEnd.end();
-          it < end; ++it )
+          it != end; ++it )
     {
         const OString& rName = *it;
 
@@ -3455,14 +3455,14 @@ void DocxAttributeOutput::WriteFormData_Impl( const ::sw::mark::IFieldmark& rFie
 void DocxAttributeOutput::WriteBookmarks_Impl( std::vector< OUString >& rStarts,
         std::vector< OUString >& rEnds )
 {
-    for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it < end; ++it )
+    for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it != end; ++it )
     {
         OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
         m_rMarksStart.push_back( rName );
     }
     rStarts.clear();
 
-    for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it < end; ++it )
+    for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it != end; ++it )
     {
         OString rName = OUStringToOString( *it, RTL_TEXTENCODING_UTF8 ).getStr( );
         m_rMarksEnd.push_back( rName );

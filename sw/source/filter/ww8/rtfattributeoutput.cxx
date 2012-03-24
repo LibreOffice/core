@@ -1435,7 +1435,7 @@ void RtfAttributeOutput::WriteField_Impl( const SwField* pFld, ww::eField /*eTyp
 
 void RtfAttributeOutput::WriteBookmarks_Impl( std::vector< rtl::OUString >& rStarts, std::vector< rtl::OUString >& rEnds )
 {
-    for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it < end; ++it )
+    for ( std::vector< OUString >::const_iterator it = rStarts.begin(), end = rStarts.end(); it != end; ++it )
     {
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKSTART " ");
         m_aRun->append(m_rExport.OutString(*it, m_rExport.eCurrentEncoding));
@@ -1443,7 +1443,7 @@ void RtfAttributeOutput::WriteBookmarks_Impl( std::vector< rtl::OUString >& rSta
     }
     rStarts.clear();
 
-    for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it < end; ++it )
+    for ( std::vector< OUString >::const_iterator it = rEnds.begin(), end = rEnds.end(); it != end; ++it )
     {
         m_aRun->append("{" OOO_STRING_SVTOOLS_RTF_IGNORE OOO_STRING_SVTOOLS_RTF_BKMKEND " ");
         m_aRun->append(m_rExport.OutString(*it, m_rExport.eCurrentEncoding));
