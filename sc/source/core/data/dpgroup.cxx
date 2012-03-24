@@ -240,19 +240,6 @@ bool ScDPGroupDateFilter::match( const ScDPItemData & rCellData ) const
 
     return false;
 }
-// -----------------------------------------------------------------------
-
-ScDPDateGroupHelper::ScDPDateGroupHelper(
-    const ScDPNumGroupInfo& rInfo, long nDim, sal_Int32 nPart ) :
-    aNumInfo( rInfo ),
-    nDatePart( nPart ),
-    mnGroupDim(nDim)
-{
-}
-
-ScDPDateGroupHelper::~ScDPDateGroupHelper()
-{
-}
 
 namespace {
 
@@ -304,18 +291,6 @@ bool isDateInGroup(const ScDPItemData& rGroupItem, const ScDPItemData& rChildIte
 
 }
 
-void ScDPDateGroupHelper::SetGroupDim(long nDim)
-{
-    mnGroupDim = nDim;
-}
-
-void ScDPDateGroupHelper::FillColumnEntries(const ScDPCache* pCache, std::vector<SCROW>& rEntries) const
-{
-    pCache->GetGroupDimMemberIds(mnGroupDim, rEntries);
-}
-
-// -----------------------------------------------------------------------
-
 ScDPGroupItem::ScDPGroupItem( const ScDPItemData& rName ) :
     aGroupName( rName )
 {
@@ -361,13 +336,12 @@ ScDPGroupDimension::ScDPGroupDimension( long nSource, const String& rNewName ) :
     nSourceDim( nSource ),
     nGroupDim( -1 ),
     aGroupName( rNewName ),
-    pDateHelper( NULL )
+    mbDateDimension(false)
 {
 }
 
 ScDPGroupDimension::~ScDPGroupDimension()
 {
-    delete pDateHelper;
     maMemberEntries.clear();
 }
 
@@ -375,11 +349,9 @@ ScDPGroupDimension::ScDPGroupDimension( const ScDPGroupDimension& rOther ) :
     nSourceDim( rOther.nSourceDim ),
     nGroupDim( rOther.nGroupDim ),
     aGroupName( rOther.aGroupName ),
-    pDateHelper( NULL ),
-   aItems( rOther.aItems )
+    aItems( rOther.aItems ),
+    mbDateDimension(rOther.mbDateDimension)
 {
-    if ( rOther.pDateHelper )
-        pDateHelper = new ScDPDateGroupHelper( *rOther.pDateHelper );
 }
 
 ScDPGroupDimension& ScDPGroupDimension::operator=( const ScDPGroupDimension& rOther )
@@ -388,20 +360,8 @@ ScDPGroupDimension& ScDPGroupDimension::operator=( const ScDPGroupDimension& rOt
     nGroupDim  = rOther.nGroupDim;
     aGroupName = rOther.aGroupName;
     aItems     = rOther.aItems;
-
-    delete pDateHelper;
-    if ( rOther.pDateHelper )
-        pDateHelper = new ScDPDateGroupHelper( *rOther.pDateHelper );
-    else
-        pDateHelper = NULL;
-
+    mbDateDimension = rOther.mbDateDimension;
     return *this;
-}
-
-void ScDPGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart )
-{
-    delete pDateHelper;
-    pDateHelper = new ScDPDateGroupHelper(rInfo, nGroupDim, nPart);
 }
 
 void ScDPGroupDimension::AddItem( const ScDPGroupItem& rItem )
@@ -412,8 +372,6 @@ void ScDPGroupDimension::AddItem( const ScDPGroupItem& rItem )
 void ScDPGroupDimension::SetGroupDim( long nDim )
 {
     nGroupDim = nDim;
-    if (pDateHelper)
-        pDateHelper->SetGroupDim(nDim);
 }
 
 const std::vector<SCROW>& ScDPGroupDimension::GetColumnEntries(
@@ -421,12 +379,6 @@ const std::vector<SCROW>& ScDPGroupDimension::GetColumnEntries(
 {
     if (!maMemberEntries.empty())
         return maMemberEntries;
-
-    if (pDateHelper)
-    {
-        pDateHelper->FillColumnEntries(rCacheTable.getCache(), maMemberEntries);
-        return maMemberEntries;
-    }
 
     rCacheTable.getCache()->GetGroupDimMemberIds(nGroupDim, maMemberEntries);
     return maMemberEntries;
@@ -465,37 +417,30 @@ void ScDPGroupDimension::DisposeData()
     maMemberEntries.clear();
 }
 
+void ScDPGroupDimension::SetDateDimension()
+{
+    mbDateDimension = true;
+}
+
 bool ScDPGroupDimension::IsDateDimension() const
 {
-    return pDateHelper != NULL;
+    return mbDateDimension;
 }
 
 // -----------------------------------------------------------------------
 
-ScDPNumGroupDimension::ScDPNumGroupDimension() :
-    pDateHelper(NULL) {}
+ScDPNumGroupDimension::ScDPNumGroupDimension() : mbDateDimension(false) {}
 
 ScDPNumGroupDimension::ScDPNumGroupDimension( const ScDPNumGroupInfo& rInfo ) :
-    aGroupInfo(rInfo), pDateHelper(NULL) {}
+    aGroupInfo(rInfo), mbDateDimension(false) {}
 
 ScDPNumGroupDimension::ScDPNumGroupDimension( const ScDPNumGroupDimension& rOther ) :
-    aGroupInfo( rOther.aGroupInfo ),
-    pDateHelper(NULL)
-{
-    if ( rOther.pDateHelper )
-        pDateHelper = new ScDPDateGroupHelper( *rOther.pDateHelper );
-}
+    aGroupInfo(rOther.aGroupInfo), mbDateDimension(rOther.mbDateDimension) {}
 
 ScDPNumGroupDimension& ScDPNumGroupDimension::operator=( const ScDPNumGroupDimension& rOther )
 {
     aGroupInfo = rOther.aGroupInfo;
-
-    delete pDateHelper;
-    if ( rOther.pDateHelper )
-        pDateHelper = new ScDPDateGroupHelper( *rOther.pDateHelper );
-    else
-        pDateHelper = NULL;
-
+    mbDateDimension = rOther.mbDateDimension;
     return *this;
 }
 
@@ -507,20 +452,17 @@ void ScDPNumGroupDimension::DisposeData()
 
 bool ScDPNumGroupDimension::IsDateDimension() const
 {
-    return pDateHelper != NULL;
+    return mbDateDimension;
 }
 
 ScDPNumGroupDimension::~ScDPNumGroupDimension()
 {
-    delete pDateHelper;
 }
 
-void ScDPNumGroupDimension::MakeDateHelper( const ScDPNumGroupInfo& rInfo, long nDim, sal_Int32 nPart )
+void ScDPNumGroupDimension::SetDateDimension()
 {
-    delete pDateHelper;
-    pDateHelper = new ScDPDateGroupHelper(rInfo, nDim, nPart);
-
     aGroupInfo.mbEnable = true;   //! or query both?
+    mbDateDimension = true;
 }
 
 const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
@@ -528,13 +470,6 @@ const std::vector<SCROW>& ScDPNumGroupDimension::GetNumEntries(
 {
     if (!maMemberEntries.empty())
         return maMemberEntries;
-
-    if (pDateHelper)
-    {
-        // Grouped by dates.
-        pDateHelper->FillColumnEntries(pCache, maMemberEntries);
-        return maMemberEntries;
-    }
 
     pCache->GetGroupDimMemberIds(nSourceDim, maMemberEntries);
     return maMemberEntries;

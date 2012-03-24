@@ -41,28 +41,6 @@
 class ScDocument;
 class SvNumberFormatter;
 
-//  ScDPDateGroupHelper is used as part of ScDPGroupDimension (additional dim.)
-//  or ScDPNumGroupDimension (innermost, replaces the original dim.).
-//  Source index, name and result collection are stored at the parent.
-
-class ScDPDateGroupHelper
-{
-    ScDPNumGroupInfo    aNumInfo;       // only start and end (incl. auto flags) are used
-    sal_Int32           nDatePart;      // single part
-    long                mnGroupDim;
-
-public:
-                ScDPDateGroupHelper( const ScDPNumGroupInfo& rInfo, long nDim, sal_Int32 nPart );
-                ~ScDPDateGroupHelper();
-
-    void SetGroupDim(long nDim);
-
-    sal_Int32   GetDatePart() const { return nDatePart; }
-    const ScDPNumGroupInfo& GetNumInfo() const { return aNumInfo; }
-
-    void FillColumnEntries(const ScDPCache* pCache, std::vector<SCROW>& rEntries) const;
-};
-
 typedef ::std::vector<ScDPItemData> ScDPItemDataVec;
 
 class ScDPGroupItem
@@ -90,9 +68,9 @@ class ScDPGroupDimension
     long                        nSourceDim;
     long                        nGroupDim;
     rtl::OUString               aGroupName;
-    ScDPDateGroupHelper*        pDateHelper;
     ScDPGroupItemVec            aItems;
-   mutable  ::std::vector< SCROW >            maMemberEntries;
+    mutable std::vector<SCROW> maMemberEntries;
+    bool mbDateDimension;
 public:
                 ScDPGroupDimension( long nSource, const String& rNewName );
                 ScDPGroupDimension( const ScDPGroupDimension& rOther );
@@ -112,12 +90,11 @@ public:
     const ScDPGroupItem* GetGroupForName( const ScDPItemData& rName ) const;  // rName = entry in group dim.
     const ScDPGroupItem* GetGroupByIndex( size_t nIndex ) const;
 
-    void        MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
-
     void        DisposeData();
 
     size_t      GetItemCount() const { return aItems.size(); }
 
+    void SetDateDimension();
     bool IsDateDimension() const;
 };
 
@@ -126,8 +103,8 @@ typedef ::std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
 class SC_DLLPUBLIC ScDPNumGroupDimension
 {
     mutable ScDPNumGroupInfo    aGroupInfo;         // settings
-    ScDPDateGroupHelper*        pDateHelper;
     mutable std::vector<SCROW>  maMemberEntries;
+    bool mbDateDimension;
 
 public:
                 ScDPNumGroupDimension();
@@ -141,7 +118,7 @@ public:
 
     const std::vector<SCROW>& GetNumEntries(SCCOL nSourceDim, const ScDPCache* pCache) const;
 
-    void MakeDateHelper( const ScDPNumGroupInfo& rInfo, long nDim, sal_Int32 nPart );
+    void SetDateDimension();
 
     void        DisposeData();
 

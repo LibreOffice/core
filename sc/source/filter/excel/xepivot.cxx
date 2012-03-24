@@ -553,7 +553,7 @@ void XclExpPCField::InsertNumDateGroupItems( const ScDPObject& rDPObj, const ScD
         // get the string collection with generated grouping elements
         ScDPNumGroupDimension aTmpDim( rNumInfo );
         if( nDatePart != 0 )
-            aTmpDim.MakeDateHelper( rNumInfo, mnFieldIdx, nDatePart );
+            aTmpDim.SetDateDimension();
         const std::vector<SCROW>& aMemberIds = aTmpDim.GetNumEntries(
             static_cast<SCCOL>(nDim), pCache);
         for ( size_t  nIdx = 0 ; nIdx < aMemberIds.size(); nIdx++ )

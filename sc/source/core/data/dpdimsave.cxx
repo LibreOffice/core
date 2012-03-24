@@ -379,7 +379,7 @@ void ScDPSaveGroupDimension::AddToData( ScDPGroupTableData& rData ) const
         {
             // date grouping
 
-            aDim.MakeDateHelper( aDateInfo, nDatePart );
+            aDim.SetDateDimension();
         }
         else
         {
@@ -459,7 +459,7 @@ void ScDPSaveNumGroupDimension::AddToData( ScDPGroupTableData& rData ) const
     {
         ScDPNumGroupDimension aDim( aGroupInfo );           // aGroupInfo: value grouping
         if ( nDatePart )
-            aDim.MakeDateHelper( aDateInfo, nSource, nDatePart );    // date grouping
+            aDim.SetDateDimension();
 
         rData.SetNumGroupDimension( nSource, aDim );
     }
