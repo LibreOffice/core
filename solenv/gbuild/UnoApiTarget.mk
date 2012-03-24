@@ -100,20 +100,18 @@ define gb_UnoApiTarget__regmerge_command_impl
 $(call gb_UnoApiTarget__command_impl,$(gb_UnoApiTarget_REGMERGECOMMAND),$(1) $(2) $(3))
 endef
 
-# TODO: -bUCR changes content of the RDB files; the old build system
-# uses -b/ (by default)
 define gb_UnoApiTarget__rdbmaker_command_impl
-$(call gb_UnoApiTarget__command_impl,$(gb_UnoApiTarget_RDBMAKERCOMMAND),-O$(1) -B$(2) -b$(2) $(3) $(4))
+$(call gb_UnoApiTarget__command_impl,$(gb_UnoApiTarget_RDBMAKERCOMMAND),-O$(1) -B$(2) -b$(3) $(4) $(5))
 endef
 
 define gb_UnoApiTarget__command
 $(call gb_Output_announce,$*,$(true),RDB,3)
 mkdir -p $(dir $(1)) && \
 $(if $(UNOAPI_FILES),\
-	$(call gb_UnoApiTarget__regmerge_command_impl,$(1),UCR,$(UNOAPI_FILES)),\
+	$(call gb_UnoApiTarget__regmerge_command_impl,$(1),$(UNOAPI_ROOT),$(UNOAPI_FILES)),\
 	$(if $(UNOAPI_MERGE),\
-		$(call gb_UnoApiTarget__regmerge_command_impl,$(1),/,$(UNOAPI_MERGE)),\
-		$(call gb_UnoApiTarget__rdbmaker_command_impl,$(1),UCR,\
+		$(call gb_UnoApiTarget__regmerge_command_impl,$(1),$(UNOAPI_ROOT),$(UNOAPI_MERGE)),\
+		$(call gb_UnoApiTarget__rdbmaker_command_impl,$(1),UCR,$(UNOAPI_ROOT),\
 			$(call gb_UnoApiTarget__get_types,$(UNOAPI_XML)),$(gb_UnoApiTarget_XMLRDB)))) \
 $(if $(UNOAPI_REFERENCE), \
 	$(call gb_Output_announce,$*,$(true),DBc,3) \
@@ -128,10 +126,11 @@ $(if $(or $(and $(1),$(2),$(3)),$(and $(1),$(2)),$(and $(2),$(3)),$(and $(1),$(3
 	$(error More than one mode of function of UnoApiTarget used: this is not supported),\
 	$(if $(or $(1),$(2),$(3)),,\
 		$(error Neither IDL files nor merged RDBs nor XML desc. were used: nothing will be produced)))
+$(if $(4),,$(error No root has been set for the rdb file))
 endef
 
 $(call gb_UnoApiTarget_get_target,%):
-	$(call gb_UnoApiTarget__check_mode,$(UNOAPI_FILES),$(UNOAPI_MERGE),$(UNOAPI_XML))
+	$(call gb_UnoApiTarget__check_mode,$(UNOAPI_FILES),$(UNOAPI_MERGE),$(UNOAPI_XML),$(UNOAPI_ROOT))
 	$(call gb_UnoApiTarget__command,$@,$*,$<,$?)
 
 .PHONY : $(call gb_UnoApiTarget_get_clean_target,%)
@@ -168,6 +167,7 @@ $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_FILES :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_MERGE :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_XML :=
 $(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_REFERENCE :=
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ROOT :=
 
 ifeq ($(gb_FULLDEPS),$(true))
 $(call gb_UnoApiTarget_get_dep_target,$(1)) : UNOAPI_IDLFILES :=
@@ -245,6 +245,11 @@ $(call gb_UnoApiTarget_get_target,$(1)) : INCLUDE := $(2)
 
 endef
 
+define gb_UnoApiTarget_set_root
+$(call gb_UnoApiTarget_get_target,$(1)) : UNOAPI_ROOT := $(2)
+
+endef
+
 # UnoApiHeadersTarget
 
 gb_UnoApiHeadersTarget_CPPUMAKERTARGET := $(call gb_Executable_get_target_for_build,cppumaker)
@@ -284,7 +289,6 @@ $(call gb_UnoApiHeadersTarget_get_clean_target,%) :
 			$(call gb_UnoApiHeadersTarget_get_lightweight_target,$*) \
 		   	$(call gb_UnoApiHeadersTarget_get_target,$*))
 
-# TODO: add second parameter: root of rdb file (UCR vs. /)
 define gb_UnoApiHeadersTarget_UnoApiHeadersTarget
 $(call gb_UnoApiHeadersTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_UnoApiHeadersTarget_get_comprehensive_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))

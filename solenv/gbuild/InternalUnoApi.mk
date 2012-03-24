@@ -30,27 +30,40 @@ $(call gb_InternalUnoApi_get_clean_target,%) :
 	$(call gb_Helper_abbreviate_dirs_native,\
 		rm -f $(call gb_InternalUnoApi_get_target,$*))
 
+# Note: The rdb root for the internal rdbs should be / . On the other
+# side, UnoApiHeadersTarget expects UCR and it is really not easy to
+# change, because the information would have to be duplicated at the
+# calling side. So we simply do both .-)
+# TODO: Should it come clear that these rdbs (installed into
+# solver/$INPATH/rdb) are actually not needed for anything, this could
+# be simplified.
+
 define gb_InternalUnoApi_InternalUnoApi
+$(call gb_UnoApiTarget_UnoApiTarget,$(1)_out)
 $(call gb_UnoApiTarget_UnoApiTarget,$(1))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
 
-$(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
-$(call gb_InternalUnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
+$(call gb_UnoApiTarget_set_root,$(1)_out,/)
+$(call gb_UnoApiTarget_set_root,$(1),UCR)
+$(call gb_UnoApiTarget_merge_rdbfile,$(1),$(1)_out)
+
+$(call gb_InternalUnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1)_out)
+$(call gb_InternalUnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1)_out)
 $(call gb_InternalUnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clean_target,$(1))
 
-$(call gb_Deliver_add_deliverable,$(call gb_InternalUnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)),$(1))
+$(call gb_Deliver_add_deliverable,$(call gb_InternalUnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)_out),$(1))
 
 $$(eval $$(call gb_Module_register_target,$(call gb_InternalUnoApi_get_target,$(1)),$(call gb_InternalUnoApi_get_clean_target,$(1))))
 
 endef
 
 define gb_InternalUnoApi_add_idlfile
-$(call gb_UnoApiTarget_add_idlfile,$(1),$(2),$(3))
+$(call gb_UnoApiTarget_add_idlfile,$(1)_out,$(2),$(3))
 
 endef
 
 define gb_InternalUnoApi_add_idlfiles
-$(call gb_UnoApiTarget_add_idlfiles,$(1),$(2),$(3))
+$(call gb_UnoApiTarget_add_idlfiles,$(1)_out,$(2),$(3))
 
 endef
 
@@ -86,12 +99,12 @@ $(foreach dep,$(3),$(call gb_InternalUnoApi_add_api_dependency,$(1),$(2),$(dep))
 endef
 
 define gb_InternalUnoApi_set_xmlfile
-$(call gb_UnoApiTarget_set_xmlfile,$(1),$(2))
+$(call gb_UnoApiTarget_set_xmlfile,$(1)_out,$(2))
 
 endef
 
 define gb_InternalUnoApi_set_include
-$(call gb_UnoApiTarget_set_include,$(1),$(2))
+$(call gb_UnoApiTarget_set_include,$(1)_out,$(2))
 
 endef
 
