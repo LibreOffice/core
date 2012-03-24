@@ -41,7 +41,9 @@
 extern "C" {
 #endif
 
+#if !defined STRICT
 #define STRICT
+#endif
 #ifdef _MSC_VER
 #pragma warning(push, 1)
 #endif
