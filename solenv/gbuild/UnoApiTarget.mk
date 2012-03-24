@@ -265,39 +265,39 @@ touch $(1)
 
 endef
 
-$(call gb_UnoApiHeadersTarget_get_target,%) :
-	$(call gb_Output_announce,$*,$(true),HPP,3)
-	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*))
+$(call gb_UnoApiHeadersTarget_get_bootstrap_target,%) :
+	$(call gb_Output_announce,$*,$(true),HPB,3)
+	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*))
 
 $(call gb_UnoApiHeadersTarget_get_comprehensive_target,%) :
 	$(call gb_Output_announce,$*,$(true),HPC,3)
 	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$*),-C)
 
-$(call gb_UnoApiHeadersTarget_get_lightweight_target,%) :
-	$(call gb_Output_announce,$*,$(true),HPL,3)
-	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_lightweight_dir,$*),-L)
+$(call gb_UnoApiHeadersTarget_get_target,%) :
+	$(call gb_Output_announce,$*,$(true),HPP,3)
+	$(call gb_UnoApiHeadersTarget__command,$@,$*,$(call gb_UnoApiHeadersTarget_get_dir,$*),-L)
 
 .PHONY : $(call gb_UnoApiHeadersTarget_get_clean_target,%)
 $(call gb_UnoApiHeadersTarget_get_clean_target,%) :
 	$(call gb_Output_announce,$*,$(false),HPP,3)
 	$(call gb_Helper_abbreviate_dirs_native,\
 		rm -rf \
+			$(call gb_UnoApiHeadersTarget_get_dir,$*) \
+		   	$(call gb_UnoApiHeadersTarget_get_bootstrap_dir,$*) \
 			$(call gb_UnoApiHeadersTarget_get_comprehensive_dir,$*) \
-			$(call gb_UnoApiHeadersTarget_get_lightweight_dir,$*) \
-		   	$(call gb_UnoApiHeadersTarget_get_dir,$*) \
-			$(call gb_UnoApiHeadersTarget_get_comprehensive_target,$*) \
-			$(call gb_UnoApiHeadersTarget_get_lightweight_target,$*) \
-		   	$(call gb_UnoApiHeadersTarget_get_target,$*))
+			$(call gb_UnoApiHeadersTarget_get_target,$*) \
+		   	$(call gb_UnoApiHeadersTarget_get_bootstrap_target,$*)) \
+			$(call gb_UnoApiHeadersTarget_get_comprehensive_target,$*)
 
 define gb_UnoApiHeadersTarget_UnoApiHeadersTarget
 $(call gb_UnoApiHeadersTarget_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
+$(call gb_UnoApiHeadersTarget_get_bootstrap_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_UnoApiHeadersTarget_get_comprehensive_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
-$(call gb_UnoApiHeadersTarget_get_lightweight_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
 $(call gb_UnoApiHeadersTarget_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
 
 $(call gb_UnoApiHeadersTarget_get_target,$(1)) : UNOAPI_DEPS :=
+$(call gb_UnoApiHeadersTarget_get_bootstrap_target,$(1)) : UNOAPI_DEPS :=
 $(call gb_UnoApiHeadersTarget_get_comprehensive_target,$(1)) : UNOAPI_DEPS :=
-$(call gb_UnoApiHeadersTarget_get_lightweight_target,$(1)) : UNOAPI_DEPS :=
 
 endef
 
@@ -313,8 +313,8 @@ endef
 
 define gb_UnoApiHeadersTarget_add_rdbfile
 $(call gb_UnoApiHeadersTarget__add_rdbfile,$(1),$(2),target)
+$(call gb_UnoApiHeadersTarget__add_rdbfile,$(1),$(2),bootstrap_target)
 $(call gb_UnoApiHeadersTarget__add_rdbfile,$(1),$(2),comprehensive_target)
-$(call gb_UnoApiHeadersTarget__add_rdbfile,$(1),$(2),lightweight_target)
 
 endef
 

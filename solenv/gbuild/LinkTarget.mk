@@ -650,12 +650,12 @@ $(foreach api,$(2),$(call gb_LinkTarget__add_internal_api_one,$(1),$(api),$(3)))
 endef
 
 define gb_LinkTarget_add_internal_api
-$(call gb_LinkTarget__add_internal_api,$(1),$(2),lightweight_)
+$(call gb_LinkTarget__add_internal_api,$(1),$(2))
 
 endef
 
 define gb_LinkTarget_add_internal_bootstrap_api
-$(call gb_LinkTarget__add_internal_api,$(1),$(2))
+$(call gb_LinkTarget__add_internal_api,$(1),$(2),bootstrap_)
 
 endef
 

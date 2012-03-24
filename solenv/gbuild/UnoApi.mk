@@ -34,12 +34,12 @@ define gb_UnoApi_UnoApi
 $(call gb_UnoApiTarget_UnoApiTarget,$(1))
 $(call gb_UnoApiHeadersTarget_UnoApiHeadersTarget,$(1))
 $(call gb_Package_Package,$(1)_idl,$(SRCDIR))
-$(call gb_Package_Package,$(1)_inc,$(call gb_UnoApiHeadersTarget_get_lightweight_dir,$(1)))
+$(call gb_Package_Package,$(1)_inc,$(call gb_UnoApiHeadersTarget_get_dir,$(1)))
 
 $(call gb_UnoApiTarget_set_root,$(1),UCR)
 
 $(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiTarget_get_target,$(1))
-$(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_lightweight_target,$(1))
+$(call gb_UnoApi_get_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_target,$(1))
 $(call gb_UnoApi_get_target,$(1)) : $(call gb_Package_get_target,$(1)_idl)
 $(call gb_UnoApi_get_target,$(1)) : $(call gb_Package_get_target,$(1)_inc)
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiTarget_get_clean_target,$(1))
@@ -47,7 +47,7 @@ $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_UnoApiHeadersTarget_get_clea
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_idl)
 $(call gb_UnoApi_get_clean_target,$(1)) : $(call gb_Package_get_clean_target,$(1)_inc)
 
-$(call gb_Package_get_preparation_target,$(1)_inc) : $(call gb_UnoApiHeadersTarget_get_lightweight_target,$(1))
+$(call gb_Package_get_preparation_target,$(1)_inc) : $(call gb_UnoApiHeadersTarget_get_target,$(1))
 
 $(call gb_Deliver_add_deliverable,$(call gb_UnoApi_get_target,$(1)),$(call gb_UnoApiTarget_get_target,$(1)),$(1))
 
