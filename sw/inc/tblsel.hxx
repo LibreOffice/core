@@ -34,6 +34,7 @@
 #include "swdllapi.h"
 
 #include <map>
+#include <deque>
 
 class SwCrsrShell;
 class SwCursor;
@@ -49,7 +50,7 @@ class SwTable;
 class SwUndoTblMerge;
 class SwCellFrm;
 
-SV_DECL_PTRARR( SwCellFrms, SwCellFrm*, 16 )
+typedef ::std::deque< SwCellFrm* > SwCellFrms;
 
 
 class SwSelBoxes : private std::map<sal_uLong, SwTableBox*>

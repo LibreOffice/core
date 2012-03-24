@@ -74,9 +74,6 @@
 #undef      DEL_EMPTY_BOXES_AT_START_AND_END
 #define     DEL_ALL_EMPTY_BOXES
 
-
-SV_IMPL_PTRARR( SwCellFrms, SwCellFrm* )
-
 struct _CmpLPt
 {
     Point aPos;
@@ -403,11 +400,11 @@ void GetTblSel( const SwLayoutFrm* pStart, const SwLayoutFrm* pEnd,
 
         if ( pCells )
         {
-            pCells->Remove( 0, pCells->Count() );
-            pCells->Insert( pCurrentTopLeftFrm, 0 );
-            pCells->Insert( pCurrentTopRightFrm, 1 );
-            pCells->Insert( pCurrentBottomLeftFrm, 2 );
-            pCells->Insert( pCurrentBottomRightFrm, 3 );
+            pCells->clear();
+            pCells->push_back( const_cast< SwCellFrm* >(pCurrentTopLeftFrm) );
+            pCells->push_back( const_cast< SwCellFrm* >(pCurrentTopRightFrm) );
+            pCells->push_back( const_cast< SwCellFrm* >(pCurrentBottomLeftFrm) );
+            pCells->push_back( const_cast< SwCellFrm* >(pCurrentBottomRightFrm) );
         }
 
         if( bTblIsValid )
@@ -773,7 +770,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                     if( pCell == pSttCell )
                     {
                         sal_uInt16 nWhichId = 0;
-                        for( sal_uInt16 n = rBoxes.Count(); n; )
+                        for( size_t n = rBoxes.size(); n; )
                             if( USHRT_MAX != ( nWhichId = rBoxes[ --n ]
                                 ->GetTabBox()->IsFormulaOrValueBox() ))
                                 break;
@@ -800,7 +797,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                 }
 
                 if( pUpperCell )
-                    rBoxes.Insert( pUpperCell, rBoxes.Count() );
+                    rBoxes.push_back( const_cast< SwCellFrm* >(pUpperCell) );
             }
             if( bFound )
             {
@@ -817,7 +814,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
     {
         bFound = sal_False;
 
-        rBoxes.Remove( 0, rBoxes.Count() );
+        rBoxes.clear();
         aUnions.DeleteAndDestroy( 0, aUnions.Count() );
         ::MakeSelUnions( aUnions, pStart, pEnd, nsSwTblSearchType::TBLSEARCH_ROW );
 
@@ -842,7 +839,7 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                         if( pCell == pSttCell )
                         {
                             sal_uInt16 nWhichId = 0;
-                            for( sal_uInt16 n = rBoxes.Count(); n; )
+                            for( size_t n = rBoxes.size(); n; )
                                 if( USHRT_MAX != ( nWhichId = rBoxes[ --n ]
                                     ->GetTabBox()->IsFormulaOrValueBox() ))
                                     break;
@@ -857,8 +854,8 @@ sal_Bool GetAutoSumSel( const SwCrsrShell& rShell, SwCellFrms& rBoxes )
                         OSL_ENSURE( pCell->IsCellFrm(), "Frame without cell" );
                         if( ::IsFrmInTblSel( pUnion->GetUnion(), pCell ) )
                         {
-                            const SwCellFrm* pC = (SwCellFrm*)pCell;
-                            rBoxes.Insert( pC, rBoxes.Count() );
+                            SwCellFrm* pC = (SwCellFrm*)pCell;
+                            rBoxes.push_back( pC );
                         }
                         if( pCell->GetNext() )
                         {

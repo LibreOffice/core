@@ -217,7 +217,7 @@ sal_Bool SwCrsrShell::_SelTblRowOrCol( bool bRow, bool bRowSimple )
                    static_cast<const SwCellFrm*>(pEndFrm),
                    aBoxes, bSelectUp ? 0 : &aCells, eType );
 
-        if( aBoxes.empty() || ( !bSelectUp && 4 != aCells.Count() ) )
+        if( aBoxes.empty() || ( !bSelectUp && 4 != aCells.size() ) )
             return sal_False;
 
         if ( bSelectUp )

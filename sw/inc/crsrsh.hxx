@@ -69,7 +69,6 @@ class SwTxtINetFmt;
 class SwFmtINetFmt;
 class SwTxtAttr;
 class SwTableBox;
-class SwCellFrms;
 class SwTOXMark;
 class SwRedline;
 class IBlockCursor;

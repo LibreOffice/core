@@ -2345,12 +2345,12 @@ sal_Bool lcl_IsFormulaSelBoxes( const SwTable& rTbl, const SwTblBoxFormula& rFml
     for( SwSelBoxes::reverse_iterator it = aBoxes.rbegin(); it != aBoxes.rend(); ++it )
     {
         SwTableBox* pBox = it->second;
-        sal_uInt16 i;
-        for( i = 0; i < rCells.Count(); ++i )
-            if( rCells[ i ]->GetTabBox() == pBox )
+        SwCellFrms::iterator iC;
+        for( iC = rCells.begin(); iC != rCells.end(); ++iC )
+            if( (*iC)->GetTabBox() == pBox )
                 break;      // found
 
-        if( i == rCells.Count() )
+        if( iC == rCells.end() )
             return sal_False;
     }
 
@@ -2371,7 +2371,7 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
     if( ::GetAutoSumSel( *this, aCells ))
     {
         sal_uInt16 nW = 0, nInsPos = 0;
-        for( sal_uInt16 n = aCells.Count(); n; )
+        for( size_t n = aCells.size(); n; )
         {
             SwCellFrm* pCFrm = aCells[ --n ];
             sal_uInt16 nBoxW = pCFrm->GetTabBox()->IsFormulaOrValueBox();
@@ -2393,7 +2393,7 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
                 {
                     nW = RES_BOXATR_VALUE;
                     // restore previous spaces!
-                    for( sal_uInt16 i = aCells.Count(); n+1 < i; )
+                    for( size_t i = aCells.size(); n+1 < i; )
                     {
                         String sTmp( String::CreateFromAscii(
                                 RTL_CONSTASCII_STRINGPARAM( "|<" )) );
@@ -2431,7 +2431,7 @@ sal_Bool SwFEShell::GetAutoSum( String& rFml ) const
                         nW = RES_BOXATR_VALUE;
                         rFml.Erase( nInsPos );
                         // restore previous spaces!
-                        for( sal_uInt16 i = aCells.Count(); n+1 < i; )
+                        for( size_t i = aCells.size(); n+1 < i; )
                         {
                             String sTmp( String::CreateFromAscii(
                                     RTL_CONSTASCII_STRINGPARAM( "|<" )) );
