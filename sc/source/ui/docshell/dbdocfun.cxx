@@ -1327,6 +1327,7 @@ bool ScDBDocFunc::DataPilotUpdate( ScDPObject* pOldObj, const ScDPObject* pNewOb
                 if ( pNewObj == pOldObj && pDestObj->IsImportData() )
                     pDestObj->ClearTableData();
 
+                pDestObj->ReloadGroupTableData();
                 pDestObj->InvalidateData();             // before getting the new output area
 
                 //  make sure the table has a name (not set by dialog)
@@ -1474,9 +1475,6 @@ sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
     for (; it != itEnd; ++it)
     {
         ScDPObject* pObj = *it;
-        if (bHasGroups)
-            // Re-build table data for each pivot table when the original contains group fields.
-            pObj->ReloadGroupTableData();
 
         // This action is intentionally not undoable since it modifies cache.
         DataPilotUpdate(pObj, pObj, false, bApi);
@@ -1515,7 +1513,6 @@ void ScDBDocFunc::RefreshPivotTableGroups(ScDPObject* pDPObj)
                 pSaveData->SetDimensionData(pDimData);
         }
 
-        pObj->ReloadGroupTableData();
         // This action is intentionally not undoable since it modifies cache.
         DataPilotUpdate(pObj, pObj, false, false);
     }
