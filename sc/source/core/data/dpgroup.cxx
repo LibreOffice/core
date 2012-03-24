@@ -465,6 +465,11 @@ void ScDPGroupDimension::DisposeData()
     maMemberEntries.clear();
 }
 
+bool ScDPGroupDimension::IsDateDimension() const
+{
+    return pDateHelper != NULL;
+}
+
 // -----------------------------------------------------------------------
 
 ScDPNumGroupDimension::ScDPNumGroupDimension() :
@@ -498,6 +503,11 @@ void ScDPNumGroupDimension::DisposeData()
 {
     aGroupInfo = ScDPNumGroupInfo();
     maMemberEntries.clear();
+}
+
+bool ScDPNumGroupDimension::IsDateDimension() const
+{
+    return pDateHelper != NULL;
 }
 
 ScDPNumGroupDimension::~ScDPNumGroupDimension()
@@ -857,15 +867,15 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
     for (size_t i = 0; it != itEnd; ++it, ++i)
     {
         long nColumn = *it;
-        const ScDPDateGroupHelper* pDateHelper = NULL;
+        bool bDateDim = false;
 
         long nSourceDim = nColumn;
         if ( nColumn >= nSourceCount && nColumn < nSourceCount + nGroupedColumns )
         {
             const ScDPGroupDimension& rGroupDim = aGroups[nColumn - nSourceCount];
             nSourceDim= rGroupDim.GetSourceDim();
-            pDateHelper = rGroupDim.GetDateHelper();
-            if (!pDateHelper)                         // date is handled below
+            bDateDim = rGroupDim.IsDateDimension();
+            if (!bDateDim)                         // date is handled below
             {
                 const ScDPItemData& rItem = *GetMemberById(nSourceDim, rItems[i]);
                 const ScDPGroupItem* pGroupItem = rGroupDim.GetGroupForData(rItem);
@@ -880,8 +890,8 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
         }
         else if ( IsNumGroupDimension( nColumn ) )
         {
-            pDateHelper = pNumGroups[nColumn].GetDateHelper();
-            if (!pDateHelper)                         // date is handled below
+            bDateDim = pNumGroups[nColumn].IsDateDimension();
+            if (!bDateDim)                         // date is handled below
             {
                 const ScDPItemData* pData = pCache->GetItemDataById(nSourceDim, rItems[i]);
                 if (pData->GetType() == ScDPItemData::Value)
@@ -899,8 +909,9 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
 
         const ScDPNumGroupInfo* pNumInfo = pCache->GetNumGroupInfo(nColumn);
 
-        if (pDateHelper && pNumInfo)
+        if (bDateDim && pNumInfo)
         {
+            // This is a date group dimension.
             sal_Int32 nDatePart = pCache->GetGroupType(nColumn);
             const ScDPItemData* pData = pCache->GetItemDataById(nSourceDim, rItems[i]);
             if (pData->GetType() == ScDPItemData::Value)

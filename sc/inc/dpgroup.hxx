@@ -89,7 +89,7 @@ class ScDPGroupDimension
 {
     long                        nSourceDim;
     long                        nGroupDim;
-    String                      aGroupName;
+    rtl::OUString               aGroupName;
     ScDPDateGroupHelper*        pDateHelper;
     ScDPGroupItemVec            aItems;
    mutable  ::std::vector< SCROW >            maMemberEntries;
@@ -105,7 +105,7 @@ public:
 
     long        GetSourceDim() const    { return nSourceDim; }
     long        GetGroupDim() const     { return nGroupDim; }
-    const      String& GetName() const       { return aGroupName; }
+    const rtl::OUString& GetName() const { return aGroupName; }
 
     const std::vector< SCROW >&  GetColumnEntries( const ScDPCacheTable&  rCacheTable ) const;
     const ScDPGroupItem* GetGroupForData( const ScDPItemData& rData ) const;  // rData = entry in original dim.
@@ -119,6 +119,8 @@ public:
     void        DisposeData();
 
     size_t      GetItemCount() const { return aItems.size(); }
+
+    bool IsDateDimension() const;
 };
 
 typedef ::std::vector<ScDPGroupDimension> ScDPGroupDimensionVec;
@@ -146,6 +148,8 @@ public:
     void MakeDateHelper( const ScDPNumGroupInfo& rInfo, long nDim, sal_Int32 nPart );
 
     void        DisposeData();
+
+    bool IsDateDimension() const;
 };
 
 //
