@@ -407,6 +407,12 @@ $(call gb_LinkTarget_add_linked_libs,$(1),\
 	rdf \
 )
 
+ifeq ($(OS),MACOSX)
+
+$(call gb_LinkTarget_add_libs,$(1),$(foreach replaceme,librasqal.1 libraptor.1,-dylib_file @loader_path/$(replaceme).dylib:$(gb_Library_OUTDIRLOCATION)/$(replaceme).dylib))
+
+endif
+
 endef
 
 endif # SYSTEM_REDLAND
