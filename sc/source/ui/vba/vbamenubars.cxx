@@ -116,12 +116,12 @@ ScVbaMenuBars::Item( const uno::Any& aIndex, const uno::Any& /*aIndex2*/ ) throw
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString
 ScVbaMenuBars::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaMenuBars") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaMenuBars"));
 }
+
 uno::Sequence<rtl::OUString>
 ScVbaMenuBars::getServiceNames()
 {

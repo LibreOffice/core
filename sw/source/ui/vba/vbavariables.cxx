@@ -83,11 +83,10 @@ SwVbaVariables::Add( const rtl::OUString& rName, const uno::Any& rValue ) throw 
     return uno::makeAny( uno::Reference< word::XVariable >( new SwVbaVariable( getParent(), mxContext, mxUserDefined, rName ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaVariables::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaVariables") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaVariables"));
 }
 
 css::uno::Sequence<rtl::OUString>

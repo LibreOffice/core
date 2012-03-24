@@ -229,11 +229,10 @@ ScVbaComment::Text( const uno::Any& aText, const uno::Any& aStart, const uno::An
     return sAnnoText;
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaComment::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaComment") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaComment"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -95,11 +95,10 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaCheckbox::getFont() throw (uno
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaCheckbox::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCheckbox") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCheckbox"));
 }
 
 uno::Sequence< rtl::OUString >

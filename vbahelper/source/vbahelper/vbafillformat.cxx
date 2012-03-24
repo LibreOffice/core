@@ -178,12 +178,10 @@ ScVbaFillFormat::ForeColor() throw (uno::RuntimeException)
     return m_xColorFormat;
 }
 
-
-rtl::OUString&
+rtl::OUString
 ScVbaFillFormat::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFillFormat") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaFillFormat"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -183,11 +183,10 @@ SwVbaFormFields::createCollectionObject( const css::uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaFormFields::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaFormFields") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFormFields"));
 }
 
 css::uno::Sequence<rtl::OUString>

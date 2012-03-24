@@ -49,11 +49,10 @@ ScVbaTextFrame::Characters() throw (uno::RuntimeException)
     return uno::makeAny( uno::Reference< ov::excel::XCharacters >( new ScVbaCharacters( this, mxContext, aPalette, xSimpleText, aStart, aLength, sal_True ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaTextFrame::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaTextFrame") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaTextFrame"));
 }
 
 uno::Sequence< rtl::OUString >

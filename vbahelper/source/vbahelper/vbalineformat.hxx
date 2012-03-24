@@ -43,7 +43,7 @@ private:
     sal_Int32 m_nLineDashStyle;
     double m_nLineWeight;
 protected:
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
     sal_Int32 convertLineStartEndNameToArrowheadStyle( rtl::OUString sLineName );
     rtl::OUString convertArrowheadStyleToLineStartEndName( sal_Int32 nArrowheadStyle ) throw (css::uno::RuntimeException);

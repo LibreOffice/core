@@ -46,7 +46,7 @@ public:
     virtual ~ScVbaFileDialog() ;
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
     //XFileDialog
     virtual css::uno::Reference< ov::XFileDialogSelectedItems > SAL_CALL getSelectedItems() throw (css::uno::RuntimeException);

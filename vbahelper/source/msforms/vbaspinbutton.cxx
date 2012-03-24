@@ -82,11 +82,10 @@ ScVbaSpinButton::setMin( sal_Int32 nVal ) throw (uno::RuntimeException)
     m_xProps->setPropertyValue( SPINMIN, uno::makeAny( nVal ) );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaSpinButton::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaSpinButton") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaSpinButton"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -415,11 +415,11 @@ SwVbaRange::Fields( const uno::Any& index ) throw (uno::RuntimeException)
         return xCol->Item( index, uno::Any() );
     return uno::makeAny( xCol );
 }
-rtl::OUString&
+
+rtl::OUString
 SwVbaRange::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaRange") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaRange"));
 }
 
 uno::Sequence< rtl::OUString >

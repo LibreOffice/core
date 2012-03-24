@@ -84,11 +84,10 @@ uno::Reference< word::XRange > SAL_CALL SwVbaAutoTextEntry::Insert( const uno::R
     return uno::Reference< word::XRange >( pWhere );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaAutoTextEntry::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaAutoTextEntry") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaAutoTextEntry"));
 }
 
 uno::Sequence< rtl::OUString >
@@ -127,11 +126,10 @@ SwVbaAutoTextEntries::createCollectionObject( const css::uno::Any& aSource )
     return uno::makeAny( uno::Reference< word::XAutoTextEntry >( new SwVbaAutoTextEntry( this, mxContext, xEntry ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaAutoTextEntries::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaAutoTextEntries") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaAutoTextEntries"));
 }
 
 css::uno::Sequence<rtl::OUString>

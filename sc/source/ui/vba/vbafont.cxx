@@ -482,11 +482,10 @@ ScVbaFont::getOutlineFont() throw (uno::RuntimeException)
     return mxFont->getPropertyValue( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CharContoured" ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaFont::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFont") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaFont"));
 }
 
 uno::Sequence< rtl::OUString >

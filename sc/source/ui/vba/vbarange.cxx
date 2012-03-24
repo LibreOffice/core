@@ -389,7 +389,7 @@ public:
 
     virtual uno::Any createCollectionObject( const uno::Any& aSource );
 
-    virtual rtl::OUString& getServiceImplName() { static rtl::OUString sDummy; return sDummy; }
+    virtual rtl::OUString getServiceImplName() { return rtl::OUString(); }
 
     virtual uno::Sequence< rtl::OUString > getServiceNames() { return uno::Sequence< rtl::OUString >(); }
 
@@ -6259,11 +6259,10 @@ ScVbaRange::PivotTable() throw (uno::RuntimeException)
 }
 
 
-rtl::OUString&
+rtl::OUString
 ScVbaRange::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaRange") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaRange"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -183,11 +183,10 @@ ScVbaAxes::createCollectionObject(const css::uno::Any& aSource)
     return aSource; // pass through ( it's already an XAxis object
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaAxes::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaAxes") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaAxes"));
 }
 
 uno::Sequence< rtl::OUString >

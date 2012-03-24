@@ -358,11 +358,10 @@ SwVbaStyles::Item( const uno::Any& Index1, const uno::Any& Index2 ) throw (uno::
     return SwVbaStyles_BASE::Item( Index1, Index2 );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaStyles::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaStyles") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaStyles"));
 }
 
 uno::Sequence< rtl::OUString >

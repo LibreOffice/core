@@ -239,11 +239,10 @@ ScVbaNames::createCollectionObject( const uno::Any& aSource )
     return uno::makeAny( uno::Reference< excel::XName > ( new ScVbaName( getParent(), mxContext, xName, mxNames , mxModel ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaNames::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaNames") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaNames"));
 }
 
 css::uno::Sequence<rtl::OUString>

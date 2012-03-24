@@ -112,11 +112,10 @@ ScVbaScrollBar::setSmallChange( ::sal_Int32 _smallchange ) throw (uno::RuntimeEx
     m_xProps->setPropertyValue( SMALLCHANGE, uno::makeAny( _smallchange ) );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaScrollBar::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaScrollBar") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaScrollBar"));
 }
 
 uno::Sequence< rtl::OUString >

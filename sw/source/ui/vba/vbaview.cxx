@@ -379,11 +379,10 @@ uno::Reference< text::XTextRange > SwVbaView::getHFTextRange( sal_Int32 nType ) 
     return xTextRange;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaView::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaView") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaView"));
 }
 
 uno::Sequence< rtl::OUString >

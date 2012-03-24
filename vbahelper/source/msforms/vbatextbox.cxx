@@ -182,11 +182,10 @@ void SAL_CALL ScVbaTextBox::setLocked( sal_Bool bLocked ) throw (uno::RuntimeExc
     ScVbaControl::setLocked( bLocked );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaTextBox::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaTextBox") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaTextBox"));
 }
 
 uno::Sequence< rtl::OUString >

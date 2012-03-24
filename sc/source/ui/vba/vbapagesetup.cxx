@@ -611,11 +611,10 @@ void SAL_CALL ScVbaPageSetup::setPrintHeadings( sal_Bool printHeadings) throw (c
     }
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaPageSetup::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPageSetup") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaPageSetup"));
 }
 
 uno::Sequence< rtl::OUString >

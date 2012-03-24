@@ -88,11 +88,10 @@ void SwVbaColumn::SelectColumn( const uno::Reference< frame::XModel >& xModel, c
     xSelection->select( uno::makeAny( xSelRange ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaColumn::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaColumn") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaColumn"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -1174,11 +1174,10 @@ SwVbaSelection::Paragraphs( const uno::Any& aIndex ) throw (uno::RuntimeExceptio
     return aRet;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaSelection::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaSelection") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaSelection"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -116,11 +116,10 @@ ScVbaCharacters::Delete(  ) throw (css::uno::RuntimeException)
 }
 
 
-rtl::OUString&
+rtl::OUString
 ScVbaCharacters::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCharacters") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCharacters"));
 }
 
 uno::Sequence< rtl::OUString >

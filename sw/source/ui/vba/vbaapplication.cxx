@@ -197,11 +197,10 @@ SwVbaApplication::getCurrentDocument() throw (css::uno::RuntimeException)
     return getCurrentWordDoc( mxContext );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaApplication::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaApplication") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaApplication"));
 }
 
 uno::Sequence< rtl::OUString >

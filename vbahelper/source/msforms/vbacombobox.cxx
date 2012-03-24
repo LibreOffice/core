@@ -272,12 +272,12 @@ uno::Reference< msforms::XNewFont > SAL_CALL ScVbaComboBox::getFont() throw (uno
     return new VbaNewFont( this, mxContext, m_xProps );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaComboBox::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaComboBox") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaComboBox"));
 }
+
 sal_Int32 SAL_CALL ScVbaComboBox::getBackColor() throw (uno::RuntimeException)
 {
     return ScVbaControl::getBackColor();

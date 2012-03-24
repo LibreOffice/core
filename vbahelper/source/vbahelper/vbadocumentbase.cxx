@@ -296,11 +296,10 @@ VbaDocumentBase::getVBProject() throw (uno::RuntimeException)
     return uno::Any( mxVBProject );
 }
 
-rtl::OUString&
+rtl::OUString
 VbaDocumentBase::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaDocumentBase") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaDocumentBase"));
 }
 
 uno::Sequence< rtl::OUString >

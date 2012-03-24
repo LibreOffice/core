@@ -40,11 +40,10 @@ SwVbaTabStop::~SwVbaTabStop()
 {
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaTabStop::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaTabStop") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTabStop"));
 }
 
 uno::Sequence< rtl::OUString >

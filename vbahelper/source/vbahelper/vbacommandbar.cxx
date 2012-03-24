@@ -179,12 +179,12 @@ ScVbaCommandBar::FindControl( const uno::Any& /*aType*/, const uno::Any& /*aId*/
     return uno::makeAny( uno::Reference< XCommandBarControl > () );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaCommandBar::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBar") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBar"));
 }
+
 uno::Sequence<rtl::OUString>
 ScVbaCommandBar::getServiceNames()
 {
@@ -262,10 +262,9 @@ uno::Any SAL_CALL VbaDummyCommandBar::FindControl( const uno::Any& /*aType*/, co
     return uno::Any( uno::Reference< XCommandBarControl >() );
 }
 
-rtl::OUString& VbaDummyCommandBar::getServiceImplName()
+rtl::OUString VbaDummyCommandBar::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaDummyCommandBar") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaDummyCommandBar"));
 }
 
 uno::Sequence< rtl::OUString > VbaDummyCommandBar::getServiceNames()

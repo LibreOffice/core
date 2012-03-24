@@ -1787,11 +1787,10 @@ double SAL_CALL ScVbaApplication::InchesToPoints( double Inches ) throw (uno::Ru
     return MetricField::ConvertDoubleValue( Inches, 0, 0, FUNIT_INCH, FUNIT_POINT );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaApplication::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaApplication") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaApplication"));
 }
 
 uno::Sequence< rtl::OUString >

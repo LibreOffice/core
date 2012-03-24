@@ -44,7 +44,7 @@ public:
     // Methods
     virtual rtl::OUString mapIndexToName( sal_Int32 nIndex );
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 

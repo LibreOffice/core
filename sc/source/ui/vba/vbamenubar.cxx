@@ -48,12 +48,12 @@ ScVbaMenuBar::Menus( const uno::Any& aIndex ) throw (script::BasicErrorException
     return uno::makeAny( xMenus );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaMenuBar::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaMenuBar") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaMenuBar"));
 }
+
 uno::Sequence<rtl::OUString>
 ScVbaMenuBar::getServiceNames()
 {

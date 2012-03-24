@@ -40,12 +40,11 @@ VbaFileDialogSelectedItems::VbaFileDialogSelectedItems( const css::uno::Referenc
 }
 
 
-rtl::OUString& VbaFileDialogSelectedItems::getServiceImplName()
+rtl::OUString VbaFileDialogSelectedItems::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaFileDialogSelectedItems") );
-    return sImplName;
-
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaFileDialogSelectedItems"));
 }
+
 css::uno::Sequence<rtl::OUString> VbaFileDialogSelectedItems::getServiceNames()
 {
     static uno::Sequence< rtl::OUString > aServiceNames;

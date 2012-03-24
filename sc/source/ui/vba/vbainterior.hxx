@@ -82,7 +82,7 @@ public:
     virtual css::uno::Any SAL_CALL getPatternColorIndex() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setPatternColorIndex( const css::uno::Any& _patterncolorindex ) throw (css::uno::RuntimeException);
     //XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif

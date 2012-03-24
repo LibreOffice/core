@@ -98,12 +98,10 @@ ScVbaMultiPage::setValue( const sal_Int32 _value ) throw (::com::sun::star::uno:
         fireChangeEvent();
 }
 
-
-rtl::OUString&
+rtl::OUString
 ScVbaMultiPage::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaMultiPage") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaMultiPage"));
 }
 
 uno::Any SAL_CALL

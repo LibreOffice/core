@@ -92,11 +92,10 @@ uno::Any SAL_CALL SwVbaBookmark::Range() throw ( uno::RuntimeException )
     return uno::makeAny( uno::Reference< word::XRange>(  new SwVbaRange( this, mxContext, xTextDocument, xTextRange->getStart(), xTextRange->getEnd(), xTextRange->getText() ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaBookmark::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaBookmark") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaBookmark"));
 }
 
 uno::Sequence< rtl::OUString >

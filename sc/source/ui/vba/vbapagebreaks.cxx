@@ -238,11 +238,10 @@ ScVbaHPageBreaks::getElementType() throw (uno::RuntimeException)
     return excel::XHPageBreak::static_type(0);
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaHPageBreaks::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaHPageBreaks") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaHPageBreaks"));
 }
 
 uno::Sequence< rtl::OUString >
@@ -299,11 +298,10 @@ ScVbaVPageBreaks::getElementType() throw ( uno::RuntimeException )
     return excel::XVPageBreak::static_type( 0 );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaVPageBreaks::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM( "ScVbaVPageBreaks" ) );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaVPageBreaks"));
 }
 
 uno::Sequence< rtl::OUString >

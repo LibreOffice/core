@@ -163,11 +163,10 @@ ScVbaStyles::Delete(const rtl::OUString _sStyleName) throw ( script::BasicErrorE
     }
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaStyles::getServiceImplName()
 {
-        static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaStyles") );
-        return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaStyles"));
 }
 
 uno::Sequence< rtl::OUString >

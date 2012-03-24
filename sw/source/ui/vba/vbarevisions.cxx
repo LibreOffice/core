@@ -166,11 +166,10 @@ void SAL_CALL SwVbaRevisions::RejectAll(  ) throw (css::uno::RuntimeException)
     throw uno::RuntimeException();
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaRevisions::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaRevisions") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaRevisions"));
 }
 
 css::uno::Sequence<rtl::OUString>

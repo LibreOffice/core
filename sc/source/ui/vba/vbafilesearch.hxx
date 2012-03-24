@@ -71,7 +71,7 @@ public:
     virtual void SAL_CALL NewSearch(  )  throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence< rtl::OUString > getServiceNames();
 };
 

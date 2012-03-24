@@ -377,11 +377,10 @@ void SAL_CALL SwVbaListLevel::setTrailingCharacter( ::sal_Int32 _trailingcharact
     pListHelper->setPropertyValueWithNameAndLevel( mnLevel, rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("LabelFollowedBy") ), uno::makeAny( nLabelFollowedBy ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaListLevel::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaListLevel") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaListLevel"));
 }
 
 uno::Sequence< rtl::OUString >

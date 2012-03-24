@@ -233,11 +233,10 @@ void SAL_CALL SwVbaStyle::setNextParagraphStyle( const uno::Any& _nextparagraphs
     return nNumberingLevel;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaStyle::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaStyle") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaStyle"));
 }
 
 uno::Sequence< rtl::OUString >

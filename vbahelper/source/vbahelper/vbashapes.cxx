@@ -116,11 +116,11 @@ ScVbaShapes::getElementType() throw (uno::RuntimeException)
 {
     return ooo::vba::msforms::XShape::static_type(0);
 }
-rtl::OUString&
+
+rtl::OUString
 ScVbaShapes::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaShapes") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaShapes"));
 }
 
 uno::Sequence< rtl::OUString >

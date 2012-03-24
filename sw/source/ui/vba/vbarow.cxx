@@ -113,11 +113,10 @@ void SAL_CALL SwVbaRow::SetHeight( float height, sal_Int32 heightrule ) throw (c
     setHeight( uno::makeAny( height ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaRow::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaRow") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaRow"));
 }
 
 uno::Sequence< rtl::OUString >

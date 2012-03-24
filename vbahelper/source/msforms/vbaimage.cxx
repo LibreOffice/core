@@ -37,11 +37,10 @@ ScVbaImage::ScVbaImage( const uno::Reference< XHelperInterface >& xParent, const
 {
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaImage::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaImage") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaImage"));
 }
 
 uno::Sequence< rtl::OUString >

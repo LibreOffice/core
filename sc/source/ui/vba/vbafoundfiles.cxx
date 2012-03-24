@@ -126,10 +126,9 @@ css::uno::Type VbaFoundFiles::getElementType() throw (css::uno::RuntimeException
     return ov::XFoundFiles::static_type(0);
 }
 
-rtl::OUString& VbaFoundFiles::getServiceImplName()
+rtl::OUString VbaFoundFiles::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaFoundFiles") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaFoundFiles"));
 }
 
 css::uno::Sequence< rtl::OUString > VbaFoundFiles::getServiceNames()

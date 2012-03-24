@@ -64,7 +64,7 @@ public:
     virtual void SAL_CALL Delete() throw ( css::script::BasicErrorException );
     virtual void Activate() throw ( css::script::BasicErrorException );
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 

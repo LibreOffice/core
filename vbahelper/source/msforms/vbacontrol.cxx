@@ -602,11 +602,10 @@ void SAL_CALL ScVbaControl::setTabIndex( sal_Int32 /*nTabIndex*/ ) throw (uno::R
     throw uno::RuntimeException( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Unsupported control.")), uno::Reference< uno::XInterface >() );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaControl::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaControl") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaControl"));
 }
 
 uno::Sequence< rtl::OUString >

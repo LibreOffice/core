@@ -705,12 +705,10 @@ ScVbaShape::WrapFormat() throw (uno::RuntimeException)
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
 
-
-rtl::OUString&
+rtl::OUString
 ScVbaShape::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaShape") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaShape"));
 }
 
 uno::Sequence< rtl::OUString >

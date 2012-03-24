@@ -269,11 +269,10 @@ SwVbaSystem::PrivateProfileString( const rtl::OUString& rFilename, const rtl::OU
     return uno::makeAny( uno::Reference< XPropValue > ( new ScVbaPropValue( &maPrivateProfileStringListener ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaSystem::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaSystem") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaSystem"));
 }
 
 uno::Sequence< rtl::OUString >

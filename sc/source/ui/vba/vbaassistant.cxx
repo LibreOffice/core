@@ -113,11 +113,10 @@ ScVbaAssistant::Name(  ) throw (css::script::BasicErrorException, css::uno::Runt
     return m_sName;
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaAssistant::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaAssistant") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaAssistant"));
 }
 
 uno::Sequence< rtl::OUString >

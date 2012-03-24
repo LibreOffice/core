@@ -160,12 +160,10 @@ ScVbaColorFormat::setSchemeColor( sal_Int32 _schemecolor ) throw (uno::RuntimeEx
     setRGB( nColor );
 }
 
-
-rtl::OUString&
+rtl::OUString
 ScVbaColorFormat::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaColorFormat") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaColorFormat"));
 }
 
 uno::Sequence< rtl::OUString >

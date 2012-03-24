@@ -75,11 +75,10 @@ ScVbaPivotTables::getElementType() throw (uno::RuntimeException)
     return excel::XPivotTable::static_type(0);
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaPivotTables::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotTables") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotTables"));
 }
 
 css::uno::Sequence<rtl::OUString>

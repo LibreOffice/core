@@ -134,11 +134,10 @@ VbaWindowBase::setWidth( sal_Int32 _width ) throw (uno::RuntimeException)
     setPosSize( getWindow(), _width, css::awt::PosSize::WIDTH );
 }
 
-rtl::OUString&
+rtl::OUString
 VbaWindowBase::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaWindowBase") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaWindowBase"));
 }
 
 uno::Sequence< rtl::OUString >

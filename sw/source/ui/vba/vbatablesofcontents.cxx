@@ -173,11 +173,10 @@ SwVbaTablesOfContents::createCollectionObject( const uno::Any& aSource )
     return aSource;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaTablesOfContents::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaTablesOfContents") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTablesOfContents"));
 }
 
 uno::Sequence<rtl::OUString>

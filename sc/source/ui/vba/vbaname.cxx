@@ -210,11 +210,10 @@ ScVbaName::Delete() throw (css::uno::RuntimeException)
     mxNames->removeByName( mxNamedRange->getName() );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaName::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaName") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaName"));
 }
 
 uno::Sequence< rtl::OUString >

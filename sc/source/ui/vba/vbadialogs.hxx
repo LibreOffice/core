@@ -50,7 +50,7 @@ public:
     // XDialogs
     virtual void SAL_CALL Dummy() throw (css::uno::RuntimeException);
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 

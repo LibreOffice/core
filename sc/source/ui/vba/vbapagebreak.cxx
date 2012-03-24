@@ -95,11 +95,10 @@ uno::Reference< excel::XRange> ScVbaPageBreak<Ifc1>::Location() throw ( script::
 }
 
 template< typename Ifc1 >
-rtl::OUString&
+rtl::OUString
 ScVbaPageBreak<Ifc1>::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPageBreak") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaPageBreak"));
 }
 
 template< typename Ifc1 >
@@ -118,11 +117,10 @@ ScVbaPageBreak<Ifc1>::getServiceNames()
 template class ScVbaPageBreak< excel::XHPageBreak >;
 
 /* class ScVbaHPageBreak */
-rtl::OUString&
+rtl::OUString
 ScVbaHPageBreak::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaHPageBreak") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaHPageBreak"));
 }
 
 uno::Sequence< rtl::OUString >
@@ -152,11 +150,10 @@ ScVbaVPageBreak::~ScVbaVPageBreak()
 {
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaVPageBreak::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaVPageBreak") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaVPageBreak"));
 }
 
 uno::Sequence< rtl::OUString >

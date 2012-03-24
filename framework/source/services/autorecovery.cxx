@@ -199,17 +199,17 @@ static const ::rtl::OUString CMD_DO_SESSION_RESTORE(RTL_CONSTASCII_USTRINGPARAM(
 static const ::rtl::OUString CMD_DO_DISABLE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("/disableRecovery"));    // disable recovery and auto save (!) temp. for this office session
 static const ::rtl::OUString CMD_DO_SET_AUTOSAVE_STATE(RTL_CONSTASCII_USTRINGPARAM("/setAutoSaveState"));    // disable/enable auto save (not crash save) for this office session
 
-static const ::rtl::OUString REFERRER_USER(RTL_CONSTASCII_USTRINGPARAM("private:user"));
+static const char REFERRER_USER[] = "private:user";
 
-static const ::rtl::OUString PROP_DISPATCH_ASYNCHRON(RTL_CONSTASCII_USTRINGPARAM("DispatchAsynchron"));
-static const ::rtl::OUString PROP_PROGRESS(RTL_CONSTASCII_USTRINGPARAM("StatusIndicator"));
-static const ::rtl::OUString PROP_SAVEPATH(RTL_CONSTASCII_USTRINGPARAM("SavePath"));
-static const ::rtl::OUString PROP_ENTRY_ID(RTL_CONSTASCII_USTRINGPARAM("EntryID"));
-static const ::rtl::OUString PROP_AUTOSAVE_STATE(RTL_CONSTASCII_USTRINGPARAM("AutoSaveState"));
+static const char PROP_DISPATCH_ASYNCHRON[] = "DispatchAsynchron";
+static const char PROP_PROGRESS[] = "StatusIndicator";
+static const char PROP_SAVEPATH[] = "SavePath";
+static const char PROP_ENTRY_ID[] = "EntryID";
+static const char PROP_AUTOSAVE_STATE[] = "AutoSaveState";
 
-static const ::rtl::OUString OPERATION_START(RTL_CONSTASCII_USTRINGPARAM("start"));
-static const ::rtl::OUString OPERATION_STOP(RTL_CONSTASCII_USTRINGPARAM("stop"));
-static const ::rtl::OUString OPERATION_UPDATE(RTL_CONSTASCII_USTRINGPARAM("update"));
+static const char OPERATION_START[] = "start";
+static const char OPERATION_STOP[] = "stop";
+static const char OPERATION_UPDATE[] = "update";
 
 static const sal_Int32       MIN_DISCSPACE_DOCSAVE                  =   5; // [MB]
 static const sal_Int32       MIN_DISCSPACE_CONFIGSAVE               =   1; // [MB]
@@ -2483,7 +2483,7 @@ AutoRecovery::ETimerType AutoRecovery::implts_openDocs(const DispatchParams& aPa
         ::comphelper::MediaDescriptor lDescriptor;
 
         // its an UI feature - so the "USER" itself must be set as referer
-        lDescriptor[::comphelper::MediaDescriptor::PROP_REFERRER()] <<= REFERRER_USER;
+        lDescriptor[::comphelper::MediaDescriptor::PROP_REFERRER()] <<= ::rtl::OUString(REFERRER_USER);
         lDescriptor[::comphelper::MediaDescriptor::PROP_SALVAGEDFILE()] <<= ::rtl::OUString();
 
         // recovered documents are loaded hidden, and shown all at once, later
@@ -2930,7 +2930,7 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
     aEvent.FeatureURL.Complete   = AutoRecovery::implst_getJobDescription(eJob);
     aEvent.FeatureDescriptor     = sEventType;
 
-    if (sEventType.equals(OPERATION_UPDATE) && pInfo)
+    if (pInfo && sEventType.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(OPERATION_UPDATE)))
     {
         // pack rInfo for transport via UNO
         ::comphelper::NamedValueCollection aInfo;

@@ -310,11 +310,10 @@ ScVbaWorkbooks::Open( const rtl::OUString& rFileName, const uno::Any& /*UpdateLi
     return aRet;
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaWorkbooks::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWorkbooks") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWorkbooks"));
 }
 
 css::uno::Sequence<rtl::OUString>

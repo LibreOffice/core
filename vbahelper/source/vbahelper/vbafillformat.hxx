@@ -48,7 +48,7 @@ private:
 private:
     void setFillStyle( css::drawing::FillStyle nFillStyle ) throw (css::uno::RuntimeException);
 protected:
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 
 public:

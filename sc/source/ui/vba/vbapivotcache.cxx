@@ -51,11 +51,11 @@ ScVbaPivotCache::Refresh() throw (css::uno::RuntimeException)
 {
     m_xTable->refresh();
 }
-rtl::OUString&
+
+rtl::OUString
 ScVbaPivotCache::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotCache") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotCache"));
 }
 
 uno::Sequence< rtl::OUString >

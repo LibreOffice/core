@@ -98,11 +98,10 @@ void SAL_CALL SwVbaListFormat::ConvertNumbersToText(  ) throw (css::uno::Runtime
     throw uno::RuntimeException( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("Not implemented") ), uno::Reference< uno::XInterface >() );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaListFormat::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaListFormat") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaListFormat"));
 }
 
 uno::Sequence< rtl::OUString >

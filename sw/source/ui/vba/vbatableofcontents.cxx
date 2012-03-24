@@ -102,11 +102,10 @@ void SAL_CALL SwVbaTableOfContents::Update(  ) throw (uno::RuntimeException)
     mxDocumentIndex->update();
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaTableOfContents::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaTableOfContents") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTableOfContents"));
 }
 
 uno::Sequence< rtl::OUString >

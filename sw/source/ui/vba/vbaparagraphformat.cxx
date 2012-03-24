@@ -557,11 +557,10 @@ sal_Int32 SwVbaParagraphFormat::getMSWordAlignment( sal_Int32 _alignment )
     return wdAlignment;
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaParagraphFormat::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaParagraphFormat") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaParagraphFormat"));
 }
 
 uno::Sequence< rtl::OUString >

@@ -252,11 +252,10 @@ void SAL_CALL SwVbaPageSetup::setSectionStart( ::sal_Int32 /*_sectionstart*/ ) t
     // #FIXME:
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaPageSetup::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaPageSetup") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaPageSetup"));
 }
 
 uno::Sequence< rtl::OUString >

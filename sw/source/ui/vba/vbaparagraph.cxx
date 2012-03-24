@@ -63,11 +63,10 @@ SwVbaParagraph::setStyle( const uno::Any& style ) throw ( uno::RuntimeException 
     xRange->setStyle( style );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaParagraph::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaParagraph") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaParagraph"));
 }
 
 uno::Sequence< rtl::OUString >
@@ -167,11 +166,10 @@ SwVbaParagraphs::createCollectionObject( const css::uno::Any& aSource )
     return uno::makeAny( uno::Reference< word::XParagraph >( new SwVbaParagraph( this, mxContext, mxTextDocument, xTextRange ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaParagraphs::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaParagraphs") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaParagraphs"));
 }
 
 css::uno::Sequence<rtl::OUString>

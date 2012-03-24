@@ -87,7 +87,7 @@ public:
     virtual void SAL_CALL setPaperSize( sal_Int32 paperSize ) throw (css::uno::RuntimeException);
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif

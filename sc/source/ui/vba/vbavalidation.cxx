@@ -324,11 +324,10 @@ ScVbaValidation::getFormula2() throw (uno::RuntimeException)
     return xCond->getFormula2();
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaValidation::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaValidation") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaValidation"));
 }
 
 uno::Sequence< rtl::OUString >

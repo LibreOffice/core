@@ -182,11 +182,10 @@ ScVbaUserForm::UnloadObject(  ) throw (uno::RuntimeException)
         m_xDialog->endExecute();
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaUserForm::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaUserForm") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaUserForm"));
 }
 
 uno::Sequence< rtl::OUString >

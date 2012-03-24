@@ -800,11 +800,10 @@ ScVbaFormat<Ifc1>::getXPropertyState() throw ( uno::RuntimeException )
 }
 
 template< typename Ifc1 >
-rtl::OUString&
+rtl::OUString
 ScVbaFormat<Ifc1>::getServiceImplName()
 {
-        static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFormat") );
-        return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaFormat"));
 }
 
 template< typename Ifc1 >

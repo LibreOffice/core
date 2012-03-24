@@ -225,10 +225,9 @@ Reference< XFoundFiles > SAL_CALL ScVbaFileSearch::getFoundFiles() throw (css::u
     return xFoundFiles;
 }
 
-rtl::OUString& ScVbaFileSearch::getServiceImplName()
+rtl::OUString ScVbaFileSearch::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaFileSearch") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaFileSearch"));
 }
 
 css::uno::Sequence< rtl::OUString > ScVbaFileSearch::getServiceNames()

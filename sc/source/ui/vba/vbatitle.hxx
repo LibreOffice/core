@@ -147,10 +147,9 @@ public:
         return static_cast< sal_Int32 >(nSOOrientation / 100) ;
     }
 // XHelperInterface
-    rtl::OUString& getServiceImplName()
+    rtl::OUString getServiceImplName()
     {
-        static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("TitleImpl") );
-        return sImplName;
+        return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("TitleImpl"));
     }
     css::uno::Sequence< rtl::OUString > getServiceNames()
     {

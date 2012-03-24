@@ -157,11 +157,10 @@ ScVbaFormatCondition::notifyRange() throw ( script::BasicErrorException )
     }
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaFormatCondition::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFormatCondition") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaFormatCondition"));
 }
 
 uno::Sequence< rtl::OUString >

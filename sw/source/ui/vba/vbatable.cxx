@@ -99,11 +99,10 @@ SwVbaTable::Columns( const uno::Any& index ) throw (uno::RuntimeException)
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString
 SwVbaTable::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaTable") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTable"));
 }
 
 uno::Sequence<rtl::OUString>

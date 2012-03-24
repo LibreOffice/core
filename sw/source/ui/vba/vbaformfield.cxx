@@ -116,11 +116,10 @@ uno::Any SAL_CALL SwVbaFormField::CheckBox() throw ( uno::RuntimeException )
     return uno::makeAny( uno::Reference< word::XCheckBox >( new SwVbaCheckBox( this, mxContext, mxModel, mxFormField ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaFormField::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaFormField") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFormField"));
 }
 
 uno::Sequence< rtl::OUString >

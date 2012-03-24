@@ -80,11 +80,10 @@ uno::Any SAL_CALL VbaSystemAXControl::getValue( const ::rtl::OUString& aProperty
 }
 
 //----------------------------------------------------------
-rtl::OUString&
+rtl::OUString
 VbaSystemAXControl::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM( "VbaSystemAXControl" ) );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaSystemAXControl"));
 }
 
 //----------------------------------------------------------

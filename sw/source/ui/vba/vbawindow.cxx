@@ -137,11 +137,10 @@ SwVbaWindow::ActivePane() throw (uno::RuntimeException)
     return uno::makeAny( uno::Reference< word::XPane >( new SwVbaPane( this,  mxContext, m_xModel ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaWindow::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaWindow") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaWindow"));
 }
 
 uno::Sequence< rtl::OUString >

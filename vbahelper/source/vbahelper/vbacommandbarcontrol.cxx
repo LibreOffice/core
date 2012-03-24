@@ -183,11 +183,10 @@ ScVbaCommandBarControl::Controls( const uno::Any& aIndex ) throw (script::BasicE
     return uno::makeAny( xCommandBarControls );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaCommandBarControl::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarControl") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarControl"));
 }
 
 uno::Sequence<rtl::OUString>
@@ -210,12 +209,12 @@ ScVbaCommandBarPopup::ScVbaCommandBarPopup( const css::uno::Reference< ov::XHelp
     m_xCurrentSettings->getByIndex( m_nPosition ) >>= m_aPropertyValues;
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaCommandBarPopup::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarPopup") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarPopup"));
 }
+
 uno::Sequence<rtl::OUString>
 ScVbaCommandBarPopup::getServiceNames()
 {
@@ -236,12 +235,12 @@ ScVbaCommandBarButton::ScVbaCommandBarButton( const css::uno::Reference< ov::XHe
     m_xCurrentSettings->getByIndex( m_nPosition ) >>= m_aPropertyValues;
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaCommandBarButton::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarButton") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaCommandBarButton"));
 }
+
 uno::Sequence<rtl::OUString>
 ScVbaCommandBarButton::getServiceNames()
 {

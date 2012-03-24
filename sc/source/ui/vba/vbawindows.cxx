@@ -238,11 +238,10 @@ ScVbaWindows::Arrange( ::sal_Int32 /*ArrangeStyle*/, const uno::Any& /*ActiveWor
 }
 
 
-rtl::OUString&
+rtl::OUString
 ScVbaWindows::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWindows") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWindows"));
 }
 
 css::uno::Sequence<rtl::OUString>

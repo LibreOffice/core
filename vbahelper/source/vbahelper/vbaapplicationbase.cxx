@@ -419,17 +419,16 @@ uno::Any SAL_CALL VbaApplicationBase::getVBE() throw (uno::RuntimeException)
             ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.vbide.VBE" ) ), aArgs, mxContext );
         return uno::Any( xVBE );
     }
-    catch( uno::Exception& )
+    catch( const uno::Exception& )
     {
     }
     return uno::Any();
 }
 
-rtl::OUString&
+rtl::OUString
 VbaApplicationBase::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("VbaApplicationBase") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("VbaApplicationBase"));
 }
 
 uno::Sequence<rtl::OUString>

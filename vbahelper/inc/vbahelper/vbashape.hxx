@@ -58,7 +58,7 @@ protected:
     virtual void addListeners();
     virtual void removeShapeListener() throw( css::uno::RuntimeException );
     virtual void removeShapesListener() throw( css::uno::RuntimeException );
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 public:
     ScVbaShape( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext, const css::uno::Reference< css::drawing::XShape >& xShape, const css::uno::Reference< css::drawing::XShapes >& xShapes, const css::uno::Reference< css::frame::XModel >& xModel, sal_Int32 nType ) throw ( css::lang::IllegalArgumentException );

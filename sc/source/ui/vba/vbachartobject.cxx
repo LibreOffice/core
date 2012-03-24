@@ -137,11 +137,10 @@ ScVbaChartObject::getChart() throw (css::uno::RuntimeException)
     return new ScVbaChart( this, mxContext, xEmbeddedObjectSupplier->getEmbeddedObject(), xTableChart );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaChartObject::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaChartObject") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaChartObject"));
 }
 
 uno::Sequence< rtl::OUString >

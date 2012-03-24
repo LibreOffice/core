@@ -250,12 +250,12 @@ SwVbaDocument::PageSetup( ) throw (uno::RuntimeException)
     return uno::makeAny( uno::Reference< word::XPageSetup >( new SwVbaPageSetup( this, mxContext, mxModel, xPageProps ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaDocument::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaDocument") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaDocument"));
 }
+
 uno::Any SAL_CALL
 SwVbaDocument::getAttachedTemplate() throw (uno::RuntimeException)
 {

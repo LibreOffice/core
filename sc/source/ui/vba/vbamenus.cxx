@@ -118,12 +118,12 @@ uno::Reference< excel::XMenu > SAL_CALL ScVbaMenus::Add( const rtl::OUString& Ca
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString
 ScVbaMenus::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaMenus") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaMenus"));
 }
+
 uno::Sequence<rtl::OUString>
 ScVbaMenus::getServiceNames()
 {

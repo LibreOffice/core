@@ -54,11 +54,10 @@ ScVbaFileDialog::~ScVbaFileDialog()
     }
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaFileDialog::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaFileDialog") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaFileDialog"));
 }
 
 css::uno::Sequence<rtl::OUString>

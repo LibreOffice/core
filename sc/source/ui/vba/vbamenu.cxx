@@ -66,12 +66,12 @@ ScVbaMenu::MenuItems( const uno::Any& aIndex ) throw (script::BasicErrorExceptio
     return uno::makeAny( xMenuItems );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaMenu::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaMenu") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaMenu"));
 }
+
 uno::Sequence<rtl::OUString>
 ScVbaMenu::getServiceNames()
 {

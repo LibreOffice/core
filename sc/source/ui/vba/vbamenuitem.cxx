@@ -64,12 +64,12 @@ ScVbaMenuItem::Delete( ) throw (script::BasicErrorException, uno::RuntimeExcepti
     m_xCommandBarControl->Delete();
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaMenuItem::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaMenuItem") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaMenuItem"));
 }
+
 uno::Sequence<rtl::OUString>
 ScVbaMenuItem::getServiceNames()
 {

@@ -60,7 +60,7 @@ public:
     virtual css::uno::Any SAL_CALL Range() throw ( css::uno::RuntimeException );
 
     // XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif /* SW_VBA_BOOKMARK_HXX */

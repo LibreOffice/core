@@ -300,11 +300,10 @@ ScVbaWSFunction::getExactName( const ::rtl::OUString& aApproximateName ) throw (
     return sName;
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaWSFunction::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaWSFunction") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaWSFunction"));
 }
 
 uno::Sequence< rtl::OUString >

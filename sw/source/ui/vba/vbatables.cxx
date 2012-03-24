@@ -191,11 +191,10 @@ SwVbaTables::createCollectionObject( const uno::Any& aSource )
 }
 
 // XHelperInterface
-rtl::OUString&
+rtl::OUString
 SwVbaTables::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaTables") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaTables"));
 }
 
 // XEnumerationAccess

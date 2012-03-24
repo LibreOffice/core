@@ -73,7 +73,7 @@ public:
     InheritedHelperInterfaceImpl() {}
     InheritedHelperInterfaceImpl( const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxContext( xContext ) {}
     InheritedHelperInterfaceImpl( const css::uno::Reference< ov::XHelperInterface >& xParent, const css::uno::Reference< css::uno::XComponentContext >& xContext ) : mxParent( xParent ), mxContext( xContext ) {}
-    virtual rtl::OUString& getServiceImplName() = 0;
+    virtual rtl::OUString getServiceImplName() = 0;
     virtual css::uno::Sequence<rtl::OUString> getServiceNames() = 0;
 
     // XHelperInterface Methods
@@ -146,10 +146,9 @@ public:
     implementation name.
  */
 #define VBAHELPER_IMPL_GETSERVICEIMPLNAME( classname ) \
-::rtl::OUString& classname::getServiceImplName() \
+::rtl::OUString classname::getServiceImplName() \
 { \
-    static ::rtl::OUString saImplName = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( #classname ) ); \
-    return saImplName; \
+    return ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( #classname ) ); \
 }
 
 // ----------------------------------------------------------------------------
@@ -176,7 +175,7 @@ css::uno::Sequence< ::rtl::OUString > classname::getServiceNames() \
     declaration.
  */
 #define VBAHELPER_DECL_XHELPERINTERFACE \
-    virtual ::rtl::OUString& getServiceImplName(); \
+    virtual ::rtl::OUString getServiceImplName(); \
     virtual css::uno::Sequence< ::rtl::OUString > getServiceNames();
 
 // ----------------------------------------------------------------------------

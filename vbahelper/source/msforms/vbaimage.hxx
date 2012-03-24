@@ -42,7 +42,7 @@ public:
     virtual sal_Int32 SAL_CALL getBackColor() throw (css::uno::RuntimeException);
     virtual void SAL_CALL setBackColor( sal_Int32 nBackColor ) throw (css::uno::RuntimeException);
     //XHelperInterface
-    virtual rtl::OUString& getServiceImplName();
+    virtual rtl::OUString getServiceImplName();
     virtual css::uno::Sequence<rtl::OUString> getServiceNames();
 };
 #endif //SC_VBA_IMAGE_HXX

@@ -159,11 +159,10 @@ void SAL_CALL ScVbaToggleButton::setLocked( sal_Bool bLocked ) throw (uno::Runti
     ScVbaControl::setLocked( bLocked );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaToggleButton::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaToggleButton") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaToggleButton"));
 }
 
 uno::Sequence< rtl::OUString >

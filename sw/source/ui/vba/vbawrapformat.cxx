@@ -221,11 +221,10 @@ void SAL_CALL SwVbaWrapFormat::setDistanceRight( float _distanceright ) throw (u
     setDistance( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("RightMargin") ), _distanceright );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaWrapFormat::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaWrapFormat") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaWrapFormat"));
 }
 
 uno::Sequence< rtl::OUString >

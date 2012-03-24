@@ -87,11 +87,10 @@ SwVbaFrames::createCollectionObject( const css::uno::Any& aSource )
     return uno::makeAny( uno::Reference< word::XFrame > ( new SwVbaFrame( this, mxContext, mxModel, xTextFrame ) ) );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaFrames::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaFrames") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaFrames"));
 }
 
 css::uno::Sequence<rtl::OUString>

@@ -44,11 +44,10 @@ ScVbaPivotTable::PivotCache() throw (uno::RuntimeException)
     return new ScVbaPivotCache( uno::Reference< XHelperInterface >(), mxContext, m_xTable );
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaPivotTable::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotTable") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaPivotTable"));
 }
 
 uno::Sequence< rtl::OUString >

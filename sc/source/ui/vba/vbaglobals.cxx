@@ -281,11 +281,10 @@ ScVbaGlobals::getAvailableServiceNames(  ) throw (uno::RuntimeException)
     return serviceNames;
 }
 
-rtl::OUString&
+rtl::OUString
 ScVbaGlobals::getServiceImplName()
 {
-        static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("ScVbaGlobals") );
-        return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ScVbaGlobals"));
 }
 
 uno::Sequence< rtl::OUString >

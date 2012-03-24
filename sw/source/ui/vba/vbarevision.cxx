@@ -82,11 +82,10 @@ SwVbaRevision::Reject( ) throw ( css::uno::RuntimeException )
         pDoc->RejectRedline( GetPosition(), sal_True );
 }
 
-rtl::OUString&
+rtl::OUString
 SwVbaRevision::getServiceImplName()
 {
-    static rtl::OUString sImplName( RTL_CONSTASCII_USTRINGPARAM("SwVbaRevision") );
-    return sImplName;
+    return rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("SwVbaRevision"));
 }
 
 uno::Sequence< rtl::OUString >
