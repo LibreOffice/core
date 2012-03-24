@@ -143,18 +143,6 @@ public:
         const ::com::sun::star::uno::Reference<
                  ::com::sun::star::xml::sax::XLocator> & rLocator); /// location
 
-    void AddRecord(
-        sal_Int32 nId, /// error ID == error flags + error class + error number
-        const ::com::sun::star::uno::Sequence<
-                  ::rtl::OUString> & rParams,  /// parameters for error message
-        const ::rtl::OUString& rExceptionMessage); /// original exception string
-
-    void AddRecord(
-        sal_Int32 nId, /// error ID == error flags + error class + error number
-        const ::com::sun::star::uno::Sequence<
-                  ::rtl::OUString> & rParams); /// parameters for error message
-
-
     /**
      * throw a SAXParseException that describes the first error that matches
      * the given mask
