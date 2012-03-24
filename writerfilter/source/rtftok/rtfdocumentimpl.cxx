@@ -2768,6 +2768,7 @@ int RTFDocumentImpl::dispatchToggle(RTFKeyword nKeyword, bool bParam, int nParam
         case RTF_STRIKED: nSprm = NS_sprm::LN_CFDStrike; break;
         case RTF_SCAPS: nSprm = NS_sprm::LN_CFSmallCaps; break;
         case RTF_IMPR: nSprm = NS_sprm::LN_CFImprint; break;
+        case RTF_CAPS: nSprm = NS_sprm::LN_CFCaps; break;
         default: break;
     }
     if (nSprm >= 0)

@@ -28,6 +28,7 @@
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/table/BorderLine2.hpp>
 #include <com/sun/star/table/BorderLineStyle.hpp>
@@ -71,6 +72,7 @@ public:
     void testN751020();
     void testFdo47326();
     void testFdo47036();
+    void testFdo46955();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -87,6 +89,7 @@ public:
     CPPUNIT_TEST(testN751020);
     CPPUNIT_TEST(testFdo47326);
     CPPUNIT_TEST(testFdo47036);
+    CPPUNIT_TEST(testFdo46955);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -423,6 +426,27 @@ void RtfModelTest::testFdo47036()
     uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
     uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
     CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
+}
+
+void RtfModelTest::testFdo46955()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo46955.rtf")));
+
+    uno::Reference<text::XTextDocument> xTextDocument(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XEnumerationAccess> xParaEnumAccess(xTextDocument->getText(), uno::UNO_QUERY);
+    uno::Reference<container::XEnumeration> xParaEnum = xParaEnumAccess->createEnumeration();
+    while (xParaEnum->hasMoreElements())
+    {
+        uno::Reference<container::XEnumerationAccess> xRangeEnumAccess(xParaEnum->nextElement(), uno::UNO_QUERY);
+        uno::Reference<container::XEnumeration> xRangeEnum = xRangeEnumAccess->createEnumeration();
+        while (xRangeEnum->hasMoreElements())
+        {
+            uno::Reference<beans::XPropertySet> xPropertySet(xRangeEnum->nextElement(), uno::UNO_QUERY);
+            sal_Int16 nValue;
+            xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("CharCaseMap"))) >>= nValue;
+            CPPUNIT_ASSERT_EQUAL(style::CaseMap::UPPERCASE, nValue);
+        }
+    }
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
