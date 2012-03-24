@@ -418,6 +418,11 @@ void RtfModelTest::testFdo47036()
     }
     // The image at the document start was ignored.
     CPPUNIT_ASSERT_EQUAL(1, nAtCharacter);
+
+    // There should be 2 textboxes, not 4
+    uno::Reference<text::XTextFramesSupplier> xTextFramesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextFramesSupplier->getTextFrames(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(2), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
