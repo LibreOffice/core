@@ -3493,6 +3493,7 @@ RTFFrame::RTFFrame(RTFParserState* pParserState)
     nHoriAnchor(0),
     nVertAlign(0),
     nVertAnchor(0),
+    nHRule(NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_auto),
     nAnchorType(0)
 {
 }
@@ -3580,7 +3581,12 @@ RTFSprms RTFFrame::getSprms()
                 break;
             case NS_sprm::LN_PWHeightAbs:
                 if ( nH != 0 )
-                    pValue.reset(new RTFValue(nH));
+                {
+                    if (nHRule == NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_exact)
+                        pValue.reset(new RTFValue(-nH)); // The negative value just sets nHRule
+                    else
+                        pValue.reset(new RTFValue(nH));
+                }
                 break;
             case NS_sprm::LN_PDxaWidth:
                 if ( nW != 0 )
@@ -3610,12 +3616,8 @@ RTFSprms RTFFrame::getSprms()
                 break;
             case NS_ooxml::LN_CT_FramePr_hRule:
                 {
-                    sal_Int32 nHRule = NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_auto;
                     if ( nH < 0 )
-                    {
                         nHRule = NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_exact;
-                        nH = -nH; // The negative value just sets nHRule
-                    }
                     else if ( nH > 0 )
                         nHRule = NS_ooxml::LN_Value_wordprocessingml_ST_HeightRule_atLeast;
                     pValue.reset(new RTFValue(nHRule));

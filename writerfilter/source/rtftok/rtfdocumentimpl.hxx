@@ -214,6 +214,7 @@ namespace writerfilter {
                 sal_Int32 nX, nY, nW, nH;
                 sal_Int32 nHoriPadding, nVertPadding;
                 sal_Int32 nHoriAlign, nHoriAnchor, nVertAlign, nVertAnchor;
+                Id nHRule;
             public:
                 RTFFrame(RTFParserState* pParserState);
                 sal_Int16 nAnchorType;
