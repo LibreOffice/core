@@ -901,16 +901,17 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
 
         if (pDateHelper && pNumInfo)
         {
+            sal_Int32 nDatePart = pCache->GetGroupType(nColumn);
             const ScDPItemData* pData = pCache->GetItemDataById(nSourceDim, rItems[i]);
             if (pData->GetType() == ScDPItemData::Value)
             {
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
                 sal_Int32 nPartValue = ScDPUtil::getDatePartValue(
-                    pData->GetValue(), *pNumInfo, pDateHelper->GetDatePart(), pFormatter);
+                    pData->GetValue(), *pNumInfo, nDatePart, pFormatter);
                 rtl::OUString aName = ScDPUtil::getDateGroupName(
-                    pDateHelper->GetDatePart(), nPartValue, pFormatter, pNumInfo->mfStart, pNumInfo->mfEnd);
+                    nDatePart, nPartValue, pFormatter, pNumInfo->mfStart, pNumInfo->mfEnd);
 
-                ScDPItemData aItem(pDateHelper->GetDatePart(), nPartValue);
+                ScDPItemData aItem(nDatePart, nPartValue);
                 rItems[i] = pCache->GetIdByItemData(nColumn, aItem);
             }
         }

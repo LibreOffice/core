@@ -72,9 +72,10 @@ public:
     {
         ItemsType maItems;
         ScDPNumGroupInfo maInfo;
+        sal_Int32 mnGroupType;
 
         GroupItems();
-        GroupItems(const ScDPNumGroupInfo& rInfo);
+        GroupItems(const ScDPNumGroupInfo& rInfo, sal_Int32 nGroupType);
     };
 
     struct Field : boost::noncopyable
@@ -132,11 +133,12 @@ public:
     SCROW GetIdByItemData(long nDim, const ScDPItemData& rItem) const;
     rtl::OUString GetFormattedString(long nDim, const ScDPItemData& rItem) const;
     long AppendGroupField();
-    void ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo);
+    void ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nGroupType);
     SCROW SetGroupItem(long nDim, const ScDPItemData& rData);
     void GetGroupDimMemberIds(long nDim, std::vector<SCROW>& rIds) const;
     void ClearGroupFields();
     const ScDPNumGroupInfo* GetNumGroupInfo(long nDim) const;
+    sal_Int32 GetGroupType(long nDim) const;
 
     SCCOL GetDimensionIndex(const rtl::OUString& sName) const;
     sal_uLong GetNumberFormat( long nDim ) const;

@@ -357,7 +357,7 @@ void fillDateGroupDimension(
     }
 
     // Now, populate the group items in the cache.
-    rCache.ResetGroupItems(nGroupDim, rDateInfo);
+    rCache.ResetGroupItems(nGroupDim, rDateInfo, nDatePart);
 
     for (sal_Int32 nValue = nStart; nValue <= nEnd; ++nValue)
         rCache.SetGroupItem(nGroupDim, ScDPItemData(nDatePart, nValue));
@@ -408,7 +408,7 @@ void ScDPSaveGroupDimension::AddToCache(ScDPCache& rCache) const
         return;
     }
 
-    rCache.ResetGroupItems(nDim, aDateInfo);
+    rCache.ResetGroupItems(nDim, aDateInfo, 0);
     {
         ScDPSaveGroupItemVec::const_iterator it = aGroups.begin(), itEnd = aGroups.end();
         for (; it != itEnd; ++it)
@@ -541,7 +541,7 @@ void ScDPSaveNumGroupDimension::AddToCache(ScDPCache& rCache) const
         long nLoopCount = 0;
         double fLoop = aGroupInfo.mfStart;
 
-        rCache.ResetGroupItems(nDim, aGroupInfo);
+        rCache.ResetGroupItems(nDim, aGroupInfo, 0);
 
         // Use "less than" instead of "less or equal" for the loop - don't
         // create a group that consists only of the end value. Instead, the

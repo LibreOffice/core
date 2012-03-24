@@ -62,10 +62,10 @@ using ::com::sun::star::uno::Reference;
 using ::com::sun::star::uno::UNO_QUERY;
 using ::com::sun::star::uno::UNO_QUERY_THROW;
 
-ScDPCache::GroupItems::GroupItems() {}
+ScDPCache::GroupItems::GroupItems() : mnGroupType(0) {}
 
-ScDPCache::GroupItems::GroupItems(const ScDPNumGroupInfo& rInfo) :
-    maInfo(rInfo) {}
+ScDPCache::GroupItems::GroupItems(const ScDPNumGroupInfo& rInfo, sal_Int32 nGroupType) :
+    maInfo(rInfo), mnGroupType(nGroupType) {}
 
 ScDPCache::Field::Field() : mnNumFormat(0) {}
 
@@ -1019,7 +1019,7 @@ long ScDPCache::AppendGroupField()
     return static_cast<long>(maFields.size() + maGroupFields.size() - 1);
 }
 
-void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo)
+void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo, sal_Int32 nGroupType)
 {
     if (nDim < 0)
         return;
@@ -1027,7 +1027,7 @@ void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo)
     long nSourceCount = static_cast<long>(maFields.size());
     if (nDim < nSourceCount)
     {
-        maFields.at(nDim).mpGroup.reset(new GroupItems(rNumInfo));
+        maFields.at(nDim).mpGroup.reset(new GroupItems(rNumInfo, nGroupType));
         return;
     }
 
@@ -1037,6 +1037,7 @@ void ScDPCache::ResetGroupItems(long nDim, const ScDPNumGroupInfo& rNumInfo)
         GroupItems& rGI = maGroupFields[nDim];
         rGI.maItems.clear();
         rGI.maInfo = rNumInfo;
+        rGI.mnGroupType = nGroupType;
     }
 }
 
@@ -1130,6 +1131,27 @@ const ScDPNumGroupInfo* ScDPCache::GetNumGroupInfo(long nDim) const
         return &maGroupFields.at(nDim).maInfo;
 
     return NULL;
+}
+
+sal_Int32 ScDPCache::GetGroupType(long nDim) const
+{
+    if (nDim < 0)
+        return 0;
+
+    long nSourceCount = static_cast<long>(maFields.size());
+    if (nDim < nSourceCount)
+    {
+        if (!maFields.at(nDim).mpGroup)
+            return 0;
+
+        return maFields[nDim].mpGroup->mnGroupType;
+    }
+
+    nDim -= nSourceCount;
+    if (nDim < static_cast<long>(maGroupFields.size()))
+        return maGroupFields.at(nDim).mnGroupType;
+
+    return 0;
 }
 
 SCROW ScDPCache::GetOrder(long /*nDim*/, SCROW nIndex) const
