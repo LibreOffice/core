@@ -665,6 +665,7 @@ bool ScDBFunc::MakePivotTable(
     bool bAllowMove = (pDPObj != NULL);   // allow re-positioning when editing existing table
 
     ScDBDocFunc aFunc( *pDocSh );
+    pDPObj->ReloadGroupTableData();
     bool bSuccess = aFunc.DataPilotUpdate(pDPObj, &aObj, true, false, bAllowMove);
 
     CursorPosChanged();     // shells may be switched

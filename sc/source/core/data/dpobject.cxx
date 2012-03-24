@@ -560,8 +560,8 @@ void ScDPObject::ReloadGroupTableData()
         return;
 
     const ScDPDimensionSaveData* pDimData = pSaveData->GetExistingDimensionData();
-    if (!pDimData)
-        // No dimension data. Most likey it doesn't have any group dimensions.
+    if (!pDimData || !pDimData->HasGroupDimensions())
+        // No group dimensions exist.
         return;
 
     ScDPGroupTableData* pData = dynamic_cast<ScDPGroupTableData*>(mpTableData.get());
@@ -581,6 +581,7 @@ void ScDPObject::ReloadGroupTableData()
         pDimData->WriteToData(*pGroupData);
         mpTableData = pGroupData;
     }
+
     bSettingsChanged = true;
 }
 

@@ -1111,6 +1111,27 @@ void ScDPCache::ClearGroupFields()
     std::for_each(maFields.begin(), maFields.end(), ClearGroupItems());
 }
 
+const ScDPNumGroupInfo* ScDPCache::GetNumGroupInfo(long nDim) const
+{
+    if (nDim < 0)
+        return NULL;
+
+    long nSourceCount = static_cast<long>(maFields.size());
+    if (nDim < nSourceCount)
+    {
+        if (!maFields.at(nDim).mpGroup)
+            return NULL;
+
+        return &maFields[nDim].mpGroup->maInfo;
+    }
+
+    nDim -= nSourceCount;
+    if (nDim < static_cast<long>(maGroupFields.size()))
+        return &maGroupFields.at(nDim).maInfo;
+
+    return NULL;
+}
+
 SCROW ScDPCache::GetOrder(long /*nDim*/, SCROW nIndex) const
 {
     return nIndex;

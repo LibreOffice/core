@@ -897,17 +897,18 @@ void ScDPGroupTableData::FillGroupValues(vector<SCROW>& rItems, const vector<lon
             }
         }
 
-        if ( pDateHelper )
+        const ScDPNumGroupInfo* pNumInfo = pCache->GetNumGroupInfo(nColumn);
+
+        if (pDateHelper && pNumInfo)
         {
             const ScDPItemData* pData = pCache->GetItemDataById(nSourceDim, rItems[i]);
             if (pData->GetType() == ScDPItemData::Value)
             {
                 SvNumberFormatter* pFormatter = pDoc->GetFormatTable();
-                const ScDPNumGroupInfo& rNumInfo = pDateHelper->GetNumInfo();
                 sal_Int32 nPartValue = ScDPUtil::getDatePartValue(
-                    pData->GetValue(), rNumInfo, pDateHelper->GetDatePart(), pFormatter);
+                    pData->GetValue(), *pNumInfo, pDateHelper->GetDatePart(), pFormatter);
                 rtl::OUString aName = ScDPUtil::getDateGroupName(
-                    pDateHelper->GetDatePart(), nPartValue, pFormatter, rNumInfo.mfStart, rNumInfo.mfEnd);
+                    pDateHelper->GetDatePart(), nPartValue, pFormatter, pNumInfo->mfStart, pNumInfo->mfEnd);
 
                 ScDPItemData aItem(pDateHelper->GetDatePart(), nPartValue);
                 rItems[i] = pCache->GetIdByItemData(nColumn, aItem);
@@ -1077,8 +1078,7 @@ void ScDPGroupTableData::Dump() const
     {
         cout << "* dimension: " << i << endl;
         const ScDPNumGroupDimension& rGrp = pNumGroups[i];
-        const ScDPNumGroupInfo& rInfo = rGrp.GetInfo();
-        cout << "  num group enabled: " << rInfo.mbEnable << endl;
+        rGrp.GetInfo().Dump();
     }
     cout << "---" << endl;
 }
