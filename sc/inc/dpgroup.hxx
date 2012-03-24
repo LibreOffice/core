@@ -112,8 +112,6 @@ public:
     const ScDPGroupItem* GetGroupForName( const ScDPItemData& rName ) const;  // rName = entry in group dim.
     const ScDPGroupItem* GetGroupByIndex( size_t nIndex ) const;
 
-    const ScDPDateGroupHelper* GetDateHelper() const    { return pDateHelper; }
-
     void        MakeDateHelper( const ScDPNumGroupInfo& rInfo, sal_Int32 nPart );
 
     void        DisposeData();
@@ -140,8 +138,6 @@ public:
     ScDPNumGroupDimension&  operator=( const ScDPNumGroupDimension& rOther );
 
     const ScDPNumGroupInfo& GetInfo() const     { return aGroupInfo; }
-
-    const ScDPDateGroupHelper* GetDateHelper() const    { return pDateHelper; }
 
     const std::vector<SCROW>& GetNumEntries(SCCOL nSourceDim, const ScDPCache* pCache) const;
 

@@ -722,6 +722,7 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
 
     // Go through all the filtered field names and process them appropriately.
 
+    const ScDPCache* pCache = GetCacheTable().getCache();
     vector<ScDPCacheTable::Criterion>::const_iterator itrEnd = rCriteria.end();
     GroupFieldMapType::const_iterator itrGrpEnd = aGroupFieldIds.end();
     for (vector<ScDPCacheTable::Criterion>::const_iterator itr = rCriteria.begin(); itr != itrEnd; ++itr)
@@ -740,20 +741,23 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
                 ScDPCacheTable::Criterion aCri;
                 aCri.mnFieldIndex = itr->mnFieldIndex;
                 const ScDPNumGroupDimension& rNumGrpDim = pNumGroups[itr->mnFieldIndex];
-                const ScDPDateGroupHelper* pDateHelper = rNumGrpDim.GetDateHelper();
+                const ScDPNumGroupInfo* pNumInfo = pCache->GetNumGroupInfo(itr->mnFieldIndex);
 
-                if (pDateHelper)
+                if (pNumInfo)
                 {
-                    // grouped by dates.
-                    aCri.mpFilter.reset(
-                        new ScDPGroupDateFilter(
-                            pFilter->getMatchValue(), *pDoc->GetFormatTable()->GetNullDate(), pDateHelper->GetNumInfo()));
-                }
-                else
-                {
-                    // This dimension is grouped by numeric ranges.
-                    aCri.mpFilter.reset(
-                        new ScDPGroupNumFilter(pFilter->getMatchValue(), rNumGrpDim.GetInfo()));
+                    if (rNumGrpDim.IsDateDimension())
+                    {
+                        // grouped by dates.
+                        aCri.mpFilter.reset(
+                            new ScDPGroupDateFilter(
+                                pFilter->getMatchValue(), *pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
+                    }
+                    else
+                    {
+                        // This dimension is grouped by numeric ranges.
+                        aCri.mpFilter.reset(
+                            new ScDPGroupNumFilter(pFilter->getMatchValue(), *pNumInfo));
+                    }
                 }
 
                 aNewCriteria.push_back(aCri);
@@ -770,16 +774,17 @@ void ScDPGroupTableData::ModifyFilterCriteria(vector<ScDPCacheTable::Criterion>&
 
             const ScDPGroupDimension* pGrpDim = itrGrp->second;
             long nSrcDim = pGrpDim->GetSourceDim();
-            const ScDPDateGroupHelper* pDateHelper = pGrpDim->GetDateHelper();
+            long nGrpDim = pGrpDim->GetGroupDim();
+            const ScDPNumGroupInfo* pNumInfo = pCache->GetNumGroupInfo(nGrpDim);
 
-            if (pDateHelper)
+            if (pGrpDim->IsDateDimension() && pNumInfo)
             {
                 // external number group
                 ScDPCacheTable::Criterion aCri;
                 aCri.mnFieldIndex = nSrcDim;  // use the source dimension, not the group dimension.
                 aCri.mpFilter.reset(
                     new ScDPGroupDateFilter(
-                        pFilter->getMatchValue(), *pDoc->GetFormatTable()->GetNullDate(), pDateHelper->GetNumInfo()));
+                        pFilter->getMatchValue(), *pDoc->GetFormatTable()->GetNullDate(), *pNumInfo));
 
                 aNewCriteria.push_back(aCri);
             }
@@ -960,14 +965,14 @@ sal_Bool ScDPGroupTableData::IsNumOrDateGroup(long nDimension) const
     if ( nDimension < nSourceCount )
     {
         return pNumGroups[nDimension].GetInfo().mbEnable ||
-               pNumGroups[nDimension].GetDateHelper();
+               pNumGroups[nDimension].IsDateDimension();
     }
 
     for ( ScDPGroupDimensionVec::const_iterator aIter(aGroups.begin()); aIter != aGroups.end(); aIter++ )
     {
         const ScDPGroupDimension& rDim = *aIter;
         if ( rDim.GetGroupDim() == nDimension )
-            return ( rDim.GetDateHelper() != NULL );
+            return rDim.IsDateDimension();
     }
 
     return false;
@@ -981,8 +986,7 @@ sal_Bool ScDPGroupTableData::IsInGroup( const ScDPItemData& rGroupData, long nGr
         const ScDPGroupDimension& rDim = *aIter;
         if ( rDim.GetGroupDim() == nGroupIndex && rDim.GetSourceDim() == nBaseIndex )
         {
-            const ScDPDateGroupHelper* pGroupDateHelper = rDim.GetDateHelper();
-            if ( pGroupDateHelper )
+            if (rDim.IsDateDimension())
             {
                 return isDateInGroup(rGroupData, rBaseData);
             }
@@ -1017,12 +1021,12 @@ sal_Bool ScDPGroupTableData::HasCommonElement( const ScDPItemData& rFirstData, l
     }
     if ( pFirstDim && pSecondDim )
     {
-        const ScDPDateGroupHelper* pFirstDateHelper = pFirstDim->GetDateHelper();
-        const ScDPDateGroupHelper* pSecondDateHelper = pSecondDim->GetDateHelper();
-        if ( pFirstDateHelper || pSecondDateHelper )
+        bool bFirstDate = pFirstDim->IsDateDimension();
+        bool bSecondDate = pSecondDim->IsDateDimension();
+        if (bFirstDate || bSecondDate)
         {
             // If one is a date group dimension, the other one must be, too.
-            if ( !pFirstDateHelper || !pSecondDateHelper )
+            if (!bFirstDate || !bSecondDate)
             {
                 OSL_FAIL( "mix of date and non-date groups" );
                 return true;
