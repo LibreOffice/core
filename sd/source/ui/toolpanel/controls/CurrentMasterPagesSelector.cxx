@@ -38,7 +38,6 @@
 #include "EventMultiplexer.hxx"
 #include "app.hrc"
 #include "DrawDocShell.hxx"
-#include "DrawViewShell.hxx"
 #include "res_bmp.hrc"
 #include "sdresid.hxx"
 

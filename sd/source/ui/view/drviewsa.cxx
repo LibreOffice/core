@@ -55,14 +55,12 @@
 
 #include <sfx2/viewfrm.hxx>
 #include <svx/fmshell.hxx>
-#include <sfx2/dispatch.hxx>
 #include <svtools/cliplistener.hxx>
 #include <svx/float3d.hxx>
 #include "helpids.h"
 
 #include "view/viewoverlaymanager.hxx"
 #include "app.hrc"
-#include "helpids.h"
 #include "strings.hrc"
 #include "res_bmp.hrc"
 #include "sdpage.hxx"
@@ -76,7 +74,6 @@
 #include "drawview.hxx"
 #include "SdUnoDrawView.hxx"
 #include "ViewShellBase.hxx"
-#include "SdUnoDrawView.hxx"
 #include "slideshow.hxx"
 #include "ToolBarManager.hxx"
 #include "annotationmanager.hxx"

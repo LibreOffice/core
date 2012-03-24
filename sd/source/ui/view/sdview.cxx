@@ -79,7 +79,6 @@
 #include "undo/undomanager.hxx"
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
-#include <svx/sdr/contact/displayinfo.hxx>
 #include "EventMultiplexer.hxx"
 #include "ViewShellBase.hxx"
 #include "ViewShellManager.hxx"

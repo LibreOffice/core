@@ -38,7 +38,6 @@
 #include "res_bmp.hrc"
 #include "slideshow.hxx"
 #include "ViewShellBase.hxx"
-#include "slideshow.hxx"
 #include "sdresid.hxx"
 #include "helpids.h"
 #include "strings.hrc"

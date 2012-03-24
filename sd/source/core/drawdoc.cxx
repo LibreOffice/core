@@ -46,7 +46,6 @@
 #include <svx/dialogs.hrc>
 #include "Outliner.hxx"
 #include "app.hxx"
-#include <editeng/eeitem.hxx>
 #include <editeng/editstat.hxx>
 #include <editeng/fontitem.hxx>
 #include <svl/flagitem.hxx>

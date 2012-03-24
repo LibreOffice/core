@@ -50,7 +50,6 @@
 #include <svx/zoomitem.hxx>
 #include <sfx2/request.hxx>
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 
 namespace sd {
 

@@ -62,7 +62,6 @@
 #include "View.hxx"
 #include "slideshow.hxx"
 #include "fuhhconv.hxx"
-#include "slideshow.hxx"
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;

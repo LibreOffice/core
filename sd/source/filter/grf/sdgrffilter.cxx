@@ -79,7 +79,6 @@
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/document/XFilter.hpp>
 #include <com/sun/star/document/XExporter.hpp>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <com/sun/star/drawing/XDrawView.hpp>
 #include "../../ui/inc/DrawController.hxx"

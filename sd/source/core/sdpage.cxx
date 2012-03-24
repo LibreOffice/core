@@ -45,7 +45,6 @@
 #include <svx/svdoole2.hxx>
 #include <svx/svdograf.hxx>
 #include <svx/svdopage.hxx>
-#include <svx/svdopage.hxx>
 #include <sfx2/printer.hxx>
 #include <basic/basmgr.hxx>
 #include <editeng/pbinitem.hxx>
@@ -59,12 +58,9 @@
 #include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/svditer.hxx>
 
-#include <editeng/adjitem.hxx>
-
 #include "../ui/inc/DrawDocShell.hxx"
 #include "Outliner.hxx"
 #include "app.hrc"
-#include "eetext.hxx"
 #include "drawdoc.hxx"
 #include "sdpage.hxx"
 #include "pglink.hxx"
@@ -76,7 +72,6 @@
 #include "anminfo.hxx"
 #include "undo/undomanager.hxx"
 #include "undo/undoobjects.hxx"
-#include <svx/sdr/contact/displayinfo.hxx>
 #include <svx/sdr/contact/viewobjectcontact.hxx>
 #include <svx/sdr/contact/viewcontact.hxx>
 #include <svx/sdr/contact/objectcontact.hxx>

@@ -42,7 +42,6 @@
 #include <unotools/localfilehelper.hxx>
 #include <com/sun/star/frame/XStorable.hpp>
 #include <sfx2/progress.hxx>
-#include <sfx2/progress.hxx>
 #include <vcl/wrkwin.hxx>
 #include <svl/aeitem.hxx>
 #include <svx/svditer.hxx>

@@ -49,7 +49,6 @@
 #include <editeng/frmdiritem.hxx>
 #include <svx/xbtmpit.hxx>
 #include <svx/xsetit.hxx>
-#include <svl/itempool.hxx>
 #include <editeng/ulspitem.hxx>
 #include <editeng/lrspitem.hxx>
 #include <svx/sdr/properties/properties.hxx>
@@ -58,8 +57,6 @@
 #include <editeng/shaditem.hxx>
 #include <editeng/boxitem.hxx>
 #include <editeng/sizeitem.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/lrspitem.hxx>
 #include <editeng/pbinitem.hxx>
 #include <sfx2/app.hxx>
 #include <sfx2/opengrf.hxx>

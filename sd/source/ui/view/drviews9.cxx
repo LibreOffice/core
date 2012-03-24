@@ -37,7 +37,6 @@
 #include <svx/xflgrit.hxx>
 #include <svx/xlnclit.hxx>
 #include <svx/xflclit.hxx>
-#include <svx/xlnwtit.hxx>
 #include <sfx2/bindings.hxx>
 
 #include <sfx2/dispatch.hxx>

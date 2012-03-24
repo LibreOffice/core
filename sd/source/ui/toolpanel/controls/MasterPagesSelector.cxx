@@ -65,7 +65,6 @@
 #include <svx/svdpagv.hxx>
 #include <svx/svxids.hrc>
 #include "FrameView.hxx"
-#include "sdpage.hxx"
 #include "stlpool.hxx"
 #include "unmovss.hxx"
 #include <sfx2/request.hxx>

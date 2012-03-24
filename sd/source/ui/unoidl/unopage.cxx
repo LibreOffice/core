@@ -35,7 +35,6 @@
 #include <com/sun/star/view/PaperOrientation.hpp>
 #include <com/sun/star/animations/AnimationNodeType.hpp>
 #include <com/sun/star/presentation/EffectNodeType.hpp>
-#include <com/sun/star/lang/DisposedException.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/servicehelper.hxx>
 #include <rtl/ustrbuf.hxx>

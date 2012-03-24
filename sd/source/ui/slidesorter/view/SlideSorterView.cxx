@@ -70,7 +70,6 @@
 #include <vcl/lineinfo.hxx>
 #include <algorithm>
 #include <svx/sdrpagewindow.hxx>
-#include <svl/itempool.hxx>
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>
 #include <basegfx/polygon/b2dpolygon.hxx>
@@ -78,7 +77,6 @@
 #include <canvas/elapsedtime.hxx>
 
 //#define DEBUG_TIMING
-#include <svl/itempool.hxx>
 #ifdef DEBUG_TIMING
 #include <vector>
 #endif

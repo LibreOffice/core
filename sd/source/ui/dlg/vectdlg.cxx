@@ -38,7 +38,6 @@
 #include "DrawDocShell.hxx"
 #include "sdmod.hxx"
 #include "sdiocmpt.hxx"
-#include "DrawDocShell.hxx"
 #include "vectdlg.hxx"
 #include "vectdlg.hrc"
 #include <vcl/bmpacc.hxx>

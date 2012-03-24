@@ -41,7 +41,6 @@
 #include "sdresid.hxx"
 #include "drawdoc.hxx"
 #include <svx/svxdlg.hxx>
-#include <svx/dialogs.hrc>
 
 #include <boost/scoped_ptr.hpp>
 

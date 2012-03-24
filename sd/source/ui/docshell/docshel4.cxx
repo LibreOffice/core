@@ -897,7 +897,6 @@ sal_Bool DrawDocShell::GotoBookmark(const String& rBookmark)
 |* SaveAsOwnFormat: wenn es eine Dokumentvorlage werden soll,
 |*
 \************************************************************************/
-#include <tools/urlobj.hxx>
 
 sal_Bool DrawDocShell::SaveAsOwnFormat( SfxMedium& rMedium )
 {

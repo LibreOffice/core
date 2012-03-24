@@ -56,7 +56,6 @@
 #include <com/sun/star/drawing/framework/XResourceId.hpp>
 #include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/drawing/framework/AnchorBindingMode.hpp>
-#include <com/sun/star/drawing/framework/ResourceActivationMode.hpp>
 #include <com/sun/star/drawing/XDrawSubController.hpp>
 /** === end UNO includes === **/
 

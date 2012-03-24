@@ -39,7 +39,6 @@
 #include <sot/storage.hxx>
 #include <vcl/outdev.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/gradient.hxx>
 #include <sfx2/app.hxx>
 #include <svl/languageoptions.hxx>
 #include <editeng/svxenum.hxx>

@@ -53,7 +53,6 @@
 #include <editeng/lspcitem.hxx>
 #include <editeng/numitem.hxx>
 #include <editeng/outlobj.hxx>
-#include <editeng/numitem.hxx>
 #include <editeng/editeng.hxx>
 
 #include <editeng/editobj.hxx>

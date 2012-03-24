@@ -48,8 +48,6 @@
 #include "GraphicViewShell.hxx"
 #include <sfx2/childwin.hxx>
 #include <sdxfer.hxx>
-#include "GraphicViewShell.hxx"
-#include <sfx2/childwin.hxx>
 
 #include "app.hrc"
 #include "helpids.h"
@@ -71,7 +69,6 @@
 #include "MediaObjectBar.hxx"
 #include "ViewShellManager.hxx"
 #include "FormShellManager.hxx"
-#include <svx/fmshell.hxx>
 #include <svx/dialogs.hrc>
 #include <svx/extrusionbar.hxx>
 #include <svx/fontworkbar.hxx>

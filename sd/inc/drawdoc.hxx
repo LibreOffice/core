@@ -39,8 +39,6 @@
 #include <unotools/charclass.hxx>
 #include <sot/storage.hxx>
 #include <rsc/rscsfx.hxx>
-#include <com/sun/star/lang/Locale.hpp>
-#include <com/sun/star/text/WritingMode.hpp>
 
 #include <svx/svdundo.hxx>
 

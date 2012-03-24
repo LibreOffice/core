@@ -33,7 +33,6 @@
 #include <vcl/fixed.hxx>
 #include <vcl/group.hxx>
 #include <vcl/button.hxx>
-#include <vcl/button.hxx>
 #include <vcl/field.hxx>
 #include <vcl/dialog.hxx>
 #include "resltn.hxx"       // enum PublishingResolution

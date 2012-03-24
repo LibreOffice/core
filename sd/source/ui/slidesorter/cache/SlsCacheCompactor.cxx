@@ -31,7 +31,6 @@
 
 #include "SlsBitmapCompressor.hxx"
 #include "SlsBitmapCache.hxx"
-#include "SlsCacheCompactor.hxx"
 #include "SlsCacheConfiguration.hxx"
 
 #include <rtl/ustring.hxx>

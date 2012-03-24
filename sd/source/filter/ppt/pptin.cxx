@@ -65,12 +65,10 @@
 #include "sdpage.hxx"
 #include "sdresid.hxx"
 #include "pres.hxx"
-#include "sdresid.hxx"
 #include "stlpool.hxx"
 #include "anminfo.hxx"
 #include <svx/gallery.hxx>
 #include <tools/urlobj.hxx>
-#include <editeng/numitem.hxx>
 #include <svl/itempool.hxx>
 #include <editeng/fhgtitem.hxx>
 #include <svx/svdopage.hxx>

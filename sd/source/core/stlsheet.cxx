@@ -32,7 +32,6 @@
 #include <com/sun/star/style/XStyle.hpp>
 
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 #include <vcl/svapp.hxx>
 #include <comphelper/serviceinfohelper.hxx>
 #include <boost/bind.hpp>

@@ -37,7 +37,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/io/XInputStream.hpp>
 #include <com/sun/star/task/XInteractionHandler.hpp>
@@ -46,7 +45,6 @@
 #include <com/sun/star/ucb/InteractiveAppException.hpp>
 #include <com/sun/star/ucb/XContent.hpp>
 #include <com/sun/star/packages/zip/ZipIOException.hpp>
-#include <framework/interaction.hxx>
 #include <toolkit/helper/vclunohelper.hxx>
 #include <ucbhelper/simpleinteractionrequest.hxx>
 #include <svtools/filter.hxx>
@@ -73,7 +71,6 @@
 #include <sot/storage.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <com/sun/star/util/XArchiver.hpp>
-#include <comphelper/processfactory.hxx>
 
 #include "strmname.h"
 

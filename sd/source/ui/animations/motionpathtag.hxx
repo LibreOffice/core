@@ -30,7 +30,6 @@
 #define _SD_MOTIONPATHTAG_HXX_
 
 #include <com/sun/star/util/XChangesListener.hpp>
-#include <com/sun/star/util/XChangesListener.hpp>
 #include <com/sun/star/drawing/XShape.hpp>
 #include <basegfx/polygon/b2dpolypolygon.hxx>
 #include <basegfx/polygon/b2dpolypolygontools.hxx>

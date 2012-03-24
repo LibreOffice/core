@@ -35,7 +35,6 @@
 #include "glob.hrc"
 #include "app.hrc"
 #include "strings.hrc"
-#include "strings.hrc"
 #include "helpids.h"
 #include "sdattr.hxx"
 #include "sdabstdlg.hxx"

@@ -55,7 +55,6 @@
 #include "dlgolbul.hrc"
 #include "bulmaper.hxx"
 #include "DrawDocShell.hxx"
-#include <svx/svxids.hrc>
 #include <svl/aeitem.hxx>
 
 namespace sd {

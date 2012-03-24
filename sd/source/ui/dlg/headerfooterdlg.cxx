@@ -69,7 +69,6 @@
 
 #include "undoheaderfooter.hxx"
 #include "sdundogr.hxx"
-#include "ViewShell.hxx"
 
 #include <basegfx/matrix/b2dhommatrix.hxx>
 #include <basegfx/polygon/b2dpolygontools.hxx>

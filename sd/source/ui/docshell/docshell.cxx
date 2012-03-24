@@ -42,9 +42,6 @@
 #include <sfx2/printer.hxx>
 #include <sfx2/docfile.hxx>
 #include <svx/drawitem.hxx>
-#include <editeng/flstitem.hxx>
-#include <svx/drawitem.hxx>
-#include <svx/srchdlg.hxx>
 #include <sfx2/dispatch.hxx>
 #include <svl/whiter.hxx>
 #include <svl/itempool.hxx>

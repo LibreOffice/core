@@ -39,9 +39,6 @@
 #include <editeng/editeng.hxx>
 #include <editeng/outliner.hxx>
 #include <editeng/unolingu.hxx>
-#include <editeng/ulspitem.hxx>
-#include <editeng/lspcitem.hxx>
-#include <editeng/adjitem.hxx>
 #include <vcl/vclenum.hxx>
 #include <sfx2/app.hxx>
 #include <svl/whiter.hxx>

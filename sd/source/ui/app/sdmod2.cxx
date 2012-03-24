@@ -75,7 +75,6 @@
 #include "sdpage.hxx"
 #include "sdxfer.hxx"
 #include "sdabstdlg.hxx"
-#include "tpoption.hrc"
 #include "prntopts.hrc"
 #include <svl/intitem.hxx>
 

@@ -36,7 +36,6 @@
 #include <com/sun/star/awt/XDevice.hpp>
 
 #include <com/sun/star/embed/Aspects.hpp>
-#include <com/sun/star/presentation/XPresentation2.hpp>
 
 #include <osl/mutex.hxx>
 #include <comphelper/sequence.hxx>
@@ -60,7 +59,6 @@
 #include <svx/unopool.hxx>
 #include <svx/svdorect.hxx>
 #include <editeng/flditem.hxx>
-#include <osl/mutex.hxx>
 #include <toolkit/awt/vclxdevice.hxx>
 #include <svx/svdpool.hxx>
 #include <editeng/unolingu.hxx>

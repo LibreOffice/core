@@ -50,7 +50,6 @@
 #include <editeng/outlobj.hxx>
 #include <editeng/postitem.hxx>
 #include <editeng/wghtitem.hxx>
-#include <editeng/udlnitem.hxx>
 #include <editeng/crsditem.hxx>
 #include <svx/svxids.hrc>
 #include <svtools/langtab.hxx>

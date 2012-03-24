@@ -58,7 +58,6 @@
 #include "ViewShellBase.hxx"
 #include "FactoryIds.hxx"
 
-#include "slideshow.hxx"
 #include "fupoor.hxx"
 #include "Window.hxx"
 

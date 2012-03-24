@@ -47,7 +47,6 @@
 #include <basic/sbstar.hxx>
 #include <editeng/flditem.hxx>
 #include <svx/xlineit0.hxx>
-#include <svx/xfillit0.hxx>
 
 #include <svx/svdoutl.hxx>
 #include <svx/xlnwtit.hxx>

@@ -64,7 +64,6 @@
 #include <com/sun/star/ui/XImageManager.hpp>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>
 #include <unotools/historyoptions.hxx>
-#include <tools/urlobj.hxx>
 #include <osl/file.hxx>
 #include <sfx2/filedlghelper.hxx>
 

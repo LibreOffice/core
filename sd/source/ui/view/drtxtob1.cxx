@@ -59,7 +59,6 @@
 #include <svx/svdobj.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/flstitem.hxx>
-#include <editeng/editeng.hxx>
 #include <svl/intitem.hxx>
 #include <editeng/scripttypeitem.hxx>
 #include <svx/svdoutl.hxx>

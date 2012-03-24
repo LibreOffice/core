@@ -46,7 +46,6 @@
 #include <svx/svdundo.hxx>
 #include <svx/svdpagv.hxx>
 #include <svl/urlbmk.hxx>
-#include <svl/urlbmk.hxx>
 #include <editeng/outliner.hxx>
 #include <svx/xflclit.hxx>
 #include <svx/dbexch.hrc>

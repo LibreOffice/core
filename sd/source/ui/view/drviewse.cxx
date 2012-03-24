@@ -88,7 +88,6 @@
 #include "fuconarc.hxx"
 #include "fucon3d.hxx"
 #include "sdresid.hxx"
-#include "slideshow.hxx"
 #include "Outliner.hxx"
 #include "PresentationViewShell.hxx"
 #include "sdpage.hxx"

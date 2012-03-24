@@ -56,7 +56,6 @@
 #include "Window.hxx"
 #include "drawview.hxx"
 #include "drawdoc.hxx"
-#include "sdresid.hxx"
 #include "fusel.hxx"
 #include "fuconbez.hxx"
 
