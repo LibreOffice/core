@@ -175,6 +175,7 @@ $(1)
 endef
 
 gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/lib
+gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/lib
 
 gb_Helper_abbreviate_dirs_native = $(gb_Helper_abbreviate_dirs)
 

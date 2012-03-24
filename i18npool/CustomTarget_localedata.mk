@@ -44,7 +44,7 @@ $(IPLD)/localedata_%.cxx : $(SRCDIR)/i18npool/source/localedata/data/%.xml \
 	$(call gb_Helper_abbreviate_dirs_native, \
 		$(call gb_Helper_execute,saxparser) $* $< $@.tmp \
 			$(my_file)$(IPLD)/saxparser.rdb $(OUTDIR_FOR_BUILD)/bin/types.rdb \
-			-env:LO_LIB_DIR=$(my_file)$(OUTDIR_FOR_BUILD)/lib \
+			-env:LO_LIB_DIR=$(my_file)$(gb_Helper_OUTDIR_FOR_BUILDLIBDIR) \
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null 2>&1) && \
 		sed 's/\(^.*get[^;]*$$\)/SAL_DLLPUBLIC_EXPORT \1/' $@.tmp > $@ && \
 		rm $@.tmp)
