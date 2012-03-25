@@ -1001,6 +1001,69 @@ sal_Bool View::GetExchangeList( List*& rpExchangeList, List* pBookmarkList, sal_
     return( bNameOK );
 }
 
+bool View::GetExchangeList (std::vector<rtl::OUString> &rExchangeList,
+                            std::vector<rtl::OUString> &rBookmarkList,
+                            const sal_uInt16 nType)
+{
+    assert(rExchangeList.empty());
+
+    bool bListIdentical = true; // BookmarkList und ExchangeList sind gleich
+    bool bNameOK = true;        // Name ist eindeutig
+
+    std::vector<rtl::OUString>::const_iterator pIter;
+    for ( pIter = rBookmarkList.begin(); bNameOK && pIter != rBookmarkList.end(); ++pIter )
+    {
+        String tmp = *pIter; ///TODO: remove when CreateSvxNameDialog uses OUString!!
+        rtl::OUString aNewName = *pIter;
+
+        if( nType == 0  || nType == 2 )
+            bNameOK = mpDocSh->CheckPageName(mpViewSh->GetActiveWindow(), tmp);
+
+        if( bNameOK && ( nType == 1  || nType == 2 ) )
+        {
+            if( mrDoc.GetObj( aNewName ) )
+            {
+                rtl::OUString aTitle( ResId::toString(SdResId( STR_TITLE_NAMEGROUP ) ) ) ;
+                rtl::OUString aDesc( ResId::toString(SdResId( STR_DESC_NAMEGROUP ) ) );
+
+                SvxAbstractDialogFactory* pFact = SvxAbstractDialogFactory::Create();
+                AbstractSvxNameDialog* pDlg = 0;
+
+                if (pFact)
+                    pDlg = pFact->CreateSvxNameDialog( mpViewSh->GetActiveWindow(), tmp, aDesc );
+
+                if( pDlg )
+                {
+                    pDlg->SetEditHelpId( HID_SD_NAMEDIALOG_OBJECT );
+
+                    bNameOK = false;
+                    pDlg->SetText( aTitle );
+
+                    while( !bNameOK && pDlg->Execute() == RET_OK )
+                    {
+                        pDlg->GetName( tmp );
+
+                        if( !mrDoc.GetObj( tmp ) )
+                            bNameOK = true;
+                    }
+
+                    delete pDlg;
+                }
+            }
+        }
+
+        bListIdentical = (*pIter == aNewName);
+
+        rExchangeList.push_back(aNewName);
+    }
+
+    // ExchangeList ist mit BookmarkList identisch
+    if( !rExchangeList.empty() && bListIdentical )
+        rExchangeList.clear();
+
+    return bNameOK;
+}
+
 typedef std::vector< std::pair< sal_uInt32, sal_uInt32 > > PathSurrogateVector;
 typedef std::vector< SdrObject* > SdrObjectVector;
 

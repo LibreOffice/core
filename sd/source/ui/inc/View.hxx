@@ -168,6 +168,21 @@ public:
 
     sal_Bool                    GetExchangeList( List*& rpExchangeList, List* pBookmarkList, sal_uInt16 nType );
 
+    /*************************************************************************
+    |*
+    |* Rueckgabeparameter:
+    |* pExchangeList == NULL -> Namen sind alle eindeutig
+    |* bNameOK == sal_False -> Benutzer hat abgebrochen
+    |* nType == 0 -> Seiten
+    |* nType == 1 -> Objekte
+    |* nType == 2 -> Seiten + Objekte
+    |*
+    \************************************************************************/
+
+    bool GetExchangeList( std::vector<rtl::OUString> &rExchangeList,
+                          std::vector<rtl::OUString> &rBookmarkList,
+                          const sal_uInt16 nType );
+
     virtual void onAccessibilityOptionsChanged();
 
     virtual SdrModel*   GetMarkedObjModel() const;
