@@ -95,8 +95,8 @@ sal_Bool SAL_CALL MediaTypeDetectionHelper::mapStrings(
         OUString& rUrl = rSeq[i];
         INetContentType eType = INetContentTypes::GetContentTypeFromURL( rUrl );
 
-        UniString aType( INetContentTypes::GetContentType( eType ) );
-        if( aType.Len() )
+        rtl::OUString aType( INetContentTypes::GetContentType( eType ) );
+        if (!aType.isEmpty())
         {
             rUrl = aType;
             bModified = sal_True;

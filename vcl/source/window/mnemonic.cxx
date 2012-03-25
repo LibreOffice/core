@@ -295,10 +295,9 @@ sal_Bool MnemonicGenerator::CreateMnemonic( XubString& rKey )
                 if ( maMnemonics[nMnemonicIndex] )
                 {
                     maMnemonics[nMnemonicIndex] = 0;
-                    UniString aStr( '(' );
-                    aStr += MNEMONIC_CHAR;
-                    aStr += c;
-                    aStr += ')';
+                    rtl::OUString aStr = rtl::OUStringBuffer().
+                        append('(').append(MNEMONIC_CHAR).append(c).
+                        append(')').makeStringAndClear();
                     nIndex = rKey.Len();
                     if( nIndex >= 2 )
                     {

@@ -1167,7 +1167,7 @@ Size ComboBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
     // Breite
     if ( nColumns )
-        aSz.Width() = nColumns * GetTextWidth( UniString( 'X' ) );
+        aSz.Width() = nColumns * GetTextWidth(rtl::OUString(static_cast<sal_Unicode>('X')));
     else
         aSz.Width() = aMinSz.Width();
 
@@ -1190,7 +1190,7 @@ Size ComboBox::CalcSize( sal_uInt16 nColumns, sal_uInt16 nLines ) const
 
 void ComboBox::GetMaxVisColumnsAndLines( sal_uInt16& rnCols, sal_uInt16& rnLines ) const
 {
-    long nCharWidth = GetTextWidth( UniString( 'x' ) );
+    long nCharWidth = GetTextWidth(rtl::OUString(static_cast<sal_Unicode>('x')));
     if ( !IsDropDownBox() )
     {
         Size aOutSz = mpImplLB->GetMainWindow()->GetOutputSizePixel();

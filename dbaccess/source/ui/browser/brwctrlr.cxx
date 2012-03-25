@@ -2179,7 +2179,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
             HANDLE_SQL_ERRORS(
                 xParser->setOrder(::rtl::OUString()); xParser->appendOrderByColumn(xField, bSortUp),
                 bParserSuccess,
-                UniString(ModuleRes(SBA_BROWSER_SETTING_ORDER)),
+                ResId::toString(ModuleRes(SBA_BROWSER_SETTING_ORDER)),
                 "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
             )
 
@@ -2251,7 +2251,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 HANDLE_SQL_ERRORS(
                     xParser->appendHavingClauseByColumn(xField,sal_True,nOp),
                     bParserSuccess,
-                    UniString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
+                    ResId::toString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
                     "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
                 )
             }
@@ -2260,7 +2260,7 @@ void SbaXDataBrowserController::Execute(sal_uInt16 nId, const Sequence< Property
                 HANDLE_SQL_ERRORS(
                     xParser->appendFilterByColumn(xField,sal_True,nOp),
                     bParserSuccess,
-                    UniString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
+                    ResId::toString(ModuleRes(SBA_BROWSER_SETTING_FILTER)),
                     "SbaXDataBrowserController::Execute : caught an exception while composing the new filter !"
                 )
             }

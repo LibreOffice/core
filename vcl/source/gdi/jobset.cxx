@@ -306,8 +306,8 @@ SvStream& operator>>( SvStream& rIStream, JobSetup& rJobSetup )
 
             rJobSetup.mpData = new ImplJobSetup;
             ImplJobSetup* pJobData = rJobSetup.mpData;
-            pJobData->maPrinterName = UniString( pData->cPrinterName, aStreamEncoding );
-            pJobData->maDriver      = UniString( pData->cDriverName, aStreamEncoding );
+            pJobData->maPrinterName = UniString(pData->cPrinterName, aStreamEncoding);
+            pJobData->maDriver = UniString(pData->cDriverName, aStreamEncoding);
 
             // Sind es unsere neuen JobSetup-Daten?
             if ( nSystem == JOBSET_FILE364_SYSTEM ||

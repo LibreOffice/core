@@ -76,7 +76,7 @@ sal_Bool CppDep::Search(const rtl::OString &rFileName)
     SvFileStream aFile;
     rtl::OString aReadLine;
 
-    UniString suFileName(rtl::OStringToOUString(rFileName, osl_getThreadTextEncoding()));
+    rtl::OUString suFileName(rtl::OStringToOUString(rFileName, osl_getThreadTextEncoding()));
 
     aFile.Open( suFileName, STREAM_READ );
     while ( aFile.ReadLine( aReadLine ))

@@ -2404,10 +2404,9 @@ void DomainMapper_Impl::handleToc
     if( lcl_FindInCommand( pContext->GetCommand(), 'o', sValue ))
     {
         bFromOutline = true;
-        UniString sParam( sValue );
-        xub_StrLen nIndex = 0;
-        sParam.GetToken( 0, '-', nIndex );
-        nMaxLevel = sal_Int16( sParam.Copy( nIndex ).ToInt32( ) );
+        sal_Int32 nIndex = 0;
+        sValue.getToken( 0, '-', nIndex );
+        nMaxLevel = static_cast<sal_Int16>(nIndex != -1 ? sValue.copy(nIndex).toInt32() : 0);
     }
 //                  \p Defines the separator between the table entry and its page number
     if( lcl_FindInCommand( pContext->GetCommand(), 'p', sValue ))
