@@ -34,8 +34,8 @@ TARGET=prj
 all:
 .ELIF "$(VERBOSE)"!=""
 all:
-	cd $(PRJ) && $(GNUMAKE) -r -j$(GMAKE_MODULE_PARALLELISM)
+	cd $(PRJ) && $(GNUMAKE) -r -j$(GMAKE_MODULE_PARALLELISM) all slowcheck
 .ELSE
 all:
-	@cd $(PRJ) && $(GNUMAKE) -rs -j$(GMAKE_MODULE_PARALLELISM)
+	@cd $(PRJ) && $(GNUMAKE) -rs -j$(GMAKE_MODULE_PARALLELISM) all slowcheck
 .END
