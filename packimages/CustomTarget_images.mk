@@ -56,7 +56,7 @@ $(PIIM)/images_%.zip : $(PIIM)/sorted.lst $(PIIM)/commandimagelist.ilst
 			$(if $(findstring s,$(MAKEFLAGS)),> /dev/null))
 
 # make sure to have one to keep packing happy
-$(PIIM)/images_brand.zip :
+$(PIIM)/images_brand.zip :| $(PIIM)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),TCH,2)
 	touch $@
 
