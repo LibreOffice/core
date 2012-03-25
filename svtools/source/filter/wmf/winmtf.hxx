@@ -696,10 +696,8 @@ public:
     void                SelectObject( sal_Int32 nIndex );
     CharSet             GetCharSet(){ return maFont.GetCharSet(); };
     WinMtfFillStyle&    GetFillStyle () { return maFillStyle; }
-    void                SetFont( const Font& rFont );
     const Font&         GetFont() const;
     void                SetTextLayoutMode( const sal_uInt32 nLayoutMode );
-    sal_uInt32          GetTextLayoutMode() const;
 
     void                ClearPath(){ aPathObj.Init(); };
     void                ClosePath(){ aPathObj.ClosePath(); };
@@ -708,7 +706,6 @@ public:
     void                MoveTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
     void                LineTo( const Point& rPoint, sal_Bool bRecordPath = sal_False );
     void                DrawPixel( const Point& rSource, const Color& rColor );
-    void                DrawLine( const Point& rSource, const Point& rDest );
     void                DrawRect( const Rectangle& rRect, sal_Bool bEdge = sal_True );
     void                DrawRoundRect( const Rectangle& rRect, const Size& rSize );
     void                DrawEllipse( const Rectangle& rRect );
