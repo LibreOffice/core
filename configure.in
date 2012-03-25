@@ -76,6 +76,7 @@ else
     SRC_ROOT=`pwd`
     x_Cygwin=[\#]
 fi
+
 AC_SUBST(SRC_ROOT)
 AC_SUBST(EXEEXT_FOR_BUILD)
 AC_SUBST(x_Cygwin)
@@ -3682,6 +3683,27 @@ EOF
 else
     AC_MSG_ERROR([failed ($GNUMAKE version >= 3.81 needed])
 fi
+
+# find if gnumake support file function
+AC_MSG_CHECKING([for GNU support for (file function])
+TESTGMAKEFILEFUNC="`mktemp -d -t tst.XXXXXX`"
+cat > $TESTGMAKEFILEFUNC/Makefile << EOF
+\$(file >test.txt,Success )
+
+.PHONY: all
+all:
+	@cat test.txt
+
+EOF
+$GNUMAKE -C $TESTGMAKEFILEFUNC 2>/dev/null 1>&2
+if test -f $TESTGMAKEFILEFUNC/test.txt ; then
+    HAVE_GNUMKAE_FILE_FUNC="YES"
+    AC_MSG_RESULT([yes])
+else
+    AC_MSG_RESULT([no])
+fi
+rm -rf $TESTGMAKEFILEFUNC
+AC_SUBST(HAVE_GNUMAKE_FILE_FUNC)
 AC_SUBST(GNUMAKE)
 
 _make_ver_check=`$GNUMAKE --version | grep LibreOffice`;
