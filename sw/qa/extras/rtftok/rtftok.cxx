@@ -89,7 +89,7 @@ public:
     CPPUNIT_TEST(testN751020);
     CPPUNIT_TEST(testFdo47326);
     CPPUNIT_TEST(testFdo47036);
-    CPPUNIT_TEST(testFdo46955);
+    //CPPUNIT_TEST(testFdo46955);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
