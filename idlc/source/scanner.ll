@@ -195,7 +195,8 @@ static double asciiToFloat(const sal_Char *s)
            	}
            	if (e > 0)
            	{
-            	for (k = 1; e > 0; k *= 10, e--) ;
+                for (k = 1; e > 0; k *= 10, e--)
+                    ;
                	if (negexp)
                 	d /= k;
                	else
