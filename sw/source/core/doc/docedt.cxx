@@ -161,9 +161,7 @@ struct _SaveRedline
     }
 };
 
-SV_DECL_PTRARR_DEL( _SaveRedlines, _SaveRedline*, 0 )
-
-SV_IMPL_PTRARR( _SaveRedlines, _SaveRedline* )
+typedef boost::ptr_vector< _SaveRedline > _SaveRedlines;
 
 bool lcl_MayOverwrite( const SwTxtNode *pNode, const xub_StrLen nPos )
 {
@@ -532,7 +530,7 @@ void lcl_SaveRedlines( const SwPaM& aPam, _SaveRedlines& rArr )
 
             // save the current redline
             _SaveRedline* pSave = new _SaveRedline( pCurrent, *pStart );
-            rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
+            rArr.push_back( pSave );
         }
     }
 
@@ -545,11 +543,10 @@ void lcl_RestoreRedlines( SwDoc* pDoc, const SwPosition& rPos, _SaveRedlines& rA
     RedlineMode_t eOld = pDoc->GetRedlineMode();
     pDoc->SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
 
-    for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
+    for( size_t n = 0; n < rArr.size(); ++n )
     {
-        _SaveRedline* pSave = rArr[ n ];
-        pSave->SetPos( rPos );
-        pDoc->AppendRedline( pSave->pRedl, true );
+        rArr[ n ].SetPos( rPos );
+        pDoc->AppendRedline( rArr[ n ].pRedl, true );
     }
 
     pDoc->SetRedlineMode_intern( eOld );
@@ -590,7 +587,7 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
                             pTmpPos->nNode.GetNode().GetCntntNode(), 0 );
 
                 _SaveRedline* pSave = new _SaveRedline( pNewRedl, rRg.aStart );
-                rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
+                rArr.push_back( pSave );
 
                 pTmpPos = pTmp->End();
                 pTmpPos->nNode = rRg.aEnd;
@@ -613,7 +610,7 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
             {
                 // move everything
                 _SaveRedline* pSave = new _SaveRedline( pTmp, rRg.aStart );
-                rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
+                rArr.push_back( pSave );
             }
             else
             {
@@ -625,7 +622,7 @@ void lcl_SaveRedlines( const SwNodeRange& rRg, _SaveRedlines& rArr )
                             pTmpPos->nNode.GetNode().GetCntntNode(), 0 );
 
                 _SaveRedline* pSave = new _SaveRedline( pNewRedl, rRg.aStart );
-                rArr.C40_INSERT( _SaveRedline, pSave, rArr.Count() );
+                rArr.push_back( pSave );
 
                 pTmpPos = pTmp->Start();
                 pTmpPos->nNode = rRg.aEnd;
@@ -646,11 +643,10 @@ void lcl_RestoreRedlines( SwDoc* pDoc, sal_uInt32 nInsPos, _SaveRedlines& rArr )
     RedlineMode_t eOld = pDoc->GetRedlineMode();
     pDoc->SetRedlineMode_intern( (RedlineMode_t)(( eOld & ~nsRedlineMode_t::REDLINE_IGNORE) | nsRedlineMode_t::REDLINE_ON ));
 
-    for( sal_uInt16 n = 0; n < rArr.Count(); ++n )
+    for( size_t n = 0; n < rArr.size(); ++n )
     {
-        _SaveRedline* pSave = rArr[ n ];
-        pSave->SetPos( nInsPos );
-        pDoc->AppendRedline( pSave->pRedl, true );
+        rArr[ n ].SetPos( nInsPos );
+        pDoc->AppendRedline( rArr[ n ].pRedl, true );
     }
 
     pDoc->SetRedlineMode_intern( eOld );
@@ -880,7 +876,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     _SaveFlyInRange( rPaM, rPos.nNode, aSaveFlyArr, 0 != ( DOC_MOVEALLFLYS & eMvFlags ) );
 
     // save redlines (if DOC_MOVEREDLINES is used)
-    _SaveRedlines aSaveRedl( 0 );
+    _SaveRedlines aSaveRedl;
     if( DOC_MOVEREDLINES & eMvFlags && GetRedlineTbl().Count() )
     {
         lcl_SaveRedlines( rPaM, aSaveRedl );
@@ -1084,7 +1080,7 @@ bool SwDoc::MoveRange( SwPaM& rPaM, SwPosition& rPos, SwMoveFlags eMvFlags )
     _RestFlyInRange( aSaveFlyArr, rPaM.Start()->nNode, &(rPos.nNode) );
 
     // restore redlines (if DOC_MOVEREDLINES is used)
-    if( aSaveRedl.Count() )
+    if( !aSaveRedl.empty() )
     {
         lcl_RestoreRedlines( this, *aSavePam.Start(), aSaveRedl );
     }
@@ -1129,7 +1125,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
                                     GetFtnIdxs(), aTmpFntIdx );
     }
 
-    _SaveRedlines aSaveRedl( 0 );
+    _SaveRedlines aSaveRedl;
     SvPtrarr aSavRedlInsPosArr( 0 );
     if( DOC_MOVEREDLINES & eMvFlags && GetRedlineTbl().Count() )
     {
@@ -1212,7 +1208,7 @@ bool SwDoc::MoveNodeRange( SwNodeRange& rRange, SwNodeIndex& rPos,
         }
     }
 
-    if( aSaveRedl.Count() )
+    if( !aSaveRedl.empty() )
         lcl_RestoreRedlines( this, aIdx.GetIndex(), aSaveRedl );
 
     if( pUndo )
