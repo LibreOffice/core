@@ -1461,11 +1461,7 @@ sal_uLong ScDBDocFunc::RefreshPivotTables(ScDPObject* pDPObj, bool bApi)
     if (!pDPs)
         return 0;
 
-    bool bHasGroups = false;
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
-    if (pSaveData && pSaveData->GetExistingDimensionData())
-        bHasGroups = true;
-
     std::set<ScDPObject*> aRefs;
     sal_uLong nErrId = pDPs->ReloadCache(pDPObj, aRefs);
     if (nErrId)
