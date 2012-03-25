@@ -294,21 +294,6 @@ void* Table::Seek( sal_uIntPtr nKey )
         return NULL;
 }
 
-// -----------------------------------------------------------------------
-
-void* Table::Seek( void* p )
-{
-    sal_uIntPtr nKey = GetKey( p );
-
-    // Ist Key vorhanden, dann als aktuellen Eintrag setzen
-    if ( nKey != TABLE_ENTRY_NOTFOUND )
-        return Seek( nKey );
-    else
-        return NULL;
-}
-
-// -----------------------------------------------------------------------
-
 void* Table::First()
 {
     // Testen, ob ein Eintrag vorhanden ist

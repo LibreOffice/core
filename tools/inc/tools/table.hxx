@@ -68,7 +68,6 @@ public:
     sal_uIntPtr SearchKey( sal_uIntPtr nKey, sal_uIntPtr* pPos = NULL ) const;
 
     void*   Seek( sal_uIntPtr nKey );
-    void*   Seek( void* p );
     void*   First();
     void*   Last();
     void*   Next();
@@ -129,8 +128,6 @@ public:                                                                 \
                                                                         \
     Type        Seek( sal_uIntPtr nKey )                                        \
                     { return (Type)Table::Seek( nKey ); }               \
-    Type        Seek( Type p )                                          \
-                    { return (Type)Table::Seek( (void*)p ); }           \
     Type        First() { return (Type)Table::First(); }                \
     Type        Last()  { return (Type)Table::Last(); }                 \
     Type        Next()  { return (Type)Table::Next(); }                 \
