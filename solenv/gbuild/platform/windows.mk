@@ -27,9 +27,6 @@
 
 GUI := WNT
 
-gb_Helper_OUTDIRLIBDIR := $(OUTDIR)/bin
-gb_Helper_OUTDIR_FOR_BUILDLIBDIR := $(OUTDIR_FOR_BUILD)/bin
-
 gb_Helper_get_rcfile = $(1).ini
 
 gb_MKTEMP := mktemp --tmpdir=$(gb_TMPDIR) gbuild.XXXXXX
