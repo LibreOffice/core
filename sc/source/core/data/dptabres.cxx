@@ -2871,24 +2871,24 @@ void ScDPResultDimension::LateInitFrom(
 
     bool bLateInitAllMembers=  bIsDataLayout || rParams.GetInitAllChild() || bShowEmpty;
 
-   if ( !bLateInitAllMembers )
+    if ( !bLateInitAllMembers )
     {
         ResultMembers* pMembers = pResultData->GetDimResultMembers(nDimSource, pThisDim, pThisLevel);
         bLateInitAllMembers = pMembers->IsHasHideDetailsMembers();
 #if OSL_DEBUG_LEVEL > 1
-    OSL_TRACE( "%s", aDimensionName.GetBuffer() );
-    if ( pMembers->IsHasHideDetailsMembers() )
-        OSL_TRACE( "HasHideDetailsMembers" );
+        OSL_TRACE( "%s", aDimensionName.getStr() );
+        if ( pMembers->IsHasHideDetailsMembers() )
+            OSL_TRACE( "HasHideDetailsMembers" );
 #endif
-     pMembers->SetHasHideDetailsMembers( false );
+        pMembers->SetHasHideDetailsMembers( false );
     }
 
-    bool bNewAllMembers =(!rParams.IsRow()) ||  nPos == 0 || bLateInitAllMembers ;
+    bool bNewAllMembers = (!rParams.IsRow()) ||  nPos == 0 || bLateInitAllMembers;
 
     if (bNewAllMembers )
     {
       // global order is used to initialize aMembers, so it doesn't have to be looked at later
-           if ( !bInitialized )
+        if ( !bInitialized )
         { //init all members
             const ScMemberSortOrder& rGlobalOrder = pThisLevel->GetGlobalOrder();
 
