@@ -304,7 +304,6 @@ SwpHtStart::Insert(SwTxtAttr const**, unsigned short)
 SwpHtStart::Insert(SwpHtStart const*, unsigned short, unsigned short)
 SwpHtStart::Remove(SwTxtAttr const*&, unsigned short)
 SystemChildWindow::SystemChildWindow(Window*, ResId const&)
-Table::Seek(void*)
 TempFile::IsValid() const
 TextEngine::GetLeftMargin() const
 TransferableDataHelper::GetInterface(com::sun::star::datatransfer::DataFlavor const&, com::sun::star::uno::Reference<com::sun::star::uno::XInterface>&)
