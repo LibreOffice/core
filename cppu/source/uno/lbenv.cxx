@@ -30,6 +30,7 @@
 #include "cppu/EnvDcp.hxx"
 
 #include "sal/alloca.h"
+#include "sal/log.hxx"
 #include "osl/diagnose.h"
 #include "osl/interlck.h"
 #include "osl/mutex.hxx"
@@ -987,11 +988,10 @@ inline void EnvironmentsData::registerEnvironment( uno_Environment ** ppEnv )
     if (iFind == aName2EnvMap.end())
     {
         (*pEnv->acquireWeak)( pEnv );
-        ::std::pair< OUString2EnvironmentMap::iterator, bool > insertion(
+        ::std::pair< OUString2EnvironmentMap::iterator, bool > insertion (
             aName2EnvMap.insert(
                 OUString2EnvironmentMap::value_type( aKey, pEnv ) ) );
-        OSL_ENSURE(
-            insertion.second, "### insertion of env into map failed?!" );
+        SAL_WARN_IF( !insertion.second, "cppu", "key " << aKey << " already in env map" );
     }
     else
     {
