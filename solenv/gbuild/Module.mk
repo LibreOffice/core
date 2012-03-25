@@ -145,7 +145,7 @@ unitcheck :
 	$(call gb_Output_announce_bell)
 
 slowcheck :
-	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SCHK,6)
+	$(call gb_Output_announce,loaded modules: $(sort $(gb_Module_ALLMODULES)),$(true),SLC,6)
 	$(call gb_Output_announce_title,all slowtests checked.)
 	$(call gb_Output_announce_bell)
 
