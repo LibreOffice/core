@@ -28,11 +28,11 @@
 
 $(eval $(call gb_Library_Library,passwordcontainer))
 
+$(eval $(call gb_Library_add_package_headers,passwordcontainer,svl_inc))
+
 $(eval $(call gb_Library_set_componentfile,passwordcontainer,svl/source/passwordcontainer/passwordcontainer))
 
 $(eval $(call gb_Library_set_include,passwordcontainer,\
-    -I$(SRCDIR)/svl/inc \
-    -I$(SRCDIR)/svl/inc/svl \
     -I$(SRCDIR)/svl/source/inc \
     $$(INCLUDE) \
 ))
