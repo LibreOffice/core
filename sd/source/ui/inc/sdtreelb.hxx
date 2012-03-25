@@ -207,6 +207,17 @@ public:
     sal_Bool                    SelectEntry( const String& rName );
     String                  GetSelectEntry();
     List*                   GetSelectEntryList( sal_uInt16 nDepth );
+
+    /*************************************************************************
+    |*
+    |* Selektierte Eintrage zurueckgeben
+    |* nDepth == 0 -> Seiten
+    |* nDepth == 1 -> Objekte
+    |*
+    \************************************************************************/
+
+    void                    GetSelectEntryList (sal_uInt16 nDepth, std::vector<rtl::OUString> &rEntries) const;
+
     SdDrawDocument*         GetBookmarkDoc(SfxMedium* pMedium = NULL);
     ::sd::DrawDocShell*         GetDropDocSh() { return(mpDropDocSh); }
 

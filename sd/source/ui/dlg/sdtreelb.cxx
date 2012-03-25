@@ -693,6 +693,21 @@ List* SdPageObjsTLB::GetSelectEntryList( sal_uInt16 nDepth )
     return( pList );
 }
 
+void SdPageObjsTLB::GetSelectEntryList( sal_uInt16 nDepth, std::vector<rtl::OUString> &rEntries ) const
+{
+    SvLBoxEntry* pEntry = FirstSelected();
+
+    while( pEntry )
+    {
+        sal_uInt16 nListDepth = GetModel()->GetDepth( pEntry );
+
+        if( nListDepth == nDepth )
+            rEntries.push_back(GetEntryText(pEntry));
+
+        pEntry = NextSelected( pEntry );
+    }
+}
+
 /*************************************************************************
 |*
 |* Eintraege werden erst auf Anforderung (Doppelklick) eingefuegt
