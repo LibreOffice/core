@@ -47,6 +47,7 @@
 #include "formula/opcode.hxx"
 
 #include <sfx2/objsh.hxx>
+#include <tools/table.hxx>
 #include <vcl/svapp.hxx>
 
 #include <com/sun/star/beans/UnknownPropertyException.hpp>
@@ -248,14 +249,12 @@ vector<ScTokenRef>* TokenTable::getAllRanges() const
 }
 
 // ============================================================================
-typedef std::map<int, ScToken*> ScTokenPtrMap;
-typedef std::map<int, ScTokenPtrMap*> ChartTokenMap;
 
 class Chart2PositionMap
 {
 public:
     Chart2PositionMap(SCCOL nColCount, SCROW nRowCount,
-                      bool bFillRowHeader, bool bFillColumnHeader, ChartTokenMap& rCols,
+                      bool bFillRowHeader, bool bFillColumnHeader, Table& rCols,
                       ScDocument* pDoc );
     ~Chart2PositionMap();
 
@@ -283,7 +282,7 @@ private:
 };
 
 Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
-                                     bool bFillRowHeader, bool bFillColumnHeader, ChartTokenMap& rCols, ScDocument* pDoc)
+                                     bool bFillRowHeader, bool bFillColumnHeader, Table& rCols, ScDocument* pDoc)
 {
     // if bFillRowHeader is true, at least the first column serves as a row header.
     //  If more than one column is pure text all the first pure text columns are used as header.
@@ -300,17 +299,14 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
         SCROW nSmallestValueRowIndex = nAllRowCount;
         bool bFoundValues = false;
         bool bFoundAnything = false;
-        ChartTokenMap::iterator aColIter = rCols.begin();
+        Table* pCol = static_cast<Table*>(rCols.First());
         for (SCCOL nCol = 0; !bFoundValues && nCol < nAllColCount; ++nCol)
         {
-            if (aColIter != rCols.end() && nCol>=nHeaderColCount)
+            if (pCol && nCol>=nHeaderColCount)
             {
-                ScTokenPtrMap* pCol = aColIter->second;
-                ScTokenPtrMap::iterator tokenIter = pCol->begin();
+                ScToken* pToken = static_cast<ScToken*>(pCol->First());
                 for (SCROW nRow = 0; !bFoundValues && nRow < nSmallestValueRowIndex; ++nRow)
                 {
-                    ScToken* pToken =
-                        tokenIter == pCol->end() ? 0 : tokenIter->second;
                     if (pToken && nRow>=nHeaderRowCount)
                     {
                         ScRange aRange;
@@ -335,14 +331,12 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                                 bFoundAnything = true;
                         }
                     }
-                    if (tokenIter != pCol->end() )
-                        ++tokenIter;
+                    pToken = static_cast<ScToken*>(pCol->Next());
                 }
                 if(!bFoundValues && nHeaderColCount>0)
                     nHeaderColCount++;
             }
-            if (aColIter != rCols.end())
-                ++aColIter;
+            pCol = static_cast<Table*>(rCols.Next());
         }
         if( bFoundAnything )
         {
@@ -366,16 +360,15 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
     maRowHeaders.init(nHeaderColCount,mnDataRowCount);
     maData.init(mnDataColCount,mnDataRowCount);
 
-    ChartTokenMap::iterator aColIter = rCols.begin();
+    Table* pCol = static_cast<Table*>(rCols.First());
+    FormulaToken* pToken = NULL;
     for (SCCOL nCol = 0; nCol < nAllColCount; ++nCol)
     {
-        if (aColIter != rCols.end())
+        if (pCol)
         {
-            ScTokenPtrMap* pCol = aColIter->second;
-            ScTokenPtrMap::iterator tokenIter = pCol->begin();
+            pToken = static_cast<FormulaToken*>(pCol->First());
             for (SCROW nRow = 0; nRow < nAllRowCount; ++nRow)
             {
-                FormulaToken* pToken = static_cast<FormulaToken*>(tokenIter->second);
                 if( nCol < nHeaderColCount )
                 {
                     if( nRow < nHeaderRowCount )
@@ -387,10 +380,11 @@ Chart2PositionMap::Chart2PositionMap(SCCOL nAllColCount,  SCROW nAllRowCount,
                     maColHeaders.push_back(pToken);
                 else
                     maData.push_back(pToken);
-                ++tokenIter;
+
+                pToken = static_cast<FormulaToken*>(pCol->Next());
             }
-            ++aColIter;
         }
+        pCol = static_cast<Table*>(rCols.Next());
     }
 }
 
@@ -721,7 +715,10 @@ void Chart2Positioner::createPositionMap()
     glueState();
 
     bool bNoGlue = (meGlue == GLUETYPE_NONE);
-    auto_ptr<ChartTokenMap> pCols(new ChartTokenMap);
+    SAL_WNODEPRECATED_DECLARATIONS_PUSH
+    auto_ptr<Table> pCols(new Table);
+    SAL_WNODEPRECATED_DECLARATIONS_POP
+    Table* pCol = NULL;
     SCROW nNoGlueRow = 0;
     for (vector<ScTokenRef>::const_iterator itr = mrRefTokens.begin(), itrEnd = mrRefTokens.end();
           itr != itrEnd; ++itr)
@@ -751,15 +748,12 @@ void Chart2Positioner::createPositionMap()
 
             for (SCCOL nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol)
             {
-                ScTokenPtrMap* pCol = NULL;
-                ChartTokenMap::iterator it = pCols->find( nInsCol );
-                if ( it == pCols->end() )
+                pCol = static_cast<Table*>(pCols->Get(nInsCol));
+                if (!pCol)
                 {
-                    pCol = new ScTokenPtrMap;
-                    (*pCols)[nInsCol] = pCol;
+                    pCol = new Table;
+                    pCols->Insert(nInsCol, pCol);
                 }
-                else
-                    pCol = it->second;
 
                 sal_uInt32 nInsRow = static_cast<sal_uInt32>(bNoGlue ? nNoGlueRow : nRow1);
                 for (SCROW nRow = nRow1; nRow <= nRow2; ++nRow, ++nInsRow)
@@ -774,12 +768,12 @@ void Chart2Positioner::createPositionMap()
                     aCellData.nRow = nRow;
                     aCellData.nTab = nTab;
 
-                    if ( pCol->find(nInsRow) == pCol->end() )
+                    if (pCol->Get(nInsRow) == NULL)
                     {
                         if (bExternal)
-                            (*pCol)[nInsRow] = new ScExternalSingleRefToken(nFileId, aTabName, aCellData);
+                            pCol->Insert(nInsRow, new ScExternalSingleRefToken(nFileId, aTabName, aCellData));
                         else
-                            (*pCol)[nInsRow] = new ScSingleRefToken(aCellData);
+                            pCol->Insert(nInsRow, new ScSingleRefToken(aCellData));
                     }
                 }
             }
@@ -790,28 +784,29 @@ void Chart2Positioner::createPositionMap()
     bool bFillRowHeader = mbRowHeaders;
     bool bFillColumnHeader = mbColHeaders;
 
-    SCSIZE nAllColCount = static_cast<SCSIZE>(pCols->size());
+    SCSIZE nAllColCount = static_cast<SCSIZE>(pCols->Count());
     SCSIZE nAllRowCount = 0;
-    if ( !pCols->empty() )
+    pCol = static_cast<Table*>(pCols->First());
+    if (pCol)
     {
-        nAllRowCount = static_cast<SCSIZE>(pCols->begin()->second->size());
         if (mbDummyUpperLeft)
-            (*pCols)[ 0 ] = NULL;    // Dummy fuer Beschriftung
+            pCol->Insert(0, NULL);        // Dummy fuer Beschriftung
+        nAllRowCount = static_cast<SCSIZE>(pCol->Count());
     }
 
     if( nAllColCount!=0 && nAllRowCount!=0 )
     {
         if (bNoGlue)
         {
-            ScTokenPtrMap* pFirstCol = pCols->begin()->second;
-            for ( ScTokenPtrMap::const_iterator it1 = pFirstCol->begin(); it1 != pFirstCol->end(); ++it1 )
+            Table* pFirstCol = static_cast<Table*>(pCols->First());
+            sal_uInt32 nCount = pFirstCol->Count();
+            pFirstCol->First();
+            for (sal_uInt32 n = 0; n < nCount; ++n, pFirstCol->Next())
             {
-                sal_uInt32 nKey = it1->first;
-                for ( ChartTokenMap::const_iterator it2 = pCols->begin(); it2 != pCols->end(); ++it2 )
-                {
-                    ScTokenPtrMap* pCol = it2->second;
-                    (*pCol)[nKey] = NULL;
-                }
+                sal_uInt32 nKey = pFirstCol->GetCurKey();
+                pCols->First();
+                for (pCol = static_cast<Table*>(pCols->Next()); pCol; pCol = static_cast<Table*>(pCols->Next()))
+                    pCol->Insert(nKey, NULL);
             }
         }
     }
@@ -821,8 +816,8 @@ void Chart2Positioner::createPositionMap()
             bFillRowHeader, bFillColumnHeader, *pCols, mpDoc));
 
     // Destroy all column instances.
-    for (ChartTokenMap::const_iterator it = pCols->begin(); it != pCols->end(); ++it)
-        delete it->second;
+    for (pCol = static_cast<Table*>(pCols->First()); pCol; pCol = static_cast<Table*>(pCols->Next()))
+        delete pCol;
 }
 
 // ============================================================================
