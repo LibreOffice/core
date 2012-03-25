@@ -286,6 +286,12 @@ List* AbstractSdInsertPagesObjsDlg_Impl::GetList( sal_uInt16 nType )
 {
     return pDlg->GetList( nType );
 }
+
+void AbstractSdInsertPagesObjsDlg_Impl::GetList (const sal_uInt16 nType, std::vector<rtl::OUString> &rEntries)
+{
+    pDlg->GetList(nType,rEntries);
+}
+
 sal_Bool AbstractSdInsertPagesObjsDlg_Impl::IsLink()
 {
     return pDlg->IsLink();
