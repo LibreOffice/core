@@ -62,6 +62,17 @@ public:
                 ~SdInsertPagesObjsDlg();
 
     List*       GetList( sal_uInt16 nType );
+
+    /*************************************************************************
+    |*
+    |*  Liefert die Liste zurueck
+    |*  nType == 0 -> Seiten
+    |*  nType == 1 -> Objekte
+    |*
+    \************************************************************************/
+
+    void GetList ( const sal_uInt16 nType, std::vector<rtl::OUString> &rEntries);
+
     sal_Bool        IsLink();
     sal_Bool        IsRemoveUnnessesaryMasterPages() const;
 };

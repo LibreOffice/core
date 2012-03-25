@@ -142,6 +142,26 @@ List* SdInsertPagesObjsDlg::GetList( sal_uInt16 nType )
     return( aLbTree.GetSelectEntryList( nType ) );
 }
 
+void SdInsertPagesObjsDlg::GetList( const sal_uInt16 nType, std::vector<rtl::OUString> &rEntries )
+{
+    // Bei Draw-Dokumenten muss bei der Selektion des Dokumentes NULL
+    // zurueckgegeben werden
+    if( pMedium )
+    {
+        // Um zu gewaehrleisten, dass die Bookmarks geoeffnet sind
+        // (Wenn gesamtes Dokument ausgewaehlt wurde)
+        aLbTree.GetBookmarkDoc();
+
+        // Wenn das Dokument (mit-)selektiert oder nichst selektiert ist,
+        // wird das gesamte Dokument (und nicht mehr!) eingefuegt.
+        if( aLbTree.GetSelectionCount() == 0 ||
+            ( aLbTree.IsSelected( aLbTree.First() ) ) )
+            return;
+    }
+
+    aLbTree.GetSelectEntryList( nType,rEntries );
+}
+
 /*************************************************************************
 |*
 |*  Ist Verknuepfung gechecked
