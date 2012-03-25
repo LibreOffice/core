@@ -38,6 +38,7 @@
 
 #include <boost/unordered_map.hpp>
 
+#include <sal/log.hxx>
 #include <rtl/instance.hxx>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
@@ -166,9 +167,9 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
 
         if (rtti)
         {
-            pair< t_rtti_map::iterator, bool > insertion(
+            pair< t_rtti_map::iterator, bool > insertion (
                 m_rttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
-            OSL_ENSURE( insertion.second, "### inserting new rtti failed?!" );
+            SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in rtti map" );
         }
         else
         {
@@ -197,9 +198,9 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
                     rtti = new __class_type_info( strdup( rttiName ) );
                 }
 
-                pair< t_rtti_map::iterator, bool > insertion(
+                pair< t_rtti_map::iterator, bool > insertion (
                     m_generatedRttis.insert( t_rtti_map::value_type( unoName, rtti ) ) );
-                OSL_ENSURE( insertion.second, "### inserting new generated rtti failed?!" );
+                SAL_WARN_IF( !insertion.second, "bridges", "key " << unoName << " already in generated rtti map" );
             }
             else // taking already generated rtti
             {
