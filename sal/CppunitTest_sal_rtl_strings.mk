@@ -42,7 +42,7 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sal_rtl_strings,\
     $(gb_STDLIBS) \
 ))
 
-# the test uses the library created by Module_DLL
+# the test uses O(U)String capabilities that dlopen this lib
 $(call gb_CppunitTest_get_target,sal_rtl_strings) : \
     $(call gb_Library_get_target,sal_textenc)
 
