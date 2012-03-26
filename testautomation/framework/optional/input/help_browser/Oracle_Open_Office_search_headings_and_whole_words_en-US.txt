@@ -1,6 +1,0 @@
-Java Platform Support
-Java
-Start Parameters
-MySQL Connection
-Oracle Open Office
-Glossary of Internet Terms
