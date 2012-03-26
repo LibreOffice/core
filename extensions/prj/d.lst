@@ -48,7 +48,6 @@ mkdir: %_DEST%\xml%_EXT%\registry\spool\org\openoffice\Office\Logging
 ..\%__SRC%\misc\oooimprovecore.component %_DEST%\xml%_EXT%\oooimprovecore.component
 ..\%__SRC%\misc\oooimprovement.component %_DEST%\xml%_EXT%\oooimprovement.component
 ..\%__SRC%\misc\pcr.component %_DEST%\xml%_EXT%\pcr.component
-..\%__SRC%\misc\pl.component %_DEST%\xml%_EXT%\pl.component
 ..\%__SRC%\misc\preload.component %_DEST%\xml%_EXT%\preload.component
 ..\%__SRC%\misc\res.component %_DEST%\xml%_EXT%\res.component
 ..\%__SRC%\misc\scn.component %_DEST%\xml%_EXT%\scn.component

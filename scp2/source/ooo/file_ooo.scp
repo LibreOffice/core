@@ -115,33 +115,6 @@ End
 
 #endif
 
-#ifndef WITHOUT_MOZILLA
-
-#if !defined(UNX) || defined(ENABLE_GTK)
-File gid_File_Exe_Nsplugin
-        BIN_FILE_BODY;
-        Styles          = (PACKED);
-        Dir             = gid_Dir_Program;
- #ifdef UNX
-        Name            = "nsplugin";
- #else
-    Name = "nsplugin.exe";
-  #endif
-End
-#endif
-#endif
-
-#if !defined(WITHOUT_MOZILLA) && defined(UNX) && !defined(QUARTZ)
-
-File gid_File_Bin_Pluginapp
-    BIN_FILE_BODY;
-    Dir = gid_Dir_Program;
-    Name = "pluginapp.bin";
-    Styles = (PACKED);
-End
-
-#endif
-
 #ifdef UNX
 
 File gid_File_Bin_Open_Url

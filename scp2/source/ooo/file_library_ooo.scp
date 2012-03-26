@@ -1139,10 +1139,6 @@ STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deplmisc)
 STD_LIB_FILE(gid_File_Lib_DeploymentMisc, deploymentmisc)
 #endif
 
-#ifndef WITHOUT_MOZILLA
-STD_LIB_FILE( gid_File_Lib_Pl , pl)
-#endif
-
 #ifdef OS2
 STD_LIB_FILE( gid_File_Lib_Preload, preloadg)
 #else

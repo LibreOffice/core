@@ -486,15 +486,6 @@ File gid_Brand_File_Bin_Libxml2
 End
 #endif
 
-#if !defined WITHOUT_MOZILLA && (!defined UNX || defined ENABLE_GTK)
-File gid_Brand_File_Lib_Npsoplugin
-    BIN_FILE_BODY;
-    Name = SPECIAL_NAME(npsoplugin);
-    Dir = gid_Brand_Dir_Program;
-    Styles = (PACKED);
-End
-#endif
-
 File gid_Brand_File_Bmp_IntroAbout
     TXT_FILE_BODY;
     Dir = gid_Brand_Dir_Program;

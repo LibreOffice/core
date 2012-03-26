@@ -290,8 +290,7 @@ my_components += ldapbe2
 my_components += \
     xmlsecurity \
     xsec_fw \
-    xsec_xmlsec \
-    pl
+    xsec_xmlsec
 .END
 
 .IF "$(OS)" == "MACOSX"

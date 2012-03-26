@@ -1,7 +1,0 @@
-mkdir: %_DEST%\inc%_EXT%\npsdk
-
-..\mozsrc\*.h %_DEST%\inc%_EXT%\npsdk\*.h
-
-..\%__SRC%\slo\npunix.o %_DEST%\lib%_EXT%\npunix.o
-..\%__SRC%\slo\npunix.obj %_DEST%\lib%_EXT%\npunix.obj
-..\%__SRC%\slo\npwin.obj %_DEST%\lib%_EXT%\npwin.obj
