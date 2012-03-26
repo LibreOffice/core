@@ -44,7 +44,6 @@
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/registry/XRegistryKey.hpp>
-#include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/awt/Rectangle.hpp>
 #include <com/sun/star/awt/KeyModifier.hpp>
