@@ -46,12 +46,7 @@
     The adapter may also support <type scope="com::sun::star::script">XInvocation2</type>.
     </p>
  */
-published service Invocation
-{
-    /// Interface to specify the object to be mapped by the invocation service.
-    interface com::sun::star::lang::XSingleServiceFactory;
-
-};
+published service Invocation : com::sun::star::lang::XSingleServiceFactory;
 
 //=============================================================================
 

@@ -40,10 +40,7 @@
     interfaces to the interface <type>XAllListener</type>.
  */
 published service AllListenerAdapter
-{
-    /// interface to create adapters for listener types
-    interface com::sun::star::script::XAllListenerAdapterService;
-};
+    : com::sun::star::script::XAllListenerAdapterService;
 
 //=============================================================================
 

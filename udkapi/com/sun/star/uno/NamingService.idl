@@ -34,14 +34,9 @@
 
 //=============================================================================
 /** a simple named object container.
-
+    Through this interface the objects are registered and accessed.
  */
-published service NamingService
-{
-    /** through this interface the objects are registered and accessed.
-     */
-    interface com::sun::star::uno::XNamingService;
-};
+published service NamingService : com::sun::star::uno::XNamingService;
 
 //=============================================================================
 

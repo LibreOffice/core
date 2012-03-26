@@ -45,12 +45,7 @@
     <p>For details see method <member>XIntrospection::inspect
     </member>.</p>
  */
-published service Introspection
-{
-    /// The only interface of this service
-    interface com::sun::star::beans::XIntrospection;
-
-};
+published service Introspection : com::sun::star::beans::XIntrospection;
 
 //=============================================================================
 
