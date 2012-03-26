@@ -1164,6 +1164,7 @@ void ScCheckListMenuWindow::initMembers()
 {
     size_t n = maMembers.size();
     size_t nVisMemCount = 0;
+    maChecks.SetUpdateMode(false);
     for (size_t i = 0; i < n; ++i)
     {
         maChecks.InsertEntry(maMembers[i].maName);
@@ -1188,6 +1189,7 @@ void ScCheckListMenuWindow::initMembers()
         maChkToggleAll.SetState(STATE_DONTKNOW);
         mePrevToggleAllState = STATE_DONTKNOW;
     }
+    maChecks.SetUpdateMode(true);
 }
 
 void ScCheckListMenuWindow::setConfig(const Config& rConfig)
