@@ -492,7 +492,8 @@ void SwLineRects::AddLineRect( const SwRect &rRect, const Color *pCol, const Svx
     //Loop backwards because lines which can be combined, can usually be painted
     //in the same context.
 
-    for (SwLineRects::iterator it = this->end(); it != this->begin(); --it)
+    for (SwLineRects::reverse_iterator it = this->rbegin(); it != this->rend();
+         ++it)
     {
         SwLineRect &rLRect = (*it);
         // Test for the orientation, color, table
@@ -948,17 +949,14 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
 
         // Remove all help line that are almost covered (tables)
-        SwSubsRects::iterator it = this->begin();
-        while ( it != this->end() )
+        for (SwSubsRects::size_type i = 0; i != this->size(); ++i)
         {
-            SwLineRect &rLi = *it;
+            SwLineRect &rLi = (*this)[i];
             const bool bVerticalSubs = rLi.Height() > rLi.Width();
 
-            SwSubsRects::iterator itK = it;
-            while ( itK != this->end() )
+            for (SwSubsRects::size_type k = i + 1; k != this->size(); ++k)
             {
-                bool bRemoved = false;
-                SwLineRect &rLk = (*itK);
+                SwLineRect &rLk = (*this)[k];
                 if ( rLi.SSize() == rLk.SSize() )
                 {
                     if ( bVerticalSubs == ( rLk.Height() > rLk.Width() ) )
@@ -971,11 +969,11 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                  ((nLi < rLk.Left() && nLi+21 > rLk.Left()) ||
                                   (nLk < rLi.Left() && nLk+21 > rLi.Left())))
                             {
-                                this->erase( itK );
+                                this->erase(this->begin() + k);
                                 // don't continue with inner loop any more:
                                 // the array may shrink!
-                                itK = this->end();
-                                bRemoved = true;
+                                --i;
+                                break;
                             }
                         }
                         else
@@ -986,21 +984,16 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                                  ((nLi < rLk.Top() && nLi+21 > rLk.Top()) ||
                                   (nLk < rLi.Top() && nLk+21 > rLi.Top())))
                             {
-                                this->erase( itK );
+                                this->erase(this->begin() + k);
                                 // don't continue with inner loop any more:
                                 // the array may shrink!
-                                itK = this->end();
-                                bRemoved = true;
+                                --i;
+                                break;
                             }
                         }
                     }
                 }
-
-                if ( !bRemoved )
-                    ++itK;
             }
-
-            ++it;
         }
 
         if ( pRects && (!pRects->empty()) )
@@ -1021,7 +1014,8 @@ void SwSubsRects::PaintSubsidiary( OutputDevice *pOut,
                 pOut->SetDrawMode( 0 );
             }
 
-            for (it = this->begin(); it != this->end(); ++it)
+            for (SwSubsRects::iterator it = this->begin(); it != this->end();
+                 ++it)
             {
                 SwLineRect &rLRect = (*it);
                 // Add condition <!rLRect.IsLocked()> to prevent paint of locked subsidiary lines.
