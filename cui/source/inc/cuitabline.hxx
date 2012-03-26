@@ -197,6 +197,7 @@ private:
     sal_Bool FillXLSet_Impl();
 #endif
 
+    void SymbolSelected(MenuButton* pButton);
     void FillListboxes();
 public:
 

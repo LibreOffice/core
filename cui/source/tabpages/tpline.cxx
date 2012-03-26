@@ -265,6 +265,106 @@ void SvxLineTabPage::Construct()
     FillListboxes();
 }
 
+void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
+{
+    sal_uInt16 nItemId = pButton->GetCurItemId();
+    const Graphic* pGraphic = 0;
+    Graphic aGraphic;
+    String aGrfName;
+    sal_Bool bResetSize = sal_False;
+    sal_Bool bEnable=sal_True;
+    long nPreviousSymbolType = nSymbolType;
+
+    if(nItemId >= MN_GALLERY_ENTRY)
+    {
+        if( (nItemId-MN_GALLERY_ENTRY) >= nNumMenuGalleryItems)
+        {
+            nSymbolType=nItemId-MN_GALLERY_ENTRY-nNumMenuGalleryItems; //Index der Liste
+        }
+        else
+        {
+            nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
+            bResetSize = sal_True;
+        }
+        SvxBmpItemInfo* pInfo = aGrfBrushItems[ nItemId - MN_GALLERY_ENTRY ];
+        pGraphic = pInfo->pBrushItem->GetGraphic();
+    }
+    else switch(nItemId)
+    {
+        case MN_SYMBOLS_AUTO:
+        {
+            pGraphic=&aAutoSymbolGraphic;
+            aAutoSymbolGraphic.SetPrefSize( Size(253,253) );
+            nSymbolType=SVX_SYMBOLTYPE_AUTO;
+        }
+        break;
+
+        case MN_SYMBOLS_NONE:
+        {
+            nSymbolType=SVX_SYMBOLTYPE_NONE;
+            pGraphic=NULL;
+            bEnable=sal_False;
+        }
+        break;
+        default:
+        {
+            SvxOpenGraphicDialog aGrfDlg(CUI_RES(RID_STR_EDIT_GRAPHIC));
+            aGrfDlg.EnableLink(sal_False);
+            aGrfDlg.AsLink(sal_False);
+            if( !aGrfDlg.Execute() )
+            {
+                // ausgewaehlten Filter merken
+                aGrfName = aGrfDlg.GetPath();
+                if( !aGrfDlg.GetGraphic(aGraphic) )
+                {
+                    nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
+                    pGraphic = &aGraphic;
+                    bResetSize = sal_True;
+                }
+            }
+            if( !pGraphic )
+                return;
+        }
+        break;
+    }
+
+    if(pGraphic)
+    {
+        Size aSize = SvxNumberFormat::GetGraphicSizeMM100(pGraphic);
+        aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)ePoolUnit);
+        aSymbolGraphic=*pGraphic;
+        if( bResetSize )
+        {
+            aSymbolSize=aSize;
+        }
+        else if( nPreviousSymbolType == SVX_SYMBOLTYPE_BRUSHITEM )
+        {   //#i31097# Data Point Symbol size changes when a different symbol is choosen(maoyg)
+            if( aSymbolSize.Width() != aSymbolSize.Height() )
+            {
+                aSize.setWidth( (long)( aSymbolSize.Width() + aSymbolSize.Height() )/2 );
+                aSize.setHeight( (long)( aSymbolSize.Width() + aSymbolSize.Height() )/2 );
+                aSymbolSize = aSize;
+            }
+        }
+        aCtlPreview.SetSymbol(&aSymbolGraphic,aSymbolSize);
+    }
+    else
+    {
+        aSymbolGraphic=Graphic();
+        aCtlPreview.SetSymbol(NULL,aSymbolSize);
+        bEnable=sal_False;
+    }
+    aSymbolLastSize=aSymbolSize;
+    SetMetricValue(aSymbolWidthMF,  aSymbolSize.Width(), ePoolUnit);
+    SetMetricValue(aSymbolHeightMF, aSymbolSize.Height(), ePoolUnit);
+    aSymbolRatioCB.Enable(bEnable);
+    aSymbolHeightFT.Enable(bEnable);
+    aSymbolWidthFT.Enable(bEnable);
+    aSymbolWidthMF.Enable(bEnable);
+    aSymbolHeightMF.Enable(bEnable);
+    aCtlPreview.Invalidate();
+}
+
 void SvxLineTabPage::FillListboxes()
 {
     // Line styles
@@ -1647,103 +1747,7 @@ IMPL_STATIC_LINK(SvxLineTabPage, GraphicArrivedHdl_Impl, SvxBrushItem*, pItem)
 //Handler f�r Menuebutton
 IMPL_LINK( SvxLineTabPage, GraphicHdl_Impl, MenuButton *, pButton )
 {
-    sal_uInt16 nItemId = pButton->GetCurItemId();
-    const Graphic* pGraphic = 0;
-    Graphic aGraphic;
-    String aGrfName;
-    sal_Bool bResetSize = sal_False;
-    sal_Bool bEnable=sal_True;
-    long nPreviousSymbolType = nSymbolType;
-
-    if(nItemId >= MN_GALLERY_ENTRY)
-    {
-        if( (nItemId-MN_GALLERY_ENTRY) >= nNumMenuGalleryItems)
-        {
-            nSymbolType=nItemId-MN_GALLERY_ENTRY-nNumMenuGalleryItems; //Index der Liste
-        }
-        else
-        {
-            nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
-            bResetSize = sal_True;
-        }
-        SvxBmpItemInfo* pInfo = aGrfBrushItems[ nItemId - MN_GALLERY_ENTRY ];
-        pGraphic = pInfo->pBrushItem->GetGraphic();
-    }
-    else switch(nItemId)
-    {
-        case MN_SYMBOLS_AUTO:
-        {
-            pGraphic=&aAutoSymbolGraphic;
-            aAutoSymbolGraphic.SetPrefSize( Size(253,253) );
-            nSymbolType=SVX_SYMBOLTYPE_AUTO;
-        }
-        break;
-
-        case MN_SYMBOLS_NONE:
-        {
-            nSymbolType=SVX_SYMBOLTYPE_NONE;
-            pGraphic=NULL;
-            bEnable=sal_False;
-        }
-        break;
-        default:
-        {
-            SvxOpenGraphicDialog aGrfDlg(CUI_RES(RID_STR_EDIT_GRAPHIC));
-            aGrfDlg.EnableLink(sal_False);
-            aGrfDlg.AsLink(sal_False);
-            if( !aGrfDlg.Execute() )
-            {
-                // ausgewaehlten Filter merken
-                aGrfName = aGrfDlg.GetPath();
-                if( !aGrfDlg.GetGraphic(aGraphic) )
-                {
-                    nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
-                    pGraphic = &aGraphic;
-                    bResetSize = sal_True;
-                }
-            }
-            if( !pGraphic )
-                return 0;
-        }
-        break;
-    }
-
-    if(pGraphic)
-    {
-        Size aSize = SvxNumberFormat::GetGraphicSizeMM100(pGraphic);
-        aSize = OutputDevice::LogicToLogic(aSize, MAP_100TH_MM, (MapUnit)ePoolUnit);
-        aSymbolGraphic=*pGraphic;
-        if( bResetSize )
-        {
-            aSymbolSize=aSize;
-        }
-        else if( nPreviousSymbolType == SVX_SYMBOLTYPE_BRUSHITEM )
-        {   //#i31097# Data Point Symbol size changes when a different symbol is choosen(maoyg)
-            if( aSymbolSize.Width() != aSymbolSize.Height() )
-            {
-                aSize.setWidth( (long)( aSymbolSize.Width() + aSymbolSize.Height() )/2 );
-                aSize.setHeight( (long)( aSymbolSize.Width() + aSymbolSize.Height() )/2 );
-                aSymbolSize = aSize;
-            }
-        }
-        aCtlPreview.SetSymbol(&aSymbolGraphic,aSymbolSize);
-    }
-    else
-    {
-        aSymbolGraphic=Graphic();
-        aCtlPreview.SetSymbol(NULL,aSymbolSize);
-        bEnable=sal_False;
-    }
-    aSymbolLastSize=aSymbolSize;
-    SetMetricValue(aSymbolWidthMF,  aSymbolSize.Width(), ePoolUnit);
-    SetMetricValue(aSymbolHeightMF, aSymbolSize.Height(), ePoolUnit);
-    aSymbolRatioCB.Enable(bEnable);
-    aSymbolHeightFT.Enable(bEnable);
-    aSymbolWidthFT.Enable(bEnable);
-    aSymbolWidthMF.Enable(bEnable);
-    aSymbolHeightMF.Enable(bEnable);
-    aCtlPreview.Invalidate();
-
+    SymbolSelected(pButton);
     return 0;
 }
 IMPL_LINK( SvxLineTabPage, SizeHdl_Impl, MetricField *, pField)
