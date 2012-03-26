@@ -762,6 +762,11 @@ JNI_info::JNI_info(
     jni.ensure_no_exception();
     OSL_ASSERT( 0 != m_field_JNI_proxy_m_oid );
 
+    m_field_css_uno_RuntimeException_m_Context = jni->GetFieldID(
+        (jclass) jo_RuntimeException.get(), "Context", "Ljava/lang/Object;" );
+    jni.ensure_no_exception();
+    OSL_ASSERT( 0 != m_field_css_uno_RuntimeException_m_Context );
+
     // get java env
     OUString java_env_type_name( RTL_CONSTASCII_USTRINGPARAM(UNO_LB_JAVA) );
     JLocalAutoRef jo_java(

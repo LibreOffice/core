@@ -1968,7 +1968,26 @@ void Bridge::map_to_java(
                         comp_td)->pParameterizedTypes != 0;
                 for ( sal_Int32 nPos = comp_td->nMembers; nPos--; )
                 {
-                    jfieldID field_id = linfo->m_fields[ nPos ];
+                    jfieldID field_id;
+
+                    // Handle com.sun.star.uno.RuntimeException::Context as a
+                    // special case. In (C++) UNO css::uno::RuntimeException
+                    // is simply a subclass of css::uno::Exception, which
+                    // contains the Context field. In the Java UNO mapping
+                    // css.uno.RuntimeException is a subclass of
+                    // java.lang.RuntimeException, and has a Context field of
+                    // its own, separate from that of css.uno.Exception.
+
+                    // In Dalvik the field IDs of these Context fields
+                    // differ. (In Java VMs they seem to be the same.)
+
+                    if (type_equals( comp_info->m_td.get()->pWeakRef,
+                                     m_jni_info->m_RuntimeException_type.getTypeLibType() )
+                        && nPos == 1)
+                        field_id = m_jni_info->m_field_css_uno_RuntimeException_m_Context;
+                    else
+                        field_id = linfo->m_fields[ nPos ];
+
                     if (0 != field_id)
                     {
                         void const * p =
