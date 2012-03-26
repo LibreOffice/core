@@ -157,8 +157,7 @@ void test::ostring::StringLiterals::checkNonConstUsage()
 
     rtl_string_unittest_const_literal = false; // start checking for OString conversions
     rtl_string_unittest_const_literal_function = false; // and check for const variants
-    sleep(10);
-    rtl::OString() = (const char*)"foo";
+    CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = (const char*)"foo" );
     CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = foo_c );
     // if this is not true, some of the calls above converted to OString
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
