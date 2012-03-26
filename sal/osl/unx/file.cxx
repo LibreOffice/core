@@ -907,6 +907,8 @@ SAL_CALL osl_openFilePath( const char *cpFilePath, oslFileHandle* pHandle, sal_u
         void *address;
         size_t size;
         address = lo_apkentry(cpFilePath, &size);
+        OSL_TRACE("osl_openFile(%s): %p",
+                  cpFilePath, address);
         if (address == NULL)
         {
             errno = ENOENT;
