@@ -45,7 +45,7 @@ handle_with_cb (GObject *source,
     gpointer user_data)
 {
   TpChannelDispatchOperation *cdo = TP_CHANNEL_DISPATCH_OPERATION (source);
-  GtkDialog *dialog = GTK_DIALOG (user_data);
+  GtkMessageDialog *dialog = GTK_MESSAGE_DIALOG (user_data);
   GError *error = NULL;
 
   if (!tp_channel_dispatch_operation_handle_with_finish (cdo, result, &error))
@@ -59,7 +59,7 @@ handle_with_cb (GObject *source,
     }
 
   g_print ("HandleWith() succeeded\n");
-  gtk_widget_destroy (dialog);
+  gtk_widget_destroy (GTK_WIDGET (dialog));
 }
 
 static void
@@ -70,6 +70,8 @@ close_cb (GObject *source,
 {
   TpChannelDispatchOperation *cdo = TP_CHANNEL_DISPATCH_OPERATION (source);
   GError *error = NULL;
+
+  (void)user_data;      /* suppress unused-parameter warning */
 
   if (!tp_channel_dispatch_operation_close_channels_finish (cdo, result, &error))
     {
@@ -87,8 +89,10 @@ dialog_response_cb (
     gint response_id,
     gpointer user_data)
 {
-    TpSimpleApprover *self = TP_SIMPLE_APPROVER (g_object_get_data (dialog, "client"));
+    TpSimpleApprover *self = TP_SIMPLE_APPROVER (g_object_get_data (G_OBJECT (dialog), "client"));
     TpChannelDispatchOperation *cdo = TP_CHANNEL_DISPATCH_OPERATION (user_data);
+
+    (void)self;     /* suppress unused-parameter warning (could remove TP_SIMPLE_APPROVER above?) */
 
     if (response_id == GTK_RESPONSE_ACCEPT)
     {
@@ -97,8 +101,8 @@ dialog_response_cb (
         tp_channel_dispatch_operation_handle_with_async (cdo, NULL,
             handle_with_cb, dialog);
 
-        gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_ACCEPT, FALSE);
-        gtk_dialog_set_response_sensitive (dialog, GTK_RESPONSE_REJECT, FALSE);
+        gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_ACCEPT, FALSE);
+        gtk_dialog_set_response_sensitive (GTK_DIALOG (dialog), GTK_RESPONSE_REJECT, FALSE);
     }
     else
     {
@@ -131,18 +135,18 @@ show_dialog (
     {
         GtkWidget *avatar = gtk_image_new_from_file (g_file_get_path (avatar_file));
 
-        gtk_message_dialog_set_image (dialog, avatar);
+        gtk_message_dialog_set_image (GTK_MESSAGE_DIALOG (dialog), avatar);
     }
 
-    gtk_dialog_add_buttons (dialog,
+    gtk_dialog_add_buttons (GTK_DIALOG (dialog),
         "_Reject", GTK_RESPONSE_REJECT,
         "_Accept", GTK_RESPONSE_ACCEPT,
         NULL);
 
-    g_object_set_data_full (dialog, "client", g_object_ref (self), g_object_unref);
-    g_signal_connect (dialog, "response", dialog_response_cb, g_object_ref (cdo));
+    g_object_set_data_full (G_OBJECT (dialog), "client", g_object_ref (self), g_object_unref);
+    g_signal_connect (dialog, "response", G_CALLBACK (dialog_response_cb), g_object_ref (cdo));
 
-    gtk_window_set_skip_taskbar_hint (dialog, FALSE);
+    gtk_window_set_skip_taskbar_hint (GTK_WINDOW (dialog), FALSE);
 
     gtk_widget_show_all (dialog);
 }
@@ -158,6 +162,10 @@ add_dispatch_operation_cb (TpSimpleApprover *self,
 {
     TpContact *target = NULL;
     GList *l;
+
+    (void)account;      /* suppress unused-parameter warning */
+    (void)connection;   /* suppress unused-parameter warning */
+    (void)user_data;    /* suppress unused-parameter warning */
 
     g_print ("Approving this batch of channels:\n");
 
