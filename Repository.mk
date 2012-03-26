@@ -99,6 +99,7 @@ $(eval $(call gb_Helper_register_executables,OOO, \
 	$(if $(filter $(GUIBASE)$(ENABLE_KDE),unxTRUE), \
 		kdefilepicker \
 	) \
+	ui-previewer \
 ))
 
 ifeq ($(OS),WNT)

@@ -83,6 +83,7 @@ $(eval $(call gb_Library_use_libraries,vcl,\
     i18nutil \
     cppu \
     sal \
+    xmlreader \
     $(gb_STDLIBS) \
 ))
 
@@ -250,6 +251,7 @@ $(eval $(call gb_Library_add_exception_objects,vcl,\
     vcl/source/window/arrange \
     vcl/source/window/brdwin \
     vcl/source/window/btndlg \
+    vcl/source/window/builder \
     vcl/source/window/cmdevt \
     vcl/source/window/cursor \
     vcl/source/window/decoview \

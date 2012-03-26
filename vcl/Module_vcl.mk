@@ -35,6 +35,7 @@ $(eval $(call gb_Module_add_targets,vcl,\
     Library_vcl \
     Package_inc \
     StaticLibrary_vclmain \
+	Executable_ui-previewer \
 ))
 
 ifeq ($(GUIBASE),unx)
