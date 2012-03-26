@@ -1464,6 +1464,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
         String aEmptyStr;
         const String *pUIName = NULL;
         sal_uInt32 i = 0;
+        nNumMenuGalleryItems = aGrfNames.size();
         for(std::vector<String>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
         {
             pUIName = &(*it);
