@@ -78,3 +78,7 @@
 # Dictionary for italian.
 [ language=it_IT ]
     c71fa1e7a047cf4efdb27027e3f75a16 http://sourceforge.net/projects/aoo-extensions/files/1204/10/dict-it.oxt/download "dict-it.oxt"
+
+# Dictionary for spanish.
+[ language=es_ES ]
+    5798f4a61b0f95db3d62eabcb80670eb http://sourceforge.net/projects/aoo-extensions/files/1657/1/es_ES.oxt/download "es_ES.oxt"
