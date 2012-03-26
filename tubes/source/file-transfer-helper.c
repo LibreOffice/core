@@ -709,6 +709,8 @@ ft_transfer_transferred_bytes_cb (TpFileTransferChannel *channel,
   EmpathyFTHandlerPriv *priv = handler->priv;
   guint64 bytes;
 
+  (void)pspec;      /* suppress unused-parameter warning */
+
   if (empathy_ft_handler_is_cancelled (handler))
     return;
 
@@ -810,6 +812,8 @@ ft_transfer_state_cb (TpFileTransferChannel *channel,
   TpFileTransferStateChangeReason reason;
   TpFileTransferState state = tp_file_transfer_channel_get_state (
       channel, &reason);
+
+  (void)pspec;      /* suppress unused-parameter warning */
 
   if (state == TP_FILE_TRANSFER_STATE_COMPLETED)
     {
@@ -1091,6 +1095,8 @@ ft_handler_read_async_cb (GObject *source,
   EmpathyFTHandler *handler = user_data;
   EmpathyFTHandlerPriv *priv = handler->priv;
 
+  (void)source;     /* suppress unused-parameter warning */
+
   DEBUG ("GFile read async CB.");
 
   stream = g_file_read_finish (priv->gfile, res, &error);
@@ -1292,6 +1298,8 @@ ft_handler_gfile_ready_cb (GObject *source,
   GError *error = NULL;
   GTimeVal mtime;
   EmpathyFTHandlerPriv *priv = cb_data->handler->priv;
+
+  (void)source;     /* suppress unused-parameter warning */
 
   DEBUG ("Got GFileInfo.");
 
