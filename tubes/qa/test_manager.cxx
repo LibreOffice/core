@@ -211,12 +211,12 @@ void TestTeleTubes::testContactList()
 
 void TestTeleTubes::testSetupManager1()
 {
-    mpManager1 = new TeleManager( true);
+    mpManager1 = new TeleManager( true, true);
 }
 
 void TestTeleTubes::testSetupManager2()
 {
-    mpManager2 = new TeleManager();
+    mpManager2 = new TeleManager( true );
 }
 
 void TestTeleTubes::testPrepareAccountManager1()

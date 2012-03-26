@@ -77,10 +77,10 @@ public:
             Whether to create and iterate an own GMainLoop. For testing
             purposes when no GMainLoop is available.
      */
-    TeleManager( bool bCreateOwnGMainLoop = false );
+    TeleManager( bool bAcceptIncoming = true, bool bCreateOwnGMainLoop = false );
     ~TeleManager();
 
-    static TeleManager     *get();
+    static TeleManager     *get( bool bAcceptIncoming );
     void                    unref();
 
     /** Prepare the Telepathy Account Manager. Requires connect() to have succeeded.
@@ -223,6 +223,7 @@ public:
 private:
     TeleConferenceVector    maConferences;
 
+    bool                    mbAcceptIncoming;
     bool                    mbChannelReadyHandlerInvoked : 1;
 
     static TeleManagerImpl* pImpl;

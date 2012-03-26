@@ -557,8 +557,9 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
             boost::bind( &ScDocFuncRecv::packetReceived, pReceiver, _1, _2 ));
         pCollab->sigFileReceived.connect(
             boost::bind( &ScDocFuncRecv::fileReceived, pReceiver, _1));
-        bOk = bOk && pCollab->initManager();
-        if (!strcmp( pEnv, "master"))
+        bool bIsMaster = !strcmp( pEnv, "master");
+        bOk = bOk && pCollab->initManager(!bIsMaster);
+        if (bIsMaster)
         {
             bOk = bOk && pCollab->initAccountContact();
             bOk = bOk && pCollab->startCollaboration();

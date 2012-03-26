@@ -357,8 +357,9 @@ static void TeleManager_AccountManagerReadyHandler(
 }
 
 
-TeleManager::TeleManager( bool bCreateOwnGMainLoop )
+TeleManager::TeleManager( bool bAcceptIncoming, bool bCreateOwnGMainLoop )
     :
+        mbAcceptIncoming( bAcceptIncoming ),
         mbChannelReadyHandlerInvoked( false)
 {
     // The glib object types need to be initialized, else we aren't going
@@ -390,11 +391,11 @@ TeleManager::~TeleManager()
 }
 
 TeleManager *
-TeleManager::get()
+TeleManager::get( bool bAcceptIncoming )
 {
     MutexGuard aGuard( GetAnotherMutex());
     if (!pSingleton)
-        pSingleton = new TeleManager();
+        pSingleton = new TeleManager(bAcceptIncoming);
 
     nAnotherRefCount++;
     return pSingleton;
@@ -445,6 +446,9 @@ bool TeleManager::connect()
     pImpl->mpAccountManager = pAccountManager;
 
     pImpl->mpContactList = new ContactList(pAccountManager);
+
+    if (!mbAcceptIncoming)
+        return true;
 
     pImpl->mpClient = tp_simple_handler_new_with_factory(
             TP_SIMPLE_CLIENT_FACTORY (pFactory), // factory

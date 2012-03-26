@@ -66,9 +66,9 @@ void ScCollaboration::packetReceivedCallback( TeleConference *pConference, TeleP
     sigPacketReceived( pConference, aString);
 }
 
-bool ScCollaboration::initManager()
+bool ScCollaboration::initManager(bool bAcceptIncoming)
 {
-    mpManager = TeleManager::get();
+    mpManager = TeleManager::get(bAcceptIncoming);
     mpManager->sigPacketReceived.connect(
         boost::bind( &ScCollaboration::packetReceivedCallback, this, _1, _2 ));
     mpManager->connect();

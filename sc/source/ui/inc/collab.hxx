@@ -46,7 +46,7 @@ public:
                             ScCollaboration();
                             ~ScCollaboration();
 
-    bool                    initManager();
+    bool                    initManager(bool bAcceptIncoming);
     bool                    initAccountContact();
     bool                    startCollaboration();
 
