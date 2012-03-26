@@ -118,10 +118,15 @@ namespace basegfx
             @param rSvgDAttribute
             A valid SVG-D attribute string
 
+            @param rWrongPositionAfterZ
+            Indicates wheter the generator interprets wrongly
+            the position in the path after Z or z elements
+            https://bugs.freedesktop.org/show_bug.cgi?id=47406
+
             @return true, if the string was successfully parsed
          */
         BASEGFX_DLLPUBLIC bool importFromSvgD( B2DPolyPolygon&        o_rPolyPoly,
-                             const ::rtl::OUString& rSvgDAttribute );
+                             const ::rtl::OUString& rSvgDAttribute, bool bWrongPositionAfterZ = false );
 
         /** Read poly-polygon from SVG.
 

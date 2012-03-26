@@ -399,8 +399,7 @@ void SdXML3DPolygonBasedShapeContext::StartElement(const uno::Reference< xml::sa
             SdXMLImExViewBox aViewBox(maViewBox, GetImport().GetMM100UnitConverter());
             awt::Point aMinPoint(aViewBox.GetX(), aViewBox.GetY());
             awt::Size aMaxSize(aViewBox.GetWidth(), aViewBox.GetHeight());
-            SdXMLImExSvgDElement aPoints(maPoints, aViewBox,
-                aMinPoint, aMaxSize, GetImport().GetMM100UnitConverter());
+            SdXMLImExSvgDElement aPoints(maPoints, aViewBox, aMinPoint, aMaxSize, GetImport());
 
             // convert to double sequences
             drawing::PointSequenceSequence& xPoSeSe =

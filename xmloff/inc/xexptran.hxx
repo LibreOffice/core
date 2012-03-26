@@ -36,6 +36,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <tools/mapunit.hxx>
+#include <xmloff/xmlimp.hxx>
 
 #include <vector>
 
@@ -171,7 +172,7 @@ public:
         const SdXMLImExViewBox& rViewBox,
         const com::sun::star::awt::Point& rObjectPos,
         const com::sun::star::awt::Size& rObjectSize,
-        const SvXMLUnitConverter& rConv);
+        const SvXMLImport& rImport);
 
     void AddPolygon(
         com::sun::star::drawing::PointSequence* pPoints,

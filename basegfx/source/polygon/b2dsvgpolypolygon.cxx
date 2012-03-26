@@ -209,7 +209,7 @@ namespace basegfx
             }
         }
 
-        bool importFromSvgD(B2DPolyPolygon& o_rPolyPolygon, const ::rtl::OUString&  rSvgDStatement)
+        bool importFromSvgD(B2DPolyPolygon& o_rPolyPolygon, const ::rtl::OUString&  rSvgDStatement, bool bWrongPositionAfterZ)
         {
             o_rPolyPolygon.clear();
             const sal_Int32 nLen(rSvgDStatement.getLength());
@@ -240,7 +240,7 @@ namespace basegfx
                         bIsClosed = true;
 
                         // update current point - we're back at the start
-                        if( aCurrPoly.count() )
+                        if( aCurrPoly.count() && !bWrongPositionAfterZ)
                         {
                             const B2DPoint aFirst( aCurrPoly.getB2DPoint(0) );
                             nLastX = aFirst.getX();

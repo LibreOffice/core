@@ -2121,7 +2121,7 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
     const SdXMLImExViewBox& rViewBox,
     const awt::Point& rObjectPos,
     const awt::Size& rObjectSize,
-    const SvXMLUnitConverter& /*rConv*/)
+    const SvXMLImport& rImport)
 :   msString( rNew ),
     mrViewBox( rViewBox ),
     mbIsClosed( false ),
@@ -2130,9 +2130,20 @@ SdXMLImExSvgDElement::SdXMLImExSvgDElement(const OUString& rNew,
     mnLastY( 0L ),
     maPoly()
 {
+    bool bWrongPositionAfterZ( false );
+	sal_Int32 nUPD( 0 );
+	sal_Int32 nBuildId( 0 );
+	if ( rImport.getBuildIds( nUPD, nBuildId ) &&
+       ( ( nUPD == 641 ) || ( nUPD == 645 ) || ( nUPD == 680 ) || ( nUPD == 300 ) ||
+         ( nUPD == 310 ) || ( nUPD == 320 ) || ( nUPD == 330 ) || ( nUPD == 340 ) ||
+         ( nUPD == 350 && nBuildId < 202 ) ) )
+    {
+        bWrongPositionAfterZ = true;
+    }
+
     // convert string to polygon
     basegfx::B2DPolyPolygon aPoly;
-    basegfx::tools::importFromSvgD(aPoly,msString);
+    basegfx::tools::importFromSvgD(aPoly,msString,bWrongPositionAfterZ);
 
     mbIsCurve = aPoly.areControlPointsUsed();
     mbIsClosed = aPoly.isClosed();
