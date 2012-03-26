@@ -931,18 +931,6 @@ void TeleManager::iterateLoop( const TeleConference* pConference, ConferenceCall
 }
 
 
-void TeleManager::flushLoop() const
-{
-    if (pImpl->mpLoop)
-    {
-        GMainContext* pContext = g_main_loop_get_context( pImpl->mpLoop);
-        while (g_main_context_iteration( pContext, FALSE))
-        {
-        }
-    }
-}
-
-
 GMainLoop* TeleManager::getMainLoop() const
 {
     return pImpl->mpLoop;

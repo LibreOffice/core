@@ -60,7 +60,6 @@ public:
     void testSendPacket();
     void testReceivePacket();
     void testSendFile();
-    void testFlushLoops();
     void testDestroyManager1();
     void testDestroyManager2();
     void testDestroyAccepterContact();
@@ -88,7 +87,6 @@ public:
     CPPUNIT_TEST( testSendPacket );
     CPPUNIT_TEST( testReceivePacket );
     CPPUNIT_TEST( testSendFile );
-    CPPUNIT_TEST( testFlushLoops );
     CPPUNIT_TEST( testDestroyManager1 );
     CPPUNIT_TEST( testDestroyManager2 );
     CPPUNIT_TEST( testDestroyAccepterContact );
@@ -344,12 +342,6 @@ void TestTeleTubes::testSendFile()
     CPPUNIT_ASSERT_MESSAGE(
         OUStringToOString( maFileReceivedUri, RTL_TEXTENCODING_UTF8).getStr(),
         maFileReceivedUri == "file:///tmp/LibreOffice-collab-test-config.ini");
-}
-
-void TestTeleTubes::testFlushLoops()
-{
-    mpManager1->flushLoop();
-    mpManager2->flushLoop();
 }
 
 void TestTeleTubes::testDestroyManager1()

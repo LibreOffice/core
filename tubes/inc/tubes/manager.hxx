@@ -192,9 +192,6 @@ public:
     /** Iterate our GMainLoop, blocking, until the callback is done. */
     void                    iterateLoop( const TeleConference* pConference, ConferenceCallBackInvokedFunc pFunc );
 
-    /** Iterate our GMainLoop, non-blocking, until nothing pending. */
-    void                    flushLoop() const;
-
     /// "LibreOfficeWhatEver"
     static rtl::OString     getFullClientName();
 
