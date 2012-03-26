@@ -593,7 +593,10 @@ SlideshowImpl::SlideshowImpl( const Reference< XPresentation2 >& xPresentation, 
 
 SlideshowImpl::~SlideshowImpl()
 {
-    SdOptions* pOptions = SD_MOD()->GetSdOptions(DOCUMENT_TYPE_IMPRESS);
+    SdModule *pModule = SD_MOD();
+    //rhbz#806663 SlideshowImpl can outlive SdModule
+    SdOptions* pOptions = pModule ?
+        pModule->GetSdOptions(DOCUMENT_TYPE_IMPRESS) : NULL;
     if( pOptions )
     {
         pOptions->SetPresentationPenColor(mnUserPaintColor);
