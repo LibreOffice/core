@@ -400,6 +400,8 @@ bool PersistentMap::importFromBDB()
         const sal_uInt8* const pPage = &aRawBDB[ nPgNo * nPgSize];
         const sal_uInt8* const pEnd = pPage + nPgSize;
         const int nHfOffset = bLE ? (pPage[22] + (pPage[23]<<8)) : (pPage[23] + (pPage[22]<<8));
+        if( nHfOffset <= 0)
+            continue;
         const sal_uInt8* pCur = pPage + nHfOffset;
         // iterate through the entries
         for(; pCur < pEnd; ++pCur) {
@@ -423,6 +425,7 @@ bool PersistentMap::importFromBDB()
             if( (pCur < pEnd) && (*pCur > 0x01))
                 continue;
             const OString aKey( (sal_Char*)pKey, pCur - pKey);
+            --pCur; // prepare for next round by rewinding to end of key-string
 
             // add the key/value pair
             add( aKey, aVal);
