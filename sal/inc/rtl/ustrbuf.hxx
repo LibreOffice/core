@@ -405,6 +405,24 @@ public:
         return *this;
     }
 
+    /**
+        @overload
+        This function accepts an ASCII string literal as its argument.
+        @since LibreOffice 3.6
+     */
+    template< int N >
+    OUStringBuffer& append( const char (&literal)[ N ] )
+    {
+        rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), literal, N - 1 );
+        return *this;
+    }
+
+    /**
+        It is an error to call this overload. Strings cannot directly use non-const char[].
+        @internal
+     */
+    template< int N >
+    OUStringBuffer& append( char (&literal)[ N ] );
 
     /**
         Appends the string representation of the <code>sal_Bool</code>

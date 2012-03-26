@@ -37,6 +37,7 @@ extern bool rtl_string_unittest_const_literal;
 #include <cppunit/extensions/HelperMacros.h>
 #include "rtl/string.h"
 #include "rtl/ustring.hxx"
+#include "rtl/ustrbuf.hxx"
 #include "rtl/oustringostreaminserter.hxx"
 
 namespace test { namespace oustring {
@@ -48,6 +49,7 @@ private:
     void checkUsage();
     void checkExtraIntArgument();
     void checkNonconstChar();
+    void checkBuffer();
 
     void testcall( const char str[] );
     // invalid conversions will trigger templated OUString ctor that creates an empty string
@@ -59,6 +61,7 @@ CPPUNIT_TEST(checkCtors);
 CPPUNIT_TEST(checkUsage);
 CPPUNIT_TEST(checkExtraIntArgument);
 CPPUNIT_TEST(checkNonconstChar);
+CPPUNIT_TEST(checkBuffer);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -158,6 +161,15 @@ void test::oustring::StringLiterals::checkNonconstChar()
     CPPUNIT_ASSERT( !validConversion( rtl::OUString( "footest" ).replaceAll( consttest, bar )));
     CPPUNIT_ASSERT( !validConversion( rtl::OUString( "footest" ).replaceAll( test, constbar )));
     CPPUNIT_ASSERT( rtl::OUString( "foobar" ) == rtl::OUString( "footest" ).replaceAll( consttest, constbar ));
+}
+
+void test::oustring::StringLiterals::checkBuffer()
+{
+    rtl::OUStringBuffer buf;
+    buf.append( "foo" );
+    CPPUNIT_ASSERT( buf.toString() == "foo" );
+    buf.append( "bar" );
+    CPPUNIT_ASSERT( buf.toString() == "foobar" );
 }
 
 }} // namespace
