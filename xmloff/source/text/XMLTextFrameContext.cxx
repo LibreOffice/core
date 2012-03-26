@@ -313,8 +313,7 @@ XMLTextFrameContourContext_Impl::XMLTextFrameContourContext_Impl(
         Any aAny;
         if( bPath )
         {
-            SdXMLImExSvgDElement aPoints( sD, aViewBox, aPoint, aSize,
-                                          GetImport().GetMM100UnitConverter() );
+            SdXMLImExSvgDElement aPoints( sD, aViewBox, aPoint, aSize, GetImport() );
             aAny <<= aPoints.GetPointSequenceSequence();
         }
         else
