@@ -64,9 +64,9 @@
 #include <com/sun/star/embed/XStorage.hpp>
 #include <com/sun/star/datatransfer/XTransferable.hpp>
 
-#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21)
-#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_21
-#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 21
+#if ! defined(INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22)
+#define INCLUDED_COMPHELPER_IMPLBASE_VAR_HXX_22
+#define COMPHELPER_IMPLBASE_INTERFACE_NUMBER 22
 #include "comphelper/implbase_var.hxx"
 #endif
 #include <osl/mutex.hxx>
@@ -88,7 +88,7 @@ namespace impl
 {
 
 // Note: needed for queryInterface (if it calls the base-class implementation)
-typedef ::comphelper::WeakImplHelper21<
+typedef ::comphelper::WeakImplHelper22<
 //       ::com::sun::star::frame::XModel        //comprehends XComponent (required interface), base of XChartDocument
          ::com::sun::star::util::XCloseable     //comprehends XCloseBroadcaster
         ,::com::sun::star::frame::XStorable2    //(extension of XStorable)
@@ -111,6 +111,7 @@ typedef ::comphelper::WeakImplHelper21<
         ,::com::sun::star::document::XDocumentPropertiesSupplier
         ,::com::sun::star::chart2::data::XDataSource
         ,::com::sun::star::document::XUndoManagerSupplier
+        ,::com::sun::star::qa::XDumper
         >
     ChartModel_Base;
 }
@@ -607,6 +608,10 @@ public:
     // ____ XDataSource ____ allows access to the curently used data and data ranges
     virtual ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Reference< ::com::sun::star::chart2::data::XLabeledDataSequence > > SAL_CALL getDataSequences()
         throw (::com::sun::star::uno::RuntimeException);
+
+    // XDumper
+    virtual rtl::OUString dump()
+        throw (com::sun::star::uno::RuntimeException);
 };
 
 }  // namespace chart

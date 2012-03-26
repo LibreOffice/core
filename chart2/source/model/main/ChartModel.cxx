@@ -1353,6 +1353,13 @@ uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartM
     return uno::Sequence< Reference< chart2::data::XLabeledDataSequence > >();
 }
 
+//XDumper
+rtl::OUString SAL_CALL ChartModel::dump()
+    throw (uno::RuntimeException)
+{
+    return rtl::OUString();
+}
+
 }  // namespace chart
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
