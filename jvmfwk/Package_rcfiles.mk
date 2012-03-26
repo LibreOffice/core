@@ -27,8 +27,36 @@
 
 $(eval $(call gb_Package_Package,jvmfwk_rcfiles,$(SRCDIR)/jvmfwk))
 
-$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(call gb_Helper_get_rcfile,bin/sunjavaplugin),plugins/sunmajor/pluginlib/sunjavapluginrc))
-$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(call gb_Helper_get_rcfile,bin/jvmfwk3),source/jvmfwk3rc))
 $(eval $(call gb_Package_add_file,jvmfwk_rcfiles,bin/javasettingsunopkginstall.xml,source/javasettingsunopkginstall.xml))
+
+# The below files (intended to be also used during the build) need to go into
+# the same directory as dynamic libraries (either bin or lib):
+
+ifeq ($(GUI),WNT)
+my_Package_jvmfwk_rcfiles_dir = bin
+else
+my_Package_jvmfwk_rcfiles_dir = lib
+endif
+
+$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(call gb_Helper_get_rcfile,$(my_Package_jvmfwk_rcfiles_dir)/sunjavaplugin),plugins/sunmajor/pluginlib/sunjavapluginrc))
+$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(call gb_Helper_get_rcfile,$(my_Package_jvmfwk_rcfiles_dir)/jvmfwk3),source/jvmfwk3rc))
+
+ifeq ($(GUI),UNX)
+ifeq ($(OS),FREEBSD)
+$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(my_Package_jvmfwk_rcfiles_dir)/javavendors.xml,distributions/OpenOfficeorg/javavendors_freebsd.xml))
+else ifeq ($(OS),MACOSX)
+$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(my_Package_jvmfwk_rcfiles_dir)/javavendors.xml,distributions/OpenOfficeorg/javavendors_macosx.xml))
+else ifeq ($(OS),LINUX)
+$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(my_Package_jvmfwk_rcfiles_dir)/javavendors.xml,distributions/OpenOfficeorg/javavendors_linux.xml))
+else ifeq ($(OS),AIX)
+$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(my_Package_jvmfwk_rcfiles_dir)/javavendors.xml,distributions/OpenOfficeorg/javavendors_linux.xml))
+else
+$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(my_Package_jvmfwk_rcfiles_dir)/javavendors.xml,distributions/OpenOfficeorg/javavendors_unx.xml))
+endif
+else ifeq ($(GUI),WNT)
+$(eval $(call gb_Package_add_file,jvmfwk_rcfiles,$(my_Package_jvmfwk_rcfiles_dir)/javavendors.xml,distributions/OpenOfficeorg/javavendors_wnt.xml))
+else
+$(call gb_Output_error,Unsupported platform)
+endif
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

@@ -37,7 +37,6 @@ ifneq ($(SOLAR_JAVA),)
 
 $(eval $(call gb_Module_add_targets,jvmfwk,\
     Library_sunjavaplugin \
-    Package_javavendors \
     Package_jreproperties \
 ))
 
