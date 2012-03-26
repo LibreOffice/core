@@ -107,8 +107,7 @@ sal_Bool XMLMarkerStyleImport::importXML(
     if( bHasViewBox && bHasPathData )
     {
         SdXMLImExSvgDElement aPoints(strPathData, *pViewBox, awt::Point( 0, 0 ),
-            awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ),
-            rUnitConverter );
+            awt::Size( pViewBox->GetWidth(), pViewBox->GetHeight() ), rImport );
 
         if(aPoints.IsCurve())
         {

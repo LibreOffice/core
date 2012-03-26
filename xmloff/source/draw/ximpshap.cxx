@@ -1421,8 +1421,7 @@ void SdXMLPathShapeContext::StartElement(const uno::Reference< xml::sax::XAttrib
         {
             aSize = maSize;
         }
-        SdXMLImExSvgDElement aPoints(maD, aViewBox,
-            aPosition, aSize, GetImport().GetMM100UnitConverter());
+        SdXMLImExSvgDElement aPoints(maD, aViewBox, aPosition, aSize, GetImport());
 
         const char* pService;
         // now create shape
@@ -1861,8 +1860,7 @@ void SdXMLConnectorShapeContext::processAttribute( sal_uInt16 nPrefix, const ::r
             awt::Point aPoint( 0, 0 );
             awt::Size aSize( 1, 1 );
 
-            SdXMLImExSvgDElement aPoints( rValue, aViewBox,
-                aPoint, aSize, GetImport().GetMM100UnitConverter() );
+            SdXMLImExSvgDElement aPoints( rValue, aViewBox, aPoint, aSize, GetImport() );
 
             if ( aPoints.IsCurve() )
             {
