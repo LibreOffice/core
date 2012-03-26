@@ -37,6 +37,7 @@ $(eval $(call gb_SrsTarget_SrsTarget,formula/res))
 
 $(eval $(call gb_SrsTarget_set_include,formula/res,\
     $$(INCLUDE) \
+    -I$(SRCDIR)/formula/inc \
     -I$(SRCDIR)/formula/source/core/inc \
 ))
 

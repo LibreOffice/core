@@ -54,6 +54,8 @@ $(eval $(call gb_SrsTarget_add_files,basctl/res,\
 	basctl/source/dlged/managelang.src \
 ))
 
-$(call gb_SrsTemplateTarget_get_target,basctl/res) : $(call gb_Package_get_target,svx_globlmn_hrc)
+$(call gb_SrsTemplateTarget_get_target,basctl/res) : \
+	$(call gb_Package_get_target,svx_globlmn_hrc) \
+	$(call gb_Package_get_target,svx_inc)
 
 # vim: set noet sw=4 ts=4:
