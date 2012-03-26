@@ -112,6 +112,14 @@ copy-stuff:
 #
 # Then other "assets". Let the directory structure under assets mimic
 # that under solver for now.
+#
+# Please note that I have no idea what all of this is really necessary and for
+# much of this stuff being copied, no idea whether it makes any sense at all.
+# Much of this is copy-pasted from android/qa/sc/Makefile (where a couple of
+# unit tests for sc are built, and those do seem to mostly work) and
+# android/qa/desktop/Makefile (mmeeks's desktop demo, also works to some
+# extent).
+#
 	mkdir -p assets/bin/ure assets/lib assets/program assets/xml/ure assets/ComponentTarget/i18npool/util
 	cp $(OUTDIR)/bin/udkapi.rdb assets/bin
 	cp $(OUTDIR)/bin/types.rdb assets/bin
@@ -124,14 +132,24 @@ copy-stuff:
 	cp $(SRC_ROOT)/odk/examples/java/DocumentHandling/test/test1.odt assets
 	cp $(WORKDIR)/ComponentTarget/i18npool/util/i18npool.component assets/ComponentTarget/i18npool/util
 #
-# Set up lofficerc, the "inifile" (see soffice_main())
-	echo '[Bootstrap]' > assets/program/lofficerc
-	echo 'Logo=1' >> assets/program/lofficerc
-	echo 'NativeProgress=1' >> assets/program/lofficerc
-	echo 'URE_BOOTSTRAP=file:///assets/program/fundamentalrc' >> assets/program/lofficerc
-#	echo 'RTL_LOGFILE=file:///dev/log/main' >> assets/program/lofficerc
-	echo "HOME=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
-	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/files" >> assets/program/lofficerc
+	mkdir -p assets/ure/share/misc assets/share/registry/res assets/share/config/soffice.cfg
+	cp -R $(OUTDIR)/xml/*.xcd assets/share/registry
+	mv assets/share/registry/fcfg_langpack_en-US.xcd assets/share/registry/res
+	cp -R $(OUTDIR)/xml/uiconfig/* assets/share/config/soffice.cfg
+	cp -R $(OUTDIR)/xml/registry/* assets/share/registry
+#
+# Set up rc, the "inifile". See BootstrapMap::getBaseIni(). As this app
+# doesn't use soffice_main() (at least I think it shouldn't), the
+# rtl::Bootstrap::setIniFilename() call there that hardcodes
+# /assets/program/lofficerc isn't executed. Instead the hardcoding of
+# /assets/rc in BootstrapMap::getBaseIni() gets used.
+	echo '[Bootstrap]' > assets/rc
+	echo 'Logo=1' >> assets/rc
+	echo 'NativeProgress=1' >> assets/rc
+	echo 'URE_BOOTSTRAP=file:///assets/program/fundamentalrc' >> assets/rc
+#	echo 'RTL_LOGFILE=file:///dev/log/main' >> assets/rc
+	echo "HOME=$(APP_DATA_PATH)/cache" >> assets/rc
+	echo "OSL_SOCKET_PATH=$(APP_DATA_PATH)/cache" >> assets/rc
 #
 # Set up fundamentalrc
 	echo '[Bootstrap]' > assets/program/fundamentalrc
@@ -151,7 +169,7 @@ copy-stuff:
 	echo '[Bootstrap]' > assets/program/bootstraprc
 	echo 'InstallMode=<installmode>' >> assets/program/bootstraprc
 	echo 'ProductKey=LibreOffice 3.6' >> assets/program/bootstraprc
-	echo "UserInstallation=file://$(APP_DATA_PATH)/files/.libreoffice" >> assets/program/bootstraprc
+	echo "UserInstallation=file://$(APP_DATA_PATH)/cache/.libreoffice" >> assets/program/bootstraprc
 
 # Set up versionrc
 	echo '[Version]' > assets/program/versionrc

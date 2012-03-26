@@ -50,9 +50,12 @@ public class DocumentLoader
 
             Bootstrap.setup(this);
 
+            Bootstrap.putenv("SAL_LOG=yes");
+
             // Load a lot of shlibs here explicitly in advance because that
             // makes debugging work better, sigh
             Bootstrap.dlopen("libvcllo.so");
+            Bootstrap.dlopen("libmergedlo.so");
             
             com.sun.star.uno.XComponentContext xContext = null;
 
