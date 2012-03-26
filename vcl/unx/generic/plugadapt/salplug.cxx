@@ -28,6 +28,8 @@
 
 #include "officecfg/Office/Common.hxx"
 
+#include "comphelper/processfactory.hxx"
+
 #include "osl/module.h"
 #include "osl/process.h"
 
@@ -54,11 +56,14 @@ static SalInstance* tryInstance( const OUString& rModuleBase, bool bForce = fals
 {
     SalInstance* pInst = NULL;
 #if !defined(ANDROID)
-    // Disable gtk3 plugin load except in experimental mode for now.
-    if( !bForce &&
-        rModuleBase.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "gtk3" ) ) &&
-        !officecfg::Office::Common::Misc::ExperimentalMode::get() )
-        return NULL;
+    if (!bForce && rModuleBase.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("gtk3")))
+    {
+        // Disable gtk3 plugin load except in experimental mode for now.
+        using namespace com::sun::star;
+        uno::Reference< uno::XComponentContext > xContext = comphelper::getProcessComponentContext();
+        if (!xContext.is() || !officecfg::Office::Common::Misc::ExperimentalMode::get(xContext))
+            return NULL;
+    }
 #endif
     OUStringBuffer aModName( 128 );
     aModName.appendAscii( SAL_DLLPREFIX"vclplug_" );
