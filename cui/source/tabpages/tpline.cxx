@@ -158,10 +158,10 @@ SvxLineTabPage::SvxLineTabPage
 
     aCtlPreview.SetAccessibleName(String(CUI_RES(STR_EXAMPLE)));
 
-    // diese Page braucht ExchangeSupport
+    // This Page requires ExchangeSupport
     SetExchangeSupport();
 
-    // Metrik einstellen
+    // Metric set
     FieldUnit eFUnit = GetModuleFieldUnit( rInAttrs );
 
     switch ( eFUnit )
@@ -214,7 +214,7 @@ SvxLineTabPage::SvxLineTabPage
     Link aEdgeStyle = LINK( this, SvxLineTabPage, ChangeEdgeStyleHdl_Impl );
     maLBEdgeStyle.SetSelectHdl( aEdgeStyle );
 
-    //#58425# Symbole auf einer Linie (z.B. StarChart) , MB-Handler setzen
+    // Symbols on a line (eg star charts), MB-handler set
     aSymbolMB.SetSelectHdl(LINK(this, SvxLineTabPage, GraphicHdl_Impl));
     aSymbolMB.SetActivateHdl(LINK(this, SvxLineTabPage, MenuCreateHdl_Impl));
     aSymbolWidthMF.SetModifyHdl(LINK(this, SvxLineTabPage, SizeHdl_Impl));
@@ -224,13 +224,13 @@ SvxLineTabPage::SvxLineTabPage
     aSymbolRatioCB.Check(sal_True);
     ShowSymbolControls(sal_False);
 
-    // #63083#
     nActLineWidth = -1;
 }
 
-//#58425# Symbole auf einer Linie (z.B. StarChart) , Symbol-Controls aktivieren
 void SvxLineTabPage::ShowSymbolControls(sal_Bool bOn)
 {
+    // Symbols on a line (eg star charts), symbol-enable controls
+
     bSymbols=bOn;
     aSymbolWidthFT.Show(bOn);
     aSymbolWidthMF.Show(bOn);
@@ -241,10 +241,11 @@ void SvxLineTabPage::ShowSymbolControls(sal_Bool bOn)
     aSymbolMB.Show(bOn);
     aCtlPreview.ShowSymbol(bOn);
 }
-// -----------------------------------------------------------------------
-//#58425# Symbole auf einer Linie (z.B. StarChart) , dtor neu!
+
 SvxLineTabPage::~SvxLineTabPage()
 {
+    //Symbols on a line (eg star charts), dtor new!
+
     delete aSymbolMB.GetPopupMenu()->GetPopupMenu( MN_GALLERY );
 
     if(pSymbolList)
@@ -259,20 +260,20 @@ SvxLineTabPage::~SvxLineTabPage()
 }
 void SvxLineTabPage::Construct()
 {
-    // Farbtabelle
+    // Color chart
     aLbColor.Fill( pColorList );
     FillListboxes();
 }
 
 void SvxLineTabPage::FillListboxes()
 {
-    // Linienstile
+    // Line styles
     sal_uInt16 nOldSelect = aLbLineStyle.GetSelectEntryPos();
     aLbLineStyle.FillStyles();
     aLbLineStyle.Fill( pDashList );
     aLbLineStyle.SelectEntryPos( nOldSelect );
 
-    // LinienEndenStile
+    // Line end style
     String sNone( SVX_RES( RID_SVXSTR_NONE ) );
     nOldSelect = aLbStartStyle.GetSelectEntryPos();
     aLbStartStyle.Clear();
@@ -298,7 +299,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
         sal_uInt16 nPos;
         sal_uInt16 nCount;
 
-        // Dashliste
+        // Dash list
         if( ( *pnDashListState & CT_MODIFIED ) ||
             ( *pnDashListState & CT_CHANGED ) )
         {
@@ -307,7 +308,7 @@ void SvxLineTabPage::ActivatePage( const SfxItemSet& rSet )
                                         GetNewDashList();
             *pnDashListState = CT_NONE;
 
-            // Styleliste
+            // Style list
             nPos = aLbLineStyle.GetSelectEntryPos();
 
             aLbLineStyle.Clear();
