@@ -91,10 +91,10 @@ void test::oustring::StringLiterals::checkCtors()
 
 // Check that contents are correct and equal to the case when RTL_CONSTASCII_USTRINGPARAM is used.
 // Also check that embedded \0 is included.
-    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" )) == rtl::OUString( "" ));
-    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\0" )) == rtl::OUString( "\0" ));
-    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ab" )) == rtl::OUString( "ab" ));
-    CPPUNIT_ASSERT( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "a\0b" )) == rtl::OUString( "a\0b" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" )), rtl::OUString( "" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\0" )), rtl::OUString( "\0" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ab" )), rtl::OUString( "ab" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "a\0b" )), rtl::OUString( "a\0b" ));
 }
 
 void test::oustring::StringLiterals::testcall( const char str[] )
@@ -167,9 +167,9 @@ void test::oustring::StringLiterals::checkBuffer()
 {
     rtl::OUStringBuffer buf;
     buf.append( "foo" );
-    CPPUNIT_ASSERT( buf.toString() == "foo" );
+    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OUString( "foo" ));
     buf.append( "bar" );
-    CPPUNIT_ASSERT( buf.toString() == "foobar" );
+    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OUString( "foobar" ));
 }
 
 }} // namespace
