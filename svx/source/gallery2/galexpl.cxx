@@ -153,6 +153,23 @@ sal_Bool GalleryExplorer::FillObjList( const sal_uInt32 nThemeId, std::vector<St
     return FillObjList( pGal->GetThemeName( nThemeId ), rObjList );
 }
 
+bool GalleryExplorer::FillObjList( const sal_uInt32 nThemeId, std::vector<rtl::OUString> &rObjList )
+{
+    std::vector<String> aObjList;
+    if (!FillObjList(nThemeId, aObjList))
+        return false;
+
+    // Convert UniString to rtl::OUString.
+    std::vector<rtl::OUString> aList;
+    aList.reserve(aObjList.size());
+    std::vector<String>::const_iterator it = aObjList.begin(), itEnd = aObjList.end();
+    for (; it != itEnd; ++it)
+        aList.push_back(*it);
+
+    rObjList.swap(aList);
+    return true;
+}
+
 // ------------------------------------------------------------------------
 
 sal_Bool GalleryExplorer::FillObjListTitle( const sal_uInt32 nThemeId, std::vector< rtl::OUString >& rList )

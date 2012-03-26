@@ -140,9 +140,8 @@ private:
     FixedText           aSymbolHeightFT;
     MetricField         aSymbolHeightMF;
     CheckBox            aSymbolRatioCB;
-    std::vector<String> aGrfNames;
+    std::vector<rtl::OUString> aGrfNames;
     SvxBmpItemInfoList  aGrfBrushItems;
-    String              sNumCharFmtName;
     sal_Bool            bLastWidthModified;
     Size                aSymbolLastSize;
     Graphic             aSymbolGraphic;

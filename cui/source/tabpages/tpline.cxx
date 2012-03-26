@@ -1462,19 +1462,17 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
         GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
 
         PopupMenu* pPopup = new PopupMenu;
-        String aEmptyStr;
-        const String *pUIName = NULL;
+        rtl::OUString aEmptyStr;
+        const rtl::OUString *pUIName = NULL;
         sal_uInt32 i = 0;
-        for(std::vector<String>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
+        for(std::vector<rtl::OUString>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
         {
             pUIName = &(*it);
 
             // convert URL encodings to UI characters (eg %20 for spaces)
-            String aPhysicalName;
-            rtl::OUString sTmp;
-            if( ::utl::LocalFileHelper::ConvertURLToPhysicalName( *it, sTmp ))
+            rtl::OUString aPhysicalName;
+            if (utl::LocalFileHelper::ConvertURLToPhysicalName(*it, aPhysicalName))
             {
-                aPhysicalName = sTmp;
                 pUIName = &aPhysicalName;
             }
 
@@ -1536,7 +1534,7 @@ IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
         pView->ShowSdrPage(pPage);
 
         PopupMenu* pPopup = new PopupMenu;
-        String aEmptyStr;
+        rtl::OUString aEmptyStr;
 
         // Generate invisible square to give all symbols a
         // bitmap size, which is indepedent from specific glyph
