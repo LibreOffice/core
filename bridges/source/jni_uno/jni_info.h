@@ -204,8 +204,6 @@ public:
     jfieldID                    m_field_JNI_proxy_m_type;
     jfieldID                    m_field_JNI_proxy_m_oid;
 
-    jfieldID                    m_field_css_uno_RuntimeException_m_Context;
-
     //
     ::com::sun::star::uno::TypeDescription m_XInterface_queryInterface_td;
     ::com::sun::star::uno::Type const & m_Exception_type;
