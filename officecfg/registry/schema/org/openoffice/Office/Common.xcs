@@ -2396,14 +2396,14 @@
                         <author>MAV</author>
                         <desc>Specifies whether SHA1 algorithm instead of SHA256 should be used in ODF12 for StartKey and Checksum generation during encryption.</desc>
                     </info>
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
                 <prop oor:name="UseBlowfishInODF12" oor:type="xs:boolean">
                     <info>
                         <author>MAV</author>
                         <desc>Specifies whether Blowfish algorithm instead of AES should be used in ODF12 for encryption.</desc>
                     </info>
-                    <value>false</value>
+                    <value>true</value>
                 </prop>
             </group>
 		</group>
