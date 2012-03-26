@@ -29,6 +29,8 @@
 // activate the extra needed ctor
 #define RTL_STRING_UNITTEST
 extern bool rtl_string_unittest_const_literal;
+extern bool rtl_string_unittest_const_literal_function;
+extern bool rtl_string_unittest_non_const_literal_function;
 
 #include "sal/config.h"
 #include "sal/precppunit.hxx"

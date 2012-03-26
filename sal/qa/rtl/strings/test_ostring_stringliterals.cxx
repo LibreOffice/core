@@ -29,6 +29,8 @@
 // activate the extra needed ctor
 #define RTL_STRING_UNITTEST
 bool rtl_string_unittest_const_literal;
+bool rtl_string_unittest_const_literal_function;
+bool rtl_string_unittest_non_const_literal_function;
 
 #include "sal/config.h"
 #include "sal/precppunit.hxx"
@@ -38,17 +40,33 @@ bool rtl_string_unittest_const_literal;
 #include "rtl/string.h"
 #include "rtl/string.hxx"
 
+namespace rtlunittest {
+
+template< typename charT, typename traits > std::basic_ostream<charT, traits> &
+operator <<(
+    std::basic_ostream<charT, traits> & stream, rtl::OString const & string)
+{
+    return stream << string.getStr();
+        // best effort; potentially loses data due to embedded null characters
+}
+
+}
+
 namespace test { namespace ostring {
 
 class StringLiterals: public CppUnit::TestFixture
 {
 private:
     void checkCtors();
+    void checkUsage();
+    void checkNonConstUsage();
 
     void testcall( const char str[] );
 
 CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);
+CPPUNIT_TEST(checkUsage);
+CPPUNIT_TEST(checkNonConstUsage);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -114,6 +132,38 @@ void test::ostring::StringLiterals::testcall( const char str[] )
     // MSVC just errors out on this for some reason, which is fine as well
     (void)str;
 #endif
+}
+
+void test::ostring::StringLiterals::checkUsage()
+{
+// simply check that all string literal based calls work as expected
+// also check that they really use string literal overload and do not convert to OString
+    rtl::OString foo( "foo" );
+
+    rtl_string_unittest_const_literal = false; // start checking for OString conversions
+    rtl_string_unittest_non_const_literal_function = false; // and check for non-const variants
+    CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = "foo" );
+    // if this is not true, some of the calls above converted to OString
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
+    // if this is not true, some of the calls above used non-const variants
+    CPPUNIT_ASSERT( rtl_string_unittest_non_const_literal_function == false );
+}
+
+void test::ostring::StringLiterals::checkNonConstUsage()
+{
+// check that (non-const) char[] overloads work and do not use const char[] overloads
+    rtl::OString foo( "foo" );
+    char foo_c[] = "foo";
+
+    rtl_string_unittest_const_literal = false; // start checking for OString conversions
+    rtl_string_unittest_const_literal_function = false; // and check for const variants
+    sleep(10);
+    rtl::OString() = (const char*)"foo";
+    CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = foo_c );
+    // if this is not true, some of the calls above converted to OString
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
+    // if this is not true, some of the calls above used const variants
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == false );
 }
 
 #undef CONST_CTOR_USED

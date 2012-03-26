@@ -57,6 +57,12 @@ namespace rtl
 
 #ifdef RTL_STRING_UNITTEST
 #undef rtl
+// helper macros to make functions appear more readable
+#define RTL_STRING_CONST_FUNCTION rtl_string_unittest_const_literal_function = true;
+#define RTL_STRING_NON_CONST_FUNCTION rtl_string_unittest_non_const_literal_function = true;
+#else
+#define RTL_STRING_CONST_FUNCTION
+#define RTL_STRING_NON_CONST_FUNCTION
 #endif
 
 /* ======================================================================= */
@@ -209,6 +215,7 @@ public:
 
       If there are any embedded \0's in the string literal, the result is undefined.
       Use the overload that explicitly accepts length.
+      @since LibreOffice 3.6
 
       @param    literal       a string literal
     */
@@ -225,6 +232,7 @@ public:
     /**
       @overload
       New string from a non-const char array.
+      @since LibreOffice 3.6
 
       @param value non-const char array
     */
@@ -295,6 +303,33 @@ public:
     OString & operator=( const OString & str ) SAL_THROW(())
     {
         rtl_string_assign( &pData, str.pData );
+        return *this;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< int N >
+    OString& operator=( const char (&literal)[ N ] ) SAL_THROW(())
+    {
+        rtl_string_newFromLiteral( &pData, literal, N - 1 );
+        RTL_STRING_CONST_FUNCTION
+        return *this;
+    }
+    /**
+      @overload
+      This function accepts a non-const char array as its argument.
+      @since LibreOffice 3.6
+
+      @param value non-const char array
+    */
+    template< int N >
+    OString& operator=( char (&value)[ N ] ) SAL_THROW(())
+    {
+        rtl_string_newFromStr( &pData, value );
+        RTL_STRING_NON_CONST_FUNCTION
         return *this;
     }
 
