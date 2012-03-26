@@ -265,6 +265,157 @@ void SvxLineTabPage::Construct()
     FillListboxes();
 }
 
+void SvxLineTabPage::InitSymbols(MenuButton* pButton)
+{
+    //Popup initialisieren
+    if(!pButton->GetPopupMenu()->GetPopupMenu( MN_GALLERY ))
+    {
+        // Gallery-Eintraege besorgen
+        GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
+
+        PopupMenu* pPopup = new PopupMenu;
+        rtl::OUString aEmptyStr;
+        const rtl::OUString *pUIName = NULL;
+        sal_uInt32 i = 0;
+        for(std::vector<rtl::OUString>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
+        {
+            pUIName = &(*it);
+
+            // convert URL encodings to UI characters (eg %20 for spaces)
+            rtl::OUString aPhysicalName;
+            if (utl::LocalFileHelper::ConvertURLToPhysicalName(*it, aPhysicalName))
+            {
+                pUIName = &aPhysicalName;
+            }
+
+            SvxBrushItem* pBrushItem = new SvxBrushItem(*it, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
+            pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
+
+            SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
+            pInfo->pBrushItem = pBrushItem;
+            pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i);
+            if ( i < aGrfBrushItems.size() ) {
+                aGrfBrushItems.insert( aGrfBrushItems.begin() + i, pInfo );
+            } else {
+                aGrfBrushItems.push_back( pInfo );
+            }
+            const Graphic* pGraphic = pBrushItem->GetGraphic();
+
+            if(pGraphic)
+            {
+                Bitmap aBitmap(pGraphic->GetBitmap());
+                Size aSize(aBitmap.GetSizePixel());
+                if(aSize.Width()  > MAX_BMP_WIDTH ||
+                   aSize.Height() > MAX_BMP_HEIGHT)
+                {
+                    sal_Bool bWidth = aSize.Width() > aSize.Height();
+                    double nScale = bWidth ?
+                                        (double)MAX_BMP_WIDTH / (double)aSize.Width():
+                                        (double)MAX_BMP_HEIGHT / (double)aSize.Height();
+                    aBitmap.Scale(nScale, nScale);
+
+                }
+                Image aImage(aBitmap);
+                pPopup->InsertItem(pInfo->nItemId, *pUIName, aImage );
+            }
+            else
+            {
+                Image aImage;
+                pPopup->InsertItem(pInfo->nItemId, *pUIName, aImage );
+            }
+        }
+        aSymbolMB.GetPopupMenu()->SetPopupMenu( MN_GALLERY, pPopup );
+
+        if(aGrfNames.empty())
+            aSymbolMB.GetPopupMenu()->EnableItem(MN_GALLERY, sal_False);
+    }
+
+    if(!pButton->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS ) && pSymbolList)
+    {
+        VirtualDevice aVDev;
+        aVDev.SetMapMode(MapMode(MAP_100TH_MM));
+        SdrModel* pModel = new SdrModel(NULL, NULL, LOADREFCOUNTS);
+        pModel->GetItemPool().FreezeIdRanges();
+        // Page
+        SdrPage* pPage = new SdrPage( *pModel, sal_False );
+        pPage->SetSize(Size(1000,1000));
+        pModel->InsertPage( pPage, 0 );
+        // 3D View
+        SdrView* pView = new SdrView( pModel, &aVDev );
+        pView->hideMarkHandles();
+        pView->ShowSdrPage(pPage);
+
+        PopupMenu* pPopup = new PopupMenu;
+        rtl::OUString aEmptyStr;
+
+        // Generate invisible square to give all symbols a
+        // bitmap size, which is indepedent from specific glyph
+        SdrObject *pInvisibleSquare=pSymbolList->GetObj(0);
+        pInvisibleSquare=pInvisibleSquare->Clone();
+        pPage->NbcInsertObject(pInvisibleSquare);
+        pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
+        pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));
+
+        for(long i=0;; ++i)
+        {
+            SdrObject *pObj=pSymbolList->GetObj(i);
+            if(pObj==NULL)
+                break;
+            pObj=pObj->Clone();
+            aGrfNames.push_back(aEmptyStr);
+            pPage->NbcInsertObject(pObj);
+            if(pSymbolAttr)
+            {
+                pObj->SetMergedItemSet(*pSymbolAttr);
+            }
+            else
+            {
+                pObj->SetMergedItemSet(rOutAttrs);
+            }
+            pView->MarkAll();
+            Bitmap aBitmap(pView->GetAllMarkedBitmap());
+            GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());
+            pView->UnmarkAll();
+            pObj=pPage->RemoveObject(1);
+            SdrObject::Free(pObj);
+
+            SvxBrushItem* pBrushItem = new SvxBrushItem(Graphic(aMeta), GPOS_AREA, SID_ATTR_BRUSH);
+            pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
+
+            SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
+            pInfo->pBrushItem = pBrushItem;
+            pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i + nNumMenuGalleryItems);
+            if ( (size_t)(nNumMenuGalleryItems + i) < aGrfBrushItems.size() ) {
+                aGrfBrushItems.insert( aGrfBrushItems.begin() + nNumMenuGalleryItems + i, pInfo );
+            } else {
+                aGrfBrushItems.push_back( pInfo );
+            }
+
+            Size aSize(aBitmap.GetSizePixel());
+            if(aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
+            {
+                sal_Bool bWidth = aSize.Width() > aSize.Height();
+                double nScale = bWidth ?
+                                    (double)MAX_BMP_WIDTH / (double)aSize.Width():
+                                    (double)MAX_BMP_HEIGHT / (double)aSize.Height();
+                aBitmap.Scale(nScale, nScale);
+            }
+            Image aImage(aBitmap);
+            pPopup->InsertItem(pInfo->nItemId,aEmptyStr,aImage);
+        }
+        pInvisibleSquare=pPage->RemoveObject(0);
+        SdrObject::Free(pInvisibleSquare);
+
+        aSymbolMB.GetPopupMenu()->SetPopupMenu( MN_SYMBOLS, pPopup );
+
+        if(aGrfNames.empty())
+            aSymbolMB.GetPopupMenu()->EnableItem(MN_SYMBOLS, sal_False);
+
+        delete pView;
+        delete pModel;
+    }
+}
+
 void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
 {
     sal_uInt16 nItemId = pButton->GetCurItemId();
@@ -1553,153 +1704,7 @@ void SvxLineTabPage::FillUserData()
 //der folgende Link stammt urspruenglich aus SvxNumOptionsTabPage
 IMPL_LINK( SvxLineTabPage, MenuCreateHdl_Impl, MenuButton *, pButton )
 {
-    //Popup initialisieren
-    if(!pButton->GetPopupMenu()->GetPopupMenu( MN_GALLERY ))
-    {
-        // Gallery-Eintraege besorgen
-        GalleryExplorer::FillObjList(GALLERY_THEME_BULLETS, aGrfNames);
-
-        PopupMenu* pPopup = new PopupMenu;
-        rtl::OUString aEmptyStr;
-        const rtl::OUString *pUIName = NULL;
-        sal_uInt32 i = 0;
-        for(std::vector<rtl::OUString>::iterator it = aGrfNames.begin(); it != aGrfNames.end(); ++it, ++i)
-        {
-            pUIName = &(*it);
-
-            // convert URL encodings to UI characters (eg %20 for spaces)
-            rtl::OUString aPhysicalName;
-            if (utl::LocalFileHelper::ConvertURLToPhysicalName(*it, aPhysicalName))
-            {
-                pUIName = &aPhysicalName;
-            }
-
-            SvxBrushItem* pBrushItem = new SvxBrushItem(*it, aEmptyStr, GPOS_AREA, SID_ATTR_BRUSH);
-            pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
-
-            SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
-            pInfo->pBrushItem = pBrushItem;
-            pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i);
-            if ( i < aGrfBrushItems.size() ) {
-                aGrfBrushItems.insert( aGrfBrushItems.begin() + i, pInfo );
-            } else {
-                aGrfBrushItems.push_back( pInfo );
-            }
-            const Graphic* pGraphic = pBrushItem->GetGraphic();
-
-            if(pGraphic)
-            {
-                Bitmap aBitmap(pGraphic->GetBitmap());
-                Size aSize(aBitmap.GetSizePixel());
-                if(aSize.Width()  > MAX_BMP_WIDTH ||
-                   aSize.Height() > MAX_BMP_HEIGHT)
-                {
-                    sal_Bool bWidth = aSize.Width() > aSize.Height();
-                    double nScale = bWidth ?
-                                        (double)MAX_BMP_WIDTH / (double)aSize.Width():
-                                        (double)MAX_BMP_HEIGHT / (double)aSize.Height();
-                    aBitmap.Scale(nScale, nScale);
-
-                }
-                Image aImage(aBitmap);
-                pPopup->InsertItem(pInfo->nItemId, *pUIName, aImage );
-            }
-            else
-            {
-                Image aImage;
-                pPopup->InsertItem(pInfo->nItemId, *pUIName, aImage );
-            }
-        }
-        aSymbolMB.GetPopupMenu()->SetPopupMenu( MN_GALLERY, pPopup );
-
-        if(aGrfNames.empty())
-            aSymbolMB.GetPopupMenu()->EnableItem(MN_GALLERY, sal_False);
-    }
-
-    if(!pButton->GetPopupMenu()->GetPopupMenu( MN_SYMBOLS ) && pSymbolList)
-    {
-        VirtualDevice aVDev;
-        aVDev.SetMapMode(MapMode(MAP_100TH_MM));
-        SdrModel* pModel = new SdrModel(NULL, NULL, LOADREFCOUNTS);
-        pModel->GetItemPool().FreezeIdRanges();
-        // Page
-        SdrPage* pPage = new SdrPage( *pModel, sal_False );
-        pPage->SetSize(Size(1000,1000));
-        pModel->InsertPage( pPage, 0 );
-        // 3D View
-        SdrView* pView = new SdrView( pModel, &aVDev );
-        pView->hideMarkHandles();
-        pView->ShowSdrPage(pPage);
-
-        PopupMenu* pPopup = new PopupMenu;
-        rtl::OUString aEmptyStr;
-
-        // Generate invisible square to give all symbols a
-        // bitmap size, which is indepedent from specific glyph
-        SdrObject *pInvisibleSquare=pSymbolList->GetObj(0);
-        pInvisibleSquare=pInvisibleSquare->Clone();
-        pPage->NbcInsertObject(pInvisibleSquare);
-        pInvisibleSquare->SetMergedItem(XFillTransparenceItem(100));
-        pInvisibleSquare->SetMergedItem(XLineTransparenceItem(100));
-
-        for(long i=0;; ++i)
-        {
-            SdrObject *pObj=pSymbolList->GetObj(i);
-            if(pObj==NULL)
-                break;
-            pObj=pObj->Clone();
-            aGrfNames.push_back(aEmptyStr);
-            pPage->NbcInsertObject(pObj);
-            if(pSymbolAttr)
-            {
-                pObj->SetMergedItemSet(*pSymbolAttr);
-            }
-            else
-            {
-                pObj->SetMergedItemSet(rOutAttrs);
-            }
-            pView->MarkAll();
-            Bitmap aBitmap(pView->GetAllMarkedBitmap());
-            GDIMetaFile aMeta(pView->GetAllMarkedMetaFile());
-            pView->UnmarkAll();
-            pObj=pPage->RemoveObject(1);
-            SdrObject::Free(pObj);
-
-            SvxBrushItem* pBrushItem = new SvxBrushItem(Graphic(aMeta), GPOS_AREA, SID_ATTR_BRUSH);
-            pBrushItem->SetDoneLink(STATIC_LINK(this, SvxLineTabPage, GraphicArrivedHdl_Impl));
-
-            SvxBmpItemInfo* pInfo = new SvxBmpItemInfo();
-            pInfo->pBrushItem = pBrushItem;
-            pInfo->nItemId = (sal_uInt16)(MN_GALLERY_ENTRY + i + nNumMenuGalleryItems);
-            if ( (size_t)(nNumMenuGalleryItems + i) < aGrfBrushItems.size() ) {
-                aGrfBrushItems.insert( aGrfBrushItems.begin() + nNumMenuGalleryItems + i, pInfo );
-            } else {
-                aGrfBrushItems.push_back( pInfo );
-            }
-
-            Size aSize(aBitmap.GetSizePixel());
-            if(aSize.Width() > MAX_BMP_WIDTH || aSize.Height() > MAX_BMP_HEIGHT)
-            {
-                sal_Bool bWidth = aSize.Width() > aSize.Height();
-                double nScale = bWidth ?
-                                    (double)MAX_BMP_WIDTH / (double)aSize.Width():
-                                    (double)MAX_BMP_HEIGHT / (double)aSize.Height();
-                aBitmap.Scale(nScale, nScale);
-            }
-            Image aImage(aBitmap);
-            pPopup->InsertItem(pInfo->nItemId,aEmptyStr,aImage);
-        }
-        pInvisibleSquare=pPage->RemoveObject(0);
-        SdrObject::Free(pInvisibleSquare);
-
-        aSymbolMB.GetPopupMenu()->SetPopupMenu( MN_SYMBOLS, pPopup );
-
-        if(aGrfNames.empty())
-            aSymbolMB.GetPopupMenu()->EnableItem(MN_SYMBOLS, sal_False);
-
-        delete pView;
-        delete pModel;
-    }
+    InitSymbols(pButton);
     return 0;
 }
 //#58425# Symbole auf einer Linie (z.B. StarChart)
