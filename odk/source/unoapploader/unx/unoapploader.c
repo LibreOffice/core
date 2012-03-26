@@ -99,8 +99,10 @@ int main( int argc, char *argv[] )
         size_t pathlen = strlen(path);
         struct stat stat;
         int ret;
+
+        char unoinfoSuffix[] = "/unoinfo";
         char * unoinfo = malloc(
-            pathlen + RTL_CONSTASCII_LENGTH("/unoinfo") + 1);
+            pathlen + RTL_CONSTASCII_LENGTH(unoinfoSuffix) + 1);
             /*TODO: overflow */
         if (unoinfo == NULL) {
             fprintf(stderr, "Error: out of memory!\n");
@@ -109,7 +111,7 @@ int main( int argc, char *argv[] )
         strcpy(unoinfo, path);
         strcpy(
             unoinfo + pathlen,
-            "/unoinfo" + (pathlen == 0 || path[pathlen - 1] != '/' ? 0 : 1));
+            unoinfoSuffix + (pathlen == 0 || path[pathlen - 1] != '/' ? 0 : 1));
         ret = lstat(unoinfo, &stat);
         free(unoinfo);
 
