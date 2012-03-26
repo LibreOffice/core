@@ -61,18 +61,13 @@
 #include <cppuhelper/weakref.hxx>
 #include <cppuhelper/component.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/basemutex.hxx>
 #include <sot/storage.hxx>
 #include <comphelper/listenernotification.hxx>
 #include <xmlscript/xmllib_imexp.hxx>
-#include <com/sun/star/deployment/XPackage.hpp>
 
 #include <cppuhelper/implbase2.hxx>
-#include <cppuhelper/compbase8.hxx>
 #include <cppuhelper/compbase9.hxx>
-#include <cppuhelper/interfacecontainer.hxx>
-#include <com/sun/star/script/vba/XVBACompatibility.hpp>
 
 class BasicManager;
 

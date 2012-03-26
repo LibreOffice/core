@@ -30,7 +30,6 @@
 #define _VCLCANVAS_TOOLS_HXX
 
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 
 #include <vcl/svapp.hxx>
 #include <vcl/outdev.hxx>

@@ -32,7 +32,6 @@
 #include <comphelper/uno3.hxx>
 #include <comphelper/accessiblecomponenthelper.hxx>
 #include <cppuhelper/implbase1.hxx>
-#include <comphelper/uno3.hxx>
 #include <com/sun/star/accessibility/XAccessibleSelection.hpp>
 #include "comphelper/comphelperdllapi.h"
 

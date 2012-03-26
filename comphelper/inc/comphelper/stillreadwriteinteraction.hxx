@@ -35,7 +35,6 @@
 
 #include <com/sun/star/task/XInteractionHandler.hpp>
 
-#include <ucbhelper/interceptedinteraction.hxx>
 #include "comphelper/comphelperdllapi.h"
 
 //_______________________________________________
