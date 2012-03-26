@@ -846,7 +846,7 @@ void UpdateDialog::addDisabledUpdate( UpdateDialog::DisabledUpdate & data )
 void UpdateDialog::addSpecificError( UpdateDialog::SpecificError & data )
 {
     sal_uInt16 nIndex = sal::static_int_cast< sal_uInt16 >( m_specificErrors.size() );
-    UpdateDialog::Index *pEntry = new UpdateDialog::Index( DISABLED_UPDATE, m_nLastID, nIndex, data.name );
+    UpdateDialog::Index *pEntry = new UpdateDialog::Index( SPECIFIC_ERROR, m_nLastID, nIndex, data.name );
 
     data.m_nID = m_nLastID;
     m_nLastID += 1;
