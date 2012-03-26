@@ -564,6 +564,7 @@ main/apple_remote/inc/RemoteControlContainer.h
 main/apple_remote/inc/RemoteMainController.h
 
 # files with W3C Software License
+main/MathMLDTD/w3c_ipr_software_notice.html
 main/MathMLDTD/math.dtd
 
 # files with Python Software Foundation License
