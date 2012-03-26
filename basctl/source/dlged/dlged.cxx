@@ -213,7 +213,7 @@ DlgEditor::DlgEditor( const ::com::sun::star::uno::Reference< ::com::sun::star::
 
     SdrLayerAdmin& rAdmin = pDlgEdModel->GetLayerAdmin();
     rAdmin.NewLayer( rAdmin.GetControlLayerName() );
-    rAdmin.NewLayer( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ) );
+    rAdmin.NewLayer( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HiddenLayer")) );
 
     pDlgEdPage = new DlgEdPage( *pDlgEdModel );
     pDlgEdModel->InsertPage( pDlgEdPage );
@@ -270,7 +270,7 @@ void DlgEditor::SetWindow( Window* pWindow_ )
 
     pDlgEdView = new DlgEdView( pDlgEdModel, pWindow_, this );
     pDlgEdView->ShowSdrPage(pDlgEdView->GetModel()->GetPage(0));
-    pDlgEdView->SetLayerVisible( UniString::CreateFromAscii( RTL_CONSTASCII_STRINGPARAM( "HiddenLayer" ) ), sal_False );
+    pDlgEdView->SetLayerVisible( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("HiddenLayer")), sal_False );
     pDlgEdView->SetMoveSnapOnlyTopLeft( sal_True );
     pDlgEdView->SetWorkArea( Rectangle( Point( 0, 0 ), pDlgEdPage->GetSize() ) );
 

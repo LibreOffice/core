@@ -41,8 +41,7 @@ TYPEINIT1_AUTOFACTORY(SfxStringItem, CntUnencodedStringItem)
 SfxStringItem::SfxStringItem(sal_uInt16 which, SvStream & rStream):
     CntUnencodedStringItem(which)
 {
-    UniString aValue;
-    readByteString(rStream, aValue);
+    UniString aValue = readByteString(rStream);
     SetValue(aValue);
 }
 

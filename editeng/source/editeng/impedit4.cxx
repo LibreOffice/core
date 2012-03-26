@@ -169,12 +169,14 @@ EditPaM ImpEditEngine::ReadRTF( SvStream& rInput, EditSelection aSel )
     // The SvRTF parser expects the Which-mapping passed on in the pool, not
     // dependant on a secondary.
     SfxItemPool* pPool = &aEditDoc.GetItemPool();
-    while ( pPool->GetSecondaryPool() && !pPool->GetName().EqualsAscii( "EditEngineItemPool" ) )
+    while (pPool->GetSecondaryPool() && !pPool->GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EditEngineItemPool")))
     {
         pPool = pPool->GetSecondaryPool();
 
     }
-    DBG_ASSERT( pPool && pPool->GetName().EqualsAscii( "EditEngineItemPool" ), "ReadRTF: no EditEnginePool!" );
+
+    DBG_ASSERT(pPool && pPool->GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("EditEngineItemPool")),
+        "ReadRTF: no EditEnginePool!");
 
     EditRTFParserRef xPrsr = new EditRTFParser( rInput, aSel, *pPool, this );
     SvParserState eState = xPrsr->CallParser();

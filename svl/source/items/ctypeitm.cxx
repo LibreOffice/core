@@ -83,8 +83,7 @@ SfxPoolItem* CntContentTypeItem::Create( SvStream& rStream,
 {
     // CntContentTypeItem used to be derived from CntStringItem, so take that
     // into account:
-    UniString aValue;
-    readUnicodeString(rStream, aValue, nItemVersion >= 1);
+    rtl::OUString aValue = readUnicodeString(rStream, nItemVersion >= 1);
     sal_uInt32 nMagic = 0;
     rStream >> nMagic;
     if (nMagic == CNTSTRINGITEM_STREAM_MAGIC)

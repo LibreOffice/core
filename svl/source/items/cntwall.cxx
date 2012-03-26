@@ -54,7 +54,7 @@ CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream, sal_uIn
     {
         // Okay, data were stored by CntWallpaperItem.
 
-        readUnicodeString(rStream, _aURL, nVersion >= 1);
+        _aURL = readUnicodeString(rStream, nVersion >= 1);
         // !!! Color stream operators do not work - they discard any
         // transparency info !!!
         _nColor.Read( rStream, sal_True );
@@ -76,7 +76,7 @@ CntWallpaperItem::CntWallpaperItem( sal_uInt16 which, SvStream& rStream, sal_uIn
         }
 
         // Read SfxWallpaperItem's string member _aURL.
-        readUnicodeString(rStream, _aURL, false);
+        _aURL = readUnicodeString(rStream, false);
 
         // "Read" SfxWallpaperItem's string member _aFilter.
         read_lenPrefixed_uInt8s_ToOString<sal_uInt16>(rStream);

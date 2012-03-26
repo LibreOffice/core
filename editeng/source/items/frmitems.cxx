@@ -4108,7 +4108,7 @@ SvxBrushItem::SvxBrushItem( const CntWallpaperItem& rItem, sal_uInt16 _nWhich ) 
 {
     aColor = rItem.GetColor();
 
-    if( rItem.GetBitmapURL().Len() )
+    if (!rItem.GetBitmapURL().isEmpty())
     {
         pStrLink    = new String( rItem.GetBitmapURL() );
         SetGraphicPos( WallpaperStyle2GraphicPos((WallpaperStyle)rItem.GetStyle() ) );

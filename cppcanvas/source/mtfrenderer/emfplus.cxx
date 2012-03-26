@@ -748,17 +748,19 @@ namespace cppcanvas
                     filter.ImportGraphic (graphic, String (), mfStream);
 
                     // debug code - write the stream to debug file /tmp/emf-stream.emf
-                    EMFP_DEBUG(mfStream.Seek(0);
-                               static int emfp_debug_stream_numnber = 0;
-                               UniString emfp_debug_filename = UniString::CreateFromAscii( "/tmp/emf-embedded-stream" );
-                               emfp_debug_filename.Append( UniString::CreateFromInt32( emfp_debug_stream_numnber++ ));
-                               emfp_debug_filename.Append( UniString::CreateFromAscii( ".emf" ));
+                    EMFP_DEBUG(
+                        mfStream.Seek(0);
+                        static int emfp_debug_stream_numnber = 0;
+                        rtl::OUString emfp_debug_filename("/tmp/emf-embedded-stream");
+                        emfp_debug_filename += rtl::OUString::valueOf(emfp_debug_stream_numnber++);
+                        emfp_debug_filename += rtl::OUString(".emf");
 
-                               SvFileStream file( emfp_debug_filename, STREAM_WRITE | STREAM_TRUNC );
+                        SvFileStream file( emfp_debug_filename, STREAM_WRITE | STREAM_TRUNC );
 
-                               mfStream >> file;
-                               file.Flush();
-                               file.Close());
+                        mfStream >> file;
+                        file.Flush();
+                        file.Close()
+                    );
                 }
             }
         };
@@ -766,33 +768,33 @@ namespace cppcanvas
         struct EMFPFont : public EMFPObject
         {
             sal_uInt32 version;
-        float emSize;
-        sal_uInt32 sizeUnit;
-        sal_Int32 fontFlags;
-        rtl::OUString family;
+            float emSize;
+            sal_uInt32 sizeUnit;
+            sal_Int32 fontFlags;
+            rtl::OUString family;
 
             void Read (SvMemoryStream &s)
             {
                 sal_uInt32 header;
-        sal_uInt32 reserved;
-        sal_uInt32 length;
+                sal_uInt32 reserved;
+                sal_uInt32 length;
 
                 s >> header >> emSize >> sizeUnit >> fontFlags >> reserved >> length;
 
-        OSL_ASSERT( ( header >> 12 ) == 0xdbc01 );
+                OSL_ASSERT( ( header >> 12 ) == 0xdbc01 );
 
                 EMFP_DEBUG (printf ("EMF+\tfont\nEMF+\theader: 0x%08x version: 0x%08x size: %f unit: 0x%08x\n",(unsigned int) header >> 12, (unsigned int)header & 0x1fff, emSize, (unsigned int)sizeUnit));
                 EMFP_DEBUG (printf ("EMF+\tflags: 0x%08x reserved: 0x%08x length: 0x%08x\n", (unsigned int)fontFlags, (unsigned int)reserved, (unsigned int)length));
 
-        if( length > 0 && length < 0x4000 ) {
-            sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
+                if( length > 0 && length < 0x4000 ) {
+                    sal_Unicode *chars = (sal_Unicode *) alloca( sizeof( sal_Unicode ) * length );
 
-            for( sal_uInt32 i = 0; i < length; i++ )
-            s >> chars[ i ];
+                    for( sal_uInt32 i = 0; i < length; i++ )
+                    s >> chars[ i ];
 
-            family = ::rtl::OUString( chars, length );
-            EMFP_DEBUG (printf ("EMF+\tfamily: %s\n", rtl::OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()));
-        }
+                    family = ::rtl::OUString( chars, length );
+                    EMFP_DEBUG (printf ("EMF+\tfamily: %s\n", rtl::OUStringToOString( family, RTL_TEXTENCODING_UTF8).getStr()));
+                }
             }
         };
 
@@ -893,7 +895,7 @@ namespace cppcanvas
 
                 rState.isFillColorSet = true;
                 rState.isLineColorSet = false;
-        SET_FILL_COLOR(brushIndexOrColor);
+                SET_FILL_COLOR(brushIndexOrColor);
 
                 pPolyAction = ActionSharedPtr ( internal::PolyPolyActionFactory::createPolyPolyAction( localPolygon, rParms.mrCanvas, rState ) );
 

@@ -43,7 +43,6 @@ namespace com { namespace sun { namespace star {
 } } }
 namespace rtl { class OUString; }
 class CharClass;
-class UniString;
 
 //============================================================================
 namespace URIHelper {
@@ -61,9 +60,9 @@ namespace URIHelper {
    existence (see URIHelper::GetMaybeFileHdl), or use bCheckFileExists = false
    if you want to generate file URLs without checking for their existence.
 */
-SVL_DLLPUBLIC UniString
+SVL_DLLPUBLIC rtl::OUString
 SmartRel2Abs(INetURLObject const & rTheBaseURIRef,
-             UniString const & rTheRelURIRef,
+             rtl::OUString const & rTheRelURIRef,
              Link const & rMaybeFileHdl = Link(),
              bool bCheckFileExists = true,
              bool bIgnoreFragment = false,
@@ -133,8 +132,8 @@ SVL_DLLPUBLIC rtl::OUString simpleNormalizedMakeRelative(
     rtl::OUString const & baseUriReference, rtl::OUString const & uriReference);
 
 //============================================================================
-SVL_DLLPUBLIC UniString
-FindFirstURLInText(UniString const & rText,
+SVL_DLLPUBLIC rtl::OUString
+FindFirstURLInText(rtl::OUString const & rText,
                    xub_StrLen & rBegin,
                    xub_StrLen & rEnd,
                    CharClass const & rCharClass,
@@ -170,8 +169,8 @@ FindFirstURLInText(UniString const & rText,
 
     @return  The input URI with any password component removed.
  */
-SVL_DLLPUBLIC UniString
-removePassword(UniString const & rURI,
+SVL_DLLPUBLIC rtl::OUString
+removePassword(rtl::OUString const & rURI,
                INetURLObject::EncodeMechanism eEncodeMechanism
                    = INetURLObject::WAS_ENCODED,
                INetURLObject::DecodeMechanism eDecodeMechanism

@@ -185,34 +185,29 @@ SvStream& SfxPoolItem::Store(SvStream &rStream, sal_uInt16 ) const
 
 //============================================================================
 // static
-bool SfxPoolItem::readByteString(SvStream & rStream, UniString & rString)
+rtl::OUString SfxPoolItem::readByteString(SvStream& rStream)
 {
-    rString = rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
-    return rStream.GetError() == ERRCODE_NONE;
+    return rStream.ReadUniOrByteString(rStream.GetStreamCharSet());
 }
 
 //============================================================================
 // static
-void SfxPoolItem::writeByteString(SvStream & rStream,
-                                  UniString const & rString)
+void SfxPoolItem::writeByteString(SvStream & rStream, const rtl::OUString& rString)
 {
     rStream.WriteUniOrByteString(rString, rStream.GetStreamCharSet());
 }
 
 //============================================================================
 // static
-bool SfxPoolItem::readUnicodeString(SvStream & rStream, UniString & rString,
-                                    bool bUnicode)
+rtl::OUString SfxPoolItem::readUnicodeString(SvStream & rStream, bool bUnicode)
 {
-    rString = rStream.ReadUniOrByteString(bUnicode ? RTL_TEXTENCODING_UCS2 :
+    return rStream.ReadUniOrByteString(bUnicode ? RTL_TEXTENCODING_UCS2 :
                                       rStream.GetStreamCharSet());
-    return rStream.GetError() == ERRCODE_NONE;
 }
 
 //============================================================================
 // static
-void SfxPoolItem::writeUnicodeString(SvStream & rStream,
-                                     UniString const & rString)
+void SfxPoolItem::writeUnicodeString(SvStream & rStream, const rtl::OUString& rString)
 {
     rStream.WriteUniOrByteString(rString, RTL_TEXTENCODING_UCS2);
 }

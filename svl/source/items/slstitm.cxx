@@ -102,7 +102,7 @@ SfxStringListItem::SfxStringListItem( sal_uInt16 which, SvStream& rStream ) :
         String  aStr;
         for( i=0; i < nEntryCount; i++ )
         {
-            readByteString(rStream, aStr);
+            aStr = readByteString(rStream);
             pImp->aList.push_back(aStr);
         }
     }

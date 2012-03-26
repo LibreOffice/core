@@ -1197,7 +1197,7 @@ SvStream& SvxTabStopItem::Store( SvStream& rStrm, sal_uInt16 /*nItemVersion*/ ) 
 
     const SfxItemPool *pPool = SfxItemPool::GetStoringPool();
     const bool bStoreDefTabs = pPool
-        && pPool->GetName().EqualsAscii("SWG")
+        && pPool->GetName().equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("SWG"))
         && ::IsDefaultItem( this );
 
     const short nTabs = Count();

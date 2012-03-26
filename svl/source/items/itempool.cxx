@@ -103,10 +103,10 @@ SfxBroadcaster& SfxItemPool::BC()
 
 SfxItemPool::SfxItemPool
 (
-    UniString const &   rName,          /* Name des Pools zur Idetifikation
+    const rtl::OUString& rName,          /* Name des Pools zur Idetifikation
                                            im File-Format */
-    sal_uInt16              nStartWhich,    /* erste Which-Id des Pools */
-    sal_uInt16              nEndWhich,      /* letzte Which-Id des Pools */
+    sal_uInt16          nStartWhich,    /* erste Which-Id des Pools */
+    sal_uInt16          nEndWhich,      /* letzte Which-Id des Pools */
     const SfxItemInfo*  pInfos,         /* SID-Map und Item-Flags */
     SfxPoolItem**       pDefaults,      /* Pointer auf statische Defaults,
                                            wird direkt vom Pool referenziert,
@@ -452,7 +452,7 @@ void SfxItemPool::SetDefaultMetric( SfxMapUnit eNewMetric )
     pImp->eDefMetric = eNewMetric;
 }
 
-const UniString& SfxItemPool::GetName() const
+const rtl::OUString& SfxItemPool::GetName() const
 {
     return pImp->aName;
 }
