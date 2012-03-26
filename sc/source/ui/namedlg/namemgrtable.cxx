@@ -127,6 +127,7 @@ void ScRangeManagerTable::GetLine(ScRangeNameLine& rLine, SvLBoxEntry* pEntry)
 
 void ScRangeManagerTable::Init()
 {
+    SetUpdateMode(false);
     Clear();
     for (boost::ptr_map<rtl::OUString, ScRangeName>::const_iterator itr = mrRangeMap.begin();
             itr != mrRangeMap.end(); ++itr)
@@ -147,6 +148,7 @@ void ScRangeManagerTable::Init()
             }
         }
     }
+    SetUpdateMode(true);
 }
 
 const ScRangeData* ScRangeManagerTable::findRangeData(const ScRangeNameLine& rLine)
