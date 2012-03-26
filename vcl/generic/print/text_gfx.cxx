@@ -87,31 +87,12 @@ Font3::Font3(const PrinterGfx &rGfx)
 
 static int getVerticalDeltaAngle( sal_Unicode nChar )
 {
-    int nAngle = 0;
-    if( ( nChar >= 0x1100 && nChar < 0x11fa ) ||
-        ( nChar >= 0x3000 && nChar < 0xfb00 ) ||
-        ( nChar >= 0xfe20 && nChar < 0xfe70 ) ||
-        ( nChar >= 0xff00 && nChar < 0xff64 )
-        )
-    {
-        /* #i52932# remember:
-         nChar == 0x2010 || nChar == 0x2015
-         nChar == 0x2016 || nChar == 0x2026
-
-         are nAngle = 0 also, but already handled in the first if
-        */
-        if( ( nChar >= 0x3008 && nChar < 0x3019 && nChar != 0x3012 ) ||
-            nChar == 0xff3b || nChar == 0xff3d ||
-            (nChar >= 0xff6b && nChar < 0xff64 ) ||
-            nChar == 0xffe3
-            )
-            nAngle = 0;
-        else if( nChar == 0x30fc )
-            nAngle = -900;
-        else
-            nAngle = 900;
-    }
-    return nAngle;
+    int nRotation = GetVerticalFlags(nChar);
+    if (nRotation == GF_ROTR)
+        return -900;
+    if (nRotation == GF_ROTL)
+        return 900;
+    return 0;
 }
 
 void
