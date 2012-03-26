@@ -2,7 +2,7 @@
 
 ifeq ($(HAVE_GNUMAKE_FILE_FUNC),YES)
 define var2file
-$(file >$(1),$(3))
+$(file >$(1),$(3))$(1)
 endef
 else
 # Write string to temporary file by chopping into pieces that

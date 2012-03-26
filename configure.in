@@ -3697,7 +3697,7 @@ all:
 EOF
 $GNUMAKE -C $TESTGMAKEFILEFUNC 2>/dev/null 1>&2
 if test -f $TESTGMAKEFILEFUNC/test.txt ; then
-    HAVE_GNUMKAE_FILE_FUNC="YES"
+    HAVE_GNUMAKE_FILE_FUNC="YES"
     AC_MSG_RESULT([yes])
 else
     AC_MSG_RESULT([no])
