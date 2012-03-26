@@ -1478,7 +1478,7 @@ void SwDoc::CopyFlyInFlyImpl( const SwNodeRange& rRg,
     //die Chains entsprechend aufgebaut werden koennen.
     ::std::vector< SwFrmFmt* > aVecSwFrmFmt;
 
-    for (::std::set< _ZSortFly >::const_iterator it=aSet.begin() ; it != aSet.end(); it++ )
+    for (::std::set< _ZSortFly >::const_iterator it=aSet.begin() ; it != aSet.end(); ++it )
     {
         // #i59964#
         // correct determination of new anchor position
