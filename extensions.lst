@@ -41,7 +41,7 @@
 
 
 
-# Extensions for english.
+# Dictionaries for english.
 [ language=en.* ]
 
     # Generic
@@ -63,6 +63,18 @@
     87123666ecce441b075c0170fa58690c http://sourceforge.net/projects/aoo-extensions/files/1665/1/dict-en-nz-2008-12-03.oxt/download "dict-en-nz-2008-12-03.oxt"
 
 
-# Extensions for german (Germany).
+# Dictionary for german.
 [ language=de || language=de-DE ]
     eb3d3397b8034c7fce6e0d78daf914ca http://sourceforge.net/projects/aoo-extensions/files/1075/10/dict-de_DE-frami_2011-06-03.oxt/download "dict-de_DE-frami_2011-06-03.oxt"
+
+# Dictionary for dutch.
+[ language=nl_NL ]
+    5c0de383ef649cffefc128cfb36b4d43 http://sourceforge.net/projects/aoo-extensions/files/1456/6/nl-dict-v2.00g.oxt/download "nl-dict-v2.00g.oxt"
+
+# Dictionary for french.
+[ language=fr_FR ]
+    47ca39e385b02839c24a5d953495cb98 http://sourceforge.net/projects/aoo-extensions/files/3554/5/ooo-dictionnaire-fr-moderne-v4.2.oxt/download "ooo-dictionnaire-fr-moderne-v4.2.oxt"
+
+# Dictionary for italian.
+[ language=it_IT ]
+    c71fa1e7a047cf4efdb27027e3f75a16 http://sourceforge.net/projects/aoo-extensions/files/1204/10/dict-it.oxt/download "dict-it.oxt"
