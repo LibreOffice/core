@@ -592,10 +592,40 @@ bool TeleManager::startGroupSession( const rtl::OUString& rUConferenceRoom, cons
 #endif
 
 
+void TeleManager::ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy )
+{
+    /* This is a workaround for a Telepathy bug.
+     * <https://bugs.freedesktop.org/show_bug.cgi?id=47760>. The first time you
+     * request a tube to a contact on an account, you actually get two channels
+     * back: the tube you asked for, along with a legacy Channel.Type.Tubes
+     * object. This breaks create_and_handle_channel_async(), which expects to
+     * only get one channel back.
+     *
+     * To work around this, we make sure the legacy Tubes channel already
+     * exists before we request the channel we actually want. We don't actually
+     * have to wait for this request to succeed—we fire it off and forget about
+     * it.
+     */
+    GHashTable* pRequest = tp_asv_new(
+            TP_PROP_CHANNEL_CHANNEL_TYPE, G_TYPE_STRING, TP_IFACE_CHANNEL_TYPE_TUBES,
+            TP_PROP_CHANNEL_TARGET_HANDLE_TYPE, TP_TYPE_HANDLE, TP_HANDLE_TYPE_CONTACT,
+            TP_PROP_CHANNEL_TARGET_ID, G_TYPE_STRING, tp_contact_get_identifier (pBuddy),
+            NULL);
+    TpAccountChannelRequest* pChannelRequest = tp_account_channel_request_new(
+            pAccount, pRequest, TP_USER_ACTION_TIME_NOT_USER_ACTION);
+    tp_account_channel_request_ensure_channel_async( pChannelRequest, NULL,
+            NULL, NULL, NULL );
+    g_object_unref( pChannelRequest );
+    g_hash_table_unref( pRequest );
+}
+
+
 /* TODO: factor out common code with startGroupSession() */
 bool TeleManager::startBuddySession( TpAccount *pAccount, TpContact *pBuddy )
 {
     INFO_LOGGER( "TeleManager::startBuddySession");
+
+    ensureLegacyChannel( pAccount, pBuddy );
 
     OString aSessionId( TeleManager::createUuid());
 

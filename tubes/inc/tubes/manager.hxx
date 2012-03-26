@@ -221,6 +221,8 @@ public:
     static void             TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer user_data);
 
 private:
+    void                    ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy );
+
     TeleConferenceVector    maConferences;
 
     bool                    mbAcceptIncoming;
