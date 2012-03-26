@@ -664,4 +664,4 @@ main/libtextcat/data/new_fingerprints/fpdb.conf
 # permissive license, but not categorized by Apache (not A, B or X)
 # A case for https://issues.apache.org/jira/browse/LEGAL-130
 main/vcl/unx/generic/fontmanager/parseAFM.cxx
-main/vcl/unx/generic/fontmanager/parseAFM.hxx 
+main/vcl/unx/generic/fontmanager/parseAFM.hxx
