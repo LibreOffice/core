@@ -270,7 +270,6 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
     sal_uInt16 nItemId = pButton->GetCurItemId();
     const Graphic* pGraphic = 0;
     Graphic aGraphic;
-    rtl::OUString aGrfName;
     bool bResetSize = false;
     bool bEnable = true;
     long nPreviousSymbolType = nSymbolType;
@@ -314,7 +313,6 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
             if( !aGrfDlg.Execute() )
             {
                 // ausgewaehlten Filter merken
-                aGrfName = aGrfDlg.GetPath();
                 if( !aGrfDlg.GetGraphic(aGraphic) )
                 {
                     nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
