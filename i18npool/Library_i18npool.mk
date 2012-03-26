@@ -139,11 +139,10 @@ $(eval $(call gb_Library_add_exception_objects,i18npool,\
 	i18npool/source/transliteration/transliteration_OneToOne \
 ))
 
-BRKFILES := $(subst $(WORKDIR)/,,$(basename $(wildcard $(WORKDIR)/CustomTarget/i18npool/source/breakiterator/*_brk.c))) \
-
 $(eval $(call gb_Library_add_generated_cobjects,i18npool,\
 	CustomTarget/i18npool/source/breakiterator/OpenOffice_dat \
-	$(BRKFILES) \
+	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/breakiterator/data/*.txt),\
+		CustomTarget/i18npool/source/breakiterator/$(notdir $(basename $(txt)))_brk) \
 ))
 
 # vim: set noet sw=4 ts=4:

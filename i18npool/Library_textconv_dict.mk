@@ -41,7 +41,8 @@ $(eval $(call gb_Library_add_api,textconv_dict,\
 ))
 
 $(eval $(call gb_Library_add_generated_exception_objects,textconv_dict,\
-	$(subst $(WORKDIR)/,,$(basename $(wildcard $(WORKDIR)/CustomTarget/i18npool/source/textconversion/*.cxx))) \
+	$(foreach txt,$(wildcard $(SRCDIR)/i18npool/source/textconversion/data/*.dic),\
+		CustomTarget/i18npool/source/textconversion/$(notdir $(basename $(txt)))) \
 ))
 
 # vim: set noet sw=4 ts=4:
