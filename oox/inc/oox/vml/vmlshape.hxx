@@ -66,27 +66,27 @@ const sal_Int32 VML_CLIENTDATA_FORMULA          = 4;
 /** The shape model structure contains all properties shared by all types of shapes. */
 struct ShapeTypeModel
 {
-    ::rtl::OUString     maShapeId;              /// Unique identifier of the shape.
-    ::rtl::OUString     maShapeName;            /// Name of the shape, if present.
-    OptValue< sal_Int32 > moShapeType;          /// Builtin shape type identifier.
+    ::rtl::OUString     maShapeId;              ///< Unique identifier of the shape.
+    ::rtl::OUString     maShapeName;            ///< Name of the shape, if present.
+    OptValue< sal_Int32 > moShapeType;          ///< Builtin shape type identifier.
 
-    OptValue< Int32Pair > moCoordPos;           /// Top-left position of coordinate system for children scaling.
-    OptValue< Int32Pair > moCoordSize;          /// Size of coordinate system for children scaling.
-    ::rtl::OUString     maPosition;             /// Position type of the shape.
-    ::rtl::OUString     maLeft;                 /// X position of the shape bounding box (number with unit).
-    ::rtl::OUString     maTop;                  /// Y position of the shape bounding box (number with unit).
-    ::rtl::OUString     maWidth;                /// Width of the shape bounding box (number with unit).
-    ::rtl::OUString     maHeight;               /// Height of the shape bounding box (number with unit).
-    ::rtl::OUString     maMarginLeft;           /// X position of the shape bounding box to shape anchor (number with unit).
-    ::rtl::OUString     maMarginTop;            /// Y position of the shape bounding box to shape anchor (number with unit).
-    ::rtl::OUString     maPositionVerticalRelative; /// The Y position is relative to this.
-    sal_Bool            mbAutoHeight;           /// If true, the height value is a minimum value (mostly used for textboxes)
+    OptValue< Int32Pair > moCoordPos;           ///< Top-left position of coordinate system for children scaling.
+    OptValue< Int32Pair > moCoordSize;          ///< Size of coordinate system for children scaling.
+    ::rtl::OUString     maPosition;             ///< Position type of the shape.
+    ::rtl::OUString     maLeft;                 ///< X position of the shape bounding box (number with unit).
+    ::rtl::OUString     maTop;                  ///< Y position of the shape bounding box (number with unit).
+    ::rtl::OUString     maWidth;                ///< Width of the shape bounding box (number with unit).
+    ::rtl::OUString     maHeight;               ///< Height of the shape bounding box (number with unit).
+    ::rtl::OUString     maMarginLeft;           ///< X position of the shape bounding box to shape anchor (number with unit).
+    ::rtl::OUString     maMarginTop;            ///< Y position of the shape bounding box to shape anchor (number with unit).
+    ::rtl::OUString     maPositionVerticalRelative; ///< The Y position is relative to this.
+    sal_Bool            mbAutoHeight;           ///< If true, the height value is a minimum value (mostly used for textboxes)
 
-    StrokeModel         maStrokeModel;          /// Border line formatting.
-    FillModel           maFillModel;            /// Shape fill formatting.
+    StrokeModel         maStrokeModel;          ///< Border line formatting.
+    FillModel           maFillModel;            ///< Shape fill formatting.
 
-    OptValue< ::rtl::OUString > moGraphicPath;  /// Path to a graphic for this shape.
-    OptValue< ::rtl::OUString > moGraphicTitle; /// Title of the graphic.
+    OptValue< ::rtl::OUString > moGraphicPath;  ///< Path to a graphic for this shape.
+    OptValue< ::rtl::OUString > moGraphicTitle; ///< Title of the graphic.
 
     explicit            ShapeTypeModel();
 
