@@ -270,9 +270,9 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
     sal_uInt16 nItemId = pButton->GetCurItemId();
     const Graphic* pGraphic = 0;
     Graphic aGraphic;
-    String aGrfName;
-    sal_Bool bResetSize = sal_False;
-    sal_Bool bEnable=sal_True;
+    rtl::OUString aGrfName;
+    bool bResetSize = false;
+    bool bEnable = true;
     long nPreviousSymbolType = nSymbolType;
 
     if(nItemId >= MN_GALLERY_ENTRY)
@@ -284,7 +284,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
         else
         {
             nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
-            bResetSize = sal_True;
+            bResetSize = true;
         }
         SvxBmpItemInfo* pInfo = aGrfBrushItems[ nItemId - MN_GALLERY_ENTRY ];
         pGraphic = pInfo->pBrushItem->GetGraphic();
@@ -303,14 +303,14 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
         {
             nSymbolType=SVX_SYMBOLTYPE_NONE;
             pGraphic=NULL;
-            bEnable=sal_False;
+            bEnable = false;
         }
         break;
         default:
         {
             SvxOpenGraphicDialog aGrfDlg(CUI_RES(RID_STR_EDIT_GRAPHIC));
-            aGrfDlg.EnableLink(sal_False);
-            aGrfDlg.AsLink(sal_False);
+            aGrfDlg.EnableLink(false);
+            aGrfDlg.AsLink(false);
             if( !aGrfDlg.Execute() )
             {
                 // ausgewaehlten Filter merken
@@ -319,7 +319,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
                 {
                     nSymbolType=SVX_SYMBOLTYPE_BRUSHITEM;
                     pGraphic = &aGraphic;
-                    bResetSize = sal_True;
+                    bResetSize = true;
                 }
             }
             if( !pGraphic )
@@ -352,7 +352,7 @@ void SvxLineTabPage::SymbolSelected(MenuButton* pButton)
     {
         aSymbolGraphic=Graphic();
         aCtlPreview.SetSymbol(NULL,aSymbolSize);
-        bEnable=sal_False;
+        bEnable = false;
     }
     aSymbolLastSize=aSymbolSize;
     SetMetricValue(aSymbolWidthMF,  aSymbolSize.Width(), ePoolUnit);
