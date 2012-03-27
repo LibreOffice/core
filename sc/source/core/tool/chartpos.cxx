@@ -526,18 +526,22 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
         ++pPos1Iter;
     if ( nColAdd )
     {   // eigenstaendig
-        for ( SCROW nRow = 0; nRow < nRowCount; nRow++ )
+        SCROW nRow = 0;
+        for ( ; nRow < nRowCount && pPos1Iter != pCol1->end(); nRow++ )
         {
             ppRowHeader[ nRow ] = pPos1Iter->second;
             ++pPos1Iter;
         }
+        for ( ; nRow < nRowCount; nRow++ )
+            ppRowHeader[ nRow ] = NULL;
     }
     else
     {   // Kopie
         SCROW nRow = 0;
         for ( ; nRow < nRowCount && pPos1Iter != pCol1->end(); nRow++ )
         {
-            ppRowHeader[ nRow ] = new ScAddress( *pPos1Iter->second );
+            ppRowHeader[ nRow ] = pPos1Iter->second ?
+                new ScAddress( *pPos1Iter->second ) : NULL;
             ++pPos1Iter;
         }
         for ( ; nRow < nRowCount; nRow++ )
@@ -556,15 +560,17 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
         {
             RowMap* pCol2 = pColIter->second;
             RowMap::const_iterator pPosIter = pCol2->begin();
-            if ( nRowAdd )
+            if ( pPosIter != pCol2->end() )
             {
-                ppColHeader[ nCol ] = pPosIter->second;     // eigenstaendig
-                ++pPosIter;
+                if ( nRowAdd )
+                {
+                    ppColHeader[ nCol ] = pPosIter->second;     // eigenstaendig
+                    ++pPosIter;
+                }
+                else
+                    ppColHeader[ nCol ] = pPosIter->second ?
+                        new ScAddress( *pPosIter->second ) : NULL;
             }
-            else if ( pPosIter != pCol2->end() )
-                ppColHeader[ nCol ] = new ScAddress( *pPosIter->second );
-            else
-                ppColHeader[ nCol ] = NULL;
 
             SCROW nRow = 0;
             for ( ; nRow < nRowCount && pPosIter != pCol2->end(); nRow++, nIndex++ )
