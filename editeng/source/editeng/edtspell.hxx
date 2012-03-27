@@ -81,8 +81,6 @@ struct WrongRange
     WrongRange( sal_uInt16 nS, sal_uInt16 nE ) { nStart = nS; nEnd = nE; }
 };
 
-#define NOT_INVALID 0xFFFF
-
 class WrongList
 {
 private:
@@ -100,8 +98,8 @@ public:
     WrongList(const WrongList& r);
     ~WrongList();
 
-    sal_Bool    IsInvalid() const       { return nInvalidStart != NOT_INVALID; }
-    void    SetValid()              { nInvalidStart = NOT_INVALID; nInvalidEnd = 0; }
+    bool    IsInvalid() const;
+    void    SetValid();
     void    MarkInvalid( sal_uInt16 nS, sal_uInt16 nE );
 
     sal_uInt16  GetInvalidStart() const { return nInvalidStart; }

@@ -207,6 +207,8 @@ void EditSpellWrapper::CheckSpellTo()
 
 //////////////////////////////////////////////////////////////////////
 
+#define NOT_INVALID 0xFFFF
+
 WrongList::WrongList() : nInvalidStart(0), nInvalidEnd(0xFFFF) {}
 
 WrongList::WrongList(const WrongList& r) :
@@ -215,6 +217,17 @@ WrongList::WrongList(const WrongList& r) :
     nInvalidEnd(r.nInvalidEnd) {}
 
 WrongList::~WrongList() {}
+
+bool WrongList::IsInvalid() const
+{
+    return nInvalidStart != NOT_INVALID;
+}
+
+void WrongList::SetValid()
+{
+    nInvalidStart = NOT_INVALID;
+    nInvalidEnd = 0;
+}
 
 void WrongList::MarkInvalid( sal_uInt16 nS, sal_uInt16 nE )
 {
