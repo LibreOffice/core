@@ -28,33 +28,68 @@
 
 #include <iodlg.hrc>
 #include <PlacesListBox.hxx>
-#include "SvtPlaceDialog.hxx"
+#include "PlaceEditDialog.hxx"
 
 #include <vcl/msgbox.hxx>
+#include <svtools/headbar.hxx>
 #include <svtools/svtdata.hxx>
+
+#define COLUMN_NAME     1
 
 namespace css = com::sun::star;
 using rtl::OUString;
 
-PlacesListBox::PlacesListBox( SvtFileDialog* pFileDlg, const ResId& rResId ) :
-    ListBox( pFileDlg, rResId ),
+PlacesListBox_Impl::PlacesListBox_Impl( Window* pParent, const rtl::OUString& rTitle ) :
+    SvHeaderTabListBox( pParent, WB_TABSTOP ),
+    mpHeaderBar( NULL )
+{
+    Size aBoxSize = pParent->GetSizePixel( );
+    mpHeaderBar = new HeaderBar( pParent, WB_BUTTONSTYLE | WB_BOTTOMBORDER );
+    mpHeaderBar->SetPosSizePixel( Point( 0, 0 ), Size( aBoxSize.getWidth(), 16 ) );
+
+    long pTabs[] = { 2, 20, aBoxSize.getWidth() };
+    SetTabs( &pTabs[0], MAP_PIXEL );
+    mpHeaderBar->InsertItem( COLUMN_NAME, rTitle, aBoxSize.getWidth(), HIB_LEFT | HIB_VCENTER );
+
+    Size aHeadSize = mpHeaderBar->GetSizePixel();
+    SetPosSizePixel( Point( 0, aHeadSize.getHeight() ),
+                  Size( aBoxSize.getWidth(), aBoxSize.getHeight() - aHeadSize.getHeight() ) );
+
+    InitHeaderBar( mpHeaderBar );
+
+    Show( );
+    mpHeaderBar->Show();
+}
+
+PlacesListBox_Impl::~PlacesListBox_Impl( )
+{
+    delete mpHeaderBar;
+}
+
+PlacesListBox::PlacesListBox( SvtFileDialog* pFileDlg, const rtl::OUString& rTitle, const ResId& rResId ) :
+    Control( pFileDlg, rResId ),
     maPlaces( ),
     mpDlg( pFileDlg ),
+    mpImpl( NULL ),
     mnNbEditables( 0 ),
     mbUpdated( false )
 {
-    SetSelectHdl( LINK( this, PlacesListBox, SelectHdl ) );
-    SetDoubleClickHdl( LINK( this, PlacesListBox, DoubleClickHdl ) ) ;
+    mpImpl = new PlacesListBox_Impl( this, rTitle );
+
+    mpImpl->SetSelectHdl( LINK( this, PlacesListBox, Selection ) );
+    mpImpl->SetDoubleClickHdl( LINK( this, PlacesListBox, DoubleClick ) ) ;
 }
 
 PlacesListBox::~PlacesListBox( )
 {
+    delete mpImpl;
 }
 
 void PlacesListBox::AppendPlace( PlacePtr pPlace )
 {
     maPlaces.push_back( pPlace );
-    InsertEntry( pPlace->GetName( ), getEntryIcon( pPlace->GetType( ) ));
+    mpImpl->InsertEntry( pPlace->GetName( ),
+            getEntryIcon( pPlace ), getEntryIcon( pPlace ) );
 
     if(pPlace->IsEditable()) {
         ++mnNbEditables;
@@ -91,53 +126,50 @@ void PlacesListBox::RemovePlace( sal_uInt16 nPos )
             mbUpdated = true;
         }
         maPlaces.erase( maPlaces.begin() + nPos );
-        RemoveEntry( nPos );
+        SvLBoxEntry* pEntry = mpImpl->GetEntry( nPos );
+        mpImpl->RemoveEntry( pEntry );
     }
 }
 
 void PlacesListBox::RemoveSelectedPlace() {
-    RemovePlace(GetSelectEntryPos());
+    RemovePlace(mpImpl->GetCurrRow());
 }
 
-Image PlacesListBox::getEntryIcon(Place::ePlaceType aType)
+void PlacesListBox::SetSizePixel( const Size& rNewSize )
 {
-	Image theImage;
-	switch (aType) {
-	case Place::e_PlaceCmis:
-		theImage =  mpDlg->GetButtonImage( IMG_FILEDLG_BTN_UP );
-		break;
-	case Place::e_PlaceFtp:
-		theImage =  mpDlg->GetButtonImage( IMG_FILEDLG_BTN_UP );
-		break;
-	case Place::e_PlaceLocal:
-	default:
-		theImage =  mpDlg->GetButtonImage( IMG_FILEDLG_BTN_UP );
-		break;
-	};
+    Control::SetSizePixel( rNewSize );
+    mpImpl->SetSizePixel( rNewSize );
+}
+
+Image PlacesListBox::getEntryIcon( PlacePtr pPlace )
+{
+	Image theImage = mpDlg->GetButtonImage( IMG_FILEDLG_PLACE_LOCAL );
+    if ( !pPlace->IsLocal( ) )
+        theImage = mpDlg->GetButtonImage( IMG_FILEDLG_PLACE_REMOTE );
 	return theImage;
 }
 
-IMPL_LINK( PlacesListBox, SelectHdl, ListBox* , EMPTYARG )
+IMPL_LINK( PlacesListBox, Selection, void* , EMPTYARG )
 {
-    sal_uInt16 nSelected = GetSelectEntryPos();
+    sal_uInt32 nSelected = mpImpl->GetCurrRow();
     PlacePtr pPlace = maPlaces[nSelected];
+
     mpDlg->OpenURL_Impl( pPlace->GetUrl() );
 
     if(pPlace->IsEditable())
         mpDlg->RemovablePlaceSelected();
     else
         mpDlg->RemovablePlaceSelected(false);
-
     return 0;
 }
 
-IMPL_LINK ( PlacesListBox, DoubleClickHdl, ListBox*, EMPTYARG )
+IMPL_LINK ( PlacesListBox, DoubleClick, void*, EMPTYARG )
 {
-	sal_uInt16 nSelected = GetSelectEntryPos();
+	sal_uInt16 nSelected = mpImpl->GetCurrRow();
 	PlacePtr pPlace = maPlaces[nSelected];
 	if ( pPlace->IsEditable() == true )
 	{
-		SvtPlaceDialog aDlg(mpDlg,pPlace);
+		PlaceEditDialog aDlg(mpDlg,pPlace);
 		short aRetCode = aDlg.Execute();
 		switch(aRetCode) {
 			case RET_OK :

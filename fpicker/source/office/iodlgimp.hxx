@@ -184,7 +184,6 @@ public:
     HelpButton*                     _pBtnHelp;
     SvtUpButton_Impl*               _pBtnUp;
     ImageButton*                    _pBtnNewFolder;
-    SvtTravelButton_Impl*           _pBtnStandard;
     CheckBox*                       _pCbPassword;
     SvtURLBox*                      _pEdCurrentPath;
     CheckBox*                       _pCbAutoExtension;

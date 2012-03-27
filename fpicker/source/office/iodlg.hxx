@@ -344,9 +344,6 @@ private:
 
     String                      implGetInitialURL( const String& _rPath, const String& _rFallback );
 
-    /// initializes the special URL lists, such as our favourites and our restricted paths
-    void                        implInitializeSpecialURLLists( );
-
     /// executes a certain FileView action asynchronously
     void                        executeAsync(
                                     ::svt::AsyncPickerAction::Action _eAction,

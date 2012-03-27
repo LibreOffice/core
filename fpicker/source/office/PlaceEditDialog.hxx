@@ -28,6 +28,8 @@
 #ifndef _SVTPLACEDIALOG_HXX
 #define _SVTPLACEDIALOG_HXX
 
+#include "PlacesListBox.hxx"
+
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/fixed.hxx>
@@ -38,7 +40,7 @@
 #include <svl/restrictedpaths.hxx>
 
 class Place;
-class SvtPlaceDialog : public ModalDialog
+class PlaceEditDialog : public ModalDialog
 {
 private :
 
@@ -69,9 +71,9 @@ private :
 
 public :
 
-     SvtPlaceDialog( Window* pParent);
-     SvtPlaceDialog( Window* pParent, PlacePtr pPlace );
-     ~SvtPlaceDialog();
+     PlaceEditDialog( Window* pParent);
+     PlaceEditDialog( Window* pParent, PlacePtr pPlace );
+     ~PlaceEditDialog();
 
      // Returns a place instance with given informations
      PlacePtr GetPlace();

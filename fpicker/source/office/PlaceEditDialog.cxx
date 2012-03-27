@@ -32,10 +32,10 @@
 
 #include "fpsofficeResMgr.hxx"
 #include "PlacesListBox.hxx"
-#include "SvtPlaceDialog.hxx"
+#include "PlaceEditDialog.hxx"
 
 
-SvtPlaceDialog::SvtPlaceDialog(	Window* pParent ) :
+PlaceEditDialog::PlaceEditDialog(	Window* pParent ) :
 	ModalDialog( pParent, SvtResId( DLG_SVT_ADDPLACE ) ),
 	m_aFTServerUrl( this, SvtResId( FT_ADDPLACE_SERVERURL ) ),
     m_aFTServerName( this, SvtResId( FT_ADDPLACE_SERVERNAME ) ),
@@ -53,11 +53,11 @@ SvtPlaceDialog::SvtPlaceDialog(	Window* pParent ) :
 {
 	// This constructor is called when user request a place creation, so
 	// delete button is hidden.
-	m_aBTOk.SetClickHdl( LINK( this, SvtPlaceDialog, OKHdl) );
+	m_aBTOk.SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
 	m_aBTOk.Enable( sal_False );
 
-	m_aEDServerName.SetModifyHdl( LINK( this, SvtPlaceDialog, EditHdl) );
-	m_aEDServerUrl.SetModifyHdl( LINK( this, SvtPlaceDialog, EditHdl) );
+	m_aEDServerName.SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
+	m_aEDServerUrl.SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
 
 	m_aEDServerUrl.SetUrlFilter( &m_UrlFilter );
 	Edit aDummyEdit ( this, SvtResId( ED_ADDPLACE_SERVERURL ) );
@@ -66,7 +66,7 @@ SvtPlaceDialog::SvtPlaceDialog(	Window* pParent ) :
 	m_aBTDelete.Hide();
 }
 
-SvtPlaceDialog::SvtPlaceDialog( Window* pParent, PlacePtr pPlace ) :
+PlaceEditDialog::PlaceEditDialog( Window* pParent, PlacePtr pPlace ) :
 	ModalDialog( pParent, SvtResId( DLG_SVT_ADDPLACE ) ),
 	m_aFTServerUrl( this, SvtResId( FT_ADDPLACE_SERVERURL ) ),
     m_aFTServerName( this, SvtResId( FT_ADDPLACE_SERVERNAME ) ),
@@ -82,11 +82,11 @@ SvtPlaceDialog::SvtPlaceDialog( Window* pParent, PlacePtr pPlace ) :
     m_aBTCancel ( this, SvtResId ( BT_ADDPLACE_CANCEL ) ),
     m_aBTDelete ( this, SvtResId (BT_ADDPLACE_DELETE ) )
 {
-	m_aBTOk.SetClickHdl( LINK( this, SvtPlaceDialog, OKHdl) );
-	m_aBTDelete.SetClickHdl ( LINK( this, SvtPlaceDialog, DelHdl) );
+	m_aBTOk.SetClickHdl( LINK( this, PlaceEditDialog, OKHdl) );
+	m_aBTDelete.SetClickHdl ( LINK( this, PlaceEditDialog, DelHdl) );
 
-	m_aEDServerName.SetModifyHdl( LINK( this, SvtPlaceDialog, EditHdl) );
-	m_aEDServerUrl.SetModifyHdl( LINK( this, SvtPlaceDialog, EditHdl) );
+	m_aEDServerName.SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
+	m_aEDServerUrl.SetModifyHdl( LINK( this, PlaceEditDialog, EditHdl) );
 
 	m_aEDServerUrl.SetUrlFilter( &m_UrlFilter );
 	Edit aDummyEdit ( this, SvtResId( ED_ADDPLACE_SERVERURL ) );
@@ -97,30 +97,30 @@ SvtPlaceDialog::SvtPlaceDialog( Window* pParent, PlacePtr pPlace ) :
 	m_aEDServerUrl.SetText( pPlace->GetUrl() );
 }
 
-SvtPlaceDialog::~SvtPlaceDialog()
+PlaceEditDialog::~PlaceEditDialog()
 {
 }
 
-PlacePtr SvtPlaceDialog::GetPlace()
+PlacePtr PlaceEditDialog::GetPlace()
 {
-	PlacePtr newPlace( new Place( m_aEDServerName.GetText(), m_aEDServerUrl.GetURL(), Place::e_PlaceLocal, true) );
+	PlacePtr newPlace( new Place( m_aEDServerName.GetText(), m_aEDServerUrl.GetURL(), true) );
 	return newPlace;
 }
 
-IMPL_LINK ( SvtPlaceDialog,  OKHdl, Button *, EMPTYARG )
+IMPL_LINK ( PlaceEditDialog,  OKHdl, Button *, EMPTYARG )
 {
 	EndDialog( RET_OK );
 	return 1;
 }
 
-IMPL_LINK ( SvtPlaceDialog, DelHdl, Button *, EMPTYARG )
+IMPL_LINK ( PlaceEditDialog, DelHdl, Button *, EMPTYARG )
 {
 	// ReUsing existing symbols...
 	EndDialog( RET_NO );
 	return 1;
 }
 
-IMPL_LINK ( SvtPlaceDialog, EditHdl, Edit *, EMPTYARG )
+IMPL_LINK ( PlaceEditDialog, EditHdl, Edit *, EMPTYARG )
 {
 	String anUrl = m_aEDServerUrl.GetText();
 	anUrl.EraseLeadingChars().EraseTrailingChars();

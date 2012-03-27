@@ -36,10 +36,12 @@
         IMG_FILEDLG_BTN_UP; \
         IMG_FILEDLG_BTN_STD; \
         IMG_FILEDLG_CREATEFOLDER; \
+        IMG_FILEDLG_PLACE_LOCAL; \
+        IMG_FILEDLG_PLACE_REMOTE; \
     }; \
     IdCount = \
     { \
-        3; \
+        5; \
     };
 
 #define MASKCOLOR MaskColor = Color { Red = 0xFFFF; Green = 0x0000; Blue = 0xFFFF; };
@@ -67,7 +69,7 @@ ModalDialog DLG_SVT_EXPLORERFILE
     Edit ED_EXPLORERFILE_CURRENTPATH
     {
         Pos = MAP_APPFONT ( 6 , 6 ) ;
-        Size = MAP_APPFONT ( 90 , 14 ) ;
+        Size = MAP_APPFONT ( 90 , 12 ) ;
         Border = TRUE ;
     };
     ImageButton BTN_EXPLORERFILE_NEWFOLDER
@@ -75,6 +77,7 @@ ModalDialog DLG_SVT_EXPLORERFILE
         HelpID = "fpicker:ImageButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_NEWFOLDER";
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( 59 , 6 ) ;
+        Size = MAP_APPFONT( 12, 12 ) ;
         QuickHelpText [ en-US ] = "Create New Directory" ;
     };
     MenuButton BTN_EXPLORERFILE_UP
@@ -82,31 +85,21 @@ ModalDialog DLG_SVT_EXPLORERFILE
         HelpID = "fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_UP";
         TabStop = FALSE ;
         Pos = MAP_APPFONT ( 109 , 6 ) ;
+        Size = MAP_APPFONT( 12, 12 ) ;
         QuickHelpText [ en-US ] = "Up One Level" ;
     };
-
-    MenuButton BTN_EXPLORERFILE_STANDARD
-    {
-        HelpID = "fpicker:MenuButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_STANDARD";
-        TabStop = FALSE ;
-        Pos = MAP_APPFONT ( 59 , 6 ) ;
-        QuickHelpText [ en-US ] = "Default Directory" ;
-    };
-    ListBox LB_EXPLORERFILE_PLACES_LISTBOX
+    Control LB_EXPLORERFILE_PLACES_LISTBOX
     {
         HelpID = "fpicker:ListBox:DLG_SVT_EXPLORERFILE:LB_EXPLORERFILE_PLACES_LISTBOX";
         Pos = MAP_APPFONT ( 6 , 26 ) ;
         Size = MAP_APPFONT ( 50 , 75 ) ;
-        DropDown = FALSE ;
-        AutoSize = FALSE ;
-        AutoHScroll = TRUE ;
         Border = TRUE ;
     };
     PushButton BTN_EXPLORERFILE_CONNECT_TO_SERVER
     {
         HelpID = "fpicker:PushButton:DLG_SVT_EXPLORERFILE:BTN_EXPLORERFILE_CONNECT_TO_SERVER";
         Pos = MAP_APPFONT ( 94 , 6 ) ;
-        Size = MAP_APPFONT ( 15 , 10 ) ;
+        Size = MAP_APPFONT ( 12 , 12 ) ;
         Text [ en-US ] = "..." ;
         QuickHelpText [ en-US ] = "Connect To Server" ;
     };
@@ -252,9 +245,13 @@ ModalDialog DLG_SVT_EXPLORERFILE
     {
         Text [ en-US ] = "File Preview";
     };
-    String STR_MY_DOCUMENTS
+    String STR_DEFAULT_DIRECTORY
     {
-        Text [ en-US ] = "My Documents" ;
+        Text [ en-US ] = "Default Directory" ;
+    };
+    String STR_PLACES_TITLE
+    {
+        Text [ en-US ] = "Places" ;
     };
 };
 

@@ -358,7 +358,6 @@ SvtExpFileDlg_Impl::SvtExpFileDlg_Impl( WinBits )   :
     _pBtnHelp           ( NULL ),
     _pBtnUp             ( NULL ),
     _pBtnNewFolder      ( NULL ),
-    _pBtnStandard       ( NULL ),
     _pCbPassword        ( NULL ),
     _pEdCurrentPath     ( NULL ),
     _pCbAutoExtension   ( NULL ),
@@ -386,7 +385,6 @@ SvtExpFileDlg_Impl::~SvtExpFileDlg_Impl()
     delete _pCbPassword;
     delete _pCbAutoExtension;
     delete _pCbOptions;
-    delete _pBtnStandard;
     delete _pBtnNewFolder;
     delete _pBtnUp;
     delete _pBtnHelp;

@@ -29,63 +29,68 @@
 #define _PLACESLISTBOX_HXX_
 
 #include <iodlg.hxx>
-#include <vcl/lstbox.hxx>
+
 #include <boost/shared_ptr.hpp>
+#include <svtools/svtabbx.hxx>
+#include <tools/urlobj.hxx>
+
 #include <vector>
 
 /** Class representing a file location: it mainly consist of display attributes and a URL.
   */
 class Place
 {
-	public:
-		enum ePlaceType {
-			e_PlaceLocal = 0,
-			e_PlaceFtp,
-			e_PlaceCmis
-		};
-
     private:
         rtl::OUString msName;
-        rtl::OUString msUrl;
-        ePlaceType meType;
+        INetURLObject maUrl;
 
         sal_Bool mbEditable;
 
     public:
 
-        Place( rtl::OUString sName, rtl::OUString sUrl, ePlaceType eType, sal_Bool bEditable = false) :
+        Place( rtl::OUString sName, rtl::OUString sUrl, sal_Bool bEditable = false) :
 			msName( sName ),
-			msUrl( sUrl ),
-			meType( eType ),
+			maUrl( sUrl ),
 			mbEditable( bEditable ) {};
 
         ~Place( ) {};
 
-        Place( const Place& rCopy ) : msName( rCopy.msName ), msUrl( rCopy.msUrl ), meType( rCopy.meType ){ };
+        Place( const Place& rCopy ) : msName( rCopy.msName ), maUrl( rCopy.maUrl ) { };
 
 		void SetName(const rtl::OUString& aName )    { msName = aName; }
-		void SetUrl(const  rtl::OUString& aUrl )	 { msUrl = aUrl; }
+		void SetUrl(const  rtl::OUString& aUrl )	 { maUrl.SetURL( aUrl ); }
 
         rtl::OUString& GetName( ) { return msName; }
-        rtl::OUString& GetUrl( ) { return msUrl; }
-        ePlaceType& GetType( ) { return meType; }
+        rtl::OUString GetUrl( ) { return maUrl.GetMainURL( INetURLObject::NO_DECODE ); }
+        sal_Bool  IsLocal( ) { return maUrl.GetProtocol() == INET_PROT_FILE; };
         sal_Bool& IsEditable( ) { return mbEditable; }
 };
 
 typedef boost::shared_ptr< Place > PlacePtr;
 
+class PlacesListBox_Impl : public SvHeaderTabListBox
+{
+    private:
+        HeaderBar*           mpHeaderBar;
+
+    public:
+        PlacesListBox_Impl( Window* pParent, const rtl::OUString& rTitle );
+        ~PlacesListBox_Impl( );
+};
+
 /** ListBox to handle Places.
   */
-class PlacesListBox : public ListBox
+class PlacesListBox : public Control
 {
     private:
         std::vector< PlacePtr > maPlaces;
         SvtFileDialog*       mpDlg;
+        PlacesListBox_Impl*  mpImpl;
         sal_Int32            mnNbEditables;
         bool                 mbUpdated;
 
     public:
-        PlacesListBox( SvtFileDialog* pFileDlg, const ResId& rResId );
+        PlacesListBox( SvtFileDialog* pFileDlg, const rtl::OUString& rTitle, const ResId& rResId );
         ~PlacesListBox( );
 
         void AppendPlace( PlacePtr pPlace );
@@ -96,12 +101,14 @@ class PlacesListBox : public ListBox
         bool IsUpdated();
         const std::vector<PlacePtr>& GetPlaces();
 
+        void SetSizePixel( const Size& rNewSize );
+
     private:
-        Image getEntryIcon( Place::ePlaceType eType);
 
-        DECL_LINK( SelectHdl, ListBox* );
-        DECL_LINK( DoubleClickHdl, ListBox* );
+        Image getEntryIcon( PlacePtr pPlace );
 
+        DECL_LINK( Selection, void* );
+        DECL_LINK( DoubleClick, void* );
 };
 
 #endif

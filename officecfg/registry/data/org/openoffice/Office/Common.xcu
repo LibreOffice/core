@@ -590,7 +590,10 @@
       <value oor:external=
           "com.sun.star.configuration.backend.GconfBackend SymbolSet"/>
     </prop>
-    <prop oor:name="FilePickerPlaces">
+    <prop oor:name="FilePickerPlacesUrls">
+      <value/>
+    </prop>
+    <prop oor:name="FilePickerPlacesNames">
       <value/>
     </prop>
   </node>

@@ -36,7 +36,6 @@
 #define ED_EXPLORERFILE_CURRENTPATH         10
 #define BTN_EXPLORERFILE_NEWFOLDER          11
 #define BTN_EXPLORERFILE_UP                 12
-#define BTN_EXPLORERFILE_STANDARD           13
 #define BTN_EXPLORERFILE_OPEN               14
 #define BTN_EXPLORERFILE_CANCEL             15
 #define BTN_EXPLORERFILE_HELP               16
@@ -44,6 +43,8 @@
 #define IMG_FILEDLG_BTN_UP                  10
 #define IMG_FILEDLG_BTN_STD                 11
 #define IMG_FILEDLG_CREATEFOLDER            14
+#define IMG_FILEDLG_PLACE_LOCAL             15
+#define IMG_FILEDLG_PLACE_REMOTE            16
 
 #define CTL_EXPLORERFILE_FILELIST           20
 
@@ -74,16 +75,17 @@
 #define STR_BUTTONSELECT                    6
 #define STR_ACTUALVERSION                   7
 #define STR_PREVIEW             			8
-#define STR_MY_DOCUMENTS          			9
+#define STR_DEFAULT_DIRECTORY     			9
+#define STR_PLACES_TITLE         			10
 
 // DLG_SVT_ADDPLACE ------------------------------
 
-#define FT_ADDPLACE_SERVERURL			    	10
+#define FT_ADDPLACE_SERVERURL			    10
 #define FT_ADDPLACE_SERVERNAME		  		11
 #define FT_ADDPLACE_SERVERTYPE		  		12
 #define FT_ADDPLACE_SERVERLOGIN			  	13
 #define FT_ADDPLACE_SERVERPASSWORD	 		14
-#define ED_ADDPLACE_SERVERURL		    		15
+#define ED_ADDPLACE_SERVERURL		        15
 #define ED_ADDPLACE_SERVERNAME		  		16
 #define ED_ADDPLACE_SERVERTYPE		  		17
 #define ED_ADDPLACE_SERVERLOGIN			  	18

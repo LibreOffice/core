@@ -6755,9 +6755,14 @@
         </info>
         <value>true</value>
       </prop>
-      <prop oor:name="FilePickerPlaces" oor:type="oor:string-list" oor:nillable="false">
+      <prop oor:name="FilePickerPlacesUrls" oor:type="oor:string-list" oor:nillable="false">
         <info>
-          <desc>List of the places the user bookmarked in the file picker dialog.</desc>
+          <desc>List of URLs of the places the user bookmarked in the file picker dialog.</desc>
+        </info>
+      </prop>
+      <prop oor:name="FilePickerPlacesNames" oor:type="oor:string-list" oor:nillable="false">
+        <info>
+          <desc>List of names of the places the user bookmarked in the file picker dialog.</desc>
         </info>
       </prop>
     </group>
