@@ -99,7 +99,7 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool b
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkEntry")))
     {
-        pWindow = new Edit(pParent, WB_CENTER|WB_VCENTER);
+        pWindow = new Edit(pParent, WB_LEFT|WB_VCENTER );
     }
     else
     {
