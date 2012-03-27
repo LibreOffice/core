@@ -63,6 +63,9 @@ $(eval $(call gb_CppunitTest_add_linked_libs,sc_subsequent_filters_test, \
     utl \
     vcl \
     xo \
+	$(if $(filter $(OS),ANDROID), \
+		lo-bootstrap \
+	) \
 	$(gb_STDLIBS) \
 ))
 
