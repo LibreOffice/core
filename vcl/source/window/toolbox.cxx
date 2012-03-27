@@ -2722,7 +2722,19 @@ void ToolBox::ImplFormat( sal_Bool bResize )
                         // if special TBX_LAYOUT_LOCKVERT lock vertical position
                         // don't recalulate the vertical position of the item
                         if ( meLayoutMode == TBX_LAYOUT_LOCKVERT && mnLines == 1 )
-                            it->maCalcRect.Top()      =  it->maRect.Top();
+                        {
+                            // Somewhat of a hack here, calc deletes and re-adds
+                            // the sum/assign & ok/cancel items dynamically.
+                            // Because TBX_LAYOUT_LOCKVERT effectively prevents
+                            // recalculation of the vertical pos of an item the
+                            // it->maRect.Top() for those newly added items is
+                            // 0. The hack here is that we want to effectively
+                            // recalculate the vertical pos for those added
+                            // items here. ( Note: assume mnMaxItemHeight is
+                            // equal to the LineSize when multibar has a single
+                            // line size )
+                            it->maCalcRect.Top()      =  it->maRect.Top() ? it->maRect.Top() : ( nY + ( mnMaxItemHeight-aCurrentItemSize.Height())/2 );
+                        }
                         else
                             it->maCalcRect.Top()      = nY+(nLineSize-aCurrentItemSize.Height())/2;
                         it->maCalcRect.Right()    = nX+aCurrentItemSize.Width()-1;
