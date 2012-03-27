@@ -300,10 +300,8 @@ Reference< XAccessible > SAL_CALL SvxRectCtlAccessibleContext::getAccessibleChil
         if( !xChild.is() )
         {
             const ChildIndexToPointData*    p = IndexToPoint( nIndex, mbAngleMode );
-            UniString       tmp = SVX_RESSTR( p->nResIdName );
-            ::rtl::OUString     aName( tmp );
-                        tmp = SVX_RESSTR( p->nResIdDescr );
-            ::rtl::OUString     aDescr( tmp );
+            ::rtl::OUString aName(SVX_RESSTR(p->nResIdName));
+            ::rtl::OUString aDescr(SVX_RESSTR(p->nResIdDescr));
 
             Rectangle       aFocusRect( mpRepr->CalculateFocusRectangle( p->ePoint ) );
 

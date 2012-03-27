@@ -547,7 +547,7 @@ const PptSlideLayoutAtom* SdrEscherImport::GetSlideLayoutAtom() const
     return NULL;
 }
 
-sal_Bool SdrEscherImport::ReadString( String& rStr ) const
+sal_Bool SdrEscherImport::ReadString( rtl::OUString& rStr ) const
 {
     sal_Bool bRet = sal_False;
     DffRecordHeader aStrHd;

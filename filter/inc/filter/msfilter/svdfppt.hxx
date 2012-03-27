@@ -423,7 +423,7 @@ protected:
     sal_Bool            bTimesNewRomanChecked   : 1;
     sal_Bool            bTimesNewRomanAvailable : 1;
 
-    sal_Bool            ReadString( String& rStr ) const;
+    sal_Bool            ReadString( rtl::OUString& rStr ) const;
     // nur fuer PowerPoint-Filter:
     virtual const PptSlideLayoutAtom* GetSlideLayoutAtom() const;
 
