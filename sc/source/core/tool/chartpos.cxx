@@ -29,8 +29,6 @@
 
 // INCLUDE ---------------------------------------------------------------
 
-#include <tools/table.hxx>
-
 #include "chartpos.hxx"
 #include "document.hxx"
 #include "rechead.hxx"
