@@ -1429,14 +1429,14 @@ bool ScColumn::GetFirstVisibleAttr( SCROW& rFirstRow ) const
         return false;
 }
 
-bool ScColumn::GetLastVisibleAttr( SCROW& rLastRow ) const
+bool ScColumn::GetLastVisibleAttr( SCROW& rLastRow, bool bFullFormattedArea ) const
 {
     if (pAttrArray)
     {
         // row of last cell is needed
         SCROW nLastData = GetLastVisDataPos();    // always including notes, 0 if none
 
-        return pAttrArray->GetLastVisibleAttr( rLastRow, nLastData );
+        return pAttrArray->GetLastVisibleAttr( rLastRow, nLastData, bFullFormattedArea );
     }
     else
         return false;

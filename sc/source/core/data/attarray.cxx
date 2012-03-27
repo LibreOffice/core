@@ -1760,7 +1760,7 @@ bool ScAttrArray::GetFirstVisibleAttr( SCROW& rFirstRow ) const
 
 const SCROW SC_VISATTR_STOP = 84;
 
-bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
+bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData, bool bFullFormattedArea ) const
 {
     //  #i30830# changed behavior:
     //  ignore all attributes starting with the first run of SC_VISATTR_STOP equal rows
@@ -1791,7 +1791,7 @@ bool ScAttrArray::GetLastVisibleAttr( SCROW& rLastRow, SCROW nLastData ) const
         if ( nAttrStartRow <= nLastData )
             nAttrStartRow = nLastData + 1;
         SCROW nAttrSize = pData[nEndPos].nRow + 1 - nAttrStartRow;
-        if ( nAttrSize >= SC_VISATTR_STOP )
+        if ( nAttrSize >= SC_VISATTR_STOP && !bFullFormattedArea )
         {
             bFound = false;        // ignore this range and below
         }

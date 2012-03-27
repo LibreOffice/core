@@ -568,7 +568,7 @@ bool ScTable::GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const
 
 const SCCOL SC_COLUMNS_STOP = 30;
 
-bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
+bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bFullFormattedArea ) const
 {
     bool bFound = false;
     SCCOL nMaxX = 0;
@@ -605,7 +605,7 @@ bool ScTable::GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const
     for (i=0; i<=MAXCOL; i++)               // Attribute testen
     {
         SCROW nLastRow;
-        if (aCol[i].GetLastVisibleAttr( nLastRow ))
+        if (aCol[i].GetLastVisibleAttr( nLastRow, bFullFormattedArea ))
         {
             bFound = true;
             nMaxX = i;

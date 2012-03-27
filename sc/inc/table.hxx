@@ -401,7 +401,7 @@ public:
 
     bool        GetCellArea( SCCOL& rEndCol, SCROW& rEndRow ) const;            // FALSE = empty
     bool        GetTableArea( SCCOL& rEndCol, SCROW& rEndRow ) const;
-    bool        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes ) const;
+    bool        GetPrintArea( SCCOL& rEndCol, SCROW& rEndRow, bool bNotes, bool bFullFormattedArea = false ) const;
     bool        GetPrintAreaHor( SCROW nStartRow, SCROW nEndRow,
                                 SCCOL& rEndCol, bool bNotes ) const;
     bool        GetPrintAreaVer( SCCOL nStartCol, SCCOL nEndCol,
