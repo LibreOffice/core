@@ -49,7 +49,7 @@ $(eval $(call gb_Library_add_linked_libs,evoab2,\
 	sal \
 	salhelper \
 	dbtools \
-	dbfile \
+	file \
 	$(gb_STDLIBS) \
 ))
 
