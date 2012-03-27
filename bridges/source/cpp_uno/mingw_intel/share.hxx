@@ -83,7 +83,7 @@ extern "C" CPPU_CURRENT_NAMESPACE::__cxa_eh_globals *__cxa_get_globals () throw(
 extern "C" void *__cxa_allocate_exception(
     std::size_t thrown_size ) throw();
 extern "C" void __cxa_throw (
-    void *thrown_exception, std::type_info *tinfo, void (*dest) (void *) ) __attribute__((noreturn));
+    void *thrown_exception, void *tinfo, void (*dest) (void *) ) __attribute__((noreturn));
 #endif
 
 namespace CPPU_CURRENT_NAMESPACE
