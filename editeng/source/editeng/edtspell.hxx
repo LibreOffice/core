@@ -96,8 +96,9 @@ public:
     typedef std::vector<WrongRange>::iterator iterator;
     typedef std::vector<WrongRange>::const_iterator const_iterator;
 
-            WrongList();
-            ~WrongList();
+    WrongList();
+    WrongList(const WrongList& r);
+    ~WrongList();
 
     sal_Bool    IsInvalid() const       { return nInvalidStart != NOT_INVALID; }
     void    SetValid()              { nInvalidStart = NOT_INVALID; nInvalidEnd = 0; }

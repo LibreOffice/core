@@ -207,15 +207,14 @@ void EditSpellWrapper::CheckSpellTo()
 
 //////////////////////////////////////////////////////////////////////
 
-WrongList::WrongList()
-{
-    nInvalidStart = 0;
-    nInvalidEnd = 0xFFFF;
-}
+WrongList::WrongList() : nInvalidStart(0), nInvalidEnd(0xFFFF) {}
 
-WrongList::~WrongList()
-{
-}
+WrongList::WrongList(const WrongList& r) :
+    maRanges(r.maRanges),
+    nInvalidStart(r.nInvalidStart),
+    nInvalidEnd(r.nInvalidEnd) {}
+
+WrongList::~WrongList() {}
 
 void WrongList::MarkInvalid( sal_uInt16 nS, sal_uInt16 nE )
 {
@@ -244,7 +243,7 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
 
     for (size_t i = 0, n = maRanges.size(); i < n; ++i)
     {
-        WrongRange & rWrong = maRanges[i]; // why does this thing derive vector?
+        WrongRange& rWrong = maRanges[i];
         bool bRefIsValid = true;
         if (rWrong.nEnd >= nPos)
         {
@@ -477,11 +476,7 @@ void WrongList::MarkWrongsInvalid()
 
 WrongList* WrongList::Clone() const
 {
-    WrongList* pNew = new WrongList;
-    pNew->maRanges.reserve(maRanges.size());
-    for (WrongList::const_iterator i = maRanges.begin(); i != maRanges.end(); ++i)
-        pNew->maRanges.push_back(*i);
-    return pNew;
+    return new WrongList(*this);
 }
 
 // #i102062#
