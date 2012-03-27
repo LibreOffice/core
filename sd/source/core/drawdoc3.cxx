@@ -1664,12 +1664,12 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         }
 
         // Liste mit Seiten fuellen
-        List* pPageList = new List;
+        std::vector<SdPage*> aPageList;
 
 //      #98456, this has to be removed according to CL (KA 07/08/2002)
 //      #109884# but we need them again to restore the styles of the presentation objects while undo
-        pPageList->Insert(pMaster, LIST_APPEND);
-        pPageList->Insert(pNotesMaster, LIST_APPEND);
+        aPageList.push_back(pMaster);
+        aPageList.push_back(pNotesMaster);
 
         if (bMaster || bLayoutReloaded)
         {
@@ -1679,21 +1679,20 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                 String aTest = pPage->GetLayoutName();
                 if (aTest == aOldPageLayoutName)
                 {
-                    pPageList->Insert(pPage, LIST_APPEND);
+                    aPageList.push_back(pPage);
                 }
             }
 
         }
         else
         {
-            pPageList->Insert(pSelectedPage, LIST_APPEND);
-            pPageList->Insert(pNotes, LIST_APPEND);
+            aPageList.push_back(pSelectedPage);
+            aPageList.push_back(pNotes);
         }
 
-        pPage = (SdPage*)pPageList->First();
-        while (pPage)
+        for (std::vector<SdPage*>::iterator pIter = aPageList.begin(); pIter != aPageList.end(); ++pIter)
         {
-            AutoLayout eAutoLayout = pPage->GetAutoLayout();
+            AutoLayout eAutoLayout = (*pIter)->GetAutoLayout();
 
             if( bUndo )
             {
@@ -1702,15 +1701,12 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         (this,
                         pPage->IsMasterPage() ? aLayoutName : aOldLayoutName,
                         aLayoutName,
-                         eAutoLayout, eAutoLayout, sal_False, pPage);
+                         eAutoLayout, eAutoLayout, sal_False, *pIter);
                 pUndoMgr->AddUndoAction(pPLUndoAction);
             }
-            pPage->SetPresentationLayout(aLayoutName);
-            pPage->SetAutoLayout(eAutoLayout);
-
-            pPage = (SdPage*)pPageList->Next();
+            (*pIter)->SetPresentationLayout(aLayoutName);
+            (*pIter)->SetAutoLayout(eAutoLayout);
         }
-        delete pPageList;
 
         /*********************************************************************
         |* Neue Masterpages angleichen
