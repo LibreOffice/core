@@ -326,6 +326,59 @@ public:
                                               sal_Bool bNoDialogs, ::sd::DrawDocShell* pBookmarkDocSh,
                                               sal_Bool bCopy, sal_Bool bMergeMasterPages,
                                               sal_Bool bPreservePageNames);
+
+    /** Insert pages into this document
+
+        This method inserts whole pages into this document, either
+        selected ones (specified via pBookmarkList/pExchangeList), or
+        all from the source document.
+
+        @attention Beware! This method in it's current state does not
+        handle all combinations of their input parameters
+        correctly. For example, for pBookmarkList=NULL, bReplace=sal_True
+        is ignored (no replace happens).
+
+        @param pBookmarkList
+        A list of strings, denoting the names of the pages to be copied
+
+        @param pExchangeList
+        A list of strings, denoting the names of the pages to be renamed
+
+        @param bLink
+        Whether the inserted pages should be links to the bookmark document
+
+        @param bReplace
+        Whether the pages should not be inserted, but replace the pages in
+        the destination document
+
+        @param nPgPos
+        Insertion point/start of replacement
+
+        @param bNoDialogs
+        Whether query dialogs are allowed (e.g. for page scaling)
+
+        @param pBookmarkDocSh
+        DocShell of the source document (used e.g. to extract the filename
+        for linked pages)
+
+        @param bCopy
+        Whether the source document should be treated as immutable (i.e.
+        inserted pages are not removed from it, but cloned)
+
+        @param bMergeMasterPages
+        Whether the source document's master pages should be copied, too.
+
+        @param bPreservePageNames
+        Whether the replace operation should take the name from the new
+        page, or preserve the old name
+     */
+
+    sal_Bool InsertBookmarkAsPage(std::vector<rtl::OUString> &rBookmarkList, std::vector<rtl::OUString> &rExchangeList,
+                              sal_Bool bLink, sal_Bool bReplace, sal_uInt16 nPgPos,
+                              sal_Bool bNoDialogs, ::sd::DrawDocShell* pBookmarkDocSh,
+                              sal_Bool bCopy, sal_Bool bMergeMasterPages,
+                              sal_Bool bPreservePageNames);
+
     sal_Bool                InsertBookmarkAsObject(List* pBookmarkList, List* pExchangeListL,
                                                 sal_Bool bLink, ::sd::DrawDocShell* pBookmarkDocSh,
                                                 Point* pObjPos);

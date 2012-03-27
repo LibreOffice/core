@@ -991,6 +991,561 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     return bContinue;
 }
 
+sal_Bool SdDrawDocument::InsertBookmarkAsPage(
+    std::vector<rtl::OUString> &rBookmarkList,
+    std::vector<rtl::OUString> &rExchangeList,            // Liste der zu verwendenen Namen
+    sal_Bool bLink,
+    sal_Bool bReplace,
+    sal_uInt16 nInsertPos,
+    sal_Bool bNoDialogs,
+    ::sd::DrawDocShell* pBookmarkDocSh,
+    sal_Bool bCopy,
+    sal_Bool bMergeMasterPages,
+    sal_Bool bPreservePageNames)
+{
+    sal_Bool bOK = sal_True;
+    sal_Bool bContinue = sal_True;
+    sal_Bool bScaleObjects = sal_False;
+    sal_uInt16 nReplacedStandardPages = 0;
+
+    SdDrawDocument* pBookmarkDoc = NULL;
+    String aBookmarkName;
+
+    if (pBookmarkDocSh)
+    {
+        pBookmarkDoc = pBookmarkDocSh->GetDoc();
+
+        if (pBookmarkDocSh->GetMedium())
+        {
+            aBookmarkName = pBookmarkDocSh->GetMedium()->GetName();
+        }
+    }
+    else if ( mxBookmarkDocShRef.Is() )
+    {
+        pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
+        aBookmarkName = maBookmarkFile;
+    }
+    else
+    {
+        return sal_False;
+    }
+
+    const sal_uInt16 nSdPageCount = GetSdPageCount(PK_STANDARD);
+    const sal_uInt16 nBMSdPageCount = pBookmarkDoc->GetSdPageCount(PK_STANDARD);
+    const sal_uInt16 nMPageCount = GetMasterPageCount();
+
+    if (nSdPageCount==0 || nBMSdPageCount==0 || nMPageCount==0)
+    {
+        bContinue = bOK = sal_False;
+        return(bContinue);
+    }
+
+    // Store the size and some other properties of the first page and notes
+    // page so that inserted pages can be properly scaled even when inserted
+    // before the first page.
+    // Note that the pointers are used later on as general page pointers.
+    SdPage* pRefPage = GetSdPage(0, PK_STANDARD);
+    Size  aSize(pRefPage->GetSize());
+    sal_Int32 nLeft  = pRefPage->GetLftBorder();
+    sal_Int32 nRight = pRefPage->GetRgtBorder();
+    sal_Int32 nUpper = pRefPage->GetUppBorder();
+    sal_Int32 nLower = pRefPage->GetLwrBorder();
+    Orientation eOrient = pRefPage->GetOrientation();
+
+    SdPage* pNPage = GetSdPage(0, PK_NOTES);
+    Size aNSize(GetSdPage(0, PK_NOTES)->GetSize());
+    sal_Int32 nNLeft  = pNPage->GetLftBorder();
+    sal_Int32 nNRight = pNPage->GetRgtBorder();
+    sal_Int32 nNUpper = pNPage->GetUppBorder();
+    sal_Int32 nNLower = pNPage->GetLwrBorder();
+    Orientation eNOrient = pRefPage->GetOrientation();
+
+    // Seitengroesse und -raender an die Werte der letzten
+    // Seiten anpassen?
+    pRefPage = GetSdPage(nSdPageCount - 1, PK_STANDARD);
+
+    if( bNoDialogs )
+    {
+        if( rBookmarkList.empty() )
+            bScaleObjects = pRefPage->IsScaleObjects();
+        else
+            bScaleObjects = sal_True;
+    }
+    else
+    {
+        SdPage* pBMPage = pBookmarkDoc->GetSdPage(0,PK_STANDARD);
+
+        if (pBMPage->GetSize()        != pRefPage->GetSize()         ||
+            pBMPage->GetLftBorder()   != pRefPage->GetLftBorder()    ||
+            pBMPage->GetRgtBorder()   != pRefPage->GetRgtBorder()    ||
+            pBMPage->GetUppBorder()   != pRefPage->GetUppBorder()    ||
+            pBMPage->GetLwrBorder()   != pRefPage->GetLwrBorder())
+        {
+            String aStr(SdResId(STR_SCALE_OBJECTS));
+            sal_uInt16 nBut = QueryBox( NULL, WB_YES_NO_CANCEL, aStr).Execute();
+
+            bScaleObjects = nBut == RET_YES;
+            bContinue     = nBut != RET_CANCEL;
+
+            if (!bContinue)
+            {
+                return(bContinue);
+            }
+        }
+    }
+
+
+    /**************************************************************************
+    |* Die benoetigten Praesentations-StyleSheets ermitteln und vor
+    |* den Seiten transferieren, sonst verlieren die Textobjekte
+    |* beim Transfer den Bezug zur Vorlage
+    \*************************************************************************/
+    ::svl::IUndoManager* pUndoMgr = NULL;
+    if( mpDocSh )
+    {
+        pUndoMgr = mpDocSh->GetUndoManager();
+        pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_INSERTPAGES)), String());
+    }
+
+    //
+    // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
+    //
+    std::vector<rtl::OUString> aLayoutsToTransfer;
+    InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( aLayoutsToTransfer );
+    lcl_IterateBookmarkPages( *this, pBookmarkDoc, rBookmarkList, nBMSdPageCount, aSearchFunctor );
+
+
+    /**************************************************************************
+    * Die tatsaechlich benoetigten Vorlagen kopieren
+    **************************************************************************/
+    SdStyleSheetPool* pBookmarkStyleSheetPool =
+    (SdStyleSheetPool*) pBookmarkDoc->GetStyleSheetPool();
+
+    // Wenn Vorlagen kopiert werden muessen, dann muessen auch die
+    // MasterPages kopiert werden!
+    if( !aLayoutsToTransfer.empty() )
+        bMergeMasterPages = sal_True;
+
+    std::vector<rtl::OUString>::const_iterator pIter;
+    for ( pIter = aLayoutsToTransfer.begin(); pIter != aLayoutsToTransfer.end(); ++pIter )
+    {
+        SdStyleSheetVector aCreatedStyles;
+        String layoutName = *pIter;
+
+        ((SdStyleSheetPool*)GetStyleSheetPool())->CopyLayoutSheets(layoutName, *pBookmarkStyleSheetPool,aCreatedStyles);
+
+        if(!aCreatedStyles.empty())
+        {
+            if( pUndoMgr )
+            {
+                SdMoveStyleSheetsUndoAction* pMovStyles = new SdMoveStyleSheetsUndoAction(this, aCreatedStyles, sal_True);
+                pUndoMgr->AddUndoAction(pMovStyles);
+            }
+        }
+    }
+
+    /**************************************************************************
+    * Dokument einfuegen
+    **************************************************************************/
+
+    const bool bUndo = IsUndoEnabled();
+
+    if( bUndo )
+        BegUndo(String(SdResId(STR_UNDO_INSERTPAGES)));
+
+    if (rBookmarkList.empty())
+    {
+        if (nInsertPos >= GetPageCount())
+        {
+            // Seiten werden hinten angefuegt
+            nInsertPos = GetPageCount();
+        }
+
+        sal_uInt16 nActualInsertPos = nInsertPos;
+
+        sal_uInt16 nBMSdPage;
+        std::set<sal_uInt16> aRenameSet;
+        std::map<sal_uInt16,rtl::OUString> aNameMap;
+
+        for (nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
+        {
+            SdPage* pBMPage = pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD);
+            String  pName( pBMPage->GetName() );
+            sal_Bool    bIsMasterPage;
+
+            if (bLink)
+            {
+                // Es werden sich die Namen aller Seiten gemerkt
+                aNameMap.insert(std::make_pair(nBMSdPage,pName));
+            }
+
+            // Have to check for duplicate names here, too
+            // don't change name if source and dest model are the same!
+            if( pBookmarkDoc != this &&
+                GetPageByName(pName, bIsMasterPage ) != SDRPAGE_NOTFOUND )
+            {
+                // delay renaming *after* pages are copied (might destroy source otherwise)
+                aRenameSet.insert(nBMSdPage);
+            }
+        }
+
+        Merge(*pBookmarkDoc,
+              1,                 // Nicht die Handzettelseite
+              0xFFFF,            // Aber alle anderen
+              nActualInsertPos,  // An Position einfuegen
+              bMergeMasterPages, // MasterPages mitnehmen
+              sal_False,             // Aber nur die benoetigten MasterPages
+              sal_True,              // Undo-Aktion erzeugen
+              bCopy);            // Seiten kopieren (oder mergen)
+
+        for (nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
+        {
+            SdPage* pPage       = (SdPage*) GetPage(nActualInsertPos);
+            SdPage* pNotesPage  = (SdPage*) GetPage(nActualInsertPos+1);
+
+            // delay renaming *after* pages are copied (might destroy source otherwise)
+            if( aRenameSet.find(nBMSdPage) != aRenameSet.end() )
+            {
+                // Seitenname schon vorhanden -> Defaultname
+                // fuer Standard & Notizseite
+                pPage->SetName(String());
+                pNotesPage->SetName(String());
+            }
+
+            if (bLink)
+            {
+                String aName(aNameMap[nBMSdPage]);
+
+                // Nun werden die Link-Namen zusammengestellt
+                pPage->SetFileName(aBookmarkName);
+                pPage->SetBookmarkName(aName);
+                pPage->SetModel(this);
+            }
+
+            nActualInsertPos += 2;
+        }
+    }
+    else
+    {
+        /**********************************************************************
+        * Ausgewaehlte Seiten einfuegen
+        **********************************************************************/
+        SdPage* pBMPage;
+
+        if (nInsertPos >= GetPageCount())
+        {
+            // Seiten werden hinten angefuegt
+            bReplace = sal_False;
+            nInsertPos = GetPageCount();
+        }
+
+        sal_uInt16 nActualInsertPos = nInsertPos;
+
+        // Collect the bookmarked pages.
+        ::std::vector<SdPage*> aBookmarkedPages (rBookmarkList.size(), NULL);
+        for ( size_t nPos = 0, n = rBookmarkList.size(); nPos < n; ++nPos)
+        {
+            String  aPgName(rBookmarkList[nPos]);
+            sal_Bool    bIsMasterPage;
+            sal_uInt16  nBMPage = pBookmarkDoc->GetPageByName( aPgName, bIsMasterPage );
+
+            if (nBMPage != SDRPAGE_NOTFOUND)
+            {
+                aBookmarkedPages[nPos] =  dynamic_cast<SdPage*>(pBookmarkDoc->GetPage(nBMPage));
+            }
+        }
+
+        for ( size_t nPos = 0, n = rBookmarkList.size(); nPos < n; ++nPos)
+        {
+            pBMPage = aBookmarkedPages[nPos];
+            sal_uInt16 nBMPage = pBMPage!=NULL ? pBMPage->GetPageNum() : SDRPAGE_NOTFOUND;
+
+            if (pBMPage && pBMPage->GetPageKind()==PK_STANDARD && !pBMPage->IsMasterPage())
+            {
+                /**************************************************************
+                * Es muss eine StandardSeite sein
+                **************************************************************/
+                sal_Bool bMustRename = sal_False;
+
+                // delay renaming *after* pages are copied (might destroy source otherwise)
+                // don't change name if source and dest model are the same!
+                // avoid renaming if replacing the same page
+                String  aPgName(rBookmarkList[nPos]);
+                sal_Bool    bIsMasterPage;
+                sal_uInt16 nPageSameName = GetPageByName(aPgName, bIsMasterPage);
+                if( pBookmarkDoc != this &&
+                    nPageSameName != SDRPAGE_NOTFOUND &&
+                    ( !bReplace ||
+                      nPageSameName != nActualInsertPos ) )
+                {
+                    bMustRename = sal_True;
+                }
+
+                SdPage* pBookmarkPage = pBMPage;
+                if (bReplace )
+                {
+                    ReplacePageInCustomShows( dynamic_cast< SdPage* >( GetPage( nActualInsertPos ) ), pBookmarkPage );
+                }
+
+                Merge(*pBookmarkDoc,
+                      nBMPage,           // Von Seite (Standard)
+                      nBMPage+1,         // Bis Seite (Notizen)
+                      nActualInsertPos,  // An Position einfuegen
+                      bMergeMasterPages, // MasterPages mitnehmen
+                      sal_False,             // Aber nur die benoetigten MasterPages
+                      sal_True,              // Undo-Aktion erzeugen
+                      bCopy);            // Seiten kopieren (oder mergen)
+
+                if( bReplace )
+                {
+                    if( GetPage( nActualInsertPos ) != pBookmarkPage )
+                    {
+                        // bookmark page was not moved but cloned, so update custom shows again
+                        ReplacePageInCustomShows( pBookmarkPage, dynamic_cast< SdPage* >( GetPage( nActualInsertPos ) ) );
+                    }
+                }
+
+                if( bMustRename )
+                {
+                    // Seitenname schon vorhanden -> Defaultname
+                    // fuer Standard & Notizseite
+                    SdPage* pPage = (SdPage*) GetPage(nActualInsertPos);
+                    pPage->SetName(String());
+                    SdPage* pNotesPage = (SdPage*) GetPage(nActualInsertPos+1);
+                    pNotesPage->SetName(String());
+                }
+
+                if (bLink)
+                {
+                    SdPage* pPage = (SdPage*) GetPage(nActualInsertPos);
+                    pPage->SetFileName(aBookmarkName);
+                    pPage->SetBookmarkName(aPgName);
+                    pPage->SetModel(this);
+                }
+
+                if (bReplace)
+                {
+                    // Seite & Notizseite ausfuegen
+                    const sal_uInt16 nDestPageNum(nActualInsertPos + 2);
+                    SdPage* pStandardPage = 0L;
+
+                    if(nDestPageNum < GetPageCount())
+                    {
+                        pStandardPage = (SdPage*)GetPage(nDestPageNum);
+                    }
+
+                    if (pStandardPage)
+                    {
+                        if( bPreservePageNames )
+                        {
+                            // Take old slide names for inserted pages
+                            SdPage* pPage = (SdPage*) GetPage(nActualInsertPos);
+                            pPage->SetName( pStandardPage->GetRealName() );
+                        }
+
+                        if( bUndo )
+                            AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pStandardPage));
+
+                        RemovePage(nDestPageNum);
+
+                        if( !bUndo )
+                            delete pStandardPage;
+                    }
+
+                    SdPage* pNotesPage = 0L;
+
+                    if(nDestPageNum < GetPageCount())
+                    {
+                        pNotesPage = (SdPage*)GetPage(nDestPageNum);
+                    }
+
+                    if (pNotesPage)
+                    {
+                        if( bPreservePageNames )
+                        {
+                            // Take old slide names for inserted pages
+                            SdPage* pNewNotesPage = (SdPage*) GetPage(nActualInsertPos+1);
+                            if( pNewNotesPage )
+                                pNewNotesPage->SetName( pStandardPage->GetRealName() );
+                        }
+
+                        if( bUndo )
+                            AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pNotesPage));
+
+                        RemovePage(nDestPageNum);
+
+                        if( !bUndo )
+                            delete pNotesPage;
+                    }
+
+                    nReplacedStandardPages++;
+                }
+
+                nActualInsertPos += 2;
+            }
+        }
+    }
+
+
+    /**************************************************************************
+    |* Dabei sind evtl. zu viele Masterpages ruebergekommen, da die
+    |* DrawingEngine gleiche Praesentationslayouts nicht erkennen kann.
+    |* Ueberzaehlige MasterPages entfernen.
+    \*************************************************************************/
+    sal_uInt16 nNewMPageCount = GetMasterPageCount();
+
+    // rueckwaerts, damit Nummern nicht durcheinander geraten
+    for (sal_uInt16 nPage = nNewMPageCount - 1; nPage >= nMPageCount; nPage--)
+    {
+        pRefPage = (SdPage*) GetMasterPage(nPage);
+        String aMPLayout(pRefPage->GetLayoutName());
+        PageKind eKind = pRefPage->GetPageKind();
+
+        // gibt's den schon?
+        for (sal_uInt16 nTest = 0; nTest < nMPageCount; nTest++)
+        {
+            SdPage* pTest = (SdPage*) GetMasterPage(nTest);
+            String aTest(pTest->GetLayoutName());
+
+            // nInsertPos > 2 is always true when inserting into non-empty models
+            if ( nInsertPos > 2 &&
+                 aTest == aMPLayout &&
+                 eKind == pTest->GetPageKind() )
+            {
+                if( bUndo )
+                    AddUndo(GetSdrUndoFactory().CreateUndoDeletePage(*pRefPage));
+
+                RemoveMasterPage(nPage);
+
+                if( !bUndo )
+                    delete pRefPage;
+                nNewMPageCount--;
+                break;
+            }
+        }
+    }
+
+    // nInsertPos > 2 is always true when inserting into non-empty models
+    if (nInsertPos > 0)
+    {
+        sal_uInt16 nSdPageStart = (nInsertPos - 1) / 2;
+        sal_uInt16 nSdPageEnd = GetSdPageCount(PK_STANDARD) - nSdPageCount +
+                            nSdPageStart - 1;
+        const bool bRemoveEmptyPresObj = pBookmarkDoc &&
+                (pBookmarkDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) &&
+                (GetDocumentType() == DOCUMENT_TYPE_DRAW);
+
+        if( bReplace )
+        {
+            nSdPageEnd = nSdPageStart + nReplacedStandardPages - 1;
+        }
+
+        std::vector<rtl::OUString>::iterator pExchangeIter = rExchangeList.begin();
+        for (sal_uInt16 nSdPage = nSdPageStart; nSdPage <= nSdPageEnd; nSdPage++)
+        {
+            pRefPage = GetSdPage(nSdPage, PK_STANDARD);
+
+            if (pExchangeIter != rExchangeList.end())
+            {
+                // Zuverwendener Name aus Exchange-Liste holen
+                String aExchangeName (*pExchangeIter);
+                pRefPage->SetName(aExchangeName);
+                SdrHint aHint(HINT_PAGEORDERCHG);
+                aHint.SetPage(pRefPage);
+                Broadcast(aHint);
+                SdPage* pNewNotesPage = GetSdPage(nSdPage, PK_NOTES);
+                pNewNotesPage->SetName(aExchangeName);
+                aHint.SetPage(pNewNotesPage);
+                Broadcast(aHint);
+
+                ++pExchangeIter;
+            }
+
+            String aLayout(pRefPage->GetLayoutName());
+            aLayout.Erase(aLayout.SearchAscii( SD_LT_SEPARATOR ));
+
+            // update layout and referred master page
+            pRefPage->SetPresentationLayout(aLayout);
+            if( bUndo )
+                AddUndo( GetSdrUndoFactory().CreateUndoPageChangeMasterPage( *pRefPage ) );
+
+            if (bScaleObjects)
+            {
+                Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
+                pRefPage->ScaleObjects(aSize, aBorderRect, sal_True);
+            }
+            pRefPage->SetSize(aSize);
+            pRefPage->SetBorder(nLeft, nUpper, nRight, nLower);
+            pRefPage->SetOrientation( eOrient );
+
+            if( bRemoveEmptyPresObj )
+                pRefPage->RemoveEmptyPresentationObjects();
+
+            pRefPage = GetSdPage(nSdPage, PK_NOTES);
+
+            // update layout and referred master page
+            pRefPage->SetPresentationLayout(aLayout);
+            if( bUndo )
+                AddUndo( GetSdrUndoFactory().CreateUndoPageChangeMasterPage( *pRefPage ) );
+
+            if (bScaleObjects)
+            {
+                Rectangle aBorderRect(nNLeft, nNUpper, nNRight, nNLower);
+                pRefPage->ScaleObjects(aNSize, aBorderRect, sal_True);
+            }
+
+            pRefPage->SetSize(aNSize);
+            pRefPage->SetBorder(nNLeft, nNUpper, nNRight, nNLower);
+            pRefPage->SetOrientation( eNOrient );
+
+            if( bRemoveEmptyPresObj )
+                pRefPage->RemoveEmptyPresentationObjects();
+        }
+
+        ///Remove processed elements, to avoid doings hacks in InsertBookmarkAsObject
+        rExchangeList.erase(rExchangeList.begin(),pExchangeIter);
+
+        for (sal_uInt16 nPage = nMPageCount; nPage < nNewMPageCount; nPage++)
+        {
+            pRefPage = (SdPage*) GetMasterPage(nPage);
+            if (pRefPage->GetPageKind() == PK_STANDARD)
+            {
+                if (bScaleObjects)
+                {
+                    Rectangle aBorderRect(nLeft, nUpper, nRight, nLower);
+                    pRefPage->ScaleObjects(aSize, aBorderRect, sal_True);
+                }
+                pRefPage->SetSize(aSize);
+                pRefPage->SetBorder(nLeft, nUpper, nRight, nLower);
+                pRefPage->SetOrientation( eOrient );
+            }
+            else        // kann nur noch NOTES sein
+            {
+                if (bScaleObjects)
+                {
+                    Rectangle aBorderRect(nNLeft, nNUpper, nNRight, nNLower);
+                    pRefPage->ScaleObjects(aNSize, aBorderRect, sal_True);
+                }
+                pRefPage->SetSize(aNSize);
+                pRefPage->SetBorder(nNLeft, nNUpper, nNRight, nNLower);
+                pRefPage->SetOrientation( eNOrient );
+            }
+
+            if( bRemoveEmptyPresObj )
+                pRefPage->RemoveEmptyPresentationObjects();
+        }
+    }
+
+    // Make absolutely sure no double masterpages are there
+    RemoveUnnecessaryMasterPages(NULL, sal_True, sal_True);
+
+    if( bUndo )
+        EndUndo();
+    pUndoMgr->LeaveListAction();
+
+    return bContinue;
+}
+
 /*************************************************************************
 |*
 |* Fuegt ein Bookmark als Objekt ein
