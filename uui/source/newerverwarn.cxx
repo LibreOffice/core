@@ -113,7 +113,7 @@ IMPL_LINK( NewerVersionWarningDialog, UpdateHdl, PushButton*, EMPTYARG )
             if ( xSystemShell.is() && sNotifyURL.getLength() )
             {
                 xSystemShell->execute(
-                    sNotifyURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                    sNotifyURL, ::rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
             }
         }
         else

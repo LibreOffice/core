@@ -59,9 +59,9 @@ using com::sun::star::system::XSystemShellExecute;
 
 namespace
 {
-    Reference< XInterface > SAL_CALL createInstance( const Reference< XMultiServiceFactory >& )
+    Reference< XInterface > SAL_CALL createInstance( const Reference< XComponentContext >& xContext )
     {
-        return Reference< XInterface >( static_cast< XSystemShellExecute* >( new CSysShExec( ) ) );
+        return Reference< XInterface >( static_cast< XSystemShellExecute* >( new CSysShExec(xContext) ) );
     }
 }
 
@@ -72,19 +72,18 @@ extern "C"
 // returns a factory to create XFilePicker-Services
 //----------------------------------------------------------------------
 
-SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface* pSrvManager, uno_Interface* /*pRegistryKey*/ )
+SAL_DLLPUBLIC_EXPORT void* SAL_CALL component_getFactory( const sal_Char* pImplName, uno_Interface*, uno_Interface* /*pRegistryKey*/ )
 {
     void* pRet = 0;
 
-    if ( pSrvManager && ( 0 == rtl_str_compare( pImplName, SYSSHEXEC_IMPL_NAME ) ) )
+    if ( 0 == rtl_str_compare( pImplName, SYSSHEXEC_IMPL_NAME ) )
     {
         Sequence< OUString > aSNS( 1 );
         aSNS.getArray( )[0] = OUString(RTL_CONSTASCII_USTRINGPARAM( SYSSHEXEC_SERVICE_NAME ));
 
-        Reference< XSingleServiceFactory > xFactory ( createOneInstanceFactory(
-            reinterpret_cast< XMultiServiceFactory* > ( pSrvManager ),
-            OUString::createFromAscii( pImplName ),
+        Reference< XSingleComponentFactory > xFactory ( createSingleComponentFactory(
             createInstance,
+            OUString::createFromAscii( pImplName ),
             aSNS ) );
         if ( xFactory.is() )
         {

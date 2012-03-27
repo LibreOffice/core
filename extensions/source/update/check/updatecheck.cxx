@@ -1512,7 +1512,7 @@ UpdateCheck::showReleaseNote(const rtl::OUString& rURL) const
     try {
 
         if( xShellExecute.is() )
-            xShellExecute->execute(rURL, rtl::OUString(), c3s::SystemShellExecuteFlags::DEFAULTS);
+            xShellExecute->execute(rURL, rtl::OUString(), c3s::SystemShellExecuteFlags::URIS_ONLY);
     } catch(c3s::SystemShellExecuteException&) {
     }
 }

@@ -122,7 +122,7 @@ IMPL_LINK( SvxImprovementOptionsPage, HandleHyperlink, svt::FixedHyperlinkImage*
             if ( xSystemShell.is() )
             {
                 xSystemShell->execute(
-                    sURL, ::rtl::OUString(), SystemShellExecuteFlags::DEFAULTS );
+                    sURL, ::rtl::OUString(), SystemShellExecuteFlags::URIS_ONLY );
             }
         }
         catch( const uno::Exception& e )

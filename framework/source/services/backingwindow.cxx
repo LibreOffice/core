@@ -943,7 +943,7 @@ IMPL_LINK( BackingWindow, ToolboxHdl, void*, EMPTYARG )
                             rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
                         UNO_QUERY_THROW);
                     //throws css::lang::IllegalArgumentException, css::system::SystemShellExecuteException
-                    xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS);
+                    xSystemShellExecute->execute( sURL, rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
                 }
             }
         }

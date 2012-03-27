@@ -879,7 +879,7 @@ void SAL_CALL OleEmbeddedObject::doVerb( sal_Int32 nVerbID )
                     uno::Reference< ::com::sun::star::system::XSystemShellExecute > xSystemShellExecute( m_xFactory->createInstance(
                         ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.system.SystemShellExecute"))),
                         uno::UNO_QUERY_THROW);
-                    xSystemShellExecute->execute(m_aTempDumpURL, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::DEFAULTS);
+                    xSystemShellExecute->execute(m_aTempDumpURL, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY);
                 }
                 else
                     throw embed::UnreachableStateException();

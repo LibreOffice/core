@@ -2979,7 +2979,7 @@ void VCLXFixedHyperlink::ProcessWindowEvent( const VclWindowEvent& rVclWindowEve
                     {
                         // start browser
                         xSystemShellExecute->execute(
-                            sURL, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+                            sURL, ::rtl::OUString(), ::com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
                     }
                     catch( uno::Exception& )
                     {

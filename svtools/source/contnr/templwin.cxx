@@ -1919,7 +1919,7 @@ IMPL_LINK ( SvtDocumentTemplateDialog, OpenLinkHdl_Impl, svt::FixedHyperlink*, E
                     RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.system.SystemShellExecute" ) ) ),
                 uno::UNO_QUERY_THROW );
             if ( xSystemShell.is() )
-                xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::DEFAULTS );
+                xSystemShell->execute( sURL, ::rtl::OUString(), com::sun::star::system::SystemShellExecuteFlags::URIS_ONLY );
             EndDialog( RET_CANCEL );
         }
         catch( const uno::Exception& e )
