@@ -37,6 +37,7 @@ File gid_File_Lib_OOoFilt
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "ooofilt.dll";
+    ComponentCondition = "NOT VersionNT64";
 End
 
 #ifdef BUILD_X64
@@ -56,6 +57,7 @@ File gid_File_Lib_Shlxthdl
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "shlxthdl.dll";
+    ComponentCondition = "NOT VersionNT64";
 End
 
 #ifdef BUILD_X64
@@ -74,6 +76,7 @@ File gid_File_Lib_PropertyHdl
     Styles = (PACKED);
     Dir = gid_Dir_Shlxthdl;
     Name = "propertyhdl.dll";
+    ComponentCondition = "NOT VersionNT64";
 End
 
 #ifdef BUILD_X64
