@@ -28,10 +28,12 @@
 
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
+#include <vcl/combobox.hxx>
 #include <vcl/dialog.hxx>
 #include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
+#include <vcl/spin.hxx>
 
 VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri)
 {
@@ -92,6 +94,14 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool b
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkCheckButton")))
     {
         pWindow = new CheckBox(pParent, WB_CENTER|WB_VCENTER);
+    }
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkSpinButton")))
+    {
+        pWindow = new SpinButton(pParent, WB_CENTER|WB_VCENTER);
+    }
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkComboBox")))
+    {
+        pWindow = new ComboBox(pParent, WB_CENTER|WB_VCENTER);
     }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
     {
@@ -164,15 +174,6 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, st
             }
             else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
                 pCurrentChild->SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
-            else if
-                (
-                    rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("expand")) ||
-                    rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("fill"))
-                )
-            {
-                bool bTrue = (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1');
-                pCurrentChild->setChildProperty(rKey, bTrue);
-            }
             else
                 fprintf(stderr, "unhandled property %s\n", rKey.getStr());
         }
@@ -191,6 +192,8 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
 {
     int nLevel = 1;
 
+    Window *pCurrentChild = NULL;
+
     while(1)
     {
         xmlreader::Span name;
@@ -202,7 +205,11 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
         {
             if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")))
             {
-                handleObject(pParent, reader);
+                pCurrentChild = handleObject(pParent, reader);
+            }
+            else if (name.equals(RTL_CONSTASCII_STRINGPARAM("packing")))
+            {
+                handlePacking(pCurrentChild, reader);
             }
             else
                 ++nLevel;
@@ -221,7 +228,7 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
     }
 }
 
-void VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
+Window* VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 {
     rtl::OString sClass;
 
@@ -230,8 +237,6 @@ void VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 
     while (reader.nextAttribute(&nsId, &name))
     {
-        rtl::OString sFoo(name.begin, name.length);
-
         if (name.equals(RTL_CONSTASCII_STRINGPARAM("class")))
         {
             name = reader.getAttributeValue(false);
@@ -251,10 +256,6 @@ void VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
 
         if (res == xmlreader::XmlReader::RESULT_DONE)
             break;
-
-        rtl::OString sFoo(name.begin, name.length);
-
-        fprintf(stderr, "level tag %d %s\n", nLevel, sFoo.getStr());
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
         {
@@ -282,9 +283,72 @@ void VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
     }
 
     if (!pCurrentChild)
-        insertObject(pParent, sClass, aProperties);
+        pCurrentChild = insertObject(pParent, sClass, aProperties);
 
-    fprintf(stderr, "finished %s\n", sClass.getStr());
+    return pCurrentChild;
+}
+
+void VclBuilder::handlePacking(Window *pCurrent, xmlreader::XmlReader &reader)
+{
+    xmlreader::Span name;
+    int nsId;
+
+    int nLevel = 1;
+
+    while(1)
+    {
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            ++nLevel;
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+                applyPackingProperty(pCurrent, reader);
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+        {
+            --nLevel;
+        }
+
+        if (!nLevel)
+            break;
+    }
+}
+
+void VclBuilder::applyPackingProperty(Window *pCurrent,
+    xmlreader::XmlReader &reader)
+{
+    xmlreader::Span name;
+    int nsId;
+
+    if (!pCurrent)
+        return;
+
+    while (reader.nextAttribute(&nsId, &name))
+    {
+        if (name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
+        {
+            name = reader.getAttributeValue(false);
+            rtl::OString sKey(name.begin, name.length);
+            reader.nextItem(
+                xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
+            rtl::OString sValue(name.begin, name.length);
+
+            if ( sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("expand")) ||
+                 sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("fill")) )
+            {
+                bool bTrue = (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1');
+                pCurrent->setChildProperty(sKey, bTrue);
+            }
+            else
+                fprintf(stderr, "unknown packing %s\n", sKey.getStr());
+        }
+    }
 }
 
 void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap)
@@ -294,8 +358,6 @@ void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap)
 
     while (reader.nextAttribute(&nsId, &name))
     {
-        rtl::OString sFoo(name.begin, name.length);
-
         if (name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
             name = reader.getAttributeValue(false);

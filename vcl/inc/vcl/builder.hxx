@@ -48,7 +48,9 @@ private:
     Window *makeObject(Window *pParent, const rtl::OString &rClass, bool bVertical=false);
 
     void handleChild(Window *pParent, xmlreader::XmlReader &reader);
-    void handleObject(Window *pParent, xmlreader::XmlReader &reader);
+    Window* handleObject(Window *pParent, xmlreader::XmlReader &reader);
+    void handlePacking(Window *pCurrent, xmlreader::XmlReader &reader);
+    void applyPackingProperty(Window *pCurrent, xmlreader::XmlReader &reader);
     void collectProperty(xmlreader::XmlReader &reader, stringmap &rVec);
 };
 
