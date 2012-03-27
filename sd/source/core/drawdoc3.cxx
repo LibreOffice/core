@@ -379,21 +379,6 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
         mrLayoutsToTransfer.push_back(aLayout);
 }
 
-/** Just add one page to the container given to the constructor.
-*/
-class InsertBookmarkAsPage_AddBookmarkedPages
-    : public SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase
-{
-public:
-    InsertBookmarkAsPage_AddBookmarkedPages(::std::vector<SdPage*>& rContainer)
-        : mrContainer(rContainer) {}
-    ~InsertBookmarkAsPage_AddBookmarkedPages(void) {}
-    void operator() (SdDrawDocument&, SdPage* pPage) { mrContainer.push_back(pPage); }
-private:
-    ::std::vector<SdPage*>& mrContainer;
-};
-
-
 sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     List* pBookmarkList,
     List* pExchangeList,            // Liste der zu verwendenen Namen
