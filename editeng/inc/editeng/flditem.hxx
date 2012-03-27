@@ -57,13 +57,11 @@ public:
     virtual MetaAction* createEndComment() const;
 };
 
-/*
-[Description]
-In diesem Item wird ein Feld (SvxFieldData) gespeichert.
-Das Feld gehoert dem Item.
-Das Feld selbst wird durch eine Ableitung von SvxFieldData bestimmt. (RTTI)
-*/
-
+/**
+ * This item stores a field (SvxFieldData).  The field is controlled by or
+ * belongs to the item.  The field itself is determined by a derivation from
+ * SvxFieldData (RTTI)
+ */
 class EDITENG_DLLPUBLIC SvxFieldItem : public SfxPoolItem
 {
 private:
