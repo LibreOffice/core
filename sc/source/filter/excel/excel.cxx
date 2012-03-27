@@ -72,69 +72,6 @@ FltError ScFormatFilterPluginImpl::ScImportExcel( SfxMedium& rMedium, ScDocument
     OSL_ENSURE( pMedStrm, "::ScImportExcel - medium without input stream" );
     if( !pMedStrm ) return eERR_OPEN;           // should not happen
 
-#if OSL_DEBUG_LEVEL > 0
-    using namespace ::com::sun::star;
-    using namespace ::comphelper;
-
-    /*  Environment variable "OOO_OOXBIFFFILTER":
-        - "1" = use new OOX filter for import;
-        - undef/other = use old sc filter for import (OOX only as file dumper). */
-    const sal_Char* pcFileName = ::getenv( "OOO_OOXBIFFFILTER" );
-    bool bUseOoxFilter = pcFileName && (*pcFileName == '1') && (*(pcFileName + 1) == 0);
-    if( SfxObjectShell* pDocShell = pDocument->GetDocumentShell() ) try
-    {
-        uno::Reference< lang::XComponent > xComponent( pDocShell->GetModel(), uno::UNO_QUERY_THROW );
-
-        uno::Sequence< beans::NamedValue > aArgSeq( 1 );
-        aArgSeq[ 0 ].Name = CREATE_OUSTRING( "UseBiffFilter" );
-        aArgSeq[ 0 ].Value <<= bUseOoxFilter;
-
-        uno::Sequence< uno::Any > aArgs( 2 );
-        aArgs[ 0 ] <<= getProcessServiceFactory();
-        aArgs[ 1 ] <<= aArgSeq;
-        uno::Reference< document::XImporter > xImporter( ScfApiHelper::CreateInstanceWithArgs(
-            CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelBiffFilter" ), aArgs ), uno::UNO_QUERY_THROW );
-        xImporter->setTargetDocument( xComponent );
-
-        MediaDescriptor aMediaDesc;
-        SfxItemSet* pItemSet = rMedium.GetItemSet();
-        if( pItemSet )
-        {
-            SFX_ITEMSET_ARG( pItemSet, pFileNameItem, SfxStringItem, SID_FILE_NAME, false);
-            if( pFileNameItem )
-                aMediaDesc[ MediaDescriptor::PROP_URL() ] <<= ::rtl::OUString( pFileNameItem->GetValue() );
-
-            SFX_ITEMSET_ARG( pItemSet, pPasswordItem, SfxStringItem, SID_PASSWORD, false);
-            if( pPasswordItem )
-                aMediaDesc[ MediaDescriptor::PROP_PASSWORD() ] <<= ::rtl::OUString( pPasswordItem->GetValue() );
-
-            SFX_ITEMSET_ARG( pItemSet, pEncryptionDataItem, SfxUnoAnyItem, SID_ENCRYPTIONDATA, false);
-            if( pEncryptionDataItem )
-                aMediaDesc[ MediaDescriptor::PROP_ENCRYPTIONDATA() ] = pEncryptionDataItem->GetValue();
-        }
-        aMediaDesc[ MediaDescriptor::PROP_INPUTSTREAM() ] <<= rMedium.GetInputStream();
-        aMediaDesc[ MediaDescriptor::PROP_INTERACTIONHANDLER() ] <<= rMedium.GetInteractionHandler();
-
-        // call the filter
-        uno::Reference< document::XFilter > xFilter( xImporter, uno::UNO_QUERY_THROW );
-        bool bResult = xFilter->filter( aMediaDesc.getAsConstPropertyValueList() );
-
-        // if filter returns false, document is invalid, or dumper has disabled import -> exit here
-        if( !bResult )
-            return ERRCODE_ABORT;
-
-        // if OOX filter has been used, exit with OK code
-        if( bUseOoxFilter )
-            return eERR_OK;
-    }
-    catch( uno::Exception& )
-    {
-        if( bUseOoxFilter )
-            return ERRCODE_ABORT;
-        // else ignore exception and import the document with this filter
-    }
-#endif
-
     SvStream* pBookStrm = 0;            // The "Book"/"Workbook" stream containing main data.
     XclBiff eBiff = EXC_BIFF_UNKNOWN;   // The BIFF version of the main stream.
 

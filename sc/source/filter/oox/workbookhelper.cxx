@@ -105,7 +105,6 @@ class WorkbookGlobals
 {
 public:
     explicit            WorkbookGlobals( ExcelFilter& rFilter );
-    explicit            WorkbookGlobals( ExcelBiffFilter& rFilter, BiffType eBiff );
                         ~WorkbookGlobals();
 
     /** Returns true, if this helper refers to a valid document. */
@@ -305,19 +304,6 @@ WorkbookGlobals::WorkbookGlobals( ExcelFilter& rFilter ) :
     // register at the filter, needed for virtual callbacks (even during construction)
     mrExcelBase.registerWorkbookGlobals( *this );
     initialize( true );
-}
-
-WorkbookGlobals::WorkbookGlobals( ExcelBiffFilter& rFilter, BiffType eBiff ) :
-    mrBaseFilter( rFilter ),
-    mrExcelBase( rFilter ),
-    meFilterType( FILTER_BIFF ),
-    mpOoxFilter( 0 ),
-    mpBiffFilter( &rFilter ),
-    meBiff( eBiff )
-{
-    // register at the filter, needed for virtual callbacks (even during construction)
-    mrExcelBase.registerWorkbookGlobals( *this );
-    initialize( eBiff >= BIFF5 );
 }
 
 WorkbookGlobals::~WorkbookGlobals()
@@ -645,14 +631,6 @@ WorkbookHelper::~WorkbookHelper()
 /*static*/ WorkbookGlobalsRef WorkbookHelper::constructGlobals( ExcelFilter& rFilter )
 {
     WorkbookGlobalsRef xBookGlob( new WorkbookGlobals( rFilter ) );
-    if( !xBookGlob->isValid() )
-        xBookGlob.reset();
-    return xBookGlob;
-}
-
-/*static*/ WorkbookGlobalsRef WorkbookHelper::constructGlobals( ExcelBiffFilter& rFilter, BiffType eBiff )
-{
-    WorkbookGlobalsRef xBookGlob( new WorkbookGlobals( rFilter, eBiff ) );
     if( !xBookGlob->isValid() )
         xBookGlob.reset();
     return xBookGlob;

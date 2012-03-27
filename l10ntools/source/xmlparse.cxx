@@ -692,17 +692,6 @@ void XMLElement::ChangeLanguageTag( const rtl::OUString &rValue )
         pCList = NULL;
     }
 }
-/*****************************************************************************/
-XMLAttribute *XMLElement::GetAttribute( const rtl::OUString &rName )
-/*****************************************************************************/
-{
-    if ( pAttributes )
-        for ( size_t i = 0; i < pAttributes->size(); i++ )
-            if ( (*pAttributes)[ i ]->GetName() == rName )
-                return (*pAttributes)[ i ];
-
-    return NULL;
-}
 
 /*****************************************************************************/
 XMLElement::~XMLElement()
@@ -716,24 +705,7 @@ XMLElement::~XMLElement()
         pAttributes = NULL;
     }
 }
-/*****************************************************************************/
-bool    XMLElement::Equals(OUString refStr){
-/*****************************************************************************/
-    return  refStr.equals( ToOUString() );
-}
 
-/*****************************************************************************/
-OString XMLElement::ToOString(){
-/*****************************************************************************/
-    OUString ouEmpty;
-
-    OUStringBuffer* buffer = new OUStringBuffer();
-    Print( this, *buffer , true );
-
-    OString result( (sal_Unicode* )buffer->getStr(), buffer->getLength() , RTL_TEXTENCODING_UTF8 );
-    delete buffer;
-    return result;
-}
 /*****************************************************************************/
 OUString XMLElement::ToOUString(){
 /*****************************************************************************/

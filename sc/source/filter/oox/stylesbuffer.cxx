@@ -3231,11 +3231,6 @@ void StylesBuffer::importStyle( BiffInputStream& rStrm )
     maCellStyles.importStyle( rStrm );
 }
 
-void StylesBuffer::importPalette( const Any& rPalette )
-{
-    maPalette.importPalette( rPalette );
-}
-
 void StylesBuffer::finalizeImport()
 {
     // fonts first, are needed to finalize unit converter and XFs below

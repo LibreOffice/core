@@ -129,7 +129,6 @@ struct BinRange
 
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
-    void                write( BiffOutputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -153,12 +152,6 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRange& or
 inline BiffInputStream& operator>>( BiffInputStream& rStrm, BinRange& orRange )
 {
     orRange.read( rStrm );
-    return rStrm;
-}
-
-inline BiffOutputStream& operator<<( BiffOutputStream& rStrm, const BinRange& rRange )
-{
-    rRange.write( rStrm );
     return rStrm;
 }
 

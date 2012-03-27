@@ -1016,9 +1016,6 @@ public:
     /** Imports the STYLE record from the passed stream. */
     void                importStyle( BiffInputStream& rStrm );
 
-    /** Imports a color palette from a UNO sequence in the passed any. */
-    void                importPalette( const ::com::sun::star::uno::Any& rPalette );
-
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 

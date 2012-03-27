@@ -330,7 +330,6 @@ WPXSubDocument::WPXSubDocument()
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
 X11SalGraphics::SetMask(int&, int&, unsigned int&, unsigned int&, int&, int&, unsigned long)
 X509Certificate_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
-XMLElement::Equals(rtl::OUString)
 XMLFamilyDataList_Impl::GetPos(XMLFamilyData_Impl const*) const
 XMLFamilyDataList_Impl::Remove(XMLFamilyData_Impl*)
 XMLFontAutoStylePoolNames_Impl::GetPos(rtl::OUString const*) const

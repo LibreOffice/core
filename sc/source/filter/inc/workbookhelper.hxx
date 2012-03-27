@@ -70,7 +70,6 @@ namespace oox {
 namespace xls {
 
 class ExcelFilter;
-class ExcelBiffFilter;
 
 // ============================================================================
 
@@ -133,7 +132,6 @@ public:
     virtual             ~WorkbookHelper();
 
     static WorkbookGlobalsRef constructGlobals( ExcelFilter& rFilter );
-    static WorkbookGlobalsRef constructGlobals( ExcelBiffFilter& rFilter, BiffType eBiff );
 
     // filter -----------------------------------------------------------------
 

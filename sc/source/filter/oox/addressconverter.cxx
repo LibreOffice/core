@@ -149,18 +149,6 @@ void BinRange::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
     maLast.mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
 }
 
-void BinRange::write( BiffOutputStream& rStrm, bool bCol16Bit, bool bRow32Bit ) const
-{
-    if( bRow32Bit )
-        rStrm << maFirst.mnRow << maLast.mnRow;
-    else
-        rStrm << static_cast< sal_uInt16 >( maFirst.mnRow ) << static_cast< sal_uInt16 >( maLast.mnRow );
-    if( bCol16Bit )
-        rStrm << static_cast< sal_uInt16 >( maFirst.mnCol ) << static_cast< sal_uInt16 >( maLast.mnCol );
-    else
-        rStrm << static_cast< sal_uInt8 >( maFirst.mnCol ) << static_cast< sal_uInt8 >( maLast.mnCol );
-}
-
 // ============================================================================
 
 void BinRangeList::read( SequenceInputStream& rStrm )

@@ -75,17 +75,6 @@ void BiffOutputRecordBuffer::write( const void* pData, sal_uInt16 nBytes )
 
 } // namespace prv
 
-// ============================================================================
-
-// record control -------------------------------------------------------------
-
-void BiffOutputStream::setPortionSize( sal_uInt8 nSize )
-{
-    OSL_ENSURE( mnPortionPos == 0, "BiffOutputStream::setPortionSize - block operation inside portion" );
-    mnPortionSize = ::std::max< sal_uInt8 >( nSize, 1 );
-    mnPortionPos = 0;
-}
-
 // BinaryOutputStream interface (stream write access) -------------------------
 
 void BiffOutputStream::writeData( const StreamDataSequence& rData, size_t nAtomSize )

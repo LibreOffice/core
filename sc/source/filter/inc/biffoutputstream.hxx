@@ -82,21 +82,11 @@ private:
     An instance is constructed with a BinaryOutputStream object and the
     maximum size of BIFF record contents (e.g. 2080 bytes in BIFF2-BIFF5, or
     8224 bytes in BIFF8).
-
-    If some data exceeds the record size limit, a CONTINUE record will be
-    started automatically and the new data will be written to this record. If
-    specific data pieces must not be split into the current and a following
-    CONTINUE record, use setPortionSize(). Example: To write a sequence of
-    16-bit values where 4 values form a unit and cannot be split, call
-    setPortionSize(8) first (4*2 bytes == 8).
 */
 class BiffOutputStream : public BinaryOutputStream
 {
 public:
     // record control ---------------------------------------------------------
-
-    /** Sets size of data portion in bytes. 0 or 1 means no portions are used. */
-    void                setPortionSize( sal_uInt8 nSize );
 
     // BinaryOutputStream interface (stream write access) ---------------------
 

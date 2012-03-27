@@ -303,18 +303,10 @@ public:
     void AddAttribute( const rtl::OUString &rAttribute, const rtl::OUString &rValue );
 
     void ChangeLanguageTag( const rtl::OUString &rValue );
-    // Return a ASCII String representation of this object
-    OString ToOString();
 
     // Return a Unicode String representation of this object
     OUString ToOUString();
 
-    bool    Equals(OUString refStr);
-
-    /// returns a attribute
-    XMLAttribute *GetAttribute(
-        const rtl::OUString &rName // the attribute name
-    );
     void SetProject         ( rtl::OString const & prj        ){ project = prj;        }
     void SetFileName        ( rtl::OString const & fn         ){ filename = fn;        }
     void SetId              ( rtl::OString const & theId      ){ id = theId;           }

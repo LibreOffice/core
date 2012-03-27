@@ -81,25 +81,6 @@ private:
     virtual ::rtl::OUString implGetImplementationName() const;
 };
 
-// ============================================================================
-
-class ExcelBiffFilter : public ::oox::core::BinaryFilterBase, public ExcelFilterBase
-{
-public:
-    explicit            ExcelBiffFilter(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
-                            throw( ::com::sun::star::uno::RuntimeException );
-    virtual             ~ExcelBiffFilter();
-
-    virtual bool        importDocument() throw();
-    virtual bool        exportDocument() throw();
-
-private:
-    virtual GraphicHelper* implCreateGraphicHelper() const;
-    virtual ::oox::ole::VbaProject* implCreateVbaProject() const;
-    virtual ::rtl::OUString implGetImplementationName() const;
-};
-
 } // namespace xls
 } // namespace oox
 
