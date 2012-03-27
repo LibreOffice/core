@@ -46,6 +46,7 @@ $(eval $(call gb_Library_add_api,evoab2,\
 ))
 
 $(eval $(call gb_Library_add_linked_libs,evoab2,\
+	comphelper \
 	cppu \
 	cppuhelper \
 	svl \
