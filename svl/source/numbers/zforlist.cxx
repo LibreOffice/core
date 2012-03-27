@@ -562,6 +562,18 @@ bool SvNumberFormatter::PutandConvertEntry(String& rString,
     return bRes;
 }
 
+bool SvNumberFormatter::PutandConvertEntry(rtl::OUString& rString,
+                                           xub_StrLen& nCheckPos,
+                                           short& nType,
+                                           sal_uInt32& nKey,
+                                           LanguageType eLnge,
+                                           LanguageType eNewLnge)
+{
+    String aStr;
+    bool bRet = PutandConvertEntry(aStr, nCheckPos, nType, nKey, eLnge, eNewLnge);
+    rString = aStr;
+    return bRet;
+}
 
 bool SvNumberFormatter::PutandConvertEntrySystem(String& rString,
                                            xub_StrLen& nCheckPos,

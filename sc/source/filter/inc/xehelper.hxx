@@ -193,7 +193,7 @@ public:
 
     /** Processes the passed URL field (tries to create a HLINK record).
         @return  The representation string of the URL field. */
-    String              ProcessUrlField( const SvxURLField& rUrlField );
+    rtl::OUString ProcessUrlField( const SvxURLField& rUrlField );
 
     /** Returns true, if a single HLINK record has been created. */
     bool                HasLinkRecord() const;

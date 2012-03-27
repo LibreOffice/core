@@ -411,6 +411,10 @@ public:
                              short& nType, sal_uInt32& nKey,
                              LanguageType eLnge, LanguageType eNewLnge );
 
+    bool PutandConvertEntry( rtl::OUString& rString, xub_StrLen& nCheckPos,
+                             short& nType, sal_uInt32& nKey,
+                             LanguageType eLnge, LanguageType eNewLnge );
+
     /** Same as <method>PutandConvertEntry</method> but the format code string
          is considered to be of the System language/country eLnge and is
         converted to another System language/country eNewLnge. In this case
