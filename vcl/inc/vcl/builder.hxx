@@ -31,21 +31,25 @@
 #include <vcl/dllapi.h>
 #include <vcl/window.hxx>
 #include <xmlreader/xmlreader.hxx>
+#include <map>
 #include <vector>
 
 class VCL_DLLPUBLIC VclBuilder
 {
 private:
     std::vector<Window*> m_aChildren;
+    typedef std::map<rtl::OString, rtl::OString> stringmap;
 public:
     VclBuilder(Window *pParent, rtl::OUString sUIFile);
     ~VclBuilder();
     Window *get_widget_root();
 private:
-    Window *makeObject(Window *pParent, xmlreader::Span &name);
+    Window *insertObject(Window *pParent, const rtl::OString &rClass, stringmap &rVec);
+    Window *makeObject(Window *pParent, const rtl::OString &rClass, bool bVertical=false);
 
+    void handleChild(Window *pParent, xmlreader::XmlReader &reader);
     void handleObject(Window *pParent, xmlreader::XmlReader &reader);
-    void handleProperty(Window *pWindow, xmlreader::XmlReader &reader);
+    void collectProperty(xmlreader::XmlReader &reader, stringmap &rVec);
 };
 
 #endif

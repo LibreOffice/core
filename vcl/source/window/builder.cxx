@@ -14,7 +14,7 @@
  *
  * The Initial Developer of the Original Code is
  *        Caolán McNamara <caolanm@redhat.com> (Red Hat, Inc.)
- * Portions created by the Initial Developer are Copyright (C) 2011 the
+ * Portions created by the Initial Developer are Copyright (C) 2012 the
  * Initial Developer. All Rights Reserved.
  *
  * Contributor(s): Caolán McNamara <caolanm@redhat.com>
@@ -36,24 +36,7 @@ VclBuilder::VclBuilder(Window *pParent, rtl::OUString sUri)
 {
     xmlreader::XmlReader reader(sUri);
 
-    while(1)
-    {
-        xmlreader::Span name;
-        int nsId;
-        xmlreader::XmlReader::Result res = reader.nextItem(
-            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
-
-        if (res == xmlreader::XmlReader::RESULT_BEGIN &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("object")))
-        {
-            handleObject(pParent, reader);
-        }
-
-        rtl::OString sFoo(name.begin, name.length);
-        fprintf(stderr, "interface level is %s\n", sFoo.getStr());
-        if (res == xmlreader::XmlReader::RESULT_DONE)
-            break;
-    }
+    handleChild(pParent, reader);
 
     for (std::vector<Window*>::iterator aI = m_aChildren.begin(),
          aEnd = m_aChildren.end(); aI != aEnd; ++aI)
@@ -76,56 +59,111 @@ VclBuilder::~VclBuilder()
     }
 }
 
-Window *VclBuilder::makeObject(Window *pParent, xmlreader::Span &name)
+Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool bVertical)
 {
     Window *pWindow = NULL;
-    if (name.equals(RTL_CONSTASCII_STRINGPARAM("GtkDialog")))
+    if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkDialog")))
     {
         pWindow = new Dialog(pParent, WB_SIZEMOVE);
     }
-    else if (name.equals(RTL_CONSTASCII_STRINGPARAM("GtkBox")))
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkBox")))
     {
-        pWindow = new VclHBox(pParent);
+        if (bVertical)
+            pWindow = new VclVBox(pParent);
+        else
+            pWindow = new VclHBox(pParent);
     }
-    else if (name.equals(RTL_CONSTASCII_STRINGPARAM("GtkButton")))
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButtonBox")))
     {
-        pWindow = new PushButton(pParent);
+        if (bVertical)
+            pWindow = new VclVButtonBox(pParent);
+        else
+            pWindow = new VclHButtonBox(pParent);
     }
-    else if (name.equals(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkButton")))
     {
-        pWindow = new FixedText(pParent);
+        pWindow = new PushButton(pParent, WB_CENTER|WB_VCENTER);
+    }
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkRadioButton")))
+    {
+        pWindow = new RadioButton(pParent, WB_CENTER|WB_VCENTER);
+    }
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
+    {
+        pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER);
     }
     else
     {
-        fprintf(stderr, "TO-DO, implement %s\n",
-            rtl::OString(name.begin, name.length).getStr());
+        fprintf(stderr, "TO-DO, implement %s\n", name.getStr());
     }
-    fprintf(stderr, "created %p child of %p\n", pWindow, pParent);
+    fprintf(stderr, "for %s, created %p child of %p\n", name.getStr(), pWindow, pParent);
     return pWindow;
 }
 
-void VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
+Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, stringmap &rMap)
 {
-    Window *pCurrentChild = NULL;
+    bool bVertical = false;
+    stringmap::iterator aFind = rMap.find(rtl::OString(RTL_CONSTASCII_STRINGPARAM("orientation")));
+    if (aFind != rMap.end())
+        bVertical = aFind->second.equalsIgnoreAsciiCaseL(RTL_CONSTASCII_STRINGPARAM("vertical"));
 
-    xmlreader::Span name;
-    int nsId;
+    Window *pCurrentChild = makeObject(pParent, rClass, bVertical);
+    if (!pCurrentChild)
+    {
+        fprintf(stderr, "missing object!\n");
+    }
 
-    while (reader.nextAttribute(&nsId, &name)) {
-        rtl::OString sFoo(name.begin, name.length);
-        fprintf(stderr, "objectlevel attribute: is %s\n", sFoo.getStr());
+    if (pCurrentChild)
+    {
+        m_aChildren.push_back(pCurrentChild);
 
-        if (name.equals(RTL_CONSTASCII_STRINGPARAM("class")))
+        for (stringmap::iterator aI = rMap.begin(), aEnd = rMap.end(); aI != aEnd; ++aI)
         {
-            name = reader.getAttributeValue(false);
-            pCurrentChild = makeObject(pParent, name);
-            if (!pCurrentChild)
+            const rtl::OString &rKey = aI->first;
+            const rtl::OString &rValue = aI->second;
+            if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("label")))
+                pCurrentChild->SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
+            else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("xalign")))
             {
-                fprintf(stderr, "missing object!\n");
-            }
+                WinBits nBits = pCurrentChild->GetStyle();
+                nBits &= ~(WB_LEFT | WB_CENTER | WB_RIGHT);
 
-            if (pCurrentChild)
-                m_aChildren.push_back(pCurrentChild);
+                float f = rValue.toFloat();
+                if (f == 0.0)
+                    nBits |= WB_LEFT;
+                else if (f == 1.0)
+                    nBits |= WB_RIGHT;
+                else if (f == 0.5)
+                    nBits |= WB_CENTER;
+
+                pCurrentChild->SetStyle(nBits);
+            }
+            else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("yalign")))
+            {
+                WinBits nBits = pCurrentChild->GetStyle();
+                nBits &= ~(WB_TOP | WB_VCENTER | WB_BOTTOM);
+
+                float f = rValue.toFloat();
+                if (f == 0.0)
+                    nBits |= WB_TOP;
+                else if (f == 1.0)
+                    nBits |= WB_BOTTOM;
+                else if (f == 0.5)
+                    nBits |= WB_CENTER;
+
+                pCurrentChild->SetStyle(nBits);
+            }
+            else if
+                (
+                    rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("expand")) ||
+                    rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("fill"))
+                )
+            {
+                bool bTrue = (rValue[0] == 't' || rValue[0] == 'T' || rValue[0] == '1');
+                pCurrentChild->setChildProperty(rKey, bTrue);
+            }
+            else
+                fprintf(stderr, "unhandled property %s\n", rKey.getStr());
         }
     }
 
@@ -134,9 +172,67 @@ void VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
         fprintf(stderr, "missing object!\n");
         pCurrentChild = m_aChildren.empty() ? pParent : m_aChildren.back();
     }
+    rMap.clear();
+    return pCurrentChild;
+}
+
+void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
+{
+    int nLevel = 1;
+
+    while(1)
+    {
+        xmlreader::Span name;
+        int nsId;
+        xmlreader::XmlReader::Result res = reader.nextItem(
+            xmlreader::XmlReader::TEXT_NONE, &name, &nsId);
+
+        if (res == xmlreader::XmlReader::RESULT_BEGIN)
+        {
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")))
+            {
+                handleObject(pParent, reader);
+            }
+            else
+                ++nLevel;
+        }
+
+        if (res == xmlreader::XmlReader::RESULT_END)
+        {
+            --nLevel;
+        }
+
+        if (!nLevel)
+            break;
+
+        if (res == xmlreader::XmlReader::RESULT_DONE)
+            break;
+    }
+}
+
+void VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
+{
+    rtl::OString sClass;
+
+    xmlreader::Span name;
+    int nsId;
+
+    while (reader.nextAttribute(&nsId, &name))
+    {
+        rtl::OString sFoo(name.begin, name.length);
+
+        if (name.equals(RTL_CONSTASCII_STRINGPARAM("class")))
+        {
+            name = reader.getAttributeValue(false);
+            sClass = rtl::OString(name.begin, name.length);
+        }
+    }
 
     int nLevel = 1;
 
+    stringmap aProperties;
+
+    Window *pCurrentChild = NULL;
     while(1)
     {
         xmlreader::XmlReader::Result res = reader.nextItem(
@@ -146,22 +242,23 @@ void VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
             break;
 
         rtl::OString sFoo(name.begin, name.length);
-        fprintf(stderr, "objectlevel: is %s %d\n", sFoo.getStr(),
-            res);
+
+        fprintf(stderr, "level tag %d %s\n", nLevel, sFoo.getStr());
 
         if (res == xmlreader::XmlReader::RESULT_BEGIN)
-            ++nLevel;
-
-        if (res == xmlreader::XmlReader::RESULT_BEGIN &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("object")))
         {
-            handleObject(pCurrentChild, reader);
-        }
-
-        if (res == xmlreader::XmlReader::RESULT_BEGIN &&
-            name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
-        {
-            handleProperty(pCurrentChild, reader);
+            if (name.equals(RTL_CONSTASCII_STRINGPARAM("child")))
+            {
+                if (!pCurrentChild)
+                    pCurrentChild = insertObject(pParent, sClass, aProperties);
+                handleChild(pCurrentChild, reader);
+            }
+            else
+            {
+                ++nLevel;
+                if (name.equals(RTL_CONSTASCII_STRINGPARAM("property")))
+                    collectProperty(reader, aProperties);
+            }
         }
 
         if (res == xmlreader::XmlReader::RESULT_END)
@@ -172,29 +269,30 @@ void VclBuilder::handleObject(Window *pParent, xmlreader::XmlReader &reader)
         if (!nLevel)
             break;
     }
+
+    if (!pCurrentChild)
+        insertObject(pParent, sClass, aProperties);
+
+    fprintf(stderr, "finished %s\n", sClass.getStr());
 }
 
-void VclBuilder::handleProperty(Window *pWindow, xmlreader::XmlReader &reader)
+void VclBuilder::collectProperty(xmlreader::XmlReader &reader, stringmap &rMap)
 {
-    if (!pWindow)
-        return;
-
     xmlreader::Span name;
     int nsId;
 
-    while (reader.nextAttribute(&nsId, &name)) {
+    while (reader.nextAttribute(&nsId, &name))
+    {
         rtl::OString sFoo(name.begin, name.length);
-        fprintf(stderr, "property attribute: is %s\n", sFoo.getStr());
 
         if (name.equals(RTL_CONSTASCII_STRINGPARAM("name")))
         {
             name = reader.getAttributeValue(false);
-            if (name.equals(RTL_CONSTASCII_STRINGPARAM("label")))
-            {
-                reader.nextItem(
-                    xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
-                pWindow->SetText(rtl::OUString(name.begin, name.length, RTL_TEXTENCODING_UTF8));
-            }
+            rtl::OString sProperty(name.begin, name.length);
+            reader.nextItem(
+                xmlreader::XmlReader::TEXT_NORMALIZED, &name, &nsId);
+            rtl::OString sValue(name.begin, name.length);
+            rMap[sProperty] = sValue;
         }
     }
 }
