@@ -155,6 +155,8 @@ namespace sfx2
 
         void                    implInitializeFileName( );
 
+        void                    verifyPath( );
+
         void                    implGetAndCacheFiles( const ::com::sun::star::uno::Reference< XInterface >& xPicker  ,
                                                             SvStringsDtor*&               rpURLList,
                                                       const SfxFilter*                    pFilter  );

@@ -100,6 +100,9 @@
 #include <helpid.hrc>
 #include <sfxlocal.hrc>
 #include <rtl/strbuf.hxx>
+#ifdef UNX
+#include <sys/stat.h>
+#endif
 
 //-----------------------------------------------------------------------------
 
@@ -1648,6 +1651,24 @@ void FileDialogHelper_Impl::getRealFilter( String& _rFilter ) const
     }
 }
 
+void FileDialogHelper_Impl::verifyPath()
+{
+#ifdef UNX
+    struct stat aFileStat;
+    const OString sFullPath = OUStringToOString( maPath.copy(RTL_CONSTASCII_LENGTH("file://")) + maFileName, osl_getThreadTextEncoding() );
+    stat( sFullPath.getStr(), &aFileStat );
+    // lp#905355, fdo#43895
+    // Check that the file has read only permission and is in /tmp -- this is
+    //  the case if we have opened the file from the web with firefox only.
+    if ( maPath.reverseCompareToAsciiL("file:///tmp",11) == 0 &&
+            ( aFileStat.st_mode & (S_IRWXO + S_IRWXG + S_IRWXU) ) == S_IRUSR )
+    {
+        maPath = SvtPathOptions().GetWorkPath();
+        mxFileDlg->setDisplayDirectory( maPath );
+    }
+#endif
+}
+
 // ------------------------------------------------------------------------
 void FileDialogHelper_Impl::displayFolder( const ::rtl::OUString& _rPath )
 {
@@ -1661,6 +1682,7 @@ void FileDialogHelper_Impl::displayFolder( const ::rtl::OUString& _rPath )
         try
         {
             mxFileDlg->setDisplayDirectory( maPath );
+            verifyPath();
         }
         catch( const IllegalArgumentException& )
         {
@@ -1678,6 +1700,7 @@ void FileDialogHelper_Impl::setFileName( const ::rtl::OUString& _rFile )
         try
         {
             mxFileDlg->setDefaultName( maFileName );
+            verifyPath();
         }
         catch( const IllegalArgumentException& )
         {
