@@ -142,9 +142,6 @@ public:
     SvxDateFormat           GetFormat() const { return eFormat; }
     void                    SetFormat( SvxDateFormat eFmt ) { eFormat = eFmt; }
 
-                            // deprecated, to be removed
-    String                  GetFormatted( LanguageType eLanguage, LanguageType eFormat ) const;
-                            // use this instead
                             // If eLanguage==LANGUAGE_DONTKNOW the language/country
                             // used in number formatter initialization is taken.
     String                  GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
@@ -282,9 +279,6 @@ public:
     SvxTimeFormat           GetFormat() const { return eFormat; }
     void                    SetFormat( SvxTimeFormat eFmt ) { eFormat = eFmt; }
 
-                            // deprecated, to be removed
-    XubString               GetFormatted( LanguageType eLanguage, LanguageType eFormat ) const;
-                            // use this instead
                             // If eLanguage==LANGUAGE_DONTKNOW the language/country
                             // used in number formatter initialization is taken.
     String                  GetFormatted( SvNumberFormatter& rFormatter, LanguageType eLanguage ) const;
