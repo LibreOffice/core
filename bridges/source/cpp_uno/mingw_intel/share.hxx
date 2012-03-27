@@ -68,17 +68,26 @@ struct __cxa_exception
     _Unwind_Exception unwindHeader;
 };
 
-extern "C" void *__cxa_allocate_exception(
-    std::size_t thrown_size ) throw();
-extern "C" void __cxa_throw (
-    void *thrown_exception, std::type_info *tinfo, void (*dest) (void *) ) __attribute__((noreturn));
-
 struct __cxa_eh_globals
 {
     __cxa_exception *caughtExceptions;
     unsigned int uncaughtExceptions;
 };
-extern "C" __cxa_eh_globals *__cxa_get_globals () throw();
+
+}
+
+extern "C" CPPU_CURRENT_NAMESPACE::__cxa_eh_globals *__cxa_get_globals () throw();
+
+// The following are in cxxabi.h since GCC 4.7:
+#if __GNUC__ == 4 && __GNUC_MINOR__ <= 6
+extern "C" void *__cxa_allocate_exception(
+    std::size_t thrown_size ) throw();
+extern "C" void __cxa_throw (
+    void *thrown_exception, std::type_info *tinfo, void (*dest) (void *) ) __attribute__((noreturn));
+#endif
+
+namespace CPPU_CURRENT_NAMESPACE
+{
 
 // -----
 
