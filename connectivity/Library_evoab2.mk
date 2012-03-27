@@ -27,6 +27,12 @@
 
 $(eval $(call gb_Library_Library,evoab2))
 
+$(eval $(call gb_Library_set_include,evoab2,\
+	-I$(dir $(call gb_YaccTarget_get_target,connectivity/source/parse/sqlbison)) \
+	-I$(SRCDIR)/connectivity/source/inc \
+	$$(INCLUDE) \
+))
+
 $(eval $(call gb_Library_use_externals,evoab2,\
 	gtk \
 	gobject \
