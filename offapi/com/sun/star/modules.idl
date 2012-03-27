@@ -142,6 +142,9 @@ module rendering {};
 /// Interfaces to access (UI) resource files.
 module resource {};
 
+/// Interfaces for QA and automated tests
+module qa {};
+
 /// Interfaces for scanner control.
 module scanner {};
 

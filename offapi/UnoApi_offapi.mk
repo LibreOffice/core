@@ -3007,6 +3007,9 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/resource,\
 	XStringResourceWithLocation \
 	XStringResourceWithStorage \
 ))
+$(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/qa,\
+    	XDumper \
+))
 $(eval $(call gb_UnoApiTarget_add_idlfiles,offapi,offapi/com/sun/star/scanner,\
 	ScanError \
 	ScannerContext \
