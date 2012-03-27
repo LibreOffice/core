@@ -139,6 +139,10 @@ public:
 private:
     /** Processes the 'points' attribute. */
     void                setPoints( const ::rtl::OUString& rPoints );
+    /** Processes the 'from' attribute. */
+    void                setFrom( const ::rtl::OUString& rPoints );
+    /** Processes the 'to' attribute. */
+    void                setTo( const ::rtl::OUString& rPoints );
 
 protected:
     ShapeBase&          mrShape;

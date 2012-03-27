@@ -45,6 +45,7 @@
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 #include <rtl/math.hxx>
 #include <rtl/ustrbuf.hxx>
+#include <rtl/oustringostreaminserter.hxx>
 #include "oox/drawingml/shapepropertymap.hxx"
 #include "oox/helper/graphichelper.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -426,6 +427,26 @@ Reference< XShape > PolyLineShape::implConvertAndInsert( const Reference< XShape
         aPropSet.setProperty( PROP_PolyPolygon, aPointSeq );
     }
     return xShape;
+}
+
+LineShape::LineShape(Drawing& rDrawing)
+    : SimpleShape(rDrawing, "com.sun.star.drawing.LineShape")
+{
+}
+
+Reference<XShape> LineShape::implConvertAndInsert(const Reference<XShapes>& rxShapes, const Rectangle& rShapeRect) const
+{
+    const GraphicHelper& rGraphicHelper = mrDrawing.getFilter().getGraphicHelper();
+    Rectangle aShapeRect(rShapeRect);
+    sal_Int32 nIndex = 0;
+
+    aShapeRect.X = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maFrom.getToken(0, ',', nIndex), 0, true, true);
+    aShapeRect.Y = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maFrom.getToken(0, ',', nIndex), 0, true, true);
+    nIndex = 0;
+    aShapeRect.Width = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maTo.getToken(0, ',', nIndex), 0, true, true) - aShapeRect.X;
+    aShapeRect.Height = ConversionHelper::decodeMeasureToHmm(rGraphicHelper, maShapeModel.maTo.getToken(0, ',', nIndex), 0, true, true) - aShapeRect.Y;
+
+    return SimpleShape::implConvertAndInsert(rxShapes, aShapeRect);
 }
 
 // ============================================================================

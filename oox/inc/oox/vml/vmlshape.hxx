@@ -186,6 +186,8 @@ struct ShapeModel
     TextBoxPtr          mxTextBox;          /// Text contents and properties.
     ClientDataPtr       mxClientData;       /// Excel specific client data.
     ::rtl::OUString     maLegacyDiagramPath;/// Legacy Diagram Fragment Path
+    ::rtl::OUString     maFrom;             /// Start point for line shape.
+    ::rtl::OUString     maTo;               /// End point for line shape.
 
     explicit            ShapeModel();
                         ~ShapeModel();
@@ -312,6 +314,19 @@ protected:
                             const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
 };
 
+/** A Line shape object. */
+class LineShape : public SimpleShape
+{
+public:
+    explicit            LineShape( Drawing& rDrawing );
+
+protected:
+    /** Creates the corresponding XShape and inserts it into the passed container. */
+    virtual ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShape >
+                        implConvertAndInsert(
+                            const ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >& rxShapes,
+                            const ::com::sun::star::awt::Rectangle& rShapeRect ) const;
+};
 // ============================================================================
 
 /** A shape object with custom geometry. */
