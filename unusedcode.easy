@@ -341,8 +341,6 @@ XMLFontAutoStylePoolNames_Impl::Remove(rtl::OUString*)
 XMLFontAutoStylePool_Impl::GetPos(XMLFontAutoStylePoolEntry_Impl const*) const
 XMLFontAutoStylePool_Impl::Remove(XMLFontAutoStylePoolEntry_Impl*)
 XMLParentNode::AddChild(XMLChildNode*, unsigned long)
-XMLParentNode::GetChildElement(XMLElement*)
-XMLParentNode::RemoveChild(XMLElement*)
 XMLPropertyBackpatcher<rtl::OUString>::XMLPropertyBackpatcher(char const*)
 XMLPropertyBackpatcher<rtl::OUString>::XMLPropertyBackpatcher(char const*, char const*, unsigned char, rtl::OUString)
 XMLPropertyBackpatcher<rtl::OUString>::XMLPropertyBackpatcher(rtl::OUString const&, rtl::OUString const&, unsigned char, rtl::OUString)

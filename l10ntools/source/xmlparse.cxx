@@ -159,37 +159,6 @@ void XMLParentNode::AddChild( XMLChildNode *pChild , size_t pos )
 }
 
 /*****************************************************************************/
-int XMLParentNode::RemoveChild( XMLElement *pRefElement )
-/*****************************************************************************/
-{
-    XMLElement* a;
-    if ( pChildList ){
-        for ( size_t i = 0; i < pChildList->size(); i++ ) {
-            XMLChildNode *pChild = (*pChildList)[ i ];
-            if ( pChild->GetNodeType() == XML_NODE_TYPE_ELEMENT ){
-                a = static_cast<XMLElement* >(pChild);
-                rtl::OString elemid(a->GetId().toAsciiLowerCase());
-                rtl::OString elemLID(a->GetLanguageId().toAsciiLowerCase());
-                rtl::OString pRefLID(
-                    pRefElement->GetLanguageId().toAsciiLowerCase());
-                if (elemid == pRefElement->GetId() && elemLID == pRefLID)
-                {
-                    if( pRefElement->ToOString().compareTo( a->ToOString() )==0 ){
-                        XMLChildNodeList::iterator it = pChildList->begin();
-                        ::std::advance( it, i );
-                        pChildList->erase( it );
-                        delete a; // Test
-                        return i;
-                    }
-                }
-            }
-
-        }
-    }
-    return -1;
-}
-
-/*****************************************************************************/
 void XMLParentNode::RemoveAndDeleteAllChildren(){
 /*****************************************************************************/
     if ( pChildList ) {
@@ -197,36 +166,6 @@ void XMLParentNode::RemoveAndDeleteAllChildren(){
             delete (*pChildList)[ i ];
         pChildList->clear();
     }
-}
-
-/*****************************************************************************/
-XMLElement *XMLParentNode::GetChildElement( XMLElement *pRefElement )
-/*****************************************************************************/
-{
-    for ( size_t i = 0; i < pChildList->size(); i++ ) {
-        XMLChildNode *pChild = (*pChildList)[ i ];
-        if ( pChild->GetNodeType() == XML_NODE_TYPE_ELEMENT )
-            if ((( XMLElement * ) pChild )->GetName() ==
-                pRefElement->GetName())
-            {
-                XMLAttributeList *pList = pRefElement->GetAttributeList();
-                if ( !pList )
-                    return ( XMLElement * ) pChild;
-
-                sal_Bool bMatch = sal_False;
-                for ( size_t j = 0; j < pList->size() && bMatch; j++ ) {
-                    XMLAttribute *pAttribute = (*pList)[ j ];
-                    XMLAttribute *pCandidate =
-                        (( XMLElement * ) pChild )->GetAttribute(
-                            pAttribute->GetName() );
-                    if ( !pCandidate || !pAttribute->IsEqual( *pCandidate ))
-                        bMatch = sal_False;
-                }
-                if ( bMatch )
-                    return ( XMLElement * ) pChild;
-            }
-    }
-    return NULL;
 }
 
 //

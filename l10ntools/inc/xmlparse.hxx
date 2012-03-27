@@ -169,13 +169,7 @@ public:
         XMLChildNode *pChild , size_t pos   /// the new child
     );
 
-    int RemoveChild( XMLElement *pRefElement );
     void RemoveAndDeleteAllChildren();
-
-    /// returns a child element which matches the given one
-    XMLElement *GetChildElement(
-        XMLElement *pRefElement // the reference elelement
-    );
 };
 
 //-------------------------------------------------------------------------
