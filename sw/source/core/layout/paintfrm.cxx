@@ -191,9 +191,9 @@ public:
 
 class SwLineRects : public std::deque< SwLineRect >
 {
-    std::deque< SwLineRect >::iterator nLastCount;  //avoid unnecessary cycles in PaintLines
+    size_t nLastCount;  //avoid unnecessary cycles in PaintLines
 public:
-    SwLineRects() : nLastCount( this->begin() ) {}
+    SwLineRects() : nLastCount( 0 ) {}
     void AddLineRect( const SwRect& rRect,  const Color *pColor, const SvxBorderStyle nStyle,
                       const SwTabFrm *pTab, const sal_uInt8 nSCol );
     void ConnectEdges( OutputDevice *pOut );
@@ -827,7 +827,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
 {
     // Paint the borders. Sadly two passes are needed.
     // Once for the inside and once for the outside edges of tables
-    if ( this->end() != nLastCount )
+    if ( this->size() != nLastCount )
     {
         // #i16816# tagged pdf support
         SwTaggedPDFHelper aTaggedPDFHelper( 0, 0, 0, *pOut );
@@ -839,18 +839,18 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
         const Color *pLast = 0;
 
         sal_Bool bPaint2nd = sal_False;
-        SwLineRects::iterator nMinCount = this->end();
+        size_t nMinCount = this->size();
 
-        for (SwLineRects::iterator it = this->begin(); it != this->end(); ++it)
+        for ( size_t i = 0; i < size(); ++i )
         {
-            SwLineRect &rLRect = *it;
+            SwLineRect &rLRect = operator[](i);
 
             if ( rLRect.IsPainted() )
                 continue;
 
             if ( rLRect.IsLocked() )
             {
-                nMinCount = Min( nMinCount, it );
+                nMinCount = Min( nMinCount, i );
                 continue;
             }
 
@@ -905,15 +905,16 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                 bPaint2nd = sal_True;
         }
         if ( bPaint2nd )
-            for (SwLineRects::iterator it = this->begin(); it != this->end(); ++it)
+        {
+            for ( size_t i = 0; i < size(); ++i )
             {
-                SwLineRect &rLRect = *it;
+                SwLineRect &rLRect = operator[](i);
                 if ( rLRect.IsPainted() )
                     continue;
 
                 if ( rLRect.IsLocked() )
                 {
-                    nMinCount = Min( nMinCount, it );
+                    nMinCount = Min( nMinCount, i );
                     continue;
                 }
 
@@ -935,6 +936,7 @@ void SwLineRects::PaintLines( OutputDevice *pOut )
                     lcl_DrawDashedRect( pOut, rLRect );
                 rLRect.SetPainted();
             }
+        }
         nLastCount = nMinCount;
         pOut->Pop();
     }
