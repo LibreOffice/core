@@ -1431,7 +1431,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
     if (pSourceDoc)
     {
-        List* pReplList = NULL;
+        std::vector<StyleReplaceData> aReplList; // Liste fuer ersetzte StyleSheets
         sal_Bool bLayoutReloaded = sal_False;   // Wurde ex. Layout wieder geladen?
 
         /*********************************************************************
@@ -1512,9 +1512,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             pSourceStyleSheetPool->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
             static_cast<SdStyleSheetPool*>( mxStyleSheetPool.get())->SetSearchMask(SD_STYLE_FAMILY_MASTERPAGE);
 
-            pReplList = new List;           // Liste fuer ersetzte StyleSheets
             SdStyleSheetVector aCreatedStyles;          // Liste fuer erzeugte StyleSheets
-
             SfxStyleSheetBase* pHisSheet = pSourceStyleSheetPool->First();
 
             while (pHisSheet)
@@ -1553,17 +1551,17 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                         aCreatedStyles.push_back( SdStyleSheetRef( static_cast< SdStyleSheet* >( pMySheet ) ) );
                     }
 
-                    StyleReplaceData* pReplData = new StyleReplaceData;
-                    pReplData->nNewFamily = pMySheet->GetFamily();
-                    pReplData->nFamily    = pMySheet->GetFamily();
-                    pReplData->aNewName   = pMySheet->GetName();
+                    StyleReplaceData aReplData;
+                    aReplData.nNewFamily = pMySheet->GetFamily();
+                    aReplData.nFamily    = pMySheet->GetFamily();
+                    aReplData.aNewName   = pMySheet->GetName();
 
                     String aTemp(pMySheet->GetName());
                     sal_uInt16 nPos = aTemp.SearchAscii( SD_LT_SEPARATOR );
                     aTemp.Erase(0, nPos);
                     aTemp.Insert(aOldLayoutName, 0);
-                    pReplData->aName = aTemp;
-                    pReplList->Insert(pReplData, LIST_APPEND);
+                    aReplData.aName = aTemp;
+                    aReplList.push_back(aReplData);
                 }
 
                 pHisSheet = (SfxStyleSheet*) pSourceStyleSheetPool->Next();
@@ -1574,12 +1572,11 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             // Vorlagen wieder aufbauen
             if(!aCreatedStyles.empty())
             {
-                StyleReplaceData* pRData = (StyleReplaceData*)pReplList->First();
-
-                while (pRData)
+                std::vector<StyleReplaceData>::iterator pRDataIter;
+                for ( pRDataIter = aReplList.begin(); pRDataIter != aReplList.end(); ++pRDataIter )
                 {
-                    SfxStyleSheetBase* pSOld = mxStyleSheetPool->Find(pRData->aName);
-                    SfxStyleSheetBase* pSNew = mxStyleSheetPool->Find(pRData->aNewName);
+                    SfxStyleSheetBase* pSOld = mxStyleSheetPool->Find(pRDataIter->aName);
+                    SfxStyleSheetBase* pSNew = mxStyleSheetPool->Find(pRDataIter->aNewName);
 
                     if (pSOld && pSNew)
                     {
@@ -1588,21 +1585,18 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
 
                         if (rParentOfOld.Len() > 0 && rParentOfNew.Len() == 0)
                         {
-
-                            for (sal_uLong i = 0; i < pReplList->Count(); i++)
+                            std::vector<StyleReplaceData>::iterator pRDIter;
+                            for ( pRDIter = aReplList.begin(); pRDIter != aReplList.end(); ++pRDIter )
                             {
-                                StyleReplaceData* pRD = (StyleReplaceData*)pReplList->
-                                                                        GetObject(i);
-                                if ((pRD->aName == rParentOfOld) && (pRD->aName != pRD->aNewName))
+                                if ((pRDIter->aName == rParentOfOld) && (pRDIter->aName != pRDIter->aNewName))
                                 {
-                                    String aParentOfNew(pRD->aNewName);
+                                    String aParentOfNew(pRDIter->aNewName);
                                     pSNew->SetParent(aParentOfNew);
                                     break;
                                 }
                             }
                         }
                     }
-                    pRData = (StyleReplaceData*) pReplList->Next();
                 }
 
                 // ab jetzt beim Suchen alle beachten
@@ -1742,16 +1736,6 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
             pNotesMaster->SetOrientation( rOldNotesMaster.GetOrientation() );
             pNotesMaster->SetAutoLayout(pNotesMaster->GetAutoLayout());
 
-            // Liste der ersetzten Vorlagen mit Inhalt loeschen
-            StyleReplaceData* pReplData = (StyleReplaceData*)pReplList->First();
-            while (pReplData)
-            {
-                delete pReplData;
-                pReplData = (StyleReplaceData*)pReplList->Next();
-            }
-            delete pReplList;
-
-
             if( (pSourceDoc->GetDocumentType() == DOCUMENT_TYPE_IMPRESS) &&
                 (GetDocumentType() == DOCUMENT_TYPE_DRAW) )
             {
@@ -1852,7 +1836,7 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
         /*********************************************************************
         |* Liste der betroffenen Standard- und Notizseiten erstellen
         \********************************************************************/
-        List* pPageList = new List;
+        std::vector<SdPage*> aPageList;
         if (bMaster)
         {
             for (sal_uInt16 nPage = 1; nPage < GetPageCount(); nPage++)
@@ -1861,25 +1845,24 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                 const String s(pPage->GetLayoutName());
                 if(s == aOldPageLayoutName)
                 {
-                    pPageList->Insert(pPage, LIST_APPEND);
+                    aPageList.push_back(pPage);
                 }
             }
         }
         else
         {
-            pPageList->Insert(pSelectedPage, LIST_APPEND);
-            pPageList->Insert(pNotes, LIST_APPEND);
+            aPageList.push_back(pSelectedPage);
+            aPageList.push_back(pNotes);
         }
 
         /*********************************************************************
         |* An den betroffenen Seiten Praesentations- und Autolayout setzen
         \********************************************************************/
-        pPage = (SdPage*)pPageList->First();
-        while(pPage)
+        for ( std::vector<SdPage*>::iterator pIter = aPageList.begin(); pIter != aPageList.end(); ++pIter )
         {
-            AutoLayout eOldAutoLayout = pPage->GetAutoLayout();
+            AutoLayout eOldAutoLayout = (*pIter)->GetAutoLayout();
             AutoLayout eNewAutoLayout =
-                pPage->GetPageKind() == PK_STANDARD ? AUTOLAYOUT_NONE : AUTOLAYOUT_NOTES;
+                (*pIter)->GetPageKind() == PK_STANDARD ? AUTOLAYOUT_NONE : AUTOLAYOUT_NOTES;
 
             if( bUndo )
             {
@@ -1887,18 +1870,13 @@ void SdDrawDocument::SetMasterPage(sal_uInt16 nSdPageNum,
                     new SdPresentationLayoutUndoAction
                             (this, aOldLayoutName, aName,
                              eOldAutoLayout, eNewAutoLayout, sal_True,
-                             pPage);
+                             *pIter);
                 pUndoMgr->AddUndoAction(pPLUndoAction);
             }
 
-            pPage->SetPresentationLayout(aName);
-            pPage->SetAutoLayout(eNewAutoLayout);
-
-            pPage = (SdPage*)pPageList->Next();
+            (*pIter)->SetPresentationLayout(aName);
+            (*pIter)->SetAutoLayout(eNewAutoLayout);
         }
-
-        // Seitenliste loeschen
-        delete pPageList;
     }
 
     /*********************************************************************
