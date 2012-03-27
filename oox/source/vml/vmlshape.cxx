@@ -382,6 +382,10 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
         if( xInStrm.is() )
             PropertySet( xShape ).setProperty( PROP_LegacyFragment, xInStrm );
     }
+
+    if (xShape.is() && !maTypeModel.maRotation.isEmpty())
+        PropertySet(xShape).setAnyProperty(PROP_RotateAngle, makeAny(maTypeModel.maRotation.toInt32() * 100));
+
     return xShape;
 }
 
