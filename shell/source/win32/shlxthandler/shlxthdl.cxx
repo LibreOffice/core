@@ -339,7 +339,7 @@ extern "C" STDAPI DllRegisterServer()
         hr = E_FAIL;
 
     if (SUCCEEDED(RegisterThumbviewerHandler(module_path.c_str())))
-        ApproveShellExtension(CLSID_THUMBVIEWER_HANDLER, THUMBVIEWER_HANDLER_DESCRIPTIVAE_NAME);
+        ApproveShellExtension(CLSID_THUMBVIEWER_HANDLER, THUMBVIEWER_HANDLER_DESCRIPTIVE_NAME);
     else
         hr = E_FAIL;
 

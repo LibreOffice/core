@@ -46,7 +46,7 @@
 #define COLUMN_HANDLER_DESCRIPTIVE_NAME    TEXT("LibreOffice Column Handler")
 #define INFOTIP_HANDLER_DESCRIPTIVE_NAME   TEXT("LibreOffice Infotip Handler")
 #define PROPSHEET_HANDLER_DESCRIPTIVE_NAME TEXT("LibreOffice Property Sheet Handler")
-#define THUMBVIEWER_HANDLER_DESCRIPTIVAE_NAME TEXT("LibreOffice Thumbnail Viewer")
+#define THUMBVIEWER_HANDLER_DESCRIPTIVE_NAME TEXT("LibreOffice Thumbnail Viewer")
 
 #define META_CONTENT_NAME               "meta.xml"
 #define DOC_CONTENT_NAME                "content.xml"
