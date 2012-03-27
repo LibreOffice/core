@@ -29,6 +29,7 @@
 #include <vcl/builder.hxx>
 #include <vcl/button.hxx>
 #include <vcl/dialog.hxx>
+#include <vcl/edit.hxx>
 #include <vcl/fixed.hxx>
 #include <vcl/layout.hxx>
 
@@ -88,9 +89,17 @@ Window *VclBuilder::makeObject(Window *pParent, const rtl::OString &name, bool b
     {
         pWindow = new RadioButton(pParent, WB_CENTER|WB_VCENTER);
     }
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkCheckButton")))
+    {
+        pWindow = new CheckBox(pParent, WB_CENTER|WB_VCENTER);
+    }
     else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkLabel")))
     {
         pWindow = new FixedText(pParent, WB_CENTER|WB_VCENTER);
+    }
+    else if (name.equalsL(RTL_CONSTASCII_STRINGPARAM("GtkEntry")))
+    {
+        pWindow = new Edit(pParent, WB_CENTER|WB_VCENTER);
     }
     else
     {
@@ -153,6 +162,8 @@ Window *VclBuilder::insertObject(Window *pParent, const rtl::OString &rClass, st
 
                 pCurrentChild->SetStyle(nBits);
             }
+            else if (rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("text")))
+                pCurrentChild->SetText(rtl::OStringToOUString(rValue, RTL_TEXTENCODING_UTF8));
             else if
                 (
                     rKey.equalsL(RTL_CONSTASCII_STRINGPARAM("expand")) ||
