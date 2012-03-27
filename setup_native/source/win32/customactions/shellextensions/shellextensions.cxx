@@ -59,10 +59,10 @@
     </MSDN>
 
     We add the following entries to the respective registry key
-    "{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}"="OpenOffice.org Column Handler"
-    "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}"="OpenOffice.org Infotip Handler"
-    "{63542C48-9552-494A-84F7-73AA6A7C99C1}"="OpenOffice.org Property Sheet Handler"
-    "{3B092F0C-7696-40E3-A80F-68D74DA84210}"="OpenOffice.org Thumbnail Viewer"
+    "{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}"="LibreOffice Column Handler"
+    "{087B3AE3-E237-4467-B8DB-5A38AB959AC9}"="LibreOffice Infotip Handler"
+    "{63542C48-9552-494A-84F7-73AA6A7C99C1}"="LibreOffice Property Sheet Handler"
+    "{3B092F0C-7696-40E3-A80F-68D74DA84210}"="LibreOffice Thumbnail Viewer"
 
     These shell extensions are implemented in the 'shell' project. We ignore registration
     failures because of insufficient privileges. The reason is: On systems which restrict the
@@ -95,10 +95,10 @@ struct RegistryEntry
     TCHAR* Value;
 };
 
-RegistryEntry ColumnHandler = { TEXT("{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}"), TEXT("OpenOffice.org Column Handler") };
-RegistryEntry InfotipHandler = { TEXT("{087B3AE3-E237-4467-B8DB-5A38AB959AC9}"), TEXT("OpenOffice.org Infotip Handler") };
-RegistryEntry PropHandler = { TEXT("{63542C48-9552-494A-84F7-73AA6A7C99C1}"), TEXT("OpenOffice.org Property Sheet Handler") };
-RegistryEntry ThumbViewer = { TEXT("{3B092F0C-7696-40E3-A80F-68D74DA84210}"), TEXT("OpenOffice.org Thumbnail Viewer") };
+RegistryEntry ColumnHandler = { TEXT("{C52AF81D-F7A0-4AAB-8E87-F80A60CCD396}"), TEXT("LibreOffice Column Handler") };
+RegistryEntry InfotipHandler = { TEXT("{087B3AE3-E237-4467-B8DB-5A38AB959AC9}"), TEXT("LibreOffice Infotip Handler") };
+RegistryEntry PropHandler = { TEXT("{63542C48-9552-494A-84F7-73AA6A7C99C1}"), TEXT("LibreOffice Property Sheet Handler") };
+RegistryEntry ThumbViewer = { TEXT("{3B092F0C-7696-40E3-A80F-68D74DA84210}"), TEXT("LibreOffice Thumbnail Viewer") };
 
 BOOL GetMsiProp( MSIHANDLE hMSI, const char* pPropName, char** ppValue )
 {

@@ -29,7 +29,7 @@
 #include "internal/types.hxx"
 
 //+-------------------------------------------------------------------------
-//  Contents:   OpenOffice.org filter declarations
+//  Contents:   LibreOffice filter declarations
 //  Platform:   Windows 2000, Windows XP
 //--------------------------------------------------------------------------
 
@@ -51,7 +51,7 @@ GUID const guidStorage = PSGUID_STORAGE;      // GUID for storage property set
 
 //C-------------------------------------------------------------------------
 //  Class:      COooFilter
-//  Purpose:    Implements interfaces of OpenOffice.org filter
+//  Purpose:    Implements interfaces of LibreOffice filter
 //--------------------------------------------------------------------------
 
 // OooFilter Class ID
@@ -64,17 +64,17 @@ GUID const CLSID_COooFilter =
     { 0xa2, 0x9d, 0x5d, 0x46, 0xd8, 0xb3, 0x92, 0x62 }
 };
 
-// OpenOffice.org Persistent Handler Class ID
+// LibreOffice Persistent Handler Class ID
 // {7BC0E713-5703-45be-A29D-5D46D8B39262}
 const CLSID CLSID_PERSISTENT_HANDLER =
 {0x7bc0e713, 0x5703, 0x45be, {0xa2, 0x9d, 0x5d, 0x46, 0xd8, 0xb3, 0x92, 0x62}};
 
-// OpenOffice.org Persistent Handler Addin Registered Class ID
+// LibreOffice Persistent Handler Addin Registered Class ID
 // {89BCB740-6119-101A-BCB7-00DD010655AF}
 const CLSID CLSID_PERSISTENT_HANDLER_ADDIN =
 {0x89bcb740, 0x6119, 0x101a, {0xbc, 0xb7, 0x00, 0xdd, 0x01, 0x06, 0x55, 0xaf}};
 
-// OpenOffice.org Filter Handler Class ID
+// LibreOffice Filter Handler Class ID
 // {7BC0E710-5703-45be-A29D-5D46D8B39262}
 const CLSID CLSID_FILTER_HANDLER =
 {0x7bc0e710, 0x5703, 0x45be, {0xa2, 0x9d, 0x5d, 0x46, 0xd8, 0xb3, 0x92, 0x62}};
@@ -171,7 +171,7 @@ private:
 
 //C-------------------------------------------------------------------------
 //  Class:      COooFilterCF
-//  Purpose:    Implements class factory for OpenOffice.org filter
+//  Purpose:    Implements class factory for LibreOffice filter
 //--------------------------------------------------------------------------
 
 class COooFilterCF : public IClassFactory

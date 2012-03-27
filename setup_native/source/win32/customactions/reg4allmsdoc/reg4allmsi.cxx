@@ -117,7 +117,7 @@ static BOOL CheckExtensionInRegistry( LPCSTR lpSubKey )
             {   // We will replace registration for word pad
                 bRet = true;
             }
-            else if ( strncmp( szBuffer, "OpenOffice.org.", 15 ) == 0 )
+            else if ( strncmp( szBuffer, "LibreOffice.", 15 ) == 0 )
             {   // We will replace registration for our own types, too
                 bRet = true;
             }
@@ -330,7 +330,7 @@ static void saveOldRegistration( LPCSTR lpSubKey )
             szBuffer[nSize] = '\0';
 
             // No need to save assocations for our own types
-            if ( strncmp( szBuffer, "OpenOffice.org.", 15 ) != 0 )
+            if ( strncmp( szBuffer, "LibreOffice.", 15 ) != 0 )
             {
                 // Save the old association
                 RegSetValueExA( hKey, "OOoBackupAssociation", 0,

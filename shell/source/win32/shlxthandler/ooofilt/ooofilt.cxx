@@ -31,7 +31,7 @@
 //  File:       ooofilt.cxx
 //  Contents:   Filter Implementation for OpenOffice.Org Document using
 //              Indexing Service
-//  Summary:    The OpenOffice.org filter reads OpenOffice.org files (with the
+//  Summary:    The LibreOffice filter reads LibreOffice files (with the
 //              extension .sxw .sxi, etc) and extract their content, author,
 //              keywords,subject,comments and title to be filtered.
 //  Platform:   Windows 2000, Windows XP
@@ -49,7 +49,7 @@
 //  filterr.h       FACILITY_ITF error definitions for IFilter
 //  ntquery.h       Indexing Service declarations
 //  assert.h        assertion function.
-//  ooofilt.hxx     OpenOffice.org filter declarations
+//  ooofilt.hxx     LibreOffice filter declarations
 //  propspec.hxx    PROPSPEC
 //--------------------------------------------------------------------------
 
@@ -78,7 +78,7 @@ using ::std::min;
 
 //C-------------------------------------------------------------------------
 //  Class:      COooFilter
-//  Summary:    Implements OpenOffice.org filter class
+//  Summary:    Implements LibreOffice filter class
 //--------------------------------------------------------------------------
 //M-------------------------------------------------------------------------
 //  Method:     COooFilter::COooFilter
@@ -188,7 +188,7 @@ ULONG STDMETHODCALLTYPE COooFilter::Release()
 }
 //M-------------------------------------------------------------------------
 //  Method:     COooFilter::Init                (IFilter::Init)
-//  Summary:    Initializes OpenOffice.org filter instance
+//  Summary:    Initializes LibreOffice filter instance
 //  Arguments:  grfFlags
 //                  [in] Flags for filter behavior
 //              cAttributes
@@ -787,7 +787,7 @@ ULONG STDMETHODCALLTYPE COooFilterCF::Release()
 }
 //M-------------------------------------------------------------------------
 //  Method:     COooFilterCF::CreateInstance (IClassFactory::CreateInstance)
-//  Summary:    Creates new OpenOffice.org filter object
+//  Summary:    Creates new LibreOffice filter object
 //  Arguments:  pUnkOuter
 //                  [in] Pointer to IUnknown interface of aggregating object
 //              riid
@@ -795,13 +795,13 @@ ULONG STDMETHODCALLTYPE COooFilterCF::Release()
 //              ppvObject
 //                  [out] Address that receives requested interface pointer
 //  Returns:    S_OK
-//                  OpenOffice.org filter object was successfully created
+//                  LibreOffice filter object was successfully created
 //              CLASS_E_NOAGGREGATION
 //                  pUnkOuter parameter was non-NULL
 //              E_NOINTERFACE
 //                  (not implemented)
 //              E_OUTOFMEMORY
-//                  OpenOffice.org filter object could not be created
+//                  LibreOffice filter object could not be created
 //                  due to insufficient memory
 //              E_UNEXPECTED
 //                  Unsuccessful due to an unexpected condition
@@ -857,7 +857,7 @@ SCODE STDMETHODCALLTYPE COooFilterCF::LockServer(BOOL fLock)
 }
 //+-------------------------------------------------------------------------
 //  DLL:        ooofilt.dll
-//  Summary:    Implements Dynamic Link Library functions for OpenOffice.org filter
+//  Summary:    Implements Dynamic Link Library functions for LibreOffice filter
 //--------------------------------------------------------------------------
 //F-------------------------------------------------------------------------
 //  Function:   DllMain
@@ -883,7 +883,7 @@ extern "C" BOOL WINAPI DllMain(
 }
 //F-------------------------------------------------------------------------
 //  Function:   DllGetClassObject
-//  Summary:    Create OpenOffice.org filter class factory object
+//  Summary:    Create LibreOffice filter class factory object
 //  Arguments:  cid
 //                  [in] Class ID of class that class factory creates
 //              iid
@@ -1017,7 +1017,7 @@ namespace /* private */
 
     //----------------------------------------------
     // Make the registry entry and set Filter Handler
-    // HKCR\CLSID\{7BC0E710-5703-45be-A29D-5D46D8B39262} = OpenOffice.org Filter
+    // HKCR\CLSID\{7BC0E710-5703-45be-A29D-5D46D8B39262} = LibreOffice Filter
     //                   InProcServer32  (Default)       = Path\ooofilt.dll
     //                                   ThreadingModel  = Both
     //----------------------------------------------
@@ -1027,7 +1027,7 @@ namespace /* private */
         std::string ClsidEntry = CLSID_GUID_ENTRY;
         SubstitutePlaceholder(ClsidEntry, GUID_PLACEHOLDER, ClsidToString(FilterGuid));
 
-        if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry.c_str(), "", "OpenOffice.org Filter"))
+        if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry.c_str(), "", "LibreOffice Filter"))
             return E_FAIL;
 
         ClsidEntry = CLSID_GUID_INPROC_ENTRY;
@@ -1044,7 +1044,7 @@ namespace /* private */
 
     //----------------------------------------------
     // Make the registry entry and set Persistent Handler
-    // HKCR\CLSID\{7BC0E713-5703-45be-A29D-5D46D8B39262}  = OpenOffice.org Persistent Handler
+    // HKCR\CLSID\{7BC0E713-5703-45be-A29D-5D46D8B39262}  = LibreOffice Persistent Handler
     //      PersistentAddinsRegistered
     //          {89BCB740-6119-101A-BCB7-00DD010655AF} = {7BC0E710-5703-45be-A29D-5D46D8B39262}
     //----------------------------------------------
@@ -1055,7 +1055,7 @@ namespace /* private */
         SubstitutePlaceholder(ClsidEntry_Persist, GUID_PLACEHOLDER, ClsidToString(PersistentGuid));
 
 
-        if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_Persist.c_str(), "", "OpenOffice.org Persistent Handler"))
+        if (!SetRegistryKey(HKEY_CLASSES_ROOT, ClsidEntry_Persist.c_str(), "", "LibreOffice Persistent Handler"))
             return E_FAIL;
 
         // Add missing entry
