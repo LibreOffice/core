@@ -78,6 +78,128 @@
 
 using namespace ::com::sun::star;
 
+/** Concrete incarnations get called by lcl_IterateBookmarkPages, for
+    every page in the bookmark document/list
+ */
+
+class InsertBookmarkAsPage_FindDuplicateLayouts
+{
+public:
+    InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<rtl::OUString> &rLayoutsToTransfer )
+        : mrLayoutsToTransfer(rLayoutsToTransfer) {}
+    void operator()( SdDrawDocument&, SdPage* );
+private:
+    std::vector<rtl::OUString> &mrLayoutsToTransfer;
+};
+
+void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage )
+{
+    // now check for duplicate masterpage and layout names
+    // ===================================================
+
+    String aFullNameLayout( pBMMPage->GetLayoutName() );
+    aFullNameLayout.Erase( aFullNameLayout.SearchAscii( SD_LT_SEPARATOR ));
+
+    rtl::OUString aLayout(aFullNameLayout);
+
+    std::vector<rtl::OUString>::const_iterator pIter =
+            find(mrLayoutsToTransfer.begin(),mrLayoutsToTransfer.end(),aLayout);
+
+    bool bFound = pIter != mrLayoutsToTransfer.end();
+
+    const sal_uInt16 nMPageCount = rDoc.GetMasterPageCount();
+    for (sal_uInt16 nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
+    {
+        /**************************************************************
+         * Gibt es die Layouts schon im Dokument?
+         **************************************************************/
+        SdPage* pTestPage = (SdPage*) rDoc.GetMasterPage(nMPage);
+        String aFullTest(pTestPage->GetLayoutName());
+        aFullTest.Erase( aFullTest.SearchAscii( SD_LT_SEPARATOR ));
+
+        rtl::OUString aTest(aFullTest);
+
+        if (aTest == aLayout)
+            bFound = true;
+    }
+
+    if (!bFound)
+        mrLayoutsToTransfer.push_back(aLayout);
+}
+
+/*************************************************************************
+|*
+|* Fuegt ein Bookmark als Seite ein
+|*
+\************************************************************************/
+
+void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBookmarkDoc,
+                               List* pBookmarkList, sal_uInt16 nBMSdPageCount,
+                               InsertBookmarkAsPage_FindDuplicateLayouts& rPageIterator )
+{
+    //
+    // Refactored copy'n'pasted layout name collection from InsertBookmarkAsPage
+    //
+    int nPos, nEndPos;
+
+    if( !pBookmarkList )
+    {
+        // no list? whole source document
+        nEndPos = nBMSdPageCount;
+    }
+    else
+    {
+        // bookmark list? number of entries
+        nEndPos = pBookmarkList->Count();
+    }
+
+    SdPage* pBMPage;
+
+    // iterate over number of pages to insert
+    for (nPos = 0; nPos < nEndPos; ++nPos)
+    {
+        // the master page associated to the nPos'th page to insert
+        SdPage* pBMMPage = NULL;
+
+        if( !pBookmarkList )
+        {
+            // simply take master page of nPos'th page in source document
+            pBMMPage = (SdPage*)(&(pBookmarkDoc->GetSdPage((sal_uInt16)nPos, PK_STANDARD)->TRG_GetMasterPage()));
+        }
+        else
+        {
+            // fetch nPos'th entry from bookmark list, and determine master page
+            String  aBMPgName (*(String*) pBookmarkList->GetObject(nPos));
+            sal_Bool    bIsMasterPage;
+
+            sal_uInt16 nBMPage = pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage );
+
+            if (nBMPage != SDRPAGE_NOTFOUND)
+            {
+                pBMPage = (SdPage*) pBookmarkDoc->GetPage(nBMPage);
+            }
+            else
+            {
+                pBMPage = NULL;
+            }
+
+            // enforce that bookmarked page is a standard page and not already a master page
+            if (pBMPage && pBMPage->GetPageKind()==PK_STANDARD && !pBMPage->IsMasterPage())
+            {
+                const sal_uInt16 nBMSdPage = (nBMPage - 1) / 2;
+                pBMMPage = (SdPage*) (&(pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD)->TRG_GetMasterPage()));
+            }
+        }
+
+        // successfully determined valid (bookmarked) page?
+        if( pBMMPage )
+        {
+            // yes, call functor
+            rPageIterator( rDoc, pBMMPage );
+        }
+    }
+}
+
 /*************************************************************************
 |*
 |* Oeffnet ein Bookmark-Dokument
@@ -247,138 +369,6 @@ sal_Bool SdDrawDocument::InsertBookmark(
     return bOK;
 }
 
-/*************************************************************************
-|*
-|* Fuegt ein Bookmark als Seite ein
-|*
-\************************************************************************/
-
-/** Concrete incarnations get called by IterateBookmarkPages, for
-    every page in the bookmark document/list
- */
-class SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase
-{
-public:
-    virtual ~InsertBookmarkAsPage_PageFunctorBase() = 0;
-    virtual void operator()( SdDrawDocument&, SdPage* ) = 0;
-};
-
-SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase::~InsertBookmarkAsPage_PageFunctorBase()
-{
-}
-
-void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* pBookmarkList, sal_uInt16 nBMSdPageCount,
-                                           SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase& rPageIterator )
-{
-    //
-    // Refactored copy'n'pasted layout name collection from InsertBookmarkAsPage
-    //
-    int nPos, nEndPos;
-
-    if( !pBookmarkList )
-    {
-        // no list? whole source document
-        nEndPos = nBMSdPageCount;
-    }
-    else
-    {
-        // bookmark list? number of entries
-        nEndPos = pBookmarkList->Count();
-    }
-
-    SdPage* pBMPage;
-
-    // iterate over number of pages to insert
-    for (nPos = 0; nPos < nEndPos; ++nPos)
-    {
-        // the master page associated to the nPos'th page to insert
-        SdPage* pBMMPage = NULL;
-
-        if( !pBookmarkList )
-        {
-            // simply take master page of nPos'th page in source document
-            pBMMPage = (SdPage*)(&(pBookmarkDoc->GetSdPage((sal_uInt16)nPos, PK_STANDARD)->TRG_GetMasterPage()));
-        }
-        else
-        {
-            // fetch nPos'th entry from bookmark list, and determine master page
-            String  aBMPgName (*(String*) pBookmarkList->GetObject(nPos));
-            sal_Bool    bIsMasterPage;
-
-            sal_uInt16 nBMPage = pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage );
-
-            if (nBMPage != SDRPAGE_NOTFOUND)
-            {
-                pBMPage = (SdPage*) pBookmarkDoc->GetPage(nBMPage);
-            }
-            else
-            {
-                pBMPage = NULL;
-            }
-
-            // enforce that bookmarked page is a standard page and not already a master page
-            if (pBMPage && pBMPage->GetPageKind()==PK_STANDARD && !pBMPage->IsMasterPage())
-            {
-                const sal_uInt16 nBMSdPage = (nBMPage - 1) / 2;
-                pBMMPage = (SdPage*) (&(pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD)->TRG_GetMasterPage()));
-            }
-        }
-
-        // successfully determined valid (bookmarked) page?
-        if( pBMMPage )
-        {
-            // yes, call functor
-            rPageIterator( *this, pBMMPage );
-        }
-    }
-}
-
-class InsertBookmarkAsPage_FindDuplicateLayouts : public SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase
-{
-public:
-    InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<rtl::OUString> &rLayoutsToTransfer )
-        : mrLayoutsToTransfer(rLayoutsToTransfer) {}
-    virtual ~InsertBookmarkAsPage_FindDuplicateLayouts() {};
-    virtual void operator()( SdDrawDocument&, SdPage* );
-private:
-    std::vector<rtl::OUString> &mrLayoutsToTransfer;
-};
-
-void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc, SdPage* pBMMPage )
-{
-    // now check for duplicate masterpage and layout names
-    // ===================================================
-
-    String aFullNameLayout( pBMMPage->GetLayoutName() );
-    aFullNameLayout.Erase( aFullNameLayout.SearchAscii( SD_LT_SEPARATOR ));
-
-    rtl::OUString aLayout(aFullNameLayout);
-
-    std::vector<rtl::OUString>::const_iterator pIter =
-            find(mrLayoutsToTransfer.begin(), mrLayoutsToTransfer.end(),aLayout);
-
-    bool bFound = pIter != mrLayoutsToTransfer.end();
-
-    const sal_uInt16 nMPageCount = rDoc.GetMasterPageCount();
-    for (sal_uInt16 nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
-    {
-        /**************************************************************
-         * Gibt es die Layouts schon im Dokument?
-         **************************************************************/
-        SdPage* pTestPage = (SdPage*) rDoc.GetMasterPage(nMPage);
-        String aFullTest(pTestPage->GetLayoutName());
-        aFullTest.Erase( aFullTest.SearchAscii( SD_LT_SEPARATOR ));
-
-        rtl::OUString aTest(aFullTest);
-
-        if (aTest == aLayout)
-            bFound = true;
-    }
-
-    if (!bFound)
-        mrLayoutsToTransfer.push_back(aLayout);
-}
-
 sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     List* pBookmarkList,
     List* pExchangeList,            // Liste der zu verwendenen Namen
@@ -500,7 +490,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     //
     std::vector<rtl::OUString> aLayoutsToTransfer;
     InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( aLayoutsToTransfer );
-    IterateBookmarkPages( pBookmarkDoc, pBookmarkList, nBMSdPageCount, aSearchFunctor );
+    lcl_IterateBookmarkPages( *this, pBookmarkDoc, pBookmarkList, nBMSdPageCount, aSearchFunctor );
 
 
     /**************************************************************************

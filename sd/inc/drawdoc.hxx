@@ -214,8 +214,6 @@ protected:
 
 public:
 
-    class InsertBookmarkAsPage_PageFunctorBase;
-
                         TYPEINFO();
 
     SD_DLLPUBLIC        SdDrawDocument(DocumentType eType, SfxObjectShell* pDocSh);
@@ -331,9 +329,7 @@ public:
     sal_Bool                InsertBookmarkAsObject(List* pBookmarkList, List* pExchangeListL,
                                                 sal_Bool bLink, ::sd::DrawDocShell* pBookmarkDocSh,
                                                 Point* pObjPos);
-    void                IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* pBookmarkList,
-                                              sal_uInt16 nBMSdPageCount,
-                                              InsertBookmarkAsPage_PageFunctorBase& rPageIterator );
+
     SD_DLLPUBLIC void   CloseBookmarkDoc();
 
     SdrObject*          GetObj(const String& rObjName) const;
