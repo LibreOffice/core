@@ -148,12 +148,6 @@ void BinAddress::write( BiffOutputStream& rStrm, bool bCol16Bit, bool bRow32Bit 
 
 // ============================================================================
 
-bool BinRange::contains( const BinAddress& rAddr ) const
-{
-    return  (maFirst.mnCol <= rAddr.mnCol) && (rAddr.mnCol <= maLast.mnCol) &&
-            (maFirst.mnRow <= rAddr.mnRow) && (rAddr.mnRow <= maLast.mnRow);
-}
-
 void BinRange::read( SequenceInputStream& rStrm )
 {
     rStrm >> maFirst.mnRow >> maLast.mnRow >> maFirst.mnCol >> maLast.mnCol;

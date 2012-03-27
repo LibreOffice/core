@@ -874,20 +874,8 @@ oox::dump::StringHelper::appendIndexedText(rtl::OUStringBuffer&, rtl::OUString c
 oox::dump::StringHelper::appendToken(rtl::OUStringBuffer&, long, unsigned short)
 oox::dump::StringHelper::prependToken(rtl::OUStringBuffer&, long, unsigned short)
 oox::dump::TextStreamObjectBase::construct(oox::dump::InputObjectBase const&, unsigned short)
-oox::dump::XmlStreamObject::XmlStreamObject(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&)
-oox::formulaimport::XmlStream::AttributeList::hasAttribute(int) const
-oox::formulaimport::XmlStream::skipElement(int)
-oox::ppt::PPTShape::findPlaceholder(int, int, std::__debug::vector<boost::shared_ptr<oox::drawingml::Shape>, std::allocator<boost::shared_ptr<oox::drawingml::Shape> > >&)
-oox::xls::BiffOutputStream::startRecord(unsigned short)
-oox::xls::BiffOutputStream::tellBase() const
 oox::xls::BinAddress::write(oox::xls::BiffOutputStream&, bool, bool) const
-oox::xls::BinRange::contains(oox::xls::BinAddress const&) const
 oox::xls::BinRangeList::write(oox::xls::BiffOutputStream&, bool, bool) const
-oox::xls::CellBlock::CellBlock(oox::xls::WorksheetHelper const&, oox::ValueRange const&, int)
-oox::xls::CellBlock::isBefore(oox::ValueRange const&) const
-oox::xls::CellBlock::isExpandable(oox::ValueRange const&) const
-oox::xls::CellBlock::startNextRow()
-oox::xls::prv::BiffOutputRecordBuffer::BiffOutputRecordBuffer(oox::BinaryOutputStream&, unsigned short)
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
 psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterColor&)
 psp::PrinterGfx::GetGlyphBoundRect(unsigned short, Rectangle&)

@@ -2920,11 +2920,6 @@ XmlStreamObject::XmlStreamObject( const ObjectBase& rParent,
     TextStreamObjectBase::construct( rParent, rxStrm, RTL_TEXTENCODING_UTF8, rSysFileName );
 }
 
-XmlStreamObject::XmlStreamObject( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm )
-{
-    TextStreamObjectBase::construct( rParent, rxStrm, RTL_TEXTENCODING_UTF8 );
-}
-
 void XmlStreamObject::implDumpText( TextInputStream& rTextStrm )
 {
     /*  Buffers a start element and the following element text. Needed to dump

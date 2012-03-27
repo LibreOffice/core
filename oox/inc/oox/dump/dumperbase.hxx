@@ -1860,10 +1860,6 @@ public:
                             const BinaryInputStreamRef& rxStrm,
                             const ::rtl::OUString& rSysFileName );
 
-    explicit            XmlStreamObject(
-                            const OutputObjectBase& rParent,
-                            const BinaryInputStreamRef& rxStrm );
-
 protected:
     virtual void        implDumpText( TextInputStream& rTextStrm );
 };

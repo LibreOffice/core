@@ -114,11 +114,6 @@ static OUString tokenToString( int token )
 
 } // namespace
 
-bool XmlStream::AttributeList::hasAttribute( int token ) const
-{
-    return attrs.find( token ) != attrs.end();
-}
-
 rtl::OUString XmlStream::AttributeList::attribute( int token, const rtl::OUString& def ) const
 {
     std::map< int, rtl::OUString >::const_iterator find = attrs.find( token );
@@ -302,11 +297,6 @@ bool XmlStream::findTagInternal( int token, bool silent )
     if( !silent )
         SAL_WARN( "oox.xmlstream", "Unexpected end of stream reached." );
     return false;
-}
-
-void XmlStream::skipElement( int token )
-{
-    return skipElementInternal( token, true ); // no debug about skipping if called from outside
 }
 
 void XmlStream::skipElementInternal( int token, bool silent )

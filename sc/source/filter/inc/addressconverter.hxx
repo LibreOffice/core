@@ -133,7 +133,6 @@ struct BinRange
 
     inline sal_Int32    getColCount() const { return maLast.mnCol - maFirst.mnCol + 1; }
     inline sal_Int32    getRowCount() const { return maLast.mnRow - maFirst.mnRow + 1; }
-    bool                contains( const BinAddress& rAddr ) const;
 
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );

@@ -117,28 +117,6 @@ const sal_Int32 CELLBLOCK_MAXROWS  = 16;    /// Number of rows in a cell block.
 
 } // namespace
 
-CellBlock::CellBlock( const WorksheetHelper& rHelper, const ValueRange& rColSpan, sal_Int32 nRow ) :
-    WorksheetHelper( rHelper ),
-    maRange( rHelper.getSheetIndex(), rColSpan.mnFirst, nRow, rColSpan.mnLast, nRow ),
-    mnRowLength( rColSpan.mnLast - rColSpan.mnFirst + 1 ),
-    mnFirstFreeIndex( 0 )
-{
-    maCellArray.realloc( 1 );
-    maCellArray[ 0 ].realloc( mnRowLength );
-    mpCurrCellRow = maCellArray[ 0 ].getArray();
-}
-
-bool CellBlock::isExpandable( const ValueRange& rColSpan ) const
-{
-    return (maRange.StartColumn == rColSpan.mnFirst) && (maRange.EndColumn == rColSpan.mnLast);
-}
-
-bool CellBlock::isBefore( const ValueRange& rColSpan ) const
-{
-    return (maRange.EndColumn < rColSpan.mnLast) ||
-        ((maRange.EndColumn == rColSpan.mnLast) && (maRange.StartColumn != rColSpan.mnFirst));
-}
-
 bool CellBlock::contains( sal_Int32 nCol ) const
 {
     return (maRange.StartColumn <= nCol) && (nCol <= maRange.EndColumn);
@@ -147,30 +125,6 @@ bool CellBlock::contains( sal_Int32 nCol ) const
 void CellBlock::insertRichString( const CellAddress& rAddress, const RichStringRef& rxString, const Font* pFirstPortionFont )
 {
     maRichStrings.push_back( RichStringCell( rAddress, rxString, pFirstPortionFont ) );
-}
-
-void CellBlock::startNextRow()
-{
-    // fill last cells in current row with empty strings (placeholder for empty cells)
-    fillUnusedCells( mnRowLength );
-    // flush if the cell block reaches maximum size
-    if( maCellArray.getLength() == CELLBLOCK_MAXROWS )
-    {
-        finalizeImport();
-        maRange.StartRow = ++maRange.EndRow;
-        maCellArray.realloc( 1 );
-        mpCurrCellRow = maCellArray[ 0 ].getArray();
-    }
-    else
-    {
-        // prepare next row
-        ++maRange.EndRow;
-        sal_Int32 nRowCount = maCellArray.getLength();
-        maCellArray.realloc( nRowCount + 1 );
-        maCellArray[ nRowCount ].realloc( mnRowLength );
-        mpCurrCellRow = maCellArray[ nRowCount ].getArray();
-    }
-    mnFirstFreeIndex = 0;
 }
 
 Any& CellBlock::getCellAny( sal_Int32 nCol )
@@ -275,11 +229,7 @@ CellBlock* CellBlockBuffer::getCellBlock( const CellAddress& rCellAddr )
             {
                 const ValueRange& rColSpan = *aVIt;
                 /*  Finalize and remove all cell blocks up to end of the column
-                    range (cell blocks are keyed by end column index).
-                    CellBlock::isBefore() returns true, if the end index of the
-                    passed colspan is greater than the column end index of the
-                    cell block, or if the passed range has the same end index
-                    but the start indexes do not match. */
+                    range (cell blocks are keyed by end column index). */
                 while( (aMIt != maCellBlocks.end()) && aMIt->second->isBefore( rColSpan ) )
                 {
                     aMIt->second->finalizeImport();

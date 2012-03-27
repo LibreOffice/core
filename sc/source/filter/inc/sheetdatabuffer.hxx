@@ -95,14 +95,6 @@ struct DataTableModel
 class CellBlock : public WorksheetHelper
 {
 public:
-    explicit            CellBlock( const WorksheetHelper& rHelper, const ValueRange& rColSpan, sal_Int32 nRow );
-
-    /** Returns true, if the end index of the passed colspan is greater than
-        the own column end index, or if the passed range has the same end index
-        but the start indexes do not match. */
-    bool                isBefore( const ValueRange& rColSpan ) const;
-    /** Returns true, if the cell block can be expanded with the passed colspan. */
-    bool                isExpandable( const ValueRange& rColSpan ) const;
     /** Returns true, if the own colspan contains the passed column. */
     bool                contains( sal_Int32 nCol ) const;
 
@@ -114,8 +106,6 @@ public:
                             const RichStringRef& rxString,
                             const Font* pFirstPortionFont );
 
-    /** Appends a new row to the cell buffer array. */
-    void                startNextRow();
     /** Writes all buffered cells into the Calc sheet. */
     void                finalizeImport();
 

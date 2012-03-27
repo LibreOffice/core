@@ -46,10 +46,6 @@ namespace prv {
 class BiffOutputRecordBuffer
 {
 public:
-    explicit            BiffOutputRecordBuffer(
-                            BinaryOutputStream& rOutStrm,
-                            sal_uInt16 nMaxRecSize );
-
     /** Returns the wrapped binary base stream. */
     inline const BinaryOutputStream& getBaseStream() const { return mrOutStrm; }
 
@@ -86,8 +82,6 @@ private:
     maximum size of BIFF record contents (e.g. 2080 bytes in BIFF2-BIFF5, or
     8224 bytes in BIFF8).
 
-    To start writing a record, call startRecord() with the record identifier.
-
     If some data exceeds the record size limit, a CONTINUE record will be
     started automatically and the new data will be written to this record. If
     specific data pieces must not be split into the current and a following
@@ -100,16 +94,8 @@ class BiffOutputStream : public BinaryOutputStream
 public:
     // record control ---------------------------------------------------------
 
-    /** Starts a new record. */
-    void                startRecord( sal_uInt16 nRecId );
-
     /** Sets size of data portion in bytes. 0 or 1 means no portions are used. */
     void                setPortionSize( sal_uInt8 nSize );
-
-    // BinaryStreamBase interface (seeking) -----------------------------------
-
-    /** Returns the absolute position in the wrapped binary stream. */
-    sal_Int64           tellBase() const;
 
     // BinaryOutputStream interface (stream write access) ---------------------
 

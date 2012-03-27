@@ -35,16 +35,6 @@ namespace xls {
 
 namespace prv {
 
-BiffOutputRecordBuffer::BiffOutputRecordBuffer( BinaryOutputStream& rOutStrm, sal_uInt16 nMaxRecSize ) :
-    mrOutStrm( rOutStrm ),
-    mnMaxRecSize( nMaxRecSize ),
-    mnRecId( BIFF_ID_UNKNOWN ),
-    mbInRec( false )
-{
-    OSL_ENSURE( mrOutStrm.isSeekable(), "BiffOutputRecordBuffer::BiffOutputRecordBuffer - stream must be seekable" );
-    maData.reserve( SAL_MAX_UINT16 );
-}
-
 void BiffOutputRecordBuffer::startRecord( sal_uInt16 nRecId )
 {
     OSL_ENSURE( !mbInRec, "BiffOutputRecordBuffer::startRecord - another record still open" );
@@ -87,24 +77,11 @@ void BiffOutputRecordBuffer::fill( sal_uInt8 nValue, sal_uInt16 nBytes )
 
 // record control -------------------------------------------------------------
 
-void BiffOutputStream::startRecord( sal_uInt16 nRecId )
-{
-    maRecBuffer.startRecord( nRecId );
-    setPortionSize( 1 );
-}
-
 void BiffOutputStream::setPortionSize( sal_uInt8 nSize )
 {
     OSL_ENSURE( mnPortionPos == 0, "BiffOutputStream::setPortionSize - block operation inside portion" );
     mnPortionSize = ::std::max< sal_uInt8 >( nSize, 1 );
     mnPortionPos = 0;
-}
-
-// BinaryStreamBase interface (seeking) ---------------------------------------
-
-sal_Int64 BiffOutputStream::tellBase() const
-{
-    return maRecBuffer.getBaseStream().tell();
 }
 
 // BinaryOutputStream interface (stream write access) -------------------------

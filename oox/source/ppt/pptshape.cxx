@@ -423,13 +423,6 @@ oox::drawingml::ShapePtr PPTShape::findPlaceholderByIndex( const sal_Int32 nIdx,
     return aShapePtr;
 }
 
-// if nFirstPlaceholder can't be found, it will be searched for nSecondPlaceholder
-oox::drawingml::ShapePtr PPTShape::findPlaceholder( sal_Int32 nFirstPlaceholder, sal_Int32 nSecondPlaceholder, std::vector< oox::drawingml::ShapePtr >& rShapes )
-{
-    oox::drawingml::ShapePtr pPlaceholder = findPlaceholder( nFirstPlaceholder, rShapes );
-    return !nSecondPlaceholder || pPlaceholder.get() ? pPlaceholder : findPlaceholder( nSecondPlaceholder, rShapes );
-}
-
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
