@@ -311,7 +311,9 @@ void CommandLineArgs::ParseCommandLine_Impl( Supplier& supplier )
                     // primitive tools that /bin/sh offers, ignore them here
                     if (!oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("backtrace")) &&
                         !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("strace")) &&
-                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("valgrind")))
+                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("valgrind")) &&
+                    //ignore additional legacy options that don't do anything anymore
+                        !oArg.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("nocrashreport")))
                     {
                         fprintf(stderr, "Unknown option %s\n",
                             rtl::OUStringToOString(aArg, osl_getThreadTextEncoding()).getStr());
