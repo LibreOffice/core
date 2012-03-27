@@ -27,6 +27,10 @@
 
 $(eval $(call gb_Library_Library,dbtools))
 
+$(eval $(call gb_Library_add_package_headers,dbtools,\
+	connectivity_inc \
+))
+
 $(eval $(call gb_Library_add_defs,dbtools,\
 	-DOOO_DLLIMPLEMENTATION_DBTOOLS \
 	-DBOOST_SPIRIT_USE_OLD_NAMESPACE \
