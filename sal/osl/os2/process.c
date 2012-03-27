@@ -44,7 +44,6 @@
 // for exception logging
 #include <stdio.h>
 #include <setjmp.h>
-#include "helpers/except.h"
 
 
 #define MAX_ARGS 255

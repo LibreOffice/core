@@ -72,8 +72,6 @@ SLOFILES=   $(SLO)$/conditn.obj  \
         $(SLO)$/file_url.obj \
         $(SLO)$/file_error_transl.obj \
         $(SLO)$/file_path_helper.obj \
-        $(SLO)$/debug.obj \
-        $(SLO)$/except.obj \
         $(SLO)$/debug_printf.obj \
         $(SLO)$/salinit.obj
 
@@ -101,8 +99,6 @@ OBJFILES=   $(OBJ)$/conditn.obj  \
         $(OBJ)$/file_url.obj \
         $(OBJ)$/file_error_transl.obj \
         $(OBJ)$/file_path_helper.obj \
-        $(OBJ)$/debug.obj \
-        $(OBJ)$/except.obj \
         $(OBJ)$/debug_printf.obj \
         $(OBJ)$/salinit.obj
 

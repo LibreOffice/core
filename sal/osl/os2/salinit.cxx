@@ -35,7 +35,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <setjmp.h>
-#include "helpers/except.h"
 
 extern "C" {
 
@@ -80,13 +79,15 @@ static FILE* APIENTRY _oslExceptOpenLogFile(VOID)
 
 /*----------------------------------------------------------------------------*/
 
+#if 0 // until exceptions restored OSL_DEBUG_LEVEL == 0
 static EXCEPTSTRUCT     g_excptstruct = {0};
+#endif
 
 void SAL_CALL sal_detail_initialize(int argc, char ** argv)
 {
     APIRET rc = -1;
 
-#if OSL_DEBUG_LEVEL == 0
+#if 0 // until exceptions restored OSL_DEBUG_LEVEL == 0
     excRegisterHooks(_oslExceptOpenLogFile, NULL, NULL, FALSE);
 
     g_excptstruct.RegRec2.pfnHandler = (PFN)excHandlerLoud;
@@ -108,7 +109,7 @@ void SAL_CALL sal_detail_deinitialize()
 {
     APIRET rc = -1;
 
-#if OSL_DEBUG_LEVEL == 0
+#if 0 // until exceptions restored OSL_DEBUG_LEVEL == 0
     rc = DosUnsetExceptionHandler((PEXCEPTIONREGISTRATIONRECORD)&(g_excptstruct.RegRec2));
 #endif
 }
