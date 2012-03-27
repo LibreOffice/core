@@ -336,14 +336,15 @@ void SdDrawDocument::IterateBookmarkPages( SdDrawDocument* pBookmarkDoc, List* p
 class InsertBookmarkAsPage_FindDuplicateLayouts : public SdDrawDocument::InsertBookmarkAsPage_PageFunctorBase
 {
 public:
-    InsertBookmarkAsPage_FindDuplicateLayouts( List* pLayoutsToTransfer, SdDrawDocument* pBookmarkDoc,
+    InsertBookmarkAsPage_FindDuplicateLayouts( std::vector<rtl::OUString> *pLayoutsToTransfer,
+                                               SdDrawDocument* pBookmarkDoc,
                                                List* pBookmarkList, sal_uInt16 nBMSdPageCount ) :
         mpLayoutsToTransfer(pLayoutsToTransfer), mpBookmarkDoc(pBookmarkDoc),
         mpBookmarkList(pBookmarkList), mnBMSdPageCount(nBMSdPageCount) {}
     virtual ~InsertBookmarkAsPage_FindDuplicateLayouts() {};
     virtual void operator()( SdDrawDocument&, SdPage* );
 private:
-    List*           mpLayoutsToTransfer;
+    std::vector<rtl::OUString> *mpLayoutsToTransfer;
     SdDrawDocument* mpBookmarkDoc;
     List*           mpBookmarkList;
     sal_uInt16          mnBMSdPageCount;
@@ -354,20 +355,15 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
     // now check for duplicate masterpage and layout names
     // ===================================================
 
-    String  sFullLayoutName( pBMMPage->GetLayoutName() );
-    String* pLayout = new String(sFullLayoutName);
-    pLayout->Erase( pLayout->SearchAscii( SD_LT_SEPARATOR ));
+    String aFullNameLayout( pBMMPage->GetLayoutName() );
+    aFullNameLayout.Erase( aFullNameLayout.SearchAscii( SD_LT_SEPARATOR ));
 
-    String* pTest = (String*) mpLayoutsToTransfer->First();
-    sal_Bool bFound = sal_False;
+    rtl::OUString aLayout(aFullNameLayout);
 
-    while (pTest && !bFound)    // found yet?
-    {
-        if (*pLayout == *pTest)
-            bFound = sal_True;
-        else
-            pTest = (String*)mpLayoutsToTransfer->Next();
-    }
+    std::vector<rtl::OUString>::const_iterator pIter =
+            find(mpLayoutsToTransfer->begin(),mpLayoutsToTransfer->end(),aLayout);
+
+    bool bFound = pIter != mpLayoutsToTransfer->end();
 
     const sal_uInt16 nMPageCount = rDoc.GetMasterPageCount();
     for (sal_uInt16 nMPage = 0; nMPage < nMPageCount && !bFound; nMPage++)
@@ -376,17 +372,17 @@ void InsertBookmarkAsPage_FindDuplicateLayouts::operator()( SdDrawDocument& rDoc
          * Gibt es die Layouts schon im Dokument?
          **************************************************************/
         SdPage* pTestPage = (SdPage*) rDoc.GetMasterPage(nMPage);
-        String aTest(pTestPage->GetLayoutName());
-        aTest.Erase( aTest.SearchAscii( SD_LT_SEPARATOR ));
+        String aFullTest(pTestPage->GetLayoutName());
+        aFullTest.Erase( aFullTest.SearchAscii( SD_LT_SEPARATOR ));
 
-        if (aTest == *pLayout)
-            bFound = sal_True;
+        rtl::OUString aTest(aFullTest);
+
+        if (aTest == aLayout)
+            bFound = true;
     }
 
     if (!bFound)
-        mpLayoutsToTransfer->Insert(pLayout, LIST_APPEND);
-    else
-        delete pLayout;
+        mpLayoutsToTransfer->push_back(aLayout);
 }
 
 /** Just add one page to the container given to the constructor.
@@ -520,12 +516,11 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         pUndoMgr->EnterListAction(String(SdResId(STR_UNDO_INSERTPAGES)), String());
     }
 
-    List* pLayoutsToTransfer = new List;
-
     //
     // Refactored copy'n'pasted layout name collection into IterateBookmarkPages
     //
-    InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( pLayoutsToTransfer, pBookmarkDoc,
+    std::vector<rtl::OUString> aLayoutsToTransfer;
+    InsertBookmarkAsPage_FindDuplicateLayouts aSearchFunctor( &aLayoutsToTransfer, pBookmarkDoc,
                                                               pBookmarkList, nBMSdPageCount );
     IterateBookmarkPages( pBookmarkDoc, pBookmarkList, nBMSdPageCount, aSearchFunctor );
 
@@ -535,18 +530,19 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     **************************************************************************/
     SdStyleSheetPool* pBookmarkStyleSheetPool =
     (SdStyleSheetPool*) pBookmarkDoc->GetStyleSheetPool();
-    String* pLayout = (String*) pLayoutsToTransfer->First();
 
     // Wenn Vorlagen kopiert werden muessen, dann muessen auch die
     // MasterPages kopiert werden!
-    if( pLayout )
+    if( !aLayoutsToTransfer.empty() )
         bMergeMasterPages = sal_True;
 
-    while (pLayout)
+    std::vector<rtl::OUString>::const_iterator pIter;
+    for ( pIter = aLayoutsToTransfer.begin(); pIter != aLayoutsToTransfer.end(); ++pIter )
     {
         SdStyleSheetVector aCreatedStyles;
+        String layoutName = *pIter;
 
-        ((SdStyleSheetPool*)GetStyleSheetPool())->CopyLayoutSheets(*pLayout, *pBookmarkStyleSheetPool,aCreatedStyles);
+        ((SdStyleSheetPool*)GetStyleSheetPool())->CopyLayoutSheets(layoutName, *pBookmarkStyleSheetPool,aCreatedStyles);
 
         if(!aCreatedStyles.empty())
         {
@@ -556,13 +552,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
                 pUndoMgr->AddUndoAction(pMovStyles);
             }
         }
-
-        delete pLayout;
-
-        pLayout = (String*)pLayoutsToTransfer->Next();
     }
-
-    delete pLayoutsToTransfer;
 
     /**************************************************************************
     * Dokument einfuegen
