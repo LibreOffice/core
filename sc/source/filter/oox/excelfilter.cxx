@@ -274,59 +274,6 @@ OUString ExcelBiffFilter::implGetImplementationName() const
     return ExcelBiffFilter_getImplementationName();
 }
 
-// ============================================================================
-
-OUString SAL_CALL ExcelVbaProjectFilter_getImplementationName() throw()
-{
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.ExcelVbaProjectFilter" );
-}
-
-// ----------------------------------------------------------------------------
-
-ExcelVbaProjectFilter::ExcelVbaProjectFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
-    ExcelBiffFilter( rxContext )
-{
-}
-
-bool ExcelVbaProjectFilter::importDocument() throw()
-{
-    // detect BIFF version and workbook stream name
-    OUString aWorkbookName;
-    BiffType eBiff = BiffDetector::detectStorageBiffVersion( aWorkbookName, getStorage() );
-    OSL_ENSURE( eBiff == BIFF8, "ExcelVbaProjectFilter::ExcelVbaProjectFilter - invalid file format" );
-    if( eBiff != BIFF8 )
-        return false;
-
-    StorageRef xVbaPrjStrg = openSubStorage( CREATE_OUSTRING( "_VBA_PROJECT_CUR" ), false );
-    if( !xVbaPrjStrg || !xVbaPrjStrg->isStorage() )
-        return false;
-
-    /*  Construct the WorkbookGlobals object referred to by every instance of
-        the class WorkbookHelper. */
-    WorkbookGlobalsRef xBookGlob = WorkbookHelper::constructGlobals( *this, eBiff );
-    if( !xBookGlob.get() )
-        return false;
-
-    // set palette colors passed in service constructor
-    Any aPalette = getArgument( CREATE_OUSTRING( "ColorPalette" ) );
-    WorkbookHelper( *xBookGlob ).getStyles().importPalette( aPalette );
-    // import the VBA project (getVbaProject() implemented in base class)
-    getVbaProject().importVbaProject( *xVbaPrjStrg, getGraphicHelper() );
-    return true;
-}
-
-bool ExcelVbaProjectFilter::exportDocument() throw()
-{
-    return false;
-}
-
-OUString ExcelVbaProjectFilter::implGetImplementationName() const
-{
-    return ExcelVbaProjectFilter_getImplementationName();
-}
-
-// ============================================================================
-
 } // namespace xls
 } // namespace oox
 

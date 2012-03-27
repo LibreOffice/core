@@ -72,7 +72,6 @@ struct BinAddress
 
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
-    void                write( BiffOutputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -96,12 +95,6 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinAddress& 
 inline BiffInputStream& operator>>( BiffInputStream& rStrm, BinAddress& orPos )
 {
     orPos.read( rStrm );
-    return rStrm;
-}
-
-inline BiffOutputStream& operator<<( BiffOutputStream& rStrm, const BinAddress& rPos )
-{
-    rPos.write( rStrm );
     return rStrm;
 }
 
@@ -179,9 +172,6 @@ public:
 
     void                read( SequenceInputStream& rStrm );
     void                read( BiffInputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false );
-    void                write( BiffOutputStream& rStrm, bool bCol16Bit = true, bool bRow32Bit = false ) const;
-    void                writeSubList( BiffOutputStream& rStrm,
-                            size_t nBegin, size_t nCount, bool bCol16Bit = true, bool bRow32Bit = false ) const;
 };
 
 // ----------------------------------------------------------------------------
@@ -195,12 +185,6 @@ inline SequenceInputStream& operator>>( SequenceInputStream& rStrm, BinRangeList
 inline BiffInputStream& operator>>( BiffInputStream& rStrm, BinRangeList& orRanges )
 {
     orRanges.read( rStrm );
-    return rStrm;
-}
-
-inline BiffOutputStream& operator<<( BiffOutputStream& rStrm, const BinRangeList& rRanges )
-{
-    rRanges.write( rStrm );
     return rStrm;
 }
 

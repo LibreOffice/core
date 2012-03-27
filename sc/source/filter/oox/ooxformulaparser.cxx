@@ -26,7 +26,12 @@
  *
  ************************************************************************/
 
-#include "ooxformulaparser.hxx"
+#include <boost/shared_ptr.hpp>
+#include <com/sun/star/lang/XComponent.hpp>
+#include <com/sun/star/lang/XInitialization.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
+#include <com/sun/star/sheet/XFilterFormulaParser.hpp>
+#include <cppuhelper/implbase3.hxx>
 
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include "formulaparser.hxx"
@@ -110,89 +115,6 @@ const FunctionInfo* OOXMLFormulaParserImpl::resolveBadFuncName( const OUString& 
     }
     return 0;
 }
-
-// ============================================================================
-
-Sequence< OUString > OOXMLFormulaParser_getSupportedServiceNames()
-{
-    Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = CREATE_OUSTRING( "com.sun.star.sheet.FilterFormulaParser" );
-    return aServiceNames;
-}
-
-OUString OOXMLFormulaParser_getImplementationName()
-{
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.FormulaParser" );
-}
-
-// ============================================================================
-
-OOXMLFormulaParser::OOXMLFormulaParser()
-{
-}
-
-OOXMLFormulaParser::~OOXMLFormulaParser()
-{
-}
-
-// com.sun.star.lang.XServiceInfo interface -----------------------------------
-
-OUString SAL_CALL OOXMLFormulaParser::getImplementationName() throw( RuntimeException )
-{
-    return OOXMLFormulaParser_getImplementationName();
-}
-
-sal_Bool SAL_CALL OOXMLFormulaParser::supportsService( const OUString& rService ) throw( RuntimeException )
-{
-    const Sequence< OUString > aServices( OOXMLFormulaParser_getSupportedServiceNames() );
-    const OUString* pArray = aServices.getConstArray();
-    const OUString* pArrayEnd = pArray + aServices.getLength();
-    return ::std::find( pArray, pArrayEnd, rService ) != pArrayEnd;
-}
-
-Sequence< OUString > SAL_CALL OOXMLFormulaParser::getSupportedServiceNames() throw( RuntimeException )
-{
-    return OOXMLFormulaParser_getSupportedServiceNames();
-}
-
-// com.sun.star.lang.XInitialization interface --------------------------------
-
-void SAL_CALL OOXMLFormulaParser::initialize( const Sequence< Any >& rArgs ) throw( Exception, RuntimeException )
-{
-    OSL_ENSURE( rArgs.hasElements(), "OOXMLFormulaParser::initialize - missing arguments" );
-    if( !rArgs.hasElements() )
-        throw RuntimeException();
-    mxComponent.set( rArgs[ 0 ], UNO_QUERY_THROW );
-}
-
-// com.sun.star.sheet.XFilterFormulaParser interface --------------------------
-
-OUString SAL_CALL OOXMLFormulaParser::getSupportedNamespace() throw( RuntimeException )
-{
-    return CREATE_OUSTRING( "http://schemas.microsoft.com/office/excel/formula" );
-}
-
-// com.sun.star.sheet.XFormulaParser interface --------------------------------
-
-Sequence< FormulaToken > SAL_CALL OOXMLFormulaParser::parseFormula(
-        const OUString& rFormula, const CellAddress& rReferencePos ) throw( RuntimeException )
-{
-    if( !mxParserImpl )
-    {
-        Reference< XMultiServiceFactory > xModelFactory( mxComponent, UNO_QUERY_THROW );
-        mxParserImpl.reset( new OOXMLFormulaParserImpl( xModelFactory ) );
-    }
-    return mxParserImpl->parseFormula( rFormula, rReferencePos );
-}
-
-OUString SAL_CALL OOXMLFormulaParser::printFormula(
-        const Sequence< FormulaToken >& /*rTokens*/, const CellAddress& /*rReferencePos*/ ) throw( RuntimeException )
-{
-    // not implemented
-    throw RuntimeException();
-}
-
-// ============================================================================
 
 } // namespace xls
 } // namespace oox

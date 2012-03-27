@@ -62,8 +62,6 @@ public:
 
     /** Writes nBytes bytes from the existing buffer pData. Must NOT overwrite the destination buffer. */
     void                write( const void* pData, sal_uInt16 nBytes );
-    /** Writes a sequence of nBytes bytes with the passed value. */
-    void                fill( sal_uInt8 nValue, sal_uInt16 nBytes );
 
 private:
     typedef ::std::vector< sal_uInt8 > DataBuffer;

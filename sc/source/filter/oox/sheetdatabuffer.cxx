@@ -204,80 +204,9 @@ void CellBlockBuffer::setColSpans( sal_Int32 nRow, const ValueRangeSet& rColSpan
 
 CellBlock* CellBlockBuffer::getCellBlock( const CellAddress& rCellAddr )
 {
-    (void) rCellAddr; // Avoid WaE: unreferenced formal parameter, drop this line
-                      // if the below "temporarily disabled" early return is removed
-
-    // Temporarily disabled. TODO: Fix this.
+    (void) rCellAddr;
+    // TODO: Fix this.
     return NULL;
-
-#if 0 // Avoid WaE: unreachable code. Don't remove this ifdeffed out block, see above
-    OSL_ENSURE( rCellAddr.Row >= mnCurrRow, "CellBlockBuffer::getCellBlock - passed row out of order" );
-    // prepare cell blocks, if row changes
-    if( rCellAddr.Row != mnCurrRow )
-    {
-        // find colspans for the new row
-        ColSpanVectorMap::iterator aIt = maColSpans.find( rCellAddr.Row );
-
-        /*  Gap between rows, or rows out of order, or no colspan
-            information for the new row found: flush all open cell blocks. */
-        if( (aIt == maColSpans.end()) || (rCellAddr.Row != mnCurrRow + 1) )
-        {
-            finalizeImport();
-            maCellBlocks.clear();
-            maCellBlockIt = maCellBlocks.end();
-        }
-
-        /*  Prepare matching cell blocks, create new cell blocks, finalize
-            unmatching cell blocks, if colspan information is available. */
-        if( aIt != maColSpans.end() )
-        {
-            /*  The colspan vector aIt points to is sorted by columns, as well
-                as the cell block map. In the folloing, this vector and the
-                list of cell blocks can be iterated simultanously. */
-            CellBlockMap::iterator aMIt = maCellBlocks.begin();
-            const ValueRangeVector& rColRanges = aIt->second;
-            for( ValueRangeVector::const_iterator aVIt = rColRanges.begin(), aVEnd = rColRanges.end(); aVIt != aVEnd; ++aVIt, ++aMIt )
-            {
-                const ValueRange& rColSpan = *aVIt;
-                /*  Finalize and remove all cell blocks up to end of the column
-                    range (cell blocks are keyed by end column index). */
-                while( (aMIt != maCellBlocks.end()) && aMIt->second->isBefore( rColSpan ) )
-                {
-                    aMIt->second->finalizeImport();
-                    maCellBlocks.erase( aMIt++ );
-                }
-                /*  If the current cell block (aMIt) fits to the colspan, start
-                    a new row there, otherwise create and insert a new cell block. */
-                if( (aMIt != maCellBlocks.end()) && aMIt->second->isExpandable( rColSpan ) )
-                    aMIt->second->startNextRow();
-                else
-                    aMIt = maCellBlocks.insert( aMIt, CellBlockMap::value_type( rColSpan.mnLast,
-                        CellBlockMap::mapped_type( new CellBlock( *this, rColSpan, rCellAddr.Row ) ) ) );
-            }
-            // finalize and remove all remaining cell blocks
-            CellBlockMap::iterator aMEnd = maCellBlocks.end();
-            for( CellBlockMap::iterator aMIt2 = aMIt; aMIt2 != aMEnd; ++aMIt2 )
-                aMIt2->second->finalizeImport();
-            maCellBlocks.erase( aMIt, aMEnd );
-
-            // remove cached colspan information (including current one aIt points to)
-            maColSpans.erase( maColSpans.begin(), ++aIt );
-        }
-        maCellBlockIt = maCellBlocks.begin();
-        mnCurrRow = rCellAddr.Row;
-    }
-
-    // try to find a valid cell block (update maCellBlockIt)
-    if( ((maCellBlockIt != maCellBlocks.end()) && maCellBlockIt->second->contains( rCellAddr.Column )) ||
-        (((maCellBlockIt = maCellBlocks.lower_bound( rCellAddr.Column )) != maCellBlocks.end()) && maCellBlockIt->second->contains( rCellAddr.Column )) )
-    {
-        // maCellBlockIt points to valid cell block
-        return maCellBlockIt->second.get();
-    }
-
-    // no valid cell block found
-    return 0;
-#endif // See start of method
 }
 
 void CellBlockBuffer::finalizeImport()

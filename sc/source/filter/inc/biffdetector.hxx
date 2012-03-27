@@ -48,46 +48,14 @@ namespace xls {
 // ============================================================================
 
 /** Detection service for BIFF streams or storages. */
-class BiffDetector : public ::cppu::WeakImplHelper2<
-            ::com::sun::star::lang::XServiceInfo,
-            ::com::sun::star::document::XExtendedFilterDetection >
+namespace BiffDetector
 {
-public:
-    explicit            BiffDetector(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
-                            throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual             ~BiffDetector();
-
     /** Detects the BIFF version of the passed stream. */
-    static BiffType     detectStreamBiffVersion( BinaryInputStream& rInStream );
+    BiffType detectStreamBiffVersion( BinaryInputStream& rInStream );
 
     /** Detects the BIFF version and workbook stream name of the passed storage. */
-    static BiffType     detectStorageBiffVersion(
-                            ::rtl::OUString& orWorkbookStreamName,
+    BiffType detectStorageBiffVersion( ::rtl::OUString& orWorkbookStreamName,
                             const StorageRef& rxStorage );
-
-    // com.sun.star.lang.XServiceInfo interface -------------------------------
-
-    virtual ::rtl::OUString SAL_CALL
-                        getImplementationName() throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual sal_Bool SAL_CALL
-                        supportsService( const ::rtl::OUString& rService )
-                            throw( ::com::sun::star::uno::RuntimeException );
-
-    virtual ::com::sun::star::uno::Sequence< ::rtl::OUString > SAL_CALL
-                        getSupportedServiceNames() throw( ::com::sun::star::uno::RuntimeException );
-
-    // com.sun.star.document.XExtendedFilterDetect interface ------------------
-
-    virtual ::rtl::OUString SAL_CALL
-                        detect( ::com::sun::star::uno::Sequence< ::com::sun::star::beans::PropertyValue >& orDescriptor )
-                            throw( ::com::sun::star::uno::RuntimeException );
-
-private:
-    ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >
-                        mxContext;
 };
 
 // ============================================================================

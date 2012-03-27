@@ -73,14 +73,6 @@ void BiffOutputRecordBuffer::write( const void* pData, sal_uInt16 nBytes )
     memcpy( &*(maData.end() - nBytes), pData, nBytes );
 }
 
-void BiffOutputRecordBuffer::fill( sal_uInt8 nValue, sal_uInt16 nBytes )
-{
-    OSL_ENSURE( mbInRec, "BiffOutputRecordBuffer::write - no record open" );
-    OSL_ENSURE( nBytes > 0, "BiffOutputRecordBuffer::write - nothing to write" );
-    OSL_ENSURE( nBytes <= getRecLeft(), "BiffOutputRecordBuffer::write - buffer overflow" );
-    maData.resize( maData.size() + nBytes, nValue );
-}
-
 } // namespace prv
 
 // ============================================================================

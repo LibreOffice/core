@@ -38,6 +38,7 @@
 
 namespace oox {
 namespace xls {
+namespace BiffDetector {
 
 // ============================================================================
 
@@ -50,32 +51,7 @@ using ::comphelper::MediaDescriptor;
 using ::rtl::OStringBuffer;
 using ::rtl::OUString;
 
-// ============================================================================
-
-Sequence< OUString > BiffDetector_getSupportedServiceNames()
-{
-    Sequence< OUString > aServiceNames( 1 );
-    aServiceNames[ 0 ] = CREATE_OUSTRING( "com.sun.star.frame.ExtendedTypeDetection" );
-    return aServiceNames;
-}
-
-OUString BiffDetector_getImplementationName()
-{
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.xls.BiffDetector" );
-}
-
-// ============================================================================
-
-BiffDetector::BiffDetector( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
-    mxContext( rxContext, UNO_SET_THROW )
-{
-}
-
-BiffDetector::~BiffDetector()
-{
-}
-
-/*static*/ BiffType BiffDetector::detectStreamBiffVersion( BinaryInputStream& rInStream )
+BiffType detectStreamBiffVersion( BinaryInputStream& rInStream )
 {
     BiffType eBiff = BIFF_UNKNOWN;
     if( !rInStream.isEof() && rInStream.isSeekable() && (rInStream.size() > 4) )
@@ -127,10 +103,8 @@ BiffDetector::~BiffDetector()
     return eBiff;
 }
 
-/*static*/ BiffType BiffDetector::detectStorageBiffVersion( OUString& orWorkbookStreamName, const StorageRef& rxStorage )
+BiffType detectStorageBiffVersion( OUString& orWorkbookStreamName, const StorageRef& rxStorage )
 {
-    static const OUString saBookName = CREATE_OUSTRING( "Book" );
-    static const OUString saWorkbookName = CREATE_OUSTRING( "Workbook" );
 
     BiffType eBiff = BIFF_UNKNOWN;
     if( rxStorage.get() )
@@ -138,10 +112,12 @@ BiffDetector::~BiffDetector()
         if( rxStorage->isStorage() )
         {
             // try to open the "Book" stream
+            const OUString saBookName = CREATE_OUSTRING( "Book" );
             BinaryXInputStream aBookStrm5( rxStorage->openInputStream( saBookName ), true );
             BiffType eBookStrm5Biff = detectStreamBiffVersion( aBookStrm5 );
 
             // try to open the "Workbook" stream
+            const OUString saWorkbookName = CREATE_OUSTRING( "Workbook" );
             BinaryXInputStream aBookStrm8( rxStorage->openInputStream( saWorkbookName ), true );
             BiffType eBookStrm8Biff = detectStreamBiffVersion( aBookStrm8 );
 
@@ -173,54 +149,9 @@ BiffDetector::~BiffDetector()
     return eBiff;
 }
 
-// com.sun.star.lang.XServiceInfo interface -----------------------------------
-
-OUString SAL_CALL BiffDetector::getImplementationName() throw( RuntimeException )
-{
-    return BiffDetector_getImplementationName();
-}
-
-sal_Bool SAL_CALL BiffDetector::supportsService( const OUString& rService ) throw( RuntimeException )
-{
-    const Sequence< OUString > aServices = BiffDetector_getSupportedServiceNames();
-    const OUString* pArray = aServices.getConstArray();
-    const OUString* pArrayEnd = pArray + aServices.getLength();
-    return ::std::find( pArray, pArrayEnd, rService ) != pArrayEnd;
-}
-
-Sequence< OUString > SAL_CALL BiffDetector::getSupportedServiceNames() throw( RuntimeException )
-{
-    return BiffDetector_getSupportedServiceNames();
-}
-
-// com.sun.star.document.XExtendedFilterDetect interface ----------------------
-
-OUString SAL_CALL BiffDetector::detect( Sequence< PropertyValue >& rDescriptor ) throw( RuntimeException )
-{
-    OUString aTypeName;
-
-    MediaDescriptor aDescriptor( rDescriptor );
-    aDescriptor.addInputStream();
-
-    Reference< XInputStream > xInStrm( aDescriptor[ MediaDescriptor::PROP_INPUTSTREAM() ], UNO_QUERY_THROW );
-    StorageRef xStorage( new ::oox::ole::OleStorage( mxContext, xInStrm, true ) );
-
-    OUString aWorkbookName;
-    switch( detectStorageBiffVersion( aWorkbookName, xStorage ) )
-    {
-        case BIFF2:
-        case BIFF3:
-        case BIFF4: aTypeName = CREATE_OUSTRING( "calc_MS_Excel_40" );  break;
-        case BIFF5: aTypeName = CREATE_OUSTRING( "calc_MS_Excel_95" );  break;
-        case BIFF8: aTypeName = CREATE_OUSTRING( "calc_MS_Excel_97" );  break;
-        default:;
-    }
-
-    return aTypeName;
-}
-
 // ============================================================================
 
+} // BiffDetector
 } // namespace xls
 } // namespace oox
 

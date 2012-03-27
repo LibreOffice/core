@@ -134,18 +134,6 @@ void BinAddress::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit )
     mnCol = bCol16Bit ? rStrm.readuInt16() : rStrm.readuInt8();
 }
 
-void BinAddress::write( BiffOutputStream& rStrm, bool bCol16Bit, bool bRow32Bit ) const
-{
-    if( bRow32Bit )
-        rStrm << mnRow;
-    else
-        rStrm << static_cast< sal_uInt16 >( mnRow );
-    if( bCol16Bit )
-        rStrm << static_cast< sal_uInt16 >( mnCol );
-    else
-        rStrm << static_cast< sal_uInt8 >( mnCol );
-}
-
 // ============================================================================
 
 void BinRange::read( SequenceInputStream& rStrm )
@@ -191,23 +179,6 @@ void BinRangeList::read( BiffInputStream& rStrm, bool bCol16Bit, bool bRow32Bit 
         aIt->read( rStrm, bCol16Bit, bRow32Bit );
 }
 
-void BinRangeList::write( BiffOutputStream& rStrm, bool bCol16Bit, bool bRow32Bit ) const
-{
-    writeSubList( rStrm, 0, size(), bCol16Bit, bRow32Bit );
-}
-
-void BinRangeList::writeSubList( BiffOutputStream& rStrm, size_t nBegin, size_t nCount, bool bCol16Bit, bool bRow32Bit ) const
-{
-    OSL_ENSURE( nBegin <= size(), "BiffRangeList::writeSubList - invalid start position" );
-    size_t nEnd = ::std::min< size_t >( nBegin + nCount, size() );
-    sal_uInt16 nBiffCount = getLimitedValue< sal_uInt16, size_t >( nEnd - nBegin, 0, SAL_MAX_UINT16 );
-    rStrm << nBiffCount;
-    rStrm.setPortionSize( lclGetBiffRangeSize( bCol16Bit, bRow32Bit ) );
-    for( const_iterator aIt = begin() + nBegin, aEnd = begin() + nEnd; aIt != aEnd; ++aIt )
-        aIt->write( rStrm, bCol16Bit, bRow32Bit );
-}
-
-// ============================================================================
 // ============================================================================
 
 AddressConverter::AddressConverter( const WorkbookHelper& rHelper ) :

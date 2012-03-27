@@ -444,31 +444,6 @@ void BiffDrawingObjectBase::readMacroBiff5( BiffInputStream& rStrm, sal_uInt16 n
     rStrm.skip( nMacroSize );
 }
 
-void BiffDrawingObjectBase::readMacroBiff8( BiffInputStream& rStrm )
-{
-    maMacroName = OUString();
-    if( rStrm.getRemaining() > 6 )
-    {
-        // macro is stored in a tNameXR token containing a link to a defined name
-        sal_uInt16 nFmlaSize;
-        rStrm >> nFmlaSize;
-        rStrm.skip( 4 );
-        OSL_ENSURE( nFmlaSize == 7, "BiffDrawingObjectBase::readMacroBiff8 - unexpected formula size" );
-        if( nFmlaSize == 7 )
-        {
-            sal_uInt8 nTokenId;
-            sal_uInt16 nExtLinkId, nExtNameId;
-            rStrm >> nTokenId >> nExtLinkId >> nExtNameId;
-#if 0
-            OSL_ENSURE( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ),
-                "BiffDrawingObjectBase::readMacroBiff8 - tNameXR token expected" );
-            if( nTokenId == XclTokenArrayHelper::GetTokenId( EXC_TOKID_NAMEX, EXC_TOKCLASS_REF ) )
-                maMacroName = GetLinkManager().GetMacroName( nExtLinkId, nExtNameId );
-#endif
-        }
-    }
-}
-
 void BiffDrawingObjectBase::convertLineProperties( ShapePropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows ) const
 {
     if( rLineModel.mbAuto )

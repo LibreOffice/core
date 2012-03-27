@@ -327,9 +327,6 @@ WPXPropertyList::Iter::last()
 WPXPropertyListVector::Iter::last()
 WPXString::Iter::last()
 WPXSubDocument::WPXSubDocument()
-WinMtfOutput::DrawLine(Point const&, Point const&)
-WinMtfOutput::GetTextLayoutMode() const
-WinMtfOutput::SetFont(Font const&)
 Window::PostUserEvent(unsigned long&, unsigned long, void*)
 X11SalGraphics::SetMask(int&, int&, unsigned int&, unsigned int&, int&, int&, unsigned long)
 X509Certificate_NssImpl::getImplementation(com::sun::star::uno::Reference<com::sun::star::uno::XInterface>)
@@ -872,8 +869,9 @@ oox::dump::StringHelper::appendIndexedText(rtl::OUStringBuffer&, rtl::OUString c
 oox::dump::StringHelper::appendToken(rtl::OUStringBuffer&, long, unsigned short)
 oox::dump::StringHelper::prependToken(rtl::OUStringBuffer&, long, unsigned short)
 oox::dump::TextStreamObjectBase::construct(oox::dump::InputObjectBase const&, unsigned short)
-oox::xls::BinAddress::write(oox::xls::BiffOutputStream&, bool, bool) const
-oox::xls::BinRangeList::write(oox::xls::BiffOutputStream&, bool, bool) const
+oox::ole::WordVbaProjectFilter::WordVbaProjectFilter(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
+oox::xls::CellBlock::CellBlock(oox::xls::WorksheetHelper const&, oox::ValueRange const&, int)
+oox::xls::prv::BiffOutputRecordBuffer::BiffOutputRecordBuffer(oox::BinaryOutputStream&, unsigned short)
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
 psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterColor&)
 psp::PrinterGfx::GetGlyphBoundRect(unsigned short, Rectangle&)

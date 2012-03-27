@@ -163,8 +163,6 @@ protected:
     void                readMacroBiff4( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
     /** Reads the macro link in a BIFF5 OBJ record. */
     void                readMacroBiff5( BiffInputStream& rStrm, sal_uInt16 nMacroSize );
-    /** Reads the contents of the ftMacro sub structure in an OBJ record. */
-    void                readMacroBiff8( BiffInputStream& rStrm );
 
     /** Converts the passed line formatting to the passed property map. */
     void                convertLineProperties( ::oox::drawingml::ShapePropertyMap& rPropMap, const BiffObjLineModel& rLineModel, sal_uInt16 nArrows = 0 ) const;
