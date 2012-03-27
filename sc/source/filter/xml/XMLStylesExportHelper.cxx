@@ -1290,6 +1290,9 @@ void ScRowStyles::AddNewTable(const sal_Int32 nTable, const sal_Int32 nFields)
 sal_Int32 ScRowStyles::GetStyleNameIndex(const sal_Int32 nTable, const sal_Int32 nField)
 {
     OSL_ENSURE(static_cast<size_t>(nTable) < aTables.size(), "wrong table");
+    if (!(static_cast<size_t>(nTable) < aTables.size()))
+        return -1;
+
     if (maCache.hasCache(nTable, nField))
         // Cache hit !
         return maCache.mnStyle;
