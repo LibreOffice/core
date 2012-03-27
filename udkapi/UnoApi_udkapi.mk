@@ -39,7 +39,6 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,udkapi,udkapi/com/sun/star,\
 	udk-modules \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/beans,\
-	Introspection \
 	PropertyBag \
 	PropertySet \
 ))
@@ -105,26 +104,15 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/r
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/registry,\
 	DefaultRegistry \
-	ImplementationRegistration \
 	NestedRegistry \
-	SimpleRegistry \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/script,\
-	AllListenerAdapter \
 	Engine \
-	Invocation \
 	InvocationAdapterFactory \
 	JavaScript \
 ))
-$(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/security,\
-	AccessController \
-	Policy \
-))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/test,\
 	TestFactory \
-))
-$(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/uno,\
-	NamingService \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/util,\
 	BootstrapMacroExpander \
@@ -137,6 +125,9 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_noheader,udkapi,udkapi/com/sun/star/u
 ))
 
 
+$(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/beans,\
+	Introspection \
+))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/bridge,\
 	UnoUrlResolver \
 ))
@@ -152,8 +143,21 @@ $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/io,\
 	SequenceOutputStream \
 	TempFile \
 ))
+$(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/registry,\
+	ImplementationRegistration \
+	SimpleRegistry \
+))
+$(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/security,\
+	AccessController \
+	Policy \
+))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/script,\
+	AllListenerAdapter \
 	Converter \
+	Invocation \
+))
+$(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/uno,\
+	NamingService \
 ))
 $(eval $(call gb_UnoApiTarget_add_idlfiles_nohdl,udkapi,udkapi/com/sun/star/uri,\
 	ExternalUriReferenceTranslator \
