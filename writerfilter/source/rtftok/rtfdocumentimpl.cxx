@@ -3534,10 +3534,10 @@ RTFSprms RTFFrame::getSprms()
 
     for ( int i = 0, len = SAL_N_ELEMENTS(pNames); i < len; ++i )
     {
-        Id aId = pNames[i];
+        Id nId = pNames[i];
         RTFValue::Pointer_t pValue;
 
-        switch ( aId )
+        switch ( nId )
         {
             case NS_ooxml::LN_CT_FramePr_x:
                 if ( nX != 0 )
@@ -3596,7 +3596,7 @@ RTFSprms RTFFrame::getSprms()
         }
 
         if (pValue.get())
-            sprms->push_back(make_pair(aId, pValue));
+            sprms->push_back(make_pair(nId, pValue));
     }
 
     RTFSprms frameprSprms;
