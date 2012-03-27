@@ -395,28 +395,15 @@ void ScChartPositioner::CreatePositionMap()
             for ( nCol = nCol1; nCol <= nCol2; ++nCol, ++nInsCol )
             {
                 RowMap* pCol = NULL;
-                if ( bNoGlue || eGlue == SC_CHARTGLUE_ROWS )
-                {   // meistens gleiche Cols
-                    ColumnMap::const_iterator it = pCols->find( nInsCol );
-                    if ( it == pCols->end() )
-                    {
-                        pCol = new RowMap;
-                        pCols->insert(it, ColumnMap::value_type( nInsCol, pCol ) );
-                    }
-                    else
-                        pCol = it->second;
+                ColumnMap::const_iterator it = pCols->find( nInsCol );
+                if ( it == pCols->end() )
+                {
+                    pCol = new RowMap;
+                    pCols->insert(it, ColumnMap::value_type( nInsCol, pCol ) );
                 }
                 else
-                {   // meistens neue Cols
-                    ColumnMap::const_iterator it = pCols->find( nInsCol );
-                    if ( it == pCols->end() )
-                    {
-                        pCol = new RowMap;
-                        pCols->insert(it, ColumnMap::value_type( nInsCol, pCol ) );
-                    }
-                    else
-                        pCol = it->second;
-                }
+                    pCol = it->second;
+
                 // bei anderer Tabelle wurde bereits neuer ColKey erzeugt,
                 // die Zeilen muessen fuer's Dummy fuellen gleich sein!
                 sal_uLong nInsRow = (bNoGlue ? nNoGlueRow : nRow1);
