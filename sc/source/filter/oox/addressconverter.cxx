@@ -36,7 +36,6 @@
 #include <rtl/ustrbuf.hxx>
 #include "oox/core/filterbase.hxx"
 #include "biffinputstream.hxx"
-#include "biffoutputstream.hxx"
 
 namespace oox {
 namespace xls {

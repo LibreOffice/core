@@ -870,7 +870,6 @@ oox::dump::StringHelper::prependToken(rtl::OUStringBuffer&, long, unsigned short
 oox::dump::TextStreamObjectBase::construct(oox::dump::InputObjectBase const&, unsigned short)
 oox::ole::WordVbaProjectFilter::WordVbaProjectFilter(com::sun::star::uno::Reference<com::sun::star::uno::XComponentContext> const&)
 oox::xls::CellBlock::CellBlock(oox::xls::WorksheetHelper const&, oox::ValueRange const&, int)
-oox::xls::prv::BiffOutputRecordBuffer::BiffOutputRecordBuffer(oox::BinaryOutputStream&, unsigned short)
 psp::PrinterGfx::DrawBitmap(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterBmp const&)
 psp::PrinterGfx::DrawMask(Rectangle const&, Rectangle const&, psp::PrinterBmp const&, psp::PrinterColor&)
 psp::PrinterGfx::GetGlyphBoundRect(unsigned short, Rectangle&)

@@ -31,8 +31,8 @@
 #include <rtl/math.hxx>
 #include <rtl/tencinfo.h>
 #include "biffinputstream.hxx"
-#include "biffoutputstream.hxx"
 #include "worksheethelper.hxx"
+#include "oox/helper/binaryoutputstream.hxx"
 
 namespace oox {
 namespace xls {
