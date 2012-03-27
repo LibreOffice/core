@@ -367,7 +367,22 @@ SimpleShape::SimpleShape( Drawing& rDrawing, const OUString& rService ) :
 
 Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes >& rxShapes, const Rectangle& rShapeRect ) const
 {
-    Reference< XShape > xShape = mrDrawing.createAndInsertXShape( maService, rxShapes, rShapeRect );
+    Rectangle aShapeRect(rShapeRect);
+    if (!maTypeModel.maFlip.isEmpty())
+    {
+        if (maTypeModel.maFlip.equalsAscii("x"))
+        {
+            aShapeRect.X += aShapeRect.Width;
+            aShapeRect.Width *= -1;
+        }
+        else if (maTypeModel.maFlip.equalsAscii("y"))
+        {
+            aShapeRect.Y += aShapeRect.Height;
+            aShapeRect.Height *= -1;
+        }
+    }
+
+    Reference< XShape > xShape = mrDrawing.createAndInsertXShape( maService, rxShapes, aShapeRect );
     convertShapeProperties( xShape );
 
     if ( maService.equalsAscii( "com.sun.star.text.TextFrame" ) )
