@@ -430,7 +430,7 @@ install:
 	echo "Installation finished, you can now execute:" && \
 	echo "$(INSTALLDIR)/program/soffice"
 
-dev-install: build-packimages
+dev-install: build
 	@rm -rf $(OUTDIR)/installation
 	@mkdir $(OUTDIR)/installation
 ifeq ($(DISABLE_LINKOO),TRUE)
