@@ -75,48 +75,6 @@ private:
 
 } // namespace prv
 
-// ============================================================================
-
-/** This class is used to write BIFF record streams.
-
-    An instance is constructed with a BinaryOutputStream object and the
-    maximum size of BIFF record contents (e.g. 2080 bytes in BIFF2-BIFF5, or
-    8224 bytes in BIFF8).
-*/
-class BiffOutputStream : public BinaryOutputStream
-{
-public:
-    // record control ---------------------------------------------------------
-
-    // BinaryOutputStream interface (stream write access) ---------------------
-
-    /** Writes the passed data sequence. */
-    virtual void        writeData( const StreamDataSequence& rData, size_t nAtomSize = 1 );
-    /** Writes nBytes bytes from the passed buffer pMem. */
-    virtual void        writeMemory( const void* pMem, sal_Int32 nBytes, size_t nAtomSize = 1 );
-
-    /** Stream operator for all data types supported by the writeValue() function. */
-    template< typename Type >
-    inline BiffOutputStream& operator<<( Type nValue ) { writeValue( nValue ); return *this; }
-
-    // ------------------------------------------------------------------------
-private:
-    /** Checks the remaining size in the current record, creates CONTINUE record if needed. */
-    void                ensureRawBlock( sal_uInt16 nSize );
-
-    /** Checks the remaining size in the current record and creates a CONTINUE
-        record if needed.
-        @return  Maximum size left for writing to current record. */
-    sal_uInt16          prepareWriteBlock( sal_Int32 nTotalSize, size_t nAtomSize );
-
-private:
-    prv::BiffOutputRecordBuffer maRecBuffer;    /// Raw record data buffer.
-    sal_uInt8           mnPortionSize;          /// Size of data portions.
-    sal_uInt8           mnPortionPos;           /// Position in current portion.
-};
-
-// ============================================================================
-
 } // namespace xls
 } // namespace oox
 
