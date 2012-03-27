@@ -40,7 +40,6 @@
 #include <com/sun/star/awt/FontPitch.hpp>
 #include <com/sun/star/awt/FontUnderline.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
-#include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/text/FontRelief.hpp>
 #include <com/sun/star/text/FontEmphasis.hpp>

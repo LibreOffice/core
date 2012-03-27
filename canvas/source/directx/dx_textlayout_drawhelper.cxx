@@ -31,7 +31,6 @@
 
 #include <vcl/metric.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/metric.hxx>
 #include <vcl/canvastools.hxx>
 #include <tools/diagnose_ex.h>
 
@@ -40,7 +39,6 @@
 #include <com/sun/star/rendering/FontRequest.hpp>
 #include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <com/sun/star/rendering/XCanvasFont.hpp>
-#include <com/sun/star/rendering/PanoseProportion.hpp>
 #include <comphelper/sequence.hxx>
 #include <comphelper/scopeguard.hxx>
 #include <tools/color.hxx>

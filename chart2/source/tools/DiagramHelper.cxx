@@ -38,7 +38,6 @@
 #include "CommonConverters.hxx"
 #include "ExplicitCategoriesProvider.hxx"
 #include "servicenames_charttypes.hxx"
-#include "ChartModelHelper.hxx"
 #include "RelativePositionHelper.hxx"
 #include "ControllerLockGuard.hxx"
 #include "NumberFormatterWrapper.hxx"

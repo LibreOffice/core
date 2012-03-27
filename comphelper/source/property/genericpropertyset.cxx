@@ -36,7 +36,6 @@
 #include <comphelper/propertysetinfo.hxx>
 #include <comphelper/stl_types.hxx>
 #include <comphelper/servicehelper.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/uuid.h>
 
 ///////////////////////////////////////////////////////////////////////

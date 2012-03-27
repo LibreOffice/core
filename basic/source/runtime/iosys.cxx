@@ -45,8 +45,6 @@
 #include <rtl/textenc.h>
 #include <rtl/strbuf.hxx>
 #include <rtl/ustrbuf.hxx>
-#include <rtl/textenc.h>
-#include <rtl/ustrbuf.hxx>
 
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>

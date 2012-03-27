@@ -36,7 +36,6 @@
 #include "ObjectIdentifier.hxx"
 #include "macros.hxx"
 #include "ChartTypeHelper.hxx"
-#include "DiagramHelper.hxx"
 #include "ChartController.hxx"
 #include "RegressionCurveHelper.hxx"
 #include "DataSeriesHelper.hxx"

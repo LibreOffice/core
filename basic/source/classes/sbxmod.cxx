@@ -79,11 +79,9 @@ using namespace com::sun::star;
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <comphelper/processfactory.hxx>
-#include <vcl/svapp.hxx>
 #include <map>
 #include <com/sun/star/reflection/XProxyFactory.hpp>
 #include <cppuhelper/implbase1.hxx>
-#include <basic/sbobjmod.hxx>
 #include <com/sun/star/uno/XAggregation.hpp>
 #include <com/sun/star/script/XInvocation.hpp>
 
@@ -95,14 +93,11 @@ using namespace com::sun::star::script;
 
 
 #include <com/sun/star/script/XLibraryContainer.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/awt/XDialogProvider.hpp>
 #include <com/sun/star/awt/XTopWindow.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/awt/XControl.hpp>
-#include <cppuhelper/implbase1.hxx>
 #include <comphelper/anytostring.hxx>
-#include <com/sun/star/beans/XPropertySet.hpp>
 #include <ooo/vba/VbQueryClose.hpp>
 
 typedef ::cppu::WeakImplHelper1< XInvocation > DocObjectWrapper_BASE;

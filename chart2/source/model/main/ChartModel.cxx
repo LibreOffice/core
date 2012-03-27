@@ -30,7 +30,6 @@
 #include "servicenames.hxx"
 #include "MediaDescriptorHelper.hxx"
 #include "macros.hxx"
-#include "servicenames.hxx"
 #include "NoWarningThisInCTOR.hxx"
 #include "DataSourceHelper.hxx"
 #include "ChartModelHelper.hxx"

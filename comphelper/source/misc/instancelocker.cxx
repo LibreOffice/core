@@ -35,7 +35,6 @@
 #include <com/sun/star/lang/IllegalArgumentException.hpp>
 #include <com/sun/star/frame/XDesktop.hpp>
 #include <com/sun/star/frame/DoubleInitializationException.hpp>
-#include <com/sun/star/frame/DoubleInitializationException.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 
 #include "instancelocker.hxx"

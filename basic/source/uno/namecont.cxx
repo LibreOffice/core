@@ -34,7 +34,6 @@
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
 #include <tools/errinf.hxx>
-#include <osl/mutex.hxx>
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/uri.hxx>
 #include <rtl/strbuf.hxx>
@@ -64,7 +63,6 @@
 #include <com/sun/star/script/vba/VBAScriptEventId.hpp>
 #include <com/sun/star/deployment/ExtensionManager.hpp>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/anytostring.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 #include <basic/sbmod.hxx>
 #include <boost/scoped_ptr.hpp>
