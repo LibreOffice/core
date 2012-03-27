@@ -35,6 +35,16 @@ namespace xls {
 
 namespace prv {
 
+BiffOutputRecordBuffer::BiffOutputRecordBuffer( BinaryOutputStream& rOutStrm, sal_uInt16 nMaxRecSize ) :
+    mrOutStrm( rOutStrm ),
+    mnMaxRecSize( nMaxRecSize ),
+    mnRecId( BIFF_ID_UNKNOWN ),
+    mbInRec( false )
+{
+    OSL_ENSURE( mrOutStrm.isSeekable(), "BiffOutputRecordBuffer::BiffOutputRecordBuffer - stream must be seekable" );
+    maData.reserve( SAL_MAX_UINT16 );
+}
+
 void BiffOutputRecordBuffer::startRecord( sal_uInt16 nRecId )
 {
     OSL_ENSURE( !mbInRec, "BiffOutputRecordBuffer::startRecord - another record still open" );

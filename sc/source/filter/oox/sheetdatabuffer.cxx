@@ -117,6 +117,17 @@ const sal_Int32 CELLBLOCK_MAXROWS  = 16;    /// Number of rows in a cell block.
 
 } // namespace
 
+CellBlock::CellBlock( const WorksheetHelper& rHelper, const ValueRange& rColSpan, sal_Int32 nRow ) :
+    WorksheetHelper( rHelper ),
+    maRange( rHelper.getSheetIndex(), rColSpan.mnFirst, nRow, rColSpan.mnLast, nRow ),
+    mnRowLength( rColSpan.mnLast - rColSpan.mnFirst + 1 ),
+    mnFirstFreeIndex( 0 )
+{
+    maCellArray.realloc( 1 );
+    maCellArray[ 0 ].realloc( mnRowLength );
+    mpCurrCellRow = maCellArray[ 0 ].getArray();
+}
+
 bool CellBlock::contains( sal_Int32 nCol ) const
 {
     return (maRange.StartColumn <= nCol) && (nCol <= maRange.EndColumn);

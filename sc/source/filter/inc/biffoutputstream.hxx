@@ -46,6 +46,9 @@ namespace prv {
 class BiffOutputRecordBuffer
 {
 public:
+    explicit            BiffOutputRecordBuffer(
+                            BinaryOutputStream& rOutStrm,
+                            sal_uInt16 nMaxRecSize );
     /** Returns the wrapped binary base stream. */
     inline const BinaryOutputStream& getBaseStream() const { return mrOutStrm; }
 

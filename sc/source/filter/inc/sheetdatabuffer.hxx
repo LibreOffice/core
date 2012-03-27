@@ -95,6 +95,8 @@ struct DataTableModel
 class CellBlock : public WorksheetHelper
 {
 public:
+    explicit            CellBlock( const WorksheetHelper& rHelper, const ValueRange& rColSpan, sal_Int32 nRow );
+
     /** Returns true, if the own colspan contains the passed column. */
     bool                contains( sal_Int32 nCol ) const;
 
