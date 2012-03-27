@@ -383,7 +383,11 @@ main/rat-excludes
 main/redland/raptor/raptor-1.4.18.patch.os2
 main/redland/rasqal/rasqal-0.9.16.patch.os2
 main/redland/redland/redland-1.0.8.patch.os2
+main/reportbuilder/java/com/sun/star/report/pentaho/parser/style-mapping.txt
 main/reportbuilder/template/delzip
+main/reportbuilder/template/post.xml
+main/reportbuilder/template/pre.xml
+main/reportbuilder/util/component.txt
 main/reportbuilder/util/delzip
 main/ridljar/source/unoloader/com/sun/star/lib/unoloader/manifest
 main/ridljar/source/unoloader/delzip
