@@ -46,6 +46,7 @@
 #include <com/sun/star/ucb/XSortedDynamicResultSetFactory.hpp>
 #include <comphelper/processfactory.hxx>
 #include <comphelper/string.hxx>
+#include <rtl/instance.hxx>
 #include <vcl/toolbox.hxx>
 #include <salhelper/thread.hxx>
 #include <osl/mutex.hxx>
@@ -121,20 +122,14 @@ class SvtMatchContext_Impl: public salhelper::Thread
     void                            FillPicklist(std::vector<rtl::OUString>& rPickList);
 
 public:
-    static ::osl::Mutex*           GetMutex();
-
                                     SvtMatchContext_Impl( SvtURLBox* pBoxP, const String& rText );
     void                            Stop();
 };
 
-::osl::Mutex* SvtMatchContext_Impl::pDirMutex = 0;
-
-::osl::Mutex* SvtMatchContext_Impl::GetMutex()
+namespace
 {
-    ::osl::MutexGuard aGuard( ::osl::Mutex::getGlobalMutex() );
-    if( !pDirMutex )
-        pDirMutex = new ::osl::Mutex;
-    return pDirMutex;
+    struct theSvtMatchContextMutex
+        : public rtl::Static< ::osl::Mutex, theSvtMatchContextMutex > {};
 }
 
 SvtMatchContext_Impl::SvtMatchContext_Impl(
@@ -558,7 +553,7 @@ String SvtURLBox::ParseSmart( String aText, String aBaseURL, String aWorkDir )
 //-------------------------------------------------------------------------
 void SvtMatchContext_Impl::doExecute()
 {
-    ::osl::MutexGuard aGuard( GetMutex() );
+    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
     if( bStop )
         // have we been stopped while we were waiting for the mutex?
         return;
@@ -930,7 +925,7 @@ sal_Bool SvtURLBox::ProcessKey( const KeyCode& rKey )
     if ( aCode == KEY_RETURN && GetText().Len() )
     {
         // wait for completion of matching thread
-        ::osl::MutexGuard aGuard( SvtMatchContext_Impl::GetMutex() );
+        ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
         if ( bAutoCompleteMode )
         {
@@ -1097,7 +1092,7 @@ void SvtURLBox::SetNoURLSelection( sal_Bool bSet )
 String SvtURLBox::GetURL()
 {
     // wait for end of autocompletion
-    ::osl::MutexGuard aGuard( SvtMatchContext_Impl::GetMutex() );
+    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
     String aText( GetText() );
     if ( MatchesPlaceHolder( aText ) )
@@ -1134,8 +1129,8 @@ String SvtURLBox::GetURL()
 
     if ( aObj.GetProtocol() == INET_PROT_NOT_VALID )
     {
-        String aName = ParseSmart( aText, aBaseURL, SvtPathOptions().GetWorkPath() );
-        aObj.SetURL( aName );
+        rtl::OUString aName = ParseSmart( aText, aBaseURL, SvtPathOptions().GetWorkPath() );
+        aObj.SetURL(aName);
         ::rtl::OUString aURL( aObj.GetMainURL( INetURLObject::NO_DECODE ) );
         if ( aURL.isEmpty() )
             // aText itself is invalid, and even together with aBaseURL, it could not
@@ -1144,13 +1139,11 @@ String SvtURLBox::GetURL()
 
         bool bSlash = aObj.hasFinalSlash();
         {
-            static const rtl::OUString aPropName(
-                rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "CasePreservingURL" )));
+            const rtl::OUString aPropName("CasePreservingURL");
 
             rtl::OUString aFileURL;
 
-            Any aAny =
-                UCBContentHelper::GetProperty(aURL,aPropName);
+            Any aAny = UCBContentHelper::GetProperty(aURL, aPropName);
             sal_Bool success = (aAny >>= aFileURL);
             rtl::OUString aTitle;
             if(success)
@@ -1185,7 +1178,7 @@ void SvtURLBox::DisableHistory()
 
 void SvtURLBox::SetBaseURL( const String& rURL )
 {
-    ::osl::MutexGuard aGuard( SvtMatchContext_Impl::GetMutex() );
+    ::osl::MutexGuard aGuard( theSvtMatchContextMutex::get() );
 
     // Reset match lists
     pImp->aCompletions.clear();
