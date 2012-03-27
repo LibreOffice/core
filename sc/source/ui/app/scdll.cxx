@@ -295,9 +295,9 @@ void ScDLL::Init()
     //  Edit-Engine-Felder, soweit nicht schon in OfficeApplication::Init
 
     SvClassManager& rClassManager = SvxFieldItem::GetClassManager();
-    rClassManager.SV_CLASS_REGISTER( SvxPagesField );
-    rClassManager.SV_CLASS_REGISTER( SvxFileField );
-    rClassManager.SV_CLASS_REGISTER( SvxTableField );
+    rClassManager.Register(SvxPagesField::StaticClassId(), SvxPagesField::CreateInstance);
+    rClassManager.Register(SvxFileField::StaticClassId(),  SvxFileField::CreateInstance);
+    rClassManager.Register(SvxTableField::StaticClassId(), SvxTableField::CreateInstance);
 
     SdrRegisterFieldClasses();      // SvDraw-Felder registrieren
 

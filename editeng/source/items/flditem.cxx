@@ -948,14 +948,14 @@ SvClassManager& SvxFieldItem::GetClassManager()
     if ( !pClassMgr )
     {
         pClassMgr = new SvClassManager;
-        pClassMgr->SV_CLASS_REGISTER( SvxFieldData );
-        pClassMgr->SV_CLASS_REGISTER( SvxURLField );
-        pClassMgr->SV_CLASS_REGISTER( SvxDateField );
-        pClassMgr->SV_CLASS_REGISTER( SvxPageField );
-        pClassMgr->SV_CLASS_REGISTER( SvxTimeField );
-        pClassMgr->SV_CLASS_REGISTER( SvxExtTimeField );
-        pClassMgr->SV_CLASS_REGISTER( SvxExtFileField );
-        pClassMgr->SV_CLASS_REGISTER( SvxAuthorField );
+        pClassMgr->Register(SvxFieldData::StaticClassId(),    SvxFieldData::CreateInstance);
+        pClassMgr->Register(SvxURLField::StaticClassId(),     SvxURLField::CreateInstance);
+        pClassMgr->Register(SvxDateField::StaticClassId(),    SvxDateField::CreateInstance);
+        pClassMgr->Register(SvxPageField::StaticClassId(),    SvxPageField::CreateInstance);
+        pClassMgr->Register(SvxTimeField::StaticClassId(),    SvxTimeField::CreateInstance);
+        pClassMgr->Register(SvxExtTimeField::StaticClassId(), SvxExtTimeField::CreateInstance);
+        pClassMgr->Register(SvxExtFileField::StaticClassId(), SvxExtFileField::CreateInstance);
+        pClassMgr->Register(SvxAuthorField::StaticClassId(),  SvxAuthorField::CreateInstance);
     }
 
     return *pClassMgr;
