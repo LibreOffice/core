@@ -122,7 +122,7 @@
 #include <basegfx/polygon/b2dpolygon.hxx>
 #include <basegfx/color/bcolortools.hxx>
 
-#include <deque>
+#include <vector>
 #include <algorithm>
 #include <wrtsh.hxx>
 #include <edtwin.hxx>
@@ -189,7 +189,7 @@ public:
     sal_Bool MakeUnion( const SwRect &rRect );
 };
 
-class SwLineRects : public std::deque< SwLineRect >
+class SwLineRects : public std::vector< SwLineRect >
 {
     size_t nLastCount;  //avoid unnecessary cycles in PaintLines
 public:
