@@ -34,8 +34,6 @@
 #include "comphelper/anytostring.hxx"
 #include "cppuhelper/exc_hlp.hxx"
 
-#include <utility>
-#include <algorithm>
 #include <vcl/wrkwin.hxx>
 #include <sfx2/docfile.hxx>
 #include <sot/storage.hxx>
@@ -53,9 +51,6 @@
 #include <svx/svdundo.hxx>
 #include <vcl/msgbox.hxx>
 #include <sot/formats.hxx>
-
-#include <set>
-#include <boost/bind.hpp>
 
 #include "glob.hrc"
 #include "drawdoc.hxx"
