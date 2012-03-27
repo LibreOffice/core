@@ -573,9 +573,9 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
 
         sal_uInt16 nActualInsertPos = nInsertPos;
 
-        List aNameList;
-        std::set<sal_uInt16> aRenameSet;
         sal_uInt16 nBMSdPage;
+        std::set<sal_uInt16> aRenameSet;
+        std::map<sal_uInt16,rtl::OUString> aNameMap;
 
         for (nBMSdPage=0; nBMSdPage < nBMSdPageCount; nBMSdPage++)
         {
@@ -586,7 +586,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
             if (bLink)
             {
                 // Es werden sich die Namen aller Seiten gemerkt
-                aNameList.Insert(new String(pName), nBMSdPage);
+                aNameMap.insert(std::make_pair(nBMSdPage,pName));
             }
 
             // Have to check for duplicate names here, too
@@ -612,7 +612,6 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
         {
             SdPage* pPage       = (SdPage*) GetPage(nActualInsertPos);
             SdPage* pNotesPage  = (SdPage*) GetPage(nActualInsertPos+1);
-            String* pName       = (String*) aNameList.GetObject(nBMSdPage);
 
             // delay renaming *after* pages are copied (might destroy source otherwise)
             if( aRenameSet.find(nBMSdPage) != aRenameSet.end() )
@@ -625,10 +624,11 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
 
             if (bLink)
             {
+                String aName(aNameMap[nBMSdPage]);
+
                 // Nun werden die Link-Namen zusammengestellt
                 pPage->SetFileName(aBookmarkName);
-                pPage->SetBookmarkName(*(pName));
-                delete pName;
+                pPage->SetBookmarkName(aName);
                 pPage->SetModel(this);
             }
 
