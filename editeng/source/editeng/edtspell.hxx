@@ -83,15 +83,19 @@ struct WrongRange
 
 #define NOT_INVALID 0xFFFF
 
-class WrongList : public std::vector<WrongRange>
+class WrongList
 {
 private:
+    std::vector<WrongRange> maRanges;
     sal_uInt16  nInvalidStart;
     sal_uInt16  nInvalidEnd;
 
     sal_Bool    DbgIsBuggy() const;
 
 public:
+    typedef std::vector<WrongRange>::iterator iterator;
+    typedef std::vector<WrongRange>::const_iterator const_iterator;
+
             WrongList();
             ~WrongList();
 
@@ -119,6 +123,16 @@ public:
 
     // #i102062#
     bool operator==(const WrongList& rCompare) const;
+
+    bool empty() const;
+    void push_back(const WrongRange& rRange);
+    WrongRange& back();
+    const WrongRange& back() const;
+
+    iterator begin();
+    iterator end();
+    const_iterator begin() const;
+    const_iterator end() const;
 };
 
 class EdtAutoCorrDoc : public SvxAutoCorrDoc

@@ -242,10 +242,10 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
             nInvalidEnd = nPos+nNew;
     }
 
-    for (WrongList::size_type i = 0; i < size(); ++i)
+    for (size_t i = 0, n = maRanges.size(); i < n; ++i)
     {
-        WrongRange & rWrong = (*this)[i]; // why does this thing derive vector?
-        sal_Bool bRefIsValid = sal_True;
+        WrongRange & rWrong = maRanges[i]; // why does this thing derive vector?
+        bool bRefIsValid = true;
         if (rWrong.nEnd >= nPos)
         {
             // Move all Wrongs after the insert position...
@@ -271,7 +271,7 @@ void WrongList::TextInserted( sal_uInt16 nPos, sal_uInt16 nNew, sal_Bool bPosIsS
                     // Split Wrong...
                     WrongRange aNewWrong(rWrong.nStart, nPos);
                     rWrong.nStart = nPos + 1;
-                    insert(begin() + i, aNewWrong);
+                    maRanges.insert(maRanges.begin() + i, aNewWrong);
                     // Reference no longer valid after Insert, the other
                     // was inserted in front of this position
                     bRefIsValid = false;
@@ -351,7 +351,7 @@ void WrongList::TextDeleted( sal_uInt16 nPos, sal_uInt16 nDeleted )
                 "TextDeleted, WrongRange: Start >= End?!");
         if ( bDelWrong )
         {
-            i = erase(i);
+            i = maRanges.erase(i);
         }
         else
         {
@@ -425,7 +425,7 @@ void WrongList::ClearWrongs( sal_uInt16 nStart, sal_uInt16 nEnd,
             }
             else
             {
-                i = erase(i);
+                i = maRanges.erase(i);
                 // no increment here
             }
         }
@@ -461,26 +461,26 @@ void WrongList::InsertWrong( sal_uInt16 nStart, sal_uInt16 nEnd,
         }
     }
 
-    if (nPos != end())
-        insert(nPos, WrongRange(nStart, nEnd));
+    if (nPos != maRanges.end())
+        maRanges.insert(nPos, WrongRange(nStart, nEnd));
     else
-        push_back(WrongRange(nStart, nEnd));
+        maRanges.push_back(WrongRange(nStart, nEnd));
 
     SAL_WARN_IF(DbgIsBuggy(), "editeng", "InsertWrong: WrongList broken!");
 }
 
 void WrongList::MarkWrongsInvalid()
 {
-    if (!empty())
-        MarkInvalid(front().nStart, back().nEnd );
+    if (!maRanges.empty())
+        MarkInvalid(maRanges.front().nStart, maRanges.back().nEnd );
 }
 
 WrongList* WrongList::Clone() const
 {
     WrongList* pNew = new WrongList;
-    pNew->reserve(size());
-    for (WrongList::const_iterator i = begin(); i != end(); ++i)
-        pNew->push_back(*i);
+    pNew->maRanges.reserve(maRanges.size());
+    for (WrongList::const_iterator i = maRanges.begin(); i != maRanges.end(); ++i)
+        pNew->maRanges.push_back(*i);
     return pNew;
 }
 
@@ -490,19 +490,59 @@ bool WrongList::operator==(const WrongList& rCompare) const
     // cleck direct members
     if(GetInvalidStart() != rCompare.GetInvalidStart()
         || GetInvalidEnd() != rCompare.GetInvalidEnd()
-        || size() != rCompare.size())
+        || maRanges.size() != rCompare.maRanges.size())
         return false;
 
-    WrongList::const_iterator rCA = begin();
-    WrongList::const_iterator rCB = rCompare.begin();
+    WrongList::const_iterator rCA = maRanges.begin();
+    WrongList::const_iterator rCB = rCompare.maRanges.begin();
 
-    for (; rCA != end(); ++rCA, ++rCB)
+    for (; rCA != maRanges.end(); ++rCA, ++rCB)
     {
         if(rCA->nStart != rCB->nStart || rCA->nEnd != rCB->nEnd)
             return false;
     }
 
     return true;
+}
+
+bool WrongList::empty() const
+{
+    return maRanges.empty();
+}
+
+void WrongList::push_back(const WrongRange& rRange)
+{
+    maRanges.push_back(rRange);
+}
+
+WrongRange& WrongList::back()
+{
+    return maRanges.back();
+}
+
+const WrongRange& WrongList::back() const
+{
+    return maRanges.back();
+}
+
+WrongList::iterator WrongList::begin()
+{
+    return maRanges.begin();
+}
+
+WrongList::iterator WrongList::end()
+{
+    return maRanges.end();
+}
+
+WrongList::const_iterator WrongList::begin() const
+{
+    return maRanges.begin();
+}
+
+WrongList::const_iterator WrongList::end() const
+{
+    return maRanges.end();
 }
 
 sal_Bool WrongList::DbgIsBuggy() const
