@@ -342,6 +342,7 @@ bool includeProject(rtl::OUString const & project) {
 bool excludeDirectory(rtl::OUString const & directory) {
     // Cf. OUTPATH=* in configure.in:
     static AsciiString const excluded[] = {
+        { RTL_CONSTASCII_STRINGPARAM("callcatcher") },
         { RTL_CONSTASCII_STRINGPARAM("unxaig") },
         { RTL_CONSTASCII_STRINGPARAM("unxand") },
         { RTL_CONSTASCII_STRINGPARAM("unxdfly") },
