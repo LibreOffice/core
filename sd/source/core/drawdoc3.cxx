@@ -197,6 +197,79 @@ void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBookmarkDo
 
 /*************************************************************************
 |*
+|* Fuegt ein Bookmark als Seite ein
+|*
+\************************************************************************/
+
+void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBookmarkDoc,
+                               std::vector<rtl::OUString> &rBookmarkList, sal_uInt16 nBMSdPageCount,
+                               InsertBookmarkAsPage_FindDuplicateLayouts& rPageIterator )
+{
+    //
+    // Refactored copy'n'pasted layout name collection from InsertBookmarkAsPage
+    //
+    int nPos, nEndPos;
+
+    if( rBookmarkList.empty() )
+    {
+        // no list? whole source document
+        nEndPos = nBMSdPageCount;
+    }
+    else
+    {
+        // bookmark list? number of entries
+        nEndPos = rBookmarkList.size();
+    }
+
+    SdPage* pBMPage;
+
+    // iterate over number of pages to insert
+    for (nPos = 0; nPos < nEndPos; ++nPos)
+    {
+        // the master page associated to the nPos'th page to insert
+        SdPage* pBMMPage = NULL;
+
+        if( rBookmarkList.empty() )
+        {
+            // simply take master page of nPos'th page in source document
+            pBMMPage = (SdPage*)(&(pBookmarkDoc->GetSdPage((sal_uInt16)nPos, PK_STANDARD)->TRG_GetMasterPage()));
+        }
+        else
+        {
+            // fetch nPos'th entry from bookmark list, and determine master page
+            String  aBMPgName(rBookmarkList[nPos]);
+            sal_Bool  bIsMasterPage;
+
+            sal_uInt16 nBMPage = pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage );
+
+            if (nBMPage != SDRPAGE_NOTFOUND)
+            {
+                pBMPage = (SdPage*) pBookmarkDoc->GetPage(nBMPage);
+            }
+            else
+            {
+                pBMPage = NULL;
+            }
+
+            // enforce that bookmarked page is a standard page and not already a master page
+            if (pBMPage && pBMPage->GetPageKind()==PK_STANDARD && !pBMPage->IsMasterPage())
+            {
+                const sal_uInt16 nBMSdPage = (nBMPage - 1) / 2;
+                pBMMPage = (SdPage*) (&(pBookmarkDoc->GetSdPage(nBMSdPage, PK_STANDARD)->TRG_GetMasterPage()));
+            }
+        }
+
+        // successfully determined valid (bookmarked) page?
+        if( pBMMPage )
+        {
+            // yes, call functor
+            rPageIterator( rDoc, pBMMPage );
+        }
+    }
+}
+
+/*************************************************************************
+|*
 |* Oeffnet ein Bookmark-Dokument
 |*
 \************************************************************************/
