@@ -280,6 +280,7 @@ $(eval $(call gb_Helper_register_libraries,OOOLIBS, \
     fwm \
     guesslang \
     helplinker \
+    hsqldb \
     hwp \
     hyphen \
     i18nregexp \

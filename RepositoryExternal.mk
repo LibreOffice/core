@@ -1220,6 +1220,26 @@ $(call gb_LinkTarget_set_include,$(1),\
 )
 endef
 
+
+ifdef ($(SYSTEM_HSQLDB),YES)
+
+define gb_LinkTarget__use_hsqldb
+
+$(call gb_LinkTarget_add_defs,$(1),\
+	-DSYSTEM_HSQLDB \
+	-DHSQLDB_JAR=\""file://$(HSQLDB_JAR)"\" \
+)
+
+endef
+
+else # !SYSTEM_HSQLDB
+
+define gb_LinkTarget__use_hsqldb
+
+endef
+
+endif # SYSTEM_HSQLDB
+
 # MacOSX-only frameworks ############################################
 # (in alphabetical order)
 
