@@ -165,7 +165,7 @@ extern "C" UINT __stdcall InstallExecSequenceEntry(MSIHANDLE hMSI)
             RegCloseKey(hKey);
         }
 
-        // Open Windows 32 Bit Registry on Win64 maschine
+        // Open Windows 32 Bit Registry on Win64 machine
 
         if (RegOpenKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Shell Extensions\\Approved"),0, KEY_WRITE, &hKey ) == ERROR_SUCCESS)
         {
