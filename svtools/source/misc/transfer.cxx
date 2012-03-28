@@ -151,7 +151,6 @@ SvStream& operator<<( SvStream& rOStm, const TransferableObjectDescriptor& rObjD
 // the reading of the parameter is done using the special service ::com::sun::star::datatransfer::MimeContentType,
 // a similar approach should be implemented for creation of the mimetype string;
 // for now the set of acceptable characters has to be hardcoded, in future it should be part of the service that creates the mimetype
-const ::rtl::OUString aQuotedParamChars = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "()<>@,;:\\\"/[]?=!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. " ) );
 
 static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescriptor& rObjDesc )
 {
@@ -181,9 +180,12 @@ static ::rtl::OUString ImplGetParameterString( const TransferableObjectDescripto
         for ( sal_Int32 nBInd = 0; nBInd < 128; nBInd++ )
             pToAccept[nBInd] = sal_False;
 
-        for ( sal_Int32 nInd = 0; nInd < aQuotedParamChars.getLength(); nInd++ )
+        const char aQuotedParamChars[] =
+            "()<>@,;:\\\"/[]?=!#$%&'*+-0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ^_`abcdefghijklmnopqrstuvwxyz{|}~. ";
+
+        for ( sal_Int32 nInd = 0; nInd < RTL_CONSTASCII_LENGTH(aQuotedParamChars); ++nInd )
         {
-            sal_Unicode nChar = aQuotedParamChars.getStr()[nInd];
+            sal_Unicode nChar = aQuotedParamChars[nInd];
             if ( nChar < 128 )
                 pToAccept[nChar] = sal_True;
         }
