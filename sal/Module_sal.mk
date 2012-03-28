@@ -29,6 +29,7 @@
 $(eval $(call gb_Module_Module,sal))
 
 $(eval $(call gb_Module_add_targets,sal,\
+	CustomTarget_generated \
 	$(if $(filter $(OS),IOS),, \
 		Executable_osl_process_child) \
 	Executable_cppunittester \
