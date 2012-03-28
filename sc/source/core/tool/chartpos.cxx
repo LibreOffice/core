@@ -565,7 +565,7 @@ ScChartPositionMap::ScChartPositionMap( SCCOL nChartCols, SCROW nChartRows,
                 ppData[ nIndex ] = pPosIter->second;
                 ++pPosIter;
             }
-            for ( ; nRow < nRowCount; nRow++, nIndex++ ) ;
+            for ( ; nRow < nRowCount; nRow++, nIndex++ )
                 ppData[ nIndex ] = NULL;
 
             ++pColIter;
