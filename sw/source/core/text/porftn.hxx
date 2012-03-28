@@ -39,7 +39,7 @@ class SwTxtFtn;
 
 class SwFtnPortion : public SwFldPortion
 {
-    SwTxtFrm *pFrm;         // um im Dtor RemoveFtn rufen zu koennen.
+    SwTxtFrm *pFrm;         // To be able to call RemoveFtn in the dtor
     SwTxtFtn *pFtn;
     KSHORT nOrigHeight;
     // #i98418#
@@ -93,7 +93,7 @@ public:
     inline const XubString &GetQuoTxt() const { return aExpand; }
     inline const XubString &GetContTxt() const { return aErgo; }
 
-    // Felder-Cloner fuer SplitGlue
+    // Field cloner for SplitGlue
     virtual SwFldPortion *Clone( const XubString &rExpand ) const;
 
     // Accessibility: pass information about this portion to the PortionHandler
@@ -113,7 +113,7 @@ public:
     virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
     virtual sal_Bool Format( SwTxtFormatInfo &rInf );
 
-    // Felder-Cloner fuer SplitGlue
+    // Field cloner for SplitGlue
     virtual SwFldPortion *Clone( const XubString &rExpand ) const;
     OUTPUT_OPERATOR
 };

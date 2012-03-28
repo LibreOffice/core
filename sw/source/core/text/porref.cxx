@@ -65,8 +65,8 @@ SwIsoRefPortion::SwIsoRefPortion() : nViewWidth(0)
 
 KSHORT SwIsoRefPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
-    // Wir stehen zwar im const, aber nViewWidth sollte erst im letzten
-    // Moment errechnet werden:
+    // Although we are const, nViewWidth should be calculated in the last
+    // moment possible
     SwIsoRefPortion* pThis = (SwIsoRefPortion*)this;
     if( !Width() && rInf.OnWin() && SwViewOption::IsFieldShadings() &&
             !rInf.GetOpt().IsReadonly() && !rInf.GetOpt().IsPagePreview() )

@@ -505,8 +505,8 @@ void SAL_CALL OSingleSelectQueryComposer::appendFilterByColumn( const Reference<
         throw SQLException(sError,*this,SQLSTATE_GENERAL,1000,Any() );
     }
 
-    // filter anhaengen
-    // select ohne where und order by aufbauen
+    // Attach filter
+    // Construct SELECT without WHERE and ORDER BY
     ::rtl::OUString aQuote  = m_xMetaData->getIdentifierQuoteString();
     if ( m_aCurrentColumns[SelectColumns]->hasByName(aName) )
     {
@@ -978,22 +978,22 @@ sal_Bool OSingleSelectQueryComposer::setORCriteria(OSQLParseNode* pCondition, OS
                                     ::std::vector< ::std::vector < PropertyValue > >& rFilters, const Reference< ::com::sun::star::util::XNumberFormatter > & xFormatter) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setORCriteria" );
-    // Runde Klammern um den Ausdruck
+    // Round brackets around the expression
     if (pCondition->count() == 3 &&
         SQL_ISPUNCTUATION(pCondition->getChild(0),"(") &&
         SQL_ISPUNCTUATION(pCondition->getChild(2),")"))
     {
         return setORCriteria(pCondition->getChild(1), _rIterator, rFilters, xFormatter);
     }
-    // oder Verknuepfung
+    // OR logic expression
     // a searchcondition can only look like this: search_condition SQL_TOKEN_OR boolean_term
     else if (SQL_ISRULE(pCondition,search_condition))
     {
         sal_Bool bResult = sal_True;
         for (int i = 0; bResult && i < 3; i+=2)
         {
-            // Ist das erste Element wieder eine OR-Verknuepfung?
-            // Dann rekursiv absteigen ...
+            // Is the first element a OR logic expression again?
+            // Then descend recursively ...
             if (SQL_ISRULE(pCondition->getChild(i),search_condition))
                 bResult = setORCriteria(pCondition->getChild(i), _rIterator, rFilters, xFormatter);
             else
@@ -1015,14 +1015,14 @@ sal_Bool OSingleSelectQueryComposer::setANDCriteria( OSQLParseNode * pCondition,
     OSQLParseTreeIterator& _rIterator, ::std::vector < PropertyValue >& rFilter, const Reference< XNumberFormatter > & xFormatter) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::setANDCriteria" );
-    // Runde Klammern
+    // Round brackets
     if (SQL_ISRULE(pCondition,boolean_primary))
     {
         // this should not occur
         OSL_FAIL("boolean_primary in And-Criteria");
         return sal_False;
     }
-    // Das erste Element ist (wieder) eine AND-Verknuepfung
+    // The first element is an AND logical expression again
     else if ( SQL_ISRULE(pCondition,boolean_term) && pCondition->count() == 3 )
     {
         return setANDCriteria(pCondition->getChild(0), _rIterator, rFilter, xFormatter) &&
@@ -1227,7 +1227,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         aItem.Handle = getPredicateType(pCondition->getChild(1));
         rFilter.push_back(aItem);
     }
-    else // kann sich nur um einen Expr. Ausdruck handeln
+    else // Can only be an expression
     {
         PropertyValue aItem;
         ::rtl::OUString aName, aValue;
@@ -1235,12 +1235,12 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
         OSQLParseNode *pLhs = pCondition->getChild(0);
         OSQLParseNode *pRhs = pCondition->getChild(2);
 
-        // Feldnamen
+        // Field names
         sal_uInt16 i;
         for (i=0;i< pLhs->count();i++)
              pLhs->getChild(i)->parseNodeToPredicateStr( aName, m_xConnection, xFormatter, m_aLocale, static_cast<sal_Char>( m_sDecimalSep.toChar() ) );
 
-        // Kriterium
+        // Criterion
         aItem.Handle = getPredicateType(pCondition->getChild(1));
         aValue       = pCondition->getChild(1)->getTokenValue();
         for(i=0;i< pRhs->count();i++)
@@ -1253,7 +1253,7 @@ sal_Bool OSingleSelectQueryComposer::setComparsionPredicate(OSQLParseNode * pCon
     return sal_True;
 }
 
-// functions for analysing SQL
+// Functions for analysing SQL
 ::rtl::OUString OSingleSelectQueryComposer::getColumnName( ::connectivity::OSQLParseNode* pColumnRef, OSQLParseTreeIterator& _rIterator ) const
 {
     RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "dbaccess", "Ocke.Janssen@sun.com", "OSingleSelectQueryComposer::getColumnName" );
@@ -1572,7 +1572,7 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         m_aCurrentColumns[SelectColumns]->getByName(aName) >>= xColumn;
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_REALNAME),"Property REALNAME not available!");
         OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(PROPERTY_TABLENAME),"Property TABLENAME not available!");
-        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"))),"Property AggregateFunctionnot available!");
+        OSL_ENSURE(xColumn->getPropertySetInfo()->hasPropertyByName(::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AggregateFunction"))),"Property AggregateFunction not available!");
 
         ::rtl::OUString sRealName,sTableName;
         xColumn->getPropertyValue(PROPERTY_REALNAME)    >>= sRealName;
@@ -1689,8 +1689,8 @@ void OSingleSelectQueryComposer::setConditionByColumn( const Reference< XPropert
         lcl_addFilterCriteria_throw(nFilterOp,sEmpty,aSQL);
     }
 
-    // filter anhaengen
-    // select ohne where und order by aufbauen
+    // Attach filter
+    // Construct SELECT without WHERE and ORDER BY
     ::rtl::OUString sFilter = getFilter();
 
     if ( !sFilter.isEmpty() && aSQL.getLength() )

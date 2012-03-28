@@ -28,8 +28,8 @@
 
 
 #include "swcache.hxx"
-#include "fntcache.hxx"     // pFntCache  ( SwFont/ScrFont-PrtFont Cache )
-#include "swfntcch.hxx"     // pSwFontCache  ( SwAttrSet/SwFont Cache )
+#include "fntcache.hxx"     // pFntCache ( SwFont/ScrFont-PrtFont cache )
+#include "swfntcch.hxx"     // pSwFontCache ( SwAttrSet/SwFont cache )
 #include "txtfrm.hxx"
 #include "txtcache.hxx"
 #include "porlay.hxx"
@@ -43,10 +43,10 @@
 #include "porftn.hxx"
 #include "porhyph.hxx"
 #include "pordrop.hxx"
-#include "blink.hxx"    // Blink-Manager
-#include "init.hxx"   // Deklarationen fuer _TextInit() und _TextFinit()
+#include "blink.hxx"    // Blink manager
+#include "init.hxx"     // Declarations for _TextInit() and _TextFinit()
 #include "txtfly.hxx"   // SwContourCache
-#include "dbg_lay.hxx"  // Layout Debug Fileausgabe
+#include "dbg_lay.hxx"  // Layout Debug file output
 
 SwCache *SwTxtFrm::pTxtCache = 0;
 long SwTxtFrm::nMinPrtLine = 0;
@@ -54,22 +54,23 @@ SwContourCache *pContourCache = 0;
 SwDropCapCache *pDropCapCache = 0;
 
 IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtLine )
-IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion ) //Absaetze
-IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout ) //Zeilen
-IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion ) //z.B. Blanks am Zeilenende
-IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion ) //Attributwechsel
+IMPL_FIXEDMEMPOOL_NEWDEL( SwParaPortion ) // Paragraphs
+IMPL_FIXEDMEMPOOL_NEWDEL( SwLineLayout ) // Lines
+IMPL_FIXEDMEMPOOL_NEWDEL( SwHolePortion ) // e.g. Blanks at the line end
+IMPL_FIXEDMEMPOOL_NEWDEL( SwTxtPortion ) // Attribute change
 
 /*************************************************************************
  *                  _TextInit(), _TextFinit()
  *************************************************************************/
 
-// Werden _nur_ in init.cxx verwendet, dort stehen extern void _TextFinit()
-// und extern void _TextInit(...)
+// Are ONLY used in init.cxx.
+// There we have extern void _TextFinit()
+// and extern void _TextInit(...)
 
 void _TextInit()
 {
-    pFntCache = new SwFntCache;                     // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
-    pSwFontCache = new SwFontCache;                 // Cache for SwTxtFmtColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
+    pFntCache = new SwFntCache; // Cache for SwSubFont -> SwFntObj = { Font aFont, Font* pScrFont, Font* pPrtFont, OutputDevice* pPrinter, ... }
+    pSwFontCache = new SwFontCache; // Cache for SwTxtFmtColl -> SwFontObj = { SwFont aSwFont, SfxPoolItem* pDefaultArray }
     SwCache *pTxtCache = new SwCache( 250 // Cache for SwTxtFrm -> SwTxtLine = { SwParaPortion* pLine }
 #ifdef DBG_UTIL
     , "static SwTxtFrm::pTxtCache"

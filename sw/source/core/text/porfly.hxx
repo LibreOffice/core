@@ -61,10 +61,10 @@ public:
 class SwFlyCntPortion : public SwLinePortion
 {
     void *pContact; // bDraw ? DrawContact : FlyInCntFrm
-    Point aRef;     // Relativ zu diesem Point wird die AbsPos berechnet.
+    Point aRef;     // Relatively to this point we calculate the AbsPos
     sal_Bool bDraw : 1;  // DrawContact?
-    sal_Bool bMax : 1;   // Zeilenausrichtung und Hoehe == Zeilenhoehe
-    sal_uInt8 nAlign : 3; // Zeilenausrichtung? Nein, oben, mitte, unten
+    sal_Bool bMax : 1;   // Line adjustment and height == line height
+    sal_uInt8 nAlign : 3; // Line adjustment? No, above, middle, bottom
     virtual xub_StrLen GetCrsrOfst( const KSHORT nOfst ) const;
 
 public:

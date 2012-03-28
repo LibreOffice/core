@@ -40,7 +40,7 @@ class SwTabPortion : public SwFixPortion
     const xub_Unicode cFill;
     const bool bAutoTabStop;
 
-    // Das Format() verzweigt entweder in Pre- oder PostFormat()
+    // Format() branches either into PreFormat() or PostFormat()
     sal_Bool PreFormat( SwTxtFormatInfo &rInf );
 public:
     SwTabPortion( const KSHORT nTabPos, const xub_Unicode cFill = '\0', const bool bAutoTab = true );

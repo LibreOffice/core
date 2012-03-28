@@ -67,7 +67,7 @@ public:
 
 class SwFixPortion : public SwGluePortion
 {
-    KSHORT nFix;        // der Width-Offset in der Zeile
+    KSHORT nFix;        // The width offset in the line
 public:
         SwFixPortion( const SwRect &rFlyRect );
         SwFixPortion( const KSHORT nFixWidth, const KSHORT nFixPos );
@@ -97,7 +97,7 @@ inline short SwGluePortion::GetPrtGlue() const
 
 /*************************************************************************
  *              inline SwGluePortion::AdjFixWidth()
- * Die FixWidth darf niemals groesser sein als die Gesamtbreite !
+ * The FixWidth MUST NEVER be larger than the accumulated width!
  *************************************************************************/
 
 inline void SwGluePortion::AdjFixWidth()

@@ -37,7 +37,7 @@
 #include "txttypes.hxx"
 #include "noteurl.hxx"
 
-// globale Variable, wird in noteurl.Hxx bekanntgegeben
+// Global variable
 SwNoteURL *pNoteURL = NULL;
 
 SV_IMPL_PTRARR( SwURLNoteList, SwURLNotePtr )

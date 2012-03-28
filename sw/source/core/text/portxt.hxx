@@ -30,7 +30,7 @@
 #ifdef GCC
 #include <sys/types.h>
 #else
-#include <new.h>    //fuer size_t, FIXEDMEM aus tools
+#include <new.h>    // for size_t, FIXEDMEM from tools
 #endif
 #include <tools/mempool.hxx>
 
@@ -59,7 +59,7 @@ public:
     virtual sal_Bool GetExpTxt( const SwTxtSizeInfo &rInf, XubString &rTxt ) const;
     virtual long CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) const;
 
-    // zaehlt die Spaces fuer Blocksatz
+    // Counts the spaces for justified paragraph
     xub_StrLen GetSpaceCnt( const SwTxtSizeInfo &rInf, xub_StrLen& rCnt ) const;
 
     sal_Bool CreateHyphen( SwTxtFormatInfo &rInf, SwTxtGuess &rGuess );

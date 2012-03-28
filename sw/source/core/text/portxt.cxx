@@ -35,7 +35,7 @@
 #include <SwPortionHandler.hxx>
 #include <porlay.hxx>
 #include <inftxt.hxx>
-#include <guess.hxx>    // SwTxtGuess, Zeilenumbruch
+#include <guess.hxx>    // SwTxtGuess, line break
 #include <porglue.hxx>
 #include <portab.hxx>       // pLastTab->
 #include <porfld.hxx>       // SwFldPortion
@@ -235,9 +235,9 @@ SwTxtPortion::SwTxtPortion( const SwLinePortion &rPortion )
 
 void SwTxtPortion::BreakCut( SwTxtFormatInfo &rInf, const SwTxtGuess &rGuess )
 {
-    // Das Wort/Zeichen ist groesser als die Zeile
-    // Sonderfall Nr.1: Das Wort ist groesser als die Zeile
-    // Wir kappen...
+    // The word/char is larger than the line
+    // Special case 1: The word is larger than the line
+    // We truncate ...
     const KSHORT nLineWidth = (KSHORT)(rInf.Width() - rInf.X());
     xub_StrLen nLen = rGuess.CutPos() - rInf.GetIdx();
     if( nLen )
@@ -304,8 +304,8 @@ sal_Bool lcl_HasContent( const SwFldPortion& rFld, SwTxtFormatInfo &rInf )
 
 sal_Bool SwTxtPortion::_Format( SwTxtFormatInfo &rInf )
 {
-    // 5744: wenn nur der Trennstrich nicht mehr passt,
-    // muss trotzdem das Wort umgebrochen werden, ansonsten return sal_True!
+    // 5744: If only the hypen does not fit anymore, we still need to wrap
+    // the word, or else return sal_True!
     if( rInf.IsUnderFlow() && rInf.GetSoftHyphPos() )
     {
         // soft hyphen portion has triggered an underflow event because
@@ -494,14 +494,13 @@ sal_Bool SwTxtPortion::Format( SwTxtFormatInfo &rInf )
  *************************************************************************/
 
 // Format end of line
-// 5083: Es kann schon manchmal unguenstige Faelle geben...
-// "vom {Nikolaus}", Nikolaus bricht um "vom " wird im Blocksatz
-// zu "vom" und " ", wobei der Glue expandiert wird, statt in die
-// MarginPortion aufzugehen.
-// rInf.nIdx steht auf dem naechsten Wort, nIdx-1 ist der letzte
-// Buchstabe der Portion.
-
-
+// 5083: We can have awkward cases e.g.:
+// "from {Santa}"
+// Santa wraps, "from " turns into "from" and " " in a justified
+// paragraph, in which the glue gets expanded instead of merged
+// with the MarginPortion.
+//
+// rInf.nIdx points to the next word, nIdx-1 is the portion's last char
 
 void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 {
@@ -517,8 +516,8 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
         while( nX && nHoleLen < GetLen() && CH_BLANK == rInf.GetChar( --nX ) )
             nHoleLen++;
 
-        // Erst uns einstellen und dann Inserten, weil wir ja auch ein
-        // SwLineLayout sein koennten.
+        // First set ourselves and the insert, because there could be
+        // a SwLineLayout
         KSHORT nBlankSize;
         if( nHoleLen == GetLen() )
             nBlankSize = Width();
@@ -537,9 +536,6 @@ void SwTxtPortion::FormatEOL( SwTxtFormatInfo &rInf )
 /*************************************************************************
  *               virtual SwTxtPortion::GetCrsrOfst()
  *************************************************************************/
-
-
-
 xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
 {
     OSL_ENSURE( !this, "SwTxtPortion::GetCrsrOfst: don't use this method!" );
@@ -549,7 +545,7 @@ xub_StrLen SwTxtPortion::GetCrsrOfst( const KSHORT nOfst ) const
 /*************************************************************************
  *                virtual SwTxtPortion::GetTxtSize()
  *************************************************************************/
-// Das GetTxtSize() geht davon aus, dass die eigene Laenge korrekt ist
+// The GetTxtSize() assumes that the own length is correct
 
 SwPosSize SwTxtPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 {
@@ -559,9 +555,6 @@ SwPosSize SwTxtPortion::GetTxtSize( const SwTxtSizeInfo &rInf ) const
 /*************************************************************************
  *               virtual SwTxtPortion::Paint()
  *************************************************************************/
-
-
-
 void SwTxtPortion::Paint( const SwTxtPaintInfo &rInf ) const
 {
     if (rInf.OnWin() && 1==rInf.GetLen() && CH_TXT_ATR_FIELDEND==rInf.GetTxt().GetChar(rInf.GetIdx()))
@@ -614,8 +607,8 @@ sal_Bool SwTxtPortion::GetExpTxt( const SwTxtSizeInfo &, XubString & ) const
 /*************************************************************************
  *        xub_StrLen SwTxtPortion::GetSpaceCnt()
  *              long SwTxtPortion::CalcSpacing()
- * sind fuer den Blocksatz zustaendig und ermitteln die Anzahl der Blanks
- * und den daraus resultierenden zusaetzlichen Zwischenraum
+ * Are responsible for the justified paragraph. They calculate the blank
+ * count and the resulting added space.
  *************************************************************************/
 
 xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
@@ -627,8 +620,8 @@ xub_StrLen SwTxtPortion::GetSpaceCnt( const SwTxtSizeInfo &rInf,
     {
         if( !IsBlankPortion() && !InNumberGrp() && !IsCombinedPortion() )
         {
-            // Bei OnWin() wird anstatt eines Leerstrings gern mal ein Blank
-            // zurueckgeliefert, das koennen wir hier aber gar nicht gebrauchen
+            // OnWin() likes to return a blank instead of an empty string from
+            // time to time. We cannot use that here at all, however.
             sal_Bool bOldOnWin = rInf.OnWin();
             ((SwTxtSizeInfo &)rInf).SetOnWin( sal_False );
 
@@ -657,8 +650,8 @@ long SwTxtPortion::CalcSpacing( long nSpaceAdd, const SwTxtSizeInfo &rInf ) cons
     {
         if( !IsBlankPortion() && !InNumberGrp() && !IsCombinedPortion() )
         {
-            // Bei OnWin() wird anstatt eines Leerstrings gern mal ein Blank
-            // zurueckgeliefert, das koennen wir hier aber gar nicht gebrauchen
+            // OnWin() likes to return a blank instead of an empty string from
+            // time to time. We cannot use that here at all, however.
             sal_Bool bOldOnWin = rInf.OnWin();
             ((SwTxtSizeInfo &)rInf).SetOnWin( sal_False );
 

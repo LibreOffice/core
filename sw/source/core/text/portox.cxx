@@ -65,10 +65,10 @@ SwIsoToxPortion::SwIsoToxPortion() : nViewWidth(0)
 
 KSHORT SwIsoToxPortion::GetViewWidth( const SwTxtSizeInfo &rInf ) const
 {
-    // Wir stehen zwar im const, aber nViewWidth sollte erst im letzten
-    // Moment errechnet werden:
+    // Although we are const, nViewWidth should be calculated in the last
+    // moment possible
     SwIsoToxPortion* pThis = (SwIsoToxPortion*)this;
-    // nViewWidth muss errechnet werden.
+    // nViewWidth need to be calculated
     if( !Width() && rInf.OnWin() &&
         !rInf.GetOpt().IsPagePreview() &&
             !rInf.GetOpt().IsReadonly() && SwViewOption::IsFieldShadings()   )

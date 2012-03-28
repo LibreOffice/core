@@ -32,7 +32,7 @@
 
 class SwFont;
 
-// DropCap-Cache, globale Variable, in txtinit.cxx initialisiert/zerstoert
+// DropCap cache, global variable initialized/destroyed in txtinit.cxx
 // und in txtdrop.cxx benutzt bei der Initialenberechnung
 
 class SwDropCapCache;
@@ -72,14 +72,14 @@ public:
 class SwDropPortion : public SwTxtPortion
 {
     friend class SwDropCapCache;
-    SwDropPortionPart* pPart; // due to script / attribute changes
-    MSHORT nLines;          // Anzahl der Zeilen
-    KSHORT nDropHeight;     // Hoehe
-    KSHORT nDropDescent;    // Abstand zur naechsten Zeile
-    KSHORT nDistance;       // Abstand zum Text
-    KSHORT nFix;            // Fixposition
-    short nX;               // X-PaintOffset
-    short nY;               // Y-Offset
+    SwDropPortionPart* pPart; // due to script/attribute changes
+    MSHORT nLines;          // Line count
+    KSHORT nDropHeight;     // Height
+    KSHORT nDropDescent;    // Distance to the next line
+    KSHORT nDistance;       // Distance to the text
+    KSHORT nFix;            // Fixed position
+    short nX;               // X PaintOffset
+    short nY;               // Y Offset
 
     sal_Bool FormatTxt( SwTxtFormatInfo &rInf );
     void PaintTxt( const SwTxtPaintInfo &rInf ) const;

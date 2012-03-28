@@ -55,12 +55,10 @@ public:
 
     sal_Bool IsInside( SwTxtMargin &rLine ) const;
 
-    // Um Sonderfaelle mit Ftn behandeln zu koennen.
-    // Mit SetRstHeight wird dem SwTxtFrmBreak die Resthoehe eingestellt,
-    // Um TruncLines() rufen zu koennen, ohne dass IsBreakNow() einen
-    // anderen Wert zurueckliefert.
-    // Es wird dabei davon ausgegangen, dass rLine auf der letzten Zeile
-    // steht, die nicht mehr passt.
+    // In order to be able to handle special cases with Ftn.
+    // SetRstHeight sets the rest height for SwTxtFrmBreak. This is needed
+    // to call TruncLines() without IsBreakNow() returning another value.
+    // We assume that rLine is pointing to the last non-fitting line.
 
     // OD 2004-02-27 #106629# - no longer inline
     void SetRstHeight( const SwTxtMargin &rLine );

@@ -58,7 +58,7 @@ protected:
     ViewShell *pShell;
     SwFont *pFnt;
     SwpHints  *pHints;
-    const SwAttrSet* pAttrSet;       // das Char-Attribut-Set
+    const SwAttrSet* pAttrSet;       // The char attribute set
     SwScriptInfo* pScriptInfo;
 
 private:
@@ -83,7 +83,7 @@ protected:
         }
 
 public:
-    // Konstruktor, Destruktor
+    // Constructor, destructor
     inline SwAttrIter( SwTxtNode& rTxtNode, SwScriptInfo& rScrInf )
         : pShell(0), pFnt(0), pHints(0), pScriptInfo(0), pLastOut(0), nChgCnt(0), pRedln(0),nPropFont(0), m_pTxtNode(&rTxtNode)
         { CtorInitAttrIter( rTxtNode, rScrInf ); }
@@ -91,25 +91,25 @@ public:
     virtual ~SwAttrIter();
 
     inline SwRedlineItr *GetRedln() { return pRedln; }
-    // Liefert im Parameter die Position des naechsten Wechsels vor oder an
-    // der uebergebenen Characterposition zurueck. Liefert sal_False, wenn vor
-    // oder an dieser Position kein Wechsel mehr erfolgt, sal_True sonst.
+    // The parameter returns the position of the next change before or at the
+    // char position.
+    // Returns sal_False, if there's no change before or at the positon,
+    // else sal_True.
     xub_StrLen GetNextAttr( ) const;
-    // Macht die an der Characterposition i gueltigen Attribute im
-    // logischen Font wirksam.
+    // Enables the attributes used at char pos nPos in the logical font
     sal_Bool Seek( const xub_StrLen nPos );
-    // Bastelt den Font an der gew. Position via Seek und fragt ihn,
-    // ob er ein Symbolfont ist.
+    // Creates the font at the specified position via Seek() and checks
+    // if it's a symbol font.
     sal_Bool IsSymbol( const xub_StrLen nPos );
 
-    // Fuehrt ChgPhysFnt aus, wenn Seek() sal_True zurueckliefert.
+    // Executes ChgPhysFnt if Seek() returns sal_True
     sal_Bool SeekAndChgAttrIter( const xub_StrLen nPos, OutputDevice* pOut );
     sal_Bool SeekStartAndChgAttrIter( OutputDevice* pOut, const sal_Bool bParaFont = sal_False );
 
-    // Gibt es ueberhaupt Attributwechsel ?
+    // Do we have an attribute change at all?
     inline sal_Bool HasHints() const { return 0 != pHints; }
 
-    // liefert fuer eine Position das Attribut
+    // Returns the attribute for a position
     SwTxtAttr *GetAttr( const xub_StrLen nPos ) const;
 
     inline const SwAttrSet* GetAttrSet() const { return pAttrSet; }

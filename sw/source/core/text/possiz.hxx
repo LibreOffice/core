@@ -32,7 +32,7 @@
 #include <tools/gen.hxx>
 #include "txttypes.hxx"
 
-// Im Gegensazt zu den SV-Sizes ist die SwPosSize immer positiv
+// Compared to the SV sizes SwPosSize is always positive
 class SwPosSize
 {
     KSHORT nWidth;
