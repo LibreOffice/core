@@ -799,18 +799,8 @@ public:
 
     friend sal_Bool     operator == ( const OString& rStr1, const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.getLength() == rStr2.getLength() && rStr1.compareTo( rStr2 ) == 0; }
-    friend sal_Bool     operator == ( const OString& rStr1, const sal_Char * pStr2 ) SAL_THROW(())
-                        { return rStr1.compareTo( pStr2 ) == 0; }
-    friend sal_Bool     operator == ( const sal_Char * pStr1,   const OString& rStr2 ) SAL_THROW(())
-                        { return OString( pStr1 ).compareTo( rStr2 ) == 0; }
-
     friend sal_Bool     operator != ( const OString& rStr1,     const OString& rStr2 ) SAL_THROW(())
                         { return !(operator == ( rStr1, rStr2 )); }
-    friend sal_Bool     operator != ( const OString& rStr1, const sal_Char * pStr2 ) SAL_THROW(())
-                        { return !(operator == ( rStr1, pStr2 )); }
-    friend sal_Bool     operator != ( const sal_Char * pStr1,   const OString& rStr2 ) SAL_THROW(())
-                        { return !(operator == ( pStr1, rStr2 )); }
-
     friend sal_Bool     operator <  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) < 0; }
     friend sal_Bool     operator >  ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
@@ -819,6 +809,18 @@ public:
                         { return rStr1.compareTo( rStr2 ) <= 0; }
     friend sal_Bool     operator >= ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) >= 0; }
+
+    template< typename T >
+    friend typename internal::CharPtrDetector< T, bool >::Type operator==( const OString& rStr1, const T& value ) SAL_THROW(())
+    {
+        return rStr1.compareTo( value ) == 0;
+    }
+
+    template< typename T >
+    friend typename internal::CharPtrDetector< T, bool >::Type operator==( const T& value, const OString& rStr2 ) SAL_THROW(())
+    {
+        return rStr2.compareTo( value ) == 0;
+    }
 
     /**
      @overload
@@ -829,8 +831,8 @@ public:
     friend bool operator == ( const OString& rStr, const char (&literal)[ N ] ) SAL_THROW(())
     {
         RTL_STRING_CONST_FUNCTION
-        return rStr.getLength() == N - 1 && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length,
-            literal, N - 1 );
+        return rStr.getLength() == N - 1
+            && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length, literal, N - 1 ) == 0;
     }
 
     /**
@@ -856,8 +858,8 @@ public:
     friend bool operator == ( const char (&literal)[ N ], const OString& rStr ) SAL_THROW(())
     {
         RTL_STRING_CONST_FUNCTION
-        return rStr.getLength() == N - 1 && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length,
-            literal, N - 1 );
+        return rStr.getLength() == N - 1
+            && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length, literal, N - 1 ) == 0;
     }
 
     /**
@@ -872,6 +874,18 @@ public:
     {
         RTL_STRING_NON_CONST_FUNCTION
         return rStr.compareTo( value ) == 0;
+    }
+
+    template< typename T >
+    friend typename internal::CharPtrDetector< T, bool >::Type operator!=( const OString& rStr1, const T& value ) SAL_THROW(())
+    {
+        return !(operator == ( rStr1, value ));
+    }
+
+    template< typename T >
+    friend typename internal::CharPtrDetector< T, bool >::Type operator!=( const T& value,   const OString& rStr2 ) SAL_THROW(())
+    {
+        return !(operator == ( value, rStr2 ));
     }
 
     /**
