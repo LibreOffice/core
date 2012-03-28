@@ -375,6 +375,19 @@ public:
     }
 
     /**
+        @overload
+        This function accepts an ASCII string literal as its argument.
+        @since LibreOffice 3.6
+     */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type append( T& literal )
+    {
+        rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), literal,
+            internal::ConstCharArrayDetector< T, void >::size - 1 );
+        return *this;
+    }
+
+    /**
         Appends a 8-Bit ASCII character string to this string buffer.
 
        Since this method is optimized for performance. the ASCII
@@ -416,19 +429,6 @@ public:
     OUStringBuffer & appendAscii( const sal_Char * str, sal_Int32 len)
     {
         rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), str, len );
-        return *this;
-    }
-
-    /**
-        @overload
-        This function accepts an ASCII string literal as its argument.
-        @since LibreOffice 3.6
-     */
-    template< typename T >
-    typename internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type append( T& literal )
-    {
-        rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), literal,
-            internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
 
