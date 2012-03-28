@@ -100,6 +100,7 @@
 #include <com/sun/star/awt/Size.hpp>
 #include <com/sun/star/awt/Point.hpp>
 #include <com/sun/star/drawing/XShapeDescriptor.hpp>
+#include <com/sun/star/text/XText.hpp>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -3027,7 +3028,7 @@ uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (un
 
 namespace {
 
-#define DEBUG_DUMPER 0
+#define DEBUG_DUMPER 1
 
 int writeCallback(void* pContext, const char* sBuffer, int nLen)
 {
@@ -3070,6 +3071,13 @@ void dumpXShape( uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlW
     uno::Reference< lang::XServiceInfo > xServiceInfo( xShape, uno::UNO_QUERY_THROW );
     uno::Sequence< rtl::OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
     sal_Int32 nServices = aServiceNames.getLength();
+    if (xServiceInfo->supportsService("com.sun.star.drawing.Text"))
+    {
+        uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY_THROW);
+        rtl::OUString aText = xText->getString();
+        if(!aText.isEmpty())
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
+    }
     for (sal_Int32 i = 0; i < nServices; ++i)
     {
         if (aServiceNames[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape")))
