@@ -108,7 +108,6 @@ static sal_uInt16 const aImplDoubleByteIdentifierTab[1] = { 0 };
 #include "tcvttcn2.tab"
 #include "tcvttcn6.tab"
 #include "tcvtuni1.tab"
-#include "convertiscii.tab"
 
 #include "convertbig5hkscs.tab"
 #include "converteuctw.tab"
@@ -211,7 +210,6 @@ Impl_getTextEncodingData(rtl_TextEncoding nEncoding) SAL_THROW_EXTERN_C()
             &aImplBig5HkscsTextEncodingData, /* BIG5_HKSCS */
             &aImplTis620TextEncodingData, /* TIS_620 */
             &aImplKoi8UTextEncodingData, /* KOI8_U */
-            &aImplIsciiDevanagariTextEncodingData, /* ISCII_DEVANAGARI */
             &aImplJavaUtf8TextEncodingData, /* JAVA_UTF8 */
             &adobeStandardEncodingData, /* ADOBE_STANDARD */
             &adobeSymbolEncodingData, /* ADOBE_SYMBOL */
