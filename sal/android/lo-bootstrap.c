@@ -1577,6 +1577,27 @@ Java_org_libreoffice_android_Bootstrap_setCommandArgs(JNIEnv* env,
     (*osl_setCommandArgs)(c_argc, c_argv);
 }
 
+// public static native void initUCBhelper();
+
+__attribute__ ((visibility("default")))
+void
+Java_org_libreoffice_android_Bootstrap_initUCBHelper(JNIEnv* env,
+                                                     jobject clazz)
+{
+    void (*InitUCBHelper)(void);
+    (void) env;
+    (void) clazz;
+
+    /* This obviously should be called only after the ucbhelper so has been loaded */
+
+    InitUCBHelper = dlsym(RTLD_DEFAULT, "InitUCBHelper");
+    if (InitUCBHelper == NULL) {
+        LOGE("InitUCBHelper: InitUCBHelper not found");
+        return;
+    }
+    (*InitUCBHelper)();
+}
+
 __attribute__ ((visibility("default")))
 JavaVM *
 lo_get_javavm(void)

@@ -93,6 +93,10 @@ public class Bootstrap extends NativeActivity
     // where the lo-bootstrap library is.
     public static native void setCommandArgs(String[] argv);
 
+    // A wrapper for InitUCBHelper() in he ucbhelper library
+    // (contentbroker.cxx), also this called indirectly through the lo-bootstrap library
+    public static native void initUCBHelper();
+
     public static void setup(Activity activity)
     {
         String dataDir = null;

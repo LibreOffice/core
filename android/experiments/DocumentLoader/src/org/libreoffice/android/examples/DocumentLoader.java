@@ -91,6 +91,8 @@ public class DocumentLoader
 
             Log.i(TAG, "oDesktop is" + (oDesktop!=null ? " not" : "") + " null");
 
+            Bootstrap.initUCBHelper();
+
             com.sun.star.frame.XComponentLoader xCompLoader =
                 (com.sun.star.frame.XComponentLoader)
                      UnoRuntime.queryInterface(
