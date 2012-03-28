@@ -101,8 +101,8 @@ SdPageLink::~SdPageLink()
                 pPage->SetBookmarkName(aBookmarkName);
             }
 
-            List aBookmarkList;
-            aBookmarkList.Insert(&aBookmarkName);
+            std::vector<rtl::OUString> aBookmarkList;
+            aBookmarkList.push_back(aBookmarkName);
             sal_uInt16 nInsertPos = pPage->GetPageNum();
             sal_Bool bLink = sal_True;
             sal_Bool bReplace = sal_True;
@@ -116,7 +116,8 @@ SdPageLink::~SdPageLink()
                 bCopy = sal_True;
             }
 
-            pDoc->InsertBookmarkAsPage(&aBookmarkList, NULL, bLink, bReplace,
+            std::vector<rtl::OUString> aExchangeList;
+            pDoc->InsertBookmarkAsPage(aBookmarkList, aExchangeList, bLink, bReplace,
                                        nInsertPos, bNoDialogs, NULL, bCopy, sal_True, sal_True);
 
             if( !pDoc->pDocLockedInsertingLinks )
