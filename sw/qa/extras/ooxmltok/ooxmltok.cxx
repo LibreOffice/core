@@ -27,6 +27,7 @@
 
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/drawing/XDrawPageSupplier.hpp>
+#include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/text/TextContentAnchorType.hpp>
 
 #include <test/bootstrapfixture.hxx>
@@ -44,10 +45,12 @@ public:
     virtual void setUp();
     virtual void tearDown();
     void testN751054();
+    void testN751117();
 
     CPPUNIT_TEST_SUITE(OoxmlModelTest);
 #if !defined(MACOSX) && !defined(WNT)
     CPPUNIT_TEST(testN751054);
+    CPPUNIT_TEST(testN751117);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -88,6 +91,32 @@ void OoxmlModelTest::testN751054()
     text::TextContentAnchorType eValue;
     xPropertySet->getPropertyValue(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("AnchorType"))) >>= eValue;
     CPPUNIT_ASSERT(eValue != text::TextContentAnchorType_AS_CHARACTER);
+}
+
+void OoxmlModelTest::testN751117()
+{
+    load("n751117.docx");
+
+    uno::Reference<drawing::XDrawPageSupplier> xDrawPageSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xDraws(xDrawPageSupplier->getDrawPage(), uno::UNO_QUERY);
+
+    // First shape: the end should be an arrow, should be rotated and should be flipped.
+    uno::Reference<beans::XPropertySet> xPropertySet(xDraws->getByIndex(0), uno::UNO_QUERY);
+    OUString aValue;
+    xPropertySet->getPropertyValue("LineEndName") >>= aValue;
+    CPPUNIT_ASSERT(aValue.indexOf("Arrow") != -1);
+
+    sal_Int32 nValue = 0;
+    xPropertySet->getPropertyValue("RotateAngle") >>= nValue;
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(90 * 100), nValue);
+
+    uno::Reference<drawing::XShape> xShape(xPropertySet, uno::UNO_QUERY);
+    awt::Size aActualSize(xShape->getSize());
+    CPPUNIT_ASSERT(aActualSize.Width < 0);
+
+    // The second shape should be a line
+    uno::Reference<lang::XServiceInfo> xServiceInfo(xDraws->getByIndex(1), uno::UNO_QUERY);
+    CPPUNIT_ASSERT(xServiceInfo->supportsService("com.sun.star.drawing.LineShape"));
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(OoxmlModelTest);
