@@ -128,10 +128,10 @@ public:
     void                importDefinedName( BiffInputStream& rStrm, sal_Int16 nCalcSheet );
 
     /** Creates a defined name in the Calc document. */
-    void                createNameObject();
+    void                createNameObject( sal_Int32 nIndex );
     /** Converts the formula string or BIFF token array for this defined name. */
     void                convertFormula();
-
+    ApiTokenSequence    getTokens();
     /** Returns true, if this defined name is global in the document. */
     inline bool         isGlobalName() const { return mnCalcSheet < 0; }
     /** Returns true, if this defined name is a special builtin name. */

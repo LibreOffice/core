@@ -42,6 +42,7 @@ namespace com { namespace sun { namespace star {
     namespace sheet { class XNamedRange; }
     namespace sheet { class XSpreadsheet; }
     namespace sheet { class XSpreadsheetDocument; }
+    namespace sheet { struct FormulaToken; }
     namespace style { class XStyle; }
     namespace table { struct CellAddress; }
     namespace table { struct CellRangeAddress; }
@@ -65,6 +66,8 @@ namespace oox { namespace core {
 namespace oox { namespace drawingml {
     class Theme;
 } }
+
+class ScDocument;
 
 namespace oox {
 namespace xls {
@@ -154,7 +157,7 @@ public:
     void                finalizeWorkbookImport();
 
     // document model ---------------------------------------------------------
-
+    ScDocument& getScDocument() const;
     /** Returns a reference to the source/target spreadsheet document model. */
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XSpreadsheetDocument >
                         getDocument() const;
@@ -184,6 +187,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
                         createNamedRangeObject(
                             ::rtl::OUString& orName,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken>& rTokens,
+                            sal_Int32 nIndex,
                             sal_Int32 nNameFlags = 0 ) const;
 
     /** Creates and returns a defined name on-the-fly in the sheet.
@@ -192,6 +197,8 @@ public:
     ::com::sun::star::uno::Reference< ::com::sun::star::sheet::XNamedRange >
                         createLocalNamedRangeObject(
                             ::rtl::OUString& orName,
+                            const ::com::sun::star::uno::Sequence< ::com::sun::star::sheet::FormulaToken>& rTokens,
+                            sal_Int32 nIndex,
                             sal_Int32 nNameFlags = 0, sal_Int32 nTab = -1 ) const;
 
     /** Creates and returns a database range on-the-fly in the Calc document.

@@ -474,7 +474,7 @@ void DefinedName::importDefinedName( BiffInputStream& rStrm, sal_Int16 nCalcShee
     }
 }
 
-void DefinedName::createNameObject()
+void DefinedName::createNameObject( sal_Int32 nIndex )
 {
     // do not create names for (macro) functions or VBA procedures
     // #163146# do not ignore hidden names (may be regular names created by VBA scripts)
@@ -502,20 +502,15 @@ void DefinedName::createNameObject()
 
     // create the name and insert it into the document, maCalcName will be changed to the resulting name
     if (maModel.mnSheet >= 0)
-        mxNamedRange = createLocalNamedRangeObject( maCalcName, nNameFlags, maModel.mnSheet );
+        mxNamedRange = createLocalNamedRangeObject( maCalcName, getTokens(), nIndex, nNameFlags, maModel.mnSheet );
     else
-        mxNamedRange = createNamedRangeObject( maCalcName, nNameFlags );
-    // index of this defined name used in formula token arrays
-    PropertySet aPropSet( mxNamedRange );
-    aPropSet.getProperty( mnTokenIndex, PROP_TokenIndex );
+        mxNamedRange = createNamedRangeObject( maCalcName, getTokens(), nIndex, nNameFlags );
+    mnTokenIndex = nIndex;
 }
 
-void DefinedName::convertFormula()
+ApiTokenSequence
+DefinedName::getTokens()
 {
-    Reference< XFormulaTokens > xTokens( mxNamedRange, UNO_QUERY );
-    if( !xTokens.is() )
-        return;
-
     // convert and set formula of the defined name
     ApiTokenSequence aTokens;
     switch( getFilterType() )
@@ -546,8 +541,14 @@ void DefinedName::convertFormula()
         case FILTER_UNKNOWN:
         break;
     }
-    xTokens->setTokens( aTokens );
+    return aTokens;
+}
 
+void DefinedName::convertFormula()
+{
+    Reference< XFormulaTokens > xTokens( mxNamedRange, UNO_QUERY );
+    if( !xTokens.is() )
+        return;
     // set built-in names (print ranges, repeated titles, filter ranges)
     if( !isGlobalName() ) switch( mcBuiltinId )
     {
@@ -636,10 +637,11 @@ void DefinedNamesBuffer::importDefinedName( BiffInputStream& rStrm )
 void DefinedNamesBuffer::finalizeImport()
 {
     // first insert all names without formula definition into the document, and insert them into the maps
+    int index = 0;
     for( DefNameVector::iterator aIt = maDefNames.begin(), aEnd = maDefNames.end(); aIt != aEnd; ++aIt )
     {
         DefinedNameRef xDefName = *aIt;
-        xDefName->createNameObject();
+        xDefName->createNameObject( ++index );
         // map by sheet index and original model name
         maModelNameMap[ SheetNameKey( xDefName->getLocalCalcSheet(), xDefName->getUpcaseModelName() ) ] = xDefName;
         // map by sheet index and built-in identifier

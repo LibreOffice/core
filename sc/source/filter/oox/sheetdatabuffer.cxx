@@ -396,14 +396,15 @@ void SheetDataBuffer::setRowFormat( sal_Int32 nRow, sal_Int32 nXfId, bool bCusto
         // try to expand cached row range, if formatting is equal
         if( (maXfIdRowRange.maRowRange.mnLast < 0) || !maXfIdRowRange.tryExpand( nRow, nXfId ) )
         {
-            writeXfIdRowRangeProperties( maXfIdRowRange );
+
+            maXfIdRowRangeList[ maXfIdRowRange.mnXfId ].push_back( maXfIdRowRange.maRowRange );
             maXfIdRowRange.set( nRow, nXfId );
         }
     }
     else if( maXfIdRowRange.maRowRange.mnLast >= 0 )
     {
         // finish last cached row range
-        writeXfIdRowRangeProperties( maXfIdRowRange );
+        maXfIdRowRangeList[ maXfIdRowRange.mnXfId ].push_back( maXfIdRowRange.maRowRange );
         maXfIdRowRange.set( -1, -1 );
     }
 }
@@ -428,6 +429,30 @@ void SheetDataBuffer::setStandardNumFmt( const CellAddress& rCellAddr, sal_Int16
     }
 }
 
+void addIfNotInMyMap( StylesBuffer& rStyles, std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList >& rMap, sal_Int32 nXfId, sal_Int32 nFormatId, const ApiCellRangeList& rRangeList )
+{
+    Xf* pXf1 = rStyles.getCellXf( nXfId ).get();
+    if ( pXf1 )
+    {
+        for ( std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList >::iterator it = rMap.begin(), it_end = rMap.end(); it != it_end; ++it )
+        {
+            if ( it->first.second == nFormatId )
+            {
+                Xf* pXf2 = rStyles.getCellXf( it->first.first ).get();
+                if ( *pXf1 == *pXf2 ) // already exists
+                {
+                    // add ranges from the rangelist to the existing rangelist for the
+                    // matching style ( should we check if they overlap ? )
+                    for ( ApiCellRangeList::const_iterator iter = rRangeList.begin(), iter_end =  rRangeList.end(); iter != iter_end; ++iter )
+                       it->second.push_back( *iter );
+                    return;
+                }
+            }
+        }
+        rMap[ std::pair<sal_Int32, sal_Int32>( nXfId, nFormatId ) ] = rRangeList;
+    }
+}
+
 void SheetDataBuffer::finalizeImport()
 {
     // insert all cells of all open cell blocks
@@ -442,11 +467,26 @@ void SheetDataBuffer::finalizeImport()
         finalizeTableOperation( aIt->first, aIt->second );
 
     // write default formatting of remaining row range
-    writeXfIdRowRangeProperties( maXfIdRowRange );
-
+    maXfIdRowRangeList[ maXfIdRowRange.mnXfId ].push_back( maXfIdRowRange.maRowRange );
+    for ( std::map< sal_Int32, std::vector< ValueRange > >::iterator it = maXfIdRowRangeList.begin(), it_end =  maXfIdRowRangeList.end(); it != it_end; ++it )
+    {
+        ApiCellRangeList rangeList;
+        AddressConverter& rAddrConv = getAddressConverter();
+        // get all row ranges for id
+        for ( std::vector< ValueRange >::iterator rangeIter = it->second.begin(), rangeIter_end = it->second.end(); rangeIter != rangeIter_end; ++rangeIter )
+        {
+            CellRangeAddress aRange( getSheetIndex(), 0, rangeIter->mnFirst, rAddrConv.getMaxApiAddress().Column, rangeIter->mnLast );
+            rangeList.push_back( aRange );
+        }
+        PropertySet aPropSet( getCellRangeList( rangeList ) );
+        getStyles().writeCellXfToPropertySet( aPropSet, it->first );
+    }
+    std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList > rangeStyleListMap;
+    // gather all ranges that have the same style and apply them in bulk
     for( XfIdRangeListMap::const_iterator aIt = maXfIdRangeLists.begin(), aEnd = maXfIdRangeLists.end(); aIt != aEnd; ++aIt )
-        writeXfIdRangeListProperties( aIt->first.first, aIt->first.second, aIt->second );
-
+        addIfNotInMyMap( getStyles(), rangeStyleListMap, aIt->first.first, aIt->first.second, aIt->second );
+    for (  std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList >::iterator it = rangeStyleListMap.begin(), it_end = rangeStyleListMap.end(); it != it_end; ++it )
+        writeXfIdRangeListProperties( it->first.first, it->first.second, it->second );
     // merge all cached merged ranges and update right/bottom cell borders
     for( MergedRangeList::iterator aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
         finalizeMergedRange( aIt->maRange );
@@ -530,7 +570,7 @@ void SheetDataBuffer::createSharedFormula( const BinAddress& rMapKey, const ApiT
         append( static_cast< sal_Int32 >( getSheetIndex() + 1 ) ).
         append( sal_Unicode( '_' ) ).append( rMapKey.mnRow ).
         append( sal_Unicode( '_' ) ).append( rMapKey.mnCol ).makeStringAndClear();
-    Reference< XNamedRange > xNamedRange = createNamedRangeObject( aName );
+    Reference< XNamedRange > xNamedRange = createNamedRangeObject( aName, rTokens, 0 );
     OSL_ENSURE( xNamedRange.is(), "SheetDataBuffer::createSharedFormula - cannot create shared formula" );
     PropertySet aNameProps( xNamedRange );
     aNameProps.setProperty( PROP_IsSharedFormula, true );
@@ -542,9 +582,6 @@ void SheetDataBuffer::createSharedFormula( const BinAddress& rMapKey, const ApiT
     {
         // store the token index in the map
         maSharedFormulas[ rMapKey ] = nTokenIndex;
-        // set the formula definition
-        Reference< XFormulaTokens > xTokens( xNamedRange, UNO_QUERY_THROW );
-        xTokens->setTokens( rTokens );
         // retry to insert a pending shared formula cell
         if( mbPendingSharedFmla )
             setCellFormula( maSharedFmlaAddr, resolveSharedFormula( maSharedBaseAddr ) );
@@ -737,8 +774,8 @@ void SheetDataBuffer::finalizeMergedRange( const CellRangeAddress& rRange )
     {
         // merge the cell range
         Reference< XMergeable > xMerge( getCellRange( rRange ), UNO_QUERY_THROW );
-        xMerge->merge( sal_True );
 
+        xMerge->merge( sal_True );
         // if merging this range worked (no overlapping merged ranges), update cell borders
         Reference< XCell > xTopLeft( getCell( CellAddress( getSheetIndex(), rRange.StartColumn, rRange.StartRow ) ), UNO_SET_THROW );
         PropertySet aTopLeftProp( xTopLeft );

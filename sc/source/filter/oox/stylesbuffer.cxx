@@ -3406,6 +3406,41 @@ void StylesBuffer::writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFil
         pFill->writeToPropertyMap( rPropMap );
 }
 
+bool operator==( const XfModel& rXfModel1,  const XfModel& rXfModel2 )
+{
+    return ( rXfModel1.mbCellXf == rXfModel2.mbCellXf &&
+        rXfModel1.mnStyleXfId == rXfModel2.mnStyleXfId &&
+        rXfModel1.mbFontUsed == rXfModel2.mbFontUsed &&
+        rXfModel1.mnFontId == rXfModel2.mnFontId &&
+        rXfModel1.mbNumFmtUsed == rXfModel2.mbNumFmtUsed &&
+        rXfModel1.mnNumFmtId == rXfModel2.mnNumFmtId &&
+        rXfModel1.mbAlignUsed == rXfModel2.mbAlignUsed &&
+        rXfModel1.mbBorderUsed == rXfModel2.mbBorderUsed &&
+        rXfModel1.mnBorderId == rXfModel2.mnBorderId &&
+        rXfModel1.mbAreaUsed == rXfModel2.mbAreaUsed &&
+        rXfModel1.mnFillId == rXfModel2.mnFillId &&
+        rXfModel1.mbProtUsed == rXfModel2.mbProtUsed );
+}
+
+bool operator==( const Xf& rXf1, const Xf& rXf2 )
+{
+    if ( rXf1.maModel == rXf2.maModel )
+    {
+        if ( rXf1.maModel.mbAlignUsed )
+        {
+            if ( !( rXf1.maAlignment.getApiData() == rXf2.maAlignment.getApiData() ) )
+                return false;
+        }
+        if ( rXf1.maModel.mbProtUsed )
+        {
+            if ( !( rXf1.maProtection.getApiData() == rXf2.maProtection.getApiData() ) )
+                return false;
+        }
+        return true;
+    }
+    return false;
+}
+
 void StylesBuffer::writeCellXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const
 {
     if( Xf* pXf = maCellXfs.get( nXfId ).get() )

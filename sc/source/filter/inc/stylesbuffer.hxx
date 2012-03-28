@@ -744,6 +744,8 @@ struct XfModel
     explicit            XfModel();
 };
 
+bool operator==( const XfModel& rXfModel1,  const XfModel& rXfModel2 );
+
 // ============================================================================
 
 /** Represents a cell format or a cell style (called XF, extended format).
@@ -755,6 +757,7 @@ struct XfModel
  */
 class Xf : public WorkbookHelper
 {
+    friend bool operator==( const Xf& rXf1,  const Xf& rXf2 );
 public:
     explicit            Xf( const WorkbookHelper& rHelper );
 
@@ -796,7 +799,6 @@ public:
     static void         writeBiff2CellFormatToPropertySet(
                             const WorkbookHelper& rHelper, PropertySet& rPropSet,
                             sal_uInt8 nFlags1, sal_uInt8 nFlags2, sal_uInt8 nFlags3 );
-
 private:
     /** Sets 'attribute used' flags from the passed BIFF bit field. */
     void                setBiffUsedFlags( sal_uInt8 nUsedFlags );
@@ -807,6 +809,8 @@ private:
     Protection          maProtection;       /// Cell protection data.
     sal_Int32           meRotationRef;      /// Rotation reference dependent on border.
 };
+
+bool operator==( const Xf& rXf1,  const Xf& rXf2 );
 
 typedef ::boost::shared_ptr< Xf > XfRef;
 
