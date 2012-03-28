@@ -261,15 +261,15 @@ void test::ostring::StringLiterals::checkBuffer()
     rtl_string_unittest_const_literal_function = false;
     buf.append( "foo" );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
-    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OString( "foo" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OString( "foo" ), buf.toString());
     rtl_string_unittest_const_literal_function = false;
     buf.append( "bar" );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
-    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OString( "foobar" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OString( "foobar" ), buf.toString());
     rtl_string_unittest_const_literal_function = false;
     buf.insert( 3, "baz" );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
-    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OString( "foobazbar" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OString( "foobazbar" ), buf.toString());
 #else
     buf.append( "foobazbar" );
 #endif
@@ -279,8 +279,8 @@ void test::ostring::StringLiterals::checkBuffer()
     rtl_string_unittest_const_literal = false; // start checking for OString conversions
     rtl_string_unittest_const_literal_function = false; // and check for const variants
     char d[] = "d";
-    CPPUNIT_ASSERT_EQUAL( buf.append( d ).toString(), foobazbard );
-    CPPUNIT_ASSERT_EQUAL( buf.insert( 3, d ).toString(), foodbazbard );
+    CPPUNIT_ASSERT_EQUAL( foobazbard, buf.append( d ).toString());
+    CPPUNIT_ASSERT_EQUAL( foodbazbard, buf.insert( 3, d ).toString() );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == false );
 }

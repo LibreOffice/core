@@ -99,10 +99,10 @@ void test::oustring::StringLiterals::checkCtors()
 
 // Check that contents are correct and equal to the case when RTL_CONSTASCII_USTRINGPARAM is used.
 // Also check that embedded \0 is included.
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" )), rtl::OUString( "" ));
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\0" )), rtl::OUString( "\0" ));
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ab" )), rtl::OUString( "ab" ));
-    CPPUNIT_ASSERT_EQUAL( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "a\0b" )), rtl::OUString( "a\0b" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "" )));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "\0" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "\0" )));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "ab" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "ab" )));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "a\0b" ), rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "a\0b" )));
 }
 
 void test::oustring::StringLiterals::testcall( const char str[] )
@@ -175,11 +175,11 @@ void test::oustring::StringLiterals::checkBuffer()
 {
     rtl::OUStringBuffer buf;
     buf.append( "foo" );
-    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OUString( "foo" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foo" ), buf.toString());
     buf.append( "bar" );
-    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OUString( "foobar" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foobar" ), buf.toString());
     buf.insert( 3, "baz" );
-    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OUString( "foobazbar" ));
+    CPPUNIT_ASSERT_EQUAL( rtl::OUString( "foobazbar" ), buf.toString());
     char d[] = "d";
     CPPUNIT_ASSERT( !VALID_CONVERSION( buf.append( d )));
     CPPUNIT_ASSERT( !VALID_CONVERSION( buf.insert( 0, d )));
