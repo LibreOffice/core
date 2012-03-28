@@ -41,6 +41,9 @@
 #include <com/sun/star/util/XNumberFormatTypes.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <rtl/ustrbuf.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/editobj.hxx>
+#include <svl/eitem.hxx>
 #include "oox/helper/containerhelper.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "oox/helper/propertyset.hxx"
@@ -50,6 +53,12 @@
 #include "formulaparser.hxx"
 #include "sharedstringsbuffer.hxx"
 #include "unitconverter.hxx"
+#include "convuno.hxx"
+#include "markdata.hxx"
+#include "rangelst.hxx"
+#include "document.hxx"
+#include "scitems.hxx"
+#include "cell.hxx"
 
 namespace oox {
 namespace xls {
@@ -279,7 +288,7 @@ void SheetDataBuffer::setStringCell( const CellModel& rModel, sal_Int32 nStringI
         setBlankCell( rModel );
 }
 
-void SheetDataBuffer::setDateTimeCell( const CellModel& rModel, const DateTime& rDateTime )
+void SheetDataBuffer::setDateTimeCell( const CellModel& rModel, const ::com::sun::star::util::DateTime& rDateTime )
 {
     // write serial date/time value into the cell
     double fSerial = getUnitConverter().calcSerialFromDateTime( rDateTime );
@@ -478,8 +487,22 @@ void SheetDataBuffer::finalizeImport()
             CellRangeAddress aRange( getSheetIndex(), 0, rangeIter->mnFirst, rAddrConv.getMaxApiAddress().Column, rangeIter->mnLast );
             rangeList.push_back( aRange );
         }
+#if AVOID_UNO
+        ScRangeList aList;
+        for ( ApiCellRangeList::const_iterator itRange = rangeList.begin(), itRange_end = rangeList.end(); itRange!=itRange_end; ++itRange )
+        {
+            ScRange* pRange = new ScRange();
+            ScUnoConversion::FillScRange( *pRange, *itRange );
+            aList.push_back( pRange );
+        }
+        ScMarkData aMark;
+        aMark.MarkFromRangeList( aList, false );
+
+        getStyles().writeCellXfToMarkData( aMark, it->first, -1 );
+#else
         PropertySet aPropSet( getCellRangeList( rangeList ) );
         getStyles().writeCellXfToPropertySet( aPropSet, it->first );
+#endif
     }
     std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList > rangeStyleListMap;
     // gather all ranges that have the same style and apply them in bulk
@@ -489,9 +512,17 @@ void SheetDataBuffer::finalizeImport()
         writeXfIdRangeListProperties( it->first.first, it->first.second, it->second );
     // merge all cached merged ranges and update right/bottom cell borders
     for( MergedRangeList::iterator aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
+#if AVOID_UNO
+        applyCellMerging( aIt->maRange );
+#else
         finalizeMergedRange( aIt->maRange );
+#endif
     for( MergedRangeList::iterator aIt = maCenterFillRanges.begin(), aEnd = maCenterFillRanges.end(); aIt != aEnd; ++aIt )
+#if AVOID_UNO
+        applyCellMerging( aIt->maRange );
+#else
         finalizeMergedRange( aIt->maRange );
+#endif
 }
 
 // private --------------------------------------------------------------------
@@ -756,6 +787,18 @@ void SheetDataBuffer::writeXfIdRowRangeProperties( const XfIdRowRange& rXfIdRowR
 void SheetDataBuffer::writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 nNumFmtId, const ApiCellRangeList& rRanges ) const
 {
     StylesBuffer& rStyles = getStyles();
+#if AVOID_UNO
+    ScRangeList aList;
+    for ( ApiCellRangeList::const_iterator it = rRanges.begin(), it_end = rRanges.end(); it!=it_end; ++it )
+    {
+        ScRange* pRange = new ScRange();
+        ScUnoConversion::FillScRange( *pRange, *it );
+        aList.push_back( pRange );
+    }
+    ScMarkData aMark;
+    aMark.MarkFromRangeList( aList, false );
+    rStyles.writeCellXfToMarkData( aMark, nXfId, nNumFmtId );
+#else
     PropertyMap aPropMap;
     if( nXfId >= 0 )
         rStyles.writeCellXfToPropertyMap( aPropMap, nXfId );
@@ -763,6 +806,55 @@ void SheetDataBuffer::writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 n
         rStyles.writeNumFmtToPropertyMap( aPropMap, nNumFmtId );
     PropertySet aPropSet( getCellRangeList( rRanges ) );
     aPropSet.setProperties( aPropMap );
+#endif
+}
+
+void lcl_SetBorderLine( ScDocument& rDoc, ScRange& rRange, SCTAB nScTab, sal_uInt16 nLine )
+{
+    SCCOL nFromScCol = (nLine == BOX_LINE_RIGHT) ? rRange.aEnd.Col() : rRange.aStart.Col();
+    SCROW nFromScRow = (nLine == BOX_LINE_BOTTOM) ? rRange.aEnd.Row() : rRange.aStart.Row();
+
+    const SvxBoxItem* pFromItem = static_cast< const SvxBoxItem* >(
+        rDoc.GetAttr( nFromScCol, nFromScRow, nScTab, ATTR_BORDER ) );
+    const SvxBoxItem* pToItem = static_cast< const SvxBoxItem* >(
+        rDoc.GetAttr( rRange.aStart.Col(), rRange.aStart.Row(), nScTab, ATTR_BORDER ) );
+
+    SvxBoxItem aNewItem( *pToItem );
+    aNewItem.SetLine( pFromItem->GetLine( nLine ), nLine );
+    rDoc.ApplyAttr( rRange.aStart.Col(), rRange.aStart.Row(), nScTab, aNewItem );
+}
+
+void SheetDataBuffer::applyCellMerging( const CellRangeAddress& rRange )
+{
+    bool bMultiCol = rRange.StartColumn < rRange.EndColumn;
+    bool bMultiRow = rRange.StartRow < rRange.EndRow;
+
+    ScRange aRange;
+    ScUnoConversion::FillScRange( aRange, rRange );
+    const ScAddress& rStart = aRange.aStart;
+    const ScAddress& rEnd = aRange.aEnd;
+    ScDocument& rDoc = getScDocument();
+    // set correct right border
+    if( bMultiCol )
+        lcl_SetBorderLine( rDoc, aRange, getSheetIndex(), BOX_LINE_RIGHT );
+        // set correct lower border
+    if( bMultiRow )
+        lcl_SetBorderLine( rDoc, aRange, getSheetIndex(), BOX_LINE_BOTTOM );
+    // do merge
+    if( bMultiCol || bMultiRow )
+        rDoc.DoMerge( getSheetIndex(), rStart.Col(), rStart.Row(), rEnd.Col(), rEnd.Row() );
+    // #i93609# merged range in a single row: test if manual row height is needed
+    if( !bMultiRow )
+    {
+        bool bTextWrap = static_cast< const SfxBoolItem* >( rDoc.GetAttr( rStart.Col(), rStart.Row(), rStart.Tab(), ATTR_LINEBREAK ) )->GetValue();
+        if( !bTextWrap && (rDoc.GetCellType( rStart ) == CELLTYPE_EDIT) )
+        {
+            if( const EditTextObject* pEditObj = static_cast< const ScEditCell* >( rDoc.GetCell( rStart ) )->GetData() )
+                bTextWrap = pEditObj->GetParagraphCount() > 1;
+            if( bTextWrap )
+                setManualRowHeight(  rStart.Row() );
+        }
+    }
 }
 
 void SheetDataBuffer::finalizeMergedRange( const CellRangeAddress& rRange )

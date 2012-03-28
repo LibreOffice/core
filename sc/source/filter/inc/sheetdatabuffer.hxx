@@ -269,7 +269,7 @@ private:
 
     /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
     void                writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 nNumFmtId, const ApiCellRangeList& rRanges ) const;
-
+    void                applyCellMerging( const ::com::sun::star::table::CellRangeAddress& rRange );
     /** Merges the passed merged range and updates right/bottom cell borders. */
     void                finalizeMergedRange( const ::com::sun::star::table::CellRangeAddress& rRange );
 

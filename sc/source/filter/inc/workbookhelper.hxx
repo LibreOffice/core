@@ -34,6 +34,9 @@
 #include "oox/helper/storagebase.hxx"
 #include "biffhelper.hxx"
 
+// use AVOID_UNO = 1 to prefer core calls over uno
+#define AVOID_UNO 1
+
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }

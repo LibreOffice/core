@@ -46,18 +46,44 @@
 #include <com/sun/star/table/CellVertJustify2.hpp>
 #include <com/sun/star/table/CellJustifyMethod.hpp>
 #include <com/sun/star/table/TableBorder.hpp>
+#include <editeng/justifyitem.hxx>
+#include <editeng/frmdiritem.hxx>
+#include <editeng/fontitem.hxx>
+#include <editeng/postitem.hxx>
+#include <editeng/fhgtitem.hxx>
+#include <editeng/wghtitem.hxx>
+#include <editeng/udlnitem.hxx>
+#include <editeng/colritem.hxx>
+#include <editeng/crsditem.hxx>
+#include <editeng/cntritem.hxx>
+#include <editeng/escpitem.hxx>
+#include <editeng/shdditem.hxx>
+#include <editeng/eeitem.hxx>
+#include <editeng/boxitem.hxx>
+#include <editeng/bolnitem.hxx>
+#include <editeng/brshitem.hxx>
+#include <svx/rotmodit.hxx>
+#include <tools/fontenum.hxx>
+#include <toolkit/helper/vclunohelper.hxx>
 #include <rtl/tencinfo.h>
 #include <rtl/ustrbuf.hxx>
-#include "oox/core/filterbase.hxx"
-#include "oox/helper/attributelist.hxx"
-#include "oox/helper/containerhelper.hxx"
-#include "oox/helper/propertymap.hxx"
-#include "oox/helper/propertyset.hxx"
+#include <oox/core/filterbase.hxx>
+#include <oox/helper/attributelist.hxx>
+#include <oox/helper/containerhelper.hxx>
+#include <oox/helper/propertymap.hxx>
+#include <oox/helper/propertyset.hxx>
 #include "biffinputstream.hxx"
 #include "condformatbuffer.hxx"
 #include "excelhandlers.hxx"
 #include "themebuffer.hxx"
 #include "unitconverter.hxx"
+#include "document.hxx"
+#include "stlpool.hxx"
+#include "docpool.hxx"
+#include "ftools.hxx"
+#include "scitems.hxx"
+#include "attrib.hxx"
+#include "globstr.hrc"
 
 using ::com::sun::star::table::BorderLine2;
 namespace oox {
@@ -1099,6 +1125,134 @@ bool Font::needsRichTextFormat() const
 {
     return maApiData.mnEscapement != API_ESCAPE_NONE;
 }
+::FontFamily lcl_getFontFamily( sal_Int32 nFamily )
+{
+    namespace cssawt = ::com::sun::star::awt;
+
+    ::FontFamily eScFamily = FAMILY_DONTKNOW;
+    switch( nFamily )
+    {
+        case cssawt::FontFamily::DONTKNOW:
+            eScFamily = FAMILY_DONTKNOW;
+            break;
+        case cssawt::FontFamily::ROMAN:
+            eScFamily = FAMILY_ROMAN;
+            break;
+        case cssawt::FontFamily::SWISS:
+            eScFamily = FAMILY_SWISS;
+            break;
+        case cssawt::FontFamily::MODERN:
+            eScFamily = FAMILY_MODERN;
+            break;
+        case cssawt::FontFamily::SCRIPT:
+            eScFamily = FAMILY_SCRIPT;
+            break;
+        case cssawt::FontFamily::DECORATIVE:
+            eScFamily = FAMILY_DECORATIVE;
+            break;
+    }
+    return eScFamily;
+}
+
+void Font::fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool bSkipPoolDefs ) const
+{
+    namespace cssawt = ::com::sun::star::awt;
+    if ( maUsedFlags.mbNameUsed )
+    {
+        if( !maApiData.maLatinFont.maName.isEmpty() )
+        {
+            rtl_TextEncoding eFontEnc = maApiData.maLatinFont.mnTextEnc;
+            SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maLatinFont.mnFamily ), maApiData.maLatinFont.maName, rtl::OUString(),
+                PITCH_DONTKNOW, eFontEnc, ATTR_FONT );
+        }
+        if( !maApiData.maAsianFont.maName.isEmpty() )
+        {
+            rtl_TextEncoding eFontEnc = maApiData.maAsianFont.mnTextEnc;
+            SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maAsianFont.mnFamily ), maApiData.maAsianFont.maName, rtl::OUString(),
+                PITCH_DONTKNOW, eFontEnc, ATTR_FONT );
+        }
+        if( !maApiData.maCmplxFont.maName.isEmpty() )
+        {
+            rtl_TextEncoding eFontEnc = maApiData.maCmplxFont.mnTextEnc;
+            SvxFontItem aFontItem( lcl_getFontFamily( maApiData.maCmplxFont.mnFamily ), maApiData.maCmplxFont.maName, rtl::OUString(),
+                PITCH_DONTKNOW, eFontEnc, ATTR_FONT );
+        }
+    }
+    // font height
+    if( maUsedFlags.mbHeightUsed )
+    {
+        // leave in twips ?
+        SvxFontHeightItem aHeightItem( maApiData.maDesc.Height, 100, ATTR_FONT_HEIGHT );
+        ScfTools::PutItem( rItemSet, aHeightItem, ATTR_FONT_HEIGHT, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aHeightItem, ATTR_CJK_FONT_HEIGHT, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aHeightItem, ATTR_CTL_FONT_HEIGHT, bSkipPoolDefs );
+    }
+    // font weight
+    if( maUsedFlags.mbWeightUsed )
+    {
+        ::FontWeight fWeight = VCLUnoHelper::ConvertFontWeight( maApiData.maDesc.Weight );
+        SvxWeightItem aWeightItem( fWeight, ATTR_FONT_WEIGHT );
+        ScfTools::PutItem( rItemSet, aWeightItem, ATTR_FONT_WEIGHT, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aWeightItem, ATTR_CTL_FONT_WEIGHT, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aWeightItem, ATTR_CJK_FONT_WEIGHT, bSkipPoolDefs );
+    }
+    // font posture
+    if( maUsedFlags.mbPostureUsed )
+    {
+        SvxPostureItem aPostItem( ( maApiData.maDesc.Slant == cssawt::FontSlant_ITALIC ) ? ITALIC_NORMAL :  ITALIC_NONE,  ATTR_FONT_POSTURE);
+        ScfTools::PutItem( rItemSet, aPostItem, ATTR_FONT_POSTURE, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aPostItem, ATTR_CJK_FONT_POSTURE, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aPostItem, ATTR_CTL_FONT_POSTURE, bSkipPoolDefs );
+    }
+    // character color
+    if( maUsedFlags.mbColorUsed )
+    {
+        ScfTools::PutItem( rItemSet,SvxColorItem( maApiData.mnColor, ATTR_FONT_COLOR  ) , bSkipPoolDefs );
+    }
+    // underline style
+    if( maUsedFlags.mbUnderlineUsed )
+    {
+        ::FontUnderline eScUnderl;
+        if ( maApiData.maDesc.Underline == cssawt::FontUnderline::DOUBLE )
+            eScUnderl = UNDERLINE_DOUBLE;
+        else if ( maApiData.maDesc.Underline == cssawt::FontUnderline::SINGLE )
+            eScUnderl = UNDERLINE_SINGLE;
+        else
+            eScUnderl = UNDERLINE_NONE;
+        SvxUnderlineItem aUnderlItem( eScUnderl, ATTR_FONT_UNDERLINE );
+        ScfTools::PutItem( rItemSet, aUnderlItem, ATTR_FONT_UNDERLINE, bSkipPoolDefs );
+    }
+    // strike out style
+    if( maUsedFlags.mbStrikeoutUsed )
+    {
+        ScfTools::PutItem( rItemSet, SvxCrossedOutItem( maModel.mbStrikeout ? STRIKEOUT_SINGLE : STRIKEOUT_NONE, ATTR_FONT_CROSSEDOUT ), ATTR_FONT_CROSSEDOUT, bSkipPoolDefs );
+    }
+
+    // outline style
+    if( maUsedFlags.mbOutlineUsed )
+    {
+        ScfTools::PutItem( rItemSet, SvxContourItem( maApiData.mbOutline, ATTR_FONT_CONTOUR ), ATTR_FONT_CONTOUR, bSkipPoolDefs );
+    }
+
+    // shadow style
+    if( maUsedFlags.mbShadowUsed )
+    {
+        ScfTools::PutItem( rItemSet, SvxShadowedItem( maApiData.mbShadow, ATTR_FONT_SHADOWED ), ATTR_FONT_SHADOWED, bSkipPoolDefs );
+    }
+    if( maUsedFlags.mbEscapementUsed )
+    {
+        SvxEscapement eScEscapem = SVX_ESCAPEMENT_OFF;
+        if ( maApiData.mnEscapement == API_ESCAPE_SUPERSCRIPT )
+            eScEscapem = SVX_ESCAPEMENT_SUPERSCRIPT;
+        else if ( maApiData.mnEscapement == API_ESCAPE_SUBSCRIPT )
+            eScEscapem = SVX_ESCAPEMENT_SUBSCRIPT;
+        rItemSet.Put( SvxEscapementItem( eScEscapem, EE_CHAR_ESCAPEMENT ) );
+        if( ePropType == FONT_PROPTYPE_TEXT )
+        {
+           // #TODO handle EscapementHeight
+        }
+    }
+}
 
 void Font::writeToPropertyMap( PropertyMap& rPropMap, FontPropertyType ePropType ) const
 {
@@ -1428,6 +1582,105 @@ void Alignment::finalizeImport()
 
 }
 
+::SvxCellVerJustify Alignment::GetScVerAlign() const
+{
+    namespace csstab = ::com::sun::star::table;
+    ::SvxCellVerJustify nVert = ::SVX_VER_JUSTIFY_STANDARD;
+    switch ( maApiData.mnVerJustify )
+    {
+        case csstab::CellVertJustify2::BOTTOM:
+            nVert = ::SVX_VER_JUSTIFY_BOTTOM;
+            break;
+        case csstab::CellVertJustify2::CENTER:
+            nVert = ::SVX_VER_JUSTIFY_CENTER;
+            break;
+        case csstab::CellVertJustify2::TOP:
+            nVert = ::SVX_VER_JUSTIFY_TOP;
+            break;
+        case csstab::CellVertJustify2::BLOCK:
+            nVert = ::SVX_VER_JUSTIFY_BLOCK;
+            break;
+        case csstab::CellVertJustify2::STANDARD:
+        default:
+            nVert = ::SVX_VER_JUSTIFY_STANDARD;
+            break;
+    }
+    return nVert;
+}
+
+::SvxCellHorJustify Alignment::GetScHorAlign() const
+{
+    namespace csstab = ::com::sun::star::table;
+    ::SvxCellHorJustify nHori = ::SVX_HOR_JUSTIFY_STANDARD;
+    switch( maApiData.meHorJustify )
+    {
+        case csstab::CellHoriJustify_LEFT:
+            nHori = ::SVX_HOR_JUSTIFY_LEFT;
+            break;
+        case csstab::CellHoriJustify_CENTER:
+            nHori = ::SVX_HOR_JUSTIFY_CENTER;
+            break;
+        case csstab::CellHoriJustify_RIGHT:
+            nHori = ::SVX_HOR_JUSTIFY_RIGHT;
+            break;
+        case csstab::CellHoriJustify_BLOCK:
+            nHori = ::SVX_HOR_JUSTIFY_BLOCK;
+            break;
+        case csstab::CellHoriJustify_REPEAT:
+            nHori = ::SVX_HOR_JUSTIFY_REPEAT;
+            break;
+        case csstab::CellHoriJustify_STANDARD:
+        default:
+            nHori = ::SVX_HOR_JUSTIFY_STANDARD;
+            break;
+    }
+    return nHori;
+}
+
+::SvxFrameDirection Alignment::GetScFrameDir() const
+{
+    namespace csstxt = ::com::sun::star::text;
+    ::SvxFrameDirection eFrameDir = ::FRMDIR_ENVIRONMENT;
+    switch( maApiData.mnWritingMode )
+    {
+        case csstxt::WritingMode2::PAGE:
+            eFrameDir = ::FRMDIR_ENVIRONMENT;
+            break;
+        case csstxt::WritingMode2::LR_TB:
+            eFrameDir = ::FRMDIR_HORI_LEFT_TOP;
+            break;
+        case csstxt::WritingMode2::RL_TB:
+            eFrameDir = ::FRMDIR_HORI_RIGHT_TOP;
+            break;
+        default:
+            OSL_FAIL( "GetScFrameDir - unknown CTL text direction" );
+    }
+    return eFrameDir;
+}
+
+void Alignment::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
+{
+    namespace csstab = ::com::sun::star::table;
+    // horizontal alignment
+    ScfTools::PutItem( rItemSet, SvxHorJustifyItem( GetScHorAlign(), ATTR_HOR_JUSTIFY ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxJustifyMethodItem( ( maApiData.mnHorJustifyMethod == csstab::CellJustifyMethod::DISTRIBUTE ) ? ::SVX_JUSTIFY_METHOD_DISTRIBUTE : ::SVX_JUSTIFY_METHOD_AUTO, ATTR_HOR_JUSTIFY_METHOD ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SvxVerJustifyItem( GetScVerAlign(), ATTR_VER_JUSTIFY ), bSkipPoolDefs );
+    // vertical alignment
+    ScfTools::PutItem( rItemSet, SvxJustifyMethodItem( ( maApiData.mnVerJustifyMethod == csstab::CellJustifyMethod::DISTRIBUTE ) ? ::SVX_JUSTIFY_METHOD_DISTRIBUTE : ::SVX_JUSTIFY_METHOD_AUTO, ATTR_VER_JUSTIFY_METHOD ), bSkipPoolDefs );
+
+    // CTL text direction
+    ScfTools::PutItem( rItemSet, SvxFrameDirectionItem( GetScFrameDir(), ATTR_WRITINGDIR ), bSkipPoolDefs );
+    // set an angle in the range from -90 to 90 degrees
+    ScfTools::PutItem( rItemSet, SfxInt32Item( ATTR_ROTATE_VALUE, maApiData.mnRotation ), bSkipPoolDefs );
+    // Orientation
+    ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_STACKED, maApiData.meOrientation == csstab::CellOrientation_STACKED ), bSkipPoolDefs );
+    // indent
+    ScfTools::PutItem( rItemSet, SfxUInt16Item( ATTR_INDENT, maApiData.mnIndent ), bSkipPoolDefs );
+    // line wrap
+    ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_LINEBREAK, maApiData.mbWrapText ), bSkipPoolDefs );
+    ScfTools::PutItem( rItemSet, SfxBoolItem( ATTR_SHRINKTOFIT, maApiData.mbShrink ), bSkipPoolDefs );
+}
+
 void Alignment::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     rPropMap[ PROP_HoriJustify ]     <<= maApiData.meHorJustify;
@@ -1506,6 +1759,11 @@ void Protection::finalizeImport()
 void Protection::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     rPropMap[ PROP_CellProtection ] <<= maApiData.maCellProt;
+}
+
+void Protection::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
+{
+    ScfTools::PutItem( rItemSet, ScProtectionAttr( maApiData.maCellProt.IsLocked, maApiData.maCellProt.IsFormulaHidden ), bSkipPoolDefs );
 }
 
 // ============================================================================
@@ -1746,6 +2004,49 @@ void Border::finalizeImport()
         convertBorderLine( maApiData.maTLtoBR, maModel.maDiagonal );
     if( maModel.mbDiagBLtoTR )
         convertBorderLine( maApiData.maBLtoTR, maModel.maDiagonal );
+}
+
+void Border::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
+{
+    if( maApiData.mbBorderUsed )
+    {
+         SvxBoxItem aBoxItem( ATTR_BORDER );
+         ::editeng::SvxBorderLine aLine;
+
+         if ( SvxBoxItem::LineToSvxLine(maApiData.maLeft, aLine, true ) )
+         {
+             aBoxItem.SetLine( &aLine, BOX_LINE_LEFT );
+         }
+         if ( SvxBoxItem::LineToSvxLine(maApiData.maRight, aLine, true ) )
+         {
+             aBoxItem.SetLine( &aLine, BOX_LINE_RIGHT );
+         }
+         if ( SvxBoxItem::LineToSvxLine(maApiData.maTop, aLine, true ) )
+         {
+             aBoxItem.SetLine( &aLine, BOX_LINE_TOP );
+         }
+         if ( SvxBoxItem::LineToSvxLine(maApiData.maBottom, aLine, true ) )
+         {
+             aBoxItem.SetLine( &aLine, BOX_LINE_BOTTOM );
+         }
+         ScfTools::PutItem( rItemSet, aBoxItem, bSkipPoolDefs );
+    }
+    if ( maApiData.mbDiagUsed )
+    {
+        SvxLineItem aTLBRItem( ATTR_BORDER_TLBR );
+        SvxLineItem aBLTRItem( ATTR_BORDER_BLTR );
+        ::editeng::SvxBorderLine aLine;
+        if ( SvxBoxItem::LineToSvxLine(maApiData.maTLtoBR, aLine, true ) )
+        {
+            aTLBRItem.SetLine( &aLine );
+        }
+        if ( SvxBoxItem::LineToSvxLine(maApiData.maBLtoTR, aLine, true ) )
+        {
+            aBLTRItem.SetLine( &aLine );
+        }
+        ScfTools::PutItem( rItemSet, aTLBRItem, bSkipPoolDefs );
+        ScfTools::PutItem( rItemSet, aBLTRItem, bSkipPoolDefs );
+    }
 }
 
 void Border::writeToPropertyMap( PropertyMap& rPropMap ) const
@@ -2194,6 +2495,23 @@ void Fill::finalizeImport()
     }
 }
 
+void Fill::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
+{
+    if( maApiData.mbUsed )
+    {
+        SvxBrushItem aBrushItem( ATTR_BACKGROUND );
+        if ( maApiData.mbTransparent )
+        {
+            aBrushItem.SetColor( ::Color( COL_TRANSPARENT ) );
+        }
+        else
+        {
+            aBrushItem.SetColor( maApiData.mnColor  );
+        }
+        ScfTools::PutItem( rItemSet, aBrushItem, bSkipPoolDefs );
+    }
+}
+
 void Fill::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     if( maApiData.mbUsed )
@@ -2227,7 +2545,8 @@ Xf::Xf( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
     maAlignment( rHelper ),
     maProtection( rHelper ),
-    meRotationRef( ::com::sun::star::table::CellVertJustify2::STANDARD )
+    meRotationRef( ::com::sun::star::table::CellVertJustify2::STANDARD ),
+    mpStyleSheet( NULL )
 {
 }
 
@@ -2410,51 +2729,50 @@ void Xf::importXf( BiffInputStream& rStrm )
 
 void Xf::finalizeImport()
 {
-    StylesBuffer& rStyles = getStyles();
-
     // alignment and protection
     maAlignment.finalizeImport();
     maProtection.finalizeImport();
-
-    /*  Enables the used flags, if the formatting attributes differ from the
-        style XF. In cell XFs Excel uses the cell attributes, if they differ
-        from the parent style XF (even if the used flag is switched off).
-        #109899# ...or if the respective flag is not set in parent style XF.
-     */
-    const Xf* pStyleXf = isCellXf() ? rStyles.getStyleXf( maModel.mnStyleXfId ).get() : 0;
-    if( pStyleXf )
-    {
-        const XfModel& rStyleData = pStyleXf->maModel;
-        if( !maModel.mbFontUsed )
-            maModel.mbFontUsed = !rStyleData.mbFontUsed || (maModel.mnFontId != rStyleData.mnFontId);
-        if( !maModel.mbNumFmtUsed )
-            maModel.mbNumFmtUsed = !rStyleData.mbNumFmtUsed || (maModel.mnNumFmtId != rStyleData.mnNumFmtId);
-        if( !maModel.mbAlignUsed )
-            maModel.mbAlignUsed = !rStyleData.mbAlignUsed || !(maAlignment.getApiData() == pStyleXf->maAlignment.getApiData());
-        if( !maModel.mbProtUsed )
-            maModel.mbProtUsed = !rStyleData.mbProtUsed || !(maProtection.getApiData() == pStyleXf->maProtection.getApiData());
-        if( !maModel.mbBorderUsed )
-            maModel.mbBorderUsed = !rStyleData.mbBorderUsed || !rStyles.equalBorders( maModel.mnBorderId, rStyleData.mnBorderId );
-        if( !maModel.mbAreaUsed )
-            maModel.mbAreaUsed = !rStyleData.mbAreaUsed || !rStyles.equalFills( maModel.mnFillId, rStyleData.mnFillId );
-    }
-
-    /*  #i38709# Decide which rotation reference mode to use. If any outer
-        border line of the cell is set (either explicitly or via cell style),
-        and the cell contents are rotated, set rotation reference to bottom of
-        cell. This causes the borders to be painted rotated with the text. */
-    if( const Alignment* pAlignment = maModel.mbAlignUsed ? &maAlignment : (pStyleXf ? &pStyleXf->maAlignment : 0) )
-    {
-        sal_Int32 nBorderId = maModel.mbBorderUsed ? maModel.mnBorderId : (pStyleXf ? pStyleXf->maModel.mnBorderId : -1);
-        if( const Border* pBorder = rStyles.getBorder( nBorderId ).get() )
-            if( (pAlignment->getApiData().mnRotation != 0) && pBorder->getApiData().hasAnyOuterBorder() )
-                meRotationRef = ::com::sun::star::table::CellVertJustify2::BOTTOM;
-    }
+    createPattern();
 }
 
 FontRef Xf::getFont() const
 {
     return getStyles().getFont( maModel.mnFontId );
+}
+
+void Xf::writeToMarkData( ::ScMarkData& rMarkData, sal_Int32 nNumFmtId  )
+{
+    createPattern();
+    ScPatternAttr& rPat = *mpPattern;
+    ScDocument& rDoc = getScDocument();
+    if ( isCellXf() )
+    {
+        if ( mpStyleSheet )
+        {
+            // Apply style sheet.  Don't clear the direct formats.
+            rPat.SetStyleSheet(mpStyleSheet, false);
+        }
+        else
+        {
+            ScStyleSheetPool* pStylePool = rDoc.GetStyleSheetPool();
+            if (pStylePool)
+            {
+                ScStyleSheet* pStyleSheet = static_cast<ScStyleSheet*>(
+                    pStylePool->Find(
+                        ScGlobal::GetRscString(STR_STYLENAME_STANDARD), SFX_STYLE_FAMILY_PARA));
+
+                if (pStyleSheet)
+                    rPat.SetStyleSheet(pStyleSheet, false);
+            }
+        }
+    }
+    if ( nNumFmtId >= 0 )
+    {
+        ScPatternAttr aNumPat(rDoc.GetPool());
+        getStyles().writeNumFmtToItemSet( aNumPat.GetItemSet(), nNumFmtId );
+        rPat.GetItemSet().Put(aNumPat.GetItemSet());
+    }
+    rDoc.ApplySelectionPattern( rPat, rMarkData );
 }
 
 void Xf::writeToPropertyMap( PropertyMap& rPropMap ) const
@@ -2543,6 +2861,95 @@ void Xf::setBiffUsedFlags( sal_uInt8 nUsedFlags )
     maModel.mbProtUsed   = isCellXf() == getFlag( nUsedFlags, BIFF_XF_PROT_USED );
     maModel.mbBorderUsed = isCellXf() == getFlag( nUsedFlags, BIFF_XF_BORDER_USED );
     maModel.mbAreaUsed   = isCellXf() == getFlag( nUsedFlags, BIFF_XF_AREA_USED );
+}
+
+const ::ScPatternAttr&
+Xf::createPattern( bool bSkipPoolDefs )
+{
+    if( mpPattern.get() )
+        return *mpPattern;
+    // create new pattern attribute set
+    mpPattern.reset( new ::ScPatternAttr( getScDocument().GetPool() ) );
+    SfxItemSet& rItemSet = mpPattern->GetItemSet();
+    /*  Enables the used flags, if the formatting attributes differ from the
+        style XF. In cell XFs Excel uses the cell attributes, if they differ
+        from the parent style XF (even if the used flag is switched off).
+        #109899# ...or if the respective flag is not set in parent style XF.
+     */
+    StylesBuffer& rStyles = getStyles();
+
+    const Xf* pStyleXf = isCellXf() ? rStyles.getStyleXf( maModel.mnStyleXfId ).get() : 0;
+    if( pStyleXf )
+    {
+        const XfModel& rStyleData = pStyleXf->maModel;
+        if( !maModel.mbFontUsed )
+            maModel.mbFontUsed = !rStyleData.mbFontUsed || (maModel.mnFontId != rStyleData.mnFontId);
+        if( !maModel.mbNumFmtUsed )
+            maModel.mbNumFmtUsed = !rStyleData.mbNumFmtUsed || (maModel.mnNumFmtId != rStyleData.mnNumFmtId);
+        if( !maModel.mbAlignUsed )
+            maModel.mbAlignUsed = !rStyleData.mbAlignUsed || !(maAlignment.getApiData() == pStyleXf->maAlignment.getApiData());
+        if( !maModel.mbProtUsed )
+            maModel.mbProtUsed = !rStyleData.mbProtUsed || !(maProtection.getApiData() == pStyleXf->maProtection.getApiData());
+        if( !maModel.mbBorderUsed )
+            maModel.mbBorderUsed = !rStyleData.mbBorderUsed || !rStyles.equalBorders( maModel.mnBorderId, rStyleData.mnBorderId );
+        if( !maModel.mbAreaUsed )
+            maModel.mbAreaUsed = !rStyleData.mbAreaUsed || !rStyles.equalFills( maModel.mnFillId, rStyleData.mnFillId );
+    }
+    // cell protection
+    if( maModel.mbProtUsed )
+    {
+        maProtection.fillToItemSet( rItemSet, bSkipPoolDefs );
+    }
+
+    // font
+    if( maModel.mbFontUsed )
+    {
+        rStyles.writeFontToItemSet( rItemSet, maModel.mnFontId, bSkipPoolDefs );
+    }
+
+    // value format
+    if( maModel.mbNumFmtUsed )
+    {
+        rStyles.writeNumFmtToItemSet( rItemSet, maModel.mnNumFmtId, bSkipPoolDefs );
+    }
+    // alignment
+    if( maModel.mbAlignUsed )
+    {
+        maAlignment.fillToItemSet( rItemSet, bSkipPoolDefs );
+    }
+
+    // border
+    if( maModel.mbBorderUsed )
+    {
+        rStyles.writeBorderToItemSet( rItemSet, maModel.mnBorderId, bSkipPoolDefs );
+    }
+
+    // area
+    if( maModel.mbAreaUsed )
+    {
+        rStyles.writeFillToItemSet( rItemSet, maModel.mnFillId, bSkipPoolDefs );
+    }
+
+    /*  #i38709# Decide which rotation reference mode to use. If any outer
+        border line of the cell is set (either explicitly or via cell style),
+        and the cell contents are rotated, set rotation reference to bottom of
+        cell. This causes the borders to be painted rotated with the text. */
+    if( const Alignment* pAlignment = maModel.mbAlignUsed ? &maAlignment : (pStyleXf ? &pStyleXf->maAlignment : 0) )
+    {
+        SvxRotateMode eRotateMode = SVX_ROTATE_MODE_STANDARD;
+        sal_Int32 nBorderId = maModel.mbBorderUsed ? maModel.mnBorderId : (pStyleXf ? pStyleXf->maModel.mnBorderId : -1);
+        if( const Border* pBorder = rStyles.getBorder( nBorderId ).get() )
+        {
+            if( (pAlignment->getApiData().mnRotation != 0) && pBorder->getApiData().hasAnyOuterBorder() )
+            {
+                meRotationRef = ::com::sun::star::table::CellVertJustify2::BOTTOM;
+                eRotateMode = SVX_ROTATE_MODE_BOTTOM;
+            }
+        }
+        ScfTools::PutItem( rItemSet, SvxRotateModeItem( eRotateMode, ATTR_ROTATE_MODE ), bSkipPoolDefs );
+    }
+
+    return *mpPattern;
 }
 
 // ============================================================================
@@ -2798,7 +3205,8 @@ bool CellStyleModel::isDefaultStyle() const
 
 CellStyle::CellStyle( const WorkbookHelper& rHelper ) :
     WorkbookHelper( rHelper ),
-    mbCreated( false )
+    mbCreated( false ),
+    mpStyleSheet( NULL )
 {
 }
 
@@ -2860,10 +3268,41 @@ void CellStyle::importStyle( BiffInputStream& rStrm )
 
 void CellStyle::createCellStyle()
 {
+
     // #i1624# #i1768# ignore unnamed user styles
     if( !mbCreated )
         mbCreated = maFinalName.isEmpty();
+#if AVOID_UNO
+    ::ScDocument& rDoc = getScDocument();
+    if( !mbCreated && !mpStyleSheet )
+    {
+        bool bCreatePattern = false;
+        Xf* pXF = getStyles().getStyleXf( maModel.mnXfId ).get();
 
+        bool bDefStyle = maModel.isDefaultStyle();
+        if( bDefStyle )
+        {
+            // use existing "Default" style sheet
+            mpStyleSheet = static_cast< ScStyleSheet* >( static_cast< ScStyleSheetPool* >( rDoc.GetStyleSheetPool() )->Find(
+                getStyles().getDefaultStyleName(), SFX_STYLE_FAMILY_PARA ) );
+            OSL_ENSURE( mpStyleSheet, "CellStyle::createStyle - Default style not found" );
+            bCreatePattern = true;
+        }
+        else
+        {
+            mpStyleSheet = static_cast< ScStyleSheet* >( static_cast< ScStyleSheetPool* >( rDoc.GetStyleSheetPool() )->Find( maFinalName, SFX_STYLE_FAMILY_PARA ) );
+            if( !mpStyleSheet )
+            {
+                mpStyleSheet = &static_cast< ScStyleSheet& >( rDoc.GetStyleSheetPool()->Make( maFinalName, SFX_STYLE_FAMILY_PARA, SFXSTYLEBIT_USERDEF ) );
+                bCreatePattern = true;
+            }
+        }
+
+        // bDefStyle==true omits default pool items in CreatePattern()
+        if( bCreatePattern && mpStyleSheet && pXF )
+            mpStyleSheet->GetItemSet().Put( pXF->createPattern( bDefStyle ).GetItemSet() );
+    }
+#else
     /*  #i103281# do not create another style of the same name, if it exists
         already. This is needed to prevent that styles pasted from clipboard
         get duplicated over and over. */
@@ -2890,6 +3329,15 @@ void CellStyle::createCellStyle()
     catch( Exception& )
     {
     }
+#endif
+}
+
+ScStyleSheet*
+CellStyle::createStyleSheet()
+{
+    if ( !mpStyleSheet )
+        createCellStyle();
+    return mpStyleSheet;
 }
 
 void CellStyle::finalizeImport( const OUString& rFinalName )
@@ -3383,15 +3831,32 @@ OUString StylesBuffer::createDxfStyle( sal_Int32 nDxfId ) const
     return rStyleName;
 }
 
+void StylesBuffer::writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs ) const
+{
+    if( Font* pFont = maFonts.get( nFontId ).get() )
+        pFont->fillToItemSet( rItemSet, FONT_PROPTYPE_CELL, bSkipPoolDefs );
+}
+
 void StylesBuffer::writeFontToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFontId ) const
 {
     if( Font* pFont = maFonts.get( nFontId ).get() )
         pFont->writeToPropertyMap( rPropMap, FONT_PROPTYPE_CELL );
 }
 
+void StylesBuffer::writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const
+{
+    maNumFmts.fillToItemSet( rItemSet, nNumFmtId, bSkipPoolDefs );
+}
+
 void StylesBuffer::writeNumFmtToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const
 {
     maNumFmts.writeToPropertyMap( rPropMap, nNumFmtId );
+}
+
+void StylesBuffer::writeBorderToItemSet( SfxItemSet& rItemSet, sal_Int32 nBorderId, bool bSkipPoolDefs ) const
+{
+    if( Border* pBorder = maBorders.get( nBorderId ).get() )
+        pBorder->fillToItemSet( rItemSet, bSkipPoolDefs );
 }
 
 void StylesBuffer::writeBorderToPropertyMap( PropertyMap& rPropMap, sal_Int32 nBorderId ) const
@@ -3400,10 +3865,22 @@ void StylesBuffer::writeBorderToPropertyMap( PropertyMap& rPropMap, sal_Int32 nB
         pBorder->writeToPropertyMap( rPropMap );
 }
 
+void StylesBuffer::writeFillToItemSet( SfxItemSet& rItemSet, sal_Int32 nFillId, bool bSkipPoolDefs ) const
+{
+    if( Fill* pFill = maFills.get( nFillId ).get() )
+        pFill->fillToItemSet( rItemSet, bSkipPoolDefs );
+}
+
 void StylesBuffer::writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFillId ) const
 {
     if( Fill* pFill = maFills.get( nFillId ).get() )
         pFill->writeToPropertyMap( rPropMap );
+}
+
+void StylesBuffer::writeCellXfToMarkData( ScMarkData& rMark,  sal_Int32 nXfId, sal_Int32 nNumFmtId  )
+{
+    if( Xf* pXf = maCellXfs.get( nXfId ).get() )
+        pXf->writeToMarkData( rMark, nNumFmtId );
 }
 
 bool operator==( const XfModel& rXfModel1,  const XfModel& rXfModel2 )

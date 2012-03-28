@@ -30,6 +30,7 @@
 #define OOX_XLS_NUMBERFORMATSBUFFER_HXX
 
 #include <com/sun/star/lang/Locale.hpp>
+#include <svl/itemset.hxx>
 #include "workbookhelper.hxx"
 
 namespace com { namespace sun { namespace star {
@@ -85,7 +86,7 @@ public:
     sal_Int32           finalizeImport(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::util::XNumberFormats >& rxNumFmts,
                             const ::com::sun::star::lang::Locale& rFromLocale );
-
+    void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const;
     /** Writes the number format to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
@@ -115,6 +116,8 @@ public:
 
     /** Final processing after import of all style settings. */
     void                finalizeImport();
+
+    void                fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs = false ) const;
 
     /** Writes the specified number format to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const;

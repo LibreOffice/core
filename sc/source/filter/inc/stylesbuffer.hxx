@@ -40,7 +40,12 @@
 #include "oox/helper/refmap.hxx"
 #include "oox/helper/refvector.hxx"
 #include "numberformatsbuffer.hxx"
+#include "patattr.hxx"
+#include "stlsheet.hxx"
+#include <editeng/svxenum.hxx>
+#include <editeng/frmdir.hxx>
 
+class ScMarkData;
 namespace com { namespace sun { namespace star {
     namespace awt { struct FontDescrtiptor; }
 } } }
@@ -303,6 +308,7 @@ public:
         needs an rich text cell for this attribute. */
     bool                needsRichTextFormat() const;
 
+    void                fillToItemSet( SfxItemSet& rItemSet, FontPropertyType ePropType, bool bSkipPoolDefs = false ) const;
     /** Writes all font attributes to the passed property map. */
     void                writeToPropertyMap(
                             PropertyMap& rPropMap,
@@ -411,10 +417,14 @@ public:
     /** Returns the converted API alignment data struct. */
     inline const ApiAlignmentData& getApiData() const { return maApiData; }
 
+    void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
     /** Writes all alignment attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
 private:
+    ::SvxCellHorJustify GetScHorAlign() const;
+    ::SvxCellVerJustify GetScVerAlign() const;
+    ::SvxFrameDirection GetScFrameDir() const;
     AlignmentModel      maModel;            /// Alignment model data.
     ApiAlignmentData    maApiData;          /// Alignment data converted to API constants.
 };
@@ -473,7 +483,7 @@ public:
 
     /** Writes all protection attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
-
+    void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
 private:
     ProtectionModel     maModel;            /// Protection model data.
     ApiProtectionData   maApiData;          /// Protection data converted to API constants.
@@ -575,6 +585,8 @@ public:
     inline const BorderModel& getModel() const { return maModel; }
     /** Returns the converted API border data struct. */
     inline const ApiBorderData& getApiData() const { return maApiData; }
+
+    void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const;
 
     /** Writes all border attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
@@ -708,6 +720,7 @@ public:
     /** Returns the converted API fill data struct. */
     inline const ApiSolidFillData& getApiData() const { return maApiData; }
 
+    void                fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs = false ) const;
     /** Writes all fill attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
 
@@ -790,6 +803,7 @@ public:
     /** Returns the cell protection data of this style. */
     inline const Protection& getProtection() const { return maProtection; }
 
+    void  writeToMarkData( ::ScMarkData& rMarkData, sal_Int32 nNumFmtId  );
     /** Writes all formatting attributes to the passed property map. */
     void                writeToPropertyMap( PropertyMap& rPropMap ) const;
     /** Writes all formatting attributes to the passed property set. */
@@ -799,15 +813,23 @@ public:
     static void         writeBiff2CellFormatToPropertySet(
                             const WorkbookHelper& rHelper, PropertySet& rPropSet,
                             sal_uInt8 nFlags1, sal_uInt8 nFlags2, sal_uInt8 nFlags3 );
+
+    const ::ScPatternAttr& createPattern( bool bSkipPoolDefs = false );
+
 private:
     /** Sets 'attribute used' flags from the passed BIFF bit field. */
     void                setBiffUsedFlags( sal_uInt8 nUsedFlags );
 
 private:
+    typedef ::std::auto_ptr< ::ScPatternAttr > ScPatternAttrPtr;
+
+    ScPatternAttrPtr    mpPattern;          /// Calc item set.
+
     XfModel             maModel;            /// Cell XF or style XF model data.
     Alignment           maAlignment;        /// Cell alignment data.
     Protection          maProtection;       /// Cell protection data.
     sal_Int32           meRotationRef;      /// Rotation reference dependent on border.
+    ::ScStyleSheet*       mpStyleSheet;       /// Calc cell style sheet.
 };
 
 bool operator==( const Xf& rXf1,  const Xf& rXf2 );
@@ -901,11 +923,14 @@ public:
     inline const CellStyleModel& getModel() const { return maModel; }
     /** Returns the final style name used in the document. */
     inline const ::rtl::OUString& getFinalStyleName() const { return maFinalName; }
+    ::ScStyleSheet*       createStyleSheet();
 
 private:
     CellStyleModel      maModel;
     ::rtl::OUString     maFinalName;        /// Final style name used in API.
     bool                mbCreated;          /// True = style sheet created.
+    ::ScStyleSheet*     mpStyleSheet;       /// Calc cell style sheet.
+
 };
 
 typedef ::boost::shared_ptr< CellStyle > CellStyleRef;
@@ -1053,14 +1078,19 @@ public:
     /** Creates the style sheet described by the DXF with the passed identifier. */
     ::rtl::OUString     createDxfStyle( sal_Int32 nDxfId ) const;
 
+    void                writeFontToItemSet( SfxItemSet& rItemSet, sal_Int32 nFontId, bool bSkipPoolDefs = false ) const;
     /** Writes the font attributes of the specified font data to the passed property map. */
     void                writeFontToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFontId ) const;
+    void                writeNumFmtToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs = false ) const;
     /** Writes the specified number format to the passed property map. */
     void                writeNumFmtToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const;
+    void                writeBorderToItemSet( SfxItemSet& rItemSet, sal_Int32 nBorderId, bool bSkipPoolDefs = false ) const;
     /** Writes the border attributes of the specified border data to the passed property map. */
     void                writeBorderToPropertyMap( PropertyMap& rPropMap, sal_Int32 nBorderId ) const;
     /** Writes the fill attributes of the specified fill data to the passed property map. */
+    void                writeFillToItemSet( SfxItemSet& rItemSet, sal_Int32 nFillId, bool bSkipPoolDefs = false ) const;
     void                writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFillId ) const;
+    void                writeCellXfToMarkData( ::ScMarkData& rMark, sal_Int32 nXfId, sal_Int32 nNumFmtId );
     /** Writes the cell formatting attributes of the specified XF to the passed property map. */
     void                writeCellXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const;
 

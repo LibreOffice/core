@@ -38,10 +38,14 @@
 #include <rtl/string.hxx>
 #include <osl/thread.h>
 #include <rtl/ustrbuf.hxx>
+#include <svl/intitem.hxx>
 #include "oox/core/filterbase.hxx"
 #include "oox/helper/attributelist.hxx"
 #include "oox/helper/propertymap.hxx"
 #include "biffinputstream.hxx"
+#include "scitems.hxx"
+#include "document.hxx"
+#include "ftools.hxx"
 
 namespace oox {
 namespace xls {
@@ -1935,6 +1939,18 @@ sal_Int32 NumberFormat::finalizeImport( const Reference< XNumberFormats >& rxNum
     return maApiData.mnIndex;
 }
 
+void NumberFormat::fillToItemSet( SfxItemSet& rItemSet, bool bSkipPoolDefs ) const
+{
+    ScDocument& rDoc = getScDocument();
+    static sal_uLong  nDflt = rDoc.GetFormatTable()->GetStandardFormat( ScGlobal::eLnge );
+    sal_uLong nScNumFmt = nDflt;
+    if ( maApiData.mnIndex )
+        nScNumFmt = maApiData.mnIndex;
+    ScfTools::PutItem( rItemSet, SfxUInt32Item( ATTR_VALUE_FORMAT, nScNumFmt ), bSkipPoolDefs );
+    if( rItemSet.GetItemState( ATTR_VALUE_FORMAT, false ) == SFX_ITEM_SET )
+        ScGlobal::AddLanguage( rItemSet, *(rDoc.GetFormatTable()) );
+}
+
 void NumberFormat::writeToPropertyMap( PropertyMap& rPropMap ) const
 {
     rPropMap[ PROP_NumberFormat ] <<= maApiData.mnIndex;
@@ -2034,6 +2050,12 @@ void NumberFormatsBuffer::importFormat( BiffInputStream& rStrm )
 void NumberFormatsBuffer::finalizeImport()
 {
     maNumFmts.forEach( NumberFormatFinalizer( *this ) );
+}
+
+void NumberFormatsBuffer::fillToItemSet( SfxItemSet& rItemSet, sal_Int32 nNumFmtId, bool bSkipPoolDefs ) const
+{
+    if( const NumberFormat* pNumFmt = maNumFmts.get( nNumFmtId ).get() )
+        pNumFmt->fillToItemSet( rItemSet, bSkipPoolDefs);
 }
 
 void NumberFormatsBuffer::writeToPropertyMap( PropertyMap& rPropMap, sal_Int32 nNumFmtId ) const

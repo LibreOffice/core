@@ -1279,7 +1279,7 @@ public:
                             SCCOL nVCol, SCROW nVRow, SCTAB nVTab,
                             const rtl::OUString& sValStr, double& nX);
 
-    void            ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
+    SC_DLLPUBLIC void            ApplySelectionPattern( const ScPatternAttr& rAttr, const ScMarkData& rMark,
                                            ScEditDataArray* pDataArray = NULL );
     void            DeleteSelection( sal_uInt16 nDelFlag, const ScMarkData& rMark );
     void            DeleteSelectionTab( SCTAB nTab, sal_uInt16 nDelFlag, const ScMarkData& rMark );
