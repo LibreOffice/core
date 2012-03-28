@@ -59,7 +59,6 @@ $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/fontcfg.hxx,unotools
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/fontcvt.hxx,unotools/fontcvt.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/fontdefs.hxx,unotools/fontdefs.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/fontoptions.hxx,unotools/fontoptions.hxx))
-$(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/historyoptions_const.hxx,unotools/historyoptions_const.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/historyoptions.hxx,unotools/historyoptions.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/idhelper.hxx,unotools/idhelper.hxx))
 $(eval $(call gb_Package_add_file,unotools_inc,inc/unotools/internaloptions.hxx,unotools/internaloptions.hxx))
