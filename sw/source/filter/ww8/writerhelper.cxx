@@ -633,8 +633,8 @@ namespace sw
         bool IsStarSymbol(const rtl::OUString &rFontName)
         {
             rtl::OUString sFamilyNm(GetFontToken(rFontName, 0));
-            return (sFamilyNm.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("starsymbol")) ||
-                sFamilyNm.equalsIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM("opensymbol")));
+            return (sFamilyNm.equalsIgnoreAsciiCase("starsymbol") ||
+                sFamilyNm.equalsIgnoreAsciiCase("opensymbol"));
         }
 
         Size GetSwappedInSize(const SwNoTxtNode& rNd)
