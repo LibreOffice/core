@@ -384,9 +384,6 @@ beans::Optional< OUString > BackendImpl::PackageImpl::getRegistrationDataURL()
     return beans::Optional<OUString>(true, OUString());
 }
 
-static rtl::OUString aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
-static rtl::OUString aHelpStr(RTL_CONSTASCII_USTRINGPARAM("help"));
-
 void BackendImpl::implProcessHelp(
     PackageImpl * package, bool doRegisterPackage,
     Reference<ucb::XCommandEnvironment> const & xCmdEnv)
@@ -444,6 +441,9 @@ void BackendImpl::implProcessHelp(
                         ::dp_misc::create_folder(
                             &langFolderContent,
                             langFolderDest, xCmdEnv);
+
+                        const OUString aHelpStr(RTL_CONSTASCII_USTRINGPARAM("help"));
+                        const OUString aSlash(RTL_CONSTASCII_USTRINGPARAM("/"));
 
                         rtl::OUString aJarFile(
                             makeURL(sHelpFolder, langFolderURLSegment + aSlash + aHelpStr +
