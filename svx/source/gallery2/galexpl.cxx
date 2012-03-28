@@ -28,6 +28,7 @@
 
 
 #include <unotools/pathoptions.hxx>
+#include <rtl/instance.hxx>
 #include <sfx2/viewfrm.hxx>
 #include "svx/gallery1.hxx"
 #include "svx/galtheme.hxx"
@@ -35,11 +36,10 @@
 #include "svx/gallery.hxx"
 #include "galobj.hxx"
 
-// -----------
-// - Statics -
-// -----------
-
-static SfxListener aLockListener;
+namespace
+{
+    class theLockListener : public rtl::Static< SfxListener, theLockListener > {};
+}
 
 // -------------------
 // - GalleryExplorer -
@@ -371,7 +371,7 @@ sal_Bool GalleryExplorer::BeginLocking( const String& rThemeName )
 
     if( pGal )
     {
-        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, aLockListener );
+        GalleryTheme* pTheme = pGal->AcquireTheme( rThemeName, theLockListener::get() );
 
         if( pTheme )
         {
@@ -413,7 +413,7 @@ sal_Bool GalleryExplorer::EndLocking( const String& rThemeName )
             if( bReleaseLockedTheme )
             {
                 // release locked theme
-                pGal->ReleaseTheme( pTheme, aLockListener );
+                pGal->ReleaseTheme( pTheme, theLockListener::get() );
                 bRet = sal_True;
             }
         }
