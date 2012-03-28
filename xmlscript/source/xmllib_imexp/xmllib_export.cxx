@@ -38,8 +38,8 @@ using ::rtl::OUString;
 namespace xmlscript
 {
 
-static OUString aTrueStr ( RTL_CONSTASCII_USTRINGPARAM("true") );
-static OUString aFalseStr( RTL_CONSTASCII_USTRINGPARAM("false") );
+const char aTrueStr[] = "true";
+const char aFalseStr[] = "false";
 
 //##################################################################################################
 
@@ -74,6 +74,9 @@ SAL_CALL exportLibraryContainer(
     xOut->ignorableWhitespace( OUString() );
     xOut->startElement( aLibrariesName, xAttributes );
 
+    rtl::OUString sTrueStr(aTrueStr);
+    rtl::OUString sFalseStr(aFalseStr);
+
     int nLibCount = pLibArray->mnLibCount;
     for( sal_Int32 i = 0 ; i < nLibCount ; i++ )
     {
@@ -97,12 +100,12 @@ SAL_CALL exportLibraryContainer(
         }
 
         pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":link") ),
-                                    rLib.bLink ? aTrueStr : aFalseStr );
+                                    rLib.bLink ? sTrueStr : sFalseStr );
 
         if( rLib.bLink )
         {
             pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":readonly") ),
-                                        rLib.bReadOnly ? aTrueStr : aFalseStr );
+                                        rLib.bReadOnly ? sTrueStr : sFalseStr );
         }
 
         pLibElement->dump( xOut.get() );
@@ -141,14 +144,17 @@ SAL_CALL exportLibrary(
     pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":name") ),
                                 rLib.aName );
 
+    rtl::OUString sTrueStr(aTrueStr);
+    rtl::OUString sFalseStr(aFalseStr);
+
     pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":readonly") ),
-                                rLib.bReadOnly ? aTrueStr : aFalseStr );
+                                rLib.bReadOnly ? sTrueStr : sFalseStr );
 
     pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":passwordprotected") ),
-                                rLib.bPasswordProtected ? aTrueStr : aFalseStr );
+                                rLib.bPasswordProtected ? sTrueStr : sFalseStr );
 
     if( rLib.bPreload )
-        pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":preload") ), aTrueStr );
+        pLibElement->addAttribute( OUString( RTL_CONSTASCII_USTRINGPARAM(XMLNS_LIBRARY_PREFIX ":preload") ), sTrueStr );
 
     sal_Int32 nElementCount = rLib.aElementNames.getLength();
     if( nElementCount )

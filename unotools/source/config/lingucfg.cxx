@@ -810,13 +810,12 @@ sal_Bool SvtLinguConfigItem::IsReadOnly( sal_Int32 nPropertyHandle ) const
 static SvtLinguConfigItem *pCfgItem = 0;
 static sal_Int32           nCfgItemRefCount = 0;
 
-static const rtl::OUString aG_SupportedDictionaryFormats(RTL_CONSTASCII_USTRINGPARAM("SupportedDictionaryFormats"));
-static const rtl::OUString aG_Dictionaries(RTL_CONSTASCII_USTRINGPARAM("Dictionaries"));
-static const rtl::OUString aG_Locations(RTL_CONSTASCII_USTRINGPARAM("Locations"));
-static const rtl::OUString aG_Format(RTL_CONSTASCII_USTRINGPARAM("Format"));
-static const rtl::OUString aG_Locales(RTL_CONSTASCII_USTRINGPARAM("Locales"));
-static const rtl::OUString aG_DisabledDictionaries(RTL_CONSTASCII_USTRINGPARAM("DisabledDictionaries"));
-static const rtl::OUString aG_LastActiveDictionaries(RTL_CONSTASCII_USTRINGPARAM("LastActiveDictionaries"));
+static const char aG_SupportedDictionaryFormats[] = "SupportedDictionaryFormats";
+static const char aG_Dictionaries[] = "Dictionaries";
+static const char aG_Locations[] = "Locations";
+static const char aG_Format[] = "Format";
+static const char aG_Locales[] = "Locales";
+static const char aG_DisabledDictionaries[] = "DisabledDictionaries";
 
 SvtLinguConfig::SvtLinguConfig()
 {
@@ -932,7 +931,7 @@ sal_Bool SvtLinguConfig::GetSupportedDictionaryFormatsFor(
         xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetName ), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rSetEntry ), uno::UNO_QUERY_THROW );
-        if (xNA->getByName( aG_SupportedDictionaryFormats ) >>= rFormatList)
+        if (xNA->getByName( rtl::OUString(aG_SupportedDictionaryFormats) ) >>= rFormatList)
             bSuccess = true;
         DBG_ASSERT( rFormatList.getLength(), "supported dictionary format list is empty" );
     }
@@ -1018,16 +1017,16 @@ sal_Bool SvtLinguConfig::GetDictionaryEntry(
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
-        xNA.set( xNA->getByName( aG_Dictionaries ), uno::UNO_QUERY_THROW );
+        xNA.set( xNA->getByName(rtl::OUString(aG_Dictionaries)), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName( rNodeName ), uno::UNO_QUERY_THROW );
 
         // read group data...
         uno::Sequence< rtl::OUString >  aLocations;
         rtl::OUString                   aFormatName;
         uno::Sequence< rtl::OUString >  aLocaleNames;
-        bSuccess =  (xNA->getByName( aG_Locations ) >>= aLocations)  &&
-                    (xNA->getByName( aG_Format )    >>= aFormatName) &&
-                    (xNA->getByName( aG_Locales )   >>= aLocaleNames);
+        bSuccess =  (xNA->getByName( rtl::OUString(aG_Locations) ) >>= aLocations)  &&
+                    (xNA->getByName( rtl::OUString(aG_Format) )    >>= aFormatName) &&
+                    (xNA->getByName( rtl::OUString(aG_Locales) )   >>= aLocaleNames);
         DBG_ASSERT( aLocations.getLength(), "Dictionary locations not set" );
         DBG_ASSERT( !aFormatName.isEmpty(), "Dictionary format name not set" );
         DBG_ASSERT( aLocaleNames.getLength(), "No locales set for the dictionary" );
@@ -1066,7 +1065,7 @@ uno::Sequence< rtl::OUString > SvtLinguConfig::GetDisabledDictionaries() const
     {
         uno::Reference< container::XNameAccess > xNA( GetMainUpdateAccess(), uno::UNO_QUERY_THROW );
         xNA.set( xNA->getByName(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("ServiceManager"))), uno::UNO_QUERY_THROW );
-        xNA->getByName( aG_DisabledDictionaries ) >>= aResult;
+        xNA->getByName( rtl::OUString(aG_DisabledDictionaries) ) >>= aResult;
     }
     catch (uno::Exception &)
     {
@@ -1084,7 +1083,7 @@ std::vector< SvtLinguConfigDictionaryEntry > SvtLinguConfig::GetActiveDictionari
     try
     {
         uno::Sequence< rtl::OUString > aElementNames;
-        GetElementNamesFor( aG_Dictionaries, aElementNames );
+        GetElementNamesFor( rtl::OUString(aG_Dictionaries), aElementNames );
         sal_Int32 nLen = aElementNames.getLength();
         const rtl::OUString *pElementNames = aElementNames.getConstArray();
 

@@ -92,9 +92,8 @@ using namespace ::com::sun::star::form;
 using ::com::sun::star::util::XNumberFormatter;
 namespace MouseWheelBehavior = ::com::sun::star::awt::MouseWheelBehavior;
 
-String INVALIDTEXT     = String::CreateFromAscii("###");
-String OBJECTTEXT      = String::CreateFromAscii("<OBJECT>");
-    // TODO: resource
+const char INVALIDTEXT[] = "###";
+const char OBJECTTEXT[] = "<OBJECT>";
 
 //==================================================================
 //= helper
@@ -423,7 +422,7 @@ String DbGridColumn::GetCellText(const DbGridRow* pRow, const Reference< XNumber
         return aText;
 
     if (!pRow || !pRow->IsValid())
-        aText  = INVALIDTEXT;
+        aText = rtl::OUString(INVALIDTEXT);
     else if (pRow->HasField(m_nFieldPos))
     {
         aText = GetCellText( pRow->GetField( m_nFieldPos ).getColumn(), xFormatter );
@@ -441,7 +440,7 @@ String DbGridColumn::GetCellText(const Reference< ::com::sun::star::sdb::XColumn
         if (pTextCell)
             aText = pTextCell->GetText(xField, xFormatter);
         else if (m_bObject)
-            aText = OBJECTTEXT;
+            aText = rtl::OUString(OBJECTTEXT);
     }
     return aText;
 }
@@ -476,7 +475,7 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             if ( !bEnabled )
                 nStyle |= TEXT_DRAW_DISABLE;
 
-            rDev.DrawText(rRect, INVALIDTEXT, nStyle);
+            rDev.DrawText(rRect, rtl::OUString(INVALIDTEXT), nStyle);
         }
         else if (m_bAutoValue && pRow->IsNew())
         {
@@ -512,14 +511,14 @@ void DbGridColumn::Paint(OutputDevice& rDev,
             if ( !bEnabled )
                 nStyle |= TEXT_DRAW_DISABLE;
 
-            rDev.DrawText(rRect, INVALIDTEXT, nStyle);
+            rDev.DrawText(rRect, rtl::OUString(INVALIDTEXT), nStyle);
         }
         else if (pRow->HasField(m_nFieldPos) && m_bObject)
         {
             sal_uInt16 nStyle = TEXT_DRAW_CLIP | TEXT_DRAW_CENTER;
             if ( !bEnabled )
                 nStyle |= TEXT_DRAW_DISABLE;
-            rDev.DrawText(rRect, OBJECTTEXT, nStyle);
+            rDev.DrawText(rRect, rtl::OUString(OBJECTTEXT), nStyle);
         }
     }
     else if ( m_pCell->ISA( FmXFilterCell ) )
