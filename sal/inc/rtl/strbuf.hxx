@@ -35,11 +35,29 @@
 
 #include <rtl/strbuf.h>
 #include <rtl/string.hxx>
+#include <rtl/stringutils.hxx>
 
 #ifdef __cplusplus
 
+// The unittest uses slightly different code to help check that the proper
+// calls are made. The class is put into a different namespace to make
+// sure the compiler generates a different (if generating also non-inline)
+// copy of the function and does not merge them together. The class
+// is "brought" into the proper rtl namespace by a typedef below.
+#ifdef RTL_STRING_UNITTEST
+#define rtl rtlunittest
+#endif
+
 namespace rtl
 {
+
+#ifdef RTL_STRING_UNITTEST
+#undef rtl
+// helper macro to make functions appear more readable
+#define RTL_STRING_CONST_FUNCTION rtl_string_unittest_const_literal_function = true;
+#else
+#define RTL_STRING_CONST_FUNCTION
+#endif
 
 /** A string buffer implements a mutable sequence of characters.
     <p>
@@ -714,6 +732,14 @@ private:
 };
 
 }
+
+#ifdef RTL_STRING_UNITTEST
+namespace rtl
+{
+typedef rtlunittest::OStringBuffer OStringBuffer;
+}
+#undef RTL_STRING_CONST_FUNCTION
+#endif
 
 #endif  /* __cplusplus */
 #endif  /* _RTL_STRBUF_HXX_ */

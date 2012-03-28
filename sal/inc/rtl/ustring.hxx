@@ -36,6 +36,7 @@
 #include "osl/diagnose.h"
 #include <rtl/ustring.h>
 #include <rtl/string.hxx>
+#include <rtl/stringutils.hxx>
 #include <rtl/memory.h>
 #include "sal/log.hxx"
 
@@ -45,8 +46,26 @@
 #include <new>
 #endif
 
+// The unittest uses slightly different code to help check that the proper
+// calls are made. The class is put into a different namespace to make
+// sure the compiler generates a different (if generating also non-inline)
+// copy of the function and does not merge them together. The class
+// is "brought" into the proper rtl namespace by a typedef below.
+#ifdef RTL_STRING_UNITTEST
+#define rtl rtlunittest
+#endif
+
 namespace rtl
 {
+
+#ifdef RTL_STRING_UNITTEST
+#undef rtl
+// helper macro to make functions appear more readable
+#define RTL_STRING_CONST_FUNCTION rtl_string_unittest_const_literal_function = true;
+#else
+#define RTL_STRING_CONST_FUNCTION
+#endif
+
 /* ======================================================================= */
 
 /**
@@ -897,7 +916,7 @@ public:
 
       @since LibreOffice 3.6
     */
-    bool endsWith(rtl::OUString const & str) const {
+    bool endsWith(OUString const & str) const {
         return str.getLength() <= getLength()
             && match(str, getLength() - str.getLength());
     }
@@ -1485,7 +1504,7 @@ public:
       @since LibreOffice 3.6
     */
     template< int N >
-    OUString replaceFirst( const char (&from)[ N ], rtl::OUString const & to,
+    OUString replaceFirst( const char (&from)[ N ], OUString const & to,
                            sal_Int32 * index = 0) const
     {
         rtl_uString * s = 0;
@@ -1500,7 +1519,7 @@ public:
      * @internal
      */
     template< int N >
-    OUString replaceFirst( char (&literal)[ N ], rtl::OUString const & to,
+    OUString replaceFirst( char (&literal)[ N ], OUString const & to,
                            sal_Int32 * index = 0) const;
 
     /**
@@ -2133,6 +2152,19 @@ public:
 
 /* ======================================================================= */
 
+} /* Namespace */
+
+#ifdef RTL_STRING_UNITTEST
+namespace rtl
+{
+typedef rtlunittest::OUString OUString;
+}
+#undef RTL_STRING_CONST_FUNCTION
+#endif
+
+namespace rtl
+{
+
 /** A helper to use OUStrings with hash maps.
 
     Instances of this class are unary function objects that can be used as
@@ -2149,7 +2181,7 @@ struct OUStringHash
         a hash code for the string.  This hash code should not be stored
         persistently, as its computation may change in later revisions.
      */
-    size_t operator()(const rtl::OUString& rString) const
+    size_t operator()(const OUString& rString) const
         { return (size_t)rString.hashCode(); }
 };
 

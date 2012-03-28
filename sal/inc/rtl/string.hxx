@@ -37,6 +37,8 @@
 #include <rtl/memory.h>
 #include <rtl/textenc.h>
 #include <rtl/string.h>
+#include <rtl/stringutils.hxx>
+
 #include "sal/log.hxx"
 
 #if !defined EXCEPTIONS_OFF
@@ -88,65 +90,6 @@ namespace rtl
   and so more people should have fewer understanding problems when they
   use this class.
 */
-
-namespace internal
-{
-/*
-These templates use SFINAE (Substitution failure is not an error) to help distinguish the various
-plain C string types: char*, const char*, char[N] and const char[N]. There are 2 cases:
-1) Only string literal (i.e. const char[N]) is wanted, not any of the others.
-    In this case it is necessary to distinguish between const char[N] and char[N], as the latter
-    would be automatically converted to the const variant, which is not wanted (not a string literal
-    with known size of the content). In this case ConstCharArrayDetector is used to ensure the function
-    is called only with const char[N] arguments. There's no other plain C string type overload.
-2) All plain C string types are wanted, and const char[N] needs to be handled differently.
-    In this case const char[N] would match const char* argument type (not exactly sure why, but it's
-    consistent in all of gcc, clang and msvc). Using a template with a reference to const of the type
-    avoids this problem, and CharPtrDetector ensures that the function is called only with char pointer
-    arguments. The const in the argument is necessary to handle the case when something is explicitly
-    cast to const char*. Additionally (non-const) char[N] needs to be handled, but with the reference
-    being const, it would also match const char[N], so another overload with a reference to non-const
-    and NonConstCharArrayDetector are used to ensure the function is called only with (non-const) char[N].
-*/
-struct Dummy {};
-template< typename T1, typename T2 >
-struct CharPtrDetector
-{
-};
-template< typename T >
-struct CharPtrDetector< const char*, T >
-{
-    typedef T Type;
-};
-template< typename T >
-struct CharPtrDetector< char*, T >
-{
-    typedef T Type;
-};
-
-template< typename T1, typename T2 >
-struct NonConstCharArrayDetector
-{
-};
-template< typename T, int N >
-struct NonConstCharArrayDetector< char[ N ], T >
-{
-    typedef T Type;
-};
-// This is similar, only it helps to detect const char[]. Without using a template,
-// (non-const) char[] would be automatically converted to const char[], which is unwanted
-// here (size of the content is not known).
-template< typename T1, typename T2 >
-struct ConstCharArrayDetector
-{
-};
-template< int N, typename T >
-struct ConstCharArrayDetector< const char[ N ], T >
-{
-    typedef T Type;
-    static const int size = N;
-};
-}
 
 class OString
 {
@@ -1486,6 +1429,19 @@ public:
 
 /* ======================================================================= */
 
+} /* Namespace */
+
+#ifdef RTL_STRING_UNITTEST
+namespace rtl
+{
+typedef rtlunittest::OString OString;
+}
+#undef RTL_STRING_CONST_FUNCTION
+#endif
+
+namespace rtl
+{
+
 /** A helper to use OStrings with hash maps.
 
     Instances of this class are unary function objects that can be used as
@@ -1509,13 +1465,6 @@ struct OStringHash
 /* ======================================================================= */
 
 } /* Namespace */
-
-#ifdef RTL_STRING_UNITTEST
-namespace rtl
-{
-typedef rtlunittest::OString OString;
-}
-#endif
 
 #endif /* _RTL_STRING_HXX_ */
 
