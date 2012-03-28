@@ -63,11 +63,11 @@ using namespace ::com::sun::star;
 
 
 /*
- * 1170-SurvivalKit: Wie gelangt man hinter das letzte Zeichen der Zeile.
- * - RightMargin verzichtet auf den Positionsausgleich mit -1
- * - GetCharRect liefert bei MV_RIGHTMARGIN ein GetEndCharRect
- * - GetEndCharRect setzt bRightMargin auf sal_True
- * - SwTxtCursor::bRightMargin wird per CharCrsrToLine auf sal_False gesetzt
+ * 1170-SurvivalKit: For how long do we get past the last char of the line.
+ * - RightMargin abstains from adjusting position with -1
+ * - GetCharRect returns a GetEndCharRect for MV_RIGHTMARGIN
+ * - GetEndCharRect sets bRightMargin to sal_True
+ * - SwTxtCursor::bRightMargin is set to sal_False by CharCrsrToLine
  */
 
 /*************************************************************************
@@ -77,7 +77,7 @@ using namespace ::com::sun::star;
 SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
                           const sal_Bool bRightMargin, const sal_Bool bNoScroll = sal_True )
 {
-    // 8810: vgl. 1170, RightMargin in der letzten Masterzeile...
+    // 8810: vgl. 1170, RightMargin in the last master line
     const xub_StrLen nOffset = rPos.nContent.GetIndex();
     SwTxtFrm *pFrmAtPos = pFrm;
     if( !bNoScroll || pFrm->GetFollow() )
@@ -116,13 +116,13 @@ SwTxtFrm *GetAdjFrmAtPos( SwTxtFrm *pFrm, const SwPosition &rPos,
 
 sal_Bool lcl_ChangeOffset( SwTxtFrm* pFrm, xub_StrLen nNew )
 {
-    // In Bereichen und ausserhalb von Flies wird nicht mehr gescrollt.
+    // Do not scroll in areas and outside of flies
     OSL_ENSURE( !pFrm->IsFollow(), "Illegal Scrolling by Follow!" );
     if( pFrm->GetOfst() != nNew && !pFrm->IsInSct() )
     {
         SwFlyFrm *pFly = pFrm->FindFlyFrm();
-        // Vorsicht, wenn z.B. bei einem spaltigen Rahmen die Groesse noch invalide ist,
-        // duerfen wir nicht mal eben herumscrollen
+        // Attention: if e.g. in a column frame the size is still invalid
+        // we must not scroll around just like that
         if ( ( pFly && pFly->IsValid() &&
              !pFly->GetNextLink() && !pFly->GetPrevLink() ) ||
              ( !pFly && pFrm->IsInTab() ) )
@@ -186,11 +186,10 @@ SwTxtFrm *SwTxtFrm::GetFrmAtPos( const SwPosition &rPos )
  *************************************************************************/
 
 /*
- * GetCharRect() findet die Characterzelle des Characters, dass
- * durch aPos beschrieben wird. GetCrsrOfst() findet den
- * umgekehrten Weg: Von einer Dokumentkoordinate zu einem Pam.
- * Beide sind virtuell in der Framebasisklasse und werden deshalb
- * immer angezogen.
+ * GetCharRect() returns the char's char line described by aPos.
+ * GetCrsrOfst() does the reverse: It goes from a document coordinate to
+ * a Pam.
+ * Both are virtual in the frame base class and thus are redefined here.
  */
 
 sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
@@ -201,13 +200,13 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     if( IsLocked() || IsHiddenNow() )
         return sal_False;
 
-    //Erstmal den richtigen Frm finden, dabei muss beachtet werden, dass:
-    //- die gecachten Informationen verworfen sein koennen (GetPara() == 0)
-    //- das ein Follow gemeint sein kann
-    //- das die Kette der Follows dynamisch waechst; der in den wir
-    //  schliesslich gelangen muss aber Formatiert sein.
+    // Find the right frame first. We need to keep in mind that:
+    // - the cached information could be invalid  (GetPara() == 0)
+    // - we could have a Follow
+    // - the Follow chain grows dynamically; the one we end up in
+    //   needs to be formatted
 
-    // opt: reading ahead erspart uns ein GetAdjFrmAtPos
+    // Optimisation: reading ahead saves us a GetAdjFrmAtPos
     const sal_Bool bRightMargin = pCMS && ( MV_RIGHTMARGIN == pCMS->eState );
     const sal_Bool bNoScroll = pCMS && pCMS->bNoScroll;
     SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, rPos, bRightMargin,
@@ -292,8 +291,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
                 SwTxtSizeInfo aInf( pFrm );
                 SwTxtCursor  aLine( pFrm, &aInf );
                 nNextOfst = aLine.GetEnd();
-                // Siehe Kommentar in AdjustFrm
-                // 1170: das letzte Zeichen der Zeile mitnehmen?
+                // See comment in AdjustFrm
+                // 1170: Include the line's last char?
                 bRet = bRightMargin ? aLine.GetEndCharRect( &rOrig, nOffset, pCMS, nMaxY )
                                 : aLine.GetCharRect( &rOrig, nOffset, pCMS, nMaxY );
             }
@@ -350,15 +349,15 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
     if( bRet )
     {
         SwPageFrm *pPage = pFrm->FindPageFrm();
-        OSL_ENSURE( pPage, "Text esaped from page?" );
+        OSL_ENSURE( pPage, "Text escaped from page?" );
         const SwTwips nOrigTop = (rOrig.*fnRect->fnGetTop)();
         const SwTwips nPageTop = (pPage->Frm().*fnRect->fnGetTop)();
         const SwTwips nPageBott = (pPage->Frm().*fnRect->fnGetBottom)();
 
-        // Following situation: if the frame is in an invalid sectionframe,
-        // it's possible that the frame is outside the page. If we restrict
-        // the cursor position to the page area, we enforce the formatting
-        // of the page, of the section frame and the frame himself.
+        // We have the following situation: if the frame is in an invalid
+        // sectionframe, it's possible that the frame is outside the page.
+        // If we restrict the cursor position to the page area, we enforce
+        // the formatting of the page, of the section frame and the frame itself.
         if( (*fnRect->fnYDiff)( nPageTop, nOrigTop ) > 0 )
             (rOrig.*fnRect->fnSetTop)( nPageTop );
 
@@ -374,8 +373,8 @@ sal_Bool SwTxtFrm::GetCharRect( SwRect& rOrig, const SwPosition &rPos,
  *************************************************************************/
 
 /*
- * GetAutoPos() findet die Characterzelle des Characters, dass
- * durch aPos beschrieben wird und wird von autopositionierten Rahmen genutzt.
+ * GetAutoPos() looks up the char's char line which is described by rPos
+ * and is used by the auto-positioned frame.
  */
 
 sal_Bool SwTxtFrm::GetAutoPos( SwRect& rOrig, const SwPosition &rPos ) const
@@ -536,7 +535,7 @@ bool SwTxtFrm::GetTopOfLine( SwTwips& _onTopOfLine,
  *                      SwTxtFrm::_GetCrsrOfst()
  *************************************************************************/
 
-// Minimaler Abstand von nichtleeren Zeilen etwas weniger als 2 cm
+// Minimum distance of non-empty lines is a little less than 2 cm
 #define FILL_MIN_DIST 1100
 
 struct SwFillData
@@ -570,8 +569,8 @@ struct SwFillData
 sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
                     const sal_Bool bChgFrm, SwCrsrMoveState* pCMS ) const
 {
-    // 8804: _GetCrsrOfst wird vom GetCrsrOfst und GetKeyCrsrOfst gerufen.
-    // In keinem Fall nur ein return sal_False.
+    // 8804: _GetCrsrOfst is called by GetCrsrOfst and GetKeyCrsrOfst.
+    // Never just a return sal_False.
 
     if( IsLocked() || IsHiddenNow() )
         return sal_False;
@@ -609,7 +608,7 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
         SwTxtSizeInfo aInf( (SwTxtFrm*)this );
         SwTxtCursor  aLine( ((SwTxtFrm*)this), &aInf );
 
-        // Siehe Kommentar in AdjustFrm()
+        // See comment in AdjustFrm()
         SwTwips nMaxY = Frm().Top() + Prt().Top() + Prt().Height();
         aLine.TwipsToLine( rPoint.Y() );
         while( aLine.Y() + aLine.GetLineHeight() > nMaxY )
@@ -628,11 +627,11 @@ sal_Bool SwTxtFrm::_GetCrsrOfst(SwPosition* pPos, const Point& rPoint,
         if( pCMS && pCMS->eState == MV_NONE && aLine.GetEnd() == nOffset )
             ((SwCrsrMoveState*)pCMS)->eState = MV_RIGHTMARGIN;
 
-    // 6776: pPos ist ein reiner IN-Parameter, der nicht ausgewertet werden darf.
-    // Das pIter->GetCrsrOfst returnt aus einer Verschachtelung mit STRING_LEN.
-    // Wenn SwTxtIter::GetCrsrOfst von sich aus weitere GetCrsrOfst
-    // ruft, so aendert sich nNode der Position. In solchen Faellen
-    // darf pPos nicht berechnet werden.
+    // 6776: pPos is a pure IN parameter and must not be evaluated.
+    // pIter->GetCrsrOfst returns from a nesting with STRING_LEN.
+    // If SwTxtIter::GetCrsrOfst calls GetCrsrOfst further by itself
+    // nNode changes the position.
+    // In such cases, pPos must not be calculated.
         if( STRING_LEN != nOffset )
         {
             SwTxtNode* pTxtNd = ((SwTxtFrm*)this)->GetTxtNode();
@@ -707,11 +706,7 @@ sal_Bool SwTxtFrm::GetCrsrOfst(SwPosition* pPos, Point& rPoint,
  *************************************************************************/
 
 /*
- * Layout-orientierte Cursorbewegungen
- */
-
-/*
- * an den Zeilenanfang
+ * Layout-oriented cursor movement to the line start.
  */
 
 sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
@@ -748,11 +743,9 @@ sal_Bool SwTxtFrm::LeftMargin(SwPaM *pPam) const
  *************************************************************************/
 
 /*
- * An das Zeilenende:Das ist die Position vor dem letzten
- * Character in der Zeile. Ausnahme: In der letzten Zeile soll
- * der Cursor auch hinter dem letzten Character stehen koennen,
- * um Text anhaengen zu koennen.
- *
+ * To the line end: That's the position before the last char of the line.
+ * Exception: In the last line, it should be able to place the cursor after
+ * the last char in order to append text.
  */
 
 sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
@@ -774,7 +767,7 @@ sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
         aLine.CharCrsrToLine(pPam->GetPoint()->nContent.GetIndex());
         nRightMargin = aLine.GetStart() + aLine.GetCurr()->GetLen();
 
-        // Harte Zeilenumbrueche lassen wir hinter uns.
+        // We skip hard line brakes
         if( aLine.GetCurr()->GetLen() &&
             CH_BREAK == aInf.GetTxt().GetChar( nRightMargin - 1 ) )
             --nRightMargin;
@@ -794,11 +787,10 @@ sal_Bool SwTxtFrm::RightMargin(SwPaM *pPam, sal_Bool bAPI) const
  *                      SwTxtFrm::_UnitUp()
  *************************************************************************/
 
-//Die beiden folgenden Methoden versuchen zunaechst den Crsr in die
-//nachste/folgende Zeile zu setzen. Gibt es im Frame keine vorhergehende/
-//folgende Zeile, so wird der Aufruf an die Basisklasse weitergeleitet.
-//Die Horizontale Ausrichtung des Crsr wird hinterher von der CrsrShell
-//vorgenommen.
+// The following two methods try to put the Crsr into the next/succsessive
+// line. If we do not have a preceding/successive line we forward the call
+// to the base class.
+// The Crsr's horizontal justification is done afterwards by the CrsrShell.
 
 class SwSetToRightMargin
 {
@@ -812,15 +804,15 @@ public:
 sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                             sal_Bool bSetInReadOnly ) const
 {
-    // 8626: Im Notfall den RightMargin setzen.
+    // 8626: Set the RightMargin if needed
     SwSetToRightMargin aSet;
 
     if( IsInTab() &&
         pPam->GetNode( sal_True )->StartOfSectionNode() !=
         pPam->GetNode( sal_False )->StartOfSectionNode() )
     {
-        //Wenn der PaM in unterschiedlichen Boxen sitzt, so handelt es sich um
-        //eine Tabellenselektion; diese wird von der Basisklasse abgearbeitet.
+        // If the PaM is located within different boxes, we have a table selection,
+        // which is handled by the base class.
         return SwCntntFrm::UnitUp( pPam, nOffset, bSetInReadOnly );
     }
 
@@ -839,7 +831,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
             SwTxtSizeInfo aInf( (SwTxtFrm*)this );
             SwTxtCursor  aLine( ((SwTxtFrm*)this), &aInf );
 
-            // 8116: Flys ohne Umlauf und IsDummy(); hier wegoptimiert
+            // 8116: Optimize away flys with no flow and IsDummy()
             if( nPos )
                 aLine.CharCrsrToLine( nPos );
             else
@@ -865,7 +857,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                 continue;
             }
 
-            // we select the target line for the cursor, in case we are in a
+            // We select the target line for the cursor, in case we are in a
             // double line portion, prev line = curr line
             if( bPrevLine && !bSecondOfDouble )
             {
@@ -881,11 +873,11 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                 aCharBox.SSize().Width() /= 2;
                 aCharBox.Pos().X() = aCharBox.Pos().X() - 150;
 
-                // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
+                // See comment in SwTxtFrm::GetCrsrOfst()
 #if OSL_DEBUG_LEVEL > 0
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
-                // Der Node soll nicht gewechselt werden
+                // The node should not be changed
                 xub_StrLen nTmpOfst = aLine.GetCrsrOfst( pPam->GetPoint(),
                                                          aCharBox.Pos(), sal_False );
 #if OSL_DEBUG_LEVEL > 0
@@ -893,7 +885,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
                         "SwTxtFrm::UnitUp: illegal node change" );
 #endif
 
-                // 7684: Wir stellen sicher, dass wir uns nach oben bewegen.
+                // 7684: We make sure that we move up.
                 if( nTmpOfst >= nStart && nStart && !bSecondOfDouble )
                 {
                     nTmpOfst = nStart;
@@ -912,10 +904,9 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
             break;
         } while ( sal_True );
     }
-    /* Wenn this ein Follow ist und ein Prev miszlang, so
-     * muessen wir in die letzte Zeile des Master ... und der sind wir.
-     * Oder wir sind ein Follow mit Follow, dann muessen wir uns den
-     * Master extra besorgen...
+    /* If 'this' is a follow and a prev failed, we need to go to the
+     * last line of the master, which is us.
+     * Or: If we are a follow with follow, we need to get the master.
      */
     if ( IsFollow() )
     {
@@ -926,7 +917,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
             ViewShell *pSh = getRootFrm()->GetCurrShell();
             sal_Bool bProtectedAllowed = pSh && pSh->GetViewOptions()->IsCursorInProtectedArea();
             const SwTxtFrm *pPrevPrev = pTmpPrev;
-            // Hier werden geschuetzte Frames und Frame ohne Inhalt ausgelassen
+            // We skip protected frames and frames without content here
             while( pPrevPrev && ( pPrevPrev->GetOfst() == nOffs ||
                    ( !bProtectedAllowed && pPrevPrev->IsProtected() ) ) )
             {
@@ -951,7 +942,7 @@ sal_Bool SwTxtFrm::_UnitUp( SwPaM *pPam, const SwTwips nOffset,
 // if left arrow or right arrow was pressed. The return values are:
 // nPos: the new visual position
 // bLeft: whether the break iterator has to add or subtract from the
-//          current position
+//        current position
 void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen nIdx,
                               xub_StrLen& nPos, sal_Bool& bRight,
                               sal_uInt8& nCrsrLevel, sal_uInt8 nDefaultDir )
@@ -959,7 +950,7 @@ void lcl_VisualMoveRecursion( const SwLineLayout& rCurrLine, xub_StrLen nIdx,
     const SwLinePortion* pPor = rCurrLine.GetFirstPortion();
     const SwLinePortion* pLast = 0;
 
-    // what's the current portion
+    // What's the current portion?
     while ( pPor && nIdx + pPor->GetLen() <= nPos )
     {
         nIdx = nIdx + pPor->GetLen();
@@ -1214,8 +1205,8 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
         pPam->GetNode( sal_True )->StartOfSectionNode() !=
         pPam->GetNode( sal_False )->StartOfSectionNode() )
     {
-        //Wenn der PaM in unterschiedlichen Boxen sitzt, so handelt es sich um
-        //eine Tabellenselektion; diese wird von der Basisklasse abgearbeitet.
+        // If the PaM is located within different boxes, we have a table selection,
+        // which is handled by the base class.
         return SwCntntFrm::UnitDown( pPam, nOffset, bSetInReadOnly );
     }
     ((SwTxtFrm*)this)->GetFormatted();
@@ -1251,7 +1242,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
             {
                 aCharBox.SSize().Width() /= 2;
 #if OSL_DEBUG_LEVEL > 0
-                // siehe Kommentar in SwTxtFrm::GetCrsrOfst()
+                // See comment in SwTxtFrm::GetCrsrOfst()
                 const sal_uLong nOldNode = pPam->GetPoint()->nNode.GetIndex();
 #endif
                 if ( pNextLine && ! bFirstOfDouble )
@@ -1264,7 +1255,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                     "SwTxtFrm::UnitDown: illegal node change" );
 #endif
 
-                // 7684: Wir stellen sicher, dass wir uns nach unten bewegen.
+                // 7684: We make sure that we move down.
                 if( nTmpOfst <= nStart && ! bFirstOfDouble )
                     nTmpOfst = nStart + 1;
                 pPam->GetPoint()->nContent =
@@ -1276,7 +1267,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                 return sal_True;
             }
             if( 0 != ( pTmpFollow = GetFollow() ) )
-            {   // geschuetzte Follows auslassen
+            {   // Skip protected follows
                 const SwCntntFrm* pTmp = pTmpFollow;
                 ViewShell *pSh = getRootFrm()->GetCurrShell();
                 if( !pSh || !pSh->GetViewOptions()->IsCursorInProtectedArea() )
@@ -1287,7 +1278,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
                         pTmpFollow = pTmpFollow->GetFollow();
                     }
                 }
-                if( !pTmpFollow ) // nur noch geschuetzte
+                if( !pTmpFollow ) // Only protected ones left
                 {
                     if ( IsVertical() )
                         ((SwTxtFrm*)this)->SwapWidthAndHeight();
@@ -1321,7 +1312,7 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
     if ( IsVertical() )
         ((SwTxtFrm*)this)->SwapWidthAndHeight();
 
-    // Bei Follows schlagen wir eine Abkuerzung
+    // We take a shortcut for follows
     if( pTmpFollow )
     {
         aCharBox.Pos().Y() = pTmpFollow->Frm().Top() + 1;
@@ -1338,19 +1329,19 @@ sal_Bool SwTxtFrm::_UnitDown(SwPaM *pPam, const SwTwips nOffset,
 sal_Bool SwTxtFrm::UnitUp(SwPaM *pPam, const SwTwips nOffset,
                             sal_Bool bSetInReadOnly ) const
 {
-    /* Im CrsrSh::Up() wird CntntNode::GetFrm() gerufen.
-     * Dies liefert _immer_ den Master zurueck.
-     * Um das Cursortravelling nicht zu belasten, korrigieren wir
-     * hier im SwTxtFrm.
-     * Wir ermittelt UnitUp fuer pFrm, pFrm ist entweder ein Master (=this)
-     * oder ein Follow (!=this)
+    /* We call CntntNode::GertFrm() in CrsrSh::Up().
+     * This _always returns the master.
+     * In order to not mess with cursor travelling, we correct here
+     * in SwTxtFrm.
+     * We calculate UnitUp for pFrm. pFrm is either a master (= this) or a
+     * follow (!= this).
      */
     const SwTxtFrm *pFrm = GetAdjFrmAtPos( (SwTxtFrm*)this, *(pPam->GetPoint()),
                                            SwTxtCursor::IsRightMargin() );
     const sal_Bool bRet = pFrm->_UnitUp( pPam, nOffset, bSetInReadOnly );
 
-    // 8626: kein SwTxtCursor::SetRightMargin( sal_False );
-    // statt dessen steht ein SwSetToRightMargin im _UnitUp
+    // 8626: No SwTxtCursor::SetRightMargin( sal_False );
+    // Instead we have a SwSetToRightMargin in _UnitUp
     return bRet;
 }
 
@@ -1370,26 +1361,26 @@ sal_Bool SwTxtFrm::UnitDown(SwPaM *pPam, const SwTwips nOffset,
 
 void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
 {
-    if( !rFill.bColumn && GetUpper()->IsColBodyFrm() ) // ColumnFrms jetzt mit BodyFrm
+    if( !rFill.bColumn && GetUpper()->IsColBodyFrm() ) // ColumnFrms now with BodyFrm
     {
         const SwColumnFrm* pTmp =
-            (SwColumnFrm*)GetUpper()->GetUpper()->GetUpper()->Lower(); // die 1. Spalte
-        // der erste SwFrm im BodyFrm der ersten Spalte
+            (SwColumnFrm*)GetUpper()->GetUpper()->GetUpper()->Lower(); // The 1st column
+        // The first SwFrm in BodyFrm of the first column
         const SwFrm* pFrm = ((SwLayoutFrm*)pTmp->Lower())->Lower();
         MSHORT nNextCol = 0;
-        // In welcher Spalte landen wir?
+        // In which column do we end up in?
         while( rFill.X() > pTmp->Frm().Right() && pTmp->GetNext() )
         {
             pTmp = (SwColumnFrm*)pTmp->GetNext();
-            if( ((SwLayoutFrm*)pTmp->Lower())->Lower() ) // ColumnFrms jetzt mit BodyFrm
+            if( ((SwLayoutFrm*)pTmp->Lower())->Lower() ) // ColumnFrms now with BodyFrm
             {
                 pFrm = ((SwLayoutFrm*)pTmp->Lower())->Lower();
                 nNextCol = 0;
             }
             else
-                ++nNextCol; // leere Spalten erfordern Spaltenumbrueche
+                ++nNextCol; // Empty columns require column brakes
         }
-        if( pTmp != GetUpper()->GetUpper() ) // Sind wir in einer anderen Spalte gelandet?
+        if( pTmp != GetUpper()->GetUpper() ) // Did we end up in another column?
         {
             if( !pFrm )
                 return;
@@ -1403,8 +1394,8 @@ void SwTxtFrm::FillCrsrPos( SwFillData& rFill ) const
                 while( pFrm->GetNext() && pFrm->Frm().Bottom() < rFill.Y() )
                     pFrm = pFrm->GetNext();
             }
-            // Kein Fuellen, wenn als letzter Frame in der anvisierten
-            // Spalte kein Absatz, sondern z.B. eine Tabelle steht
+            // No filling, if the last frame in the targeted column does
+            // not contain a paragraph, but e.g. a table
             if( pFrm->IsTxtFrm() )
             {
                 rFill.Fill().nColumnCnt = nNextCol;
@@ -1716,7 +1707,7 @@ static sal_Char const sDoubleSpace[] = "  ";
                     }
                 }
             }
-            // Gehen wir ueber die Unterkante der Seite/Spalte etc. hinaus?
+            // Do we extend over the page's/column's/etc. lower edge?
             const SwFrm* pUp = GetUpper();
             if( pUp->IsInSct() )
             {
