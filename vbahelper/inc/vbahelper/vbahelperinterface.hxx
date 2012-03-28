@@ -61,7 +61,6 @@
 //     virtual OUString getName();
 // }
 //
-const ::rtl::OUString sHelperServiceName( RTL_CONSTASCII_USTRINGPARAM( "ooo.vba.HelperServiceBase" ) );
 
 template< typename Ifc1 >
 class SAL_DLLPUBLIC_TEMPLATE InheritedHelperInterfaceImpl : public Ifc1
