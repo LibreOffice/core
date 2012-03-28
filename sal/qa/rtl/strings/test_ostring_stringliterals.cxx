@@ -152,9 +152,11 @@ void test::ostring::StringLiterals::checkUsage()
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT_EQUAL( foo, rtl::OString() = "foo" );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( FoO.equalsIgnoreAsciiCase( "fOo" ));
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+#endif
     rtl_string_unittest_const_literal_function = false;
     CPPUNIT_ASSERT( foobarfoo.match( "bar", 3 ));
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
