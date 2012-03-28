@@ -400,7 +400,13 @@ Reference< XShape > SimpleShape::implConvertAndInsert( const Reference< XShapes 
     }
 
     if (xShape.is() && !maTypeModel.maRotation.isEmpty())
-        PropertySet(xShape).setAnyProperty(PROP_RotateAngle, makeAny(maTypeModel.maRotation.toInt32() * 100));
+    {
+        PropertySet aPropertySet(xShape);
+        aPropertySet.setAnyProperty(PROP_RotateAngle, makeAny(maTypeModel.maRotation.toInt32() * 100));
+        // If rotation is used, simple setPosition() is not enough.
+        aPropertySet.setAnyProperty(PROP_HoriOrientPosition, makeAny( aShapeRect.X ) );
+        aPropertySet.setAnyProperty(PROP_VertOrientPosition, makeAny( aShapeRect.Y ) );
+    }
 
     return xShape;
 }
