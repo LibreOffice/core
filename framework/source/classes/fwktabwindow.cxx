@@ -52,9 +52,7 @@
 
 const ::rtl::OUString SERVICENAME_WINPROVIDER(RTL_CONSTASCII_USTRINGPARAM("com.sun.star.awt.ContainerWindowProvider"));
 const ::rtl::OUString EXTERNAL_EVENT(RTL_CONSTASCII_USTRINGPARAM("external_event"));
-const ::rtl::OUString BACK_METHOD(RTL_CONSTASCII_USTRINGPARAM("back"));
 const ::rtl::OUString INITIALIZE_METHOD(RTL_CONSTASCII_USTRINGPARAM("initialize"));
-const ::rtl::OUString OK_METHOD(RTL_CONSTASCII_USTRINGPARAM("ok"));
 
 using namespace ::com::sun::star;
 
