@@ -54,8 +54,8 @@
 namespace framework
 {
 
-static const ::rtl::OUString CFGPATH_FACTORIES    (RTL_CONSTASCII_USTRINGPARAM("/org.openoffice.Setup/Office/Factories"));
-static const ::rtl::OUString MODULEPROP_IDENTIFIER(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryModuleIdentifier"));
+static const char CFGPATH_FACTORIES[] = "/org.openoffice.Setup/Office/Factories";
+static const char MODULEPROP_IDENTIFIER[] = "ooSetupFactoryModuleIdentifier";
 
 /*-----------------------------------------------
     04.12.2003 09:32
@@ -212,7 +212,7 @@ void SAL_CALL ModuleManager::replaceByName(const ::rtl::OUString& sName ,
     // we can close it without a flush ... and our read data wont be affected .-)
     css::uno::Reference< css::uno::XInterface >         xCfg      = ::comphelper::ConfigurationHelper::openConfig(
                                                                         xSMGR,
-                                                                        CFGPATH_FACTORIES,
+                                                                        rtl::OUString(CFGPATH_FACTORIES),
                                                                         ::comphelper::ConfigurationHelper::E_STANDARD);
     css::uno::Reference< css::container::XNameAccess >  xModules (xCfg, css::uno::UNO_QUERY_THROW);
     css::uno::Reference< css::container::XNameReplace > xModule  ;
@@ -266,7 +266,7 @@ css::uno::Any SAL_CALL ModuleManager::getByName(const ::rtl::OUString& sName)
           sal_Int32                             c          = lPropNames.getLength();
           sal_Int32                             i          = 0;
 
-    lProps[MODULEPROP_IDENTIFIER] <<= sName;
+    lProps[rtl::OUString(MODULEPROP_IDENTIFIER)] <<= sName;
     for (i=0; i<c; ++i)
     {
         const ::rtl::OUString& sPropName         = lPropNames[i];
@@ -375,7 +375,7 @@ css::uno::Reference< css::container::XNameAccess > ModuleManager::implts_getConf
     {
         xCfg = ::comphelper::ConfigurationHelper::openConfig(
                     xSMGR,
-                    CFGPATH_FACTORIES,
+                    rtl::OUString(CFGPATH_FACTORIES),
                     ::comphelper::ConfigurationHelper::E_READONLY);
     }
     catch(const css::uno::RuntimeException&)

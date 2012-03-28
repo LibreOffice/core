@@ -63,8 +63,8 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-static const rtl::OUString sSpreadsheetDocument( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.sheet.SpreadsheetDocument") );
-static const rtl::OUString sTextDocument( RTL_CONSTASCII_USTRINGPARAM("com.sun.star.text.TextDocument") );
+static const char aSpreadsheetDocument[] = "com.sun.star.sheet.SpreadsheetDocument";
+static const char aTextDocument[] = "com.sun.star.text.TextDocument";
 
 typedef  boost::unordered_map< rtl::OUString,
 sal_Int32, ::rtl::OUStringHash,
@@ -146,8 +146,8 @@ public:
         {
             uno::Reference< lang::XServiceInfo > xServiceInfo( xEnum->nextElement(), uno::UNO_QUERY );
             if ( xServiceInfo.is()
-                && (  ( xServiceInfo->supportsService( sSpreadsheetDocument ) && meDocType == VbaDocumentsBase::EXCEL_DOCUMENT )
-                || ( xServiceInfo->supportsService( sTextDocument ) && meDocType == VbaDocumentsBase::WORD_DOCUMENT ) ) )
+                && (  ( xServiceInfo->supportsService( rtl::OUString(aSpreadsheetDocument) ) && meDocType == VbaDocumentsBase::EXCEL_DOCUMENT )
+                || ( xServiceInfo->supportsService( rtl::OUString(aTextDocument) ) && meDocType == VbaDocumentsBase::WORD_DOCUMENT ) ) )
             {
                 uno::Reference< frame::XModel > xModel( xServiceInfo, uno::UNO_QUERY_THROW ); // that the spreadsheetdocument is a xmodel is a given
                 m_documents.push_back( xModel );

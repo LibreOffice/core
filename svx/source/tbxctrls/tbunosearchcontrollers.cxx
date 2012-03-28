@@ -45,26 +45,26 @@
 namespace svx
 {
 
-static const ::rtl::OUString SEARCHITEM_SEARCHSTRING( RTL_CONSTASCII_USTRINGPARAM( "SearchItem.SearchString" ) );
-static const ::rtl::OUString SEARCHITEM_SEARCHBACKWARD( RTL_CONSTASCII_USTRINGPARAM( "SearchItem.Backward" ) );
-static const ::rtl::OUString SEARCHITEM_SEARCHFLAGS( RTL_CONSTASCII_USTRINGPARAM( "SearchItem.SearchFlags" ) );
+static const char SEARCHITEM_SEARCHSTRING[] = "SearchItem.SearchString";
+static const char SEARCHITEM_SEARCHBACKWARD[] = "SearchItem.Backward";
+static const char SEARCHITEM_SEARCHFLAGS[] = "SearchItem.SearchFlags";
 
-static const ::rtl::OUString COMMAND_EXECUTESEARCH( RTL_CONSTASCII_USTRINGPARAM( ".uno:ExecuteSearch" ) );
-static const ::rtl::OUString COMMAND_FINDTEXT( RTL_CONSTASCII_USTRINGPARAM( ".uno:FindText" ) );
-static const ::rtl::OUString COMMAND_DOWNSEARCH( RTL_CONSTASCII_USTRINGPARAM(".uno:DownSearch") );
-static const ::rtl::OUString COMMAND_UPSEARCH( RTL_CONSTASCII_USTRINGPARAM(".uno:UpSearch") );
-static const ::rtl::OUString COMMAND_APPENDSEARCHHISTORY( RTL_CONSTASCII_USTRINGPARAM( "AppendSearchHistory") );
+static const char COMMAND_EXECUTESEARCH[] = ".uno:ExecuteSearch";
+static const char COMMAND_FINDTEXT[] = ".uno:FindText";
+static const char COMMAND_DOWNSEARCH[] = ".uno:DownSearch";
+static const char COMMAND_UPSEARCH[] = ".uno:UpSearch";
+static const char COMMAND_APPENDSEARCHHISTORY[] = "AppendSearchHistory";
 
-static const ::rtl::OUString SERVICENAME_URLTRANSFORMER( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.util.URLTransformer") );
+static const char SERVICENAME_URLTRANSFORMER[] = "com.sun.star.util.URLTransformer";
 static const sal_Int32       REMEMBER_SIZE = 10;
 
 void impl_executeSearch( const css::uno::Reference< css::lang::XMultiServiceFactory >& rSMgr, const css::uno::Reference< css::frame::XFrame >& xFrame, const css::uno::Sequence< css::beans::PropertyValue >& lArgs )
 {
-    css::uno::Reference< css::util::XURLTransformer > xURLTransformer( rSMgr->createInstance(SERVICENAME_URLTRANSFORMER), css::uno::UNO_QUERY );
+    css::uno::Reference< css::util::XURLTransformer > xURLTransformer( rSMgr->createInstance(rtl::OUString(SERVICENAME_URLTRANSFORMER)), css::uno::UNO_QUERY );
     if ( xURLTransformer.is() )
     {
         css::util::URL aURL;
-        aURL.Complete = COMMAND_EXECUTESEARCH;
+        aURL.Complete = rtl::OUString(COMMAND_EXECUTESEARCH);
         xURLTransformer->parseStrict(aURL);
 
         css::uno::Reference< css::frame::XDispatchProvider > xDispatchProvider(xFrame, css::uno::UNO_QUERY);
@@ -164,16 +164,16 @@ long FindTextFieldControl::PreNotify( NotifyEvent& rNEvt )
                 ::rtl::OUString sFindText = GetText();
                 css::uno::Sequence< css::beans::PropertyValue > lArgs(3);
 
-                lArgs[0].Name = SEARCHITEM_SEARCHSTRING;
+                lArgs[0].Name = rtl::OUString(SEARCHITEM_SEARCHSTRING);
                 lArgs[0].Value <<= sFindText;
 
-                lArgs[1].Name = SEARCHITEM_SEARCHBACKWARD;
+                lArgs[1].Name = rtl::OUString(SEARCHITEM_SEARCHBACKWARD);
                 if (bShift)
                     lArgs[1].Value <<= sal_True;
                 else
                     lArgs[1].Value <<= sal_False;
 
-                lArgs[2].Name = SEARCHITEM_SEARCHFLAGS;
+                lArgs[2].Name = rtl::OUString(SEARCHITEM_SEARCHFLAGS);
                 lArgs[2].Value <<= (sal_Int32)0;
 
                 impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
@@ -300,7 +300,7 @@ css::uno::Reference< css::frame::XStatusListener > SearchToolbarControllersManag
 FindTextToolbarController::FindTextToolbarController( const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager )
     :svt::ToolboxController( rServiceManager,
     css::uno::Reference< css::frame::XFrame >(),
-    COMMAND_FINDTEXT )
+    rtl::OUString(COMMAND_FINDTEXT) )
 {
 }
 
@@ -383,9 +383,9 @@ void SAL_CALL FindTextToolbarController::initialize( const css::uno::Sequence< :
         for ( sal_uInt16 i=0; i<nItemCount; ++i )
         {
             ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
-            if ( sItemCommand.equals( COMMAND_DOWNSEARCH ) )
+            if ( sItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(COMMAND_DOWNSEARCH)))
                 m_nDownSearchId = i;
-            else if (sItemCommand.equals( COMMAND_UPSEARCH ))
+            else if (sItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(COMMAND_UPSEARCH)))
                 m_nUpSearchId = i;
         }
     }
@@ -464,7 +464,7 @@ IMPL_LINK_NOARG(FindTextToolbarController, EditModifyHdl)
 DownSearchToolboxController::DownSearchToolboxController(const css::uno::Reference< css::lang::XMultiServiceFactory >& rServiceManager )
     : svt::ToolboxController( rServiceManager,
     css::uno::Reference< css::frame::XFrame >(),
-    COMMAND_DOWNSEARCH )
+    rtl::OUString(COMMAND_DOWNSEARCH) )
 {
 }
 
@@ -518,7 +518,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL DownSearchToolboxController::getS
 css::uno::Sequence< ::rtl::OUString >  DownSearchToolboxController::getSupportedServiceNames_Static() throw()
 {
     css::uno::Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ));
+    aSNS.getArray()[0] = ::rtl::OUString("com.sun.star.frame.ToolbarController");
     return aSNS;
 }
 
@@ -554,7 +554,7 @@ void SAL_CALL DownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
         for ( sal_uInt16 i=0; i<nItemCount; ++i )
         {
             ::rtl::OUString sItemCommand = pToolBox->GetItemCommand(i);
-            if ( sItemCommand.equals( COMMAND_FINDTEXT ) )
+            if ( sItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(COMMAND_FINDTEXT)) )
             {
                 Window* pItemWin = pToolBox->GetItemWindow(i);
                 if (pItemWin)
@@ -565,17 +565,17 @@ void SAL_CALL DownSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) 
     }
 
     css::uno::Sequence< css::beans::PropertyValue > lArgs(3);
-    lArgs[0].Name = SEARCHITEM_SEARCHSTRING;
+    lArgs[0].Name = rtl::OUString(SEARCHITEM_SEARCHSTRING);
     lArgs[0].Value <<= sFindText;
-    lArgs[1].Name = SEARCHITEM_SEARCHBACKWARD;
+    lArgs[1].Name = rtl::OUString(SEARCHITEM_SEARCHBACKWARD);
     lArgs[1].Value <<= sal_False;
-    lArgs[2].Name = SEARCHITEM_SEARCHFLAGS;
+    lArgs[2].Name = rtl::OUString(SEARCHITEM_SEARCHFLAGS);
     lArgs[2].Value <<= (sal_Int32)0;
 
     impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
 
     css::frame::FeatureStateEvent aEvent;
-    aEvent.FeatureURL.Complete = COMMAND_APPENDSEARCHHISTORY;
+    aEvent.FeatureURL.Complete = rtl::OUString(COMMAND_APPENDSEARCHHISTORY);
     css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager().findController(m_xFrame, COMMAND_FINDTEXT);
     if (xStatusListener.is())
         xStatusListener->statusChanged( aEvent );
@@ -595,7 +595,7 @@ void SAL_CALL DownSearchToolboxController::statusChanged( const css::frame::Feat
 UpSearchToolboxController::UpSearchToolboxController( const css::uno::Reference< css::lang::XMultiServiceFactory > & rServiceManager )
     :svt::ToolboxController( rServiceManager,
     css::uno::Reference< css::frame::XFrame >(),
-    COMMAND_UPSEARCH )
+    rtl::OUString(COMMAND_UPSEARCH) )
 {
 }
 
@@ -649,7 +649,7 @@ css::uno::Sequence< ::rtl::OUString > SAL_CALL UpSearchToolboxController::getSup
 css::uno::Sequence< ::rtl::OUString >  UpSearchToolboxController::getSupportedServiceNames_Static() throw()
 {
     css::uno::Sequence< ::rtl::OUString > aSNS( 1 );
-    aSNS.getArray()[0] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.frame.ToolbarController" ) );
+    aSNS.getArray()[0] = ::rtl::OUString("com.sun.star.frame.ToolbarController");
     return aSNS;
 }
 
@@ -696,17 +696,17 @@ void SAL_CALL UpSearchToolboxController::execute( sal_Int16 /*KeyModifier*/ ) th
     }
 
     css::uno::Sequence< css::beans::PropertyValue > lArgs(3);
-    lArgs[0].Name = SEARCHITEM_SEARCHSTRING;
+    lArgs[0].Name = rtl::OUString(SEARCHITEM_SEARCHSTRING);
     lArgs[0].Value <<= sFindText;
-    lArgs[1].Name = SEARCHITEM_SEARCHBACKWARD;
+    lArgs[1].Name = rtl::OUString(SEARCHITEM_SEARCHBACKWARD);
     lArgs[1].Value <<= sal_True;
-    lArgs[2].Name = SEARCHITEM_SEARCHFLAGS;
+    lArgs[2].Name = rtl::OUString(SEARCHITEM_SEARCHFLAGS);
     lArgs[2].Value <<= (sal_Int32)0;
 
     impl_executeSearch(m_xServiceManager, m_xFrame, lArgs);
 
     css::frame::FeatureStateEvent aEvent;
-    aEvent.FeatureURL.Complete = COMMAND_APPENDSEARCHHISTORY;
+    aEvent.FeatureURL.Complete = rtl::OUString(COMMAND_APPENDSEARCHHISTORY);
     css::uno::Reference< css::frame::XStatusListener > xStatusListener = SearchToolbarControllersManager::createControllersManager().findController(m_xFrame, COMMAND_FINDTEXT);
     if (xStatusListener.is())
         xStatusListener->statusChanged( aEvent );

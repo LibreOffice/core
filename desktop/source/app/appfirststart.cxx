@@ -44,7 +44,7 @@ using namespace ::desktop;
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::beans;
 
-static const OUString sAccessSrvc( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.configuration.ConfigurationUpdateAccess" ) );
+static const char aAccessSrvc[] = "com.sun.star.configuration.ConfigurationUpdateAccess";
 
 /* Local function - get access to the configuration */
 static Reference< XPropertySet > impl_getConfigurationAccess( const OUString& rPath )
@@ -56,7 +56,7 @@ static Reference< XPropertySet > impl_getConfigurationAccess( const OUString& rP
     NamedValue aValue( OUString( RTL_CONSTASCII_USTRINGPARAM( "nodepath" ) ), makeAny( rPath ) );
     aArgs[0] <<= aValue;
     return Reference< XPropertySet >(
-            xConfigProvider->createInstanceWithArguments( sAccessSrvc, aArgs ), UNO_QUERY_THROW );
+            xConfigProvider->createInstanceWithArguments( rtl::OUString(aAccessSrvc), aArgs ), UNO_QUERY_THROW );
 }
 
 void Desktop::DoRestartActionsIfNecessary( sal_Bool bQuickStart )
