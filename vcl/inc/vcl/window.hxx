@@ -1101,6 +1101,8 @@ public:
         return nValue;
     }
 
+    void reorderWithinParent(sal_uInt16 nNewPosition);
+
     //-------------------------------------
     //  Native Widget Rendering functions
     //-------------------------------------

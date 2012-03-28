@@ -206,6 +206,23 @@ void VclBuilder::handleChild(Window *pParent, xmlreader::XmlReader &reader)
             if (name.equals(RTL_CONSTASCII_STRINGPARAM("object")))
             {
                 pCurrentChild = handleObject(pParent, reader);
+
+                if (pCurrentChild)
+                {
+                    rtl::OString sPosition(RTL_CONSTASCII_STRINGPARAM("position"));
+                    std::vector<Window*> aChilds;
+                    for (Window* pChild = pCurrentChild->GetWindow(WINDOW_FIRSTCHILD); pChild;
+                        pChild = pChild->GetWindow(WINDOW_NEXT))
+                    {
+                        aChilds.push_back(pChild);
+                    }
+
+                    for (size_t i = 0; i < aChilds.size(); ++i)
+                    {
+                        sal_uInt16 nPosition = aChilds[i]->getWidgetProperty<sal_uInt16>(sPosition);
+                        aChilds[i]->reorderWithinParent(nPosition);
+                    }
+                }
             }
             else if (name.equals(RTL_CONSTASCII_STRINGPARAM("packing")))
             {
@@ -344,6 +361,10 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
             {
                 bool bTrue = (sValue[0] == 't' || sValue[0] == 'T' || sValue[0] == '1');
                 pCurrent->setChildProperty(sKey, bTrue);
+            }
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("position")))
+            {
+                pCurrent->setChildProperty(sKey, static_cast<sal_uInt16>(sValue.toInt32()));
             }
             else
                 fprintf(stderr, "unknown packing %s\n", sKey.getStr());

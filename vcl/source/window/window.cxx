@@ -1114,6 +1114,38 @@ void Window::ImplRemoveWindow( sal_Bool bRemoveFrameData )
     }
 }
 
+void Window::reorderWithinParent(sal_uInt16 nNewPosition)
+{
+    sal_uInt16 nChildCount = 0;
+    Window *pSource = mpWindowImpl->mpParent->mpWindowImpl->mpFirstChild;
+    while (pSource)
+    {
+        if (nChildCount == nNewPosition)
+            break;
+        pSource = pSource->mpWindowImpl->mpNext;
+        nChildCount++;
+    }
+
+    if (pSource == this) //already at the right place
+        return;
+
+    ImplRemoveWindow(false);
+
+    if (pSource)
+    {
+        mpWindowImpl->mpNext = pSource;
+        mpWindowImpl->mpPrev = pSource->mpWindowImpl->mpPrev;
+        pSource->mpWindowImpl->mpPrev = this;
+    }
+    else
+        mpWindowImpl->mpParent->mpWindowImpl->mpLastChild = this;
+
+    if (mpWindowImpl->mpPrev)
+        mpWindowImpl->mpPrev->mpWindowImpl->mpNext = this;
+    else
+        mpWindowImpl->mpParent->mpWindowImpl->mpFirstChild = this;
+}
+
 // -----------------------------------------------------------------------
 
 void Window::ImplCallResize()
