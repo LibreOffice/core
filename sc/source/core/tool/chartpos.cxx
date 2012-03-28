@@ -399,7 +399,7 @@ void ScChartPositioner::CreatePositionMap()
                 if ( it == pCols->end() )
                 {
                     pCol = new RowMap;
-                    pCols->insert(it, ColumnMap::value_type( nInsCol, pCol ) );
+                    pCols->insert( ColumnMap::value_type( nInsCol, pCol ) );
                 }
                 else
                     pCol = it->second;
@@ -412,7 +412,7 @@ void ScChartPositioner::CreatePositionMap()
                     RowMap::const_iterator it = pCol->find( nInsRow );
                     if ( it == pCol->end() )
                     {
-                        pCol->insert(it, RowMap::value_type( nInsRow, new ScAddress( nCol, nRow, nTab ) ) );
+                        pCol->insert( RowMap::value_type( nInsRow, new ScAddress( nCol, nRow, nTab ) ) );
                     }
                 }
             }
