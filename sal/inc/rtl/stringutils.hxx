@@ -101,7 +101,30 @@ struct ConstCharArrayDetector< const char[ N ], T >
     typedef T Type;
     static const int size = N;
 };
-}
+
+// this one is used to rule out only const char[N]
+template< typename T >
+struct ExceptConstCharArrayDetector
+{
+    typedef Dummy Type;
+};
+template< int N >
+struct ExceptConstCharArrayDetector< const char[ N ] >
+{
+};
+// this one is used to rule out only const char[N]
+// (const will be brought in by 'const T&' in the function call)
+template< typename T >
+struct ExceptCharArrayDetector
+{
+    typedef Dummy Type;
+};
+template< int N >
+struct ExceptCharArrayDetector< char[ N ] >
+{
+};
+
+} /* Namespace */
 
 } /* Namespace */
 

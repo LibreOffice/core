@@ -199,6 +199,9 @@ public:
       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
       @since LibreOffice 3.6
     */
+#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
+    // Old gcc can try to convert anonymous enums to OUString and give compile error.
+    // So instead have a variant for const and non-const char[].
     template< int N >
     OUString( const char (&literal)[ N ] )
     {
@@ -217,15 +220,8 @@ public:
     }
 
     /**
-     * This overload exists only to avoid creating instances directly from (non-const) char[],
-     * which would otherwise be picked up by the optimized const char[] constructor.
-     * Since the non-const array cannot be guaranteed to contain characters in the expected
-     * ASCII encoding, this needs to be prevented.
-     *
-     * It is an error to try to call this overload.
-     *
+     * It is an error to call this overload. Strings cannot directly use non-const char[].
      * @internal
-     * @since LibreOffice 3.6
      */
     template< int N >
     OUString( char (&value)[ N ] )
@@ -236,8 +232,29 @@ public:
         (void) value; // unused
         pData = 0;
         rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10 ); // set to garbage
+        rtl_string_unittest_invalid_conversion = true;
     }
 #endif
+#else // HAVE_SFINAE_ANONYMOUS_BROKEN
+    template< typename T >
+    OUString( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() )
+    {
+        pData = 0;
+        rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+        if (pData == 0) {
+#if defined EXCEPTIONS_OFF
+            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+#else
+            throw std::bad_alloc();
+#endif
+        }
+#ifdef RTL_STRING_UNITTEST
+        rtl_string_unittest_const_literal = true;
+#endif
+    }
+
+#endif // HAVE_SFINAE_ANONYMOUS_BROKEN
+
 
 #ifdef RTL_STRING_UNITTEST
     /**
@@ -245,10 +262,22 @@ public:
      * @internal
      */
     template< typename T >
-    OUString( T )
+    OUString( T&, typename internal::ExceptConstCharArrayDetector< T >::Type = internal::Dummy() )
     {
         pData = 0;
         rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10 ); // set to garbage
+        rtl_string_unittest_invalid_conversion = true;
+    }
+    /**
+     * Only used by unittests to detect incorrect conversions.
+     * @internal
+     */
+    template< typename T >
+    OUString( const T&, typename internal::ExceptCharArrayDetector< T >::Type = internal::Dummy() )
+    {
+        pData = 0;
+        rtl_uString_newFromLiteral( &pData, "!!br0ken!!", 10 ); // set to garbage
+        rtl_string_unittest_invalid_conversion = true;
     }
 #endif
 
@@ -357,10 +386,10 @@ public:
       @exception std::bad_alloc is thrown if an out-of-memory condition occurs
       @since LibreOffice 3.6
     */
-    template< int N >
-    OUString& operator=( const char (&literal)[ N ] )
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OUString& >::Type operator=( T& literal )
     {
-        rtl_uString_newFromLiteral( &pData, literal, N - 1 );
+        rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
         if (pData == 0) {
 #if defined EXCEPTIONS_OFF
             SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
@@ -370,13 +399,6 @@ public:
         }
         return *this;
     }
-
-    /**
-     * It is an error to call this overload. Strings cannot be directly assigned non-const char[].
-     * @internal
-     */
-    template< int N >
-    OUString& operator=( char (&value)[ N ] ); // intentionally not implemented
 
     /**
       Append a string to this string.
@@ -542,21 +564,14 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    sal_Bool equalsIgnoreAsciiCase( const char (&literal)[ N ] ) const SAL_THROW(())
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type equalsIgnoreAsciiCase( T& literal ) const SAL_THROW(())
     {
-        if ( pData->length != N - 1 )
+        if ( pData->length != internal::ConstCharArrayDetector< T, void >::size - 1 )
             return sal_False;
 
         return rtl_ustr_ascii_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length, literal ) == 0;
     }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    sal_Bool equalsIgnoreAsciiCase( char (&literal)[ N ] ) const SAL_THROW(());
 
    /**
       Match against a substring appearing in this string.
@@ -584,19 +599,12 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    sal_Bool match( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type match( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
         return rtl_ustr_ascii_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
-                                                           literal, N - 1 ) == 0;
+            literal, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    sal_Bool match( char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(());
 
     /**
       Match against a substring appearing in this string, ignoring the case of
@@ -628,19 +636,12 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    sal_Bool matchIgnoreAsciiCase( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type matchIgnoreAsciiCase( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
         return rtl_ustr_ascii_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
-                                                                          literal, N - 1 ) == 0;
+            literal, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    sal_Bool matchIgnoreAsciiCase( char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(());
 
     /**
       Compares two strings.
@@ -926,21 +927,14 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    bool endsWith( const char (&literal)[ N ] ) const
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type endsWith( T& literal ) const
     {
-        return N - 1 <= pData->length
+        return internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
             && rtl_ustr_asciil_reverseEquals_WithLength(
-                pData->buffer + pData->length - ( N - 1 ), literal,
-                N - 1);
+                pData->buffer + pData->length - ( internal::ConstCharArrayDetector< T, void >::size - 1 ), literal,
+                internal::ConstCharArrayDetector< T, void >::size - 1);
     }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    bool endsWith( char (&literal)[ N ] ) const;
 
     /**
       Check whether this string ends with a given ASCII string.
@@ -986,22 +980,17 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    sal_Bool endsWithIgnoreAsciiCase( const char (&literal)[ N ] ) const SAL_THROW(())
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type endsWithIgnoreAsciiCase( T& literal ) const SAL_THROW(())
     {
-        return N - 1 <= pData->length
+        return internal::ConstCharArrayDetector< T, void >::size - 1 <= pData->length
             && (rtl_ustr_ascii_compareIgnoreAsciiCase_WithLengths(
-                    pData->buffer + pData->length - ( N - 1 ),
-                    N - 1, literal, N - 1)
+                    pData->buffer + pData->length - ( internal::ConstCharArrayDetector< T, void >::size - 1 ),
+                    internal::ConstCharArrayDetector< T, void >::size - 1, literal,
+                    internal::ConstCharArrayDetector< T, void >::size - 1)
                 == 0);
     }
 
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    sal_Bool endsWithIgnoreAsciiCase( char (&literal)[ N ] ) const SAL_THROW(());
     /**
       Check whether this string ends with a given ASCII string, ignoring the
       case of ASCII letters.
@@ -1052,10 +1041,10 @@ public:
      *
      * @since LibreOffice 3.6
      */
-    template< int N >
-    friend inline bool operator==( const OUString& string, const char (&literal)[ N ] )
+    template< typename T >
+    friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator==( const OUString& string, T& literal )
     {
-        return string.equalsAsciiL( literal, N - 1 );
+        return string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
     }
     /**
      * Compare string to an ASCII string literal.
@@ -1064,10 +1053,10 @@ public:
      *
      * @since LibreOffice 3.6
      */
-    template< int N >
-    friend inline bool operator==( const char (&literal)[ N ], const OUString& string )
+    template< typename T >
+    friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OUString& string )
     {
-        return string.equalsAsciiL( literal, N - 1 );
+        return string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
     }
     /**
      * Compare string to an ASCII string literal.
@@ -1076,10 +1065,10 @@ public:
      *
      * @since LibreOffice 3.6
      */
-    template< int N >
-    friend inline bool operator!=( const OUString& string, const char (&literal)[ N ] )
+    template< typename T >
+    friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OUString& string, T& literal )
     {
-        return !string.equalsAsciiL( literal, N - 1 );
+        return !string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
     }
     /**
      * Compare string to an ASCII string literal.
@@ -1088,35 +1077,11 @@ public:
      *
      * @since LibreOffice 3.6
      */
-    template< int N >
-    friend inline bool operator!=( const char (&literal)[ N ], const OUString& string )
+    template< typename T >
+    friend inline typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OUString& string )
     {
-        return !string.equalsAsciiL( literal, N - 1 );
+        return !string.equalsAsciiL( literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
     }
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    friend inline bool operator==( const OUString& string, char (&literal)[ N ] ); // not implemented
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    friend inline bool operator==( char (&literal)[ N ], const OUString& string ); // not implemented
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    friend inline bool operator!=( const OUString& string, char (&literal)[ N ] ); // not implemented
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    friend inline bool operator!=( char (&literal)[ N ], const OUString& string ); // not implemented
 
     /**
       Returns a hashcode for this string.
@@ -1207,20 +1172,14 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    sal_Int32 indexOf( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
         sal_Int32 ret = rtl_ustr_indexOfAscii_WithLength(
-            pData->buffer + fromIndex, pData->length - fromIndex, literal, N - 1);
+            pData->buffer + fromIndex, pData->length - fromIndex, literal,
+            internal::ConstCharArrayDetector< T, void >::size - 1);
         return ret < 0 ? ret : ret + fromIndex;
     }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    sal_Int32 indexOf( char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(());
 
     /**
        Returns the index within this string of the first occurrence of the
@@ -1311,19 +1270,12 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    sal_Int32 lastIndexOf( const char (&literal)[ N ] ) const SAL_THROW(())
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type lastIndexOf( T& literal ) const SAL_THROW(())
     {
         return rtl_ustr_lastIndexOfAscii_WithLength(
-            pData->buffer, pData->length, literal, N - 1);
+            pData->buffer, pData->length, literal, internal::ConstCharArrayDetector< T, void >::size - 1);
     }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    sal_Int32 lastIndexOf( char (&literal)[ N ] ) const SAL_THROW(());
 
     /**
        Returns the index within this string of the last occurrence of the
@@ -1503,24 +1455,16 @@ public:
 
       @since LibreOffice 3.6
     */
-    template< int N >
-    OUString replaceFirst( const char (&from)[ N ], OUString const & to,
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OUString >::Type replaceFirst( T& from, OUString const & to,
                            sal_Int32 * index = 0) const
     {
         rtl_uString * s = 0;
         sal_Int32 i = 0;
         rtl_uString_newReplaceFirstAsciiL(
-            &s, pData, from, N - 1, to.pData, index == 0 ? &i : index);
+            &s, pData, from, internal::ConstCharArrayDetector< T, void >::size - 1, to.pData, index == 0 ? &i : index);
         return OUString(s, SAL_NO_ACQUIRE);
     }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    OUString replaceFirst( char (&literal)[ N ], OUString const & to,
-                           sal_Int32 * index = 0) const;
 
     /**
       Returns a new string resulting from replacing the first occurrence of a
@@ -1540,38 +1484,17 @@ public:
 
       @since LibreOffice 3.6
     */
-    template< int N1, int N2 >
-    OUString replaceFirst( const char (&from)[ N1 ], const char (&to)[ N2 ],
-                           sal_Int32 * index = 0) const
+    template< typename T1, typename T2 >
+    typename internal::ConstCharArrayDetector< T1, typename internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
+        replaceFirst( T1& from, T2& to, sal_Int32 * index = 0) const
     {
         rtl_uString * s = 0;
         sal_Int32 i = 0;
         rtl_uString_newReplaceFirstAsciiLAsciiL(
-            &s, pData, from, N1 - 1, to, N2 - 1, index == 0 ? &i : index);
+            &s, pData, from, internal::ConstCharArrayDetector< T1, void >::size - 1, to,
+            internal::ConstCharArrayDetector< T2, void >::size - 1, index == 0 ? &i : index);
         return OUString(s, SAL_NO_ACQUIRE);
     }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N1, int N2 >
-    OUString replaceFirst( char (&from)[ N1 ], char (&to)[ N2 ],
-                           sal_Int32 * index = 0) const;
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N1, int N2 >
-    OUString replaceFirst( const char (&from)[ N1 ], char (&to)[ N2 ],
-                           sal_Int32 * index = 0) const;
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N1, int N2 >
-    OUString replaceFirst( char (&from)[ N1 ], const char (&to)[ N2 ],
-                           sal_Int32 * index = 0) const;
 
     /**
       Returns a new string resulting from replacing all occurrences of a given
@@ -1605,20 +1528,13 @@ public:
 
       @since LibreOffice 3.6
     */
-    template< int N >
-    OUString replaceAll( const char (&from)[ N ], OUString const & to) const
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OUString >::Type replaceAll( T& from, OUString const & to) const
     {
         rtl_uString * s = 0;
-        rtl_uString_newReplaceAllAsciiL(&s, pData, from, N - 1, to.pData);
+        rtl_uString_newReplaceAllAsciiL(&s, pData, from, internal::ConstCharArrayDetector< T, void >::size - 1, to.pData);
         return OUString(s, SAL_NO_ACQUIRE);
     }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N >
-    OUString replaceAll( char (&literal)[ N ], OUString const & to) const;
 
     /**
       Returns a new string resulting from replacing all occurrences of a given
@@ -1633,63 +1549,16 @@ public:
 
       @since LibreOffice 3.6
     */
-    template< int N1, int N2 >
-    OUString replaceAll( const char (&from)[ N1 ], const char (&to)[ N2 ] ) const
+    template< typename T1, typename T2 >
+    typename internal::ConstCharArrayDetector< T1, typename internal::ConstCharArrayDetector< T2, OUString >::Type >::Type
+        replaceAll( T1& from, T2& to ) const
     {
         rtl_uString * s = 0;
         rtl_uString_newReplaceAllAsciiLAsciiL(
-            &s, pData, from, N1 - 1, to, N2 - 1);
+            &s, pData, from, internal::ConstCharArrayDetector< T1, void >::size - 1,
+            to, internal::ConstCharArrayDetector< T2, void >::size - 1);
         return OUString(s, SAL_NO_ACQUIRE);
     }
-
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N1, int N2 >
-    OUString replaceAll( char (&from)[ N1 ], char (&to)[ N2 ] ) const
-#ifndef RTL_STRING_UNITTEST
-        ; // intentionally not implemented
-#else
-    {
-        (void) from; // unused
-        (void) to; // unused
-        rtl_uString_newFromLiteral( &const_cast<OUString*>(this)->pData, "!!br0ken!!", 10 ); // set to garbage
-        return *this;
-    }
-#endif
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N1, int N2 >
-    OUString replaceAll( char (&from)[ N1 ], const char (&to)[ N2 ] ) const
-#ifndef RTL_STRING_UNITTEST
-        ; // intentionally not implemented
-#else
-    {
-        (void) from; // unused
-        (void) to; // unused
-        rtl_uString_newFromLiteral( &const_cast<OUString*>(this)->pData, "!!br0ken!!", 10 ); // set to garbage
-        return *this;
-    }
-#endif
-    /**
-     * It is an error to call this overload. Strings cannot directly use non-const char[].
-     * @internal
-     */
-    template< int N1, int N2 >
-    OUString replaceAll( const char (&from)[ N1 ], char (&to)[ N2 ] ) const
-#ifndef RTL_STRING_UNITTEST
-        ; // intentionally not implemented
-#else
-    {
-        (void) from; // unused
-        (void) to; // unused
-        rtl_uString_newFromLiteral( &const_cast<OUString*>(this)->pData, "!!br0ken!!", 10 ); // set to garbage
-        return *this;
-    }
-#endif
 
     /**
       Converts from this string all ASCII uppercase characters (65-90)

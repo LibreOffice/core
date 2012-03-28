@@ -29,6 +29,7 @@
 // activate the extra needed ctor
 #define RTL_STRING_UNITTEST
 bool rtl_string_unittest_const_literal;
+bool rtl_string_unittest_invalid_conversion;
 bool rtl_string_unittest_const_literal_function;
 bool rtl_string_unittest_non_const_literal_function;
 

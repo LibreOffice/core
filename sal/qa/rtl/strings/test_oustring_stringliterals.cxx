@@ -29,6 +29,7 @@
 // activate the extra needed ctor
 #define RTL_STRING_UNITTEST
 extern bool rtl_string_unittest_const_literal;
+extern bool rtl_string_unittest_invalid_conversion;
 extern bool rtl_string_unittest_const_literal_function;
 extern bool rtl_string_unittest_non_const_literal_function;
 
@@ -54,9 +55,6 @@ private:
     void checkBuffer();
 
     void testcall( const char str[] );
-    // invalid conversions will trigger templated OUString ctor that creates an empty string
-    // (see RTL_STRING_UNITTEST)
-    bool validConversion( const rtl::OUString& str ) { return str != "!!br0ken!!"; }
 
 CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);
@@ -67,29 +65,37 @@ CPPUNIT_TEST(checkBuffer);
 CPPUNIT_TEST_SUITE_END();
 };
 
+// reset the flag, evaluate the expression and return
+// whether the string literal ctor was used (i.e. whether the conversion was valid)
+#define VALID_CONVERSION( expression ) \
+    ( \
+    rtl_string_unittest_invalid_conversion = false, \
+    ( void ) ( expression ), \
+    !rtl_string_unittest_invalid_conversion )
+
 void test::oustring::StringLiterals::checkCtors()
 {
-    CPPUNIT_ASSERT( validConversion( rtl::OUString( "test" )));
+    CPPUNIT_ASSERT( VALID_CONVERSION( rtl::OUString( "test" )));
     const char good1[] = "test";
-    CPPUNIT_ASSERT( validConversion( rtl::OUString( good1 )));
+    CPPUNIT_ASSERT( VALID_CONVERSION( rtl::OUString( good1 )));
 
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( (const char*) "test" )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( (const char*) "test" )));
     const char* bad1 = good1;
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( bad1 )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( bad1 )));
     char bad2[] = "test";
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( bad2 )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( bad2 )));
     char* bad3 = bad2;
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( bad3 )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( bad3 )));
     const char* bad4[] = { "test1" };
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( bad4[ 0 ] )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( bad4[ 0 ] )));
     testcall( good1 );
 
 // This one is technically broken, since the first element is 6 characters test\0\0,
 // but there does not appear a way to detect this by compile time (runtime will complain).
 // RTL_CONSTASCII_USTRINGPARAM() has the same flaw.
     const char bad5[][ 6 ] = { "test", "test2" };
-//    CPPUNIT_ASSERT( validConversion( rtl::OUString( bad5[ 0 ] )));
-    CPPUNIT_ASSERT( validConversion( rtl::OUString( bad5[ 1 ] )));
+//    CPPUNIT_ASSERT( VALID_CONVERSION( rtl::OUString( bad5[ 0 ] )));
+    CPPUNIT_ASSERT( VALID_CONVERSION( rtl::OUString( bad5[ 1 ] )));
 
 // Check that contents are correct and equal to the case when RTL_CONSTASCII_USTRINGPARAM is used.
 // Also check that embedded \0 is included.
@@ -101,7 +107,7 @@ void test::oustring::StringLiterals::checkCtors()
 
 void test::oustring::StringLiterals::testcall( const char str[] )
 {
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( str )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( str )));
 }
 
 void test::oustring::StringLiterals::checkUsage()
@@ -159,9 +165,9 @@ void test::oustring::StringLiterals::checkNonconstChar()
     char bar[] = "bar";
     const char consttest[] = "test";
     const char constbar[] = "bar";
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( "footest" ).replaceAll( test, bar )));
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( "footest" ).replaceAll( consttest, bar )));
-    CPPUNIT_ASSERT( !validConversion( rtl::OUString( "footest" ).replaceAll( test, constbar )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( "footest" ).replaceAll( test, bar )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( "footest" ).replaceAll( consttest, bar )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( rtl::OUString( "footest" ).replaceAll( test, constbar )));
     CPPUNIT_ASSERT( rtl::OUString( "foobar" ) == rtl::OUString( "footest" ).replaceAll( consttest, constbar ));
 }
 
