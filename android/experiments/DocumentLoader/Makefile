@@ -196,20 +196,11 @@ build-ant: copy-stuff
 		   juh \
 		   jurt \
 		   ridl \
+		   unoil \
 		   unoloader \
 		  ); do \
 	    $(call COPYJAR,$(OUTDIR)/bin/$${F}.jar); \
 	done
-#
-# com.sun.star.frame.XComponentLoader is not in any jar
-#
-	cd libs && \
-	    LD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib \
-	    DYLD_LIBRARY_PATH=$(OUTDIR_FOR_BUILD)/lib \
-	    $(OUTDIR_FOR_BUILD)/bin/javamaker -BUCR -nD \
-		$(OUTDIR)/bin/udkapi.rdb $(OUTDIR)/bin/offapi.rdb \
-		-Tcom.sun.star.frame.XComponentLoader && \
-	    jar cvf more.jar com
 #
 	unset JAVA_HOME && $(ANT) debug
 
