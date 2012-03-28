@@ -28,7 +28,6 @@
 #ifndef _CHART2_VIEW_SHAPEFACTORY_HXX
 #define _CHART2_VIEW_SHAPEFACTORY_HXX
 
-#include "DumpHelper.hxx"
 #include "PropertyMapper.hxx"
 #include "VLineProperties.hxx"
 #include "BaseGFXHelper.hxx"
@@ -37,13 +36,11 @@
 #include <com/sun/star/drawing/HomogenMatrix.hpp>
 #include <com/sun/star/drawing/PointSequenceSequence.hpp>
 #include <com/sun/star/drawing/PolyPolygonShape3D.hpp>
-#include <com/sun/star/drawing/PolyPolygonBezierCoords.hpp>
 #include <com/sun/star/drawing/Position3D.hpp>
 #include <com/sun/star/drawing/XDrawPage.hpp>
 #include <com/sun/star/drawing/XShapes.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/graphic/XGraphic.hpp>
-
 
 //.............................................................................
 namespace chart
@@ -54,11 +51,8 @@ class Stripe;
 class ShapeFactory
 {
 public:
-    ShapeFactory(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory):
-        m_xShapeFactory(xFactory),
-        mbDump(ENABLE_DUMP)
-    {
-    }
+    ShapeFactory(::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory> xFactory)
+        {m_xShapeFactory = xFactory;}
 
     ::com::sun::star::uno::Reference< ::com::sun::star::drawing::XShapes >
         createGroup2D(
@@ -253,9 +247,6 @@ private:
     //member:
     ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory>
         m_xShapeFactory;
-
-    bool mbDump;
-    DumpHelper maDumpHelper;
 };
 
 //.............................................................................

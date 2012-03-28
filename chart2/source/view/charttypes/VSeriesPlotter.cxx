@@ -158,7 +158,6 @@ VSeriesPlotter::VSeriesPlotter( const uno::Reference<XChartType>& xChartTypeMode
         , m_xColorScheme()
         , m_pExplicitCategoriesProvider(0)
         , m_bPointsWereSkipped(false)
-        , mbDump(ENABLE_DUMP)
 {
     OSL_POSTCOND(m_xChartTypeModel.is(),"no XChartType available in view, fallback to default values may be wrong");
 }
@@ -435,14 +434,6 @@ uno::Reference< drawing::XShape > VSeriesPlotter::createDataLabel( const uno::Re
                     , sal_Int32 nOffset )
 {
     uno::Reference< drawing::XShape > xTextShape;
-
-    if(mbDump)
-    {
-        maDumpHelper.writeElement("DataLabel");
-        maDumpHelper.writeAttribute("Value", fValue);
-        maDumpHelper.writeAttribute("SumValue", fSumValue);
-        maDumpHelper.writePointElement(rScreenPosition2D);
-    }
 
     try
     {
@@ -2197,18 +2188,9 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForSeries(
         default:
             break;
     };
-
-    if(mbDump)
-    {
-        maDumpHelper.writeElement("LegendSymbolForSeries");
-    }
-
     Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
         xTarget, eLegendSymbolStyle, xShapeFactory
             , rSeries.getPropertiesOfSeries(), ePropType, aExplicitSymbol ));
-
-    if(mbDump)
-        maDumpHelper.endElement();
 
     return xShape;
 }
@@ -2262,18 +2244,8 @@ Reference< drawing::XShape > VSeriesPlotter::createLegendSymbolForPoint(
         }
     }
 
-    if (mbDump)
-    {
-        maDumpHelper.writeElement("LegendSymbolForPoint");
-    }
-
     Reference< drawing::XShape > xShape( VLegendSymbolFactory::createSymbol( rEntryKeyAspectRatio,
         xTarget, eLegendSymbolStyle, xShapeFactory, xPointSet, ePropType, aExplicitSymbol ));
-
-    if (mbDump)
-    {
-        maDumpHelper.endElement();
-    }
 
     return xShape;
 }
@@ -2291,11 +2263,6 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
 
     if( ! ( xShapeFactory.is() && xTarget.is() && xContext.is() ) )
         return aResult;
-
-    if(mbDump)
-    {
-        maDumpHelper.writeElement("LegendEntriesForSeries");
-    }
 
     try
     {
@@ -2413,10 +2380,6 @@ std::vector< ViewLegendEntry > VSeriesPlotter::createLegendEntriesForSeries(
     {
         ASSERT_EXCEPTION( ex );
     }
-
-    if(mbDump)
-        maDumpHelper.endElement();
-
     return aResult;
 }
 

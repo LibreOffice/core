@@ -598,9 +598,6 @@ void AreaChart::createShapes()
     if(!(m_pShapeFactory&&m_xLogicTarget.is()&&m_xFinalTarget.is()))
         return;
 
-    if(mbDump)
-        maDumpHelper.writeElement("AreaChart-Shapes");
-
     //the text labels should be always on top of the other series shapes
     //for area chart the error bars should be always on top of the other series shapes
 
@@ -1004,9 +1001,6 @@ void AreaChart::createShapes()
         m_xLogicTarget->remove(xSeriesGroupShape_Shape);
     }
     */
-
-    if(mbDump)
-        maDumpHelper.endElement();
 
     //remove and delete series-group-shape if empty
 

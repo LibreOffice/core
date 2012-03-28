@@ -28,7 +28,6 @@
 #ifndef _CHART2_VSERIESPLOTTER_HXX
 #define _CHART2_VSERIESPLOTTER_HXX
 
-#include "DumpHelper.hxx"
 #include "PlotterBase.hxx"
 #include "VDataSeries.hxx"
 #include "LabelAlignment.hxx"
@@ -443,9 +442,6 @@ protected: //member
     //better performance for big data
     ::com::sun::star::uno::Sequence< sal_Int32 >    m_aCoordinateSystemResolution;
     bool m_bPointsWereSkipped;
-
-    DumpHelper maDumpHelper;
-    bool mbDump;
 
 private: //member
     typedef std::map< sal_Int32 , ExplicitScaleData > tSecondaryValueScales;
