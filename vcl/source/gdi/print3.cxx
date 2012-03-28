@@ -172,8 +172,24 @@ public:
     // set by user through printer config dialog
     // if set, pages are centered and trimmed onto the fixed page
     Size                                                        maFixedPageSize;
+    // set by user through printer config dialog
     sal_Int32                                                   mnDefaultPaperBin;
+    // Set by user through printer preferences in print dialog.
+    // Overrides application-set tray for a page.
     sal_Int32                                                   mnFixedPaperBin;
+
+    // N.B. Apparently we have three levels of paper tray settings
+    // (latter overrides former):
+    // 1. default tray
+    // 2. tray set for a concrete page by an application, e.g., writer
+    //    allows setting a printer tray (for the default printer) for a
+    //    page style. This setting can be overriden by user by selecting
+    //    "Use only paper tray from printer preferences" on the Options
+    //    page in the print dialog, in which case the default tray is
+    //    used for all pages.
+    // 3. tray set in printer properties the printer dialog
+    // I'm not quite sure why 1. and 3. are distinct, but the commit
+    // history suggests this is intentional...
 
     ImplPrinterControllerData() :
         mbFirstPage( sal_True ),
@@ -817,6 +833,11 @@ PrinterController::PageSize vcl::ImplPrinterControllerData::modifyJobSetup( cons
         if( aRealPaperSize != aCurSize )
             mpPrinter->SetPaperSizeUser( aRealPaperSize, ! isFixedPageSize() );
     }
+
+    // paper bin set from properties in print dialog overrides
+    // application default for a page
+    if ( mnFixedPaperBin != -1 )
+        nPaperBin = mnFixedPaperBin;
 
     if( nPaperBin != -1 && nPaperBin != mpPrinter->GetPaperBin() )
         mpPrinter->SetPaperBin( nPaperBin );
