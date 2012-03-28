@@ -2447,7 +2447,10 @@ void addConstant(
                 rtl::OString(
                     RTL_CONSTASCII_STRINGPARAM("Bad type information"))); //TODO
         }
-        valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aByte);
+        if (fieldValue.m_value.aByte < 0x80)
+            valueIndex = classFile->addIntegerInfo(fieldValue.m_value.aByte);
+        else
+            valueIndex = classFile->addIntegerInfo(-256 + (int) fieldValue.m_value.aByte);
         break;
 
     case codemaker::UnoType::SORT_SHORT:
