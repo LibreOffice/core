@@ -467,6 +467,14 @@ extern "C"
 
     extern void * bootstrap_component_getFactory(
         const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+
+    // More of them, in order of discovery. This is a temporary way to handle this..
+    extern void * ucb_component_getFactory(
+        const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * configmgr_component_getFactory(
+        const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * ucpfile_component_getFactory(
+        const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
 }
 #endif
 
@@ -525,11 +533,17 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
 
 #ifdef DISABLE_DYNLOADING
     if ( rLibName.equals( OUSTR("bootstrap.uno" SAL_DLLEXTENSION)) )
-         pSym = (oslGenericFunction) bootstrap_component_getFactory;
+        pSym = (oslGenericFunction) bootstrap_component_getFactory;
+    else if ( rLibName.equals( OUSTR("libucb1.a")) )
+        pSym = (oslGenericFunction) ucb_component_getFactory;
+    else if ( rLibName.equals( OUSTR("configmgr.uno.a")) )
+        pSym = (oslGenericFunction) configmgr_component_getFactory;
+    else if ( rLibName.equals( OUSTR("libucpfile1.a")) )
+        pSym = (oslGenericFunction) ucpfile_component_getFactory;
     else
     {
 #if OSL_DEBUG_LEVEL > 1
-        OSL_TRACE( "%s: attempting to load unknown library %s", __PRETTY_FUNCTION__, OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
+        OSL_TRACE( "attempting to load unknown library %s", OUStringToOString( rLibName, RTL_TEXTENCODING_ASCII_US ).getStr() );
 #endif
     }
 #else
