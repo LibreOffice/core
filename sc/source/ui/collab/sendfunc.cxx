@@ -275,7 +275,6 @@ public:
 
     void packetReceived( TeleConference* pConference, const rtl::OString & );
     void fileReceived( rtl::OUString *rStr );
-    DECL_LINK( ReceiveFileCallback, rtl::OUString * );
 
     void RecvMessage( const rtl::OString &rString )
     {
