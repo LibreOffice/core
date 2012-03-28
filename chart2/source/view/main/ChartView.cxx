@@ -3070,7 +3070,15 @@ void dumpXShape( uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlW
 
     uno::Reference< lang::XServiceInfo > xServiceInfo( xShape, uno::UNO_QUERY_THROW );
     uno::Sequence< rtl::OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
-    sal_Int32 nServices = aServiceNames.getLength();
+
+    uno::Reference< beans::XPropertySet > xPropSet(xShape, uno::UNO_QUERY_THROW);
+    uno::Any aAny = xPropSet->getPropertyValue("Name");
+    rtl::OUString aName;
+    if (aAny >>= aName)
+    {
+        if (!aName.isEmpty())
+            xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("name"), "%s", rtl::OUStringToOString(aName, RTL_TEXTENCODING_UTF8).getStr());
+    }
     if (xServiceInfo->supportsService("com.sun.star.drawing.Text"))
     {
         uno::Reference< text::XText > xText(xShape, uno::UNO_QUERY_THROW);
@@ -3078,19 +3086,20 @@ void dumpXShape( uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlW
         if(!aText.isEmpty())
             xmlTextWriterWriteFormatAttribute( xmlWriter, BAD_CAST("text"), "%s", rtl::OUStringToOString(aText, RTL_TEXTENCODING_UTF8).getStr());
     }
+    else if(xServiceInfo->supportsService("com.sun.star.drawing.GroupShape"))
+    {
+        uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY_THROW);
+        dumpXShapes(xShapes, xmlWriter);
+    }
+#if DEBUG_DUMPER
+    sal_Int32 nServices = aServiceNames.getLength();
     for (sal_Int32 i = 0; i < nServices; ++i)
     {
-        if (aServiceNames[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape")))
-        {
-            uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY_THROW);
-            dumpXShapes(xShapes, xmlWriter);
-        }
-#if DEBUG_DUMPER
         xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ServiceName" ));
         xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST( "name" ), "%s", rtl::OUStringToOString(aServiceNames[i], RTL_TEXTENCODING_UTF8).getStr());
         xmlTextWriterEndElement( xmlWriter );
-#endif
     }
+#endif
 
     xmlTextWriterEndElement( xmlWriter );
 }
