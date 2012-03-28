@@ -496,19 +496,19 @@ sal_Bool ParaPortion::DbgCheckTextPortions()
 }
 #endif
 
-sal_Bool CheckOrderedList( CharAttribArray& rAttribs, sal_Bool bStart )
+bool CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart)
 {
     sal_uInt16 nPrev = 0;
-    for ( sal_uInt16 nAttr = 0; nAttr < rAttribs.Count(); nAttr++ )
+    for (size_t nAttr = 0; nAttr < rAttribs.size(); ++nAttr)
     {
-        EditCharAttrib* pAttr = rAttribs[nAttr];
-        sal_uInt16 nCur = bStart ? pAttr->GetStart() : pAttr->GetEnd();
+        const EditCharAttrib& rAttr = rAttribs[nAttr];
+        sal_uInt16 nCur = bStart ? rAttr.GetStart() : rAttr.GetEnd();
         if ( nCur < nPrev )
-            return sal_False;
+            return false;
 
         nPrev = nCur;
     }
-    return sal_True;
+    return true;
 }
 
 #endif

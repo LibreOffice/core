@@ -117,9 +117,6 @@ struct WritingDirectionInfo
 
 typedef std::deque< WritingDirectionInfo > WritingDirectionInfos;
 
-typedef EditCharAttrib* EditCharAttribPtr;
-SV_DECL_PTRARR( CharAttribArray, EditCharAttribPtr, 0 )
-
 class ContentAttribsInfo
 {
 private:
@@ -804,7 +801,7 @@ inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, size_t n
     return (nAttr < rAttribs.size()) ? &rAttribs[nAttr] : NULL;
 }
 
-sal_Bool CheckOrderedList( CharAttribArray& rAttribs, sal_Bool bStart );
+bool CheckOrderedList(const CharAttribList::AttribsType& rAttribs, bool bStart);
 
 // -------------------------------------------------------------------------
 // class EditEngineItemPool
