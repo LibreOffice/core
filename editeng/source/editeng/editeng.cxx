@@ -2113,7 +2113,7 @@ void EditEngine::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
                 const SvxFieldData* pFldData = static_cast<const SvxFieldItem*>(rAttr.GetItem())->GetField();
                 if ( pFldData && ( !aType || ( pFldData->IsA( aType ) ) ) )
                 {
-                    DBG_ASSERT( rAttr->GetItem()->ISA( SvxFieldItem ), "no field item..." );
+                    DBG_ASSERT( dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "no field item..." );
                     EditSelection aSel( EditPaM(pNode, rAttr.GetStart()), EditPaM(pNode, rAttr.GetEnd()) );
                     String aFieldText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
                     pImpEditEngine->ImpInsertText( aSel, aFieldText );

@@ -298,10 +298,11 @@ SV_DECL_PTRARR( DummyContentList, ContentNodePtr, 0 )
 
 class ContentList : public DummyContentList
 {
-  sal_uInt16 nLastCache;
+    sal_uInt16 nLastCache;
+
 public:
-  ContentList() : DummyContentList( 0 ), nLastCache(0) {}
-  sal_uInt16 GetPos( const ContentNodePtr &rPtr ) const;
+    ContentList();
+    sal_uInt16 GetPos(ContentNode* p) const;
 };
 
 // -------------------------------------------------------------------------

@@ -337,10 +337,12 @@ sal_uInt16 ParaPortionList::GetPos( const ParaPortionPtr &rPtr ) const
                        ((ParaPortionList *)this)->nLastCache );
 }
 
-sal_uInt16 ContentList::GetPos( const ContentNodePtr &rPtr ) const
+ContentList::ContentList() : DummyContentList( 0 ), nLastCache(0) {}
+
+sal_uInt16 ContentList::GetPos(ContentNode* p) const
 {
     return FastGetPos( reinterpret_cast<const VoidPtr *>( GetData() ),
-                       Count(), static_cast<VoidPtr>( rPtr ),
+                       Count(), static_cast<VoidPtr>(p),
                        ((ContentList *)this)->nLastCache );
 }
 
