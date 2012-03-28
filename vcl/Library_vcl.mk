@@ -43,14 +43,13 @@ $(eval $(call gb_Library_set_componentfile,vcl,vcl/vcl.unx))
 endif
 
 $(eval $(call gb_Library_add_package_headers,vcl,vcl_inc))
-$(eval $(call gb_Library_add_package_headers,vcl,vcl_afmhash))
+
+$(eval $(call gb_Library_add_custom_headers,vcl,vcl/generic/fontmanager))
 
 $(eval $(call gb_Library_set_include,vcl,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/solenv/inc \
 	$(if $(filter WNTGCC,$(OS)$(COM)),-I$(OUTDIR)/inc/external/wine) \
-    -I$(WORKDIR)/CustomTarget/vcl/generic/fontmanager \
 ))
 
 $(eval $(call gb_Library_add_defs,vcl,\
@@ -451,9 +450,6 @@ $(eval $(call gb_Library_use_externals,vcl,\
 endif
 
 ifeq ($(GUIBASE),headless)
-$(eval $(call gb_Library_add_cxxflags,vcl,\
-    $$(FREETYPE_CFLAGS) \
-))
 $(eval $(call gb_Library_add_defs,vcl,\
     -DSAL_DLLPREFIX=\"$(gb_Library_SYSPRE)\" \
     -DSAL_DLLPOSTFIX=\"$(gb_Library_OOOEXT)\" \

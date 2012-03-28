@@ -28,13 +28,11 @@
 
 $(eval $(call gb_Library_Library,vclplug_kde4))
 
-$(eval $(call gb_Library_add_package_headers,vcl,vcl_kde4moc))
+$(eval $(call gb_Library_add_custom_headers,vclplug_kde4,vcl/unx/kde4))
 
 $(eval $(call gb_Library_set_include,vclplug_kde4,\
     $$(INCLUDE) \
     -I$(SRCDIR)/vcl/inc \
-    -I$(SRCDIR)/solenv/inc \
-    -I$(WORKDIR)/CustomTarget/vcl/unx/kde4 \
 ))
 
 $(eval $(call gb_Library_set_include,vclplug_kde4,\
@@ -95,9 +93,8 @@ $(eval $(call gb_Library_add_exception_objects,vclplug_kde4,\
 
 # KDE/Qt consider -Wshadow more trouble than benefit
 $(eval $(call gb_Library_add_cxxflags,vclplug_kde4,\
-        -Wno-shadow \
+    -Wno-shadow \
 ))
-
 
 ifeq ($(OS),LINUX)
 $(eval $(call gb_Library_add_linked_libs,vclplug_kde4,\

@@ -1,4 +1,3 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -24,7 +23,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,vcl_afmhash,$(WORKDIR)/CustomTarget/vcl/generic/fontmanager))
-$(eval $(call gb_Package_add_customtarget,vcl_afmhash,vcl/generic/fontmanager))
+$(eval $(call gb_CustomTarget_CustomTarget,vcl/generic/fontmanager,new_style))
 
-# vim: set noet sw=4 ts=4:
+VCFM := $(call gb_CustomTarget_get_workdir,vcl/generic/fontmanager)
+
+$(call gb_CustomTarget_get_target,vcl/generic/fontmanager) : $(VCFM)/afm_hash.hpp
+
+$(VCFM)/afm_hash.hpp : $(SRCDIR)/vcl/generic/fontmanager/afm_keyword_list | $(VCFM)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GPF,1)
+	$(GPERF) -C -t -l -L C++ -m 20 -Z AfmKeywordHash -k '1,4,6,$$' $< | sed -e "s/(char\*)0/(char\*)0, NOPE/g" | grep -v "^#line" > $@
+
+# vim: set noet sw=4:

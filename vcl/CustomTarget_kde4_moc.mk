@@ -25,7 +25,14 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,vcl_kde4moc,$(WORKDIR)/CustomTarget/vcl/unx/kde4))
-$(eval $(call gb_Package_add_customtarget,vcl_kde4moc,vcl/unx/kde4))
+$(eval $(call gb_CustomTarget_CustomTarget,vcl/unx/kde4,new_style))
 
-# vim: set noet sw=4 ts=4:
+VCKM := $(call gb_CustomTarget_get_workdir,vcl/unx/kde4)
+
+$(call gb_CustomTarget_get_target,vcl/unx/kde4) : $(VCKM)/KDEXLib.moc
+
+$(VCKM)/KDEXLib.moc : $(SRCDIR)/vcl/unx/kde4/KDEXLib.hxx | $(VCKM)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),MOC,1)
+	$(MOC4) $< -o $@
+
+# vim: set noet sw=4:

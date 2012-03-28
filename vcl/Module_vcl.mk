@@ -30,11 +30,11 @@
 $(eval $(call gb_Module_Module,vcl))
 
 $(eval $(call gb_Module_add_targets,vcl,\
-    Library_vcl \
-    StaticLibrary_vclmain \
-    Package_inc \
-	Package_afmhash \
     AllLangResTarget_vcl \
+    CustomTarget_afm_hash \
+    Library_vcl \
+    Package_inc \
+    StaticLibrary_vclmain \
 ))
 
 ifeq ($(GUIBASE),unx)
@@ -62,8 +62,8 @@ $(eval $(call gb_Module_add_targets,vcl,\
 endif
 ifneq ($(ENABLE_KDE4),)
 $(eval $(call gb_Module_add_targets,vcl,\
+    CustomTarget_kde4_moc \
     Library_vclplug_kde4 \
-    Package_kde4moc \
 ))
 endif
 endif
