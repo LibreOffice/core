@@ -337,6 +337,12 @@ AC_ARG_WITH(bundled-extension-blobs,
 #                          are to be bundled as pre-registered extensions. Make sure to only bundle
 #                          extensions which can be installed without requiring a license dialog
 #],,)
+AC_ARG_ENABLE(bundled-dictionaries,
+[  --enable-bundled-dictionaries  Download dictionaries (spelling, hyphenation, thesaurus)
+                           according to main/extensions.lst and bundle them.
+],,)
+
+# Remove the following switches when not in release mode.
 AC_ARG_WITH(system-dicts,
 [  --with-system-dicts    Use dictionaries from system paths- Specify
                          them via --with-{dict,hyph,thes}-path=/path
@@ -351,6 +357,9 @@ AC_ARG_WITH(external-hyph-dir,
 AC_ARG_WITH(external-thes-dir,
 [  --with-external-thes-dir Specify external thesaurus dir
 ],,)
+# End of remove.
+
+
 AC_ARG_WITH(system-libs,
 [  --with-system-libs      Use libs already on system -- enables all
                           --with-system-* flags except mozilla and
@@ -5317,6 +5326,19 @@ else
     AC_MSG_RESULT([no])
 fi
 AC_SUBST(ENABLE_HYPHEN)
+
+
+#dnl ===================================================================
+#dnl Check whether we are allowed to bundle dictionaries and whether
+#dnl hunspell is available.
+#dnl ===================================================================
+ENABLE_BUNDLED_DICTIONARIES=
+if test "x$enable_bundled_dictionaries" != "xno" -a "x$ENABLE_HUNSPELL" = "xYES"; then
+   ENABLE_BUNDLED_DICTIONARIES=YES
+fi
+AC_SUBST(ENABLE_BUNDLED_DICTIONARIES)
+
+
 
 dnl ===================================================================
 dnl Checking for mythes

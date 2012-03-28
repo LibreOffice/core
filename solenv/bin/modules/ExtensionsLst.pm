@@ -67,6 +67,9 @@ our @EXPORT = qw(DownloadExtensions GetExtensionList);
 # Number of the line in extensions.lst that is currently being processed.
 my $LineNo = 0;
 
+# Set to 1 to get a more verbose output, the default is 0.
+my $Debug = 0;
+
 
 =head3 Prepare
     Check that some environment variables are properly set and then return the file name
@@ -493,7 +496,7 @@ sub Download (@)
                 }
                 else
                 {
-                    unlink($temporary_filename);
+                    unlink($temporary_filename) if ! $Debug;
                     die "downloaded file has the wrong md5 checksum: $file_md5 instead of $md5sum";
                 }
             }
@@ -521,9 +524,17 @@ sub Download (@)
 =cut
 sub DownloadExtensions ()
 {
-    my $full_file_name = Prepare();
-    my @urls = ParseExtensionsLst($full_file_name, []);
-    Download(@urls);
+    if (defined $ENV{'ENABLE_BUNDLED_DICTIONARIES'}
+         && $ENV{'ENABLE_BUNDLED_DICTIONARIES'} eq "YES")
+    {
+        my $full_file_name = Prepare();
+        my @urls = ParseExtensionsLst($full_file_name, []);
+        Download(@urls);
+    }
+    else
+    {
+        print "bundling of dictionaries is disabled.\n";
+    }
 }
 
 
@@ -548,20 +559,28 @@ sub GetExtensionList ($@)
     my $protocol_selector = shift;
     my @language_list = @_;
 
-    my $full_file_name = Prepare();
-    my @urls = ParseExtensionsLst($full_file_name, \@language_list);
-
-    my @result = ();
-    for my $entry (@urls)
+    if (defined $ENV{'ENABLE_BUNDLED_DICTIONARIES'}
+         && $ENV{'ENABLE_BUNDLED_DICTIONARIES'} eq "YES")
     {
-        my ($protocol, $name, $URL, $md5sum) = @{$entry};
-        if ($protocol =~ /^$protocol_selector$/)
-        {
-            push @result, $name;
-        }
-    }
+        my $full_file_name = Prepare();
+        my @urls = ParseExtensionsLst($full_file_name, \@language_list);
 
-    return @result;
+        my @result = ();
+        for my $entry (@urls)
+        {
+            my ($protocol, $name, $URL, $md5sum) = @{$entry};
+            if ($protocol =~ /^$protocol_selector$/)
+            {
+                push @result, $name;
+            }
+        }
+
+        return @result;
+    }
+    else
+    {
+        # Bundling of dictionaires is disabled.
+    }
 }
 
 

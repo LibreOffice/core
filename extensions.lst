@@ -60,26 +60,45 @@
     87123666ecce441b075c0170fa58690c http://sourceforge.net/projects/aoo-extensions/files/1665/1/dict-en-nz-2008-12-03.oxt/download "dict-en-nz-2008-12-03.oxt"
 
 # English (en_US) dictionary
-[ language=en.* || language==nl_NL ]
+[ language=en.* || language==nl || language==ru ]
     e2eab80772ab1aa09716954219351a80 http://sourceforge.net/projects/aoo-extensions/files/1470/1/en_US.oxt/download "en_US.oxt"
 
-
 # German dictionary.
-[ language=de || language=de-DE || language=nl_NL ]
+[ language=de || language=de_DE || language=nl || language=ru ]
     eb3d3397b8034c7fce6e0d78daf914ca http://sourceforge.net/projects/aoo-extensions/files/1075/10/dict-de_DE-frami_2011-06-03.oxt/download "dict-de_DE-frami_2011-06-03.oxt"
 
 # Dutch dictionary.
-[ language=nl_NL ]
+[ language=nl ]
     5c0de383ef649cffefc128cfb36b4d43 http://sourceforge.net/projects/aoo-extensions/files/1456/6/nl-dict-v2.00g.oxt/download "nl-dict-v2.00g.oxt"
 
 # French dictionary.
-[ language=fr_FR || language=nl_NL ]
+[ language=fr || language=nl ]
     47ca39e385b02839c24a5d953495cb98 http://sourceforge.net/projects/aoo-extensions/files/3554/5/ooo-dictionnaire-fr-moderne-v4.2.oxt/download "ooo-dictionnaire-fr-moderne-v4.2.oxt"
 
 # Italian dictionary.
-[ language=it_IT ]
+[ language=it ]
     c71fa1e7a047cf4efdb27027e3f75a16 http://sourceforge.net/projects/aoo-extensions/files/1204/10/dict-it.oxt/download "dict-it.oxt"
 
 # Spanish dictionary.
-[ language=es_ES ]
+[ language=es ]
     5798f4a61b0f95db3d62eabcb80670eb http://sourceforge.net/projects/aoo-extensions/files/1657/1/es_ES.oxt/download "es_ES.oxt"
+
+# Danish dictionary.
+[ language=da ]
+    b38cba04b6513dd42b031199d617cce6 http://sourceforge.net/projects/aoo-extensions/files/1388/12/DanskeSynonymer.oxt/download "DanskeSynonymer.oxt"
+
+# Norwegian dictionary.
+[ language=no ]
+    b4971332a09292af069783b089b9014b http://svn.skolelinux.org/websvn/filedetails.php?repname=skolelinux&path=%2Ftrunk%2Fi18n%2Fopenoffice%2Futils%2Fdictionary-no-NO-1.0.oxt&rev=0&sc=0 "dictionary-no-NO-1.0.oxt"
+
+# Romanian dictionary.
+[ language=ro ]
+    b05941b975afc0321df0cd48a4d295c8 http://sourceforge.net/projects/aoo-extensions/files/1392/8/dict-ro.1.5.oxt/download "dict-ro.1.5.oxt"
+
+# Russian dictionary.
+[ language=ru ]
+    a63512bc487d7378bbe2e44f59d5ef45 http://sourceforge.net/projects/aoo-extensions/files/3233/2/dict_ru_RU-0.3.6.oxt/download "dict_ru_RU-0.3.6.oxt"
+
+# Slovenian dictionary.
+[ language=sl ]
+    33eb80b84d163e00298bc2c98ddd81cb http://sl.openoffice.org/test/pack-sl.oxt "pack-sl.oxt"
