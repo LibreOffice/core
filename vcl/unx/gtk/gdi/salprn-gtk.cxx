@@ -239,7 +239,7 @@ GtkSalPrinter::StartJob(
         vcl::PrinterController& io_rController)
 {
     if (!lcl_useSystemPrintDialog())
-        return impl_doJob(i_pFileName, i_rJobName, i_rAppName, io_pSetupData, 1, false, io_rController);
+        return PspSalPrinter::StartJob(i_pFileName, i_rJobName, i_rAppName, io_pSetupData, io_rController);
 
     assert(!m_pImpl);
 
