@@ -531,8 +531,10 @@ XTYPEPROVIDER_IMPL_3( CachedContentResultSetStubFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( CachedContentResultSetStubFactory,
-                     "com.sun.star.comp.ucb.CachedContentResultSetStubFactory",
-                     CACHED_CRS_STUB_FACTORY_NAME );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                     "com.sun.star.comp.ucb.CachedContentResultSetStubFactory" )),
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                     CACHED_CRS_STUB_FACTORY_NAME )) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

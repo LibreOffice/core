@@ -87,8 +87,10 @@ XTYPEPROVIDER_IMPL_3( UcbContentProviderProxyFactory,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( UcbContentProviderProxyFactory,
-                     "com.sun.star.comp.ucb.UcbContentProviderProxyFactory",
-                     PROVIDER_FACTORY_SERVICE_NAME );
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         "com.sun.star.comp.ucb.UcbContentProviderProxyFactory" )),
+                     OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         PROVIDER_FACTORY_SERVICE_NAME )) );
 
 //=========================================================================
 //

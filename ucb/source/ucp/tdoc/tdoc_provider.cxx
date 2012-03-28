@@ -105,8 +105,10 @@ XTYPEPROVIDER_IMPL_4( ContentProvider,
 
 XSERVICEINFO_IMPL_1(
     ContentProvider,
-    "com.sun.star.comp.ucb.TransientDocumentsContentProvider",
-    TDOC_CONTENT_PROVIDER_SERVICE_NAME );
+    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+        "com.sun.star.comp.ucb.TransientDocumentsContentProvider" ) ),
+    rtl::OUString( RTL_CONSTASCII_USTRINGPARAM(
+        TDOC_CONTENT_PROVIDER_SERVICE_NAME ) ) );
 
 //=========================================================================
 //

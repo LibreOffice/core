@@ -732,39 +732,18 @@ XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                                  \
 com::sun::star::uno::Sequence< rtl::OUString >                              \
 Class::getSupportedServiceNames_Static()
 
-#ifdef DISABLE_DYNLOADING
-
-#define STATICALLY_LINKED_SERVICE( Class, ImplName, Service, Num )          \
-extern com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > service##Num( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rSMgr ) \
-    __asm("SSF:" Service);                                                  \
-                                                                            \
-com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > service##Num( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rSMgr ) \
-{                                                                           \
-    com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory( Class::createServiceFactory( rSMgr ) ); \
-    xFactory->acquire();                                                    \
-    return xFactory;                                                        \
-}
-
-#else
-
-#define STATICALLY_LINKED_SERVICE( Class, ImplName, Service, Num ) // empty
-
-#endif
-
 // 1 service name
-#define XSERVICEINFO_IMPL_1( Class, ImplName, Service1 )                                \
-XSERVICEINFO_COMMOM_IMPL( Class, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( ImplName )) ) \
-XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                                              \
-                                                                                        \
-com::sun::star::uno::Sequence< rtl::OUString >                                          \
-Class::getSupportedServiceNames_Static()                                                \
-{                                                                                       \
-    com::sun::star::uno::Sequence< rtl::OUString > aSNS( 1 );                           \
-    aSNS.getArray()[ 0 ] = rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( Service1 ));      \
-    return aSNS;                                                                        \
-}                                                                                       \
-                                                                                        \
-STATICALLY_LINKED_SERVICE( Class, ImplName, Service1, 1 )
+#define XSERVICEINFO_IMPL_1( Class, ImplName, Service1 )                    \
+XSERVICEINFO_COMMOM_IMPL( Class, ImplName )                                 \
+XSERVICEINFO_CREATE_INSTANCE_IMPL( Class )                                  \
+                                                                            \
+com::sun::star::uno::Sequence< rtl::OUString >                              \
+Class::getSupportedServiceNames_Static()                                    \
+{                                                                           \
+    com::sun::star::uno::Sequence< rtl::OUString > aSNS( 1 );               \
+    aSNS.getArray()[ 0 ] = Service1;                                        \
+    return aSNS;                                                            \
+}
 
 #endif /* !_UCBHELPER_MACROS_HXX */
 

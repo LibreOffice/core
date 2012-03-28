@@ -511,8 +511,10 @@ XTYPEPROVIDER_IMPL_3( SortedDynamicResultSetFactory,
 //--------------------------------------------------------------------------
 
 XSERVICEINFO_IMPL_1( SortedDynamicResultSetFactory,
-                     "com.sun.star.comp.ucb.SortedDynamicResultSetFactory",
-                     DYNAMIC_RESULTSET_FACTORY_NAME );
+                         OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.comp.ucb.SortedDynamicResultSetFactory" )),
+                         OUString(RTL_CONSTASCII_USTRINGPARAM(
+                         DYNAMIC_RESULTSET_FACTORY_NAME )) );
 
 //--------------------------------------------------------------------------
 // Service factory implementation.

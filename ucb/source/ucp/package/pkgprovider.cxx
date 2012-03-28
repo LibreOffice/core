@@ -181,8 +181,10 @@ XTYPEPROVIDER_IMPL_3( ContentProvider,
 //=========================================================================
 
 XSERVICEINFO_IMPL_1( ContentProvider,
-                    "com.sun.star.comp.ucb.PackageContentProvider",
-                    PACKAGE_CONTENT_PROVIDER_SERVICE_NAME );
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        "com.sun.star.comp.ucb.PackageContentProvider" )),
+                     rtl::OUString(RTL_CONSTASCII_USTRINGPARAM(
+                        PACKAGE_CONTENT_PROVIDER_SERVICE_NAME )) );
 
 //=========================================================================
 //

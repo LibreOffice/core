@@ -34,7 +34,6 @@
  *************************************************************************/
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
-#include <com/sun/star/lang/XSingleServiceFactory.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
@@ -47,30 +46,6 @@
 #include <cppuhelper/bootstrap.hxx>
 #include <com/sun/star/uno/XComponentContext.hpp>
 #include <ucbhelper/configurationkeys.hxx>
-#endif
-
-#ifdef DISABLE_DYNLOADING
-
-#define MSF_CREATEINSTANCE(Msf, Service)                                \
-({                                                                      \
-    extern com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > service( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rSMgr ) __asm("SSF:" Service); \
-    com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory( service( Msf ) ); \
-    xFactory->createInstance();                                          \
-})
-
-#define MSF_CREATEINSTANCE_WITHARGUMENTS(Msf, Service, Args)            \
-({                                                                      \
-    extern com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > service( com::sun::star::uno::Reference< com::sun::star::lang::XMultiServiceFactory > &rSMgr ) __asm("SSF:" Service); \
-    com::sun::star::uno::Reference< com::sun::star::lang::XSingleServiceFactory > xFactory( service( Msf ) ); \
-    xFactory->createInstanceWithArguments( Args );                       \
-})
-
-#else
-
-#define MSF_CREATEINSTANCE(Msf, Service) Msf->createInstance( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( Service )) )
-
-#define MSF_CREATEINSTANCE_WITHARGUMENTS(Msf, Service, Args) Msf->createInstanceWithArguments( rtl::OUString(RTL_CONSTASCII_USTRINGPARAM( Service )), Args )
-
 #endif
 
 using namespace com::sun::star::lang;
@@ -311,7 +286,9 @@ bool ContentBroker_Impl::initialize()
             {
                 try
                 {
-                    xIfc = MSF_CREATEINSTANCE( m_xSMgr, "com.sun.star.ucb.UniversalContentBroker" );
+                    xIfc = m_xSMgr->createInstance(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.ucb.UniversalContentBroker" )) );
                 }
                 catch ( Exception const & )
                 {
@@ -343,7 +320,10 @@ bool ContentBroker_Impl::initialize()
             {
                 try
                 {
-                    xIfc = MSF_CREATEINSTANCE_WITHARGUMENTS( m_xSMgr, "com.sun.star.ucb.UniversalContentBroker", m_aArguments );
+                    xIfc = m_xSMgr->createInstanceWithArguments(
+                            OUString(RTL_CONSTASCII_USTRINGPARAM(
+                                "com.sun.star.ucb.UniversalContentBroker" )),
+                            m_aArguments );
                 }
                 catch ( Exception const & )
                 {
