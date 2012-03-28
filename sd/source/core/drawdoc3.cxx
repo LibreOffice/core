@@ -202,7 +202,7 @@ void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBookmarkDo
 \************************************************************************/
 
 void lcl_IterateBookmarkPages( SdDrawDocument &rDoc, SdDrawDocument* pBookmarkDoc,
-                               std::vector<rtl::OUString> &rBookmarkList, sal_uInt16 nBMSdPageCount,
+                               const std::vector<rtl::OUString> &rBookmarkList, sal_uInt16 nBMSdPageCount,
                                InsertBookmarkAsPage_FindDuplicateLayouts& rPageIterator )
 {
     //
@@ -992,7 +992,7 @@ sal_Bool SdDrawDocument::InsertBookmarkAsPage(
 }
 
 sal_Bool SdDrawDocument::InsertBookmarkAsPage(
-    std::vector<rtl::OUString> &rBookmarkList,
+    const std::vector<rtl::OUString> &rBookmarkList,
     std::vector<rtl::OUString> &rExchangeList,            // Liste der zu verwendenen Namen
     sal_Bool bLink,
     sal_Bool bReplace,
