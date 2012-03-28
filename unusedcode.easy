@@ -825,21 +825,7 @@ nullcanvas::SpriteCanvasHelper::genericUpdate(basegfx::B2DConnectedRanges<canvas
 nullcanvas::SpriteCanvasHelper::opaqueUpdate(basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 nullcanvas::SpriteCanvasHelper::scrollUpdate(basegfx::B2DRange const&, basegfx::B2DRange const&, basegfx::B2DConnectedRanges<canvas::SpriteRedrawManager::SpriteInfo>::ConnectedComponents const&)
 ooo::vba::extractIntFromAny(com::sun::star::uno::Any const&)
-oox::core::PowerPointExport::WriteTextStyleLevel(boost::shared_ptr<sax_fastparser::FastSerializerHelper>, int, int)
-oox::drawingml::TextParagraphProperties::dump() const
-oox::dump::Config::requestEncryptionData(comphelper::IDocPasswordVerifier&)
-oox::dump::ConfigItemBase::readConfigLine(oox::TextInputStream&) const
-oox::dump::DffStreamObject::construct(oox::dump::ObjectBase const&, oox::dump::BinaryInputStreamRef const&, rtl::OUString const&)
 oox::dump::DffStreamObject::construct(oox::dump::OutputObjectBase const&, oox::dump::BinaryInputStreamRef const&)
-oox::dump::DffStreamObject::dumpDffColor(oox::dump::String const&)
-oox::dump::FormulaStack::FormulaStack()
-oox::dump::FormulaStack::getString(std::stack<rtl::OUString, std::__debug::deque<rtl::OUString, std::allocator<rtl::OUString> > > const&) const
-oox::dump::FormulaStack::pushBinaryOp(oox::dump::String const&)
-oox::dump::FormulaStack::pushFuncOp(oox::dump::String const&, rtl::OUString const&, unsigned char)
-oox::dump::FormulaStack::pushOperand(oox::dump::String const&)
-oox::dump::FormulaStack::pushUnaryOp(oox::dump::String const&, oox::dump::String const&)
-oox::dump::FormulaStack::replaceOnTop(rtl::OUString const&, rtl::OUString const&)
-oox::dump::InputObjectBase::dumpChar(oox::dump::String const&, unsigned short)
 oox::dump::InputObjectBase::dumpColorABGR(oox::dump::String const&)
 oox::dump::InputObjectBase::dumpRk(oox::dump::String const&)
 oox::dump::ItemFormat::set(oox::dump::DataType, oox::dump::FormatType, rtl::OUString const&, rtl::OUString const&)

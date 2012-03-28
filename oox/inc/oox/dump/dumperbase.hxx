@@ -480,26 +480,18 @@ static const String EMPTY_STRING;
 class FormulaStack
 {
 public:
-    explicit            FormulaStack();
-
     inline const ::rtl::OUString& getFormulaString() const { return getString( maFmlaStack ); }
     inline const ::rtl::OUString& getClassesString() const { return getString( maClassStack ); }
 
     void                pushOperand( const String& rOp, const ::rtl::OUString& rTokClass );
-    void                pushOperand( const String& rOp );
-    void                pushUnaryOp( const String& rLOp, const String& rROp );
-    void                pushBinaryOp( const String& rOp );
-    void                pushFuncOp( const String& rFunc, const ::rtl::OUString& rTokClass, sal_uInt8 nParamCount );
 
     inline void         setError() { mbError = true; }
-    void                replaceOnTop( const ::rtl::OUString& rOld, const ::rtl::OUString& rNew );
 
 private:
     typedef ::std::stack< ::rtl::OUString > StringStack;
 
     inline bool         check( bool bCond ) { return (mbError |= !bCond) == false; }
 
-    const ::rtl::OUString& getString( const StringStack& rStack ) const;
     void                pushUnaryOp( StringStack& rStack, const ::rtl::OUString& rLOp, const ::rtl::OUString& rROp );
     void                pushBinaryOp( StringStack& rStack, const ::rtl::OUString& rOp );
     void                pushFuncOp( StringStack& rStack, const ::rtl::OUString& rOp, sal_uInt8 nParamCount );
@@ -611,9 +603,6 @@ private:
                             TextInputStream& rStrm,
                             ::rtl::OUString& orKey,
                             ::rtl::OUString& orData ) const;
-
-    LineType            readConfigLine(
-                            TextInputStream& rStrm ) const;
 
     void                processConfigItem(
                             TextInputStream& rStrm,
@@ -1013,7 +1002,6 @@ public:
     template< typename Type >
     bool                hasName( const NameListWrapper& rListWrp, Type nKey ) const;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier );
     bool                isPasswordCancelled() const;
 
 protected:
@@ -1598,7 +1586,6 @@ protected:
     inline void         dumpUnused( sal_Int32 nBytes ) { dumpArray( OOX_DUMP_UNUSED, nBytes ); }
     inline void         dumpUnknown( sal_Int32 nBytes ) { dumpArray( OOX_DUMP_UNKNOWN, nBytes ); }
 
-    sal_Unicode         dumpChar( const String& rName, rtl_TextEncoding eTextEnc );
     sal_Unicode         dumpUnicode( const String& rName );
 
     ::rtl::OUString     dumpCharArray( const String& rName, sal_Int32 nLen, rtl_TextEncoding eTextEnc, bool bHideTrailingNul = false );

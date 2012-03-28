@@ -926,54 +926,10 @@ void StringHelper::convertStringToIntList( Int64Vector& orVec, const OUString& r
 // ============================================================================
 // ============================================================================
 
-FormulaStack::FormulaStack() :
-    mbError( false )
-{
-}
-
 void FormulaStack::pushOperand( const String& rOp, const OUString& rTokClass )
 {
     maFmlaStack.push( rOp );
     maClassStack.push( rTokClass );
-}
-
-void FormulaStack::pushOperand( const String& rOp )
-{
-    pushOperand( rOp, OUString( OOX_DUMP_BASECLASS ) );
-}
-
-void FormulaStack::pushUnaryOp( const String& rLOp, const String& rROp )
-{
-    pushUnaryOp( maFmlaStack, rLOp, rROp );
-    pushUnaryOp( maClassStack, rLOp, rROp );
-}
-
-void FormulaStack::pushBinaryOp( const String& rOp )
-{
-    pushBinaryOp( maFmlaStack, rOp );
-    pushBinaryOp( maClassStack, rOp );
-}
-
-void FormulaStack::pushFuncOp( const String& rFunc, const OUString& rTokClass, sal_uInt8 nParamCount )
-{
-    pushFuncOp( maFmlaStack, rFunc, nParamCount );
-    pushFuncOp( maClassStack, rTokClass, nParamCount );
-}
-
-void FormulaStack::replaceOnTop( const OUString& rOld, const OUString& rNew )
-{
-    if( !maFmlaStack.empty() )
-    {
-        sal_Int32 nPos = maFmlaStack.top().indexOf( rOld );
-        if( nPos >= 0 )
-            maFmlaStack.top() = maFmlaStack.top().copy( 0, nPos ) + rNew + maFmlaStack.top().copy( nPos + rOld.getLength() );
-    }
-}
-
-const OUString& FormulaStack::getString( const StringStack& rStack ) const
-{
-    static const OUString saStackError = OOX_DUMP_ERRSTRING( "stack" );
-    return (mbError || rStack.empty()) ? saStackError : rStack.top();
 }
 
 void FormulaStack::pushUnaryOp( StringStack& rStack, const OUString& rLOp, const OUString& rROp )
@@ -1078,12 +1034,6 @@ ConfigItemBase::LineType ConfigItemBase::readConfigLine(
     orData = aPair.second;
     return (!orKey.isEmpty() && (!orData.isEmpty() || !orKey.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "end" ) ))) ?
         LINETYPE_DATA : LINETYPE_END;
-}
-
-ConfigItemBase::LineType ConfigItemBase::readConfigLine( TextInputStream& rStrm ) const
-{
-    OUString aKey, aData;
-    return readConfigLine( rStrm, aKey, aData );
 }
 
 void ConfigItemBase::processConfigItem(
@@ -1729,11 +1679,6 @@ void Config::eraseNameList( const String& rListName )
 NameListRef Config::getNameList( const String& rListName ) const
 {
     return implGetNameList( rListName );
-}
-
-Sequence< NamedValue > Config::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier )
-{
-    return mxCfgData->requestEncryptionData( rVerifier );
 }
 
 bool Config::isPasswordCancelled() const
@@ -2632,16 +2577,6 @@ void InputObjectBase::dumpArray( const String& rName, sal_Int32 nBytes, sal_Unic
     }
     else if( nDumpSize == 1 )
         dumpHex< sal_uInt8 >( rName );
-}
-
-sal_Unicode InputObjectBase::dumpChar( const String& rName, rtl_TextEncoding eTextEnc )
-{
-    sal_uInt8 nChar;
-    *mxStrm >> nChar;
-    OUString aChar = OStringToOUString( OString( static_cast< sal_Char >( nChar ) ), eTextEnc );
-    sal_Unicode cChar = aChar.isEmpty() ? 0 : aChar[ 0 ];
-    writeCharItem( rName( "char" ), cChar );
-    return cChar;
 }
 
 sal_Unicode InputObjectBase::dumpUnicode( const String& rName )

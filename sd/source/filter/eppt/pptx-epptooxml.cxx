@@ -1537,20 +1537,6 @@ sal_Int32 PowerPointExport::nStyleLevelToken[5] =
     XML_lvl5pPr
 };
 
-void PowerPointExport::WriteTextStyleLevel( FSHelperPtr pFS, int nInstance, int nLevel )
-{
-    OSL_ASSERT( nLevel >= 0 && nLevel < 5 );
-    OSL_ASSERT( nInstance >= 0 && nInstance < 9 );
-
-    PPTExParaLevel rParaLevel = mpStyleSheet->GetParaSheet( nInstance ).maParaLevel[ nLevel ];
-
-    pFS->startElementNS( XML_a, PowerPointExport::nStyleLevelToken[ nLevel ],
-             XML_algn, DrawingML::GetAlignment( rParaLevel.mnOOAdjust ),
-             FSEND );
-
-    pFS->endElementNS( XML_a, PowerPointExport::nStyleLevelToken[ nLevel ] );
-}
-
 void PowerPointExport::ImplWriteSlideMaster( sal_uInt32 nPageNum, Reference< XPropertySet > aXBackgroundPropSet )
 {
     DBG(printf("write slide master: %" SAL_PRIuUINT32 "\n----------------\n", nPageNum));

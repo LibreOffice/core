@@ -469,31 +469,6 @@ float TextParagraphProperties::getCharHeightPoints( float fDefault ) const
 }
 
 
-#ifdef DBG_UTIL
-
-void TextParagraphProperties::dump() const
-{
-    Reference< ::com::sun::star::lang::XMultiServiceFactory > xFactory = comphelper::getProcessServiceFactory();
-    Reference< ::com::sun::star::drawing::XShape > xShape( oox::ppt::PowerPointImport::mpDebugFilterBase->getModelFactory()->createInstance( CREATE_OUSTRING( "com.sun.star.presentation.TitleTextShape" ) ), UNO_QUERY );
-    Reference< ::com::sun::star::text::XText > xText( xShape, UNO_QUERY );
-
-    Reference< com::sun::star::drawing::XDrawPage > xDebugPage(ppt::SlidePersist::mxDebugPage.get(), UNO_QUERY);
-    if (xDebugPage.is())
-        xDebugPage->add( xShape );
-
-    PropertyMap emptyMap;
-
-    const OUString sText = CREATE_OUSTRING("debug");
-    xText->setString( sText );
-    Reference< ::com::sun::star::text::XTextCursor > xStart( xText->createTextCursor(), UNO_QUERY );
-    Reference< ::com::sun::star::text::XTextRange > xRange( xStart, UNO_QUERY );
-    xStart->gotoEnd( sal_True );
-    Reference< XPropertySet > xPropSet( xRange, UNO_QUERY );
-    pushToPropSet( NULL, xPropSet, emptyMap, NULL, false, 0 );
-    PropertySet pSet( xPropSet );
-    pSet.dump();
-}
-#endif
 } }
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

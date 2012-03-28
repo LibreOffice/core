@@ -63,12 +63,6 @@ const sal_uInt16 DFF_OPT_FLAGSMASK          = 0x003F;
 
 // ============================================================================
 
-void DffStreamObject::construct( const ObjectBase& rParent, const BinaryInputStreamRef& rxStrm, const OUString& rSysFileName )
-{
-    SequenceRecordObjectBase::construct( rParent, rxStrm, rSysFileName, "DFF-RECORD-NAMES" );
-    constructDffObj();
-}
-
 void DffStreamObject::construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm )
 {
     SequenceRecordObjectBase::construct( rParent, rxStrm, "DFF-RECORD-NAMES" );
@@ -197,11 +191,6 @@ void DffStreamObject::constructDffObj()
 sal_uInt32 DffStreamObject::dumpDffSimpleColor( const String& rName )
 {
     return dumpHex< sal_uInt32 >( rName, "DFF-SIMPLE-COLOR" );
-}
-
-sal_uInt32 DffStreamObject::dumpDffColor( const String& rName )
-{
-    return dumpHex< sal_uInt32 >( rName, "DFF-COLOR" );
 }
 
 namespace {
