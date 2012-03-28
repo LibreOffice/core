@@ -770,10 +770,8 @@ comphelper::detail::ConfigurationWrapper::getLocalizedPropertyValue(rtl::OUStrin
 comphelper::detail::ConfigurationWrapper::setLocalizedPropertyValue(boost::shared_ptr<comphelper::ConfigurationChanges> const&, rtl::OUString const&, com::sun::star::uno::Any const&) const
 comphelper::findProperty(com::sun::star::beans::Property&, com::sun::star::uno::Sequence<com::sun::star::beans::Property>&, rtl::OUString const&)
 connectivity::OKeyValue::OKeyValue()
-connectivity::ORowSetValue::setFromDouble(double const&, int)
 connectivity::OSQLInternalNode::OSQLInternalNode(unsigned short const*, connectivity::SQLNodeType, unsigned int)
 connectivity::OSQLScanner::GetCurrentRule() const
-connectivity::OSortIndex::GetValue(int) const
 connectivity::SQLError::getSQLState(int) const
 connectivity::file::OStatement_Base::reset()
 connectivity::file::OStatement_Base::setWarning(com::sun::star::sdbc::SQLWarning const&)

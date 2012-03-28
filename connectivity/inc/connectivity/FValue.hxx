@@ -330,8 +330,6 @@ namespace connectivity
         sal_Int64       getLong()   const;
         double          getDouble() const;
         float           getFloat() const;
-        // convert the double to the type _nDataType
-        void            setFromDouble(const double& _rVal,sal_Int32 _nDatatype);
 
         ::rtl::OUString getString() const;      // makes a automatic conversion if type isn't a string
         ::com::sun::star::util::Date                getDate()       const;

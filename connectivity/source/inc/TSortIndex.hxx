@@ -107,11 +107,6 @@ namespace connectivity
         sal_Bool IsFrozen() const { return m_bFrozen; }
         // returns the current size of the keyvalues
         sal_Int32 Count()   const { return m_aKeyValues.size(); }
-        /** GetValue returns the value at position nPos (1..n) [sorted access].
-            It only allowed to call this method after the sortindex has been frozen.
-        */
-
-        sal_Int32 GetValue(sal_Int32 nPos) const;
 
         inline const ::std::vector<OKeyType>& getKeyType() const { return m_aKeyType; }
         inline TAscendingOrder getAscending(::std::vector<TAscendingOrder>::size_type _nPos) const { return m_aAscending[_nPos]; }
