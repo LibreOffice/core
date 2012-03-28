@@ -25,7 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-# This executable is only required by unit-test sal_osl_profile.
+# This executable is required only by sal_osl_process test.
 # See qa/osl/process/osl_process.cxx:411
 $(eval $(call gb_Executable_Executable,osl_process_child))
 
@@ -38,7 +38,7 @@ $(eval $(call gb_Executable_add_exception_objects,osl_process_child,\
 	sal/qa/osl/process/osl_process_child \
 ))
 
-# Also this batch file is required by sal_osl_profile.
+# Also this batch file is required by sal_osl_process.
 # See qa/osl/process/osl_process.cxx:675
 ifeq ($(OS),WNT)
 BATCH_FILE:=batch.bat
