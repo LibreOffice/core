@@ -256,20 +256,19 @@ public:
 
 class ScDocFuncRecv : public ScDocFunc
 {
-    ScDocFunc *mpChain;
-    ScCollaboration* mpCollab;
+    boost::shared_ptr<ScDocFuncDirect>  mpChain;
+    boost::shared_ptr<ScCollaboration>  mpCollab;
 public:
     // FIXME: really ScDocFunc should be an abstract base
-    ScDocFuncRecv( ScDocShell& rDocSh, ScDocFunc *pChain )
+    ScDocFuncRecv( ScDocShell& rDocSh, boost::shared_ptr<ScDocFuncDirect>& pChain )
         : ScDocFunc( rDocSh ),
-          mpChain( pChain ),
-          mpCollab( NULL)
+          mpChain( pChain )
     {
         fprintf( stderr, "Receiver created !\n" );
     }
     virtual ~ScDocFuncRecv() {}
 
-    void SetCollaboration( ScCollaboration* pCollab )
+    void SetCollaboration( boost::shared_ptr<ScCollaboration>& pCollab )
     {
         mpCollab = pCollab;
     }
@@ -380,8 +379,8 @@ void ScDocFuncRecv::fileReceived( rtl::OUString *pStr )
 
 class ScDocFuncSend : public ScDocFunc
 {
-    ScDocFuncRecv *mpChain;
-    ScCollaboration* mpCollab;
+    boost::shared_ptr<ScDocFuncRecv>    mpChain;
+    boost::shared_ptr<ScCollaboration>  mpCollab;
 
     void SendMessage( ScChangeOpWriter &rOp )
     {
@@ -424,16 +423,15 @@ class ScDocFuncSend : public ScDocFunc
 public:
     // FIXME: really ScDocFunc should be an abstract base, so
     // we don't need the rDocSh hack/pointer
-    ScDocFuncSend( ScDocShell& rDocSh, ScDocFuncRecv *pChain )
+    ScDocFuncSend( ScDocShell& rDocSh, boost::shared_ptr<ScDocFuncRecv>& pChain )
             : ScDocFunc( rDocSh ),
-            mpChain( pChain ),
-            mpCollab( NULL)
+            mpChain( pChain )
     {
         fprintf( stderr, "Sender created !\n" );
     }
     virtual ~ScDocFuncSend() {}
 
-    void SetCollaboration( ScCollaboration* pCollab )
+    void SetCollaboration( boost::shared_ptr<ScCollaboration>& pCollab )
     {
         mpCollab = pCollab;
     }
@@ -562,20 +560,28 @@ public:
 
 SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
 {
-    // FIXME: the chains should be auto-ptrs, so should be collab
+    // With ScDocFuncDirect shared_ptr it should even be possible during
+    // runtime to replace a ScDocFuncDirect instance with a ScDocFuncSend
+    // chained instance (holding the same ScDocFuncDirect instance) and vice
+    // versa.
     bool bIsMaster = false;
     if (getenv ("INTERCEPT"))
-        return new ScDocFuncSend( *this, new ScDocFuncRecv( *this, new ScDocFuncDirect( *this ) ) );
+    {
+        boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *this ) );
+        boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( *this, pDirect ) );
+        return new ScDocFuncSend( *this, pReceiver );
+    }
     else if (isCollabMode( bIsMaster ))
     {
-        ScDocFuncRecv* pReceiver = new ScDocFuncRecv( *this, new ScDocFuncDirect( *this ) );
+        boost::shared_ptr<ScDocFuncDirect> pDirect( new ScDocFuncDirect( *this ) );
+        boost::shared_ptr<ScDocFuncRecv> pReceiver( new ScDocFuncRecv( *this, pDirect ) );
         ScDocFuncSend* pSender = new ScDocFuncSend( *this, pReceiver );
-        bool bOk = true;
-        ScCollaboration* pCollab = new ScCollaboration();
+        boost::shared_ptr<ScCollaboration> pCollab( new ScCollaboration );
         pCollab->sigPacketReceived.connect(
-            boost::bind( &ScDocFuncRecv::packetReceived, pReceiver, _1, _2 ));
+                boost::bind( &ScDocFuncRecv::packetReceived, pReceiver, _1, _2 ));
         pCollab->sigFileReceived.connect(
-            boost::bind( &ScDocFuncRecv::fileReceived, pReceiver, _1));
+                boost::bind( &ScDocFuncRecv::fileReceived, pReceiver, _1));
+        bool bOk = true;
         bOk = bOk && pCollab->initManager(!bIsMaster);
         if (bIsMaster)
         {
@@ -590,7 +596,7 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
         else
         {
             fprintf( stderr, "Could not start collaboration.\n");
-            delete pCollab;
+            // pCollab shared_ptr will be destructed
         }
         return pSender;
     }
