@@ -77,14 +77,11 @@ using ::rtl::OString;
 
 namespace desktop {
 
-static const ::rtl::OUString ITEM_DESCRIPTOR_COMMANDURL(RTL_CONSTASCII_USTRINGPARAM("CommandURL"));
-static const ::rtl::OUString ITEM_DESCRIPTOR_CONTAINER(RTL_CONSTASCII_USTRINGPARAM("ItemDescriptorContainer"));
-static const ::rtl::OUString ITEM_DESCRIPTOR_LABEL(RTL_CONSTASCII_USTRINGPARAM("Label"));
+static const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
+static const char ITEM_DESCRIPTOR_CONTAINER[] = "ItemDescriptorContainer";
+static const char ITEM_DESCRIPTOR_LABEL[] = "Label";
 
-static const ::rtl::OUString MENU_SEPERATOR(RTL_CONSTASCII_USTRINGPARAM(" | "));
 static const ::rtl::OUString MENU_SUBMENU(RTL_CONSTASCII_USTRINGPARAM("..."));
-static const ::rtl::OUString MIGRATION_STAMP_NAME(RTL_CONSTASCII_USTRINGPARAM("/MIGRATED"));
-
 
 static const char XDG_CONFIG_PART[] = "/.config";
 
@@ -184,6 +181,7 @@ static const char XDG_CONFIG_PART[] = "/.config";
 
 bool MigrationImpl::alreadyMigrated()
 {
+    rtl::OUString MIGRATION_STAMP_NAME(RTL_CONSTASCII_USTRINGPARAM("/MIGRATED"));
     rtl::OUString aStr = m_aInfo.userdata + MIGRATION_STAMP_NAME;
     File aFile(aStr);
     // create migration stamp, and/or check its existence
@@ -1069,6 +1067,8 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
                                            const uno::Reference< container::XIndexContainer >& xIndexNew,
                                            const ::rtl::OUString& sResourceURL)
 {
+    const ::rtl::OUString MENU_SEPERATOR(RTL_CONSTASCII_USTRINGPARAM(" | "));
+
     ::std::vector< MigrationItem > vOldItems;
     ::std::vector< MigrationItem > vNewItems;
     uno::Sequence< beans::PropertyValue > aProp;
@@ -1082,9 +1082,9 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
         {
             for(int i=0; i<aProp.getLength(); ++i)
             {
-                if (aProp[i].Name.equals(ITEM_DESCRIPTOR_COMMANDURL))
+                if (aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)))
                     aProp[i].Value >>= aMigrationItem.m_sCommandURL;
-                else if (aProp[i].Name.equals(ITEM_DESCRIPTOR_CONTAINER))
+                else if (aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)))
                     aProp[i].Value >>= aMigrationItem.m_xPopupMenu;
             }
 
@@ -1100,9 +1100,9 @@ void MigrationImpl::compareOldAndNewConfig(const ::rtl::OUString& sParent,
         {
             for(int i=0; i<aProp.getLength(); ++i)
             {
-                if (aProp[i].Name.equals(ITEM_DESCRIPTOR_COMMANDURL))
+                if (aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)))
                     aProp[i].Value >>= aMigrationItem.m_sCommandURL;
-                else if (aProp[i].Name.equals(ITEM_DESCRIPTOR_CONTAINER))
+                else if (aProp[i].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)))
                     aProp[i].Value >>= aMigrationItem.m_xPopupMenu;
             }
 
@@ -1211,11 +1211,11 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                 for (sal_Int32 j=0; j<aPropSeq.getLength(); ++j)
                 {
                     ::rtl::OUString sPropName = aPropSeq[j].Name;
-                    if (sPropName.equals(ITEM_DESCRIPTOR_COMMANDURL))
+                    if (sPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)))
                         aPropSeq[j].Value >>= sCommandURL;
-                    else if (sPropName.equals(ITEM_DESCRIPTOR_LABEL))
+                    else if (sPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_LABEL)))
                         aPropSeq[j].Value >>= sLabel;
-                    else if (sPropName.equals(ITEM_DESCRIPTOR_CONTAINER))
+                    else if (sPropName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_CONTAINER)))
                         aPropSeq[j].Value >>= xChild;
                 }
 
@@ -1232,11 +1232,11 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
         {
             uno::Sequence< beans::PropertyValue > aPropSeq(3);
 
-            aPropSeq[0].Name = ITEM_DESCRIPTOR_COMMANDURL;
+            aPropSeq[0].Name = rtl::OUString(ITEM_DESCRIPTOR_COMMANDURL);
             aPropSeq[0].Value <<= it->m_sCommandURL;
-            aPropSeq[1].Name = ITEM_DESCRIPTOR_LABEL;
+            aPropSeq[1].Name = rtl::OUString(ITEM_DESCRIPTOR_LABEL);
             aPropSeq[1].Value <<= retrieveLabelFromCommand(it->m_sCommandURL, sModuleIdentifier);
-            aPropSeq[2].Name = ITEM_DESCRIPTOR_CONTAINER;
+            aPropSeq[2].Name = rtl::OUString(ITEM_DESCRIPTOR_CONTAINER);
             aPropSeq[2].Value <<= it->m_xPopupMenu;
 
             if (it->m_sPrevSibling.isEmpty())
@@ -1252,7 +1252,7 @@ void MigrationImpl::mergeOldToNewVersion(const uno::Reference< ui::XUIConfigurat
                     xTemp->getByIndex(i) >>= aTempPropSeq;
                     for (sal_Int32 j=0; j<aTempPropSeq.getLength(); ++j)
                     {
-                        if (aTempPropSeq[j].Name.equals(ITEM_DESCRIPTOR_COMMANDURL))
+                        if (aTempPropSeq[j].Name.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(ITEM_DESCRIPTOR_COMMANDURL)))
                         {
                             aTempPropSeq[j].Value >>= sCmd;
                             break;
