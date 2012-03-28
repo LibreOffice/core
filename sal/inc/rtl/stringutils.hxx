@@ -114,6 +114,8 @@ struct ExceptConstCharArrayDetector< const char[ N ] >
 };
 // this one is used to rule out only const char[N]
 // (const will be brought in by 'const T&' in the function call)
+// msvc needs const char[N] here (not sure whether gcc or msvc
+// are right, it doesn't matter).
 template< typename T >
 struct ExceptCharArrayDetector
 {
@@ -121,6 +123,10 @@ struct ExceptCharArrayDetector
 };
 template< int N >
 struct ExceptCharArrayDetector< char[ N ] >
+{
+};
+template< int N >
+struct ExceptCharArrayDetector< const char[ N ] >
 {
 };
 
