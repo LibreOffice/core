@@ -395,6 +395,17 @@ ContentAttribsInfo::ContentAttribsInfo( const SfxItemSet& rParaAttribs ) :
 {
 }
 
+void ContentAttribsInfo::RemoveAllCharAttribsFromPool(SfxItemPool& rPool) const
+{
+    CharAttribsType::const_iterator it = aPrevCharAttribs.begin(), itEnd = aPrevCharAttribs.end();
+    for (; it != itEnd; ++it)
+        rPool.Remove(*it->GetItem());
+}
+
+void ContentAttribsInfo::AppendCharAttrib(EditCharAttrib* pNew)
+{
+    aPrevCharAttribs.push_back(pNew);
+}
 
 void ConvertItem( SfxPoolItem& rPoolItem, MapUnit eSourceUnit, MapUnit eDestUnit )
 {

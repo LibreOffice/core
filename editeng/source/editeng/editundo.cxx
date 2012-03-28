@@ -549,13 +549,7 @@ EditUndoSetAttribs::~EditUndoSetAttribs()
     {
         ContentAttribsInfo* pInf = aPrevAttribs[n];
         DBG_ASSERT( pInf, "Undo_DTOR (SetAttribs): pInf = NULL!" );
-        for ( sal_uInt16 nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
-        {
-            EditCharAttrib* pX = pInf->GetPrevCharAttribs()[nAttr];
-            DBG_ASSERT( pX, "Undo_DTOR (SetAttribs): pX = NULL!" );
-            pPool->Remove( *pX->GetItem() );
-            delete pX;
-        }
+        pInf->RemoveAllCharAttribsFromPool(*pPool);
         delete pInf;
     }
 }
@@ -564,7 +558,7 @@ void EditUndoSetAttribs::Undo()
 {
     DBG_ASSERT( GetImpEditEngine()->GetActiveView(), "Undo/Redo: No Active View!" );
     ImpEditEngine* _pImpEE = GetImpEditEngine();
-    sal_Bool bFields = sal_False;
+    bool bFields = false;
     for ( sal_uInt16 nPara = aESel.nStartPara; nPara <= aESel.nEndPara; nPara++ )
     {
         ContentAttribsInfo* pInf = aPrevAttribs[ (sal_uInt16)(nPara-aESel.nStartPara) ];
@@ -578,14 +572,13 @@ void EditUndoSetAttribs::Undo()
         _pImpEE->RemoveCharAttribs( nPara, 0, sal_True );
         DBG_ASSERT( _pImpEE->GetEditDoc().SaveGetObject( nPara ), "Undo (SetAttribs): pNode = NULL!" );
         ContentNode* pNode = _pImpEE->GetEditDoc().GetObject( nPara );
-        for ( sal_uInt16 nAttr = 0; nAttr < pInf->GetPrevCharAttribs().Count(); nAttr++ )
+        for (size_t nAttr = 0; nAttr < pInf->GetPrevCharAttribs().size(); ++nAttr)
         {
-            EditCharAttrib* pX = pInf->GetPrevCharAttribs()[nAttr];
-            DBG_ASSERT( pX, "Redo (SetAttribs): pX = NULL!" );
+            const EditCharAttrib& rX = pInf->GetPrevCharAttribs()[nAttr];
             // is automatically "poolsized"
-            _pImpEE->GetEditDoc().InsertAttrib( pNode, pX->GetStart(), pX->GetEnd(), *pX->GetItem() );
-            if ( pX->Which() == EE_FEATURE_FIELD )
-                bFields = sal_True;
+            _pImpEE->GetEditDoc().InsertAttrib(pNode, rX.GetStart(), rX.GetEnd(), *rX.GetItem());
+            if (rX.Which() == EE_FEATURE_FIELD)
+                bFields = true;
         }
     }
     if ( bFields )

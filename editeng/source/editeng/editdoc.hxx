@@ -123,16 +123,19 @@ SV_DECL_PTRARR( CharAttribArray, EditCharAttribPtr, 0 )
 class ContentAttribsInfo
 {
 private:
+    typedef boost::ptr_vector<EditCharAttrib> CharAttribsType;
+
     SfxItemSet          aPrevParaAttribs;
-    CharAttribArray     aPrevCharAttribs;
+    CharAttribsType     aPrevCharAttribs;
 
 public:
                         ContentAttribsInfo( const SfxItemSet& rParaAttribs );
 
     const SfxItemSet&       GetPrevParaAttribs() const  { return aPrevParaAttribs; }
-    const CharAttribArray&  GetPrevCharAttribs() const  { return aPrevCharAttribs; }
+    const CharAttribsType&  GetPrevCharAttribs() const  { return aPrevCharAttribs; }
 
-    CharAttribArray&        GetPrevCharAttribs()        { return aPrevCharAttribs; }
+    void RemoveAllCharAttribsFromPool(SfxItemPool& rPool) const;
+    void AppendCharAttrib(EditCharAttrib* pNew);
 };
 
 typedef ContentAttribsInfo* ContentAttribsInfoPtr;
