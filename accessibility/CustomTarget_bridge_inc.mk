@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2011 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,12 +25,17 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,accessibility_bridge_inc,$(WORKDIR)/CustomTarget/accessibility/bridge/inc))
+$(eval $(call gb_CustomTarget_CustomTarget,accessibility/bridge/inc,new_style))
 
-$(eval $(call gb_Package_add_customtarget,accessibility_bridge_inc,accessibility/bridge/source/java))
+ACBI := $(call gb_CustomTarget_get_workdir,accessibility/bridge/inc)
 
-$(eval $(call gb_CustomTarget_add_outdir_dependencies,accessibility/bridge/source/java,\
-    $(call gb_JavaClassSet_get_target,$(call gb_Jar_get_classsetname,java_uno_accessbridge)) \
-))
+$(call gb_CustomTarget_get_target,accessibility/bridge/inc) : \
+    $(ACBI)/WindowsAccessBridgeAdapter.h
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+$(ACBI)/WindowsAccessBridgeAdapter.h :| $(ACBI)/.dir \
+        $(call gb_Jar_get_target,java_uno_accessbridge)
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JVH,1)
+	cd $(call gb_JavaClassSet_get_classdir,$(call gb_Jar_get_classsetname,java_uno_accessbridge)) && \
+    javah -classpath . -o $(call gb_Helper_convert_native,$@) org.openoffice.accessibility.WindowsAccessBridgeAdapter
+
+# vim: set ts=4 sw=4 et:

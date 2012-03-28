@@ -87,9 +87,4 @@ $(eval $(call gb_Jar_add_generated_sourcefiles,java_accessibility,\
     CustomTarget/accessibility/bridge/org/openoffice/java/accessibility/Build \
 ))
 
-# Dummy dep. to satisfy make's depsolver: .../classes is created by a
-# custom target, so there is no dependency information for it here.
-# It also makes sure that the package is built before this jar .-)
-$(WORKDIR)/CustomTarget/accessibility/bridge/org/openoffice/java/accessibility/Build.java :| $(call gb_Package_get_target,accessibility_bridge)
-
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

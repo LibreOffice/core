@@ -12,7 +12,7 @@
 # License.
 #
 # Major Contributor(s):
-# Copyright (C) 2010 Red Hat, Inc., David Tardon <dtardon@redhat.com>
+# Copyright (C) 2011 Red Hat, Inc., David Tardon <dtardon@redhat.com>
 #  (initial developer)
 #
 # All Rights Reserved.
@@ -25,8 +25,29 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,accessibility_bridge,$(WORKDIR)/CustomTarget/accessibility/bridge))
+$(eval $(call gb_CustomTarget_CustomTarget,accessibility/bridge,new_style))
 
-$(eval $(call gb_Package_add_customtarget,accessibility_bridge,accessibility/bridge))
+ACBR := $(call gb_CustomTarget_get_workdir,accessibility/bridge)
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+$(call gb_CustomTarget_get_target,accessibility/bridge) : \
+    $(ACBR)/org/openoffice/java/accessibility/Build.java
+
+ifeq ($(PRODUCT),)
+ac_DEBUGSWITCH := true
+ac_PRODUCTSWITCH := false
+else
+ac_DEBUGSWITCH := false
+ac_PRODUCTSWITCH := true
+endif
+
+$(ACBR)/org/openoffice/java/accessibility/Build.java :
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
+	mkdir -p $(dir $@) && (\
+        echo package org.openoffice.java.accessibility\; && \
+        echo public class Build \{ && \
+        echo public static final boolean DEBUG = $(ac_DEBUGSWITCH)\; && \
+        echo public static final boolean PRODUCT = $(ac_PRODUCTSWITCH)\; && \
+        echo \} \
+        ) > $@
+
+# vim: set ts=4 sw=4 et:
