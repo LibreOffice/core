@@ -240,9 +240,11 @@ public:
 class EditUndoSetAttribs: public EditUndo
 {
 private:
+    typedef boost::ptr_vector<ContentAttribsInfo> InfoArrayType;
+
     ESelection          aESel;
     SfxItemSet          aNewAttribs;
-    ContentInfoArray    aPrevAttribs;
+    InfoArrayType       aPrevAttribs;
 
     sal_uInt8               nSpecial;
     sal_Bool                bSetIsRemove;
@@ -257,7 +259,6 @@ public:
                         EditUndoSetAttribs( ImpEditEngine* pImpEE, const ESelection& rESel, const SfxItemSet& rNewItems );
                         ~EditUndoSetAttribs();
 
-    ContentInfoArray&   GetContentInfos()   { return aPrevAttribs; }
     SfxItemSet&         GetNewAttribs()     { return aNewAttribs; }
 
     void                SetSpecial( sal_uInt8 n )           { nSpecial = n; }
@@ -267,6 +268,8 @@ public:
 
     virtual void        Undo();
     virtual void        Redo();
+
+    void AppendContentInfo(ContentAttribsInfo* pNew);
 };
 
 // -----------------------------------------------------------------------

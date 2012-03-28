@@ -213,7 +213,7 @@ EditUndoSetAttribs* ImpEditEngine::CreateAttribUndo( EditSelection aSel, const S
         ContentNode* pNode = aEditDoc.GetObject( nPara );
         DBG_ASSERT( aEditDoc.SaveGetObject( nPara ), "Node not found: CreateAttribUndo" );
         ContentAttribsInfo* pInf = new ContentAttribsInfo( pNode->GetContentAttribs().GetItems() );
-        pUndo->GetContentInfos().Insert( pInf, pUndo->GetContentInfos().Count() );
+        pUndo->AppendContentInfo(pInf);
 
         for ( sal_uInt16 nAttr = 0; nAttr < pNode->GetCharAttribs().Count(); nAttr++ )
         {

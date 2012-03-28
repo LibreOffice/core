@@ -135,9 +135,6 @@ public:
     void AppendCharAttrib(EditCharAttrib* pNew);
 };
 
-typedef ContentAttribsInfo* ContentAttribsInfoPtr;
-SV_DECL_PTRARR( ContentInfoArray, ContentAttribsInfoPtr, 1 )
-
 //  ----------------------------------------------------------------------
 //  class SvxColorList
 //  ----------------------------------------------------------------------

@@ -540,18 +540,26 @@ EditUndoSetAttribs::EditUndoSetAttribs( ImpEditEngine* _pImpEE, const ESelection
     nSpecial = 0;
 }
 
+namespace {
+
+struct RemoveAttribsFromPool : std::unary_function<ContentAttribsInfo, void>
+{
+    SfxItemPool& mrPool;
+public:
+    RemoveAttribsFromPool(SfxItemPool& rPool) : mrPool(rPool) {}
+    void operator() (ContentAttribsInfo& rInfo)
+    {
+        rInfo.RemoveAllCharAttribsFromPool(mrPool);
+    }
+};
+
+}
+
 EditUndoSetAttribs::~EditUndoSetAttribs()
 {
     // Get Items from Pool...
     SfxItemPool* pPool = aNewAttribs.GetPool();
-    sal_uInt16 nContents = aPrevAttribs.Count();
-    for ( sal_uInt16 n = 0; n < nContents; n++ )
-    {
-        ContentAttribsInfo* pInf = aPrevAttribs[n];
-        DBG_ASSERT( pInf, "Undo_DTOR (SetAttribs): pInf = NULL!" );
-        pInf->RemoveAllCharAttribsFromPool(*pPool);
-        delete pInf;
-    }
+    std::for_each(aPrevAttribs.begin(), aPrevAttribs.end(), RemoveAttribsFromPool(*pPool));
 }
 
 void EditUndoSetAttribs::Undo()
@@ -561,20 +569,19 @@ void EditUndoSetAttribs::Undo()
     bool bFields = false;
     for ( sal_uInt16 nPara = aESel.nStartPara; nPara <= aESel.nEndPara; nPara++ )
     {
-        ContentAttribsInfo* pInf = aPrevAttribs[ (sal_uInt16)(nPara-aESel.nStartPara) ];
-        DBG_ASSERT( pInf, "Undo (SetAttribs): pInf = NULL!" );
+        const ContentAttribsInfo& rInf = aPrevAttribs[nPara-aESel.nStartPara];
 
         // first the paragraph attributes ...
-        _pImpEE->SetParaAttribs( nPara, pInf->GetPrevParaAttribs() );
+        _pImpEE->SetParaAttribs(nPara, rInf.GetPrevParaAttribs());
 
         // Then the character attributes ...
         // Remove all attributes including features, are later re-established.
-        _pImpEE->RemoveCharAttribs( nPara, 0, sal_True );
+        _pImpEE->RemoveCharAttribs(nPara, 0, true);
         DBG_ASSERT( _pImpEE->GetEditDoc().SaveGetObject( nPara ), "Undo (SetAttribs): pNode = NULL!" );
         ContentNode* pNode = _pImpEE->GetEditDoc().GetObject( nPara );
-        for (size_t nAttr = 0; nAttr < pInf->GetPrevCharAttribs().size(); ++nAttr)
+        for (size_t nAttr = 0; nAttr < rInf.GetPrevCharAttribs().size(); ++nAttr)
         {
-            const EditCharAttrib& rX = pInf->GetPrevCharAttribs()[nAttr];
+            const EditCharAttrib& rX = rInf.GetPrevCharAttribs()[nAttr];
             // is automatically "poolsized"
             _pImpEE->GetEditDoc().InsertAttrib(pNode, rX.GetStart(), rX.GetEnd(), *rX.GetItem());
             if (rX.Which() == EE_FEATURE_FIELD)
@@ -598,6 +605,11 @@ void EditUndoSetAttribs::Redo()
         _pImpEE->RemoveCharAttribs( aSel, bRemoveParaAttribs, nRemoveWhich );
 
     ImpSetSelection( GetImpEditEngine()->GetActiveView() );
+}
+
+void EditUndoSetAttribs::AppendContentInfo(ContentAttribsInfo* pNew)
+{
+    aPrevAttribs.push_back(pNew);
 }
 
 void EditUndoSetAttribs::ImpSetSelection( EditView* /*pView*/ )
