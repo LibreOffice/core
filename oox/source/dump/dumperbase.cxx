@@ -926,46 +926,6 @@ void StringHelper::convertStringToIntList( Int64Vector& orVec, const OUString& r
 // ============================================================================
 // ============================================================================
 
-void FormulaStack::pushOperand( const String& rOp, const OUString& rTokClass )
-{
-    maFmlaStack.push( rOp );
-    maClassStack.push( rTokClass );
-}
-
-void FormulaStack::pushUnaryOp( StringStack& rStack, const OUString& rLOp, const OUString& rROp )
-{
-    if( check( !rStack.empty() ) )
-        rStack.top() = rLOp + rStack.top() + rROp;
-}
-
-void FormulaStack::pushBinaryOp( StringStack& rStack, const OUString& rOp )
-{
-    OUString aSecond;
-    if( check( !rStack.empty() ) )
-    {
-        aSecond = rStack.top();
-        rStack.pop();
-    }
-    if( check( !rStack.empty() ) )
-        rStack.top() = rStack.top() + rOp + aSecond;
-}
-
-void FormulaStack::pushFuncOp( StringStack& rStack, const OUString& rOp, sal_uInt8 nParamCount )
-{
-    OUStringBuffer aFunc;
-    for( sal_uInt8 nParam = 0; (nParam < nParamCount) && check( !rStack.empty() ); ++nParam )
-    {
-        StringHelper::prependToken( aFunc, rStack.top(), OOX_DUMP_FUNCSEP );
-        rStack.pop();
-    }
-    StringHelper::enclose( aFunc, '(', ')' );
-    aFunc.insert( 0, rOp );
-    rStack.push( aFunc.makeStringAndClear() );
-}
-
-// ============================================================================
-// ============================================================================
-
 Base::~Base()
 {
 }

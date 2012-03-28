@@ -28,7 +28,6 @@
 
 #include "oox/dump/pptxdumper.hxx"
 
-//#include "oox/dump/biffdumper.hxx"
 #include "oox/dump/oledumper.hxx"
 #include "oox/dump/xlsbdumper.hxx"
 #include "oox/helper/zipstorage.hxx"

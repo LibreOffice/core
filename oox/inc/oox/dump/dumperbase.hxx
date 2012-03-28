@@ -476,35 +476,6 @@ static const String EMPTY_STRING;
 // ============================================================================
 // ============================================================================
 
-/** Stack to create a human readable formula string from a UPN token array. */
-class FormulaStack
-{
-public:
-    inline const ::rtl::OUString& getFormulaString() const { return getString( maFmlaStack ); }
-    inline const ::rtl::OUString& getClassesString() const { return getString( maClassStack ); }
-
-    void                pushOperand( const String& rOp, const ::rtl::OUString& rTokClass );
-
-    inline void         setError() { mbError = true; }
-
-private:
-    typedef ::std::stack< ::rtl::OUString > StringStack;
-
-    inline bool         check( bool bCond ) { return (mbError |= !bCond) == false; }
-
-    void                pushUnaryOp( StringStack& rStack, const ::rtl::OUString& rLOp, const ::rtl::OUString& rROp );
-    void                pushBinaryOp( StringStack& rStack, const ::rtl::OUString& rOp );
-    void                pushFuncOp( StringStack& rStack, const ::rtl::OUString& rOp, sal_uInt8 nParamCount );
-
-private:
-    StringStack         maFmlaStack;
-    StringStack         maClassStack;
-    bool                mbError;
-};
-
-// ============================================================================
-// ============================================================================
-
 class Base;
 typedef ::boost::shared_ptr< Base > BaseRef;
 
