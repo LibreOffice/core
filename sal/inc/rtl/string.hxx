@@ -91,7 +91,6 @@ namespace rtl
   use this class.
 */
 
-#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
 namespace internal
 {
 // This template is used for SFINAE (Substitution failure is not an error), to detect that
@@ -114,7 +113,6 @@ struct CharPtrDetector< char*, T >
     typedef T Type;
 };
 }
-#endif
 
 class OString
 {
