@@ -349,21 +349,21 @@ void EditDbg::ShowEditEngineData( EditEngine* pEE, sal_Bool bInfoBox )
         sal_uInt16 z;
         for ( z = 0; z < pPPortion->GetNode()->GetCharAttribs().Count(); z++ )
         {
-            EditCharAttrib* pAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs().GetObject( z );
+            const EditCharAttrib& rAttr = pPPortion->GetNode()->GetCharAttribs().GetAttribs()[z];
             rtl::OStringBuffer aCharAttribs;
             aCharAttribs.append(RTL_CONSTASCII_STRINGPARAM("\nA"));
             aCharAttribs.append(static_cast<sal_Int32>(nPortion));
             aCharAttribs.append(RTL_CONSTASCII_STRINGPARAM(":  "));
-            aCharAttribs.append(static_cast<sal_Int32>(pAttr->GetItem()->Which()));
+            aCharAttribs.append(static_cast<sal_Int32>(rAttr.GetItem()->Which()));
             aCharAttribs.append('\t');
-            aCharAttribs.append(static_cast<sal_Int32>(pAttr->GetStart()));
+            aCharAttribs.append(static_cast<sal_Int32>(rAttr.GetStart()));
             aCharAttribs.append('\t');
-            aCharAttribs.append(static_cast<sal_Int32>(pAttr->GetEnd()));
-            if ( pAttr->IsEmpty() )
+            aCharAttribs.append(static_cast<sal_Int32>(rAttr.GetEnd()));
+            if ( rAttr.IsEmpty() )
                 bZeroAttr = sal_True;
             fprintf(fp, "%s => ", aCharAttribs.getStr());
 
-            rtl::OString aDebStr = DbgOutItem( rPool, *pAttr->GetItem() );
+            rtl::OString aDebStr = DbgOutItem( rPool, *rAttr.GetItem() );
             fprintf( fp, "%s", aDebStr.getStr() );
         }
         if ( bZeroAttr )
