@@ -373,6 +373,12 @@ public:
         @param   str   the characters to be appended.
         @return  this string buffer.
      */
+#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
+    OStringBuffer & append( const sal_Char * str )
+    {
+        return append( str, rtl_str_getLength( str ) );
+    }
+#else
     template< typename T >
     typename internal::CharPtrDetector< T, OStringBuffer& >::Type append( const T& str )
     {
@@ -397,6 +403,7 @@ public:
         rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
+#endif
 
     /**
         Appends the string representation of the <code>char</code> array
@@ -555,6 +562,12 @@ public:
         @param      str      a character array.
         @return     this string buffer.
      */
+#ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
+    OStringBuffer & insert( sal_Int32 offset, const sal_Char * str )
+    {
+        return insert( offset, str, rtl_str_getLength( str ) );
+    }
+#else
     template< typename T >
     typename internal::CharPtrDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, const T& str )
     {
@@ -579,6 +592,7 @@ public:
         rtl_stringbuffer_insert( &pData, &nCapacity, offset, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
+#endif
 
     /**
         Inserts the string representation of the <code>char</code> array

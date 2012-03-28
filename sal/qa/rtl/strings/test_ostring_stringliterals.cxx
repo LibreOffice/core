@@ -257,6 +257,7 @@ void test::ostring::StringLiterals::checkNonConstUsage()
 void test::ostring::StringLiterals::checkBuffer()
 {
     rtl::OStringBuffer buf;
+#ifndef HAVE_SFINAE_ANONYMOUS_BROKEN
     rtl_string_unittest_const_literal_function = false;
     buf.append( "foo" );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
@@ -269,6 +270,9 @@ void test::ostring::StringLiterals::checkBuffer()
     buf.insert( 3, "baz" );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
     CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OString( "foobazbar" ));
+#else
+    buf.append( "foobazbar" );
+#endif
 
     rtl::OString foobazbard( "foobazbard" );
     rtl::OString foodbazbard( "foodbazbard" );
