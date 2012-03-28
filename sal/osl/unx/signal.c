@@ -922,7 +922,6 @@ void CallSystemHandler(int Signal)
 #if defined(HAVE_MEMCHECK_H)
 static void DUMPCURRENTALLOCS()
 {
-    fprintf(stderr, "hello world\n");
     VALGRIND_PRINTF( "=== start memcheck dump of active allocations ===\n" );
 
 #if (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 6))
