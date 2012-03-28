@@ -57,12 +57,10 @@ namespace rtl
 
 #ifdef RTL_STRING_UNITTEST
 #undef rtl
-// helper macros to make functions appear more readable
+// helper macro to make functions appear more readable
 #define RTL_STRING_CONST_FUNCTION rtl_string_unittest_const_literal_function = true;
-#define RTL_STRING_NON_CONST_FUNCTION rtl_string_unittest_non_const_literal_function = true;
 #else
 #define RTL_STRING_CONST_FUNCTION
-#define RTL_STRING_NON_CONST_FUNCTION
 #endif
 
 /* ======================================================================= */
@@ -93,10 +91,23 @@ namespace rtl
 
 namespace internal
 {
-// This template is used for SFINAE (Substitution failure is not an error), to detect that
-// the template types used in the OString ctor actually are only either char* or const char*.
-// Using a template appears to be the only way to distinguish char* and char[], since
-// using char*(&) does not work with something explicitly cast to char*.
+/*
+These templates use SFINAE (Substitution failure is not an error) to help distinguish the various
+plain C string types: char*, const char*, char[N] and const char[N]. There are 2 cases:
+1) Only string literal (i.e. const char[N]) is wanted, not any of the others.
+    In this case it is necessary to distinguish between const char[N] and char[N], as the latter
+    would be automatically converted to the const variant, which is not wanted (not a string literal
+    with known size of the content). In this case ConstCharArrayDetector is used to ensure the function
+    is called only with const char[N] arguments. There's no other plain C string type overload.
+2) All plain C string types are wanted, and const char[N] needs to be handled differently.
+    In this case const char[N] would match const char* argument type (not exactly sure why, but it's
+    consistent in all of gcc, clang and msvc). Using a template with a reference to const of the type
+    avoids this problem, and CharPtrDetector ensures that the function is called only with char pointer
+    arguments. The const in the argument is necessary to handle the case when something is explicitly
+    cast to const char*. Additionally (non-const) char[N] needs to be handled, but with the reference
+    being const, it would also match const char[N], so another overload with a reference to non-const
+    and NonConstCharArrayDetector are used to ensure the function is called only with (non-const) char[N].
+*/
 struct Dummy {};
 template< typename T1, typename T2 >
 struct CharPtrDetector
@@ -111,6 +122,29 @@ template< typename T >
 struct CharPtrDetector< char*, T >
 {
     typedef T Type;
+};
+
+template< typename T1, typename T2 >
+struct NonConstCharArrayDetector
+{
+};
+template< typename T, int N >
+struct NonConstCharArrayDetector< char[ N ], T >
+{
+    typedef T Type;
+};
+// This is similar, only it helps to detect const char[]. Without using a template,
+// (non-const) char[] would be automatically converted to const char[], which is unwanted
+// here (size of the content is not known).
+template< typename T1, typename T2 >
+struct ConstCharArrayDetector
+{
+};
+template< int N, typename T >
+struct ConstCharArrayDetector< const char[ N ], T >
+{
+    typedef T Type;
+    static const int size = N;
 };
 }
 
@@ -208,6 +242,13 @@ public:
         rtl_string_newFromStr( &pData, value );
     }
 
+    template< typename T >
+    OString( T& value, typename internal::NonConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() ) SAL_THROW(())
+    {
+        pData = 0;
+        rtl_string_newFromStr( &pData, value );
+    }
+
     /**
       New string from a string literal.
 
@@ -217,29 +258,16 @@ public:
 
       @param    literal       a string literal
     */
-    template< int N >
-    OString( const char (&literal)[ N ] ) SAL_THROW(())
+    template< typename T >
+    OString( T& literal, typename internal::ConstCharArrayDetector< T, internal::Dummy >::Type = internal::Dummy() ) SAL_THROW(())
     {
         pData = 0;
-        rtl_string_newFromLiteral( &pData, literal, N - 1 );
+        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
     }
 
-    /**
-      @overload
-      New string from a non-const char array.
-      @since LibreOffice 3.6
-
-      @param value non-const char array
-    */
-    template< int N >
-    OString( char (&value)[ N ] ) SAL_THROW(())
-    { // the array is not const, so its size may not match the string length - 1
-        pData = 0;
-        rtl_string_newFromStr( &pData, value );
-    }
 #endif // HAVE_SFINAE_ANONYMOUS_BROKEN
 
     /**
@@ -309,25 +337,11 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    OString& operator=( const char (&literal)[ N ] ) SAL_THROW(())
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OString& >::Type operator=( T& literal ) SAL_THROW(())
     {
         RTL_STRING_CONST_FUNCTION
-        rtl_string_newFromLiteral( &pData, literal, N - 1 );
-        return *this;
-    }
-    /**
-      @overload
-      This function accepts a non-const char array as its argument.
-      @since LibreOffice 3.6
-
-      @param value non-const char array
-    */
-    template< int N >
-    OString& operator=( char (&value)[ N ] ) SAL_THROW(())
-    {
-        rtl_string_newFromStr( &pData, value );
-        RTL_STRING_NON_CONST_FUNCTION
+        rtl_string_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
 
@@ -543,32 +557,25 @@ public:
         return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
     }
 
+    template< typename T >
+    typename internal::NonConstCharArrayDetector< T, bool >::Type equalsIgnoreAsciiCase( T& asciiStr ) const SAL_THROW(())
+    {
+        return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
+    }
+
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    bool equalsIgnoreAsciiCase( const char (&literal)[ N ] ) const SAL_THROW(())
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type  equalsIgnoreAsciiCase( T& literal ) const SAL_THROW(())
     {
         RTL_STRING_CONST_FUNCTION
-        if ( pData->length != N - 1 )
+        if ( pData->length != internal::ConstCharArrayDetector< T, void >::size - 1 )
             return false;
         return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
-                                                          literal, N - 1 ) == 0;
-    }
-    /**
-      @overload
-      This function accepts a non-const char array as its argument.
-      @since LibreOffice 3.6
-
-      @param value non-const char array
-    */
-    template< int N >
-    bool equalsIgnoreAsciiCase( char (&value)[ N ] ) const SAL_THROW(())
-    {
-        RTL_STRING_NON_CONST_FUNCTION
-        return rtl_str_compareIgnoreAsciiCase( pData->buffer, value ) == 0;
+                                                          literal, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 
     /**
@@ -625,29 +632,13 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    bool match( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type  match( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
         RTL_STRING_CONST_FUNCTION
         return rtl_str_shortenedCompare_WithLength(
             pData->buffer + fromIndex, pData->length - fromIndex,
-            literal, N - 1, N - 1) == 0;
-    }
-    /**
-      @overload
-      This function accepts a non-const char array as its argument.
-      @since LibreOffice 3.6
-
-      @param value non-const char array
-    */
-    template< int N >
-    bool match( char (&value)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
-    {
-        RTL_STRING_NON_CONST_FUNCTION
-        sal_Int32 strLength = rtl_str_getLength( value );
-        return rtl_str_shortenedCompare_WithLength(
-            pData->buffer + fromIndex, pData->length - fromIndex,
-            value, strLength, strLength) == 0;
+            literal, internal::ConstCharArrayDetector< T, void >::size - 1, internal::ConstCharArrayDetector< T, void >::size - 1) == 0;
     }
 
     /**
@@ -713,27 +704,12 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    bool matchIgnoreAsciiCase( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type matchIgnoreAsciiCase( T& literal, sal_Int32 fromIndex = 0 ) const
     {
         RTL_STRING_CONST_FUNCTION
         return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
-                                                                   literal, N - 1, N - 1 ) == 0;
-    }
-    /**
-      @overload
-      This function accepts a non-const char array as its argument.
-      @since LibreOffice 3.6
-
-      @param value non-const char array
-    */
-    template< int N >
-    bool matchIgnoreAsciiCase( char (&value)[ N ], sal_Int32 fromIndex = 0 ) const
-    {
-        RTL_STRING_NON_CONST_FUNCTION
-        sal_Int32 strLength = rtl_str_getLength( value );
-        return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
-                                                                   value, strLength, strLength ) == 0;
+            literal, internal::ConstCharArrayDetector< T, void >::size - 1, internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 
     /**
@@ -756,27 +732,12 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    bool endsWith( const char (&literal)[ N ] ) const
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, bool >::Type endsWith( T& literal ) const
     {
         RTL_STRING_CONST_FUNCTION
-        return N - 1 <= getLength()
-            && match(literal, getLength() - ( N - 1 ));
-    }
-    /**
-      @overload
-      This function accepts a non-const char array as its argument.
-      @since LibreOffice 3.6
-
-      @param value non-const char array
-    */
-    template< int N >
-    bool endsWith( char (&value)[ N ] ) const
-    {
-        RTL_STRING_NON_CONST_FUNCTION
-        sal_Int32 strLength = rtl_str_getLength( value );
-        return strLength <= getLength()
-            && matchL(value, strLength, getLength() - strLength);
+        return internal::ConstCharArrayDetector< T, void >::size - 1 <= getLength()
+            && match(literal, getLength() - ( internal::ConstCharArrayDetector< T, void >::size - 1 ));
     }
 
     /**
@@ -817,7 +778,19 @@ public:
     }
 
     template< typename T >
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr1, T& value ) SAL_THROW(())
+    {
+        return rStr1.compareTo( value ) == 0;
+    }
+
+    template< typename T >
     friend typename internal::CharPtrDetector< T, bool >::Type operator==( const T& value, const OString& rStr2 ) SAL_THROW(())
+    {
+        return rStr2.compareTo( value ) == 0;
+    }
+
+    template< typename T >
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator==( T& value, const OString& rStr2 ) SAL_THROW(())
     {
         return rStr2.compareTo( value ) == 0;
     }
@@ -827,26 +800,13 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    friend bool operator == ( const OString& rStr, const char (&literal)[ N ] ) SAL_THROW(())
+    template< typename T >
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator==( const OString& rStr, T& literal ) SAL_THROW(())
     {
         RTL_STRING_CONST_FUNCTION
-        return rStr.getLength() == N - 1
-            && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length, literal, N - 1 ) == 0;
-    }
-
-    /**
-      @overload
-      This function accepts a non-const char array as its argument.
-      @since LibreOffice 3.6
-
-      @param value non-const char array
-    */
-    template< int N >
-    friend bool operator == ( const OString& rStr, char (&value)[ N ] ) SAL_THROW(())
-    {
-        RTL_STRING_NON_CONST_FUNCTION
-        return rStr.compareTo( value ) == 0;
+        return rStr.getLength() == internal::ConstCharArrayDetector< T, void >::size - 1
+            && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length, literal,
+                internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 
     /**
@@ -854,30 +814,23 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    friend bool operator == ( const char (&literal)[ N ], const OString& rStr ) SAL_THROW(())
+    template< typename T >
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator==( T& literal, const OString& rStr ) SAL_THROW(())
     {
         RTL_STRING_CONST_FUNCTION
-        return rStr.getLength() == N - 1
-            && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length, literal, N - 1 ) == 0;
-    }
-
-    /**
-      @overload
-      This function accepts a non-const char array as its argument.
-      @since LibreOffice 3.6
-
-      @param value non-const char array
-    */
-    template< int N >
-    friend bool operator == ( char (&value)[ N ], const OString& rStr ) SAL_THROW(())
-    {
-        RTL_STRING_NON_CONST_FUNCTION
-        return rStr.compareTo( value ) == 0;
+        return rStr.getLength() == internal::ConstCharArrayDetector< T, void >::size - 1
+            && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length, literal,
+                internal::ConstCharArrayDetector< T, void >::size - 1 ) == 0;
     }
 
     template< typename T >
     friend typename internal::CharPtrDetector< T, bool >::Type operator!=( const OString& rStr1, const T& value ) SAL_THROW(())
+    {
+        return !(operator == ( rStr1, value ));
+    }
+
+    template< typename T >
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr1, T& value ) SAL_THROW(())
     {
         return !(operator == ( rStr1, value ));
     }
@@ -888,52 +841,32 @@ public:
         return !(operator == ( value, rStr2 ));
     }
 
+    template< typename T >
+    friend typename internal::NonConstCharArrayDetector< T, bool >::Type operator!=( T& value,   const OString& rStr2 ) SAL_THROW(())
+    {
+        return !(operator == ( value, rStr2 ));
+    }
+
     /**
      @overload
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    friend bool operator != ( const OString& rStr, const char (&literal)[ N ] ) SAL_THROW(())
+    template< typename T >
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( const OString& rStr, T& literal ) SAL_THROW(())
     {
         return !( rStr == literal );
     }
 
     /**
-      @overload
-      This function accepts a non-const char array as its argument.
-      @since LibreOffice 3.6
-
-      @param value non-const char array
-    */
-    template< int N >
-    friend bool operator != ( const OString& rStr, char (&value)[ N ] ) SAL_THROW(())
-    {
-        return !( rStr == value );
-    }
-
-    /**
      @overload
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    friend bool operator != ( const char (&literal)[ N ], const OString& rStr ) SAL_THROW(())
+    template< typename T >
+    friend typename internal::ConstCharArrayDetector< T, bool >::Type operator!=( T& literal, const OString& rStr ) SAL_THROW(())
     {
         return !( literal == rStr );
-    }
-
-    /**
-      @overload
-      This function accepts a non-const char array as its argument.
-      @since LibreOffice 3.6
-
-      @param value non-const char array
-    */
-    template< int N >
-    friend bool operator != ( char (&value)[ N ], const OString& rStr ) SAL_THROW(())
-    {
-        return !( value == rStr );
     }
 
     /**
@@ -1025,28 +958,12 @@ public:
      This function accepts an ASCII string literal as its argument.
      @since LibreOffice 3.6
     */
-    template< int N >
-    sal_Int32 indexOf( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, sal_Int32 >::Type indexOf( T& literal, sal_Int32 fromIndex = 0 ) const SAL_THROW(())
     {
         RTL_STRING_CONST_FUNCTION
         sal_Int32 n = rtl_str_indexOfStr_WithLength(
-            pData->buffer + fromIndex, pData->length - fromIndex, literal, N - 1);
-        return n < 0 ? n : n + fromIndex;
-    }
-
-    /**
-      @overload
-      This function accepts a non-const char array as its argument.
-      @since LibreOffice 3.6
-
-      @param value non-const char array
-    */
-    template< int N >
-    sal_Int32 indexOf( char (&value)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
-    {
-        RTL_STRING_NON_CONST_FUNCTION
-        sal_Int32 n = rtl_str_indexOfStr_WithLength(
-            pData->buffer + fromIndex, pData->length - fromIndex, value, rtl_str_getLength( value ));
+            pData->buffer + fromIndex, pData->length - fromIndex, literal, internal::ConstCharArrayDetector< T, void >::size - 1);
         return n < 0 ? n : n + fromIndex;
     }
 
