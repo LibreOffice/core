@@ -68,21 +68,21 @@ namespace {
     static const ::sal_Int32 s_nOffsetTitle             = 2;
     static const ::sal_Int32 s_nOffsetPassword          = 3;
 
-    static const ::rtl::OUString s_sCommonHistory(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Common/History"));
-    static const ::rtl::OUString s_sHistories(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Histories/Histories"));
-    static const ::rtl::OUString s_sPickListSize(RTL_CONSTASCII_USTRINGPARAM("PickListSize"));
-    static const ::rtl::OUString s_sURLHistorySize(RTL_CONSTASCII_USTRINGPARAM("Size"));
-    static const ::rtl::OUString s_sHelpBookmarksSize(RTL_CONSTASCII_USTRINGPARAM("HelpBookmarkSize"));
-    static const ::rtl::OUString s_sPickList(RTL_CONSTASCII_USTRINGPARAM("PickList"));
-    static const ::rtl::OUString s_sURLHistory(RTL_CONSTASCII_USTRINGPARAM("URLHistory"));
-    static const ::rtl::OUString s_sHelpBookmarks(RTL_CONSTASCII_USTRINGPARAM("HelpBookmarks"));
-    static const ::rtl::OUString s_sItemList(RTL_CONSTASCII_USTRINGPARAM("ItemList"));
-    static const ::rtl::OUString s_sOrderList(RTL_CONSTASCII_USTRINGPARAM("OrderList"));
-    static const ::rtl::OUString s_sHistoryItemRef(RTL_CONSTASCII_USTRINGPARAM("HistoryItemRef"));
-    static const ::rtl::OUString s_sURL(RTL_CONSTASCII_USTRINGPARAM("URL"));
-    static const ::rtl::OUString s_sFilter(RTL_CONSTASCII_USTRINGPARAM("Filter"));
-    static const ::rtl::OUString s_sTitle(RTL_CONSTASCII_USTRINGPARAM("Title"));
-    static const ::rtl::OUString s_sPassword(RTL_CONSTASCII_USTRINGPARAM("Password"));
+    const char s_sCommonHistory[] = "org.openoffice.Office.Common/History";
+    const char s_sHistories[] = "org.openoffice.Office.Histories/Histories";
+    const char s_sPickListSize[] = "PickListSize";
+    const char s_sURLHistorySize[] = "Size";
+    const char s_sHelpBookmarksSize[] = "HelpBookmarkSize";
+    const char s_sPickList[] = "PickList";
+    const char s_sURLHistory[] = "URLHistory";
+    const char s_sHelpBookmarks[] = "HelpBookmarks";
+    const char s_sItemList[] = "ItemList";
+    const char s_sOrderList[] = "OrderList";
+    const char s_sHistoryItemRef[] = "HistoryItemRef";
+    const char s_sURL[] = "URL";
+    const char s_sFilter[] = "Filter";
+    const char s_sTitle[] = "Title";
+    const char s_sPassword[] = "Password";
 }
 
 struct IMPL_THistoryItem
@@ -150,14 +150,14 @@ SvtHistoryOptions_Impl::SvtHistoryOptions_Impl()
         m_xCfg = Reference< css::container::XNameAccess > (
             ::comphelper::ConfigurationHelper::openConfig(
             ::comphelper::getProcessServiceFactory(),
-            s_sHistories,
+            rtl::OUString(s_sHistories),
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY );
 
         m_xCommonXCU = Reference< css::container::XNameAccess > (
             ::comphelper::ConfigurationHelper::openConfig(
             ::comphelper::getProcessServiceFactory(),
-            s_sCommonHistory,
+            rtl::OUString(s_sCommonHistory),
             ::comphelper::ConfigurationHelper::E_STANDARD),
             css::uno::UNO_QUERY );
     }
@@ -195,15 +195,15 @@ sal_uInt32 SvtHistoryOptions_Impl::GetSize( EHistoryType eHistory )
         switch( eHistory )
         {
         case ePICKLIST:
-            xListAccess->getPropertyValue(s_sPickListSize) >>= nSize;
+            xListAccess->getPropertyValue(rtl::OUString(s_sPickListSize)) >>= nSize;
             break;
 
         case eHISTORY:
-            xListAccess->getPropertyValue(s_sURLHistorySize) >>= nSize;
+            xListAccess->getPropertyValue(rtl::OUString(s_sURLHistorySize)) >>= nSize;
             break;
 
         case eHELPBOOKMARKS:
-            xListAccess->getPropertyValue(s_sHelpBookmarksSize) >>= nSize;
+            xListAccess->getPropertyValue(rtl::OUString(s_sHelpBookmarksSize)) >>= nSize;
             break;
 
         default:
@@ -231,15 +231,15 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
         switch( eHistory )
         {
         case ePICKLIST:
-            m_xCfg->getByName(s_sPickList) >>= xList;
+            m_xCfg->getByName(rtl::OUString(s_sPickList)) >>= xList;
             break;
 
         case eHISTORY:
-            m_xCfg->getByName(s_sURLHistory) >>= xList;
+            m_xCfg->getByName(rtl::OUString(s_sURLHistory)) >>= xList;
             break;
 
         case eHELPBOOKMARKS:
-            m_xCfg->getByName(s_sHelpBookmarks) >>= xList;
+            m_xCfg->getByName(rtl::OUString(s_sHelpBookmarks)) >>= xList;
             break;
 
         default:
@@ -251,8 +251,8 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
         if ( ! xList.is())
             return;
 
-        xList->getByName(s_sOrderList) >>= xOrderList;
-        xList->getByName(s_sItemList)  >>= xItemList;
+        xList->getByName(rtl::OUString(s_sOrderList)) >>= xOrderList;
+        xList->getByName(rtl::OUString(s_sItemList))  >>= xItemList;
 
         const sal_uInt32 nLength = xOrderList->getElementNames().getLength();
         if (nSize < nLength)
@@ -262,7 +262,7 @@ void SvtHistoryOptions_Impl::impl_truncateList ( EHistoryType eHistory, sal_uInt
                 ::rtl::OUString sTmp;
                 const ::rtl::OUString sRemove = ::rtl::OUString::valueOf((sal_Int32)i);
                 xOrderList->getByName(sRemove) >>= xSet;
-                xSet->getPropertyValue(s_sHistoryItemRef) >>= sTmp;
+                xSet->getPropertyValue(rtl::OUString(s_sHistoryItemRef)) >>= sTmp;
                 xItemList->removeByName(sTmp);
                 xOrderList->removeByName(sRemove);
             }
@@ -292,19 +292,19 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
         {
         case ePICKLIST:
             {
-                m_xCfg->getByName(s_sPickList) >>= xListAccess;
+                m_xCfg->getByName(rtl::OUString(s_sPickList)) >>= xListAccess;
                 break;
             }
 
         case eHISTORY:
             {
-                m_xCfg->getByName(s_sURLHistory) >>= xListAccess;
+                m_xCfg->getByName(rtl::OUString(s_sURLHistory)) >>= xListAccess;
                 break;
             }
 
         case eHELPBOOKMARKS:
             {
-                m_xCfg->getByName(s_sHelpBookmarks) >>= xListAccess;
+                m_xCfg->getByName(rtl::OUString(s_sHelpBookmarks)) >>= xListAccess;
                 break;
             }
 
@@ -315,14 +315,14 @@ void SvtHistoryOptions_Impl::Clear( EHistoryType eHistory )
         if (xListAccess.is())
         {
             // clear ItemList
-            xListAccess->getByName(s_sItemList)  >>= xNode  ;
+            xListAccess->getByName(rtl::OUString(s_sItemList))  >>= xNode  ;
             lOrders = xNode->getElementNames();
             const sal_Int32 nLength = lOrders.getLength();
             for(sal_Int32 i=0; i<nLength; ++i)
                 xNode->removeByName(lOrders[i]);
 
             // clear OrderList
-            xListAccess->getByName(s_sOrderList) >>= xNode ;
+            xListAccess->getByName(rtl::OUString(s_sOrderList)) >>= xNode ;
             lOrders = xNode->getElementNames();
             for(sal_Int32 j=0; j<nLength; ++j)
                 xNode->removeByName(lOrders[j]);
@@ -364,19 +364,19 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
         {
         case ePICKLIST:
             {
-                m_xCfg->getByName(s_sPickList) >>= xListAccess;
+                m_xCfg->getByName(rtl::OUString(s_sPickList)) >>= xListAccess;
                 break;
             }
 
         case eHISTORY:
             {
-                m_xCfg->getByName(s_sURLHistory) >>= xListAccess;
+                m_xCfg->getByName(rtl::OUString(s_sURLHistory)) >>= xListAccess;
                 break;
             }
 
         case eHELPBOOKMARKS:
             {
-                m_xCfg->getByName(s_sHelpBookmarks) >>= xListAccess;
+                m_xCfg->getByName(rtl::OUString(s_sHelpBookmarks)) >>= xListAccess;
                 break;
             }
 
@@ -386,8 +386,8 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
 
         if (xListAccess.is())
         {
-            xListAccess->getByName(s_sItemList)  >>= xItemList;
-            xListAccess->getByName(s_sOrderList) >>= xOrderList;
+            xListAccess->getByName(rtl::OUString(s_sItemList))  >>= xItemList;
+            xListAccess->getByName(rtl::OUString(s_sOrderList)) >>= xOrderList;
 
             const sal_Int32 nLength = xOrderList->getElementNames().getLength();
             Sequence< Sequence< PropertyValue > > aRet(nLength);
@@ -396,13 +396,13 @@ Sequence< Sequence< PropertyValue > > SvtHistoryOptions_Impl::GetList( EHistoryT
             {
                 ::rtl::OUString sUrl;
                 xOrderList->getByName(::rtl::OUString::valueOf(nItem)) >>= xSet;
-                xSet->getPropertyValue(s_sHistoryItemRef) >>= sUrl;
+                xSet->getPropertyValue(rtl::OUString(s_sHistoryItemRef)) >>= sUrl;
 
                 xItemList->getByName(sUrl) >>= xSet;
                 seqProperties[s_nOffsetURL  ].Value <<= sUrl;
-                xSet->getPropertyValue(s_sFilter)   >>= seqProperties[s_nOffsetFilter   ].Value;
-                xSet->getPropertyValue(s_sTitle)    >>= seqProperties[s_nOffsetTitle    ].Value;
-                xSet->getPropertyValue(s_sPassword) >>= seqProperties[s_nOffsetPassword ].Value;
+                xSet->getPropertyValue(rtl::OUString(s_sFilter))   >>= seqProperties[s_nOffsetFilter   ].Value;
+                xSet->getPropertyValue(rtl::OUString(s_sTitle))    >>= seqProperties[s_nOffsetTitle    ].Value;
+                xSet->getPropertyValue(rtl::OUString(s_sPassword)) >>= seqProperties[s_nOffsetPassword ].Value;
                 aRet[nItem] = seqProperties;
             }
             seqReturn = aRet;
@@ -435,19 +435,19 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
     {
     case ePICKLIST:
         {
-            m_xCfg->getByName(s_sPickList) >>= xListAccess;
+            m_xCfg->getByName(rtl::OUString(s_sPickList)) >>= xListAccess;
             nMaxSize = GetSize(ePICKLIST);
         }
         break;
     case eHISTORY:
         {
-            m_xCfg->getByName(s_sURLHistory) >>= xListAccess;
+            m_xCfg->getByName(rtl::OUString(s_sURLHistory)) >>= xListAccess;
             nMaxSize = GetSize(eHISTORY);
         }
         break;
     case eHELPBOOKMARKS:
         {
-            m_xCfg->getByName(s_sHelpBookmarks) >>= xListAccess;
+            m_xCfg->getByName(rtl::OUString(s_sHelpBookmarks)) >>= xListAccess;
             nMaxSize = GetSize(eHELPBOOKMARKS);
         }
         break;
@@ -464,10 +464,11 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
 
     try
     {
-        xListAccess->getByName(s_sItemList)  >>= xItemList;
-        xListAccess->getByName(s_sOrderList) >>= xOrderList;
+        xListAccess->getByName(rtl::OUString(s_sItemList))  >>= xItemList;
+        xListAccess->getByName(rtl::OUString(s_sOrderList)) >>= xOrderList;
         sal_Int32 nLength = xOrderList->getElementNames().getLength();
 
+        rtl::OUString sHistoryItemRef(s_sHistoryItemRef);
         // The item to be appended is already existing!
         if (xItemList->hasByName(sURL))
         {
@@ -475,13 +476,13 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
             {
                 ::rtl::OUString sTmp;
                 xOrderList->getByName(::rtl::OUString::valueOf(i)) >>= xSet;
-                xSet->getPropertyValue(s_sHistoryItemRef) >>= sTmp;
+                xSet->getPropertyValue(sHistoryItemRef) >>= sTmp;
 
                 if(sURL == sTmp)
                 {
                     ::rtl::OUString sFind;
                     xOrderList->getByName( ::rtl::OUString::valueOf(i) ) >>= xSet;
-                    xSet->getPropertyValue(s_sHistoryItemRef) >>= sFind;
+                    xSet->getPropertyValue(sHistoryItemRef) >>= sFind;
                     for (sal_Int32 j=i-1; j>=0; --j)
                     {
                         css::uno::Reference< css::beans::XPropertySet > xPrevSet;
@@ -490,11 +491,11 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
                         xOrderList->getByName( ::rtl::OUString::valueOf(j) )     >>= xNextSet;
 
                         ::rtl::OUString sTemp;
-                        xNextSet->getPropertyValue(s_sHistoryItemRef) >>= sTemp;
-                        xPrevSet->setPropertyValue(s_sHistoryItemRef, css::uno::makeAny(sTemp));
+                        xNextSet->getPropertyValue(sHistoryItemRef) >>= sTemp;
+                        xPrevSet->setPropertyValue(sHistoryItemRef, css::uno::makeAny(sTemp));
                     }
                     xOrderList->getByName( ::rtl::OUString::valueOf((sal_Int32)0) ) >>= xSet;
-                    xSet->setPropertyValue(s_sHistoryItemRef, css::uno::makeAny(sFind));
+                    xSet->setPropertyValue(sHistoryItemRef, css::uno::makeAny(sFind));
 
                     ::comphelper::ConfigurationHelper::flush(m_xCfg);
                     break;
@@ -515,7 +516,7 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
             {
                 ::rtl::OUString sRemove;
                 xOrderList->getByName(::rtl::OUString::valueOf(nLength-1)) >>= xSet;
-                xSet->getPropertyValue(s_sHistoryItemRef) >>= sRemove;
+                xSet->getPropertyValue(sHistoryItemRef) >>= sRemove;
                 xItemList->removeByName(sRemove);
             }
             if ( nLength != nMaxSize )
@@ -530,20 +531,20 @@ void SvtHistoryOptions_Impl::AppendItem(       EHistoryType eHistory ,
                 xOrderList->getByName( ::rtl::OUString::valueOf(j) )   >>= xPrevSet;
                 xOrderList->getByName( ::rtl::OUString::valueOf(j-1) ) >>= xNextSet;
                 ::rtl::OUString sTemp;
-                xNextSet->getPropertyValue(s_sHistoryItemRef) >>= sTemp;
-                xPrevSet->setPropertyValue(s_sHistoryItemRef, css::uno::makeAny(sTemp));
+                xNextSet->getPropertyValue(sHistoryItemRef) >>= sTemp;
+                xPrevSet->setPropertyValue(sHistoryItemRef, css::uno::makeAny(sTemp));
             }
             xOrderList->getByName( ::rtl::OUString::valueOf((sal_Int32)0) ) >>= xSet;
-            xSet->setPropertyValue(s_sHistoryItemRef, css::uno::makeAny(sURL));
+            xSet->setPropertyValue(sHistoryItemRef, css::uno::makeAny(sURL));
 
             // Append the item to ItemList.
             xFac = css::uno::Reference< css::lang::XSingleServiceFactory >(xItemList, css::uno::UNO_QUERY);
             xInst = xFac->createInstance();
             xItemList->insertByName(sURL, css::uno::makeAny(xInst));
             xSet = css::uno::Reference< css::beans::XPropertySet >(xInst, css::uno::UNO_QUERY);
-            xSet->setPropertyValue(s_sFilter, css::uno::makeAny(sFilter));
-            xSet->setPropertyValue(s_sTitle, css::uno::makeAny(sTitle));
-            xSet->setPropertyValue(s_sPassword, css::uno::makeAny(sPassword));
+            xSet->setPropertyValue(rtl::OUString(s_sFilter), css::uno::makeAny(sFilter));
+            xSet->setPropertyValue(rtl::OUString(s_sTitle), css::uno::makeAny(sTitle));
+            xSet->setPropertyValue(rtl::OUString(s_sPassword), css::uno::makeAny(sPassword));
 
             ::comphelper::ConfigurationHelper::flush(m_xCfg);
         }
