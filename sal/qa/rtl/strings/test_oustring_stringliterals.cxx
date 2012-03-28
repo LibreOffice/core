@@ -178,6 +178,8 @@ void test::oustring::StringLiterals::checkBuffer()
     CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OUString( "foo" ));
     buf.append( "bar" );
     CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OUString( "foobar" ));
+    buf.insert( 3, "baz" );
+    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OUString( "foobazbar" ));
 }
 
 }} // namespace

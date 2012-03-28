@@ -635,6 +635,19 @@ public:
     }
 
     /**
+        @overload
+        This function accepts an ASCII string literal as its argument.
+        @since LibreOffice 3.6
+     */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
+    {
+        rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, offset, literal,
+            internal::ConstCharArrayDetector< T, void >::size - 1 );
+        return *this;
+    }
+
+    /**
         Inserts the string representation of the <code>sal_Bool</code>
         argument into this string buffer.
 
