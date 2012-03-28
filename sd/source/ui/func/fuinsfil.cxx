@@ -334,9 +334,6 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 {
     sal_Bool bOK = sal_False;
 
-    // Liste mit Seitennamen (wenn NULL, dann alle Seiten)
-    List* pBookmarkList = NULL;
-
     mpDocSh->SetWaitCursor( sal_False );
     SdAbstractDialogFactory* pFact = SdAbstractDialogFactory::Create();
     AbstractSdInsertPagesObjsDlg* pDlg = pFact ? pFact->CreateSdInsertPagesObjsDlg( NULL, mpDoc, pMedium, aFile ) : 0;
@@ -357,8 +354,10 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
 
     if( nRet == RET_OK )
     {
+        std::vector<rtl::OUString> aBookmarkList;       // Liste mit Seitennamen (wenn NULL, dann alle Seiten)
+
         // Zuerst Seiten einfuegen
-        pBookmarkList = pDlg->GetList( 1 ); // Seiten
+        pDlg->GetList( 1, aBookmarkList ); // Seiten
         sal_Bool bLink = pDlg->IsLink();
         sal_Bool bReplace = sal_False;
         SdPage* pPage = NULL;
@@ -388,83 +387,34 @@ sal_Bool FuInsertFile::InsSDDinDrMode(SfxMedium* pMedium)
         }
 
         sal_Bool  bNameOK;
-        List* pObjectBookmarkList = pDlg->GetList( 2 ); // Objekte
-        List* pExchangeList = NULL;
+        std::vector<rtl::OUString> aObjectBookmarkList, aExchangeList;
+        pDlg->GetList( 2, aObjectBookmarkList ); // Objekte
 
         // Es werden ausgewaehlte Seiten und/oder ausgewaehlte Objekte oder
         // alles eingefuegt, wenn pBookmarkList NULL ist!
-        if( pBookmarkList || !pObjectBookmarkList )
+        if( !aBookmarkList.empty() || aObjectBookmarkList.empty() )
         {
             // Um zu gewaehrleisten, dass alle Seitennamen eindeutig sind, werden
             // die einzufuegenden geprueft und gegebenenfalls in einer Ersatzliste
             // aufgenommen
             // bNameOK == sal_False -> Benutzer hat abgebrochen
-            bNameOK = mpView->GetExchangeList( pExchangeList, pBookmarkList, 0 );
+            bNameOK = mpView->GetExchangeList( aExchangeList, aBookmarkList, 0 );
 
             if( bNameOK )
-                bOK = mpDoc->InsertBookmarkAsPage( pBookmarkList, pExchangeList,
+                bOK = mpDoc->InsertBookmarkAsPage( aBookmarkList, aExchangeList,
                                     bLink, bReplace, nPos,
                                     sal_False, NULL, sal_True, sal_True, sal_False );
 
-            // delete the BookmarkList
-            if( pBookmarkList )
-            {
-                String* pString = (String*) pBookmarkList->First();
-                while( pString )
-                {
-                    delete pString;
-                    pString = (String*) pBookmarkList->Next();
-                }
-                delete pBookmarkList;
-                pBookmarkList = NULL;
-            }
-            // delete the ExchangeList
-            if( pExchangeList )
-            {
-                String* pString = (String*) pExchangeList->First();
-                while( pString )
-                {
-                    delete pString;
-                    pString = (String*) pExchangeList->Next();
-                }
-                delete pExchangeList;
-                pExchangeList = NULL;
-            }
+            aBookmarkList.clear();
+            aExchangeList.clear();
         }
-        // Dann Objekte einfuegen
-        pBookmarkList = pObjectBookmarkList;
 
         // Um zu gewaehrleisten... (s.o.)
-        bNameOK = mpView->GetExchangeList( pExchangeList, pBookmarkList, 1 );
+        bNameOK = mpView->GetExchangeList( aExchangeList, aObjectBookmarkList, 1 );
 
         if( bNameOK )
-            bOK = mpDoc->InsertBookmarkAsObject( pBookmarkList, pExchangeList,
+            bOK = mpDoc->InsertBookmarkAsObject( aObjectBookmarkList, aExchangeList,
                                 bLink, NULL, NULL);
-
-        // delete the BookmarkList
-        if( pBookmarkList )
-        {
-            String* pString = (String*) pBookmarkList->First();
-            while( pString )
-            {
-                delete pString;
-                pString = (String*) pBookmarkList->Next();
-            }
-            delete pBookmarkList;
-            pBookmarkList = NULL;
-        }
-        // delete the ExchangeList
-        if( pExchangeList )
-        {
-            String* pString = (String*) pExchangeList->First();
-            while( pString )
-            {
-                delete pString;
-                pString = (String*) pExchangeList->Next();
-            }
-            delete pExchangeList;
-            pExchangeList = NULL;
-        }
 
         if( pDlg->IsRemoveUnnessesaryMasterPages() )
             mpDoc->RemoveUnnecessaryMasterPages();
