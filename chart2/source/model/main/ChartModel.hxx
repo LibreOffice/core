@@ -611,7 +611,7 @@ public:
         throw (::com::sun::star::uno::RuntimeException);
 
     // XDumper
-    virtual rtl::OUString dump()
+    virtual rtl::OUString SAL_CALL dump()
         throw (com::sun::star::uno::RuntimeException);
 };
 
