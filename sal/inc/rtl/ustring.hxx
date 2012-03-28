@@ -60,10 +60,6 @@ namespace rtl
 
 #ifdef RTL_STRING_UNITTEST
 #undef rtl
-// helper macro to make functions appear more readable
-#define RTL_STRING_CONST_FUNCTION rtl_string_unittest_const_literal_function = true;
-#else
-#define RTL_STRING_CONST_FUNCTION
 #endif
 
 /* ======================================================================= */
@@ -2028,7 +2024,6 @@ namespace rtl
 {
 typedef rtlunittest::OUString OUString;
 }
-#undef RTL_STRING_CONST_FUNCTION
 #endif
 
 namespace rtl
