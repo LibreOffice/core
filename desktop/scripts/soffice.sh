@@ -109,6 +109,7 @@ for arg in $@ $VALGRINDOPT ; do
                 fi
                 # finally set the valgrind check
                 VALGRINDCHECK="valgrind --tool=$VALGRIND --trace-children=yes $valgrind_skip --num-callers=50 --error-limit=no --error-exitcode=101"
+                echo "use kill -SIGUSR2 pid to dump traces of active allocations"
                 checks="c$checks"
                 if [ "$VALGRIND" = "memcheck" ] ; then
                     export G_SLICE=always-malloc
