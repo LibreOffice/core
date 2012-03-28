@@ -43,7 +43,6 @@
 #include "file/FDateFunctions.hxx"
 #include "file/FNumericFunctions.hxx"
 #include "file/FConnection.hxx"
-#include <com/sun/star/sdb/SQLFilterOperator.hpp>
 
 using namespace connectivity;
 using namespace connectivity::file;

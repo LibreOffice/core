@@ -47,12 +47,9 @@
 #include <com/sun/star/sdbc/DataType.hpp>
 #include <com/sun/star/sdb/XQueriesSupplier.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
-#include <com/sun/star/util/XNumberFormatter.hpp>
 #include <com/sun/star/util/XNumberFormatsSupplier.hpp>
 #include <com/sun/star/util/XNumberFormats.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
-#include <com/sun/star/util/XNumberFormatTypes.hpp>
-#include <com/sun/star/lang/Locale.hpp>
 #include <com/sun/star/i18n/KParseType.hpp>
 #include <com/sun/star/i18n/KParseTokens.hpp>
 #include "connectivity/dbconversion.hxx"

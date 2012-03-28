@@ -47,7 +47,6 @@
 #include <com/sun/star/util/XCancellable.hpp>
 #include <cppuhelper/compbase5.hxx>
 #include <comphelper/propertycontainer.hxx>
-#include <com/sun/star/lang/XServiceInfo.hpp>
 
 #include "EApi.h"
 

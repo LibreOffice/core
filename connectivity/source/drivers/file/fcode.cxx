@@ -35,7 +35,6 @@
 #include "TConnection.hxx"
 #include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <comphelper/types.hxx>
-#include <com/sun/star/sdb/SQLFilterOperator.hpp>
 #include <rtl/logfile.hxx>
 
 using namespace ::comphelper;

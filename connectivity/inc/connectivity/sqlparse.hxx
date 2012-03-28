@@ -48,7 +48,6 @@
 #include "connectivity/dbtoolsdllapi.hxx"
 #include "connectivity/sqlerror.hxx"
 #include <salhelper/singletonref.hxx>
-#include <osl/mutex.hxx>
 
 #include <map>
 

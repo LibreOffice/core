@@ -37,8 +37,6 @@
 #include <rtl/digest.h>
 #include <algorithm>
 
-#include <algorithm>
-
 using namespace connectivity;
 //------------------------------------------------------------------------------
 using namespace com::sun::star::uno;

@@ -45,7 +45,6 @@
 #include "nsILDAPConnection.h"
 #include "nsILDAPOperation.h"
 #include "post_include_mozilla.h"
-#include "MQuery.hxx"
 #include <MQueryHelper.hxx>
 #include <com/sun/star/uno/Reference.hxx>
 #include <comphelper/processfactory.hxx>
