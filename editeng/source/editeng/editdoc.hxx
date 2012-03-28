@@ -298,8 +298,7 @@ SV_DECL_PTRARR( DummyContentList, ContentNodePtr, 0 )
 
 class ContentList : public DummyContentList
 {
-    sal_uInt16 nLastCache;
-
+    mutable sal_uInt16 nLastCache;
 public:
     ContentList();
     sal_uInt16 GetPos(ContentNode* p) const;
@@ -631,7 +630,7 @@ SV_DECL_PTRARR( DummyParaPortionList, ParaPortionPtr, 0 )
 // -------------------------------------------------------------------------
 class ParaPortionList : public DummyParaPortionList
 {
-    sal_uInt16 nLastCache;
+    mutable sal_uInt16 nLastCache;
 public:
                     ParaPortionList();
                     ~ParaPortionList();
@@ -643,7 +642,7 @@ public:
     inline ParaPortion* SaveGetObject( sal_uInt16 nPos ) const
         { return ( nPos < Count() ) ? GetObject( nPos ) : 0; }
 
-    sal_uInt16                  GetPos( const ParaPortionPtr &rPtr ) const;
+    sal_uInt16 GetPos(ParaPortion* p) const;
 #if OSL_DEBUG_LEVEL > 2
     // temporary:
     void            DbgCheck( EditDoc& rDoc );

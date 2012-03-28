@@ -291,8 +291,11 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormatte
 
 // Shared reverse lookup acceleration pieces ...
 
-static sal_uInt16 FastGetPos( const VoidPtr *pPtrArray, sal_uInt16 nPtrArrayLen,
-                          VoidPtr pPtr, sal_uInt16 &rLastPos )
+namespace {
+
+template<typename T>
+sal_uInt16 FastGetPos(
+    T const* pPtrArray, sal_uInt16 nPtrArrayLen, T pPtr, sal_uInt16 &rLastPos)
 {
   // Through certain filter code-paths we do a lot of appends, which in
   // turn call GetPos - creating some N^2 nightmares. If we have a
@@ -321,6 +324,8 @@ static sal_uInt16 FastGetPos( const VoidPtr *pPtrArray, sal_uInt16 nPtrArrayLen,
   return USHRT_MAX;
 }
 
+}
+
 ParaPortionList::ParaPortionList() : nLastCache( 0 )
 {
 }
@@ -330,20 +335,16 @@ ParaPortionList::~ParaPortionList()
     Reset();
 }
 
-sal_uInt16 ParaPortionList::GetPos( const ParaPortionPtr &rPtr ) const
+sal_uInt16 ParaPortionList::GetPos(ParaPortion* p) const
 {
-    return FastGetPos( reinterpret_cast<const VoidPtr *>( GetData() ),
-                       Count(), static_cast<VoidPtr>( rPtr ),
-                       ((ParaPortionList *)this)->nLastCache );
+    return FastGetPos(GetData(), Count(), p, nLastCache);
 }
 
 ContentList::ContentList() : DummyContentList( 0 ), nLastCache(0) {}
 
 sal_uInt16 ContentList::GetPos(ContentNode* p) const
 {
-    return FastGetPos( reinterpret_cast<const VoidPtr *>( GetData() ),
-                       Count(), static_cast<VoidPtr>(p),
-                       ((ContentList *)this)->nLastCache );
+    return FastGetPos(GetData(), Count(), p, nLastCache);
 }
 
 void ParaPortionList::Reset()
