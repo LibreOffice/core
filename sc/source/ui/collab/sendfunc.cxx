@@ -68,6 +68,18 @@ ScBaseCell *stringToCell( const rtl::OUString &rString )
     return NULL;
 }
 
+bool isCollabMode( bool& rbMaster )
+{
+    const char* pEnv = getenv ("LIBO_TUBES");
+    if (pEnv)
+    {
+        rbMaster = !strcmp( pEnv, "master");
+        return true;
+    }
+    rbMaster = false;
+    return false;
+}
+
 
 // Ye noddy mangling - needs improvement ...
 // method name ';' then arguments ; separated
@@ -452,7 +464,14 @@ public:
             SendFile( rText );
 
         if ( rtl::OUString( rText ) == "contacts" )
-            tubes::createContacts( TeleManager::get() );
+        {
+            // For TeleManager::get() use the same master/slave mode we have
+            // for collaboration, if any. This is a hack anyway so don't care
+            // whether we really are in collab mode or not.
+            bool bIsMaster = false;
+            isCollabMode( bIsMaster );
+            tubes::createContacts( TeleManager::get( bIsMaster ) );
+        }
 
         return true; // needs some code auditing action
     }
@@ -544,10 +563,10 @@ public:
 SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
 {
     // FIXME: the chains should be auto-ptrs, so should be collab
-    const char* pEnv;
+    bool bIsMaster = false;
     if (getenv ("INTERCEPT"))
         return new ScDocFuncSend( *this, new ScDocFuncRecv( *this, new ScDocFuncDirect( *this ) ) );
-    else if ((pEnv = getenv ("LIBO_TUBES")) != NULL)
+    else if (isCollabMode( bIsMaster ))
     {
         ScDocFuncRecv* pReceiver = new ScDocFuncRecv( *this, new ScDocFuncDirect( *this ) );
         ScDocFuncSend* pSender = new ScDocFuncSend( *this, pReceiver );
@@ -557,7 +576,6 @@ SC_DLLPRIVATE ScDocFunc *ScDocShell::CreateDocFunc()
             boost::bind( &ScDocFuncRecv::packetReceived, pReceiver, _1, _2 ));
         pCollab->sigFileReceived.connect(
             boost::bind( &ScDocFuncRecv::fileReceived, pReceiver, _1));
-        bool bIsMaster = !strcmp( pEnv, "master");
         bOk = bOk && pCollab->initManager(!bIsMaster);
         if (bIsMaster)
         {
