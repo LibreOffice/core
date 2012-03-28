@@ -78,10 +78,10 @@ published interface XCellRangesQuery: com::sun::star::uno::XInterface
             <atom>long</atom> values, this method expects a <atom>short</atom>
             parameter.</p>
 
-            <p>Attention: Empty cells in the range are not analyzed.Some
-            <type>CellFlags</type> may not be fully honored. For instance,
-            when querying for STYLES, the returned ranges may not include empty
-            cells with styles applied.</p>
+            <p>Attention: Empty cells in the range may be skipped depending on
+            the content flag used.  For instance, when querying for STYLES,
+            the returned ranges may not include empty cells even if styles are
+            applied to those cells.</p>
 
         @returns
             all cells of the current cell range(s) with the specified
