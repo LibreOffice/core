@@ -1181,21 +1181,23 @@ const SvxFieldItem* ImpEditView::GetField( const Point& rPos, sal_uInt16* pPara,
         return 0;
     }
 
-    const CharAttribArray& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
+    const CharAttribList::AttribsType& rAttrs = aPaM.GetNode()->GetCharAttribs().GetAttribs();
     sal_uInt16 nXPos = aPaM.GetIndex();
-    for ( sal_uInt16 nAttr = rAttrs.Count(); nAttr; )
+    for (size_t nAttr = rAttrs.size(); nAttr; )
     {
-        EditCharAttrib* pAttr = rAttrs[--nAttr];
-        if ( pAttr->GetStart() == nXPos )
-            if ( pAttr->Which() == EE_FEATURE_FIELD )
+        const EditCharAttrib& rAttr = rAttrs[--nAttr];
+        if (rAttr.GetStart() == nXPos)
+        {
+            if (rAttr.Which() == EE_FEATURE_FIELD)
             {
-                DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "No FieldItem..." );
+                DBG_ASSERT(dynamic_cast<const SvxFieldItem*>(rAttr.GetItem()), "No FieldItem...");
                 if ( pPara )
                     *pPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( aPaM.GetNode() );
                 if ( pPos )
-                    *pPos = pAttr->GetStart();
-                return (const SvxFieldItem*)pAttr->GetItem();
+                    *pPos = rAttr.GetStart();
+                return static_cast<const SvxFieldItem*>(rAttr.GetItem());
             }
+        }
     }
     return NULL;
 }

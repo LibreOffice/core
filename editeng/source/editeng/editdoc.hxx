@@ -208,10 +208,13 @@ public:
 // -------------------------------------------------------------------------
 class CharAttribList
 {
+public:
+    typedef boost::ptr_vector<EditCharAttrib> AttribsType;
+
 private:
-    CharAttribArray aAttribs;
+    AttribsType     aAttribs;
     SvxFont         aDefFont;          // faster than ever from the pool!
-    sal_Bool        bHasEmptyAttribs;
+    bool            bHasEmptyAttribs;
 
                     CharAttribList( const CharAttribList& ) {;}
 
@@ -223,27 +226,32 @@ public:
     void            RemoveItemsFromPool( SfxItemPool* pItemPool );
 
     EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
-    EditCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos ) const;
+    const EditCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos ) const;
     EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
-    EditCharAttrib* FindFeature( sal_uInt16 nPos ) const;
+    const EditCharAttrib* FindFeature( sal_uInt16 nPos ) const;
 
 
     void            ResortAttribs();
     void            OptimizeRanges( SfxItemPool& rItemPool );
 
-    sal_uInt16          Count()                 { return aAttribs.Count(); }
-    void            Clear()                 { aAttribs.Remove( 0, aAttribs.Count()); }
+    size_t Count() const;
+    void Clear();
+
     void            InsertAttrib( EditCharAttrib* pAttrib );
 
     SvxFont&        GetDefFont()            { return aDefFont; }
 
-    sal_Bool            HasEmptyAttribs() const { return bHasEmptyAttribs; }
-    sal_Bool&           HasEmptyAttribs()       { return bHasEmptyAttribs; }
-    sal_Bool            HasBoundingAttrib( sal_uInt16 nBound );
-    sal_Bool            HasAttrib( sal_uInt16 nStartPos, sal_uInt16 nEndPos ) const;
+    bool            HasEmptyAttribs() const { return bHasEmptyAttribs; }
+    void SetHasEmptyAttribs(bool b);
+    bool HasBoundingAttrib( sal_uInt16 nBound ) const;
+    bool HasAttrib( sal_uInt16 nStartPos, sal_uInt16 nEndPos ) const;
 
-    CharAttribArray&        GetAttribs()        { return aAttribs; }
-    const CharAttribArray&  GetAttribs() const  { return aAttribs; }
+    AttribsType& GetAttribs();
+    const AttribsType& GetAttribs() const;
+
+    void Remove(const EditCharAttrib* p);
+    void Remove(size_t nPos);
+
 #if OSL_DEBUG_LEVEL > 2
     // Debug:
     bool DbgCheckAttribs() const;
@@ -788,9 +796,9 @@ inline EditPaM EditDoc::GetEndPaM() const
     return EditPaM( pLastNode, pLastNode->Len() );
 }
 
-inline EditCharAttrib* GetAttrib( const CharAttribArray& rAttribs, sal_uInt16 nAttr )
+inline EditCharAttrib* GetAttrib(CharAttribList::AttribsType& rAttribs, size_t nAttr)
 {
-    return ( nAttr < rAttribs.Count() ) ? rAttribs[nAttr] : 0;
+    return (nAttr < rAttribs.size()) ? &rAttribs[nAttr] : NULL;
 }
 
 sal_Bool CheckOrderedList( CharAttribArray& rAttribs, sal_Bool bStart );

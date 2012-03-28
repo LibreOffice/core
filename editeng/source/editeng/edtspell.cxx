@@ -694,23 +694,23 @@ sal_Bool EdtAutoCorrDoc::HasSymbolChars( sal_uInt16 nStt, sal_uInt16 nEnd )
     sal_uInt16 nScriptType = pImpEE->GetScriptType( EditPaM( pCurNode, nStt ) );
     sal_uInt16 nScriptFontInfoItemId = GetScriptItemId( EE_CHAR_FONTINFO, nScriptType );
 
-    CharAttribArray& rAttribs = pCurNode->GetCharAttribs().GetAttribs();
-    sal_uInt16 nAttrs = rAttribs.Count();
-    for ( sal_uInt16 n = 0; n < nAttrs; n++ )
+    const CharAttribList::AttribsType& rAttribs = pCurNode->GetCharAttribs().GetAttribs();
+    CharAttribList::AttribsType::const_iterator it = rAttribs.begin(), itEnd = rAttribs.end();
+    for (; it != itEnd; ++it)
     {
-        EditCharAttrib* pAttr = rAttribs.GetObject( n );
-        if ( pAttr->GetStart() >= nEnd )
-            return sal_False;
+        const EditCharAttrib& rAttr = *it;
+        if (rAttr.GetStart() >= nEnd)
+            return false;
 
-        if ( ( pAttr->Which() == nScriptFontInfoItemId ) &&
-                ( ((SvxFontItem*)pAttr->GetItem())->GetCharSet() == RTL_TEXTENCODING_SYMBOL ) )
+        if (rAttr.Which() == nScriptFontInfoItemId &&
+            static_cast<const SvxFontItem*>(rAttr.GetItem())->GetCharSet() == RTL_TEXTENCODING_SYMBOL)
         {
             // check if the Attribtuteis within range...
-            if ( pAttr->GetEnd() >= nStt )
-                return sal_True;
+            if (rAttr.GetEnd() >= nStt)
+                return true;
         }
     }
-    return sal_False;
+    return false;
 }
 
 const String* EdtAutoCorrDoc::GetPrevPara( sal_Bool )

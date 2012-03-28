@@ -2043,12 +2043,12 @@ sal_uInt16 EditEngine::GetFieldCount( sal_uInt16 nPara ) const
     ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
     if ( pNode )
     {
-        const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
-        for ( sal_uInt16 nAttr = 0; nAttr < rAttrs.Count(); nAttr++ )
+        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
+        CharAttribList::AttribsType::const_iterator it = rAttrs.begin(), itEnd = rAttrs.end();
+        for (; it != itEnd; ++it)
         {
-            EditCharAttrib* pAttr = rAttrs[nAttr];
-            if ( pAttr->Which() == EE_FEATURE_FIELD )
-                nFields++;
+            if (it->Which() == EE_FEATURE_FIELD)
+                ++nFields;
         }
     }
 
@@ -2061,20 +2061,22 @@ EFieldInfo EditEngine::GetFieldInfo( sal_uInt16 nPara, sal_uInt16 nField ) const
     if ( pNode )
     {
         sal_uInt16 nCurrentField = 0;
-        const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
-        for ( sal_uInt16 nAttr = 0; nAttr < rAttrs.Count(); nAttr++ )
+        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
+        CharAttribList::AttribsType::const_iterator it = rAttrs.begin(), itEnd = rAttrs.end();
+        for (; it != itEnd; ++it)
         {
-            EditCharAttrib* pAttr = rAttrs[nAttr];
-            if ( pAttr->Which() == EE_FEATURE_FIELD )
+            const EditCharAttrib& rAttr = *it;
+            if (rAttr.Which() == EE_FEATURE_FIELD)
             {
                 if ( nCurrentField == nField )
                 {
-                    EFieldInfo aInfo( *(const SvxFieldItem*)pAttr->GetItem(), nPara, pAttr->GetStart() );
-                    aInfo.aCurrentText = ((EditCharAttribField*)pAttr)->GetFieldValue();
+                    const SvxFieldItem* p = static_cast<const SvxFieldItem*>(rAttr.GetItem());
+                    EFieldInfo aInfo(*p, nPara, rAttr.GetStart());
+                    aInfo.aCurrentText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
                     return aInfo;
                 }
 
-                nCurrentField++;
+                ++nCurrentField;
             }
         }
     }
@@ -2102,18 +2104,18 @@ void EditEngine::RemoveFields( sal_Bool bKeepFieldText, TypeId aType )
     for ( sal_uInt16 nPara = 0; nPara < nParas; nPara++  )
     {
         ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( nPara );
-        const CharAttribArray& rAttrs = pNode->GetCharAttribs().GetAttribs();
-        for ( sal_uInt16 nAttr = rAttrs.Count(); nAttr; )
+        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
+        for (size_t nAttr = rAttrs.size(); nAttr; )
         {
-            const EditCharAttrib* pAttr = rAttrs[--nAttr];
-            if ( pAttr->Which() == EE_FEATURE_FIELD )
+            const EditCharAttrib& rAttr = rAttrs[--nAttr];
+            if (rAttr.Which() == EE_FEATURE_FIELD)
             {
-                const SvxFieldData* pFldData = ((const SvxFieldItem*)pAttr->GetItem())->GetField();
+                const SvxFieldData* pFldData = static_cast<const SvxFieldItem*>(rAttr.GetItem())->GetField();
                 if ( pFldData && ( !aType || ( pFldData->IsA( aType ) ) ) )
                 {
-                    DBG_ASSERT( pAttr->GetItem()->ISA( SvxFieldItem ), "no field item..." );
-                    EditSelection aSel( EditPaM( pNode, pAttr->GetStart() ), EditPaM( pNode, pAttr->GetEnd() ) );
-                    String aFieldText = ((EditCharAttribField*)pAttr)->GetFieldValue();
+                    DBG_ASSERT( rAttr->GetItem()->ISA( SvxFieldItem ), "no field item..." );
+                    EditSelection aSel( EditPaM(pNode, rAttr.GetStart()), EditPaM(pNode, rAttr.GetEnd()) );
+                    String aFieldText = static_cast<const EditCharAttribField&>(rAttr).GetFieldValue();
                     pImpEditEngine->ImpInsertText( aSel, aFieldText );
                 }
             }

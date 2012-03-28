@@ -73,6 +73,8 @@
 
 #include <unicode/ubidi.h>
 
+#include <boost/scoped_ptr.hpp>
+
 using namespace ::com::sun::star;
 
 sal_uInt16 lcl_CalcExtraSpace( ParaPortion*, const SvxLineSpacingItem& rLSItem )
@@ -1404,7 +1406,7 @@ EditPaM ImpEditEngine::CursorEndOfLine( const EditPaM& rPaM )
         if ( aNewPaM.GetNode()->IsFeature( aNewPaM.GetIndex() - 1 ) )
         {
             // When a soft break, be in front of it!
-            EditCharAttrib* pNextFeature = aNewPaM.GetNode()->GetCharAttribs().FindFeature( aNewPaM.GetIndex()-1 );
+            const EditCharAttrib* pNextFeature = aNewPaM.GetNode()->GetCharAttribs().FindFeature( aNewPaM.GetIndex()-1 );
             if ( pNextFeature && ( pNextFeature->GetItem()->Which() == EE_FEATURE_LINEBR ) )
                 aNewPaM = CursorLeft( aNewPaM );
         }
@@ -1685,10 +1687,10 @@ void ImpEditEngine::InitScriptTypes( sal_uInt16 nPara )
 
         // To handle fields put the character from the field in the string,
         // because endOfScript( ... ) will skip the CH_FEATURE, because this is WEAK
-        EditCharAttrib* pField = pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, 0 );
+        const EditCharAttrib* pField = pNode->GetCharAttribs().FindNextAttrib( EE_FEATURE_FIELD, 0 );
         while ( pField )
         {
-            ::rtl::OUString aFldText( ((EditCharAttribField*)pField)->GetFieldValue() );
+            rtl::OUString aFldText = static_cast<const EditCharAttribField*>(pField)->GetFieldValue();
             if ( !aFldText.isEmpty() )
             {
                 aText.SetChar( pField->GetStart(), aFldText.getStr()[0] );
@@ -2102,11 +2104,11 @@ void ImpEditEngine::ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, Edit
         // Check whether attributes are deleted or changed:
         sal_uInt16 nStart = rPaM.GetIndex();
         sal_uInt16 nEnd = nStart + nChars;
-        CharAttribArray& rAttribs = rPaM.GetNode()->GetCharAttribs().GetAttribs();
-        for ( sal_uInt16 nAttr = 0; nAttr < rAttribs.Count(); nAttr++ )
+        const CharAttribList::AttribsType& rAttribs = rPaM.GetNode()->GetCharAttribs().GetAttribs();
+        for (size_t i = 0, n = rAttribs.size(); i < n; ++i)
         {
-            EditCharAttrib* pAttr = rAttribs[nAttr];
-            if ( ( pAttr->GetEnd() >= nStart ) && ( pAttr->GetStart() < nEnd ) )
+            const EditCharAttrib& rAttr = rAttribs[i];
+            if (rAttr.GetEnd() >= nStart && rAttr.GetStart() < nEnd)
             {
                 EditSelection aSel( rPaM );
                 aSel.Max().GetIndex() = aSel.Max().GetIndex() + nChars;
@@ -2964,37 +2966,37 @@ EditPaM ImpEditEngine::InsertField( EditSelection aCurSel, const SvxFieldItem& r
 
 sal_Bool ImpEditEngine::UpdateFields()
 {
-    sal_Bool bChanges = sal_False;
+    bool bChanges = false;
     sal_uInt16 nParas = GetEditDoc().Count();
     for ( sal_uInt16 nPara = 0; nPara < nParas; nPara++ )
     {
-        sal_Bool bChangesInPara = sal_False;
+        bool bChangesInPara = false;
         ContentNode* pNode = GetEditDoc().GetObject( nPara );
         OSL_ENSURE( pNode, "NULL-Pointer in Doc" );
-        CharAttribArray& rAttribs = pNode->GetCharAttribs().GetAttribs();
-        for ( sal_uInt16 nAttr = 0; nAttr < rAttribs.Count(); nAttr++ )
+        CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
+        for (size_t nAttr = 0; nAttr < rAttribs.size(); ++nAttr)
         {
-            EditCharAttrib* pAttr = rAttribs[nAttr];
-            if ( pAttr->Which() == EE_FEATURE_FIELD )
+            EditCharAttrib& rAttr = rAttribs[nAttr];
+            if (rAttr.Which() == EE_FEATURE_FIELD)
             {
-                EditCharAttribField* pField = (EditCharAttribField*)pAttr;
-                EditCharAttribField* pCurrent = new EditCharAttribField( *pField );
-                pField->Reset();
+                EditCharAttribField& rField = static_cast<EditCharAttribField&>(rAttr);
+                boost::scoped_ptr<EditCharAttribField> pCurrent(new EditCharAttribField(rField));
+                rField.Reset();
 
                 if ( aStatus.MarkFields() )
-                    pField->GetFldColor() = new Color( GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor );
+                    rField.GetFldColor() = new Color( GetColorConfig().GetColorValue( svtools::WRITERFIELDSHADINGS ).nColor );
 
-                XubString aFldValue = GetEditEnginePtr()->CalcFieldValue(
-                                        (const SvxFieldItem&)*pField->GetItem(),
-                                        nPara, pField->GetStart(),
-                                        pField->GetTxtColor(), pField->GetFldColor() );
-                pField->GetFieldValue() = aFldValue;
-                if ( *pField != *pCurrent )
+                rtl::OUString aFldValue =
+                    GetEditEnginePtr()->CalcFieldValue(
+                        static_cast<const SvxFieldItem&>(*rField.GetItem()),
+                        nPara, rField.GetStart(), rField.GetTxtColor(), rField.GetFldColor());
+
+                rField.GetFieldValue() = aFldValue;
+                if (rField != *pCurrent)
                 {
-                    bChanges = sal_True;
-                    bChangesInPara = sal_True;
+                    bChanges = true;
+                    bChangesInPara = true;
                 }
-                delete pCurrent;
             }
         }
         if ( bChangesInPara )
@@ -4310,7 +4312,7 @@ void ImpEditEngine::IndentBlock( EditView* pEditView, sal_Bool bRight )
             else
             {
                 // Remove Tabs
-                EditCharAttrib* pFeature = pNode->GetCharAttribs().FindFeature( 0 );
+                const EditCharAttrib* pFeature = pNode->GetCharAttribs().FindFeature( 0 );
                 if ( pFeature && ( pFeature->GetStart() == 0 ) &&
                    ( pFeature->GetItem()->Which() == EE_FEATURE_TAB ) )
                 {

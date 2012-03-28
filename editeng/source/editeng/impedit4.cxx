@@ -627,7 +627,7 @@ sal_uInt32 ImpEditEngine::WriteRTF( SvStream& rOutput, EditSelection aSel )
             nEndPortion = pParaPortion->GetTextPortions().FindPortion( nEndPos, nPortionStart );
         }
 
-        EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature( nIndex );
+        const EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature(nIndex);
         // start at 0, so the index is right ...
         for ( sal_uInt16 n = 0; n <= nEndPortion; n++ )
         {
@@ -2060,7 +2060,7 @@ void ImpEditEngine::AddPortionIterated(
                 //determine whether a field and has been reached
                 bIsEndField = nEndField == aCursor.GetIndex();
                 //search for a new field attribute
-                EditCharAttrib* _pFieldAttr = aCursor.GetNode()->GetCharAttribs().
+                const EditCharAttrib* _pFieldAttr = aCursor.GetNode()->GetCharAttribs().
                                                         FindFeature( aCursor.GetIndex() );
                 bIsField = _pFieldAttr &&
                         _pFieldAttr->GetStart() == aCursor.GetIndex() &&

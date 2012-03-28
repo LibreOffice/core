@@ -889,7 +889,7 @@ sal_Bool ImpEditEngine::CreateLines( sal_uInt16 nPara, sal_uInt32 nStartPosY )
         TextPortion* pPortion = 0;
         sal_Bool bBrokenLine = sal_False;
         bLineBreak = sal_False;
-        EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature( pLine->GetStart() );
+        const EditCharAttrib* pNextFeature = pNode->GetCharAttribs().FindFeature( pLine->GetStart() );
         while ( ( nTmpWidth < nXWidth ) && !bEOL && ( nTmpPortion < pParaPortion->GetTextPortions().Count() ) )
         {
             nPortionStart = nTmpPos;
@@ -1734,13 +1734,13 @@ void ImpEditEngine::ImpBreakLine( ParaPortion* pParaPortion, EditLine* pLine, Te
     else
     {
         sal_uInt16 nMinBreakPos = pLine->GetStart();
-        sal_uInt16 nAttrs = pNode->GetCharAttribs().GetAttribs().Count();
-        for ( sal_uInt16 nAttr = nAttrs; nAttr; )
+        const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
+        for (size_t nAttr = rAttrs.size(); nAttr; )
         {
-            EditCharAttrib* pAttr = pNode->GetCharAttribs().GetAttribs()[--nAttr];
-            if ( pAttr->IsFeature() && ( pAttr->GetEnd() > nMinBreakPos ) && ( pAttr->GetEnd() <= nMaxBreakPos ) )
+            const EditCharAttrib& rAttr = rAttrs[--nAttr];
+            if (rAttr.IsFeature() && rAttr.GetEnd() > nMinBreakPos && rAttr.GetEnd() <= nMaxBreakPos)
             {
-                nMinBreakPos = pAttr->GetEnd();
+                nMinBreakPos = rAttr.GetEnd();
                 break;
             }
         }
@@ -2563,9 +2563,9 @@ void ImpEditEngine::SeekCursor( ContentNode* pNode, sal_uInt16 nPos, SvxFont& rF
 
     if ( aStatus.UseCharAttribs() )
     {
-        const CharAttribArray& rAttribs = pNode->GetCharAttribs().GetAttribs();
-        sal_uInt16 nAttr = 0;
-        EditCharAttrib* pAttrib = GetAttrib( rAttribs, nAttr );
+        CharAttribList::AttribsType& rAttribs = pNode->GetCharAttribs().GetAttribs();
+        size_t nAttr = 0;
+        EditCharAttrib* pAttrib = GetAttrib(rAttribs, nAttr);
         while ( pAttrib && ( pAttrib->GetStart() <= nPos ) )
         {
             // when seeking, ignore attributes which start there! Empty attributes
@@ -3078,7 +3078,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                 }
                                 else if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
                                 {
-                                    EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature( nIndex );
+                                    const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
                                     DBG_ASSERT( pAttr, "Field not found");
                                     DBG_ASSERT( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ), "Field of the wrong type! ");
                                     aText = ((EditCharAttribField*)pAttr)->GetFieldValue();
@@ -3096,7 +3096,7 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
                                     {
-                                        SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
+                                        const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
                                         if( pFieldItem )
                                         {
                                             const SvxFieldData* pFieldData = pFieldItem->GetField();
@@ -3187,8 +3187,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                     if(PORTIONKIND_FIELD == pTextPortion->GetKind())
                                     {
-                                        EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
-                                        SvxFieldItem* pFieldItem = PTR_CAST(SvxFieldItem, pAttr->GetItem());
+                                        const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
+                                        const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
 
                                         if(pFieldItem)
                                         {
@@ -3335,8 +3335,8 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                         {
                                             if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
                                             {
-                                                EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature( nIndex );
-                                                SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
+                                                const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
+                                                const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
                                                 if( pFieldItem )
                                                 {
                                                     const SvxFieldData* pFieldData = pFieldItem->GetField();
@@ -3344,8 +3344,6 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
                                                     {
                                                         Point aTopLeft( aTmpPos );
                                                         aTopLeft.Y() -= pLine->GetMaxAscent();
-//                                                      if ( nOrientation )
-//                                                          aTopLeft = lcl_ImplCalcRotatedPos( aTopLeft, aOrigin, nSin, nCos );
 
                                                         Rectangle aRect( aTopLeft, pTextPortion->GetSize() );
                                                         vcl::PDFExtOutDevBookmarkEntry aBookmark;
@@ -3386,14 +3384,14 @@ void ImpEditEngine::Paint( OutputDevice* pOutDev, Rectangle aClipRec, Point aSta
 
                                 if ( pTextPortion->GetKind() == PORTIONKIND_FIELD )
                                 {
-                                    EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature( nIndex );
+                                    const EditCharAttrib* pAttr = pPortion->GetNode()->GetCharAttribs().FindFeature(nIndex);
                                     DBG_ASSERT( pAttr, "Field not found" );
                                     DBG_ASSERT( pAttr && pAttr->GetItem()->ISA( SvxFieldItem ), "Wrong type of field!" );
 
                                     // add a meta file comment if we record to a metafile
                                     if( bMetafileValid )
                                     {
-                                        SvxFieldItem* pFieldItem = PTR_CAST( SvxFieldItem, pAttr->GetItem() );
+                                        const SvxFieldItem* pFieldItem = dynamic_cast<const SvxFieldItem*>(pAttr->GetItem());
 
                                         if( pFieldItem )
                                         {
