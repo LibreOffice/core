@@ -30,7 +30,7 @@
 
 #include "chartview/ExplicitValueProvider.hxx"
 #include "ServiceMacros.hxx"
-#include <cppuhelper/implbase9.hxx>
+#include <cppuhelper/implbase10.hxx>
 #include <cppuhelper/interfacecontainer.hxx>
 
 // header for class SfxListener
@@ -47,6 +47,7 @@
 #include <com/sun/star/util/XModifyListener.hpp>
 #include <com/sun/star/util/XModeChangeBroadcaster.hpp>
 #include <com/sun/star/util/XUpdatable.hpp>
+#include <com/sun/star/qa/XDumper.hpp>
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
@@ -70,7 +71,7 @@ The view than changes to state dirty. The view can be updated with call 'update'
 The View is not responsible to handle single user events (that is instead done by the ChartWindow).
 */
 
-class ChartView : public ::cppu::WeakImplHelper9<
+class ChartView : public ::cppu::WeakImplHelper10<
     ::com::sun::star::lang::XInitialization
         , ::com::sun::star::lang::XServiceInfo
         , ::com::sun::star::datatransfer::XTransferable
@@ -84,6 +85,7 @@ class ChartView : public ::cppu::WeakImplHelper9<
         ,::com::sun::star::util::XUpdatable
         ,::com::sun::star::beans::XPropertySet
         ,::com::sun::star::lang::XMultiServiceFactory
+        ,::com::sun::star::qa::XDumper
         >
         , public ExplicitValueProvider
         , private SfxListener
@@ -181,6 +183,10 @@ public:
     // ____ XUnoTunnel ___
     virtual ::sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< ::sal_Int8 >& aIdentifier )
             throw (::com::sun::star::uno::RuntimeException);
+
+    // XDumper
+    virtual rtl::OUString SAL_CALL dump()
+            throw(::com::sun::star::uno::RuntimeException);
 
 private: //methods
     ChartView();

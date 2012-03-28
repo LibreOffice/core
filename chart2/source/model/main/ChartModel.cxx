@@ -1357,6 +1357,11 @@ uno::Sequence< Reference< chart2::data::XLabeledDataSequence > > SAL_CALL ChartM
 rtl::OUString SAL_CALL ChartModel::dump()
     throw (uno::RuntimeException)
 {
+    uno::Reference< qa::XDumper > xDumper(
+            this->createInstance( CHART_VIEW_SERVICE_NAME ), uno::UNO_QUERY );
+    if (xDumper.is())
+        return xDumper->dump();
+
     return rtl::OUString();
 }
 

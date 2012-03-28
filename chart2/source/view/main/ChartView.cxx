@@ -97,6 +97,9 @@
 #include <com/sun/star/util/XModifiable.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/util/NumberFormat.hpp>
+#include <com/sun/star/awt/Size.hpp>
+#include <com/sun/star/awt/Point.hpp>
+#include <com/sun/star/drawing/XShapeDescriptor.hpp>
 
 #include <com/sun/star/style/XStyleFamiliesSupplier.hpp>
 #include <com/sun/star/text/XTextDocument.hpp>
@@ -105,6 +108,13 @@
 #include <com/sun/star/view/XSelectionSupplier.hpp>
 #include <svl/languageoptions.hxx>
 #include <sot/clsids.hxx>
+
+#include <rtl/strbuf.hxx>
+#include <rtl/oustringostreaminserter.hxx>
+
+//libxml2 for dumping
+#include <libxml/xmlwriter.h>
+
 
 //.............................................................................
 namespace chart
@@ -3013,6 +3023,109 @@ uno::Sequence< ::rtl::OUString > ChartView::getAvailableServiceNames() throw (un
     aServiceNames[5] = ::rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "com.sun.star.drawing.MarkerTable" ) );
 
     return aServiceNames;
+}
+
+namespace {
+
+#define DEBUG_DUMPER 0
+
+int writeCallback(void* pContext, const char* sBuffer, int nLen)
+{
+    rtl::OStringBuffer* pBuffer = static_cast<rtl::OStringBuffer*>(pContext);
+    pBuffer->append(sBuffer);
+    return nLen;
+}
+
+int closeCallback(void* )
+{
+    return 0;
+}
+
+void dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("position"), "%i,%i", rPoint.X, rPoint.Y);
+}
+
+void dumpSizeAsAttribute(const awt::Size& rSize, xmlTextWriterPtr xmlWriter)
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("size"), "%ix%i", rSize.Width, rSize.Height);
+}
+
+void dumpShapeDescriptorAsAttribute( uno::Reference< drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter )
+{
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("type"), "%s", rtl::OUStringToOString(xDescr->getShapeType(), RTL_TEXTENCODING_UTF8).getStr());
+}
+
+void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter );
+
+void dumpXShape( uno::Reference< drawing::XShape > xShape, xmlTextWriterPtr xmlWriter  )
+{
+    xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShape" ) );
+
+    dumpPositionAsAttribute(xShape->getPosition(), xmlWriter);
+    dumpSizeAsAttribute(xShape->getSize(), xmlWriter);
+    uno::Reference< drawing::XShapeDescriptor > xDescr(xShape, uno::UNO_QUERY_THROW);
+    dumpShapeDescriptorAsAttribute(xDescr, xmlWriter);
+
+    uno::Reference< lang::XServiceInfo > xServiceInfo( xShape, uno::UNO_QUERY_THROW );
+    uno::Sequence< rtl::OUString > aServiceNames = xServiceInfo->getSupportedServiceNames();
+    sal_Int32 nServices = aServiceNames.getLength();
+    for (sal_Int32 i = 0; i < nServices; ++i)
+    {
+        if (aServiceNames[i].equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("com.sun.star.drawing.GroupShape")))
+        {
+            uno::Reference< drawing::XShapes > xShapes(xShape, uno::UNO_QUERY_THROW);
+            dumpXShapes(xShapes, xmlWriter);
+        }
+#if DEBUG_DUMPER
+        xmlTextWriterStartElement(xmlWriter, BAD_CAST( "ServiceName" ));
+        xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST( "name" ), "%s", rtl::OUStringToOString(aServiceNames[i], RTL_TEXTENCODING_UTF8).getStr());
+        xmlTextWriterEndElement( xmlWriter );
+#endif
+    }
+
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+void dumpXShapes( uno::Reference< drawing::XShapes > xShapes, xmlTextWriterPtr xmlWriter )
+{
+    xmlTextWriterStartElement( xmlWriter, BAD_CAST( "XShapes" ) );
+    uno::Reference< container::XIndexAccess > xIA( xShapes, uno::UNO_QUERY_THROW);
+    sal_Int32 nLength = xIA->getCount();
+    for (sal_Int32 i = 0; i < nLength; ++i)
+    {
+        uno::Reference< drawing::XShape > xShape( xIA->getByIndex( i ), uno::UNO_QUERY_THROW );
+        dumpXShape( xShape, xmlWriter );
+    }
+
+    xmlTextWriterEndElement( xmlWriter );
+}
+
+}
+
+rtl::OUString ChartView::dump() throw (uno::RuntimeException)
+{
+    impl_updateView();
+    uno::Reference<drawing::XShapes> xPageShapes( ShapeFactory(m_xShapeFactory)
+        .getOrCreateChartRootShape( m_xDrawPage ) );
+
+    if (!xPageShapes.is())
+        return rtl::OUString();
+
+    rtl::OStringBuffer aString;
+    xmlOutputBufferPtr xmlOutBuffer = xmlOutputBufferCreateIO( writeCallback, closeCallback, &aString, NULL );
+    xmlTextWriterPtr xmlWriter = xmlNewTextWriter( xmlOutBuffer );
+    xmlTextWriterSetIndent( xmlWriter, 1 );
+
+    xmlTextWriterStartDocument( xmlWriter, NULL, NULL, NULL );
+
+    dumpXShapes( xPageShapes, xmlWriter );
+
+    xmlTextWriterEndDocument( xmlWriter );
+    xmlFreeTextWriter( xmlWriter );
+
+
+    return OStringToOUString(aString.makeStringAndClear(), RTL_TEXTENCODING_UTF8);
 }
 
 //.............................................................................
