@@ -81,8 +81,6 @@ static const char ITEM_DESCRIPTOR_COMMANDURL[] = "CommandURL";
 static const char ITEM_DESCRIPTOR_CONTAINER[] = "ItemDescriptorContainer";
 static const char ITEM_DESCRIPTOR_LABEL[] = "Label";
 
-static const ::rtl::OUString MENU_SUBMENU(RTL_CONSTASCII_USTRINGPARAM("..."));
-
 static const char XDG_CONFIG_PART[] = "/.config";
 
 ::rtl::OUString retrieveLabelFromCommand(const ::rtl::OUString& sCommand, const ::rtl::OUString& sModuleIdentifier)
