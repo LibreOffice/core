@@ -278,11 +278,9 @@ namespace connectivity
         void append(OSQLParseNode* pNewSubTree);
         void insert(sal_uInt32 nPos, OSQLParseNode* pNewSubTree);
 
-        OSQLParseNode* replaceAt(sal_uInt32 nPos, OSQLParseNode* pNewSubTree);
         OSQLParseNode* replace(OSQLParseNode* pOldSubTree, OSQLParseNode* pNewSubTree);
 
         OSQLParseNode* removeAt(sal_uInt32 nPos);
-        OSQLParseNode* remove(OSQLParseNode* pSubTree);
 
         void replaceNodeValue(const ::rtl::OUString& rTableAlias,const ::rtl::OUString& rColumnName);
 

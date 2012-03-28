@@ -2383,44 +2383,8 @@ OSQLParseNode* OSQLParseNode::removeAt(sal_uInt32 nPos)
     m_aChildren.erase(aPos);
     return pNode;
 }
-//-----------------------------------------------------------------------------
-OSQLParseNode* OSQLParseNode::remove(OSQLParseNode* pSubTree)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::remove" );
-    OSL_ENSURE(pSubTree != NULL, "OSQLParseNode: invalid SubTree");
-    OSQLParseNodes::iterator aPos = ::std::find(m_aChildren.begin(), m_aChildren.end(), pSubTree);
-    if (aPos != m_aChildren.end())
-    {
-        // Set the getParent of the removed node to NULL
-        pSubTree->setParent( NULL );
-        m_aChildren.erase(aPos);
-        return pSubTree;
-    }
-    else
-        return NULL;
-}
 
 // Replace methods
-//-----------------------------------------------------------------------------
-OSQLParseNode* OSQLParseNode::replaceAt(sal_uInt32 nPos, OSQLParseNode* pNewSubNode)
-{
-    RTL_LOGFILE_CONTEXT_AUTHOR( aLogger, "parse", "Ocke.Janssen@sun.com", "OSQLParseNode::replaceAt" );
-    OSL_ENSURE(pNewSubNode != NULL, "OSQLParseNode: invalid nodes");
-    OSL_ENSURE(pNewSubNode->getParent() == NULL, "OSQLParseNode: node already has getParent");
-    OSL_ENSURE(nPos < m_aChildren.size(), "OSQLParseNode: invalid position");
-    OSL_ENSURE(::std::find(m_aChildren.begin(), m_aChildren.end(), pNewSubNode) == m_aChildren.end(),
-            "OSQLParseNode::Replace() Node already element of parent");
-
-    OSQLParseNode* pOldSubNode = m_aChildren[nPos];
-
-    // Create connection to getParent
-    pNewSubNode->setParent( this );
-    pOldSubNode->setParent( NULL );
-
-    m_aChildren[nPos] = pNewSubNode;
-    return pOldSubNode;
-}
-
 //-----------------------------------------------------------------------------
 OSQLParseNode* OSQLParseNode::replace (OSQLParseNode* pOldSubNode, OSQLParseNode* pNewSubNode )
 {
@@ -2786,11 +2750,6 @@ void OSQLParseNodesContainer::erase(OSQLParseNode* _pNode)
         if ( aFind != m_aNodes.end() )
             m_aNodes.erase(aFind);
     }
-}
-// -----------------------------------------------------------------------------
-bool OSQLParseNodesContainer::empty() const
-{
-    return m_aNodes.empty();
 }
 // -----------------------------------------------------------------------------
 void OSQLParseNodesContainer::clear()

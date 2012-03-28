@@ -772,9 +772,6 @@ comphelper::findProperty(com::sun::star::beans::Property&, com::sun::star::uno::
 connectivity::OKeyValue::OKeyValue()
 connectivity::ORowSetValue::setFromDouble(double const&, int)
 connectivity::OSQLInternalNode::OSQLInternalNode(unsigned short const*, connectivity::SQLNodeType, unsigned int)
-connectivity::OSQLParseNode::remove(connectivity::OSQLParseNode*)
-connectivity::OSQLParseNode::replaceAt(unsigned int, connectivity::OSQLParseNode*)
-connectivity::OSQLParseNodesContainer::empty() const
 connectivity::OSQLScanner::GetCurrentRule() const
 connectivity::OSortIndex::GetValue(int) const
 connectivity::SQLError::getSQLState(int) const
