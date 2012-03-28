@@ -180,6 +180,9 @@ void test::oustring::StringLiterals::checkBuffer()
     CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OUString( "foobar" ));
     buf.insert( 3, "baz" );
     CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OUString( "foobazbar" ));
+    char d[] = "d";
+    CPPUNIT_ASSERT( !VALID_CONVERSION( buf.append( d )));
+    CPPUNIT_ASSERT( !VALID_CONVERSION( buf.insert( 0, d )));
 }
 
 }} // namespace
