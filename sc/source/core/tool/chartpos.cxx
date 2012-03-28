@@ -409,8 +409,7 @@ void ScChartPositioner::CreatePositionMap()
                 sal_uLong nInsRow = (bNoGlue ? nNoGlueRow : nRow1);
                 for ( nRow = nRow1; nRow <= nRow2; nRow++, nInsRow++ )
                 {
-                    RowMap::const_iterator it = pCol->find( nInsRow );
-                    if ( it == pCol->end() )
+                    if ( pCol->find( nInsRow ) == pCol->end() )
                     {
                         pCol->insert( RowMap::value_type( nInsRow, new ScAddress( nCol, nRow, nTab ) ) );
                     }
