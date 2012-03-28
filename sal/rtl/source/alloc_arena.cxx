@@ -922,7 +922,6 @@ try_alloc:
     if (result != 0)
     {
         rtl_arena_type * arena = result;
-        VALGRIND_CREATE_MEMPOOL(arena, 0, 0);
         rtl_arena_constructor (arena);
 
         if (!source_arena)
@@ -945,7 +944,6 @@ try_alloc:
         {
             rtl_arena_deactivate (arena);
             rtl_arena_destructor (arena);
-            VALGRIND_DESTROY_MEMPOOL(arena);
             rtl_arena_free (gp_arena_arena, arena, size);
         }
     }
@@ -972,7 +970,6 @@ SAL_CALL rtl_arena_destroy (
     {
         rtl_arena_deactivate (arena);
         rtl_arena_destructor (arena);
-        VALGRIND_DESTROY_MEMPOOL(arena);
         rtl_arena_free (gp_arena_arena, arena, sizeof(rtl_arena_type));
     }
 }
@@ -1033,10 +1030,6 @@ SAL_CALL rtl_arena_alloc (
 
                 rtl_arena_hash_insert (arena, segment);
 
-                /* DEBUG ONLY: mark allocated, undefined */
-                OSL_DEBUG_ONLY(memset((void*)(segment->m_addr), 0x77777777, segment->m_size));
-                VALGRIND_MEMPOOL_ALLOC(arena, segment->m_addr, segment->m_size);
-
                 (*pSize) = segment->m_size;
                 addr = (void*)(segment->m_addr);
             }
@@ -1085,11 +1078,6 @@ SAL_CALL rtl_arena_free (
             if (segment != 0)
             {
                 rtl_arena_segment_type *next, *prev;
-
-                /* DEBUG ONLY: mark unallocated, undefined */
-                VALGRIND_MEMPOOL_FREE(arena, segment->m_addr);
-                /* OSL_DEBUG_ONLY() */ RTL_VALGRIND_IGNORE_VAL VALGRIND_MAKE_MEM_UNDEFINED(segment->m_addr, segment->m_size);
-                OSL_DEBUG_ONLY(memset((void*)(segment->m_addr), 0x33333333, segment->m_size));
 
                 /* coalesce w/ adjacent free segment(s) */
                 rtl_arena_segment_coalesce (arena, segment);
@@ -1266,7 +1254,6 @@ rtl_arena_init()
         static rtl_arena_type g_machdep_arena;
 
         assert(gp_machdep_arena == 0);
-        VALGRIND_CREATE_MEMPOOL(&g_machdep_arena, 0, 0);
         rtl_arena_constructor (&g_machdep_arena);
 
         gp_machdep_arena = rtl_arena_activate (
@@ -1283,7 +1270,6 @@ rtl_arena_init()
         static rtl_arena_type g_default_arena;
 
         assert(gp_default_arena == 0);
-        VALGRIND_CREATE_MEMPOOL(&g_default_arena, 0, 0);
         rtl_arena_constructor (&g_default_arena);
 
         gp_default_arena = rtl_arena_activate (
@@ -1302,7 +1288,6 @@ rtl_arena_init()
         static rtl_arena_type g_arena_arena;
 
         assert(gp_arena_arena == 0);
-        VALGRIND_CREATE_MEMPOOL(&g_arena_arena, 0, 0);
         rtl_arena_constructor (&g_arena_arena);
 
         gp_arena_arena = rtl_arena_activate (
