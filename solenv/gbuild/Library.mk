@@ -127,6 +127,11 @@ gb_Library__get_layer_componentprefix = \
 		$(filter $(1):%,$(gb_Library__COMPONENTPREFIXES)), \
 		$(call gb_Output_error,no ComponentTarget native prefix for layer '$(1)')))
 
+# The \d gets turned into a dollar sign by a $(subst) call in
+# gb_ComponentTarget__command in ComponentTarget.mk. As far as I
+# understand, there is nothing magic to it, it is not some
+# Make/awk/sed/whatever syntax.
+
 gb_Library__COMPONENTPREFIXES := \
     NONE:vnd.sun.star.expand:\dLO_LIB_DIR/ \
     OOO:vnd.sun.star.expand:\dLO_LIB_DIR/ \
