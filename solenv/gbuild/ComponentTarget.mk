@@ -29,13 +29,18 @@
 gb_ComponentTarget_XSLTCOMMANDFILE := $(SOLARENV)/bin/createcomponent.xslt
 gb_ComponentTarget_get_source = $(1)/$(2).component
 
+# In the DISABLE_DYNLOADING case we don't need any COMPONENTPREFIX, we
+# put just the static library filename into the uri parameter. For
+# each statically linked app using some subset of LO components, there
+# is a mapping from library filenames to direct pointers to the
+# corresponding PREFIX_component_getFactory functions.
 define gb_ComponentTarget__command
 $(call gb_Output_announce,$(3),$(true),CMP,1)
 $(if $(LIBFILENAME),,$(call gb_Output_error,No LIBFILENAME set at component target: $(1)))
 $(call gb_Helper_abbreviate_dirs_native,\
 	mkdir -p $(dir $(1)) && \
 	$(gb_XSLTPROC) --nonet --stringparam uri \
-		'$(subst \d,$$,$(COMPONENTPREFIX))$(LIBFILENAME)' -o $(1) \
+		'$(if $(filter TRUE,$(DISABLE_DYNLOADING)),,$(subst \d,$$,$(COMPONENTPREFIX)))$(LIBFILENAME)' -o $(1) \
 		$(gb_ComponentTarget_XSLTCOMMANDFILE) $(2))
 endef
 
