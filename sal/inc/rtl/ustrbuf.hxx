@@ -52,10 +52,6 @@ namespace rtl
 
 #ifdef RTL_STRING_UNITTEST
 #undef rtl
-// helper macro to make functions appear more readable
-#define RTL_STRING_CONST_FUNCTION rtl_string_unittest_const_literal_function = true;
-#else
-#define RTL_STRING_CONST_FUNCTION
 #endif
 
 /** A string buffer implements a mutable sequence of characters.
@@ -428,19 +424,13 @@ public:
         This function accepts an ASCII string literal as its argument.
         @since LibreOffice 3.6
      */
-    template< int N >
-    OUStringBuffer& append( const char (&literal)[ N ] )
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OUStringBuffer& >::Type append( T& literal )
     {
-        rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), literal, N - 1 );
+        rtl_uStringbuffer_insert_ascii( &pData, &nCapacity, getLength(), literal,
+            internal::ConstCharArrayDetector< T, void >::size - 1 );
         return *this;
     }
-
-    /**
-        It is an error to call this overload. Strings cannot directly use non-const char[].
-        @internal
-     */
-    template< int N >
-    OUStringBuffer& append( char (&literal)[ N ] );
 
     /**
         Appends the string representation of the <code>sal_Bool</code>
@@ -889,7 +879,6 @@ namespace rtl
 {
 typedef rtlunittest::OUStringBuffer OUStringBuffer;
 }
-#undef RTL_STRING_CONST_FUNCTION
 #endif
 
 #endif  /* _RTL_USTRBUF_HXX_ */
