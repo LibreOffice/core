@@ -373,9 +373,29 @@ public:
         @param   str   the characters to be appended.
         @return  this string buffer.
      */
-    OStringBuffer & append( const sal_Char * str )
+    template< typename T >
+    typename internal::CharPtrDetector< T, OStringBuffer& >::Type append( const T& str )
     {
         return append( str, rtl_str_getLength( str ) );
+    }
+
+    template< typename T >
+    typename internal::NonConstCharArrayDetector< T, OStringBuffer& >::Type append( T& str )
+    {
+        return append( str, rtl_str_getLength( str ) );
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OStringBuffer& >::Type append( T& literal )
+    {
+        RTL_STRING_CONST_FUNCTION
+        rtl_stringbuffer_insert( &pData, &nCapacity, getLength(), literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+        return *this;
     }
 
     /**
@@ -535,9 +555,29 @@ public:
         @param      str      a character array.
         @return     this string buffer.
      */
-    OStringBuffer & insert( sal_Int32 offset, const sal_Char * str )
+    template< typename T >
+    typename internal::CharPtrDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, const T& str )
     {
         return insert( offset, str, rtl_str_getLength( str ) );
+    }
+
+    template< typename T >
+    typename internal::NonConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& str )
+    {
+        return insert( offset, str, rtl_str_getLength( str ) );
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< typename T >
+    typename internal::ConstCharArrayDetector< T, OStringBuffer& >::Type insert( sal_Int32 offset, T& literal )
+    {
+        RTL_STRING_CONST_FUNCTION
+        rtl_stringbuffer_insert( &pData, &nCapacity, offset, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
+        return *this;
     }
 
     /**

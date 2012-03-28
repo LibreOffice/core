@@ -40,6 +40,7 @@ bool rtl_string_unittest_non_const_literal_function;
 #include <cppunit/extensions/HelperMacros.h>
 #include "rtl/string.h"
 #include "rtl/string.hxx"
+#include "rtl/strbuf.hxx"
 
 namespace rtlunittest {
 
@@ -61,6 +62,7 @@ private:
     void checkCtors();
     void checkUsage();
     void checkNonConstUsage();
+    void checkBuffer();
 
     void testcall( const char str[] );
 
@@ -68,6 +70,7 @@ CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);
 CPPUNIT_TEST(checkUsage);
 CPPUNIT_TEST(checkNonConstUsage);
+CPPUNIT_TEST(checkBuffer);
 CPPUNIT_TEST_SUITE_END();
 };
 
@@ -247,6 +250,34 @@ void test::ostring::StringLiterals::checkNonConstUsage()
 //    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( (const char*)foo_c ) == 6 );
 //    CPPUNIT_ASSERT( foobarfoo.lastIndexOf( foo_c ) == 6 );
     // if this is not true, some of the calls above used const variants
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == false );
+}
+
+void test::ostring::StringLiterals::checkBuffer()
+{
+    rtl::OStringBuffer buf;
+    rtl_string_unittest_const_literal_function = false;
+    buf.append( "foo" );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OString( "foo" ));
+    rtl_string_unittest_const_literal_function = false;
+    buf.append( "bar" );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OString( "foobar" ));
+    rtl_string_unittest_const_literal_function = false;
+    buf.insert( 3, "baz" );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == true );
+    CPPUNIT_ASSERT_EQUAL( buf.toString(), rtl::OString( "foobazbar" ));
+
+    rtl::OString foobazbard( "foobazbard" );
+    rtl::OString foodbazbard( "foodbazbard" );
+    rtl_string_unittest_const_literal = false; // start checking for OString conversions
+    rtl_string_unittest_const_literal_function = false; // and check for const variants
+    char d[] = "d";
+    CPPUNIT_ASSERT_EQUAL( buf.append( d ).toString(), foobazbard );
+    CPPUNIT_ASSERT_EQUAL( buf.insert( 3, d ).toString(), foodbazbard );
+    CPPUNIT_ASSERT( rtl_string_unittest_const_literal == false );
     CPPUNIT_ASSERT( rtl_string_unittest_const_literal_function == false );
 }
 
