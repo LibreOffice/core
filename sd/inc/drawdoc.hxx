@@ -383,6 +383,11 @@ public:
                                                 sal_Bool bLink, ::sd::DrawDocShell* pBookmarkDocSh,
                                                 Point* pObjPos);
 
+    sal_Bool InsertBookmarkAsObject(const std::vector<rtl::OUString> &rBookmarkList,
+                                    std::vector<rtl::OUString> &rExchangeList,
+                                    sal_Bool bLink, ::sd::DrawDocShell* pBookmarkDocSh,
+                                    Point* pObjPos, bool bCalcObjCount = false);
+
     SD_DLLPUBLIC void   CloseBookmarkDoc();
 
     SdrObject*          GetObj(const String& rObjName) const;

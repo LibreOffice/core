@@ -1735,6 +1735,195 @@ sal_Bool SdDrawDocument::InsertBookmarkAsObject(
 
 /*************************************************************************
 |*
+|* Fuegt ein Bookmark als Objekt ein
+|*
+\************************************************************************/
+
+sal_Bool SdDrawDocument::InsertBookmarkAsObject(
+    const std::vector<rtl::OUString> &rBookmarkList,
+    std::vector<rtl::OUString> &rExchangeList,            // Liste der zu verwendenen Namen
+    sal_Bool /* bLink */,
+    ::sd::DrawDocShell* pBookmarkDocSh,
+    Point* pObjPos, bool bCalcObjCount)
+{
+    sal_Bool bOK = sal_True;
+    sal_Bool bOLEObjFound = sal_False;
+    ::sd::View* pBMView = NULL;
+
+    SdDrawDocument* pBookmarkDoc = NULL;
+    String aBookmarkName;
+
+    if (pBookmarkDocSh)
+    {
+        pBookmarkDoc = pBookmarkDocSh->GetDoc();
+
+        if (pBookmarkDocSh->GetMedium())
+        {
+            aBookmarkName = pBookmarkDocSh->GetMedium()->GetName();
+        }
+    }
+    else if ( mxBookmarkDocShRef.Is() )
+    {
+        pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
+        aBookmarkName = maBookmarkFile;
+    }
+    else
+    {
+        return sal_False;
+    }
+
+    if (rBookmarkList.empty())
+    {
+        pBMView = new ::sd::View(*pBookmarkDoc, (OutputDevice*) NULL);
+        pBMView->EndListening(*pBookmarkDoc);
+        pBMView->MarkAll();
+    }
+    else
+    {
+        SdrPage* pPage;
+        SdrPageView* pPV;
+
+        std::vector<rtl::OUString>::const_iterator pIter;
+        for ( pIter = rBookmarkList.begin(); pIter != rBookmarkList.end(); ++pIter )
+        {
+            /******************************************************************
+            * Namen der Bookmarks aus Liste holen
+            ******************************************************************/
+            String aBMName (*pIter);
+
+            SdrObject* pObj = pBookmarkDoc->GetObj(aBMName);
+
+            if (pObj)
+            {
+                // Objekt gefunden
+
+                if (pObj->GetObjInventor() == SdrInventor &&
+                    pObj->GetObjIdentifier() == OBJ_OLE2)
+                {
+                    bOLEObjFound = sal_True;
+                }
+
+                if (!pBMView)
+                {
+                    // View erstmalig erzeugen
+                    pBMView = new ::sd::View(*pBookmarkDoc, (OutputDevice*) NULL);
+                    pBMView->EndListening(*pBookmarkDoc);
+                }
+
+                pPage = pObj->GetPage();
+
+                if (pPage->IsMasterPage())
+                {
+                    pPV = pBMView->ShowSdrPage(pBMView->GetModel()->GetMasterPage(pPage->GetPageNum()));
+                }
+                else
+                {
+                    pPV = pBMView->GetSdrPageView();
+                    if( !pPV || (pPV->GetPage() != pPage))
+                        pPV = pBMView->ShowSdrPage(pPage);
+                }
+
+                pBMView->MarkObj(pObj, pPV, sal_False);
+            }
+        }
+    }
+
+    if (pBMView)
+    {
+        /**********************************************************************
+        * Selektierte Objekte einfuegen
+        **********************************************************************/
+        ::sd::View* pView = new ::sd::View(*this, (OutputDevice*) NULL);
+        pView->EndListening(*this);
+
+        // Seite bestimmen, auf der die Objekte eingefuegt werden sollen
+        SdrPage* pPage = GetSdPage(0, PK_STANDARD);
+
+        if (mpDocSh)
+        {
+            ::sd::ViewShell* pViewSh = mpDocSh->GetViewShell();
+
+            if (pViewSh)
+            {
+                // Welche Seite wird denn aktuell angezeigt?
+                SdrPageView* pPV = pViewSh->GetView()->GetSdrPageView();
+
+                if (pPV)
+                {
+                    pPage = pPV->GetPage();
+                }
+                else if (pViewSh->GetActualPage())
+                {
+                    pPage = pViewSh->GetActualPage();
+                }
+            }
+        }
+
+        Point aObjPos;
+
+        if (pObjPos)
+        {
+            aObjPos = *pObjPos;
+        }
+        else
+        {
+            aObjPos = Rectangle(Point(), pPage->GetSize()).Center();
+        }
+
+        sal_uLong nCountBefore = 0;
+
+        if (!rExchangeList.empty() || bCalcObjCount)
+        {
+            // OrdNums sortieren und Anzahl Objekte vor dem Einfuegen bestimmen
+            pPage->RecalcObjOrdNums();
+            nCountBefore = pPage->GetObjCount();
+        }
+
+        if (bOLEObjFound)
+            pBMView->GetDoc().SetAllocDocSh(sal_True);
+
+        SdDrawDocument* pTmpDoc = (SdDrawDocument*) pBMView->GetAllMarkedModel();
+        bOK = pView->Paste(*pTmpDoc, aObjPos, pPage);
+
+        if (bOLEObjFound)
+            pBMView->GetDoc().SetAllocDocSh(sal_False);
+
+        if (!bOLEObjFound)
+            delete pTmpDoc;             // Wird ansonsten von der DocShell zerstoert
+
+        delete pView;
+
+        if (!rExchangeList.empty())
+        {
+            // Anzahl Objekte nach dem Einfuegen bestimmen
+            sal_uLong nCount = pPage->GetObjCount();
+
+            std::vector<rtl::OUString>::const_iterator pIter = rExchangeList.begin();
+            for (sal_uLong nObj = nCountBefore; nObj < nCount; nObj++)
+            {
+                // Zuverwendener Name aus Exchange-Liste holen
+                if (pIter != rExchangeList.end())
+                {
+                    String aExchangeName (*pIter);
+
+                    if (pPage->GetObj(nObj))
+                    {
+                        pPage->GetObj(nObj)->SetName(aExchangeName);
+                    }
+
+                    ++pIter;
+                }
+            }
+        }
+    }
+
+    delete pBMView;
+
+    return bOK;
+}
+
+/*************************************************************************
+|*
 |* Beendet das Einfuegen von Bookmarks
 |*
 \************************************************************************/
