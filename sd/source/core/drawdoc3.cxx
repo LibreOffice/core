@@ -437,6 +437,81 @@ sal_Bool SdDrawDocument::InsertBookmark(
     return bOK;
 }
 
+sal_Bool SdDrawDocument::InsertBookmark(
+    const std::vector<rtl::OUString> &rBookmarkList,    // Liste der Namen der einzufuegenden Bookmarks
+    std::vector<rtl::OUString> &rExchangeList,          // Liste der zu verwendenen Namen
+    sal_Bool bLink,                                     // Bookmarks sollen als Verknuepfung eingefuegt werden
+    sal_Bool bReplace,                                  // Aktuellen Seiten (Standard&Notiz) werden ersetzt
+    sal_uInt16 nInsertPos,                              // Einfuegeposition fuer Seiten
+    sal_Bool bNoDialogs,                                // Keine Dialoge anzeigen
+    ::sd::DrawDocShell* pBookmarkDocSh,                 // Wenn gesetzt, so ist dieses das Source-Dokument
+    sal_Bool bCopy,                                     // Seiten werden kopiert
+    Point* pObjPos)                                     // Einfuegeposition fuer Objekte
+{
+    sal_Bool bOK = sal_True;
+    sal_Bool bInsertPages = sal_False;
+
+    if (rBookmarkList.empty())
+    {
+        /**********************************************************************
+        * Alle Seiten werden eingefuegt
+        **********************************************************************/
+        bInsertPages = sal_True;
+    }
+    else
+    {
+        SdDrawDocument* pBookmarkDoc = NULL;
+        String aBookmarkName;
+
+        if (pBookmarkDocSh)
+        {
+            pBookmarkDoc = pBookmarkDocSh->GetDoc();
+            aBookmarkName = pBookmarkDocSh->GetMedium()->GetName();
+        }
+        else if ( mxBookmarkDocShRef.Is() )
+        {
+            pBookmarkDoc = mxBookmarkDocShRef->GetDoc();
+            aBookmarkName = maBookmarkFile;
+        }
+        else
+            bOK = sal_False;
+
+        std::vector<rtl::OUString>::const_iterator pIter;
+        for ( pIter = rBookmarkList.begin(); bOK && pIter != rBookmarkList.end() && !bInsertPages; ++pIter )
+        {
+            /******************************************************************
+            * Gibt es in der Bookmark-Liste einen Seitennamen?
+            ******************************************************************/
+            String  aBMPgName(*pIter);
+            sal_Bool    bIsMasterPage;
+
+            if( pBookmarkDoc->GetPageByName( aBMPgName, bIsMasterPage ) != SDRPAGE_NOTFOUND )
+            {
+                // Seite gefunden
+                bInsertPages = sal_True;
+            }
+        }
+    }
+
+    sal_Bool bCalcObjCount = !rExchangeList.empty();
+
+    if ( bOK && bInsertPages )
+    {
+        // Zuerst werden alle Seiten-Bookmarks eingefuegt
+        bOK = InsertBookmarkAsPage(rBookmarkList, rExchangeList, bLink, bReplace,
+                                   nInsertPos, bNoDialogs, pBookmarkDocSh, bCopy, sal_True, sal_False);
+    }
+
+    if ( bOK && !rBookmarkList.empty() )
+    {
+        // Es werden alle Objekt-Bookmarks eingefuegt
+        bOK = InsertBookmarkAsObject(rBookmarkList, rExchangeList, bLink,
+                                     pBookmarkDocSh, pObjPos, bCalcObjCount);
+    }
+
+    return bOK;
+}
+
 sal_Bool SdDrawDocument::InsertBookmarkAsPage(
     List* pBookmarkList,
     List* pExchangeList,            // Liste der zu verwendenen Namen

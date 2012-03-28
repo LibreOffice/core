@@ -273,6 +273,12 @@ public:
                                         ::sd::DrawDocShell* pBookmarkDocSh, sal_Bool bCopy,
                                         Point* pObjPos);
 
+    sal_Bool InsertBookmark(const std::vector<rtl::OUString> &rBookmarkList,
+                            std::vector<rtl::OUString> &rExchangeList, sal_Bool bLink,
+                            sal_Bool bReplace, sal_uInt16 nPgPos, sal_Bool bNoDialogs,
+                            ::sd::DrawDocShell* pBookmarkDocSh, sal_Bool bCopy,
+                            Point* pObjPos);
+
     bool IsStartWithPresentation() const;
     void SetStartWithPresentation( bool bStartWithPresentation );
 
