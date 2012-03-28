@@ -99,19 +99,19 @@ namespace internal
 // Using a template appears to be the only way to distinguish char* and char[], since
 // using char*(&) does not work with something explicitly cast to char*.
 struct Dummy {};
-template< typename T >
+template< typename T1, typename T2 >
 struct CharPtrDetector
 {
 };
-template<>
-struct CharPtrDetector< const char* >
+template< typename T >
+struct CharPtrDetector< const char*, T >
 {
-    typedef Dummy Type;
+    typedef T Type;
 };
-template<>
-struct CharPtrDetector< char* >
+template< typename T >
+struct CharPtrDetector< char*, T >
 {
-    typedef Dummy Type;
+    typedef T Type;
 };
 }
 #endif
@@ -204,7 +204,7 @@ public:
      }
 #else
     template< typename T >
-    OString( const T& value, typename internal::CharPtrDetector< T >::Type = internal::Dummy() ) SAL_THROW(())
+    OString( const T& value, typename internal::CharPtrDetector< T, internal::Dummy >::Type = internal::Dummy() ) SAL_THROW(())
     {
         pData = 0;
         rtl_string_newFromStr( &pData, value );
@@ -314,8 +314,8 @@ public:
     template< int N >
     OString& operator=( const char (&literal)[ N ] ) SAL_THROW(())
     {
-        rtl_string_newFromLiteral( &pData, literal, N - 1 );
         RTL_STRING_CONST_FUNCTION
+        rtl_string_newFromLiteral( &pData, literal, N - 1 );
         return *this;
     }
     /**
@@ -532,13 +532,45 @@ public:
       127. The ASCII string must be NULL-terminated.
       This function can't be used for language specific comparison.
 
+      Note: The argument type is always either char* or const char*, the return type is bool.
+      The template is used only for technical reasons.
+
       @param    asciiStr        the 8-Bit ASCII character string to be compared.
       @return   sal_True if the strings are equal;
                 sal_False, otherwise.
     */
-    sal_Bool equalsIgnoreAsciiCase( const sal_Char * asciiStr ) const SAL_THROW(())
+    template< typename T >
+    typename internal::CharPtrDetector< T, bool >::Type equalsIgnoreAsciiCase( const T& asciiStr ) const SAL_THROW(())
     {
         return rtl_str_compareIgnoreAsciiCase( pData->buffer, asciiStr ) == 0;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< int N >
+    bool equalsIgnoreAsciiCase( const char (&literal)[ N ] ) const SAL_THROW(())
+    {
+        RTL_STRING_CONST_FUNCTION
+        if ( pData->length != N - 1 )
+            return false;
+        return rtl_str_compareIgnoreAsciiCase_WithLength( pData->buffer, pData->length,
+                                                          literal, N - 1 ) == 0;
+    }
+    /**
+      @overload
+      This function accepts a non-const char array as its argument.
+      @since LibreOffice 3.6
+
+      @param value non-const char array
+    */
+    template< int N >
+    bool equalsIgnoreAsciiCase( char (&value)[ N ] ) const SAL_THROW(())
+    {
+        RTL_STRING_NON_CONST_FUNCTION
+        return rtl_str_compareIgnoreAsciiCase( pData->buffer, value ) == 0;
     }
 
     /**
@@ -588,6 +620,36 @@ public:
     {
         return rtl_str_shortenedCompare_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                     str.pData->buffer, str.pData->length, str.pData->length ) == 0;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< int N >
+    bool match( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        RTL_STRING_CONST_FUNCTION
+        return rtl_str_shortenedCompare_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex,
+            literal, N - 1, N - 1) == 0;
+    }
+    /**
+      @overload
+      This function accepts a non-const char array as its argument.
+      @since LibreOffice 3.6
+
+      @param value non-const char array
+    */
+    template< int N >
+    bool match( char (&value)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        RTL_STRING_NON_CONST_FUNCTION
+        sal_Int32 strLength = rtl_str_getLength( value );
+        return rtl_str_shortenedCompare_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex,
+            value, strLength, strLength) == 0;
     }
 
     /**
@@ -649,6 +711,34 @@ public:
     }
 
     /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< int N >
+    bool matchIgnoreAsciiCase( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const
+    {
+        RTL_STRING_CONST_FUNCTION
+        return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                                   literal, N - 1, N - 1 ) == 0;
+    }
+    /**
+      @overload
+      This function accepts a non-const char array as its argument.
+      @since LibreOffice 3.6
+
+      @param value non-const char array
+    */
+    template< int N >
+    bool matchIgnoreAsciiCase( char (&value)[ N ], sal_Int32 fromIndex = 0 ) const
+    {
+        RTL_STRING_NON_CONST_FUNCTION
+        sal_Int32 strLength = rtl_str_getLength( value );
+        return rtl_str_shortenedCompareIgnoreAsciiCase_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
+                                                                   value, strLength, strLength ) == 0;
+    }
+
+    /**
       Check whether this string ends with a given substring.
 
       @param str  the substring to be compared
@@ -661,6 +751,34 @@ public:
     bool endsWith(OString const & str) const {
         return str.getLength() <= getLength()
             && match(str, getLength() - str.getLength());
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< int N >
+    bool endsWith( const char (&literal)[ N ] ) const
+    {
+        RTL_STRING_CONST_FUNCTION
+        return N - 1 <= getLength()
+            && match(literal, getLength() - ( N - 1 ));
+    }
+    /**
+      @overload
+      This function accepts a non-const char array as its argument.
+      @since LibreOffice 3.6
+
+      @param value non-const char array
+    */
+    template< int N >
+    bool endsWith( char (&value)[ N ] ) const
+    {
+        RTL_STRING_NON_CONST_FUNCTION
+        sal_Int32 strLength = rtl_str_getLength( value );
+        return strLength <= getLength()
+            && matchL(value, strLength, getLength() - strLength);
     }
 
     /**
@@ -703,6 +821,108 @@ public:
                         { return rStr1.compareTo( rStr2 ) <= 0; }
     friend sal_Bool     operator >= ( const OString& rStr1,    const OString& rStr2 ) SAL_THROW(())
                         { return rStr1.compareTo( rStr2 ) >= 0; }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< int N >
+    friend bool operator == ( const OString& rStr, const char (&literal)[ N ] ) SAL_THROW(())
+    {
+        RTL_STRING_CONST_FUNCTION
+        return rStr.getLength() == N - 1 && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length,
+            literal, N - 1 );
+    }
+
+    /**
+      @overload
+      This function accepts a non-const char array as its argument.
+      @since LibreOffice 3.6
+
+      @param value non-const char array
+    */
+    template< int N >
+    friend bool operator == ( const OString& rStr, char (&value)[ N ] ) SAL_THROW(())
+    {
+        RTL_STRING_NON_CONST_FUNCTION
+        return rStr.compareTo( value ) == 0;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< int N >
+    friend bool operator == ( const char (&literal)[ N ], const OString& rStr ) SAL_THROW(())
+    {
+        RTL_STRING_CONST_FUNCTION
+        return rStr.getLength() == N - 1 && rtl_str_compare_WithLength( rStr.pData->buffer, rStr.pData->length,
+            literal, N - 1 );
+    }
+
+    /**
+      @overload
+      This function accepts a non-const char array as its argument.
+      @since LibreOffice 3.6
+
+      @param value non-const char array
+    */
+    template< int N >
+    friend bool operator == ( char (&value)[ N ], const OString& rStr ) SAL_THROW(())
+    {
+        RTL_STRING_NON_CONST_FUNCTION
+        return rStr.compareTo( value ) == 0;
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< int N >
+    friend bool operator != ( const OString& rStr, const char (&literal)[ N ] ) SAL_THROW(())
+    {
+        return !( rStr == literal );
+    }
+
+    /**
+      @overload
+      This function accepts a non-const char array as its argument.
+      @since LibreOffice 3.6
+
+      @param value non-const char array
+    */
+    template< int N >
+    friend bool operator != ( const OString& rStr, char (&value)[ N ] ) SAL_THROW(())
+    {
+        return !( rStr == value );
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< int N >
+    friend bool operator != ( const char (&literal)[ N ], const OString& rStr ) SAL_THROW(())
+    {
+        return !( literal == rStr );
+    }
+
+    /**
+      @overload
+      This function accepts a non-const char array as its argument.
+      @since LibreOffice 3.6
+
+      @param value non-const char array
+    */
+    template< int N >
+    friend bool operator != ( char (&value)[ N ], const OString& rStr ) SAL_THROW(())
+    {
+        return !( value == rStr );
+    }
 
     /**
       Returns a hashcode for this string.
@@ -786,6 +1006,36 @@ public:
         sal_Int32 ret = rtl_str_indexOfStr_WithLength( pData->buffer+fromIndex, pData->length-fromIndex,
                                                        str.pData->buffer, str.pData->length );
         return (ret < 0 ? ret : ret+fromIndex);
+    }
+
+    /**
+     @overload
+     This function accepts an ASCII string literal as its argument.
+     @since LibreOffice 3.6
+    */
+    template< int N >
+    sal_Int32 indexOf( const char (&literal)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        RTL_STRING_CONST_FUNCTION
+        sal_Int32 n = rtl_str_indexOfStr_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex, literal, N - 1);
+        return n < 0 ? n : n + fromIndex;
+    }
+
+    /**
+      @overload
+      This function accepts a non-const char array as its argument.
+      @since LibreOffice 3.6
+
+      @param value non-const char array
+    */
+    template< int N >
+    sal_Int32 indexOf( char (&value)[ N ], sal_Int32 fromIndex = 0 ) const SAL_THROW(())
+    {
+        RTL_STRING_NON_CONST_FUNCTION
+        sal_Int32 n = rtl_str_indexOfStr_WithLength(
+            pData->buffer + fromIndex, pData->length - fromIndex, value, rtl_str_getLength( value ));
+        return n < 0 ? n : n + fromIndex;
     }
 
     /**
