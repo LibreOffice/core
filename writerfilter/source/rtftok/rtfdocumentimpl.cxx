@@ -1414,6 +1414,7 @@ int RTFDocumentImpl::dispatchSymbol(RTFKeyword nKeyword)
         case RTF_CELL:
         case RTF_NESTCELL:
             {
+                checkFirstRun();
                 if (m_bNeedPap)
                 {
                     // There were no runs in the cell, so we need to send paragraph and character properties here.
