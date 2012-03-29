@@ -31,6 +31,7 @@
 
 #include <vcl/bitmap.hxx> // for BitmapSystemData
 #include <vcl/salbtype.hxx>
+#include <com/sun/star/beans/XFastPropertySet.hpp>
 
 #include <win/wincomp.hxx>
 #include <win/salgdi.h>
@@ -267,8 +268,22 @@ bool WinSalBitmap::Create( const SalBitmap& rSSalBmp, sal_uInt16 nNewBitCount )
 
 // ------------------------------------------------------------------
 
-bool WinSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > /*xBitmapCanvas*/, Size& /*rSize*/, bool /*bMask*/ )
+bool WinSalBitmap::Create( const ::com::sun::star::uno::Reference< ::com::sun::star::rendering::XBitmapCanvas > xBitmapCanvas, Size& /*rSize*/, bool bMask )
 {
+    ::com::sun::star::uno::Reference< ::com::sun::star::beans::XFastPropertySet >
+        xFastPropertySet( xBitmapCanvas, ::com::sun::star::uno::UNO_QUERY );
+
+    if( xFastPropertySet.get() ) {
+        ::com::sun::star::uno::Sequence< ::com::sun::star::uno::Any > args;
+
+        if( xFastPropertySet->getFastPropertyValue(bMask ? 2 : 1) >>= args ) {
+            sal_Int64 aHBmp64;
+
+            if( args[0] >>= aHBmp64 ) {
+                return Create( HBITMAP(aHBmp64), false, false );
+            }
+        }
+    }
     return false;
 }
 
