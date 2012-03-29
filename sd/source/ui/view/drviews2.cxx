@@ -804,7 +804,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                 // der harten Attribute sowie der UserCall eingetragen, da diese beim nachfolgenden
                 // mpDrawView->SetAttributes( *pSet, sal_True ) verloren gehen und spaeter restauriert
                 // werden muessen
-                List* pAttrList = new List();
+                std::vector<std::pair<SfxItemSet*,SdrObjUserCall*> > aAttrList;
                 SdPage* pPresPage = (SdPage*) mpDrawView->GetSdrPageView()->GetPage();
                 sal_uLong i;
 
@@ -816,8 +816,7 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                     {
                         SfxItemSet* pNewSet = new SfxItemSet( GetDoc()->GetPool(), SDRATTR_TEXT_MINFRAMEHEIGHT, SDRATTR_TEXT_AUTOGROWHEIGHT, 0 );
                         pNewSet->Put(pObj->GetMergedItemSet());
-                        pAttrList->Insert( pNewSet, LIST_APPEND );
-                        pAttrList->Insert( pObj->GetUserCall(), LIST_APPEND );
+                        aAttrList.push_back(std::make_pair(pNewSet, pObj->GetUserCall()));
                     }
                 }
 
@@ -857,8 +856,10 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
 
                     if( pPresPage->IsPresObj( pObj ) )
                     {
-                        SfxItemSet* pNewSet = (SfxItemSet*) pAttrList->GetObject(j++);
-                        SdrObjUserCall* pUserCall = (SdrObjUserCall*) pAttrList->GetObject(j++);
+                        std::pair<SfxItemSet*,SdrObjUserCall*> &rAttr = aAttrList[j++];
+
+                        SfxItemSet* pNewSet = rAttr.first;
+                        SdrObjUserCall* pUserCall = rAttr.second;
 
                         if ( pNewSet && pNewSet->GetItemState( SDRATTR_TEXT_MINFRAMEHEIGHT ) == SFX_ITEM_ON )
                         {
@@ -876,8 +877,6 @@ void DrawViewShell::FuTemporary(SfxRequest& rReq)
                         delete pNewSet;
                     }
                 }
-
-                delete pAttrList;
             }
 
             delete pSet;
