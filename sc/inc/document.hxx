@@ -419,6 +419,10 @@ private:
 
     ::std::set<ScFormulaCell*> maSubTotalCells;
 
+    // quick and ugly hack to fix the ScEditableTester problem in ucalc
+    // write a clean fix for this as soon as possible
+    bool                mbIsInTest;
+
 public:
     SC_DLLPUBLIC sal_uLong          GetCellCount() const;       // all cells
     SCSIZE          GetCellCount(SCTAB nTab, SCCOL nCol) const;
@@ -1103,6 +1107,7 @@ public:
                                 bool bColInfo = false, bool bRowInfo = false );
     SC_DLLPUBLIC void           InitUndoSelected( ScDocument* pSrcDoc, const ScMarkData& rTabSelection,
                                 bool bColInfo = false, bool bRowInfo = false );
+    void            SetInTest() { mbIsInTest = true; }
 
                     //  don't use anymore:
     void            CopyToDocument(SCCOL nCol1, SCROW nRow1, SCTAB nTab1,

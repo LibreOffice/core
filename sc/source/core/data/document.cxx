@@ -4766,7 +4766,8 @@ bool ScDocument::IsBlockEditable( SCTAB nTab, SCCOL nStartCol, SCROW nStartRow,
                                         bool* pOnlyNotBecauseOfMatrix /* = NULL */ ) const
 {
     // import into read-only document is possible
-    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && pShell->IsReadOnly() )
+    // TODO: come up with a clean solution for the testing problem
+    if ( !bImportingXML && !mbChangeReadOnlyEnabled && pShell && (pShell->IsReadOnly()&&!mbIsInTest) )
     {
         if ( pOnlyNotBecauseOfMatrix )
             *pOnlyNotBecauseOfMatrix = false;
