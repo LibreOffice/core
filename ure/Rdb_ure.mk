@@ -28,10 +28,11 @@
 $(eval $(call gb_Rdb_Rdb,ure/services))
 
 $(eval $(call gb_Rdb_add_components,ure/services,\
-    acceptor \
+	$(if $(filter IOS,$(OS)),, \
+	    acceptor \
+	    connector) \
     binaryurp/source/binaryurp \
     bootstrap \
-    connector \
     introspection \
     invocadapt \
     invocation \

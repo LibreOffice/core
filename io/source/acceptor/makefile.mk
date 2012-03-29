@@ -68,17 +68,20 @@ SHL1DEF=		$(MISC)$/$(SHL1TARGET).def
 
 DEF1NAME=		$(SHL1TARGET)
 
-# --- Targets ------------------------------------------------------
+.ENDIF          # IOS
+
 .ENDIF 		# L10N_framework
 
-.ENDIF
-
-.INCLUDE :	target.mk
-
-ALLTAR : $(MISC)/acceptor.component
+.IF "$(OS)" != "IOS"
 
 $(MISC)/acceptor.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         acceptor.component
     $(XSLTPROC) --nonet --stringparam uri \
         '$(COMPONENTPREFIX_URE_NATIVE)$(SHL1TARGETN:f)' -o $@ \
         $(SOLARENV)/bin/createcomponent.xslt acceptor.component
+
+ALLTAR : $(MISC)/acceptor.component
+
+.ENDIF          # IOS
+
+.INCLUDE :	target.mk
