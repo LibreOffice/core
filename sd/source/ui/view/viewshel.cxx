@@ -815,14 +815,6 @@ void ViewShell::Resize (void)
     ArrangeGUIElements ();
     // end of included AdjustPosSizePixel.
 
-    Size aS (GetParentWindow()->GetOutputSizePixel());
-    Rectangle aCurrentVisArea (GetDocSh()->GetVisArea(ASPECT_CONTENT));
-    if (GetDocSh()->GetCreateMode() == SFX_CREATE_MODE_EMBEDDED
-        && IsMainViewShell())
-    {
-
-    }
-
     ::sd::View* pView = GetView();
 
     if (pView)
