@@ -216,7 +216,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
     sal_Bool bMergeMasterPages = !rTransferable.HasSourceDoc( &rDoc );
 
     // Prepare the insertion.
-    const List* pBookmarkList;
+    const std::vector<rtl::OUString> *pBookmarkList = NULL;
     DrawDocShell* pDataDocSh;
     if (rTransferable.HasPageBookmarks())
     {
@@ -224,7 +224,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
         // pages are inserted.
         pBookmarkList = &rTransferable.GetPageBookmarks();
         pDataDocSh = rTransferable.GetPageDocShell();
-        nInsertPgCnt = (sal_uInt16)pBookmarkList->Count();
+        nInsertPgCnt = (sal_uInt16)pBookmarkList->size();
     }
     else
     {
@@ -233,7 +233,7 @@ sal_uInt16 ViewClipboard::InsertSlides (
         SfxObjectShell* pShell = rTransferable.GetDocShell();
         pDataDocSh = (DrawDocShell*) pShell;
         SdDrawDocument* pDataDoc = pDataDocSh->GetDoc();
-        pBookmarkList = NULL;
+
         if (pDataDoc!=NULL && pDataDoc->GetSdPageCount(PK_STANDARD))
             nInsertPgCnt = pDataDoc->GetSdPageCount(PK_STANDARD);
     }
@@ -246,9 +246,10 @@ sal_uInt16 ViewClipboard::InsertSlides (
         if( bWait )
             pWin->LeaveWait();
 
+        std::vector<rtl::OUString> aExchangeList;
         rDoc.InsertBookmarkAsPage(
-            const_cast<List*>(pBookmarkList),
-            NULL,
+            *pBookmarkList,
+            aExchangeList,
             sal_False,
             sal_False,
             nInsertPosition,
