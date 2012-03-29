@@ -55,6 +55,13 @@ PATCH_FILES=$(TARFILE_NAME).patch
 PATCH_FILES += vigra1.4.0-unused-parameters.patch
 .END
 
+# At least GCC 4.7 treats more correctly now the type of enumerators prior to
+# the closing brace of the enum-specifier (see [dcl.enum] in the C++ 2003
+# Standard), leading to "comparison between <enum1> and <enum2> [-Werror=enum-
+# compare]" and "enumeral mismatch in conditional expression [-Werror]"
+# warnings:
+PATCH_FILES += vigra1.4.0-enumwarn.patch
+
 CONFIGURE_DIR=
 CONFIGURE_ACTION=
 
