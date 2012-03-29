@@ -121,7 +121,9 @@ void CPPU_CURRENT_NAMESPACE::callVirtualMethod(
         "movsd %%xmm1, %3\n\t"
         : "=m" ( rax ), "=m" ( rdx ), "=m" ( xmm0 ), "=m" ( xmm1 )
         : "m" ( pMethod ), "m" ( pGPR ), "m" ( pFPR ), "m" ( nFPR )
-        : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r11"
+        : "rax", "rdi", "rsi", "rdx", "rcx", "r8", "r9", "r10", "r11",
+          "xmm0", "xmm1", "xmm2", "xmm3", "xmm4", "xmm5", "xmm6", "xmm7",
+          "xmm8", "xmm9", "xmm10", "xmm11", "xmm12", "xmm13", "xmm14", "xmm15"
     );
 
     switch (pReturnTypeRef->eTypeClass)
