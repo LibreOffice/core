@@ -110,7 +110,7 @@ void InsertionIndicatorOverlay::Create (const controller::Transferable* pTransfe
 
     sal_Int32 nSelectionCount (0);
     if (pTransferable->HasPageBookmarks())
-        nSelectionCount = pTransferable->GetPageBookmarks().Count();
+        nSelectionCount = pTransferable->GetPageBookmarks().size();
     else
     {
         DrawDocShell* pDataDocShell = dynamic_cast<DrawDocShell*>(&pTransferable->GetDocShell());
