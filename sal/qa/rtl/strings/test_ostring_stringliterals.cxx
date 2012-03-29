@@ -66,6 +66,9 @@ private:
 
     void testcall( const char str[] );
 
+    static const char bad5[];
+    static char bad6[];
+
 CPPUNIT_TEST_SUITE(StringLiterals);
 CPPUNIT_TEST(checkCtors);
 CPPUNIT_TEST(checkUsage);
@@ -100,13 +103,20 @@ void test::ostring::StringLiterals::checkCtors()
     const char* bad4[] = { "test1" };
     CPPUNIT_ASSERT( !CONST_CTOR_USED( bad4[ 0 ] ));
     testcall( good1 );
+#ifndef _MSC_VER
+    // this is actually not supposed to work (see discussion in stringutils.hxx),
+    // but gcc and clang somehow manage, so keep it used, just in case some other problem
+    // shows up somewhen in the future
+    CPPUNIT_ASSERT( !CONST_CTOR_USED( bad5 )); // size is not known here
+    CPPUNIT_ASSERT( !CONST_CTOR_USED( bad6 ));
+#endif
 
 // This one is technically broken, since the first element is 6 characters test\0\0,
 // but there does not appear a way to detect this by compile time (runtime will complain).
 // RTL_CONSTASCII_USTRINGPARAM() has the same flaw.
-    const char bad5[][ 6 ] = { "test", "test2" };
-    CPPUNIT_ASSERT( CONST_CTOR_USED( bad5[ 0 ] ));
-    CPPUNIT_ASSERT( CONST_CTOR_USED( bad5[ 1 ] ));
+    const char bad7[][ 6 ] = { "test", "test2" };
+    CPPUNIT_ASSERT( CONST_CTOR_USED( bad7[ 0 ] ));
+    CPPUNIT_ASSERT( CONST_CTOR_USED( bad7[ 1 ] ));
 
 // Check that contents are correct and equal to the case when const char* ctor is used.
     CPPUNIT_ASSERT( rtl::OString( (const char*)"" ) == rtl::OString( "" ));
@@ -127,6 +137,9 @@ void test::ostring::StringLiterals::checkCtors()
 #endif
 #endif
 }
+
+const char test::ostring::StringLiterals::bad5[] = "test";
+char test::ostring::StringLiterals::bad6[] = "test";
 
 void test::ostring::StringLiterals::testcall( const char str[] )
 {

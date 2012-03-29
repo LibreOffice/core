@@ -65,6 +65,12 @@ There are 2 cases:
     cast to const char*. Additionally (non-const) char[N] needs to be handled, but with the reference
     being const, it would also match const char[N], so another overload with a reference to non-const
     and NonConstCharArrayDetector are used to ensure the function is called only with (non-const) char[N].
+Additionally, char[] and const char[] (i.e. size unknown) are rather tricky. Their usage with 'T&' would
+mean it would be 'char(&)[]', which seems to be invalid. But gcc and clang somehow manage when it is
+a template. while msvc complains about no conversion from char[] to char[1]. And the reference cannot
+be avoided, because 'const char[]' as argument type would match also 'const char[N]'
+So char[] and const char[] should always be used with their contents specified (which automatically
+turns them into char[N] or const char[N]), or char* and const char* should be used.
 */
 struct Dummy {};
 template< typename T1, typename T2 >
@@ -91,6 +97,8 @@ struct NonConstCharArrayDetector< char[ N ], T >
 {
     typedef T Type;
 };
+#ifdef RTL_STRING_UNITTEST
+// never use, until all compilers handle this
 template< typename T >
 struct NonConstCharArrayDetector< char[], T >
 {
@@ -101,6 +109,7 @@ struct NonConstCharArrayDetector< const char[], T >
 {
     typedef T Type;
 };
+#endif
 
 template< typename T1, typename T2 >
 struct ConstCharArrayDetector

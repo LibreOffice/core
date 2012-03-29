@@ -79,10 +79,10 @@ using rtl::OUStringBuffer;
 
 using sw::mark::IMark;
 
-#if defined(UNX)
+#if defined(UNX22)
 const sal_Char RtfExport::sNewLine = '\012';
 #else
-const sal_Char RtfExport::sNewLine[] = "\015\012";
+const sal_Char* const RtfExport::sNewLine = "\015\012";
 #endif
 
 // the default text encoding for the export, if it doesn't fit unicode will
