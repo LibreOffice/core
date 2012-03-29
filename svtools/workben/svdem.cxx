@@ -1006,7 +1006,7 @@ IMPL_LINK( MyWin, CalSelectHdl, CalendarField*, pCtrl )
     if ( pCtrl == &aCalendarField )
     {
         Calendar* l_pCalendar = pCtrl->GetCalendar();
-        aCalendarField2.SetDate( l_pCalendar->GetSelectDate( l_pCalendar->GetSelectDateCount()-1 ) );
+        aCalendarField2.SetDate( l_pCalendar->GetLastSelectDate() );
     }
 
     return 0;

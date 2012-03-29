@@ -30,7 +30,6 @@
 #include <rtl/oustringostreaminserter.hxx>
 #include <rtl/strbuf.hxx>
 #include <vcl/svapp.hxx>
-#include <tools/table.hxx>
 #include <vcl/help.hxx>
 #include <vcl/menu.hxx>
 #include <vcl/decoview.hxx>
@@ -72,23 +71,21 @@
 
 #define MENU_YEAR_COUNT                 3
 
-#define TABLE_DATE_SELECTED             ((void*)0x00000001)
-
 using namespace ::com::sun::star;
 
 // =======================================================================
 
-static void ImplCalendarSelectDate( Table* pTable, const Date& rDate, sal_Bool bSelect )
+static void ImplCalendarSelectDate( IntDateSet* pTable, const Date& rDate, sal_Bool bSelect )
 {
     if ( bSelect )
-        pTable->Insert( rDate.GetDate(), TABLE_DATE_SELECTED );
+        pTable->insert( rDate.GetDate() );
     else
-        pTable->Remove( rDate.GetDate() );
+        pTable->erase( rDate.GetDate() );
 }
 
 // -----------------------------------------------------------------------
 
-static void ImplCalendarSelectDateRange( Table* pTable,
+static void ImplCalendarSelectDateRange( IntDateSet* pTable,
                                          const Date& rStartDate,
                                          const Date& rEndDate,
                                          sal_Bool bSelect )
@@ -106,31 +103,30 @@ static void ImplCalendarSelectDateRange( Table* pTable,
     {
         while ( aStartDate <= aEndDate )
         {
-            pTable->Insert( aStartDate.GetDate(), TABLE_DATE_SELECTED );
+            pTable->insert( aStartDate.GetDate() );
             aStartDate++;
         }
     }
     else
     {
-        void* p = pTable->First();
-        while ( p )
+        for ( IntDateSet::const_iterator it = pTable->begin(); it != pTable->end(); )
         {
-            Date aDate( pTable->GetCurKey() );
+            Date aDate( *it );
             if ( aDate > aEndDate )
                 break;
 
             if ( aDate >= aStartDate )
-                pTable->Remove( aDate.GetDate() );
+                pTable->erase( it++ );
             else
-                p = pTable->Next();
+                ++it;
         }
     }
 }
 
 // -----------------------------------------------------------------------
 
-static void ImplCalendarUnSelectDateRange( Table* pTable,
-                                           Table* pOldTable,
+static void ImplCalendarUnSelectDateRange( IntDateSet* pTable,
+                                           IntDateSet* pOldTable,
                                            const Date& rStartDate,
                                            const Date& rEndDate )
 {
@@ -143,44 +139,40 @@ static void ImplCalendarUnSelectDateRange( Table* pTable,
         aEndDate = aTempDate;
     }
 
-    void* p = pTable->First();
-    while ( p )
+    for ( IntDateSet::const_iterator it = pTable->begin(); it != pTable->end(); )
     {
-        Date aDate( pTable->GetCurKey() );
+        Date aDate( *it );
         if ( aDate > aEndDate )
             break;
 
         if ( aDate >= aStartDate )
-            pTable->Remove( aDate.GetDate() );
+            pTable->erase( it++ );
         else
-            p = pTable->Next();
+            ++it;
     }
 
-    p = pOldTable->First();
-    while ( p )
+    for ( IntDateSet::const_iterator it = pOldTable->begin(); it != pOldTable->end(); ++it )
     {
-        Date aDate( pOldTable->GetCurKey() );
+        Date aDate( *it );
         if ( aDate > aEndDate )
             break;
         if ( aDate >= aStartDate )
-            pTable->Insert( aDate.GetDate(), TABLE_DATE_SELECTED );
-
-        p = pOldTable->Next();
+            pTable->insert( aDate.GetDate() );
     }
 }
 
 // -----------------------------------------------------------------------
 
-inline void ImplCalendarClearSelectDate( Table* pTable )
+inline void ImplCalendarClearSelectDate( IntDateSet* pTable )
 {
-    pTable->Clear();
+    pTable->clear();
 }
 
 // =======================================================================
 
 void Calendar::ImplInit( WinBits nWinStyle )
 {
-    mpSelectTable           = new Table;
+    mpSelectTable           = new IntDateSet;
     mpOldSelectTable        = NULL;
     mpRestoreSelectTable    = NULL;
     mpStandardColor         = NULL;
@@ -750,7 +742,7 @@ void Calendar::ImplDrawDate( long nX, long nY,
         bFocus = sal_True;
     if ( mpSelectTable )
     {
-        if ( mpSelectTable->IsKeyValid( Date( nDay, nMonth, nYear ).GetDate() ) )
+        if ( mpSelectTable->find( Date( nDay, nMonth, nYear ).GetDate() ) != mpSelectTable->end() )
             bSel = sal_True;
     }
 
@@ -1091,36 +1083,28 @@ void Calendar::ImplUpdateDate( const Date& rDate )
 
 // -----------------------------------------------------------------------
 
-void Calendar::ImplUpdateSelection( Table* pOld )
+void Calendar::ImplUpdateSelection( IntDateSet* pOld )
 {
-    Table*  pNew = mpSelectTable;
-    void*   p;
-    sal_uLong   nKey;
+    IntDateSet*  pNew = mpSelectTable;
 
-    p = pOld->First();
-    while ( p )
+    for ( IntDateSet::const_iterator it = pOld->begin(); it != pOld->end(); ++it )
     {
-        nKey = pOld->GetCurKey();
-        if ( !pNew->Get( nKey ) )
+        sal_uLong nKey = *it;
+        if ( pNew->find( nKey ) == pNew->end() )
         {
             Date aTempDate( nKey );
             ImplUpdateDate( aTempDate );
         }
-
-        p = pOld->Next();
     }
 
-    p = pNew->First();
-    while ( p )
+    for ( IntDateSet::const_iterator it = pNew->begin(); it != pNew->end(); ++it )
     {
-        nKey = pNew->GetCurKey();
-        if ( !pOld->Get( nKey ) )
+        sal_uLong nKey = *it;
+        if ( pOld->find( nKey ) == pOld->end() )
         {
             Date aTempDate( nKey );
             ImplUpdateDate( aTempDate );
         }
-
-        p = pNew->Next();
     }
 }
 
@@ -1129,7 +1113,7 @@ void Calendar::ImplUpdateSelection( Table* pOld )
 void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
                                 sal_Bool bMove, sal_Bool bExpand, sal_Bool bExtended )
 {
-    Table*  pOldSel = new Table( *mpSelectTable );
+    IntDateSet*  pOldSel = new IntDateSet( *mpSelectTable );
     Date    aOldDate = maCurDate;
     Date    aTempDate = rDate;
 
@@ -1194,7 +1178,7 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
                 ImplCalendarSelectDate( mpSelectTable, aTempDate, sal_True );
             }
 
-            mpRestoreSelectTable = new Table( *mpSelectTable );
+            mpRestoreSelectTable = new IntDateSet( *mpSelectTable );
         }
     }
     else
@@ -1227,10 +1211,11 @@ void Calendar::ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
         HideFocus();
         if ( bNewSel )
             ImplUpdateSelection( pOldSel );
-        if ( !bNewSel || !pOldSel->Get( aOldDate.GetDate() ) )
+        if ( !bNewSel || pOldSel->find( aOldDate.GetDate() ) == pOldSel->end() )
             ImplUpdateDate( aOldDate );
         // Damit Focus-Rechteck auch wieder neu ausgegeben wird
-        if ( HasFocus() || !bNewSel || !mpSelectTable->Get( maCurDate.GetDate() ) )
+        if ( HasFocus() || !bNewSel
+             || mpSelectTable->find( maCurDate.GetDate() ) == mpSelectTable->end() )
             ImplUpdateDate( maCurDate );
     }
     delete pOldSel;
@@ -1399,16 +1384,16 @@ void Calendar::ImplEndTracking( sal_Bool bCancel )
 
         if ( !bSpinDown )
         {
-            Table*  pOldSel = new Table( *mpSelectTable );
+            IntDateSet* pOldSel = new IntDateSet( *mpSelectTable );
             Date    aOldDate = maCurDate;
             maCurDate       = maOldCurDate;
             *mpSelectTable  = *mpOldSelectTable;
             HideFocus();
             ImplUpdateSelection( pOldSel );
-            if ( !pOldSel->Get( aOldDate.GetDate() ) )
+            if ( pOldSel->find( aOldDate.GetDate() ) == pOldSel->end() )
                 ImplUpdateDate( aOldDate );
             // Damit Focus-Rechteck auch wieder neu ausgegeben wird
-            if ( HasFocus() || !mpSelectTable->Get( maCurDate.GetDate() ) )
+            if ( HasFocus() || mpSelectTable->find( maCurDate.GetDate() ) == mpSelectTable->end() )
                 ImplUpdateDate( maCurDate );
             delete pOldSel;
         }
@@ -1419,11 +1404,11 @@ void Calendar::ImplEndTracking( sal_Bool bCancel )
         if ( !bCancel )
         {
             // Feststellen, ob wir sichtbaren Bereich scrollen sollen
-            sal_uLong nSelCount = mpSelectTable->Count();
+            sal_uLong nSelCount = mpSelectTable->size();
             if ( nSelCount )
             {
-                Date aFirstSelDate( mpSelectTable->GetObjectKey( 0 ) );
-                Date aLastSelDate( mpSelectTable->GetObjectKey( nSelCount-1 ) );
+                Date aFirstSelDate( *mpSelectTable->begin() );
+                Date aLastSelDate( *mpSelectTable->rbegin() );
                 if ( aLastSelDate < GetFirstMonth() )
                     ImplScroll( sal_True );
                 else if ( GetLastMonth() < aFirstSelDate )
@@ -1498,7 +1483,7 @@ void Calendar::MouseButtonDown( const MouseEvent& rMEvt )
                         if ( mpOldSelectTable )
                             delete mpOldSelectTable;
                         maOldCurDate = maCurDate;
-                        mpOldSelectTable = new Table( *mpSelectTable );
+                        mpOldSelectTable = new IntDateSet( *mpSelectTable );
 
                         if ( !mbSelection )
                         {
@@ -1629,7 +1614,7 @@ void Calendar::KeyInput( const KeyEvent& rKEvt )
     {
         if ( bMultiSel && bExpand )
         {
-            Table* pOldSel = new Table( *mpSelectTable );
+            IntDateSet* pOldSel = new IntDateSet( *mpSelectTable );
             Date aOldAnchorDate = maAnchorDate;
             mbSelLeft = aNewDate < maAnchorDate;
             if ( !bExtended )
@@ -1868,10 +1853,10 @@ void Calendar::SelectDate( const Date& rDate, sal_Bool bSelect )
     if ( !rDate.IsValidAndGregorian() )
         return;
 
-    Table* pOldSel;
+    IntDateSet* pOldSel;
 
     if ( !mbInSelChange )
-        pOldSel = new Table( *mpSelectTable );
+        pOldSel = new IntDateSet( *mpSelectTable );
     else
         pOldSel = NULL;
 
@@ -1888,10 +1873,10 @@ void Calendar::SelectDate( const Date& rDate, sal_Bool bSelect )
 
 void Calendar::SetNoSelection()
 {
-    Table* pOldSel;
+    IntDateSet* pOldSel;
 
     if ( !mbInSelChange )
-        pOldSel = new Table( *mpSelectTable );
+        pOldSel = new IntDateSet( *mpSelectTable );
     else
         pOldSel = NULL;
 
@@ -1908,15 +1893,28 @@ void Calendar::SetNoSelection()
 
 sal_Bool Calendar::IsDateSelected( const Date& rDate ) const
 {
-    return mpSelectTable->IsKeyValid( rDate.GetDate() );
+    return mpSelectTable->find( rDate.GetDate() ) != mpSelectTable->end();
 }
 
 // -----------------------------------------------------------------------
 
-Date Calendar::GetSelectDate( sal_uLong nIndex ) const
+Date Calendar::GetFirstSelectedDate() const
 {
-    if ( nIndex < mpSelectTable->Count() )
-        return Date( mpSelectTable->GetObjectKey( nIndex ) );
+    if ( !mpSelectTable->empty() )
+        return Date( *mpSelectTable->begin() );
+    else
+    {
+        Date aDate( 0, 0, 0 );
+        return aDate;
+    }
+}
+
+// -----------------------------------------------------------------------
+
+Date Calendar::GetLastSelectedDate() const
+{
+    if ( !mpSelectTable->empty() )
+        return Date( *mpSelectTable->rbegin() );
     else
     {
         Date aDate( 0, 0, 0 );
@@ -2155,7 +2153,7 @@ void Calendar::StartSelection()
     if ( mpOldSelectTable )
         delete mpOldSelectTable;
     maOldCurDate = maCurDate;
-    mpOldSelectTable = new Table( *mpSelectTable );
+    mpOldSelectTable = new IntDateSet( *mpSelectTable );
 
     mbSelection = sal_True;
 }
@@ -2459,7 +2457,7 @@ IMPL_LINK( CalendarField, ImplSelectHdl, Calendar*, pCalendar )
         mpFloatWin->EndPopupMode();
         EndDropDown();
         GrabFocus();
-        Date aNewDate = mpCalendar->GetSelectDate( 0 );
+        Date aNewDate = mpCalendar->GetFirstSelectedDate();
         if ( IsEmptyDate() || ( aNewDate != GetDate() ) )
         {
             SetDate( aNewDate );

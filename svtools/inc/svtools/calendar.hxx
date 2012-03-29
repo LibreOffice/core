@@ -36,8 +36,8 @@
 #include <vcl/ctrl.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/field.hxx>
+#include <set>
 
-class Table;
 class MouseEvent;
 class TrackingEvent;
 class KeyEvent;
@@ -162,12 +162,15 @@ calls or by ending a selection.
 // - Calendar -
 // ------------
 
+typedef std::set<sal_uInt32> IntDateSet;
+
+
 class SVT_DLLPUBLIC Calendar : public Control
 {
 private:
-    Table*          mpSelectTable;
-    Table*          mpOldSelectTable;
-    Table*          mpRestoreSelectTable;
+    IntDateSet*     mpSelectTable;
+    IntDateSet*     mpOldSelectTable;
+    IntDateSet*     mpRestoreSelectTable;
     XubString*      mpDayText[31];
     XubString       maDayText;
     XubString       maWeekText;
@@ -250,7 +253,7 @@ private:
                                   sal_uLong nToday = 0 );
     SVT_DLLPRIVATE void         ImplDraw( sal_Bool bPaint = sal_False );
     SVT_DLLPRIVATE void         ImplUpdateDate( const Date& rDate );
-    SVT_DLLPRIVATE void         ImplUpdateSelection( Table* pOld );
+    SVT_DLLPRIVATE void         ImplUpdateSelection( IntDateSet* pOld );
     SVT_DLLPRIVATE void         ImplMouseSelect( const Date& rDate, sal_uInt16 nHitTest,
                                      sal_Bool bMove, sal_Bool bExpand, sal_Bool bExtended );
     SVT_DLLPRIVATE void         ImplUpdate( sal_Bool bCalcNew = sal_False );
@@ -296,7 +299,8 @@ public:
     void            SelectDate( const Date& rDate, sal_Bool bSelect = sal_True );
     void            SetNoSelection();
     sal_Bool            IsDateSelected( const Date& rDate ) const;
-    Date            GetSelectDate( sal_uLong nIndex = 0 ) const;
+    Date            GetFirstSelectedDate() const;
+    Date            GetLastSelectedDate() const;
     void            EnableCallEverySelect( sal_Bool bEvery = sal_True ) { mbAllSel = bEvery; }
     sal_Bool            IsCallEverySelectEnabled() const { return mbAllSel; }
 

@@ -51,6 +51,7 @@ class SvxSearchItem;
 #include <sfx2/progress.hxx>
 #include <svtools/syntaxhighlight.hxx>
 #include <unotools/options.hxx>
+#include <tools/table.hxx>
 
 #include "breakpoint.hxx"
 #include "linenumberwindow.hxx"
