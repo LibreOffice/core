@@ -50,7 +50,8 @@ namespace internal
 {
 /*
 These templates use SFINAE (Substitution failure is not an error) to help distinguish the various
-plain C string types: char*, const char*, char[N] and const char[N]. There are 2 cases:
+plain C string types: char*, const char*, char[N], const char[N], char[] and const char[].
+There are 2 cases:
 1) Only string literal (i.e. const char[N]) is wanted, not any of the others.
     In this case it is necessary to distinguish between const char[N] and char[N], as the latter
     would be automatically converted to the const variant, which is not wanted (not a string literal
@@ -87,6 +88,16 @@ struct NonConstCharArrayDetector
 };
 template< typename T, int N >
 struct NonConstCharArrayDetector< char[ N ], T >
+{
+    typedef T Type;
+};
+template< typename T >
+struct NonConstCharArrayDetector< char[], T >
+{
+    typedef T Type;
+};
+template< typename T >
+struct NonConstCharArrayDetector< const char[], T >
 {
     typedef T Type;
 };
