@@ -536,7 +536,7 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
         ParaPortion* pPortion = GetParaPortions()[nNode];
 
         DBG_ASSERT( aEditDoc.SaveGetObject( nNode ), "Node not founden: SetAttribs" );
-        DBG_ASSERT( GetParaPortions().GetObject( nNode ), "Portion not found: SetAttribs" );
+        DBG_ASSERT( GetParaPortions()[ nNode ], "Portion not found: SetAttribs" );
 
         xub_StrLen nStartPos = 0;
         xub_StrLen nEndPos = pNode->Len();
