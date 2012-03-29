@@ -731,10 +731,23 @@ SalSession* IosSalInstance::CreateSalSession()
 
 // -----------------------------------------------------------------------
 
+class IOsImeStatus : public SalI18NImeStatus
+{
+public:
+    IOsImeStatus() {}
+    virtual ~IOsImeStatus() {}
+
+    // asks whether there is a status window available
+    // to toggle into menubar
+    virtual bool canToggle() { return false; }
+    virtual void toggle() {}
+};
+
+// -----------------------------------------------------------------------
+
 SalI18NImeStatus* IosSalInstance::CreateI18NImeStatus()
 {
-    // ???
-    return NULL;
+    return new IOsImeStatus();
 }
 
 // -----------------------------------------------------------------------
