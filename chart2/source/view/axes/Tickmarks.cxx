@@ -313,7 +313,7 @@ void TickFactory_2D::updateScreenValues( ::std::vector< ::std::vector< TickInfo 
     //get the transformed screen values for all tickmarks in rAllTickInfos
     ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter       = rAllTickInfos.begin();
     const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = rAllTickInfos.end();
-    for( ; aDepthIter != aDepthEnd; aDepthIter++ )
+    for( ; aDepthIter != aDepthEnd; ++aDepthIter )
     {
         ::std::vector< TickInfo >::iterator       aTickIter = (*aDepthIter).begin();
         const ::std::vector< TickInfo >::const_iterator aTickEnd  = (*aDepthIter).end();

@@ -282,7 +282,7 @@ namespace connectivity
             sal_Int32 i=0;
             for(ProfileList::iterator itor=m_Product.mProfileList.begin();
                 itor != m_Product.mProfileList.end();
-                itor++)
+                ++itor)
             {
                 ProfileStruct * aProfile = (*itor).second;
                 list[i] = aProfile->getProfileName();

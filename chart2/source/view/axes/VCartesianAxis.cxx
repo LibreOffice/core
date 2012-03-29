@@ -1467,7 +1467,7 @@ void VCartesianAxis::updatePositions()
 
         ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter = m_aAllTickInfos.begin();
         const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = m_aAllTickInfos.end();
-        for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd; aDepthIter++, nDepth++ )
+        for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd; ++aDepthIter, nDepth++ )
         {
             ::std::vector< TickInfo >::iterator aTickIter = aDepthIter->begin();
             const ::std::vector< TickInfo >::const_iterator aTickEnd  = aDepthIter->end();
@@ -1589,7 +1589,7 @@ void VCartesianAxis::createShapes()
             sal_Int32 nTickmarkPropertiesCount = aTickmarkPropertiesList.size();
             ::std::vector< ::std::vector< TickInfo > >::iterator aDepthIter             = aComplexTickInfos.begin();
             const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = aComplexTickInfos.end();
-            for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; aDepthIter++, nDepth++ )
+            for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; ++aDepthIter, nDepth++ )
             {
                 if(nDepth==0 && !m_aAxisProperties.m_nMajorTickmarks)
                     continue;
@@ -1614,7 +1614,7 @@ void VCartesianAxis::createShapes()
                 return;
 
             sal_Int32 nTickmarkPropertiesCount = m_aAxisProperties.m_aTickmarkPropertiesList.size();
-            for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; aDepthIter++, nDepth++ )
+            for( sal_Int32 nDepth=0; aDepthIter != aDepthEnd && nDepth < nTickmarkPropertiesCount; ++aDepthIter, nDepth++ )
                 createTickMarkLineShapes( *aDepthIter, m_aAxisProperties.m_aTickmarkPropertiesList[nDepth], *pTickFactory2D, false /*bOnlyAtLabels*/ );
         }
         //-----------------------------------------

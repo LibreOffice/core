@@ -246,7 +246,7 @@ void VCartesianGrid::createShapes()
     sal_Int32 nLinePropertiesCount = aLinePropertiesList.size();
     for( sal_Int32 nDepth=0
         ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount
-        ; aDepthIter++, nDepth++ )
+        ; ++aDepthIter, nDepth++ )
     {
         if( !aLinePropertiesList[nDepth].isLineVisible() )
             continue;

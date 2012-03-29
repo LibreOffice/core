@@ -235,7 +235,7 @@ void EmbeddedObjectContainer::CloseEmbeddedObjects()
             }
         }
 
-        aIt++;
+        ++aIt;
     }
 }
 
@@ -290,7 +290,7 @@ sal_Bool EmbeddedObjectContainer::HasEmbeddedObject( const uno::Reference < embe
         if ( (*aIt).second == xObj )
             return sal_True;
         else
-            aIt++;
+            ++aIt;
     }
 
     return sal_False;
@@ -313,7 +313,7 @@ sal_Bool EmbeddedObjectContainer::HasInstantiatedEmbeddedObject( const ::rtl::OU
         if ( (*aIt).second == xObj )
             return (*aIt).first;
         else
-            aIt++;
+            ++aIt;
     }
 
     OSL_FAIL( "Unknown object!" );
@@ -498,7 +498,7 @@ void EmbeddedObjectContainer::AddEmbeddedObject( const ::com::sun::star::uno::Re
                 break;
             }
             else
-                aIt++;
+                ++aIt;
         }
     }
 }
@@ -905,7 +905,7 @@ sal_Bool EmbeddedObjectContainer::MoveEmbeddedObject( EmbeddedObjectContainer& r
                 break;
             }
 
-            aIt++;
+            ++aIt;
         }
 
         OSL_ENSURE( bRet, "Object not found for removal!" );
@@ -1107,7 +1107,7 @@ sal_Bool EmbeddedObjectContainer::RemoveEmbeddedObject( const uno::Reference < e
             break;
         }
 
-        aIt++;
+        ++aIt;
     }
 
     OSL_ENSURE( bFound, "Object not found for removal!" );
@@ -1154,7 +1154,7 @@ sal_Bool EmbeddedObjectContainer::CloseEmbeddedObject( const uno::Reference < em
             break;
         }
 
-        aIt++;
+        ++aIt;
     }
 
     if ( bFound )
@@ -1221,7 +1221,7 @@ uno::Reference < io::XInputStream > EmbeddedObjectContainer::GetGraphicStream( c
             break;
         }
 
-        aIt++;
+        ++aIt;
     }
 
     // try to load it from the container storage

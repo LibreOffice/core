@@ -188,7 +188,7 @@ void VPolarGrid::create2DRadiusGrid( const Reference< drawing::XShapes >& xLogic
     const ::std::vector< ::std::vector< TickInfo > >::const_iterator aDepthEnd  = rRadiusTickInfos.end();
     for( sal_Int32 nDepth=0
         ; aDepthIter != aDepthEnd && nDepth < nLinePropertiesCount
-        ; aDepthIter++, nDepth++ )
+        ; ++aDepthIter, nDepth++ )
     {
         if( !rLinePropertiesList[nDepth].isLineVisible() )
             continue;
