@@ -460,12 +460,12 @@ sal_uInt16 ParaPortionList::FindParagraph(long nYOffset) const
     return EE_PARA_NOT_FOUND;
 }
 
-const ParaPortion* ParaPortionList::SaveGetObject(size_t nPos) const
+const ParaPortion* ParaPortionList::SafeGetObject(size_t nPos) const
 {
     return nPos < maPortions.size() ? &maPortions[nPos] : NULL;
 }
 
-ParaPortion* ParaPortionList::SaveGetObject(size_t nPos)
+ParaPortion* ParaPortionList::SafeGetObject(size_t nPos)
 {
     return nPos < maPortions.size() ? &maPortions[nPos] : NULL;
 }
@@ -476,7 +476,7 @@ void ParaPortionList::DbgCheck( EditDoc& rDoc)
     DBG_ASSERT( Count() == rDoc.Count(), "ParaPortionList::DbgCheck() - Count() unequal!" );
     for ( sal_uInt16 i = 0; i < Count(); i++ )
     {
-        DBG_ASSERT( SaveGetObject(i), "ParaPortionList::DbgCheck() - Null-Pointer in List!" );
+        DBG_ASSERT( SafeGetObject(i), "ParaPortionList::DbgCheck() - Null-Pointer in List!" );
         DBG_ASSERT( GetObject(i)->GetNode(), "ParaPortionList::DbgCheck() - Null-Pointer in List(2)!" );
         DBG_ASSERT( GetObject(i)->GetNode() == rDoc.GetObject(i), "ParaPortionList::DbgCheck() - Entries intersect!" );
     }

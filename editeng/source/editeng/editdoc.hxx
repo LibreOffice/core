@@ -658,8 +658,8 @@ public:
     long GetYOffset(const ParaPortion* pPPortion) const;
     sal_uInt16 FindParagraph(long nYOffset) const;
 
-    const ParaPortion* SaveGetObject(size_t nPos) const;
-    ParaPortion* SaveGetObject(size_t nPos);
+    const ParaPortion* SafeGetObject(size_t nPos) const;
+    ParaPortion* SafeGetObject(size_t nPos);
 
     sal_uInt16 GetPos(const ParaPortion* p) const;
     ParaPortion* operator[](size_t nPos);
@@ -805,8 +805,8 @@ public:
     void            FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet );
 
     sal_uInt16 GetPos( const ContentNode* pNode ) const { return ContentList::GetPos(pNode); }
-    const ContentNode* SaveGetObject(size_t nPos) const;
-    ContentNode* SaveGetObject(size_t nPos);
+    const ContentNode* SafeGetObject(size_t nPos) const;
+    ContentNode* SafeGetObject(size_t nPos);
 
     static XubString    GetSepStr( LineEnd eEnd );
 };

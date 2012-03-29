@@ -1341,12 +1341,12 @@ static const sal_Unicode aCR[] = { 0x0d, 0x00 };
 static const sal_Unicode aLF[] = { 0x0a, 0x00 };
 static const sal_Unicode aCRLF[] = { 0x0d, 0x0a, 0x00 };
 
-const ContentNode* EditDoc::SaveGetObject(size_t nPos) const
+const ContentNode* EditDoc::SafeGetObject(size_t nPos) const
 {
     return ( nPos < Count() ) ? GetObject( nPos ) : 0;
 }
 
-ContentNode* EditDoc::SaveGetObject(size_t nPos)
+ContentNode* EditDoc::SafeGetObject(size_t nPos)
 {
     return ( nPos < Count() ) ? GetObject( nPos ) : 0;
 }
@@ -1400,7 +1400,7 @@ XubString EditDoc::GetText( LineEnd eEnd ) const
 
 XubString EditDoc::GetParaAsString( sal_uInt16 nNode ) const
 {
-    return GetParaAsString( SaveGetObject( nNode ) );
+    return GetParaAsString( SafeGetObject( nNode ) );
 }
 
 XubString EditDoc::GetParaAsString(

@@ -48,13 +48,13 @@ void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
 
 const SfxStyleSheet* ImpEditEngine::GetStyleSheet( sal_uInt16 nPara ) const
 {
-    const ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
+    const ContentNode* pNode = aEditDoc.SafeGetObject( nPara );
     return pNode ? pNode->GetContentAttribs().GetStyleSheet() : NULL;
 }
 
 SfxStyleSheet* ImpEditEngine::GetStyleSheet( sal_uInt16 nPara )
 {
-    ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
+    ContentNode* pNode = aEditDoc.SafeGetObject( nPara );
     return pNode ? pNode->GetContentAttribs().GetStyleSheet() : NULL;
 }
 
@@ -77,7 +77,7 @@ void ImpEditEngine::SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle )
 void ImpEditEngine::SetStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pStyle )
 {
     DBG_ASSERT( GetStyleSheetPool() || !pStyle, "SetStyleSheet: No StyleSheetPool registered!" );
-    ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
+    ContentNode* pNode = aEditDoc.SafeGetObject( nPara );
     SfxStyleSheet* pCurStyle = pNode->GetStyleSheet();
     if ( pStyle != pCurStyle )
     {
@@ -217,7 +217,7 @@ EditUndoSetAttribs* ImpEditEngine::CreateAttribUndo( EditSelection aSel, const S
     for ( sal_uInt16 nPara = nStartNode; nPara <= nEndNode; nPara++ )
     {
         ContentNode* pNode = aEditDoc.GetObject( nPara );
-        DBG_ASSERT( aEditDoc.SaveGetObject( nPara ), "Node not found: CreateAttribUndo" );
+        DBG_ASSERT( aEditDoc.SafeGetObject( nPara ), "Node not found: CreateAttribUndo" );
         ContentAttribsInfo* pInf = new ContentAttribsInfo( pNode->GetContentAttribs().GetItems() );
         pUndo->AppendContentInfo(pInf);
 
@@ -330,7 +330,7 @@ SfxItemSet ImpEditEngine::GetAttribs( EditSelection aSel, sal_Bool bOnlyHardAttr
     for ( sal_uInt16 nNode = nStartNode; nNode <= nEndNode; nNode++ )
     {
         ContentNode* pNode = aEditDoc.GetObject( nNode );
-        DBG_ASSERT( aEditDoc.SaveGetObject( nNode ), "Node not found: GetAttrib" );
+        DBG_ASSERT( aEditDoc.SafeGetObject( nNode ), "Node not found: GetAttrib" );
 
         xub_StrLen nStartPos = 0;
         xub_StrLen nEndPos = pNode->Len();
@@ -415,7 +415,7 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_uInt16 nPara, sal_uInt16 nStart, sal_u
 
     DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );
 
-    ContentNode* pNode = const_cast<ContentNode*>(aEditDoc.SaveGetObject(nPara));
+    ContentNode* pNode = const_cast<ContentNode*>(aEditDoc.SafeGetObject(nPara));
     DBG_ASSERT( pNode, "GetAttribs - unknown paragraph!" );
     DBG_ASSERT( nStart <= nEnd, "getAttribs: Start > End not supported!" );
 
@@ -532,8 +532,8 @@ void ImpEditEngine::SetAttribs( EditSelection aSel, const SfxItemSet& rSet, sal_
         sal_Bool bParaAttribFound = sal_False;
         sal_Bool bCharAttribFound = sal_False;
 
-        DBG_ASSERT( aEditDoc.SaveGetObject( nNode ), "Node not founden: SetAttribs" );
-        DBG_ASSERT( GetParaPortions().SaveGetObject( nNode ), "Portion not found: SetAttribs" );
+        DBG_ASSERT( aEditDoc.SafeGetObject( nNode ), "Node not founden: SetAttribs" );
+        DBG_ASSERT( GetParaPortions().SafeGetObject( nNode ), "Portion not found: SetAttribs" );
 
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         ParaPortion* pPortion = GetParaPortions()[nNode];
@@ -622,8 +622,8 @@ void ImpEditEngine::RemoveCharAttribs( EditSelection aSel, sal_Bool bRemoveParaA
         ContentNode* pNode = aEditDoc.GetObject( nNode );
         ParaPortion* pPortion = GetParaPortions()[nNode];
 
-        DBG_ASSERT( aEditDoc.SaveGetObject( nNode ), "Node not found: SetAttribs" );
-        DBG_ASSERT( GetParaPortions().SaveGetObject( nNode ), "Portion not found: SetAttribs" );
+        DBG_ASSERT( aEditDoc.SafeGetObject( nNode ), "Node not found: SetAttribs" );
+        DBG_ASSERT( GetParaPortions().SafeGetObject( nNode ), "Portion not found: SetAttribs" );
 
         xub_StrLen nStartPos = 0;
         xub_StrLen nEndPos = pNode->Len();
@@ -667,8 +667,8 @@ typedef EditCharAttrib* EditCharAttribPtr;
 
 void ImpEditEngine::RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich, sal_Bool bRemoveFeatures )
 {
-    ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
-    ParaPortion* pPortion = GetParaPortions().SaveGetObject( nPara );
+    ContentNode* pNode = aEditDoc.SafeGetObject( nPara );
+    ParaPortion* pPortion = GetParaPortions().SafeGetObject( nPara );
 
     DBG_ASSERT( pNode, "Node not found: RemoveCharAttribs" );
     DBG_ASSERT( pPortion, "Portion not found: RemoveCharAttribs" );
@@ -696,7 +696,7 @@ void ImpEditEngine::RemoveCharAttribs( sal_uInt16 nPara, sal_uInt16 nWhich, sal_
 
 void ImpEditEngine::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
 {
-    ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
+    ContentNode* pNode = aEditDoc.SafeGetObject( nPara );
 
     if ( !pNode )
         return;

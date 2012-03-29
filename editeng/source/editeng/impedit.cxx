@@ -183,7 +183,7 @@ void ImpEditView::DrawSelection( EditSelection aTmpSel, Region* pRegion )
     sal_uInt16 nEndPara = pEditEngine->pImpEditEngine->GetEditDoc().GetPos( pEndNode );
     for ( sal_uInt16 nPara = nStartPara; nPara <= nEndPara; nPara++ )
     {
-        ParaPortion* pTmpPortion = pEditEngine->pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
+        ParaPortion* pTmpPortion = pEditEngine->pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
         DBG_ASSERT( pTmpPortion, "Portion in Selection not found!" );
         DBG_ASSERT( !pTmpPortion->IsInvalid(), "Portion in Selection not formatted!" );
 
@@ -1849,7 +1849,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
             if ( pDragAndDropInfo->bOutlinerMode )
             {
                 sal_uInt16 nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
-                ParaPortion* pPPortion = pEditEngine->pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
+                ParaPortion* pPPortion = pEditEngine->pImpEditEngine->GetParaPortions().SafeGetObject( nPara );
                 long nDestParaStartY = pEditEngine->pImpEditEngine->GetParaPortions().GetYOffset( pPPortion );
                 long nRel = aDocPos.Y() - nDestParaStartY;
                 if ( nRel < ( pPPortion->GetHeight() / 2 ) )
@@ -1887,7 +1887,7 @@ void ImpEditView::dragOver( const ::com::sun::star::datatransfer::dnd::DropTarge
                     long nDDYPos;
                     if ( pDragAndDropInfo->nOutlinerDropDest < pEditEngine->pImpEditEngine->GetEditDoc().Count() )
                     {
-                        ParaPortion* pPPortion = pEditEngine->pImpEditEngine->GetParaPortions().SaveGetObject( pDragAndDropInfo->nOutlinerDropDest );
+                        ParaPortion* pPPortion = pEditEngine->pImpEditEngine->GetParaPortions().SafeGetObject( pDragAndDropInfo->nOutlinerDropDest );
                         nDDYPos = pEditEngine->pImpEditEngine->GetParaPortions().GetYOffset( pPPortion );
                     }
                     else

@@ -3557,7 +3557,7 @@ void ImpEditEngine::Paint( ImpEditView* pView, const Rectangle& rRec, sal_Bool b
             Color aBackgroundColor( pView->GetBackgroundColor() );
             // #i47161# Check if text is visible on background
             SvxFont aTmpFont;
-            ContentNode* pNode = GetEditDoc().SaveGetObject( 0 );
+            ContentNode* pNode = GetEditDoc().SafeGetObject( 0 );
             SeekCursor( pNode, 1, aTmpFont );
             Color aFontColor( aTmpFont.GetColor() );
             if( (aFontColor == COL_AUTO) || IsForceAutoColor() )
@@ -3727,7 +3727,7 @@ void ImpEditEngine::InsertContent( ContentNode* pNode, sal_uInt16 nPos )
 
 EditPaM ImpEditEngine::SplitContent( sal_uInt16 nNode, sal_uInt16 nSepPos )
 {
-    ContentNode* pNode = aEditDoc.SaveGetObject( nNode );
+    ContentNode* pNode = aEditDoc.SafeGetObject( nNode );
     DBG_ASSERT( pNode, "Invalid Node in SplitContent" );
     DBG_ASSERT( IsInUndo(), "SplitContent only for Undo()!" );
     DBG_ASSERT( nSepPos <= pNode->Len(), "Index out of range: SplitContent" );
@@ -3737,8 +3737,8 @@ EditPaM ImpEditEngine::SplitContent( sal_uInt16 nNode, sal_uInt16 nSepPos )
 
 EditPaM ImpEditEngine::ConnectContents( sal_uInt16 nLeftNode, sal_Bool bBackward )
 {
-    ContentNode* pLeftNode = aEditDoc.SaveGetObject( nLeftNode );
-    ContentNode* pRightNode = aEditDoc.SaveGetObject( nLeftNode+1 );
+    ContentNode* pLeftNode = aEditDoc.SafeGetObject( nLeftNode );
+    ContentNode* pRightNode = aEditDoc.SafeGetObject( nLeftNode+1 );
     DBG_ASSERT( pLeftNode, "Invalid left node in ConnectContents ");
     DBG_ASSERT( pRightNode, "Invalid right node in ConnectContents ");
     DBG_ASSERT( IsInUndo(), "ConnectContent only for Undo()!" );
@@ -3762,7 +3762,7 @@ void ImpEditEngine::SetUpdateMode( sal_Bool bUp, EditView* pCurView, sal_Bool bF
 
 void ImpEditEngine::ShowParagraph( sal_uInt16 nParagraph, sal_Bool bShow )
 {
-    ParaPortion* pPPortion = GetParaPortions().SaveGetObject( nParagraph );
+    ParaPortion* pPPortion = GetParaPortions().SafeGetObject( nParagraph );
     DBG_ASSERT( pPPortion, "ShowParagraph: Paragraph does not exist! ");
     if ( pPPortion && ( pPPortion->IsVisible() != bShow ) )
     {
@@ -3834,8 +3834,8 @@ EditSelection ImpEditEngine::MoveParagraphs( Range aOldPositions, sal_uInt16 nNe
         sal_uInt16 nFirstPortion = Min( (sal_uInt16)aOldPositions.Min(), nNewPos );
         sal_uInt16 nLastPortion = Max( (sal_uInt16)aOldPositions.Max(), nNewPos );
 
-        ParaPortion* pUpperPortion = GetParaPortions().SaveGetObject( nFirstPortion );
-        ParaPortion* pLowerPortion = GetParaPortions().SaveGetObject( nLastPortion );
+        ParaPortion* pUpperPortion = GetParaPortions().SafeGetObject( nFirstPortion );
+        ParaPortion* pLowerPortion = GetParaPortions().SafeGetObject( nLastPortion );
 
         aInvalidRec = Rectangle();  // make empty
         aInvalidRec.Left() = 0;
@@ -3927,9 +3927,9 @@ const ParaPortion* ImpEditEngine::GetNextVisPortion( const ParaPortion* pCurPort
 {
     sal_uInt16 nPara = GetParaPortions().GetPos( pCurPortion );
     DBG_ASSERT( nPara < GetParaPortions().Count() , "Portion not found: GetPrevVisNode" );
-    const ParaPortion* pPortion = GetParaPortions().SaveGetObject( ++nPara );
+    const ParaPortion* pPortion = GetParaPortions().SafeGetObject( ++nPara );
     while ( pPortion && !pPortion->IsVisible() )
-        pPortion = GetParaPortions().SaveGetObject( ++nPara );
+        pPortion = GetParaPortions().SafeGetObject( ++nPara );
 
     return pPortion;
 }
@@ -3987,15 +3987,15 @@ EditPaM ImpEditEngine::InsertParagraph( sal_uInt16 nPara )
     EditPaM aPaM;
     if ( nPara != 0 )
     {
-        ContentNode* pNode = GetEditDoc().SaveGetObject( nPara-1 );
+        ContentNode* pNode = GetEditDoc().SafeGetObject( nPara-1 );
         if ( !pNode )
-            pNode = GetEditDoc().SaveGetObject( GetEditDoc().Count() - 1 );
+            pNode = GetEditDoc().SafeGetObject( GetEditDoc().Count() - 1 );
         DBG_ASSERT( pNode, "Not a single paragraph in InsertParagraph ?" );
         aPaM = EditPaM( pNode, pNode->Len() );
     }
     else
     {
-        ContentNode* pNode = GetEditDoc().SaveGetObject( 0 );
+        ContentNode* pNode = GetEditDoc().SafeGetObject( 0 );
         aPaM = EditPaM( pNode, 0 );
     }
 
@@ -4005,7 +4005,7 @@ EditPaM ImpEditEngine::InsertParagraph( sal_uInt16 nPara )
 EditSelection* ImpEditEngine::SelectParagraph( sal_uInt16 nPara )
 {
     EditSelection* pSel = 0;
-    ContentNode* pNode = GetEditDoc().SaveGetObject( nPara );
+    ContentNode* pNode = GetEditDoc().SafeGetObject( nPara );
     DBG_ASSERTWARNING( pNode, "Paragraph does not exist: SelectParagraph" );
     if ( pNode )
         pSel = new EditSelection( EditPaM( pNode, 0 ), EditPaM( pNode, pNode->Len() ) );
@@ -4192,7 +4192,7 @@ void ImpEditEngine::ImplInitLayoutMode( OutputDevice* pOutDev, sal_uInt16 nPara,
     }
     else
     {
-        ContentNode* pNode = GetEditDoc().SaveGetObject( nPara );
+        ContentNode* pNode = GetEditDoc().SafeGetObject( nPara );
         short nScriptType = GetScriptType( EditPaM( pNode, nIndex+1 ) );
         bCTL = nScriptType == i18n::ScriptType::COMPLEX;
         bR2L = GetRightToLeft( nPara, nIndex + 1);  // this change was discussed in issue 37190

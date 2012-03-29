@@ -205,7 +205,7 @@ void EditUndoDelContent::Redo()
 
     // pNode is no longer correct, if the paragraphs where merged
     // in between Undos
-    pContentNode = _pImpEE->GetEditDoc().SaveGetObject( nNode );
+    pContentNode = _pImpEE->GetEditDoc().SafeGetObject( nNode );
     DBG_ASSERT( pContentNode, "EditUndoDelContent::Redo(): Node?!" );
 
     _pImpEE->GetParaPortions().Remove( nNode );
@@ -220,8 +220,8 @@ void EditUndoDelContent::Redo()
     _pImpEE->UpdateSelections();
 
     ContentNode* pN = ( nNode < _pImpEE->GetEditDoc().Count() )
-        ? _pImpEE->GetEditDoc().SaveGetObject( nNode )
-        : _pImpEE->GetEditDoc().SaveGetObject( nNode-1 );
+        ? _pImpEE->GetEditDoc().SafeGetObject( nNode )
+        : _pImpEE->GetEditDoc().SafeGetObject( nNode-1 );
     DBG_ASSERT( pN && ( pN != pContentNode ), "?! RemoveContent !? " );
     EditPaM aPaM( pN, pN->Len() );
 
@@ -576,7 +576,7 @@ void EditUndoSetAttribs::Undo()
         // Then the character attributes ...
         // Remove all attributes including features, are later re-established.
         _pImpEE->RemoveCharAttribs(nPara, 0, true);
-        DBG_ASSERT( _pImpEE->GetEditDoc().SaveGetObject( nPara ), "Undo (SetAttribs): pNode = NULL!" );
+        DBG_ASSERT( _pImpEE->GetEditDoc().SafeGetObject( nPara ), "Undo (SetAttribs): pNode = NULL!" );
         ContentNode* pNode = _pImpEE->GetEditDoc().GetObject( nPara );
         for (size_t nAttr = 0; nAttr < rInf.GetPrevCharAttribs().size(); ++nAttr)
         {
