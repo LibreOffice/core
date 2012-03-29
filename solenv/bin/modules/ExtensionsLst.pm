@@ -521,6 +521,7 @@ sub Download (@)
 =head3 DownloadExtensions
     This function is intended to be called during bootstrapping.  It extracts the set of extensions
     that will be used later, when the installation sets are built.
+    The set of languages is taken from the WITH_LANG environment variable.
 =cut
 sub DownloadExtensions ()
 {
@@ -528,7 +529,16 @@ sub DownloadExtensions ()
          && $ENV{'ENABLE_BUNDLED_DICTIONARIES'} eq "YES")
     {
         my $full_file_name = Prepare();
-        my @urls = ParseExtensionsLst($full_file_name, []);
+        my $languages = [ "en_US" ];
+        if (defined $ENV{'WITH_LANG'})
+        {
+            @$languages = split(/\s+/, $ENV{'WITH_LANG'});
+            foreach my $l (@$languages)
+            {
+                print "$l\n";
+            }
+        }
+        my @urls = ParseExtensionsLst($full_file_name, $languages);
         Download(@urls);
     }
     else

@@ -33,33 +33,35 @@
 
 # Some extensions that are installed indepently of the language.
 
-[ language=all && ENABLE_PRESENTER_SCREEN=YES ]
-    file://presenter/presenter-screen.oxt
+#[ language=all && ENABLE_PRESENTER_SCREEN=YES ]
+#    file://presenter/presenter-screen.oxt
 
-[ language=all && ENABLE_MINIMIZER=YES ]
-    file://minimizer/presentation-minimizer.oxt
+#[ language=all && ENABLE_MINIMIZER=YES ]
+#    file://minimizer/presentation-minimizer.oxt
 
 
 
-# English dictionaries.
-[ language=en.* ]
-
-    # Generic
+# English dictionary
+[ language=en.* || language=de ]
     b7ce02d25eb302e5b23572cdccaea461 http://numbertext.org/tmp/dict-en.oxt
     
-    # Canada (en_CA)
+# English (Canada, en_CA) dictionary
+[ language=en.* ]
     e545415a4c813075c67ea58ea99802e5 http://sourceforge.net/projects/aoo-extensions/files/1263/1/en_CA_2_0_0.oxt/download "en_CA_2_0_0.oxt"
 
-    # Australia (en_AU)
+# English (Australia, en_AU) dictionary
+[ language=en.* ]
     68bfee769199749288c5e1aaf200a1ca http://sourceforge.net/projects/aoo-extensions/files/1232/7/dict-en-au-2008-12-15.oxt/download "dict-en-au-2008-12-15.oxt"
 
-    # South Africa (en_ZA)
+# English (South Africa, en_ZA) dictionary
+[ language=en.* ]
     c0c052e01b124a9ca5739facdb3ddbd5 http://sourceforge.net/projects/aoo-extensions/files/3089/0/dict-en_ZA-2009.10.22.oxt/download "dict-en_ZA-2009.10.22.oxt"
 
-    # New Zealand (en_NZ)
+# English (New Zealand, en_NZ) dictionary
+[ language=en.* ]
     87123666ecce441b075c0170fa58690c http://sourceforge.net/projects/aoo-extensions/files/1665/1/dict-en-nz-2008-12-03.oxt/download "dict-en-nz-2008-12-03.oxt"
 
-# English (en_US) dictionary
+# English (USA, en_US) dictionary
 [ language=en.* || language==nl || language==ru ]
     e2eab80772ab1aa09716954219351a80 http://sourceforge.net/projects/aoo-extensions/files/1470/1/en_US.oxt/download "en_US.oxt"
 
@@ -72,11 +74,11 @@
     5c0de383ef649cffefc128cfb36b4d43 http://sourceforge.net/projects/aoo-extensions/files/1456/6/nl-dict-v2.00g.oxt/download "nl-dict-v2.00g.oxt"
 
 # French dictionary.
-[ language=fr || language=nl ]
+[ language=fr || language=nl || language=de || language=de_DE ]
     47ca39e385b02839c24a5d953495cb98 http://sourceforge.net/projects/aoo-extensions/files/3554/5/ooo-dictionnaire-fr-moderne-v4.2.oxt/download "ooo-dictionnaire-fr-moderne-v4.2.oxt"
 
 # Italian dictionary.
-[ language=it ]
+[ language=it || language=de || language=de_DE ]
     c71fa1e7a047cf4efdb27027e3f75a16 http://sourceforge.net/projects/aoo-extensions/files/1204/10/dict-it.oxt/download "dict-it.oxt"
 
 # Spanish dictionary.
@@ -102,3 +104,11 @@
 # Slovenian dictionary.
 [ language=sl ]
     33eb80b84d163e00298bc2c98ddd81cb http://sl.openoffice.org/test/pack-sl.oxt "pack-sl.oxt"
+
+# German (Austria) dictionary.
+[ language=de || language=de_AT || language=de_DE ]
+    76654bcb6ba11bb265111ef1fe3c6007 http://sourceforge.net/projects/aoo-extensions/files/1697/7/dict-de_AT-frami_2011-06-03.oxt/download "dict-de_AT-frami_2011-06-03.oxt"
+
+# German (Switzerland) dictionary.
+[ language=de || language=de_CH || language=de_DE ]
+    7c9f63dcd9de3e4ec6ddbde160a0d793 http://sourceforge.net/projects/aoo-extensions/files/1699/7/dict-de_CH-frami_2011-06-03.oxt/download "dict-de_CH-frami_2011-06-03.oxt"
