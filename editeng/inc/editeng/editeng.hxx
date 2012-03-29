@@ -328,7 +328,8 @@ public:
     SfxStyleSheetPool*  GetStyleSheetPool();
 
     void                SetStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pStyle );
-    SfxStyleSheet*      GetStyleSheet( sal_uInt16 nPara ) const;
+    const SfxStyleSheet* GetStyleSheet( sal_uInt16 nPara ) const;
+    SfxStyleSheet* GetStyleSheet( sal_uInt16 nPara );
 
     void            SetWordDelimiters( const String& rDelimiters );
     String          GetWordDelimiters() const;

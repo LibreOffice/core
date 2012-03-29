@@ -256,8 +256,6 @@ sal_uInt16 aV5Map[] = {
     4035, 4036, 4037, 4038
 };
 
-SV_IMPL_PTRARR( DummyContentList, ContentNode* );
-
 EditCharAttrib* MakeCharAttrib( SfxItemPool& rPool, const SfxPoolItem& rAttr, sal_uInt16 nS, sal_uInt16 nE )
 {
     // Create a new attribute in the pool
@@ -567,6 +565,25 @@ sal_uInt16 EditLineList::FindLine( sal_uInt16 nChar, sal_Bool bInclEnd )
     return ( Count() - 1 );
 }
 
+EditPaM::EditPaM() : pNode(NULL), nIndex(0) {}
+EditPaM::EditPaM(const EditPaM& r) : pNode(r.pNode), nIndex(r.nIndex) {}
+EditPaM::EditPaM(ContentNode* p, sal_uInt16 n) : pNode(p), nIndex(n) {}
+
+const ContentNode* EditPaM::GetNode() const
+{
+    return pNode;
+}
+
+ContentNode* EditPaM::GetNode()
+{
+    return pNode;
+}
+
+void EditPaM::SetNode(ContentNode* p)
+{
+    pNode = p;
+}
+
 sal_Bool EditPaM::DbgIsBuggy( EditDoc& rDoc )
 {
     if ( !pNode )
@@ -633,8 +650,8 @@ sal_Bool EditSelection::Adjust( const ContentList& rNodes )
     DBG_ASSERT( aStartPaM.GetIndex() <= aStartPaM.GetNode()->Len(), "Index out of range in Adjust(1)" );
     DBG_ASSERT( aEndPaM.GetIndex() <= aEndPaM.GetNode()->Len(), "Index out of range in Adjust(2)" );
 
-    ContentNode* pStartNode = aStartPaM.GetNode();
-    ContentNode* pEndNode = aEndPaM.GetNode();
+    const ContentNode* pStartNode = aStartPaM.GetNode();
+    const ContentNode* pEndNode = aEndPaM.GetNode();
 
     sal_uInt16 nStartNode = rNodes.GetPos( pStartNode );
     sal_uInt16 nEndNode = rNodes.GetPos( pEndNode );
@@ -1136,23 +1153,23 @@ void ContentAttribs::SetStyleSheet( SfxStyleSheet* pS )
     }
 }
 
-const SfxPoolItem& ContentAttribs::GetItem( sal_uInt16 nWhich )
+const SfxPoolItem& ContentAttribs::GetItem( sal_uInt16 nWhich ) const
 {
     // Hard paragraph attributes take precedence!
-    SfxItemSet* pTakeFrom = &aAttribSet;
+    const SfxItemSet* pTakeFrom = &aAttribSet;
     if ( pStyle && ( aAttribSet.GetItemState( nWhich, sal_False ) != SFX_ITEM_ON  ) )
         pTakeFrom = &pStyle->GetItemSet();
 
     return pTakeFrom->Get( nWhich );
 }
 
-sal_Bool ContentAttribs::HasItem( sal_uInt16 nWhich )
+bool ContentAttribs::HasItem( sal_uInt16 nWhich ) const
 {
-    sal_Bool bHasItem = sal_False;
+    bool bHasItem = false;
     if ( aAttribSet.GetItemState( nWhich, sal_False ) == SFX_ITEM_ON  )
-        bHasItem = sal_True;
+        bHasItem = true;
     else if ( pStyle && pStyle->GetItemSet().GetItemState( nWhich ) == SFX_ITEM_ON )
-        bHasItem = sal_True;
+        bHasItem = true;
 
     return bHasItem;
 }
@@ -1218,7 +1235,8 @@ void EditDoc::ImplDestroyContents()
 {
     for ( sal_uInt16 nNode = Count(); nNode; )
         RemoveItemsFromPool( GetObject( --nNode ) );
-    DeleteAndDestroy( 0, Count() );
+
+    ContentList::Clear();
 }
 
 void EditDoc::RemoveItemsFromPool( ContentNode* pNode )
@@ -1323,6 +1341,16 @@ static const sal_Unicode aCR[] = { 0x0d, 0x00 };
 static const sal_Unicode aLF[] = { 0x0a, 0x00 };
 static const sal_Unicode aCRLF[] = { 0x0d, 0x0a, 0x00 };
 
+const ContentNode* EditDoc::SaveGetObject(size_t nPos) const
+{
+    return ( nPos < Count() ) ? GetObject( nPos ) : 0;
+}
+
+ContentNode* EditDoc::SaveGetObject(size_t nPos)
+{
+    return ( nPos < Count() ) ? GetObject( nPos ) : 0;
+}
+
 XubString EditDoc::GetSepStr( LineEnd eEnd )
 {
     XubString aSep;
@@ -1375,7 +1403,8 @@ XubString EditDoc::GetParaAsString( sal_uInt16 nNode ) const
     return GetParaAsString( SaveGetObject( nNode ) );
 }
 
-XubString EditDoc::GetParaAsString( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, sal_Bool bResolveFields ) const
+XubString EditDoc::GetParaAsString(
+    const ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, bool bResolveFields) const
 {
     if ( nEndPos > pNode->Len() )
         nEndPos = pNode->Len();
@@ -1425,7 +1454,7 @@ sal_uLong EditDoc::GetTextLen() const
     sal_uLong nLen = 0;
     for ( sal_uInt16 nNode = 0; nNode < Count(); nNode++ )
     {
-        ContentNode* pNode = GetObject( nNode );
+        const ContentNode* pNode = GetObject( nNode );
         nLen += pNode->Len();
         // Fields can be longer than the placeholder in the Node
         const CharAttribList::AttribsType& rAttrs = pNode->GetCharAttribs().GetAttribs();
@@ -1450,11 +1479,11 @@ EditPaM EditDoc::Clear()
     ImplDestroyContents();
 
     ContentNode* pNode = new ContentNode( GetItemPool() );
-    Insert( pNode, 0 );
+    Insert(0, pNode);
 
-    CreateDefFont( sal_False );
+    CreateDefFont(false);
 
-    SetModified( sal_False );
+    SetModified(false);
 
     EditPaM aPaM( pNode, 0 );
     return aPaM;
@@ -1480,19 +1509,19 @@ EditPaM EditDoc::RemoveText()
     ImplDestroyContents();
 
     ContentNode* pNode = new ContentNode( GetItemPool() );
-    Insert( pNode, 0 );
+    Insert(0, pNode);
 
-    pNode->SetStyleSheet( pPrevStyle, sal_False );
+    pNode->SetStyleSheet(pPrevStyle, false);
     pNode->GetContentAttribs().GetItems().Set( aPrevSet );
     pNode->GetCharAttribs().GetDefFont() = aPrevFont;
 
-    SetModified( sal_True );
+    SetModified(true);
 
     EditPaM aPaM( pNode, 0 );
     return aPaM;
 }
 
-void EditDoc::InsertText( const EditPaM& rPaM, xub_Unicode c )
+void EditDoc::InsertText( EditPaM& rPaM, xub_Unicode c )
 {
     DBG_ASSERT( c != 0x0A, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
     DBG_ASSERT( c != 0x0D, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
@@ -1553,9 +1582,9 @@ EditPaM EditDoc::InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs )
     // Character attributes may need to be copied or trimmed:
     pNode->CopyAndCutAttribs( aPaM.GetNode(), GetItemPool(), bKeepEndingAttribs );
 
-    Insert( pNode, nPos+1 );
+    Insert(nPos+1, pNode);
 
-    SetModified( sal_True );
+    SetModified(true);
 
     aPaM.SetNode( pNode );
     aPaM.SetIndex( 0 );
@@ -1593,9 +1622,8 @@ EditPaM EditDoc::ConnectParagraphs( ContentNode* pLeft, ContentNode* pRight )
     RemoveItemsFromPool( pRight );
     sal_uInt16 nRight = GetPos( pRight );
     Remove( nRight );
-    delete pRight;
 
-    SetModified( sal_True );
+    SetModified(true);
 
     return aPaM;
 }
@@ -1784,15 +1812,16 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nE
     else
     {
         // Check whether already a new attribute with WhichId exists at this place:
-        EditCharAttrib* pAttr = pNode->GetCharAttribs().FindEmptyAttrib( rPoolItem.Which(), nStart );
+        CharAttribList& rAttrList = pNode->GetCharAttribs();
+        EditCharAttrib* pAttr = rAttrList.FindEmptyAttrib( rPoolItem.Which(), nStart );
         if ( pAttr )
         {
             // Remove attribute....
-            pNode->GetCharAttribs().Remove(pAttr);
+            rAttrList.Remove(pAttr);
         }
 
         // check whether 'the same' attribute exist at this place.
-        pAttr = pNode->GetCharAttribs().FindAttrib( rPoolItem.Which(), nStart );
+        pAttr = rAttrList.FindAttrib( rPoolItem.Which(), nStart );
         if ( pAttr )
         {
             if ( pAttr->IsInside( nStart ) )    // split
@@ -1800,8 +1829,8 @@ void EditDoc::InsertAttrib( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nE
                 // check again if really splitting, or return !
                 sal_uInt16 nOldEnd = pAttr->GetEnd();
                 pAttr->GetEnd() = nStart;
-                pAttr = MakeCharAttrib( GetItemPool(), *(pAttr->GetItem()), nStart, nOldEnd );
-                pNode->GetCharAttribs().InsertAttrib( pAttr );
+                EditCharAttrib* pNew = MakeCharAttrib( GetItemPool(), *(pAttr->GetItem()), nStart, nOldEnd );
+                rAttrList.InsertAttrib(pNew);
             }
             else if ( pAttr->GetEnd() == nStart )
             {
@@ -2016,6 +2045,20 @@ void CharAttribList::Clear()
     aAttribs.clear();
 }
 
+const EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos ) const
+{
+    // Backwards, if one ends where the next starts.
+    // => The starting one is the valid one ...
+    AttribsType::const_reverse_iterator it = aAttribs.rbegin(), itEnd = aAttribs.rend();
+    for (; it != itEnd; ++it)
+    {
+        const EditCharAttrib& rAttr = *it;
+        if (rAttr.Which() == nWhich && rAttr.IsIn(nPos))
+            return &rAttr;
+    }
+    return NULL;
+}
+
 EditCharAttrib* CharAttribList::FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )
 {
     // Backwards, if one ends where the next starts.
@@ -2115,6 +2158,21 @@ bool CharAttribList::HasBoundingAttrib( sal_uInt16 nBound ) const
             return true;
     }
     return false;
+}
+
+const EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos ) const
+{
+    if ( !bHasEmptyAttribs )
+        return NULL;
+
+    AttribsType::const_iterator it = aAttribs.begin(), itEnd = aAttribs.end();
+    for (; it != itEnd; ++it)
+    {
+        const EditCharAttrib& rAttr = *it;
+        if (rAttr.GetStart() == nPos && rAttr.GetEnd() == nPos && rAttr.Which() == nWhich)
+            return &rAttr;
+    }
+    return NULL;
 }
 
 EditCharAttrib* CharAttribList::FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos )

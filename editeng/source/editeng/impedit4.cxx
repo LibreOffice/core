@@ -307,7 +307,7 @@ void lcl_FindValidAttribs( ItemList& rLst, ContentNode* pNode, sal_uInt16 nIndex
     }
 }
 
-sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, sal_Bool bStoreUnicodeStrings ) const
+sal_uInt32 ImpEditEngine::WriteBin( SvStream& rOutput, EditSelection aSel, sal_Bool bStoreUnicodeStrings )
 {
     BinTextObject* pObj = (BinTextObject*)CreateBinTextObject( aSel, NULL );
     pObj->StoreUnicodeStrings( bStoreUnicodeStrings );
@@ -1029,7 +1029,7 @@ EditTextObject* ImpEditEngine::CreateTextObject( EditSelection aSel )
     return CreateBinTextObject( aSel, GetEditTextObjectPool(), aStatus.AllowBigObjects(), nBigTextObjectStart );
 }
 
-EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemPool* pPool, sal_Bool bAllowBigObjects, sal_uInt16 nBigObjectStart ) const
+EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemPool* pPool, sal_Bool bAllowBigObjects, sal_uInt16 nBigObjectStart )
 {
     BinTextObject* pTxtObj = new BinTextObject( pPool );
     pTxtObj->SetVertical( IsVertical() );
@@ -1403,7 +1403,7 @@ LanguageType ImpEditEngine::GetLanguage( const EditPaM& rPaM, sal_uInt16* pEndPo
     short nScriptType = GetScriptType( rPaM, pEndPos ); // pEndPos will be valid now, pointing to ScriptChange or NodeLen
     sal_uInt16 nLangId = GetScriptItemId( EE_CHAR_LANGUAGE, nScriptType );
     const SvxLanguageItem* pLangItem = &(const SvxLanguageItem&)rPaM.GetNode()->GetContentAttribs().GetItem( nLangId );
-    EditCharAttrib* pAttr = rPaM.GetNode()->GetCharAttribs().FindAttrib( nLangId, rPaM.GetIndex() );
+    const EditCharAttrib* pAttr = rPaM.GetNode()->GetCharAttribs().FindAttrib( nLangId, rPaM.GetIndex() );
     if ( pAttr )
         pLangItem = (const SvxLanguageItem*)pAttr->GetItem();
 
@@ -2960,7 +2960,7 @@ EditSelection ImpEditEngine::TransliterateText( const EditSelection& rSelection,
             // yet unchanged text parts remain the same.
             for (size_t i = 0; i < aChanges.size(); ++i)
             {
-                const TransliterationChgData &rData = aChanges[ aChanges.size() - 1 - i ];
+                TransliterationChgData& rData = aChanges[ aChanges.size() - 1 - i ];
 
                 bChanges = sal_True;
                 if (rData.nLen != rData.aNewText.Len())

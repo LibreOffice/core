@@ -3720,7 +3720,7 @@ void ImpEditEngine::InsertContent( ContentNode* pNode, sal_uInt16 nPos )
     DBG_ASSERT( IsInUndo(), "InsertContent only for Undo()!" );
     ParaPortion* pNew = new ParaPortion( pNode );
     GetParaPortions().Insert(nPos, pNew);
-    aEditDoc.Insert( pNode, nPos );
+    aEditDoc.Insert(nPos, pNode);
     if ( IsCallParaInsertedOrDeleted() )
         GetEditEnginePtr()->ParagraphInserted( nPos );
 }

@@ -730,7 +730,7 @@ void EditView::ForceUpdate()
     PIMPEE->SetUpdateMode( sal_True, this, sal_True );
 }
 
-SfxStyleSheet* EditView::GetStyleSheet() const
+const SfxStyleSheet* EditView::GetStyleSheet() const
 {
     DBG_CHKTHIS( EditView, 0 );
     DBG_CHKOBJ( pImpEditView->pEditEngine, EditEngine, 0 );
@@ -741,10 +741,10 @@ SfxStyleSheet* EditView::GetStyleSheet() const
     sal_uInt16 nStartPara = PIMPEE->GetEditDoc().GetPos( aSel.Min().GetNode() );
     sal_uInt16 nEndPara = PIMPEE->GetEditDoc().GetPos( aSel.Max().GetNode() );
 
-    SfxStyleSheet* pStyle = NULL;
+    const SfxStyleSheet* pStyle = NULL;
     for ( sal_uInt16 n = nStartPara; n <= nEndPara; n++ )
     {
-        SfxStyleSheet* pTmpStyle = PIMPEE->GetStyleSheet( n );
+        const SfxStyleSheet* pTmpStyle = PIMPEE->GetStyleSheet( n );
         if ( ( n != nStartPara ) && ( pStyle != pTmpStyle ) )
             return NULL;    // Not unique.
         pStyle = pTmpStyle;

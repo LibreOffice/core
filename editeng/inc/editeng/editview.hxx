@@ -183,7 +183,7 @@ public:
     void            SetEditEngineUpdateMode( sal_Bool bUpdate );
     void            ForceUpdate();
 
-    SfxStyleSheet*  GetStyleSheet() const;
+    const SfxStyleSheet* GetStyleSheet() const;
 
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const;

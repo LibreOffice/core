@@ -1881,7 +1881,13 @@ void EditEngine::SetStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pStyle )
     pImpEditEngine->SetStyleSheet( nPara, pStyle );
 }
 
-SfxStyleSheet* EditEngine::GetStyleSheet( sal_uInt16 nPara ) const
+const SfxStyleSheet* EditEngine::GetStyleSheet( sal_uInt16 nPara ) const
+{
+    DBG_CHKTHIS( EditEngine, 0 );
+    return pImpEditEngine->GetStyleSheet( nPara );
+}
+
+SfxStyleSheet* EditEngine::GetStyleSheet( sal_uInt16 nPara )
 {
     DBG_CHKTHIS( EditEngine, 0 );
     return pImpEditEngine->GetStyleSheet( nPara );
