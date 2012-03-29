@@ -3614,6 +3614,14 @@ AC_MSG_CHECKING([whether to enable pch feature])
 AC_MSG_RESULT([no, obsolete])
 
 dnl ===================================================================
+dnl Search all the common names for sha1sum
+dnl ===================================================================
+AC_PATH_PROGS(SHA1SUM, sha1sum sha1)
+if test -z "$SHA1SUM"; then
+    AC_MSG_ERROR([install sha1sum to run this script])
+fi
+
+dnl ===================================================================
 dnl Search all the common names for GNU make
 dnl ===================================================================
 AC_MSG_CHECKING([for GNU make])
@@ -3669,7 +3677,7 @@ define d2
 endef
 
 %.b : %.a
-	\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | sha1sum))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
+	\$(eval CHECKSUM := \$(word 1,\$(shell cat \$^ | $SHA1SUM))) \$(if \$(wildcard \$(CACHEDIR)/\$(CHECKSUM)),\
 	\$(call d1,\$(CHECKSUM)),\
 	\$(call d2,\$(CHECKSUM)))
 EOF
