@@ -1331,9 +1331,11 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
                             if ( bAsLink && bOtherDoc )
                                 pTabViewShell->PasteFromSystem(SOT_FORMATSTR_ID_LINK);  // DDE insert
                             else
+                            {
                                 pTabViewShell->PasteFromClip( nFlags, pOwnClip->GetDocument(),
                                     nFunction, bSkipEmpty, bTranspose, bAsLink,
                                     eMoveMode, IDF_NONE, sal_True );    // allow warning dialog
+                            }
                         }
 
                         if( !pReqArgs )
@@ -1367,7 +1369,27 @@ void ScCellShell::ExecuteEdit( SfxRequest& rReq )
             }
             pTabViewShell->CellContentChanged();        // => PasteFromXXX ???
             break;
-
+        case SID_PASTE_ONLY_TEXT:
+        case SID_PASTE_ONLY_FORMULA:
+        {
+            Window* pWin = GetViewData()->GetActiveWin();
+            if ( ScTransferObj::GetOwnClipboard( pWin ) )  // own cell data
+            {
+                rReq.SetSlot( FID_INS_CELL_CONTENTS );
+                rtl::OUString aFlags;
+                if ( nSlot == SID_PASTE_ONLY_TEXT )
+                    aFlags = "VDS";
+                else
+                    aFlags = "F";
+                rReq.AppendItem( SfxStringItem( FID_INS_CELL_CONTENTS, aFlags ) );
+                ExecuteSlot( rReq, GetInterface() );
+                rReq.SetReturnValue(SfxInt16Item(nSlot, 1));    // 1 = success
+                pTabViewShell->CellContentChanged();
+            }
+            else
+                rReq.SetReturnValue(SfxInt16Item(nSlot, 0));        // 0 = fail
+            break;
+        }
         case SID_PASTE_SPECIAL:
             // differentiate between own cell data and draw objects/external data
             // this makes FID_INS_CELL_CONTENTS superfluous

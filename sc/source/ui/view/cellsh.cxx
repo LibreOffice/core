@@ -449,6 +449,8 @@ IMPL_LINK( ScCellShell, ClipboardChanged, TransferableDataHelper*, pDataHelper )
         SfxBindings& rBindings = GetViewData()->GetBindings();
         rBindings.Invalidate( SID_PASTE );
         rBindings.Invalidate( SID_PASTE_SPECIAL );
+        rBindings.Invalidate( SID_PASTE_ONLY_TEXT );
+        rBindings.Invalidate( SID_PASTE_ONLY_FORMULA );
         rBindings.Invalidate( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     return 0;
@@ -537,6 +539,8 @@ void ScCellShell::GetClipState( SfxItemSet& rSet )
     {
         rSet.DisableItem( SID_PASTE );
         rSet.DisableItem( SID_PASTE_SPECIAL );
+        rSet.DisableItem( SID_PASTE_ONLY_TEXT );
+        rSet.DisableItem( SID_PASTE_ONLY_FORMULA );
         rSet.DisableItem( SID_CLIPBOARD_FORMAT_ITEMS );
     }
     else if ( rSet.GetItemState( SID_CLIPBOARD_FORMAT_ITEMS ) != SFX_ITEM_UNKNOWN )
