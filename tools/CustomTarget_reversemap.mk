@@ -1,4 +1,3 @@
-# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 # Version: MPL 1.1 / GPLv3+ / LGPLv3+
 #
 # The contents of this file are subject to the Mozilla Public License Version
@@ -24,11 +23,15 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,tools_reversemap,$(WORKDIR)/CustomTarget/tools/source/reversemap))
-$(eval $(call gb_Package_add_customtarget,tools_reversemap,tools/source/reversemap))
+$(eval $(call gb_CustomTarget_CustomTarget,tools/reversemap,new_style))
 
-$(eval $(call gb_CustomTarget_add_outdir_dependencies,tools/source/reversemap,\
-	$(call gb_Executable_get_target_for_build,bestreversemap) \
-))
+TLRM := $(call gb_CustomTarget_get_workdir,tools/reversemap)
+
+$(call gb_CustomTarget_get_target,tools/reversemap) : $(TLRM)/reversemap.hxx
+
+$(TLRM)/reversemap.hxx : $(call gb_Executable_get_target_for_build,bestreversemap) \
+		| $(TLRM)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),BRM,1)
+	$(call gb_Helper_execute,bestreversemap > $@)
 
 # vim: set noet sw=4 ts=4:
