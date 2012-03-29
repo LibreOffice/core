@@ -1262,8 +1262,7 @@ void CppuType::dumpConstantValue(FileStream& o, sal_uInt16 index)
                 o << "sal_False";
             break;
         case RT_TYPE_BYTE:
-            o << "(sal_Int8)"
-              << sal::static_int_cast< sal_Int8 >(constValue.m_value.aByte);
+            o << "(sal_Int8)" << constValue.m_value.aByte;
             break;
         case RT_TYPE_INT16:
             o << "(sal_Int16)" << constValue.m_value.aShort;
