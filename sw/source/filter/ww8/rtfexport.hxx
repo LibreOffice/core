@@ -155,7 +155,7 @@ public:
     /// Destructor.
     virtual ~RtfExport();
 
-#if defined(UNX22)
+#if defined(UNX)
     static const sal_Char sNewLine; // \012 or \015
 #else
     static const sal_Char* const sNewLine; // \015\012

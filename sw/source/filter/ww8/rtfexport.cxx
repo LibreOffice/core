@@ -79,7 +79,7 @@ using rtl::OUStringBuffer;
 
 using sw::mark::IMark;
 
-#if defined(UNX22)
+#if defined(UNX)
 const sal_Char RtfExport::sNewLine = '\012';
 #else
 const sal_Char* const RtfExport::sNewLine = "\015\012";
