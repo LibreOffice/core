@@ -1062,7 +1062,7 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
 
         if ( bOnlyFullParagraphs )
         {
-            ParaPortion* pParaPortion = GetParaPortions()[nNode];
+            const ParaPortion* pParaPortion = GetParaPortions()[nNode];
             nTextPortions += pParaPortion->GetTextPortions().Count();
         }
 
@@ -1138,7 +1138,7 @@ EditTextObject* ImpEditEngine::CreateBinTextObject( EditSelection aSel, SfxItemP
         pTxtObj->SetPortionInfo( pXList );
         for ( nNode = nStartNode; nNode <= nEndNode; nNode++  )
         {
-            ParaPortion* pParaPortion = GetParaPortions()[nNode];
+            const ParaPortion* pParaPortion = GetParaPortions()[nNode];
             XParaPortion* pX = new XParaPortion;
             pXList->Insert( pX, pXList->Count() );
 

@@ -1345,7 +1345,7 @@ void EditEngine::RemoveParagraph( sal_uInt16 nPara )
         return;
 
     ContentNode* pNode = pImpEditEngine->GetEditDoc().SaveGetObject( nPara );
-    ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
+    const ParaPortion* pPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
     DBG_ASSERT( pPortion && pNode, "Paragraph not found: RemoveParagraph" );
     if ( pNode && pPortion )
     {
@@ -1557,7 +1557,7 @@ void EditEngine::GetPortions( sal_uInt16 nPara, std::vector<sal_uInt16>& rList )
     if ( !pImpEditEngine->IsFormatted() )
         pImpEditEngine->FormatFullDoc();
 
-    ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
+    const ParaPortion* pParaPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nPara );
     if ( pParaPortion )
     {
         sal_uInt16 nEnd = 0;
@@ -1639,8 +1639,8 @@ void EditEngine::SetControlWord( sal_uInt32 nWord )
                 for ( sal_uInt16 n = 0; n < nNodes; n++ )
                 {
                     ContentNode* pNode = pImpEditEngine->GetEditDoc().GetObject( n );
-                    ParaPortion* pPortion = pImpEditEngine->GetParaPortions().GetObject( n );
-                    sal_Bool bWrongs = ( bSpellingChanged || ( nWord & EE_CNTRL_ONLINESPELLING ) ) ? !pNode->GetWrongList()->empty() : sal_False;
+                    const ParaPortion* pPortion = pImpEditEngine->GetParaPortions()[n];
+                    bool bWrongs = ( bSpellingChanged || ( nWord & EE_CNTRL_ONLINESPELLING ) ) ? !pNode->GetWrongList()->empty() : false;
                     if ( bSpellingChanged )
                         pNode->DestroyWrongList();
                     if ( bWrongs )
@@ -1669,13 +1669,13 @@ long EditEngine::GetFirstLineStartX( sal_uInt16 nParagraph )
     DBG_CHKTHIS( EditEngine, 0 );
 
     long nX = 0;
-    ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nParagraph );
+    const ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nParagraph );
     if ( pPPortion )
     {
         DBG_ASSERT( pImpEditEngine->IsFormatted() || !pImpEditEngine->IsFormatting(), "GetFirstLineStartX: Doc not formatted - unable to format!" );
         if ( !pImpEditEngine->IsFormatted() )
             pImpEditEngine->FormatDoc();
-        EditLine* pFirstLine = pPPortion->GetLines()[0];
+        const EditLine* pFirstLine = pPPortion->GetLines()[0];
         nX = pFirstLine->GetStartPosX();
     }
     return nX;
@@ -1695,7 +1695,7 @@ Point EditEngine::GetDocPos( const Point& rPaperPos ) const
 Point EditEngine::GetDocPosTopLeft( sal_uInt16 nParagraph )
 {
     DBG_CHKTHIS( EditEngine, 0 );
-    ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nParagraph );
+    const ParaPortion* pPPortion = pImpEditEngine->GetParaPortions().SaveGetObject( nParagraph );
     DBG_ASSERT( pPPortion, "Paragraph not found: GetWindowPosTopLeft" );
     Point aPoint;
     if ( pPPortion )
@@ -1758,7 +1758,7 @@ sal_Bool EditEngine::IsTextPos( const Point& rPaperPos, sal_uInt16 nBorder )
         EditPaM aPaM = pImpEditEngine->GetPaM( aDocPos, sal_False );
         if ( aPaM.GetNode() )
         {
-            ParaPortion* pParaPortion = pImpEditEngine->FindParaPortion( aPaM.GetNode() );
+            const ParaPortion* pParaPortion = pImpEditEngine->FindParaPortion( aPaM.GetNode() );
             DBG_ASSERT( pParaPortion, "ParaPortion?" );
 
             sal_uInt16 nLine = pParaPortion->GetLineNumber( aPaM.GetIndex() );

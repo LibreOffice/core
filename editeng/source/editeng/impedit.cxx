@@ -650,7 +650,8 @@ void ImpEditView::ShowCursor( sal_Bool bGotoCursor, sal_Bool bForceVisCursor, sa
     sal_uInt16 nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
     if (nPara == USHRT_MAX) // #i94322
         return;
-    ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions().GetObject( nPara );
+
+    const ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions()[nPara];
 
     nShowCursorFlags |= nExtraCursorFlags;
 
@@ -1218,7 +1219,7 @@ sal_Bool ImpEditView::IsBulletArea( const Point& rPos, sal_uInt16* pPara )
         sal_uInt16 nPara = pEditEngine->pImpEditEngine->aEditDoc.GetPos( aPaM.GetNode() );
         Rectangle aBulletArea = pEditEngine->GetBulletArea( nPara );
         long nY = pEditEngine->GetDocPosTopLeft( nPara ).Y();
-        ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions().GetObject( nPara );
+        const ParaPortion* pParaPortion = pEditEngine->pImpEditEngine->GetParaPortions()[nPara];
         nY += pParaPortion->GetFirstLineOffset();
         if ( ( aDocPos.Y() > ( nY + aBulletArea.Top() ) ) &&
              ( aDocPos.Y() < ( nY + aBulletArea.Bottom() ) ) &&

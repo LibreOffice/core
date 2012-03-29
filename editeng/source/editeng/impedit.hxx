@@ -536,10 +536,10 @@ private:
     EditPaM             GetPaM( Point aDocPos, sal_Bool bSmart = sal_True );
     EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, sal_Bool bSmart = sal_True );
     long                GetXPos( ParaPortion* pParaPortion, EditLine* pLine, sal_uInt16 nIndex, sal_Bool bPreferPortionStart = sal_False );
-    long                GetPortionXOffset( ParaPortion* pParaPortion, EditLine* pLine, sal_uInt16 nTextPortion );
-    sal_uInt16              GetChar( ParaPortion* pParaPortion, EditLine* pLine, long nX, sal_Bool bSmart = sal_True );
+    long GetPortionXOffset(const ParaPortion* pParaPortion, EditLine* pLine, sal_uInt16 nTextPortion);
+    sal_uInt16 GetChar(const ParaPortion* pParaPortion, EditLine* pLine, long nX, bool bSmart = true);
     Range               GetInvalidYOffsets( ParaPortion* pPortion );
-    Range               GetLineXPosStartEnd( ParaPortion* pParaPortion, EditLine* pLine );
+    Range               GetLineXPosStartEnd( const ParaPortion* pParaPortion, EditLine* pLine ) const;
 
     void                SetParaAttrib( sal_uInt8 nFunc, EditSelection aSel, sal_uInt16 nValue );
     sal_uInt16          GetParaAttrib( sal_uInt8 nFunc, EditSelection aSel );
@@ -654,8 +654,8 @@ private:
     ContentNode*        GetPrevVisNode( ContentNode* pCurNode );
     ContentNode*        GetNextVisNode( ContentNode* pCurNode );
 
-    ParaPortion*        GetPrevVisPortion( ParaPortion* pCurPortion );
-    ParaPortion*        GetNextVisPortion( ParaPortion* pCurPortion );
+    const ParaPortion*  GetPrevVisPortion( const ParaPortion* pCurPortion ) const;
+    const ParaPortion*  GetNextVisPortion( const ParaPortion* pCurPortion ) const;
 
     void                SetBackgroundColor( const Color& rColor ) { maBackgroundColor = rColor; }
     Color               GetBackgroundColor() const { return maBackgroundColor; }
@@ -678,7 +678,8 @@ private:
 
     void                CheckIdleFormatter();
 
-    inline ParaPortion* FindParaPortion( ContentNode* pNode ) const;
+    inline const ParaPortion* FindParaPortion( ContentNode* pNode ) const;
+    inline ParaPortion* FindParaPortion( ContentNode* pNode );
 
     ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection ) const;
 
@@ -1091,7 +1092,14 @@ inline EditUndoManager& ImpEditEngine::GetUndoManager()
     return *pUndoManager;
 }
 
-inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode* pNode ) const
+inline const ParaPortion* ImpEditEngine::FindParaPortion( ContentNode* pNode ) const
+{
+    sal_uInt16 nPos = aEditDoc.GetPos( pNode );
+    DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );
+    return GetParaPortions()[ nPos ];
+}
+
+inline ParaPortion* ImpEditEngine::FindParaPortion( ContentNode* pNode )
 {
     sal_uInt16 nPos = aEditDoc.GetPos( pNode );
     DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );

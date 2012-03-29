@@ -208,7 +208,6 @@ void EditUndoDelContent::Redo()
     pContentNode = _pImpEE->GetEditDoc().SaveGetObject( nNode );
     DBG_ASSERT( pContentNode, "EditUndoDelContent::Redo(): Node?!" );
 
-    delete _pImpEE->GetParaPortions()[nNode];
     _pImpEE->GetParaPortions().Remove( nNode );
 
     // Do not delete node, depends on the undo!

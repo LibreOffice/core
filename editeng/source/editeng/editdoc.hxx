@@ -438,7 +438,7 @@ public:
             ~TextPortionList();
 
     void    Reset();
-    sal_uInt16  FindPortion( sal_uInt16 nCharPos, sal_uInt16& rPortionStart, sal_Bool bPreferStartingPortion = sal_False );
+    sal_uInt16  FindPortion( sal_uInt16 nCharPos, sal_uInt16& rPortionStart, sal_Bool bPreferStartingPortion = sal_False ) const;
     sal_uInt16  GetStartPos( sal_uInt16 nPortion );
     void    DeleteFromPortion( sal_uInt16 nDelFrom );
 };
@@ -584,9 +584,10 @@ public:
                         ParaPortion( ContentNode* pNode );
                         ~ParaPortion();
 
-    sal_uInt16              GetLineNumber( sal_uInt16 nIndex );
+    sal_uInt16 GetLineNumber( sal_uInt16 nIndex ) const;
 
     EditLineList&       GetLines()                  { return aLineList; }
+    const EditLineList& GetLines() const { return aLineList; }
 
     sal_Bool                IsInvalid() const           { return bInvalid; }
     sal_Bool                IsSimpleInvalid()   const   { return bSimple; }
@@ -602,7 +603,7 @@ public:
     void                MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 nEnd );
 
     void                SetVisible( sal_Bool bVisible );
-    sal_Bool                IsVisible()                 { return bVisible; }
+    bool                IsVisible() const { return bVisible; }
 
     sal_Bool            IsEmpty() { return GetTextPortions().Count() == 1 && GetTextPortions()[0]->GetLen() == 0; }
 
@@ -612,6 +613,7 @@ public:
 
     ContentNode*        GetNode() const             { return pNode; }
     TextPortionList&    GetTextPortions()           { return aTextPortionList; }
+    const TextPortionList& GetTextPortions() const { return aTextPortionList; }
 
     sal_uInt16              GetInvalidPosStart() const  { return nInvalidPosStart; }
     short               GetInvalidDiff() const      { return nInvalidDiff; }
@@ -622,27 +624,37 @@ public:
 #endif
 };
 
-typedef ParaPortion* ParaPortionPtr;
-SV_DECL_PTRARR( DummyParaPortionList, ParaPortionPtr, 0 )
-
 // -------------------------------------------------------------------------
 // class ParaPortionList
 // -------------------------------------------------------------------------
-class ParaPortionList : public DummyParaPortionList
+class ParaPortionList
 {
-    mutable sal_uInt16 nLastCache;
+    mutable size_t nLastCache;
+    boost::ptr_vector<ParaPortion> maPortions;
 public:
                     ParaPortionList();
                     ~ParaPortionList();
 
     void            Reset();
-    long            GetYOffset( ParaPortion* pPPortion );
+    long GetYOffset(const ParaPortion* pPPortion) const;
     sal_uInt16          FindParagraph( long nYOffset );
 
-    inline ParaPortion* SaveGetObject( sal_uInt16 nPos ) const
-        { return ( nPos < Count() ) ? GetObject( nPos ) : 0; }
+    inline const ParaPortion* SaveGetObject(size_t nPos) const
+        { return nPos < maPortions.size() ? &maPortions[nPos] : NULL; }
 
-    sal_uInt16 GetPos(ParaPortion* p) const;
+    inline ParaPortion* SaveGetObject(size_t nPos)
+        { return nPos < maPortions.size() ? &maPortions[nPos] : NULL; }
+
+    sal_uInt16 GetPos(const ParaPortion* p) const;
+    ParaPortion* operator[](size_t nPos);
+    const ParaPortion* operator[](size_t nPos) const;
+
+    ParaPortion* Release(size_t nPos);
+    void Remove(size_t nPos);
+    void Insert(size_t nPos, ParaPortion* p);
+    void Append(ParaPortion* p);
+    size_t Count() const;
+
 #if OSL_DEBUG_LEVEL > 2
     // temporary:
     void            DbgCheck( EditDoc& rDoc );

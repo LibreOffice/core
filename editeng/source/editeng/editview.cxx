@@ -241,7 +241,7 @@ void EditView::SetSelection( const ESelection& rESel )
     PIMPEE->CheckIdleFormatter();
 
     // Selection may not start/end at an invisible paragraph:
-    ParaPortion* pPortion = PIMPEE->FindParaPortion( aNewSelection.Min().GetNode() );
+    const ParaPortion* pPortion = PIMPEE->FindParaPortion( aNewSelection.Min().GetNode() );
     if ( !pPortion->IsVisible() )
     {
         pPortion = PIMPEE->GetPrevVisPortion( pPortion );

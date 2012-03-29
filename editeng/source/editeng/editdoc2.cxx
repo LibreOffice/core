@@ -63,6 +63,8 @@
 
 #include <vcl/svapp.hxx>    // For AppWindow...
 
+#include <limits>
+
 DBG_NAME( EE_ParaPortion )
 
 SV_IMPL_VARARR( CharPosArray, sal_Int32 );
@@ -92,7 +94,7 @@ void TextPortionList::DeleteFromPortion( sal_uInt16 nDelFrom )
     Remove( nDelFrom, Count()-nDelFrom );
 }
 
-sal_uInt16 TextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPortionStart, sal_Bool bPreferStartingPortion )
+sal_uInt16 TextPortionList::FindPortion( sal_uInt16 nCharPos, sal_uInt16& nPortionStart, sal_Bool bPreferStartingPortion ) const
 {
     // When nCharPos at portion limit, the left portion is found
     sal_uInt16 nTmpPos = 0;
@@ -227,7 +229,7 @@ void ParaPortion::MarkSelectionInvalid( sal_uInt16 nStart, sal_uInt16 /* nEnd */
     aWritingDirectionInfos.clear();
 }
 
-sal_uInt16 ParaPortion::GetLineNumber( sal_uInt16 nIndex )
+sal_uInt16 ParaPortion::GetLineNumber( sal_uInt16 nIndex ) const
 {
     DBG_ASSERTWARNING( aLineList.Count(), "Empty ParaPortion in GetLine!" );
     DBG_ASSERT( bVisible, "Why GetLine() on an invisible paragraph?" );
@@ -324,6 +326,40 @@ sal_uInt16 FastGetPos(
   return USHRT_MAX;
 }
 
+template<typename _Array, typename _Val>
+size_t FastGetPos(const _Array& rArray, const _Val* p, size_t& rLastPos)
+{
+    size_t nArrayLen = rArray.size();
+
+    // Through certain filter code-paths we do a lot of appends, which in
+    // turn call GetPos - creating some N^2 nightmares. If we have a
+    // non-trivially large list, do a few checks from the end first.
+    if (rLastPos > 16)
+    {
+        size_t nEnd;
+        if (rLastPos > nArrayLen - 2)
+            nEnd = nArrayLen;
+        else
+            nEnd = rLastPos + 2;
+
+        for (size_t nIdx = rLastPos - 2; nIdx < nEnd; ++nIdx)
+        {
+            if (&rArray[nIdx] == p)
+            {
+                rLastPos = nIdx;
+                return nIdx;
+            }
+        }
+    }
+    // The world's lamest linear search from svarray ...
+    for (size_t nIdx = 0; nIdx < nArrayLen; ++nIdx)
+        if (&rArray[nIdx] == p)
+            return rLastPos = nIdx;
+
+    // 0xFFFF is used to signify "not found" condition. We need to change this.
+    return std::numeric_limits<sal_uInt16>::max();
+}
+
 }
 
 ParaPortionList::ParaPortionList() : nLastCache( 0 )
@@ -332,12 +368,46 @@ ParaPortionList::ParaPortionList() : nLastCache( 0 )
 
 ParaPortionList::~ParaPortionList()
 {
-    Reset();
 }
 
-sal_uInt16 ParaPortionList::GetPos(ParaPortion* p) const
+sal_uInt16 ParaPortionList::GetPos(const ParaPortion* p) const
 {
-    return FastGetPos(GetData(), Count(), p, nLastCache);
+    return FastGetPos(maPortions, p, nLastCache);
+}
+
+ParaPortion* ParaPortionList::operator [](size_t nPos)
+{
+    return nPos < maPortions.size() ? &maPortions[nPos] : NULL;
+}
+
+const ParaPortion* ParaPortionList::operator [](size_t nPos) const
+{
+    return nPos < maPortions.size() ? &maPortions[nPos] : NULL;
+}
+
+ParaPortion* ParaPortionList::Release(size_t nPos)
+{
+    return maPortions.release(maPortions.begin()+nPos).release();
+}
+
+void ParaPortionList::Remove(size_t nPos)
+{
+    maPortions.erase(maPortions.begin()+nPos);
+}
+
+void ParaPortionList::Insert(size_t nPos, ParaPortion* p)
+{
+    maPortions.insert(maPortions.begin()+nPos, p);
+}
+
+void ParaPortionList::Append(ParaPortion* p)
+{
+    maPortions.push_back(p);
+}
+
+size_t ParaPortionList::Count() const
+{
+    return maPortions.size();
 }
 
 ContentList::ContentList() : DummyContentList( 0 ), nLastCache(0) {}
@@ -349,17 +419,15 @@ sal_uInt16 ContentList::GetPos(ContentNode* p) const
 
 void ParaPortionList::Reset()
 {
-    for ( sal_uInt16 nPortion = 0; nPortion < Count(); nPortion++ )
-        delete GetObject( nPortion );
-    Remove( 0, Count() );
+    maPortions.clear();
 }
 
-long ParaPortionList::GetYOffset( ParaPortion* pPPortion )
+long ParaPortionList::GetYOffset(const ParaPortion* pPPortion) const
 {
     long nHeight = 0;
-    for ( sal_uInt16 nPortion = 0; nPortion < Count(); nPortion++ )
+    for (size_t i = 0, n = maPortions.size(); i < n; ++i)
     {
-        ParaPortion* pTmpPortion = GetObject(nPortion);
+        const ParaPortion* pTmpPortion = &maPortions[i];
         if ( pTmpPortion == pPPortion )
             return nHeight;
         nHeight += pTmpPortion->GetHeight();
@@ -371,13 +439,13 @@ long ParaPortionList::GetYOffset( ParaPortion* pPPortion )
 sal_uInt16 ParaPortionList::FindParagraph( long nYOffset )
 {
     long nY = 0;
-    for ( sal_uInt16 nPortion = 0; nPortion < Count(); nPortion++ )
+    for (size_t i = 0, n = maPortions.size(); i < n; ++i)
     {
-        nY += GetObject(nPortion)->GetHeight(); // should also be correct even in bVisible!
+        nY += maPortions[i].GetHeight(); // should also be correct even in bVisible!
         if ( nY > nYOffset )
-            return nPortion;
+            return i;
     }
-    return 0xFFFF;  // Should be reachable through EE_PARA_NOT_FOUND!
+    return EE_PARA_NOT_FOUND;
 }
 
 #if OSL_DEBUG_LEVEL > 2
