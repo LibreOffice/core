@@ -2275,10 +2275,7 @@ EditPaM ImpEditEngine::ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pR
 
     // First search for Portions since pRight is gone after ConnectParagraphs.
     ParaPortion* pLeftPortion = FindParaPortion( pLeft );
-    ParaPortion* pRightPortion = FindParaPortion( pRight );
     OSL_ENSURE( pLeftPortion, "Blind Portion in ImpConnectParagraphs(1)" );
-    OSL_ENSURE( pRightPortion, "Blind Portion in ImpConnectParagraphs(2)" );
-    OSL_ENSURE( nParagraphTobeDeleted == GetParaPortions().GetPos( pRightPortion ), "NodePos != PortionPos?" );
 
     if ( GetStatus().DoOnlineSpelling() )
     {
