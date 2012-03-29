@@ -2477,18 +2477,15 @@ void ImpEditEngine::ImpRemoveParagraph( sal_uInt16 nPara )
 {
     ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
     ContentNode* pNextNode = aEditDoc.SaveGetObject( nPara+1 );
-    ParaPortion* pPortion = GetParaPortions().SaveGetObject( nPara );
 
     OSL_ENSURE( pNode, "Blind Node in ImpRemoveParagraph" );
-    OSL_ENSURE( pPortion, "Blind Portion in ImpRemoveParagraph(2)" );
 
     DeletedNodeInfo* pInf = new DeletedNodeInfo( (sal_uLong)pNode, nPara );
     aDeletedNodes.Insert( pInf, aDeletedNodes.Count() );
 
     // The node is managed by the undo and possibly destroyed!
-    /* delete */ aEditDoc.Remove( nPara );
+    aEditDoc.Remove( nPara );
     GetParaPortions().Remove( nPara );
-    delete pPortion;
 
     if ( IsCallParaInsertedOrDeleted() )
     {
