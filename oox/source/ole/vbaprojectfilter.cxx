@@ -79,11 +79,6 @@ OUString SAL_CALL WordVbaProjectFilter_getImplementationName() throw()
 
 // ----------------------------------------------------------------------------
 
-WordVbaProjectFilter::WordVbaProjectFilter( const Reference< XComponentContext >& rxContext ) throw( RuntimeException ) :
-    VbaProjectFilterBase( rxContext, CREATE_OUSTRING( "Writer" ), CREATE_OUSTRING( "Macros" ) )
-{
-}
-
 OUString WordVbaProjectFilter::implGetImplementationName() const
 {
     return WordVbaProjectFilter_getImplementationName();

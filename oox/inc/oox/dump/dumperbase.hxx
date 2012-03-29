@@ -231,7 +231,6 @@ struct ItemFormat
     explicit            ItemFormat();
 
     void                set( DataType eDataType, FormatType eFmtType, const ::rtl::OUString& rItemName );
-    void                set( DataType eDataType, FormatType eFmtType, const ::rtl::OUString& rItemName, const ::rtl::OUString& rListName );
 
     /** Initializes the struct from a vector of strings containing the item format.
 
@@ -398,7 +397,6 @@ public:
     static void         appendToken( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     static void         appendToken( ::rtl::OUStringBuffer& rStr, sal_Int64 nToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     static void         prependToken( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
-    static void         prependToken( ::rtl::OUStringBuffer& rStr, sal_Int64 nToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
 
     static void         appendIndex( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rIdx );
     static void         appendIndex( ::rtl::OUStringBuffer& rStr, sal_Int64 nIdx );
@@ -1047,11 +1045,9 @@ public:
 
     void                incIndent();
     void                decIndent();
-    void                resetIndent();
 
     void                startTable( sal_Int32 nW1 );
     void                startTable( sal_Int32 nW1, sal_Int32 nW2 );
-    void                startTable( sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3 );
     void                startTable( sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3, sal_Int32 nW4 );
     void                startTable( size_t nColCount, const sal_Int32* pnColWidths );
     void                tab();
@@ -1209,8 +1205,6 @@ public:
     explicit            StorageIterator( const StorageRef& rxStrg );
     virtual             ~StorageIterator();
 
-    size_t              getElementCount() const;
-
     StorageIterator&    operator++();
 
     ::rtl::OUString     getName() const;
@@ -1250,8 +1244,6 @@ protected:
     virtual void        implDump();
 
     // ------------------------------------------------------------------------
-
-    void                reconstructConfig( const ConfigRef& rxConfig );
 
     inline Config&      cfg() const { return *mxConfig; }
 
@@ -1564,8 +1556,6 @@ protected:
     ::rtl::OUString     dumpNullCharArray( const String& rName, rtl_TextEncoding eTextEnc );
     ::rtl::OUString     dumpNullUnicodeArray( const String& rName );
 
-    double              dumpRk( const String& rName = EMPTY_STRING );
-    sal_Int32           dumpColorABGR( const String& rName = EMPTY_STRING );
     ::com::sun::star::util::DateTime dumpFileTime( const String& rName = EMPTY_STRING );
     ::rtl::OUString     dumpGuid( const String& rName = EMPTY_STRING );
 

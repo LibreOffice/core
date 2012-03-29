@@ -178,7 +178,6 @@ protected:
 
     using               StorageObjectBase::construct;
     void                construct( const ObjectBase& rParent, const StorageRef& rxStrg, const ::rtl::OUString& rSysPath );
-    void                construct( const ObjectBase& rParent );
 
     virtual void        implDumpStream(
                             const ::com::sun::star::uno::Reference< ::com::sun::star::io::XInputStream >& rxStrm,

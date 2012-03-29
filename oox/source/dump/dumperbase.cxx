@@ -188,12 +188,6 @@ void ItemFormat::set( DataType eDataType, FormatType eFmtType, const OUString& r
     maListName = OUString();
 }
 
-void ItemFormat::set( DataType eDataType, FormatType eFmtType, const OUString& rItemName, const OUString& rListName )
-{
-    set( eDataType, eFmtType, rItemName );
-    maListName = rListName;
-}
-
 OUStringVector::const_iterator ItemFormat::parse( const OUStringVector& rFormatVec )
 {
     set( DATATYPE_VOID, FORMATTYPE_NONE, OUString() );
@@ -634,13 +628,6 @@ void StringHelper::prependToken( OUStringBuffer& rStr, const OUString& rToken, s
     if( rStr.getLength() > 0 && !rToken.isEmpty() )
         rStr.insert( 0, cSep );
     rStr.insert( 0, rToken );
-}
-
-void StringHelper::prependToken( OUStringBuffer& rStr, sal_Int64 nToken, sal_Unicode cSep )
-{
-    OUStringBuffer aToken;
-    appendDec( aToken, nToken );
-    prependToken( rStr, aToken.makeStringAndClear(), cSep );
 }
 
 void StringHelper::appendIndex( OUStringBuffer& rStr, const OUString& rIdx )
@@ -1695,11 +1682,6 @@ void Output::decIndent()
         maIndent = maIndent.copy( OOX_DUMP_INDENT );
 }
 
-void Output::resetIndent()
-{
-    maIndent = OUString();
-}
-
 void Output::startTable( sal_Int32 nW1 )
 {
     startTable( 1, &nW1 );
@@ -1711,15 +1693,6 @@ void Output::startTable( sal_Int32 nW1, sal_Int32 nW2 )
     pnColWidths[ 0 ] = nW1;
     pnColWidths[ 1 ] = nW2;
     startTable( 2, pnColWidths );
-}
-
-void Output::startTable( sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3 )
-{
-    sal_Int32 pnColWidths[ 3 ];
-    pnColWidths[ 0 ] = nW1;
-    pnColWidths[ 1 ] = nW2;
-    pnColWidths[ 2 ] = nW3;
-    startTable( 3, pnColWidths );
 }
 
 void Output::startTable( sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3, sal_Int32 nW4 )
@@ -1971,11 +1944,6 @@ StorageIterator::~StorageIterator()
 {
 }
 
-size_t StorageIterator::getElementCount() const
-{
-    return maNames.size();
-}
-
 StorageIterator& StorageIterator::operator++()
 {
     if( maIt != maNames.end() )
@@ -2039,12 +2007,6 @@ bool ObjectBase::implIsValid() const
 
 void ObjectBase::implDump()
 {
-}
-
-void ObjectBase::reconstructConfig( const ConfigRef& rxConfig )
-{
-    if( isValid( rxConfig ) )
-        mxConfig = rxConfig;
 }
 
 // ============================================================================
@@ -2583,21 +2545,6 @@ OUString InputObjectBase::dumpNullUnicodeArray( const String& rName )
     OUString aString = aBuffer.makeStringAndClear();
     writeStringItem( rName( "text" ), aString );
     return aString;
-}
-
-double InputObjectBase::dumpRk( const String& rName )
-{
-    sal_Int32 nRk;
-    *mxStrm >> nRk;
-    return writeRkItem( rName( "rk-value" ), nRk );
-}
-
-sal_Int32 InputObjectBase::dumpColorABGR( const String& rName )
-{
-    sal_Int32 nColor;
-    *mxStrm >> nColor;
-    writeColorABGRItem( rName( "color" ), nColor );
-    return nColor;
 }
 
 DateTime InputObjectBase::dumpFileTime( const String& rName )

@@ -60,11 +60,6 @@ private:
 
 class WordVbaProjectFilter : public VbaProjectFilterBase
 {
-public:
-    explicit            WordVbaProjectFilter(
-                            const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >& rxContext )
-                            throw( ::com::sun::star::uno::RuntimeException );
-
 private:
     virtual ::rtl::OUString implGetImplementationName() const;
 };

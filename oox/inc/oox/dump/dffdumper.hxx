@@ -49,7 +49,6 @@ protected:
     inline explicit     DffStreamObject() {}
 
     using               SequenceRecordObjectBase::construct;
-    void                construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm );
 
     virtual bool        implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize );
     virtual void        implWriteExtHeader();

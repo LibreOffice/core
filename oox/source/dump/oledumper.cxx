@@ -671,11 +671,6 @@ void OleStorageObject::construct( const ObjectBase& rParent, const StorageRef& r
     StorageObjectBase::construct( rParent, rxStrg, rSysPath );
 }
 
-void OleStorageObject::construct( const ObjectBase& rParent )
-{
-    StorageObjectBase::construct( rParent );
-}
-
 void OleStorageObject::implDumpStream( const Reference< XInputStream >& rxStrm, const OUString& /*rStrgPath*/, const OUString& rStrmName, const OUString& rSysFileName )
 {
     if( rStrmName.equalsAsciiL( RTL_CONSTASCII_STRINGPARAM( "\001CompObj" ) ) )

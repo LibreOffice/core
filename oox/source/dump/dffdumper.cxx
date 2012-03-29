@@ -63,12 +63,6 @@ const sal_uInt16 DFF_OPT_FLAGSMASK          = 0x003F;
 
 // ============================================================================
 
-void DffStreamObject::construct( const OutputObjectBase& rParent, const BinaryInputStreamRef& rxStrm )
-{
-    SequenceRecordObjectBase::construct( rParent, rxStrm, "DFF-RECORD-NAMES" );
-    constructDffObj();
-}
-
 bool DffStreamObject::implReadRecordHeader( BinaryInputStream& rBaseStrm, sal_Int64& ornRecId, sal_Int64& ornRecSize )
 {
     sal_uInt16 nRecId;
