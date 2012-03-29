@@ -2228,6 +2228,10 @@ void WinMtfOutput::PassEMFPlusHeaderInfo()
     // rotate and scale operations
     mem << one << zero << zero << one << zero << zero;
 
+    // need to flush the stream, otherwise GetEndOfData will return 0
+    // on windows where the function parameters are probably resolved in reverse order
+    mem.Flush();
+
     mpGDIMetaFile->AddAction( new MetaCommentAction( "EMF_PLUS_HEADER_INFO", 0, (const sal_uInt8*) mem.GetData(), mem.GetEndOfData() ) );
     mpGDIMetaFile->UseCanvas( sal_True );
 }
