@@ -59,7 +59,9 @@ PATCH_FILES += vigra1.4.0-unused-parameters.patch
 # the closing brace of the enum-specifier (see [dcl.enum] in the C++ 2003
 # Standard), leading to "comparison between <enum1> and <enum2> [-Werror=enum-
 # compare]" and "enumeral mismatch in conditional expression [-Werror]"
-# warnings:
+# warnings (see <https://mailhost.informatik.uni-hamburg.de/pipermail/vigra/
+# 2012-March/000956.html> "GCC 4.7 picky about sized_int.hxx (-Werror=enum-
+# compare)" about getting this upstreamed):
 PATCH_FILES += vigra1.4.0-enumwarn.patch
 
 CONFIGURE_DIR=
