@@ -637,13 +637,10 @@ public:
 
     void            Reset();
     long GetYOffset(const ParaPortion* pPPortion) const;
-    sal_uInt16          FindParagraph( long nYOffset );
+    sal_uInt16 FindParagraph(long nYOffset) const;
 
-    inline const ParaPortion* SaveGetObject(size_t nPos) const
-        { return nPos < maPortions.size() ? &maPortions[nPos] : NULL; }
-
-    inline ParaPortion* SaveGetObject(size_t nPos)
-        { return nPos < maPortions.size() ? &maPortions[nPos] : NULL; }
+    const ParaPortion* SaveGetObject(size_t nPos) const;
+    ParaPortion* SaveGetObject(size_t nPos);
 
     sal_uInt16 GetPos(const ParaPortion* p) const;
     ParaPortion* operator[](size_t nPos);

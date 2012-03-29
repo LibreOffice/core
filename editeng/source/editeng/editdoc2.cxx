@@ -436,7 +436,7 @@ long ParaPortionList::GetYOffset(const ParaPortion* pPPortion) const
     return nHeight;
 }
 
-sal_uInt16 ParaPortionList::FindParagraph( long nYOffset )
+sal_uInt16 ParaPortionList::FindParagraph(long nYOffset) const
 {
     long nY = 0;
     for (size_t i = 0, n = maPortions.size(); i < n; ++i)
@@ -446,6 +446,16 @@ sal_uInt16 ParaPortionList::FindParagraph( long nYOffset )
             return i;
     }
     return EE_PARA_NOT_FOUND;
+}
+
+const ParaPortion* ParaPortionList::SaveGetObject(size_t nPos) const
+{
+    return nPos < maPortions.size() ? &maPortions[nPos] : NULL;
+}
+
+ParaPortion* ParaPortionList::SaveGetObject(size_t nPos)
+{
+    return nPos < maPortions.size() ? &maPortions[nPos] : NULL;
 }
 
 #if OSL_DEBUG_LEVEL > 2
