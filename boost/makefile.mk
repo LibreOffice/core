@@ -62,6 +62,9 @@ PATCH_FILES+=boost.gcc47679.patch
 
 PATCH_FILES+=boost.windows.patch
 
+# Backporting fixes for the GCC 4.7 -std=c++11 mode from Boost 1.48.0:
+PATCH_FILES += boost_1_44_0-gcc4.7.patch
+
 ADDITIONAL_FILES= \
     libs/thread/src/win32/makefile.mk \
 	libs/date_time/src/gregorian/makefile.mk
