@@ -103,54 +103,6 @@ BiffType detectStreamBiffVersion( BinaryInputStream& rInStream )
     return eBiff;
 }
 
-BiffType detectStorageBiffVersion( OUString& orWorkbookStreamName, const StorageRef& rxStorage )
-{
-
-    BiffType eBiff = BIFF_UNKNOWN;
-    if( rxStorage.get() )
-    {
-        if( rxStorage->isStorage() )
-        {
-            // try to open the "Book" stream
-            const OUString saBookName = CREATE_OUSTRING( "Book" );
-            BinaryXInputStream aBookStrm5( rxStorage->openInputStream( saBookName ), true );
-            BiffType eBookStrm5Biff = detectStreamBiffVersion( aBookStrm5 );
-
-            // try to open the "Workbook" stream
-            const OUString saWorkbookName = CREATE_OUSTRING( "Workbook" );
-            BinaryXInputStream aBookStrm8( rxStorage->openInputStream( saWorkbookName ), true );
-            BiffType eBookStrm8Biff = detectStreamBiffVersion( aBookStrm8 );
-
-            // decide which stream to use
-            if( (eBookStrm8Biff != BIFF_UNKNOWN) && ((eBookStrm5Biff == BIFF_UNKNOWN) || (eBookStrm8Biff > eBookStrm5Biff)) )
-            {
-                /*  Only "Workbook" stream exists; or both streams exist, and
-                    "Workbook" has higher BIFF version than "Book" stream. */
-                eBiff = eBookStrm8Biff;
-                orWorkbookStreamName = saWorkbookName;
-            }
-            else if( eBookStrm5Biff != BIFF_UNKNOWN )
-            {
-                /*  Only "Book" stream exists; or both streams exist, and
-                    "Book" has higher BIFF version than "Workbook" stream. */
-                eBiff = eBookStrm5Biff;
-                orWorkbookStreamName = saBookName;
-            }
-        }
-        else
-        {
-            // no storage, try plain input stream from medium (even for BIFF5+)
-            BinaryXInputStream aStrm( rxStorage->openInputStream( OUString() ), false );
-            eBiff = detectStreamBiffVersion( aStrm );
-            orWorkbookStreamName = OUString();
-        }
-    }
-
-    return eBiff;
-}
-
-// ============================================================================
-
 } // BiffDetector
 } // namespace xls
 } // namespace oox

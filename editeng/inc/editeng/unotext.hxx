@@ -485,7 +485,9 @@ public:
     virtual ~SvxUnoText() throw();
 
     // Internal
-    UNO3_GETIMPLEMENTATION_DECL( SvxUnoText )
+    static const ::com::sun::star::uno::Sequence< sal_Int8 > & getUnoTunnelId() throw();
+    virtual sal_Int64 SAL_CALL getSomething( const ::com::sun::star::uno::Sequence< sal_Int8 >& aIdentifier )
+        throw(::com::sun::star::uno::RuntimeException);
 };
 
 // ====================================================================
@@ -536,7 +538,6 @@ protected:
     using SvxUnoTextRangeBase::getPropertyValue;
 
 public:
-    SvxUnoTextContent() throw();
     SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw();
     SvxUnoTextContent( const SvxUnoTextContent& rContent ) throw();
     virtual ~SvxUnoTextContent() throw();

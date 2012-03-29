@@ -52,10 +52,6 @@ namespace BiffDetector
 {
     /** Detects the BIFF version of the passed stream. */
     BiffType detectStreamBiffVersion( BinaryInputStream& rInStream );
-
-    /** Detects the BIFF version and workbook stream name of the passed storage. */
-    BiffType detectStorageBiffVersion( ::rtl::OUString& orWorkbookStreamName,
-                            const StorageRef& rxStorage );
 };
 
 // ============================================================================

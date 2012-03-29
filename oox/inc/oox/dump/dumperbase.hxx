@@ -875,7 +875,6 @@ public:
     void                eraseNameList( const ::rtl::OUString& rListName );
     NameListRef         getNameList( const ::rtl::OUString& rListName ) const;
 
-    ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier );
     inline bool         isPasswordCancelled() const { return mbPwCancelled; }
 
 protected:

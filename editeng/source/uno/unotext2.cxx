@@ -102,24 +102,6 @@ uno::Any SvxUnoTextContentEnumeration::nextElement(void) throw( container::NoSuc
 // ====================================================================
 // class SvxUnoTextContent
 // ====================================================================
-uno::Reference< text::XText > xDummyText;
-
-static SvxUnoText* getDummyText() throw()
-{
-    if(!xDummyText.is())
-        xDummyText = new SvxUnoText();
-
-    return SvxUnoText::getImplementation( xDummyText );
-}
-
-SvxUnoTextContent::SvxUnoTextContent() throw()
-:	SvxUnoTextContent_Base(*getDummyText())
-,   mnParagraph(0)
-,   mrParentText(*getDummyText())
-,   maDisposeListeners(maDisposeContainerMutex)
-,   mbDisposing( false )
-{
-}
 
 SvxUnoTextContent::SvxUnoTextContent( const SvxUnoTextBase& rText, sal_uInt16 nPara ) throw()
 :	SvxUnoTextContent_Base(rText)

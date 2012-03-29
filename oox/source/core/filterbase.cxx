@@ -246,14 +246,6 @@ OoxmlVersion FilterBase::getVersion() const
     return mxImpl->meVersion;
 }
 
-// ----------------------------------------------------------------------------
-
-Any FilterBase::getArgument( const OUString& rArgName ) const
-{
-    SequenceAsHashMap::const_iterator aIt = mxImpl->maArguments.find( rArgName );
-    return (aIt == mxImpl->maArguments.end()) ? Any() : aIt->second;
-}
-
 const Reference< XComponentContext >& FilterBase::getComponentContext() const
 {
     return mxImpl->mxComponentContext;

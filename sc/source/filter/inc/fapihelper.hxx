@@ -97,11 +97,6 @@ public:
                             const ::rtl::OUString& rServiceName,
                             const UnoAnySequence& rArgs );
 
-    /** Creates an instance from the passed service name, using the process service factory. */
-    static XInterfaceRef CreateInstanceWithArgs(
-                            const ::rtl::OUString& rServiceName,
-                            const UnoAnySequence& rArgs );
-
     /** Opens a password dialog and returns the encryption data.
         @return  The encryption data or an empty sequence on 'Cancel' or any error. */
     static ::com::sun::star::uno::Sequence< ::com::sun::star::beans::NamedValue > QueryEncryptionDataForMedium( SfxMedium& rMedium,

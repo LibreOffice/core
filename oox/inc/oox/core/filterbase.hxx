@@ -121,9 +121,6 @@ public:
 
     // ------------------------------------------------------------------------
 
-    /** Returns the specified argument passed through the XInitialization interface. */
-    ::com::sun::star::uno::Any getArgument( const ::rtl::OUString& rArgName ) const;
-
     /** Returns the component context passed in the filter constructor (always existing). */
     const ::com::sun::star::uno::Reference< ::com::sun::star::uno::XComponentContext >&
                         getComponentContext() const;

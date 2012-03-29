@@ -70,29 +70,6 @@ private:
     DefinedNameRef      mxCurrName;
 };
 
-// ============================================================================
-
-class BiffWorkbookFragment : public BiffWorkbookFragmentBase
-{
-public:
-    explicit            BiffWorkbookFragment( const WorkbookHelper& rHelper, const ::rtl::OUString& rStrmName );
-
-    /** Imports the entire workbook stream, including all contained worksheets. */
-    virtual bool        importFragment();
-
-private:
-    /** Imports a complete BIFF4 workspace fragment (with embedded sheets). */
-    bool                importWorkspaceFragment();
-    /** Imports the workbook globals fragment from current stream position. */
-    bool                importGlobalsFragment( ISegmentProgressBar& rProgressBar );
-    /** Imports a sheet fragment with passed type from current stream position. */
-    bool                importSheetFragment(
-                            ISegmentProgressBar& rProgressBar,
-                            BiffFragmentType eFragment, sal_Int16 nCalcSheet );
-};
-
-// ============================================================================
-
 } // namespace xls
 } // namespace oox
 

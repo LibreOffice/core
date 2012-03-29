@@ -2162,15 +2162,6 @@ SvxUnoText::~SvxUnoText() throw()
 {
 }
 
-SvxUnoText* SvxUnoText::getImplementation( const uno::Reference< uno::XInterface >& xInt )
-{
-    uno::Reference< lang::XUnoTunnel > xUT( xInt, uno::UNO_QUERY );
-    if( xUT.is() )
-        return reinterpret_cast<SvxUnoText*>(sal::static_int_cast<sal_uIntPtr>(xUT->getSomething( SvxUnoText::getUnoTunnelId())));
-    else
-        return NULL;
-}
-
 namespace
 {
     class theSvxUnoTextUnoTunnelId : public rtl::Static< UnoTunnelIdInit, theSvxUnoTextUnoTunnelId > {};

@@ -1469,20 +1469,6 @@ NameListRef SharedConfigData::getNameList( const OUString& rListName ) const
     return xList;
 }
 
-Sequence< NamedValue > SharedConfigData::requestEncryptionData( ::comphelper::IDocPasswordVerifier& rVerifier )
-{
-    Sequence< NamedValue > aEncryptionData;
-    if( !mbPwCancelled )
-    {
-        ::std::vector< OUString > aDefaultPasswords;
-        aDefaultPasswords.push_back( CREATE_OUSTRING( "VelvetSweatshop" ) );
-        aEncryptionData = ::comphelper::DocPasswordHelper::requestAndVerifyDocPassword(
-            rVerifier, mrMediaDesc, ::comphelper::DocPasswordRequestType_MS, &aDefaultPasswords );
-        mbPwCancelled = !aEncryptionData.hasElements();
-    }
-    return aEncryptionData;
-}
-
 bool SharedConfigData::implIsValid() const
 {
     return mbLoaded && mxContext.is() && mxRootStrg.get() && !maSysFileName.isEmpty();
