@@ -440,12 +440,7 @@ sal_Bool EnhWMFReader::ReadEnhWMF()
     sal_Bool    bFlag(sal_False), bStatus = ReadHeader();
     sal_Bool    bHaveDC = false;
 
-#ifdef UNX
     static sal_Bool bEnableEMFPlus = ( getenv( "EMF_PLUS_DISABLE" ) == NULL );
-#else
-    // TODO: make it possible to disable emf+ on windows
-    static sal_Bool bEnableEMFPlus = sal_False;
-#endif
 
     while( bStatus && nRecordCount-- && pWMF->good())
     {
