@@ -368,7 +368,7 @@ namespace {
 apr_status_t SerfSession::verifySerfCertificateChain (
     int,
     const char** pCertificateChainBase64Encoded,
-    const int nCertificateChainLength)
+    int nCertificateChainLength)
 {
     // Check arguments.
     if (pCertificateChainBase64Encoded == NULL || nCertificateChainLength<=0)
