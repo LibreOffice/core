@@ -308,7 +308,7 @@ public:
     void        Paste();
     void        PasteSpecial();
 
-    SfxStyleSheet*  GetStyleSheet() const;
+    const SfxStyleSheet*  GetStyleSheet() const;
 
     void        SetControlWord( sal_uLong nWord );
     sal_uLong       GetControlWord() const;

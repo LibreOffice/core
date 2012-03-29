@@ -535,8 +535,8 @@ private:
 
     EditPaM             GetPaM( Point aDocPos, sal_Bool bSmart = sal_True );
     EditPaM             GetPaM( ParaPortion* pPortion, Point aPos, sal_Bool bSmart = sal_True );
-    long                GetXPos( ParaPortion* pParaPortion, EditLine* pLine, sal_uInt16 nIndex, sal_Bool bPreferPortionStart = sal_False );
-    long GetPortionXOffset(const ParaPortion* pParaPortion, EditLine* pLine, sal_uInt16 nTextPortion);
+    long GetXPos(const ParaPortion* pParaPortion, EditLine* pLine, sal_uInt16 nIndex, bool bPreferPortionStart = false) const;
+    long GetPortionXOffset(const ParaPortion* pParaPortion, const EditLine* pLine, sal_uInt16 nTextPortion) const;
     sal_uInt16 GetChar(const ParaPortion* pParaPortion, EditLine* pLine, long nX, bool bSmart = true);
     Range               GetInvalidYOffsets( ParaPortion* pPortion );
     Range               GetLineXPosStartEnd( const ParaPortion* pParaPortion, EditLine* pLine ) const;
@@ -547,7 +547,7 @@ private:
     void                ParaAttribsToCharAttribs( ContentNode* pNode );
     void                GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const;
 
-    EditTextObject*     CreateBinTextObject( EditSelection aSelection, SfxItemPool*, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 ) const;
+    EditTextObject*     CreateBinTextObject( EditSelection aSelection, SfxItemPool*, sal_Bool bAllowBigObjects = sal_False, sal_uInt16 nBigObjStart = 0 );
     void                StoreBinTextObject( SvStream& rOStream, BinTextObject& rTextObject );
     EditSelection       InsertBinTextObject( BinTextObject&, EditPaM aPaM );
     EditSelection       InsertText( ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable >& rxDataObj, const String& rBaseURL, const EditPaM& rPaM, sal_Bool bUseSpecial );
@@ -570,8 +570,8 @@ private:
     void                ImpAdjustBlocks( ParaPortion* pParaPortion, EditLine* pLine, long nRemainingSpace );
     EditPaM             ImpConnectParagraphs( ContentNode* pLeft, ContentNode* pRight, sal_Bool bBackward = sal_False );
     EditPaM             ImpDeleteSelection( EditSelection aEditSelection);
-    EditPaM             ImpInsertParaBreak( const EditPaM& rPaM, sal_Bool bKeepEndingAttribs = sal_True );
-    EditPaM             ImpInsertParaBreak( const EditSelection& rEditSelection, sal_Bool bKeepEndingAttribs = sal_True );
+    EditPaM             ImpInsertParaBreak( EditPaM& rPaM, bool bKeepEndingAttribs = true );
+    EditPaM             ImpInsertParaBreak( const EditSelection& rEditSelection, bool bKeepEndingAttribs = true );
     EditPaM             ImpInsertText( EditSelection aCurEditSelection, const String& rStr );
     EditPaM             ImpInsertFeature( EditSelection aEditSelection, const SfxPoolItem& rItem );
     void                ImpRemoveChars( const EditPaM& rPaM, sal_uInt16 nChars, EditUndoRemoveChars* pCurUndo = 0 );
@@ -636,7 +636,7 @@ private:
     sal_uInt32          WriteRTF( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteXML( SvStream& rOutput, EditSelection aSel );
     sal_uInt32          WriteHTML( SvStream& rOutput, EditSelection aSel );
-    sal_uInt32          WriteBin( SvStream& rOutput, EditSelection aSel, sal_Bool bStoreUnicode = sal_False ) const;
+    sal_uInt32          WriteBin( SvStream& rOutput, EditSelection aSel, sal_Bool bStoreUnicode = sal_False );
 
     void                WriteItemAsRTF( const SfxPoolItem& rItem, SvStream& rOutput, sal_uInt16 nPara, sal_uInt16 nPos,
                         std::vector<SvxFontItem*>& rFontTable, SvxColorList& rColorList );
@@ -678,10 +678,10 @@ private:
 
     void                CheckIdleFormatter();
 
-    inline const ParaPortion* FindParaPortion( ContentNode* pNode ) const;
+    inline const ParaPortion* FindParaPortion( const ContentNode* pNode ) const;
     inline ParaPortion* FindParaPortion( ContentNode* pNode );
 
-    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection ) const;
+    ::com::sun::star::uno::Reference< ::com::sun::star::datatransfer::XTransferable > CreateTransferable( const EditSelection& rSelection );
 
     void                SetValidPaperSize( const Size& rSz );
 
@@ -812,7 +812,7 @@ public:
     void                SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet );
     const SfxItemSet&   GetParaAttribs( sal_uInt16 nPara ) const;
 
-    sal_Bool            HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
+    bool            HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
     const SfxPoolItem&  GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const;
 
     Rectangle       PaMtoEditCursor( EditPaM aPaM, sal_uInt16 nFlags = 0 );
@@ -850,7 +850,7 @@ public:
     sal_Bool            IsVisualCursorTravelingEnabled();
     sal_Bool            DoVisualCursorTraveling( const ContentNode* pNode );
 
-    EditSelection           ConvertSelection( sal_uInt16 nStartPara, sal_uInt16 nStartPos, sal_uInt16 nEndPara, sal_uInt16 nEndPos ) const;
+    EditSelection ConvertSelection( sal_uInt16 nStartPara, sal_uInt16 nStartPos, sal_uInt16 nEndPara, sal_uInt16 nEndPos );
     inline EPaM             CreateEPaM( const EditPaM& rPaM );
     inline EditPaM          CreateEditPaM( const EPaM& rEPaM );
     inline ESelection       CreateESel( const EditSelection& rSel );
@@ -862,7 +862,8 @@ public:
 
     void                SetStyleSheet( EditSelection aSel, SfxStyleSheet* pStyle );
     void                SetStyleSheet( sal_uInt16 nPara, SfxStyleSheet* pStyle );
-    SfxStyleSheet*      GetStyleSheet( sal_uInt16 nPara ) const;
+    const SfxStyleSheet* GetStyleSheet( sal_uInt16 nPara ) const;
+    SfxStyleSheet* GetStyleSheet( sal_uInt16 nPara );
 
     void                UpdateParagraphsWithStyleSheet( SfxStyleSheet* pStyle );
     void                RemoveStyleFromParagraphs( SfxStyleSheet* pStyle );
@@ -1019,7 +1020,7 @@ public:
 
 inline EPaM ImpEditEngine::CreateEPaM( const EditPaM& rPaM )
 {
-    ContentNode* pNode = rPaM.GetNode();
+    const ContentNode* pNode = rPaM.GetNode();
     return EPaM( aEditDoc.GetPos( pNode ), rPaM.GetIndex() );
 }
 
@@ -1032,8 +1033,8 @@ inline EditPaM ImpEditEngine::CreateEditPaM( const EPaM& rEPaM )
 
 inline ESelection ImpEditEngine::CreateESel( const EditSelection& rSel )
 {
-    ContentNode* pStartNode = rSel.Min().GetNode();
-    ContentNode* pEndNode = rSel.Max().GetNode();
+    const ContentNode* pStartNode = rSel.Min().GetNode();
+    const ContentNode* pEndNode = rSel.Max().GetNode();
     ESelection aESel;
     aESel.nStartPara = aEditDoc.GetPos( pStartNode );
     aESel.nStartPos = rSel.Min().GetIndex();
@@ -1092,7 +1093,7 @@ inline EditUndoManager& ImpEditEngine::GetUndoManager()
     return *pUndoManager;
 }
 
-inline const ParaPortion* ImpEditEngine::FindParaPortion( ContentNode* pNode ) const
+inline const ParaPortion* ImpEditEngine::FindParaPortion( const ContentNode* pNode ) const
 {
     sal_uInt16 nPos = aEditDoc.GetPos( pNode );
     DBG_ASSERT( nPos < GetParaPortions().Count(), "Portionloser Node?" );

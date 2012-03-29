@@ -780,7 +780,7 @@ void OutlinerView::CreateSelectionList (std::vector<Paragraph*> &aSelList)
     }
 }
 
-SfxStyleSheet* OutlinerView::GetStyleSheet() const
+const SfxStyleSheet* OutlinerView::GetStyleSheet() const
 {
     DBG_CHKTHIS(OutlinerView,0);
     return pEditView->GetStyleSheet();
