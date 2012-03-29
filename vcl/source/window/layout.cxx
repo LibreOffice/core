@@ -133,9 +133,9 @@ void VclBox::setAllocation(const Size &rAllocation)
     rtl::OString sPackType(RTL_CONSTASCII_STRINGPARAM("pack-type"));
     rtl::OString sFill(RTL_CONSTASCII_STRINGPARAM("fill"));
 
-    Point aPos(nBorderWidth, nBorderWidth);
     for (sal_Int32 ePackType = VCL_PACK_START; ePackType <= VCL_PACK_END; ++ePackType)
     {
+        Point aPos(nBorderWidth, nBorderWidth);
         if (ePackType == VCL_PACK_END)
         {
             long nPrimaryCoordinate = getPrimaryCoordinate(aPos);
@@ -197,7 +197,7 @@ void VclBox::setAllocation(const Size &rAllocation)
             {
                 setPrimaryCoordinate(aPos, nPrimaryCoordinate - nDiff);
                 setPrimaryCoordinate(aChildPos, getPrimaryCoordinate(aChildPos) -
-                    getPrimaryDimension(aChildSize));
+                    getPrimaryDimension(aBoxSize));
             }
 
             pChild->SetPosSizePixel(aChildPos, aChildSize);

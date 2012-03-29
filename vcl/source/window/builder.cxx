@@ -366,6 +366,11 @@ void VclBuilder::applyPackingProperty(Window *pCurrent,
             {
                 pCurrent->setChildProperty(sKey, static_cast<sal_uInt16>(sValue.toInt32()));
             }
+            else if (sKey.equalsL(RTL_CONSTASCII_STRINGPARAM("pack_type")))
+            {
+                sal_Int32 nPackType = (sValue[0] == 'e' || sValue[0] == 'e') ? VCL_PACK_END : VCL_PACK_START;
+                pCurrent->setChildProperty(rtl::OString("pack-type"), nPackType);
+            }
             else
                 fprintf(stderr, "unknown packing %s\n", sKey.getStr());
         }
