@@ -740,8 +740,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
         // detect exact media-type:
         ::ucbhelper::Content ucbContent;
         if (create_ucb_content( &ucbContent, url, xCmdEnv )) {
-            const OUString title( ucbContent.getPropertyValue(
-                                      StrTitle::get() ).get<OUString>() );
+            const OUString title( StrTitle::getTitle( ucbContent ) );
             if (title.endsWithIgnoreAsciiCaseAsciiL(
                     RTL_CONSTASCII_STRINGPARAM(SAL_DLLEXTENSION) ))
             {
@@ -785,8 +784,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (!bRemoved)
             {
                 ::ucbhelper::Content ucbContent( url, xCmdEnv );
-                name = ucbContent.getPropertyValue(
-                    StrTitle::get() ).get<OUString>();
+                name = StrTitle::getTitle( ucbContent );
             }
 
             if (subType.EqualsIgnoreCaseAscii("vnd.sun.star.uno-component"))

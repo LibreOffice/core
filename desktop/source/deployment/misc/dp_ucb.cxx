@@ -48,11 +48,6 @@ using ::rtl::OUString;
 namespace dp_misc
 {
 
-const OUString StrTitle::operator () ()
-{
-    return OUSTR("Title");
-}
-
 //==============================================================================
 bool create_ucb_content(
     ::ucbhelper::Content * ret_ucbContent, OUString const & url,
@@ -146,7 +141,7 @@ bool create_folder(
             try {
                 if (parentContent.insertNewContent(
                         info.Type,
-                        Sequence<OUString>( &StrTitle::get(), 1 ),
+                        StrTitle::getTitleSequence(),
                         Sequence<Any>( &title, 1 ),
                         ucb_content )) {
                     if (ret_ucb_content != 0)

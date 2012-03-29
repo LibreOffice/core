@@ -104,12 +104,9 @@ namespace {
 OUString getExtensionFolder(OUString const &  parentFolder,
                             Reference<ucb::XCommandEnvironment> const & xCmdEnv)
 {
-    ::ucbhelper::Content tempFolder(
-        parentFolder, xCmdEnv );
+    ::ucbhelper::Content tempFolder( parentFolder, xCmdEnv );
     Reference<sdbc::XResultSet> xResultSet(
-        tempFolder.createCursor(
-            Sequence<OUString>( &StrTitle::get(), 1 ),
-            ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
+                StrTitle::createCursor (tempFolder, ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
 
     OUString title;
     while (xResultSet->next())
@@ -136,9 +133,8 @@ void PackageManagerImpl::initActivationLayer(
         {
             // scan for all entries in m_packagesDir:
             Reference<sdbc::XResultSet> xResultSet(
-                ucbContent.createCursor(
-                    Sequence<OUString>( &StrTitle::get(), 1 ),
-                    ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
+                        StrTitle::createCursor (ucbContent, ::ucbhelper::INCLUDE_FOLDERS_AND_DOCUMENTS ) );
+
             while (xResultSet->next())
             {
                 Reference<sdbc::XRow> xRow( xResultSet, UNO_QUERY_THROW );
@@ -203,12 +199,11 @@ void PackageManagerImpl::initActivationLayer(
             // clean up activation layer, scan for zombie temp dirs:
             ActivePackages::Entries id2temp( m_activePackagesDB->getEntries() );
 
-            ::ucbhelper::Content tempFolder(
-                m_activePackages_expanded, xCmdEnv );
+            ::ucbhelper::Content tempFolder( m_activePackages_expanded, xCmdEnv );
             Reference<sdbc::XResultSet> xResultSet(
-                tempFolder.createCursor(
-                    Sequence<OUString>( &StrTitle::get(), 1 ),
-                    ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
+                StrTitle::createCursor (tempFolder,
+                                         ::ucbhelper::INCLUDE_DOCUMENTS_ONLY ) );
+
             // get all temp directories:
             ::std::vector<OUString> tempEntries;
             ::std::vector<OUString> removedEntries;
@@ -774,8 +769,7 @@ Reference<deployment::XPackage> PackageManagerImpl::addPackage(
     try {
         ::ucbhelper::Content sourceContent;
         create_ucb_content( &sourceContent, url, xCmdEnv ); // throws exc
-        const OUString title(sourceContent.getPropertyValue(
-                             StrTitle::get() ).get<OUString>() );
+        const OUString title( StrTitle::getTitle( sourceContent ) );
         const OUString title_enc( ::rtl::Uri::encode(
                                       title, rtl_UriCharClassPchar,
                                       rtl_UriEncodeIgnoreEscapes,
@@ -1362,13 +1356,11 @@ bool PackageManagerImpl::synchronizeAddedExtensions(
     if (!create_ucb_content(
             NULL, m_activePackages_expanded, Reference<css::ucb::XCommandEnvironment>(), false))
         return bModified;
-    ::ucbhelper::Content tempFolder(
-        m_activePackages_expanded, xCmdEnv );
 
+    ::ucbhelper::Content tempFolder( m_activePackages_expanded, xCmdEnv );
     Reference<sdbc::XResultSet> xResultSet(
-        tempFolder.createCursor(
-            Sequence<OUString>( &StrTitle::get(), 1 ),
-            ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
+        StrTitle::createCursor( tempFolder,
+                                ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
 
     while (xResultSet->next())
     {

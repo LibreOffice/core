@@ -90,8 +90,8 @@ class Window;
 namespace cssu = ::com::sun::star::uno;
 namespace css = ::com::sun::star;
 
+using dp_misc::StrTitle;
 using ::rtl::OUString;
-
 
 namespace dp_gui {
 
@@ -619,8 +619,7 @@ void UpdateInstallDialog::Thread::download(OUString const & sDownloadURL, Update
     ::ucbhelper::Content sourceContent;
     dp_misc::create_ucb_content( &sourceContent, sDownloadURL, m_updateCmdEnv.get() );
 
-    const OUString sTitle(sourceContent.getPropertyValue(
-                          dp_misc::StrTitle::get() ).get<OUString>() );
+    const OUString sTitle( StrTitle::getTitle( sourceContent ) );
 
     if (destFolderContent.transferContent(
             sourceContent, ::ucbhelper::InsertOperation_COPY,

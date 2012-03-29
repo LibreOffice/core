@@ -274,10 +274,10 @@ void PackageRegistryBackend::deleteUnusedFolders(
         const OUString sDataFolder = makeURL(getCachePath(), relUrl);
         ::ucbhelper::Content tempFolder(
             sDataFolder, Reference<ucb::XCommandEnvironment>());
+
         Reference<sdbc::XResultSet> xResultSet(
-            tempFolder.createCursor(
-                Sequence<OUString>( &StrTitle::get(), 1 ),
-                ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
+                 StrTitle::createCursor( tempFolder, ::ucbhelper::INCLUDE_FOLDERS_ONLY ) );
+
         // get all temp directories:
         ::std::vector<OUString> tempEntries;
 

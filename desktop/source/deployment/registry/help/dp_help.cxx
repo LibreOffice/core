@@ -203,8 +203,7 @@ Reference<deployment::XPackage> BackendImpl::bindPackage_(
             if (!bRemoved)
             {
                 ::ucbhelper::Content ucbContent( url, xCmdEnv );
-                name = ucbContent.getPropertyValue(
-                    StrTitle::get() ).get<OUString>();
+                name = StrTitle::getTitle( ucbContent );
             }
 
             if (subType.EqualsIgnoreCaseAscii(

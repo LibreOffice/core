@@ -32,8 +32,10 @@
 #include <list>
 #include "rtl/byteseq.hxx"
 #include "rtl/instance.hxx"
+#include "com/sun/star/sdbc/XResultSet.hpp"
 #include "com/sun/star/ucb/XCommandEnvironment.hpp"
 #include "dp_misc_api.hxx"
+#include "ucbhelper/content.hxx"
 
 namespace ucbhelper
 {
@@ -44,10 +46,27 @@ namespace css = ::com::sun::star;
 
 namespace dp_misc {
 
-struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle :
-    public rtl::StaticWithInit<rtl::OUString, StrTitle>
+struct DESKTOP_DEPLOYMENTMISC_DLLPUBLIC StrTitle
 {
-    const rtl::OUString operator () ();
+    static css::uno::Sequence< rtl::OUString > getTitleSequence()
+    {
+        css::uno::Sequence< rtl::OUString > aSeq( 1 );
+        aSeq[ 0 ] = "Title";
+        return aSeq;
+    }
+    static rtl::OUString getTitle( ::ucbhelper::Content &rContent )
+    {
+        return rtl::OUString( rContent.getPropertyValue(
+                rtl::OUString::createFromAscii( "Title" ) ).get<rtl::OUString>() );
+    }
+    // just return titles - the ucbhelper should have a simpler API for this [!]
+    static css::uno::Reference< css::sdbc::XResultSet >
+        createCursor( ::ucbhelper::Content &rContent,
+                      ucbhelper::ResultSetInclude eInclude )
+    {
+        return css::uno::Reference< css::sdbc::XResultSet >(
+                rContent.createCursor( StrTitle::getTitleSequence(), eInclude ) );
+    }
 };
 
 //==============================================================================

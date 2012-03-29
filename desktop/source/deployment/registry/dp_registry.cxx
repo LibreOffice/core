@@ -493,8 +493,7 @@ Reference<deployment::XPackage> PackageRegistryImpl::bindPackage(
                 &ucbContent, url, xCmdEnv, false /* no throw */ )
                 && !ucbContent.isFolder())
         {
-            OUString title( ucbContent.getPropertyValue(
-                                StrTitle::get() ).get<OUString>() );
+            OUString title( StrTitle::getTitle( ucbContent ) );
             for (;;)
             {
                 const t_string2string::const_iterator iFind(
