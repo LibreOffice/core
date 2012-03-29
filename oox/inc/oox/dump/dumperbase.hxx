@@ -1150,8 +1150,6 @@ public:
                             mrOut( *rxOut ) { mrOut.startTable( nW1 ); }
     inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2 ) :
                             mrOut( *rxOut ) { mrOut.startTable( nW1, nW2 ); }
-    inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3 ) :
-                            mrOut( *rxOut ) { mrOut.startTable( nW1, nW2, nW3 ); }
     inline explicit     TableGuard( const OutputRef& rxOut, sal_Int32 nW1, sal_Int32 nW2, sal_Int32 nW3, sal_Int32 nW4 ) :
                             mrOut( *rxOut ) { mrOut.startTable( nW1, nW2, nW3, nW4 ); }
     inline explicit     TableGuard( const OutputRef& rxOut, size_t nColCount,

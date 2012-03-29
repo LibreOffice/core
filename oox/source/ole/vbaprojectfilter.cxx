@@ -72,20 +72,6 @@ VbaProject* VbaProjectFilterBase::implCreateVbaProject() const
 
 // ============================================================================
 
-OUString SAL_CALL WordVbaProjectFilter_getImplementationName() throw()
-{
-    return CREATE_OUSTRING( "com.sun.star.comp.oox.WordVbaProjectFilter" );
-}
-
-// ----------------------------------------------------------------------------
-
-OUString WordVbaProjectFilter::implGetImplementationName() const
-{
-    return WordVbaProjectFilter_getImplementationName();
-}
-
-// ============================================================================
-
 } // namespace ole
 } // namespace oox
 

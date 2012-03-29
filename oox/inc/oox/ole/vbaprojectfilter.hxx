@@ -56,16 +56,6 @@ private:
     ::rtl::OUString     maStorageName;
 };
 
-// ============================================================================
-
-class WordVbaProjectFilter : public VbaProjectFilterBase
-{
-private:
-    virtual ::rtl::OUString implGetImplementationName() const;
-};
-
-// ============================================================================
-
 } // namespace ole
 } // namespace oox
 
