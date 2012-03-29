@@ -43,7 +43,6 @@
 #include <rtl/memory.h>
 #include <rtl/uuid.h>
 #include <tools/diagnose_ex.h>
-#include <tools/table.hxx>
 #include <tools/date.hxx>
 #include <tools/time.hxx>
 #include <tools/debug.hxx>

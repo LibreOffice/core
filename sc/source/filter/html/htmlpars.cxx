@@ -58,7 +58,6 @@
 #include <vcl/svapp.hxx>
 #include <tools/urlobj.hxx>
 #include <tools/tenccvt.hxx>
-#include <tools/table.hxx>
 
 #include "htmlpars.hxx"
 #include "global.hxx"

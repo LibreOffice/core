@@ -32,7 +32,6 @@
 #include <svl/lstner.hxx>
 #include <vcl/timer.hxx>
 
-#include <tools/table.hxx>
 #include <svtools/xtextedt.hxx>
 #include <vcl/timer.hxx>
 #include <vcl/wrkwin.hxx>

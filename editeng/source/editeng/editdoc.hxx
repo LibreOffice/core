@@ -37,7 +37,6 @@
 #include <svl/itemset.hxx>
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
-#include <tools/table.hxx>
 
 #include <vector>
 #include <deque>

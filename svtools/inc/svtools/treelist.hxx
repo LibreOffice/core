@@ -29,12 +29,12 @@
 #ifndef _SVTREELIST_HXX
 #define _SVTREELIST_HXX
 
+#include <limits.h>
 #include "svtools/svtdllapi.h"
 #include <tools/solar.h>
 #include <vector>
 #include <boost/ptr_container/ptr_map.hpp>
 
-#include <tools/table.hxx>
 #include <tools/link.hxx>
 #include <tools/string.hxx>
 #include <tools/debug.hxx>
