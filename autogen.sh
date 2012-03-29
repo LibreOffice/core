@@ -3,6 +3,7 @@
         if 0;
 
 use strict;
+use Cwd ('cwd', 'realpath');
 
 sub clean()
 {
@@ -130,6 +131,16 @@ my $system = `uname -s`;
 chomp $system;
 
 sanity_checks ($system) unless($system eq 'Darwin');
+
+# since this looks crazy, if you have a symlink on a path up to and including
+# the current directory, we need our configure to run in the realpath of that
+# such that compiled (realpath'd) dependency filenames match the filenames
+# used in our makefiles - ie. this gets dependencies right via SRC_ROOT
+my $cwd_str = realpath(cwd());
+chdir ($cwd_str);
+# more amazingly, if you don't clobber 'PWD' shells will re-assert their
+# old path from the environment, not cwd.
+$ENV{PWD} = $cwd_str;
 
 my $aclocal_flags = $ENV{ACLOCAL_FLAGS};
 
