@@ -119,7 +119,6 @@ namespace connectivity
 
         void push_back(OSQLParseNode* _pNode);
         void erase(OSQLParseNode* _pNode);
-        bool empty() const;
         void clear();
         void clearAndDelete();
     };
