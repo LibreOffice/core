@@ -124,7 +124,7 @@ static RTFSprms& lcl_getLastAttributes(RTFSprms& rSprms, Id nId)
         return p->getSprms()->back().second->getAttributes();
     else
     {
-        OSL_FAIL("trying to set property when no type is defined");
+        SAL_WARN("writerfilter", "trying to set property when no type is defined");
         return rSprms;
     }
 }
@@ -984,7 +984,7 @@ void RTFDocumentImpl::replayBuffer(RTFBuffer_t& rBuffer)
         else if (aPair.first == BUFFER_PAR)
             parBreak();
         else
-            OSL_FAIL("should not happen");
+            SAL_WARN("writerfilter", "should not happen");
     }
 
 }
