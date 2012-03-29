@@ -261,6 +261,7 @@ RTFDocumentImpl::RTFDocumentImpl(uno::Reference<uno::XComponentContext> const& x
     m_pCurrentBuffer(0),
     m_bHasFootnote(false),
     m_bIsSubstream(false),
+    m_pSuperstream(0),
     m_nHeaderFooterPositions(),
     m_nGroupStartPos(0),
     m_aBookmarks(),
@@ -317,6 +318,11 @@ void RTFDocumentImpl::setSubstream(bool bIsSubtream)
     m_bIsSubstream = bIsSubtream;
 }
 
+void RTFDocumentImpl::setSuperstream(RTFDocumentImpl *pSuperstream)
+{
+    m_pSuperstream = pSuperstream;
+}
+
 void RTFDocumentImpl::setAuthor(rtl::OUString& rAuthor)
 {
     m_aAuthor = rAuthor;
@@ -356,6 +362,7 @@ void RTFDocumentImpl::resolveSubstream(sal_uInt32 nPos, Id nId, OUString& rIgnor
     // Seek to header position, parse, then seek back.
     RTFDocumentImpl::Pointer_t pImpl(new RTFDocumentImpl(m_xContext, m_xInputStream, m_xDstDoc, m_xFrame, m_xStatusIndicator));
     pImpl->setSubstream(true);
+    pImpl->setSuperstream(this);
     pImpl->setIgnoreFirst(rIgnoreFirst);
     if (!m_aAuthor.isEmpty())
     {
@@ -516,11 +523,24 @@ sal_uInt32 RTFDocumentImpl::getColorTable(sal_uInt32 nIndex)
     return 0;
 }
 
-sal_uInt32 RTFDocumentImpl::getEncodingTable(sal_uInt32 nFontIndex)
+rtl_TextEncoding RTFDocumentImpl::getEncoding(sal_uInt32 nFontIndex)
 {
-    if (nFontIndex < m_aFontEncodings.size())
-        return m_aFontEncodings[nFontIndex];
-    return 0;
+    if (!m_pSuperstream)
+    {
+        if (nFontIndex < m_aFontEncodings.size())
+            return m_aFontEncodings[nFontIndex];
+        return 0;
+    }
+    else
+        return m_pSuperstream->getEncoding(nFontIndex);
+}
+
+int RTFDocumentImpl::getFontIndex(int nIndex)
+{
+    if (!m_pSuperstream)
+        return std::find(m_aFontIndexes.begin(), m_aFontIndexes.end(), nIndex) - m_aFontIndexes.begin();
+    else
+        return m_pSuperstream->getFontIndex(nIndex);
 }
 
 void RTFDocumentImpl::resolve(Stream & rMapper)
@@ -2168,14 +2188,14 @@ int RTFDocumentImpl::dispatchValue(RTFKeyword nKeyword, int nParam)
             if (m_aStates.top().nDestinationState == DESTINATION_FONTTABLE || m_aStates.top().nDestinationState == DESTINATION_FONTENTRY)
             {
                 m_aFontIndexes.push_back(nParam);
-                m_nCurrentFontIndex = std::find(m_aFontIndexes.begin(), m_aFontIndexes.end(), nParam) - m_aFontIndexes.begin();
+                m_nCurrentFontIndex = getFontIndex(nParam);
             }
             else
             {
-                int nFontIndex = std::find(m_aFontIndexes.begin(), m_aFontIndexes.end(), nParam) - m_aFontIndexes.begin();
+                int nFontIndex = getFontIndex(nParam);
                 RTFValue::Pointer_t pValue(new RTFValue(nFontIndex));
                 m_aStates.top().aCharacterSprms->push_back(make_pair(NS_sprm::LN_CRgFtc0, pValue));
-                m_aStates.top().nCurrentEncoding = getEncodingTable(nFontIndex);
+                m_aStates.top().nCurrentEncoding = getEncoding(nFontIndex);
             }
             break;
         case RTF_RED:
