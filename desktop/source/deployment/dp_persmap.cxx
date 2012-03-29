@@ -61,7 +61,7 @@ void PersistentMap::throw_rtexc( int err, char const * pmsg ) const
     const OUString msg_(buf.makeStringAndClear());
     OSL_FAIL( rtl::OUStringToOString(
                     msg_, RTL_TEXTENCODING_UTF8 ).getStr() );
-    throw RuntimeException( msg_, Reference<XInterface>() );
+    throw RuntimeException( msg_, uno::Reference<XInterface>() );
 }
 
 //______________________________________________________________________________
