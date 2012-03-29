@@ -1320,7 +1320,7 @@ EditTextObject* EditEngine::CreateTextObject( sal_uInt16 nPara, sal_uInt16 nPara
 {
     DBG_CHKTHIS( EditEngine, 0 );
     DBG_ASSERT( nPara < pImpEditEngine->GetEditDoc().Count(), "CreateTextObject: Startpara out of Range" );
-    DBG_ASSERT( nPara+nParas-1 < pImpEditEngine->GetEditDoc().Count(), "CreateTextObject: Endpara out of Range" );
+    DBG_ASSERT( nParas <= pImpEditEngine->GetEditDoc().Count() - nPara, "CreateTextObject: Endpara out of Range" );
 
     ContentNode* pStartNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara );
     ContentNode* pEndNode = pImpEditEngine->GetEditDoc().SafeGetObject( nPara+nParas-1 );
