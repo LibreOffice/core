@@ -330,6 +330,7 @@ namespace writerfilter {
 
                 Stream& Mapper();
                 void setSubstream(bool bIsSubtream);
+                void setSuperstream(RTFDocumentImpl *pSuperstream);
                 void setAuthor(rtl::OUString& rAuthor);
                 bool isSubstream() const;
                 void finishSubstream();
@@ -364,11 +365,14 @@ namespace writerfilter {
                 bool getFirstRun();
                 /// If we need to add a dummy paragraph before a section break.
                 void setNeedPar(bool bNeedPar);
+                /// Return the dmapper index of an RTF index for fonts.
+                int getFontIndex(int nIndex);
+                /// Return the encoding associated with a dmapper font index.
+                rtl_TextEncoding getEncoding(sal_uInt32 nFontIndex);
 
             private:
                 SvStream& Strm();
                 sal_uInt32 getColorTable(sal_uInt32 nIndex);
-                sal_uInt32 getEncodingTable(sal_uInt32 nFontIndex);
                 RTFSprms mergeSprms();
                 RTFSprms mergeAttributes();
                 void resetSprms();
@@ -434,6 +438,8 @@ namespace writerfilter {
                 bool m_bHasFootnote;
                 /// If this is a substream.
                 bool m_bIsSubstream;
+                /// Superstream of this substream.
+                RTFDocumentImpl *m_pSuperstream;
                 std::queue< std::pair<Id, sal_uInt32> > m_nHeaderFooterPositions;
                 sal_uInt32 m_nGroupStartPos;
                 /// Ignore the first occurrence of this text.
