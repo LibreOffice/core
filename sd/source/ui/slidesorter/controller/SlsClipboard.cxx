@@ -424,7 +424,7 @@ void Clipboard::CreateSlideTransferable (
     ::Window* pWindow,
     bool bDrag)
 {
-    List aBookmarkList;
+    std::vector<rtl::OUString> aBookmarkList;
 
     // Insert all selected pages into a bookmark list and remember them in
     // maPagesToRemove for possible later removal.
@@ -434,9 +434,7 @@ void Clipboard::CreateSlideTransferable (
     while (aSelectedPages.HasMoreElements())
     {
         model::SharedPageDescriptor pDescriptor (aSelectedPages.GetNextElement());
-        aBookmarkList.Insert (
-            new String(pDescriptor->GetPage()->GetName()),
-            LIST_APPEND);
+        aBookmarkList.push_back(pDescriptor->GetPage()->GetName());
         maPagesToRemove.push_back (pDescriptor->GetPage());
     }
 
@@ -461,7 +459,7 @@ void Clipboard::CreateSlideTransferable (
             break;
     }
 
-    if (aBookmarkList.Count() > 0)
+    if (!aBookmarkList.empty())
     {
         mrSlideSorter.GetView().BrkAction();
         SdDrawDocument* pDocument = mrSlideSorter.GetModel().GetDocument();
@@ -505,16 +503,13 @@ void Clipboard::CreateSlideTransferable (
             pTransferable->SetPageBookmarks (aBookmarkList, !bDrag);
         }
 
-        for (void* p=aBookmarkList.First(); p!=NULL; p=aBookmarkList.Next())
-            delete static_cast<String*>(p);
-
         if (bDrag)
         {
             pTransferable->SetView (&mrSlideSorter.GetView());
             sal_Int8 nDragSourceActions (DND_ACTION_COPY);
             // The move action is available only when not all pages would be
             // moved.  Otherwise an empty document would remain.  Crash.
-            sal_Int32 nRemainingPages = mrSlideSorter.GetModel().GetPageCount() - aBookmarkList.Count();
+            sal_Int32 nRemainingPages = mrSlideSorter.GetModel().GetPageCount() - aBookmarkList.size();
             if (nRemainingPages > 0)
                 nDragSourceActions |= DND_ACTION_MOVE;
             pTransferable->StartDrag (pActionWindow, nDragSourceActions);
