@@ -83,8 +83,9 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
     {
         do
         {
-            const List* pBookmarks = &rTransferable.GetPageBookmarks();
-            if (pBookmarks == NULL)
+            const std::vector<rtl::OUString> &rBookmarks = rTransferable.GetPageBookmarks();
+
+            if (rBookmarks.empty())
                 break;
 
             DrawDocShell* pDocShell = rTransferable.GetPageDocShell();
@@ -95,13 +96,10 @@ SdPage* ViewClipboard::GetFirstMasterPage (const SdTransferable& rTransferable)
             if (pDocument == NULL)
                 break;
 
-            if (pBookmarks->Count() <= 0)
-                break;
-
-            int nBookmarkCount = pBookmarks->Count();
-            for (int nIndex=0; nIndex<nBookmarkCount; nIndex++)
+            std::vector<rtl::OUString>::const_iterator pIter;
+            for ( pIter = rBookmarks.begin(); pIter != rBookmarks.end(); ++pIter )
             {
-                String sName (*(String*) pBookmarks->GetObject(nIndex));
+                String sName (*pIter);
                 sal_Bool bIsMasterPage;
 
                 // SdPage* GetMasterSdPage(sal_uInt16 nPgNum, PageKind ePgKind);
