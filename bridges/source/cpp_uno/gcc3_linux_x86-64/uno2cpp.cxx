@@ -26,7 +26,11 @@
  *
  ************************************************************************/
 
+#if defined (FREEBSD) || defined(NETBSD) || defined(OPENBSD) || defined(DRAGONFLY)
+#include <stdlib.h>
+#else
 #include <alloca.h>
+#endif
 #include <exception>
 #include <typeinfo>
 
