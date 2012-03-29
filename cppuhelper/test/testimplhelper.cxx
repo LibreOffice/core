@@ -62,8 +62,6 @@
 
 #include <osl/diagnose.h>
 #include <cppuhelper/servicefactory.hxx>
-#include <cppuhelper/implbase4.hxx>
-#include <cppuhelper/compbase4.hxx>
 #include <cppuhelper/exc_hlp.hxx>
 
 #include <test/A.hpp>

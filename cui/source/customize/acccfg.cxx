@@ -69,7 +69,6 @@
 // include other projects
 #include <comphelper/processfactory.hxx>
 #include <svtools/acceleratorexecute.hxx>
-#include <comphelper/processfactory.hxx>
 #include <svtools/svlbitm.hxx>
 #include <vcl/svapp.hxx>
 #include <vcl/help.hxx>

@@ -36,8 +36,6 @@
 #include <unotools/configmgr.hxx>
 #include <unotools/bootstrap.hxx>
 #include <com/sun/star/uno/Any.h>
-#include <unotools/configmgr.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/graph.hxx>
 #include <svtools/filter.hxx>
 
