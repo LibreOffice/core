@@ -35,8 +35,6 @@
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-void dummy_can_throw_anything( char const * );
-
 // ----- following decl from libstdc++-v3/libsupc++/unwind-cxx.h and unwind.h
 
 struct _Unwind_Exception

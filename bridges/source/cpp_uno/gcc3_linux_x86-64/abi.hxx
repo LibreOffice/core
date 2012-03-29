@@ -51,7 +51,7 @@ const sal_uInt32 MAX_SSE_REGS = 8;
 
  Return false iff parameter should be passed in memory.
 */
-bool examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool bInReturn, int &nUsedGPR, int &nUsedSSE );
+bool examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool bInReturn, int &nUsedGPR, int &nUsedSSE ) throw ();
 
 /** Does function that returns this type use a hidden parameter, or registers?
 
@@ -59,9 +59,9 @@ bool examine_argument( typelib_TypeDescriptionReference *pTypeRef, bool bInRetur
  pointer to a structure allocated by the caller), or in registers (rax, rdx
  for the integers, xmm0, xmm1 for the floating point numbers).
 */
-bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef );
+bool return_in_hidden_param( typelib_TypeDescriptionReference *pTypeRef ) throw ();
 
-void fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64* pGPR, const double* pSSE, void *pStruct );
+void fill_struct( typelib_TypeDescriptionReference *pTypeRef, const sal_uInt64* pGPR, const double* pSSE, void *pStruct ) throw ();
 
 } // namespace x86_64
 

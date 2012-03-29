@@ -57,12 +57,8 @@ using namespace ::__cxxabiv1;
 namespace CPPU_CURRENT_NAMESPACE
 {
 
-void dummy_can_throw_anything( char const * )
-{
-}
-
 //==================================================================================================
-static OUString toUNOname( char const * p ) SAL_THROW( () )
+static OUString toUNOname( char const * p ) SAL_THROW(())
 {
 #if OSL_DEBUG_LEVEL > 1
     char const * start = p;

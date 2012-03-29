@@ -57,6 +57,7 @@ CFLAGSCXX += -fno-omit-frame-pointer -fno-strict-aliasing
 SLOFILES= \
     $(SLO)$/abi.obj			\
     $(SLO)$/except.obj		\
+    $(SLO)$/callvirtualmethod.obj \
     $(SLO)$/cpp2uno.obj		\
     $(SLO)$/uno2cpp.obj		\
     $(SLO)$/call.obj
