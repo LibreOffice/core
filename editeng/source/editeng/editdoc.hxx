@@ -38,11 +38,9 @@
 #include <svl/style.hxx>
 #include <svl/itempool.hxx>
 #include <tools/table.hxx>
-
 #include <vector>
-#include <deque>
 
-#include <boost/ptr_container/ptr_vector.hpp>
+#include <deque>
 
 class ImpEditEngine;
 class SvxTabStop;
@@ -195,13 +193,11 @@ public:
 
     SvxTabStop      FindTabStop( long nCurPos, sal_uInt16 nDefTab );
     SfxItemSet&     GetItems()                          { return aAttribSet; }
-    const SfxItemSet& GetItems() const { return aAttribSet; }
-    const SfxStyleSheet*  GetStyleSheet() const { return pStyle; }
-    SfxStyleSheet*  GetStyleSheet() { return pStyle; }
+    SfxStyleSheet*  GetStyleSheet() const               { return pStyle; }
     void            SetStyleSheet( SfxStyleSheet* pS );
 
-    const SfxPoolItem& GetItem( sal_uInt16 nWhich ) const;
-    bool HasItem( sal_uInt16 nWhich ) const;
+    const SfxPoolItem&  GetItem( sal_uInt16 nWhich );
+    sal_Bool                HasItem( sal_uInt16 nWhich );
 };
 
 // -------------------------------------------------------------------------
@@ -226,10 +222,8 @@ public:
     void            DeleteEmptyAttribs(  SfxItemPool& rItemPool );
     void            RemoveItemsFromPool( SfxItemPool* pItemPool );
 
-    const EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos ) const;
     EditCharAttrib* FindAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
     const EditCharAttrib* FindNextAttrib( sal_uInt16 nWhich, sal_uInt16 nFromPos ) const;
-    const EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos ) const;
     EditCharAttrib* FindEmptyAttrib( sal_uInt16 nWhich, sal_uInt16 nPos );
     const EditCharAttrib* FindFeature( sal_uInt16 nPos ) const;
 
@@ -277,9 +271,7 @@ public:
                     ~ContentNode();
 
     ContentAttribs& GetContentAttribs()     { return aContentAttribs; }
-    const ContentAttribs& GetContentAttribs() const { return aContentAttribs; }
     CharAttribList& GetCharAttribs()        { return aCharAttribList; }
-    const CharAttribList& GetCharAttribs() const { return aCharAttribList; }
 
     void            ExpandAttribs( sal_uInt16 nIndex, sal_uInt16 nNewChars, SfxItemPool& rItemPool );
     void            CollapsAttribs( sal_uInt16 nIndex, sal_uInt16 nDelChars, SfxItemPool& rItemPool );
@@ -289,12 +281,10 @@ public:
     void            SetStyleSheet( SfxStyleSheet* pS, sal_Bool bRecalcFont = sal_True );
     void            SetStyleSheet( SfxStyleSheet* pS, const SvxFont& rFontFromStyle );
     SfxStyleSheet*  GetStyleSheet() { return aContentAttribs.GetStyleSheet(); }
-    const SfxStyleSheet* GetStyleSheet() const { return aContentAttribs.GetStyleSheet(); }
 
     void            CreateDefFont();
 
     WrongList*      GetWrongList()          { return pWrongList; }
-    const WrongList* GetWrongList() const { return pWrongList; }
     void            SetWrongList( WrongList* p );
 
     void            CreateWrongList();
@@ -303,22 +293,15 @@ public:
     sal_Bool            IsFeature( sal_uInt16 nPos ) const { return ( GetChar( nPos ) == CH_FEATURE ); }
 };
 
-class ContentList
+typedef ContentNode* ContentNodePtr;
+SV_DECL_PTRARR( DummyContentList, ContentNodePtr, 0 )
+
+class ContentList : public DummyContentList
 {
-    mutable size_t nLastCache;
-    boost::ptr_vector<ContentNode> maContents;
+    mutable sal_uInt16 nLastCache;
 public:
     ContentList();
-    size_t GetPos(const ContentNode* p) const;
-    const ContentNode* GetObject(size_t nPos) const;
-    ContentNode* GetObject(size_t nPos);
-    const ContentNode* operator[](size_t nPos) const;
-    ContentNode* operator[](size_t nPos);
-
-    void Insert(size_t nPos, ContentNode* p);
-    void Remove(size_t nPos);
-    size_t Count() const;
-    void Clear();
+    sal_uInt16 GetPos(ContentNode* p) const;
 };
 
 // -------------------------------------------------------------------------
@@ -327,17 +310,15 @@ public:
 class EditPaM
 {
 private:
-    ContentNode* pNode;
+    ContentNode*    pNode;
     sal_uInt16          nIndex;
 
 public:
-    EditPaM();
-    EditPaM(const EditPaM& r);
-    EditPaM(ContentNode* p, sal_uInt16 n);
+                    EditPaM()                           { pNode = NULL; nIndex = 0; }
+                    EditPaM( ContentNode* p, sal_uInt16 n ) { pNode = p; nIndex = n; }
 
-    const ContentNode* GetNode() const;
-    ContentNode* GetNode();
-    void SetNode(ContentNode* p);
+    ContentNode*    GetNode() const                 { return pNode; }
+    void            SetNode( ContentNode* p)        { pNode = p; }
 
     sal_uInt16          GetIndex() const                { return nIndex; }
     sal_uInt16&         GetIndex()                      { return nIndex; }
@@ -777,7 +758,7 @@ public:
     EditPaM         Clear();
     EditPaM         RemoveText();
     EditPaM         RemoveChars( EditPaM aPaM, sal_uInt16 nChars );
-    void            InsertText( EditPaM& rPaM, xub_Unicode c );
+    void            InsertText( const EditPaM& rPaM, xub_Unicode c );
     EditPaM         InsertText( EditPaM aPaM, const XubString& rStr );
     EditPaM         InsertParaBreak( EditPaM aPaM, sal_Bool bKeepEndingAttribs );
     EditPaM         InsertFeature( EditPaM aPaM, const SfxPoolItem& rItem );
@@ -787,7 +768,7 @@ public:
     sal_uLong           GetTextLen() const;
 
     XubString       GetParaAsString( sal_uInt16 nNode ) const;
-    XubString       GetParaAsString(const ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, bool bResolveFields = true) const;
+    XubString       GetParaAsString( ContentNode* pNode, sal_uInt16 nStartPos = 0, sal_uInt16 nEndPos = 0xFFFF, sal_Bool bResolveFields = sal_True ) const;
 
     inline EditPaM  GetStartPaM() const;
     inline EditPaM  GetEndPaM() const;
@@ -804,22 +785,20 @@ public:
     sal_Bool            RemoveAttribs( ContentNode* pNode, sal_uInt16 nStart, sal_uInt16 nEnd, EditCharAttrib*& rpStarting, EditCharAttrib*& rpEnding, sal_uInt16 nWhich = 0 );
     void            FindAttribs( ContentNode* pNode, sal_uInt16 nStartPos, sal_uInt16 nEndPos, SfxItemSet& rCurSet );
 
-    sal_uInt16 GetPos( const ContentNode* pNode ) const { return ContentList::GetPos(pNode); }
-    const ContentNode* SaveGetObject(size_t nPos) const;
-    ContentNode* SaveGetObject(size_t nPos);
+    sal_uInt16          GetPos( ContentNode* pNode ) const { return ContentList::GetPos(pNode); }
+    ContentNode*    SaveGetObject( sal_uInt16 nPos ) const { return ( nPos < Count() ) ? GetObject( nPos ) : 0; }
 
     static XubString    GetSepStr( LineEnd eEnd );
 };
 
 inline EditPaM EditDoc::GetStartPaM() const
 {
-    ContentNode* p = const_cast<ContentNode*>(GetObject(0));
-    return EditPaM(p, 0);
+    return EditPaM( GetObject( 0 ), 0 );
 }
 
 inline EditPaM EditDoc::GetEndPaM() const
 {
-    ContentNode* pLastNode = const_cast<ContentNode*>(GetObject(Count()-1));
+    ContentNode* pLastNode = GetObject( Count()-1 );
     return EditPaM( pLastNode, pLastNode->Len() );
 }
 

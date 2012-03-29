@@ -295,6 +295,37 @@ void ParaPortion::CorrectValuesBehindLastFormattedLine( sal_uInt16 nLastFormatte
 
 namespace {
 
+template<typename T>
+sal_uInt16 FastGetPos(
+    T const* pPtrArray, sal_uInt16 nPtrArrayLen, T pPtr, sal_uInt16 &rLastPos)
+{
+  // Through certain filter code-paths we do a lot of appends, which in
+  // turn call GetPos - creating some N^2 nightmares. If we have a
+  // non-trivially large list, do a few checks from the end first.
+  if( rLastPos > 16 )
+    {
+      sal_uInt16 nEnd;
+      if (rLastPos > nPtrArrayLen - 2)
+        nEnd = nPtrArrayLen;
+      else
+        nEnd = rLastPos + 2;
+
+      for( sal_uInt16 nIdx = rLastPos - 2; nIdx < nEnd; nIdx++ )
+        {
+          if( pPtrArray[ nIdx ] == pPtr )
+            {
+              rLastPos = nIdx;
+              return nIdx;
+            }
+        }
+    }
+  // The world's lamest linear search from svarray ...
+  for( sal_uInt16 nIdx = 0; nIdx < nPtrArrayLen; nIdx++ )
+    if (pPtrArray[ nIdx ] == pPtr )
+      return rLastPos = nIdx;
+  return USHRT_MAX;
+}
+
 template<typename _Array, typename _Val>
 size_t FastGetPos(const _Array& rArray, const _Val* p, size_t& rLastPos)
 {
@@ -379,54 +410,11 @@ size_t ParaPortionList::Count() const
     return maPortions.size();
 }
 
-ContentList::ContentList() : nLastCache(0) {}
+ContentList::ContentList() : DummyContentList( 0 ), nLastCache(0) {}
 
-size_t ContentList::GetPos(const ContentNode* p) const
+sal_uInt16 ContentList::GetPos(ContentNode* p) const
 {
-    return FastGetPos(maContents, p, nLastCache);
-}
-
-const ContentNode* ContentList::GetObject(size_t nPos) const
-{
-    return nPos < maContents.size() ? &maContents[nPos] : NULL;
-}
-
-ContentNode* ContentList::GetObject(size_t nPos)
-{
-    return nPos < maContents.size() ? &maContents[nPos] : NULL;
-}
-
-const ContentNode* ContentList::operator[](size_t nPos) const
-{
-    return GetObject(nPos);
-}
-
-ContentNode* ContentList::operator[](size_t nPos)
-{
-    return GetObject(nPos);
-}
-
-void ContentList::Insert(size_t nPos, ContentNode* p)
-{
-    maContents.insert(maContents.begin()+nPos, p);
-}
-
-void ContentList::Remove(size_t nPos)
-{
-    if (nPos >= maContents.size())
-        return;
-
-    maContents.erase(maContents.begin() + nPos);
-}
-
-size_t ContentList::Count() const
-{
-    return maContents.size();
-}
-
-void ContentList::Clear()
-{
-    maContents.clear();
+    return FastGetPos(GetData(), Count(), p, nLastCache);
 }
 
 void ParaPortionList::Reset()

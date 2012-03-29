@@ -1092,7 +1092,7 @@ void ImpEditView::SetInsertMode( sal_Bool bInsert )
 
 sal_Bool ImpEditView::IsWrongSpelledWord( const EditPaM& rPaM, sal_Bool bMarkIfWrong )
 {
-    bool bIsWrong = false;
+    sal_Bool bIsWrong = sal_False;
     if ( rPaM.GetNode()->GetWrongList() )
     {
         EditSelection aSel = pEditEngine->pImpEditEngine->SelectWord( rPaM, ::com::sun::star::i18n::WordType::DICTIONARY_WORD );
@@ -1139,7 +1139,7 @@ String ImpEditView::SpellIgnoreOrAddWord( sal_Bool bAdd )
                 if (xDic.is())
                     xDic->add( aWord, sal_False, String() );
             }
-            EditDoc& rDoc = pEditEngine->pImpEditEngine->GetEditDoc();
+            const EditDoc& rDoc = pEditEngine->pImpEditEngine->GetEditDoc();
             sal_uInt16 nNodes = rDoc.Count();
             for ( sal_uInt16 n = 0; n < nNodes; n++ )
             {

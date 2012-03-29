@@ -46,13 +46,7 @@ void ImpEditEngine::SetStyleSheetPool( SfxStyleSheetPool* pSPool )
     }
 }
 
-const SfxStyleSheet* ImpEditEngine::GetStyleSheet( sal_uInt16 nPara ) const
-{
-    const ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
-    return pNode ? pNode->GetContentAttribs().GetStyleSheet() : NULL;
-}
-
-SfxStyleSheet* ImpEditEngine::GetStyleSheet( sal_uInt16 nPara )
+SfxStyleSheet* ImpEditEngine::GetStyleSheet( sal_uInt16 nPara ) const
 {
     ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
     return pNode ? pNode->GetContentAttribs().GetStyleSheet() : NULL;
@@ -415,7 +409,7 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_uInt16 nPara, sal_uInt16 nStart, sal_u
 
     DBG_CHKOBJ( GetEditEnginePtr(), EditEngine, 0 );
 
-    ContentNode* pNode = const_cast<ContentNode*>(aEditDoc.SaveGetObject(nPara));
+    ContentNode* pNode = aEditDoc.SaveGetObject( nPara );
     DBG_ASSERT( pNode, "GetAttribs - unknown paragraph!" );
     DBG_ASSERT( nStart <= nEnd, "getAttribs: Start > End not supported!" );
 
@@ -432,7 +426,7 @@ SfxItemSet ImpEditEngine::GetAttribs( sal_uInt16 nPara, sal_uInt16 nStart, sal_u
         // StyleSheet / Parattribs...
 
         if ( pNode->GetStyleSheet() && ( nFlags & GETATTRIBS_STYLESHEET ) )
-            aAttribs.Set(pNode->GetStyleSheet()->GetItemSet(), true);
+            aAttribs.Set( pNode->GetStyleSheet()->GetItemSet(), sal_True );
 
         if ( nFlags & GETATTRIBS_PARAATTRIBS )
             aAttribs.Put( pNode->GetContentAttribs().GetItems() );
@@ -726,14 +720,14 @@ void ImpEditEngine::SetParaAttribs( sal_uInt16 nPara, const SfxItemSet& rSet )
 
 const SfxItemSet& ImpEditEngine::GetParaAttribs( sal_uInt16 nPara ) const
 {
-    const ContentNode* pNode = aEditDoc.GetObject( nPara );
+    ContentNode* pNode = aEditDoc.GetObject( nPara );
     DBG_ASSERT( pNode, "Node not found: GetParaAttribs" );
     return pNode->GetContentAttribs().GetItems();
 }
 
-bool ImpEditEngine::HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const
+sal_Bool ImpEditEngine::HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const
 {
-    const ContentNode* pNode = aEditDoc.GetObject( nPara );
+    ContentNode* pNode = aEditDoc.GetObject( nPara );
     DBG_ASSERT( pNode, "Node not found: HasParaAttrib" );
 
     return pNode->GetContentAttribs().HasItem( nWhich );
@@ -741,7 +735,7 @@ bool ImpEditEngine::HasParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const
 
 const SfxPoolItem& ImpEditEngine::GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nWhich ) const
 {
-    const ContentNode* pNode = aEditDoc.GetObject( nPara );
+    ContentNode* pNode = aEditDoc.GetObject( nPara );
     DBG_ASSERT( pNode, "Node not found: GetParaAttrib" );
 
     return pNode->GetContentAttribs().GetItem( nWhich );
@@ -750,7 +744,7 @@ const SfxPoolItem& ImpEditEngine::GetParaAttrib( sal_uInt16 nPara, sal_uInt16 nW
 void ImpEditEngine::GetCharAttribs( sal_uInt16 nPara, std::vector<EECharAttrib>& rLst ) const
 {
     rLst.clear();
-    const ContentNode* pNode = aEditDoc.GetObject( nPara );
+    ContentNode* pNode = aEditDoc.GetObject( nPara );
     if ( pNode )
     {
         rLst.reserve(pNode->GetCharAttribs().Count());
