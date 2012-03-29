@@ -562,6 +562,11 @@ main/redland/rasqal/rasqal-0.9.16.patch.ooo_build
 main/redland/redland/redland-1.0.8.patch.ooo_build
 main/binfilter/bf_sfx2/util/makefile.prj
 main/testautomation/spreadsheet/optional/input/loadsave/microsoft/dif.DIF
+main/officecfg/util/delcomment.sed
+main/solenv/bin/chrel.sed
+main/sysui/desktop/share/add_specfile_triggers.sed
+main/dbaccess/uiconfig/dbbrowser/menubar/preserve.txt
+main/helpcontent2/helpers/unocmds.txt
 main/mysqlc/source/description/description_de.txt
 main/mysqlc/source/description/description_en-US.txt
 main/mysqlc/source/description/description_es.txt
@@ -591,6 +596,36 @@ main/qadevOOo/testdocs/XSimpleFileAccess/XSimpleFileAccess.txt
 main/qadevOOo/testdocs/XSimpleFileAccess/XSimpleFileAccess2.txt
 main/qadevOOo/testdocs/XSimpleFileAccessBASIC/File1.txt
 main/qadevOOo/testdocs/XSimpleFileAccessBASIC/File2.txt
+main/sdext/source/minimizer/help/component.txt
+main/sdext/source/pdfimport/help/component.txt
+main/sdext/source/presenter/help/component.txt
+main/setup_native/source/packinfo/package.txt
+main/setup_native/source/packinfo/shellscripts.txt
+main/setup_native/source/packinfo/shellscripts_brand.txt
+main/setup_native/source/packinfo/shellscripts_core01.txt
+main/setup_native/source/packinfo/shellscripts_extensions.txt
+main/setup_native/source/packinfo/shellscripts_module.txt
+main/setup_native/source/packinfo/shellscripts_root.txt
+main/shell/source/unix/exec/urltest.txt
+main/sw/sdi/swpatch.txt
+main/testautomation/dbaccess/optional/input/text_datasource/TT_Query1.txt
+main/testautomation/dbaccess/optional/input/text_datasource/text_database.txt
+main/testautomation/extensions/optional/input/files.txt
+main/testautomation/framework/optional/input/extras_formats/Labels_en-US.txt
+main/testautomation/framework/optional/input/extras_formats/Tables_calc_en-US.txt
+main/testautomation/framework/optional/input/extras_formats/Tables_writer_en-US.txt
+main/testautomation/framework/optional/input/menu/areadme.txt
+main/testautomation/framework/optional/input/menu/en-us_basic.txt
+main/testautomation/framework/optional/input/menu/en-us_calc.txt
+main/testautomation/framework/optional/input/menu/en-us_draw.txt
+main/testautomation/framework/optional/input/menu/en-us_htmldokument.txt
+main/testautomation/framework/optional/input/menu/en-us_impress.txt
+main/testautomation/framework/optional/input/menu/en-us_insight.txt
+main/testautomation/framework/optional/input/menu/en-us_masterdoc.txt
+main/testautomation/framework/optional/input/menu/en-us_math.txt
+main/testautomation/framework/optional/input/menu/en-us_writer.txt
+main/testautomation/framework/optional/input/options/paths_1.txt
+main/testautomation/global/input/filters/graphic_filters.txt
 main/testautomation/graphics/required/input/gallery/gal_1.txt
 main/testautomation/graphics/required/input/gallery/gal_31.txt
 main/testautomation/graphics/required/input/gallery/gal_33.txt
@@ -686,6 +721,12 @@ main/xmlsecurity/tools/examples/eval_export.txt
 main/xmlsecurity/tools/examples/eval_import.txt
 
 # empty files
+main/scripting/java/org/openoffice/netbeans/modules/office/Bundle.properties
+main/scripting/java/org/openoffice/netbeans/modules/office/Bundle_en_US.properties
+main/scripting/java/org/openoffice/netbeans/modules/office/filesystem/Bundle_en_US.properties
+main/scripting/java/org/openoffice/netbeans/modules/office/wizard/Bundle_en_US.properties
+main/testgraphical/ui/java/ConvwatchGUIProject/nbproject/private/config.properties
+main/testautomation/extensions/optional/input/extension_sources/TaskPaneComponent/nbproject/private/config.properties
 main/testautomation/framework/required/input/basic_ide/Dialog5_ar_DZ.default
 main/odk/pack/unzip_udk/deltree.txt
 main/instsetoo_native/inc_ure/windows/msi_templates/components.txt
@@ -694,6 +735,21 @@ main/instsetoo_native/inc_sdkoo/windows/msi_templates/components.txt
 main/instsetoo_native/inc_openoffice/windows/msi_templates/components.txt
 main/instsetoo_native/inc_ooolangpack/windows/msi_templates/components.txt
 
+# template files - for generating other files
+main/sfx2/qa/complex/sfx2/testdocuments/empty.rdf
+main/crashrep/source/win32/ctrylnglist.txt
+main/crashrep/source/win32/rcfooter.txt
+main/crashrep/source/win32/rctemplate.txt
+main/desktop/win32/source/rebase/rcfooter.txt
+main/desktop/win32/source/rebase/rcheader.txt
+main/desktop/win32/source/rebase/rctmpl.txt
+main/desktop/win32/source/setup/rcfooter.txt
+main/desktop/win32/source/setup/rcheader.txt
+main/desktop/win32/source/setup/rctmpl.txt
+main/shell/source/win32/shlxthandler/res/ctrylnglist.txt
+main/shell/source/win32/shlxthandler/res/rcfooter.txt
+main/shell/source/win32/shlxthandler/res/rcheader.txt
+main/shell/source/win32/shlxthandler/res/rctmpl.txt
 
 # test files (need current contents)
 main/desktop/test/deployment/update/defect/update/info1.update.xml
