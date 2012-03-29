@@ -142,9 +142,6 @@ SdTransferable::~SdTransferable()
 
     ObjectReleased();
 
-    for( void* p = maPageBookmarks.First(); p; p = maPageBookmarks.Next() )
-        delete static_cast< String* >( p );
-
     if( mbOwnView )
         delete mpSdViewIntern;
 
@@ -712,7 +709,7 @@ void SdTransferable::SetObjectDescriptor( const TransferableObjectDescriptor& rO
 
 // -----------------------------------------------------------------------------
 
-void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, sal_Bool bPersistent )
+void SdTransferable::SetPageBookmarks( const std::vector<rtl::OUString> &rPageBookmarks, sal_Bool bPersistent )
 {
     if( mpSourceDoc )
     {
@@ -723,20 +720,19 @@ void SdTransferable::SetPageBookmarks( const List& rPageBookmarks, sal_Bool bPer
 
         mpPageDocShell = NULL;
 
-        for( void* p = maPageBookmarks.First(); p; p = maPageBookmarks.Next() )
-            delete static_cast< String* >( p );
+        maPageBookmarks.clear();
 
         if( bPersistent )
         {
+            std::vector<rtl::OUString> aExchangeList;
             mpSdDrawDocument->CreateFirstPages(mpSourceDoc);
-            mpSdDrawDocument->InsertBookmarkAsPage( const_cast< List* >( &rPageBookmarks ), NULL, sal_False, sal_True, 1, sal_True, mpSourceDoc->GetDocSh(), sal_True, sal_True, sal_False );
+            mpSdDrawDocument->InsertBookmarkAsPage( rPageBookmarks, aExchangeList, sal_False, sal_True, 1, sal_True,
+                                                    mpSourceDoc->GetDocSh(), sal_True, sal_True, sal_False );
         }
         else
         {
             mpPageDocShell = mpSourceDoc->GetDocSh();
-
-            for( sal_uLong i = 0; i < rPageBookmarks.Count(); i++ )
-                maPageBookmarks.Insert( new String( *static_cast< String* >( rPageBookmarks.GetObject( i ) ) ), LIST_APPEND );
+            maPageBookmarks = rPageBookmarks;
         }
 
         if( mpSdViewIntern && mpSdDrawDocument )
