@@ -459,22 +459,13 @@ Reference< XInterface > invokeComponentFactory(
 #ifdef DISABLE_DYNLOADING
 extern "C"
 {
-    // In stoc/source/bootstrap/services.cxx.
-
-    // Sure, some public header would be a better place for this. But
-    // it can't be in some stoc header as that hasn't been built and
-    // delivered yet when cppuhelper is built.
-
-    extern void * bootstrap_component_getFactory(
-        const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-
-    // More of them, in order of discovery. This is a temporary way to handle this..
-    extern void * ucb_component_getFactory(
-        const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * configmgr_component_getFactory(
-        const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
-    extern void * ucpfile_component_getFactory(
-        const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * bootstrap_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * configmgr_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * fwk_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * i18npool_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * sc_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * ucb_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
+    extern void * ucpfile_component_getFactory( const sal_Char * pImplName, void * pServiceManager, void * pRegistryKey );
 }
 #endif
 
@@ -540,6 +531,12 @@ Reference< XInterface > SAL_CALL loadSharedLibComponentFactory(
         pSym = (oslGenericFunction) configmgr_component_getFactory;
     else if ( rLibName.equals( OUSTR("libucpfile1.a")) )
         pSym = (oslGenericFunction) ucpfile_component_getFactory;
+    else if ( rLibName.equals( OUSTR("libsclo.a")) )
+        pSym = (oslGenericFunction) sc_component_getFactory;
+    else if ( rLibName.equals( OUSTR("libfwklo.a")) )
+        pSym = (oslGenericFunction) fwk_component_getFactory;
+    else if ( rLibName.equals( OUSTR("i18npool.uno.a")) )
+        pSym = (oslGenericFunction) i18npool_component_getFactory;
     else
     {
 #if OSL_DEBUG_LEVEL > 1
