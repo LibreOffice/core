@@ -786,6 +786,12 @@ const SfxStyleSheet* OutlinerView::GetStyleSheet() const
     return pEditView->GetStyleSheet();
 }
 
+SfxStyleSheet* OutlinerView::GetStyleSheet()
+{
+    DBG_CHKTHIS(OutlinerView,0);
+    return pEditView->GetStyleSheet();
+}
+
 Pointer OutlinerView::GetPointer( const Point& rPosPixel )
 {
     DBG_CHKTHIS(OutlinerView,0);

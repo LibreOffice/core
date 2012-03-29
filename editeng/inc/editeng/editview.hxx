@@ -184,6 +184,7 @@ public:
     void            ForceUpdate();
 
     const SfxStyleSheet* GetStyleSheet() const;
+    SfxStyleSheet* GetStyleSheet();
 
     void            SetAnchorMode( EVAnchorMode eMode );
     EVAnchorMode    GetAnchorMode() const;
