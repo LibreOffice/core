@@ -61,13 +61,8 @@
 #include <unotools/ucbhelper.hxx>
 #include <ucbhelper/commandenvironment.hxx>
 #include "finteraction.hxx"
-#include <connectivity/CommonTools.hxx>
 
 #include "DBSetupConnectionPages.hxx"
-
-#include "dbu_dlg.hrc"
-
-#include "dbaccess_helpid.hrc"
 
 #include <unotools/pathoptions.hxx>
 

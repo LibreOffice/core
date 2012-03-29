@@ -34,7 +34,6 @@
 #include "dbu_misc.hrc"
 #include "WizardPages.hrc"
 #include <vcl/scrbar.hxx>
-#include "WCopyTable.hxx"
 #include <com/sun/star/sdbc/DataType.hpp>
 
 using namespace ::dbaui;

@@ -45,7 +45,6 @@
 #include "tabletree.hxx"
 #include "AppSwapWindow.hxx"
 #include <vcl/svapp.hxx>
-#include "AppSwapWindow.hxx"
 #include "AppTitleWindow.hxx"
 #include "dsntypes.hxx"
 #include "dbustrings.hrc"

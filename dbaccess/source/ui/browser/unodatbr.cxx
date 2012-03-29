@@ -56,7 +56,6 @@
 
 /** === begin UNO includes === **/
 #include <com/sun/star/awt/LineEndFormat.hpp>
-#include <com/sun/star/awt/LineEndFormat.hpp>
 #include <com/sun/star/awt/MouseWheelBehavior.hpp>
 #include <com/sun/star/awt/TextAlign.hpp>
 #include <com/sun/star/awt/VisualEffect.hpp>
@@ -97,7 +96,6 @@
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/util/XFlushable.hpp>
-#include <com/sun/star/sdb/XDocumentDataSource.hpp>
 #include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/frame/XComponentLoader.hpp>
 #include <com/sun/star/ui/XContextMenuInterceptor.hpp>

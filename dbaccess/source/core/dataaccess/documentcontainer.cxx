@@ -50,7 +50,6 @@
 
 #include <vcl/svapp.hxx>
 #include <osl/mutex.hxx>
-#include <comphelper/namedvaluecollection.hxx>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::lang;

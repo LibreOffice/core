@@ -35,7 +35,6 @@
 #include "dbustrings.hrc"
 #include <sfx2/sfxhtml.hxx>
 #include <osl/diagnose.h>
-#include <tools/tenccvt.hxx>
 #include "moduledbu.hxx"
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XColumnsSupplier.hpp>

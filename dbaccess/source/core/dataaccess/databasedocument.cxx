@@ -79,8 +79,6 @@
 #include <comphelper/numberedcollection.hxx>
 #include <comphelper/property.hxx>
 #include <comphelper/storagehelper.hxx>
-#include <comphelper/genericpropertyset.hxx>
-#include <comphelper/property.hxx>
 
 #include <connectivity/dbtools.hxx>
 

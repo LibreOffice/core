@@ -32,14 +32,12 @@
 #include "sdbcoretools.hxx"
 #include "SingleSelectQueryComposer.hxx"
 #include "module_dba.hxx"
-#include "sdbcoretools.hxx"
 #include "CRowSetColumn.hxx"
 #include "CRowSetDataColumn.hxx"
 #include "RowSetCache.hxx"
 #include "core_resource.hrc"
 #include "core_resource.hxx"
 #include "tablecontainer.hxx"
-#include "dbastrings.hrc"
 
 /** === begin UNO includes === **/
 #include <com/sun/star/beans/PropertyAttribute.hpp>

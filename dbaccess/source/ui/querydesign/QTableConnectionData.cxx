@@ -28,7 +28,6 @@
 
 #include "QTableConnectionData.hxx"
 #include <tools/debug.hxx>
-#include "QTableConnectionData.hxx"
 #include "QTableWindow.hxx"
 
 using namespace dbaui;

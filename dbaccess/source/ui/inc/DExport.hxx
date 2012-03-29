@@ -44,7 +44,6 @@
 #include "WTypeSelect.hxx"
 #include "commontypes.hxx"
 #include "IUpdateHelper.hxx"
-#include "WTypeSelect.hxx"
 
 namespace com { namespace sun { namespace star {
     namespace awt{

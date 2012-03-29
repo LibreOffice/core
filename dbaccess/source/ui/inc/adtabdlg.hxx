@@ -37,7 +37,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 #include <vcl/lstbox.hxx>
-#include <vcl/dialog.hxx>
 #include <tools/string.hxx>
 
 #include "tabletree.hxx"

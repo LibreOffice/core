@@ -72,7 +72,6 @@
 #include "AppDetailView.hxx"
 #include "linkeddocuments.hxx"
 #include <vcl/lstbox.hxx>
-#include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include "sqlmessage.hxx"
 #include <tools/string.hxx>

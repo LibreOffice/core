@@ -44,7 +44,6 @@
 #include <com/sun/star/util/XRefreshable.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/uno/Sequence.hxx>
-#include <com/sun/star/container/XNameContainer.hpp>
 #include <com/sun/star/sdbcx/XDataDescriptorFactory.hpp>
 #include <com/sun/star/sdbcx/XAppend.hpp>
 #include <com/sun/star/sdbcx/XDrop.hpp>

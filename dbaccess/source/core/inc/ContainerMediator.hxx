@@ -35,7 +35,6 @@
 #include <com/sun/star/sdbc/XConnection.hpp>
 
 #include <comphelper/broadcasthelper.hxx>
-#include <comphelper/broadcasthelper.hxx>
 #include <cppuhelper/implbase1.hxx>
 #include <rtl/ref.hxx>
 

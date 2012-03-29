@@ -60,7 +60,6 @@
 #include "dbustrings.hrc"
 #include "UITools.hxx"
 #include "querycontainerwindow.hxx"
-#include "QueryTableView.hxx"
 #include "sqlmessage.hxx"
 #include <unotools/syslocale.hxx>
 

@@ -69,7 +69,6 @@
 #include "imageprovider.hxx"
 #include <vcl/waitobj.hxx>
 #include <tools/stream.hxx>
-#include <tools/debug.hxx>
 #include <rtl/ustrbuf.hxx>
 #include "IApplicationController.hxx"
 

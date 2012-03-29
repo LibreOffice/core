@@ -43,7 +43,6 @@
 #include <com/sun/star/container/XNameAccess.hpp>
 #include "dbustrings.hrc"
 #include "QTableWindow.hxx"
-#include "QueryTableView.hxx"
 #include <vcl/msgbox.hxx>
 #include "QueryDesignFieldUndoAct.hxx"
 #include <svx/dbexch.hrc>

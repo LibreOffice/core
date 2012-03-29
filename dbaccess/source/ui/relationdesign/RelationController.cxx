@@ -62,7 +62,6 @@
 #include "RelationController.hxx"
 #include <vcl/msgbox.hxx>
 #include "TableWindowData.hxx"
-#include "dbustrings.hrc"
 #include "UITools.hxx"
 #include "RTableConnectionData.hxx"
 #include "RelationTableView.hxx"

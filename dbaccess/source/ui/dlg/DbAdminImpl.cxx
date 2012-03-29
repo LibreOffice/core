@@ -68,11 +68,6 @@
 #include <connectivity/DriversConfig.hxx>
 #include <connectivity/dbexception.hxx>
 #include <osl/file.hxx>
-#include <svl/eitem.hxx>
-#include <svl/intitem.hxx>
-#include <svl/itempool.hxx>
-#include <svl/poolitem.hxx>
-#include <svl/stritem.hxx>
 #include <tools/diagnose_ex.h>
 #include <osl/diagnose.h>
 #include <typelib/typedescription.hxx>

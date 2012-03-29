@@ -62,11 +62,6 @@
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/document/XEmbeddedScripts.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
-#include <com/sun/star/container/XHierarchicalNameContainer.hpp>
-#include <com/sun/star/util/XModifyBroadcaster.hpp>
-#include <com/sun/star/util/XModifiable.hpp>
-#include <com/sun/star/frame/FrameSearchFlag.hpp>
-#include <com/sun/star/util/XFlushable.hpp>
 #include "com/sun/star/ui/dialogs/TemplateDescription.hpp"
 #include "com/sun/star/beans/NamedValue.hpp"
 #include <com/sun/star/awt/XTopWindow.hpp>

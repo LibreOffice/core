@@ -39,7 +39,6 @@
 #include <comphelper/types.hxx>
 #include "xmlstrings.hrc"
 #include "xmlEnums.hxx"
-#include <xmloff/nmspmap.hxx>
 #include <com/sun/star/beans/XPropertyState.hpp>
 #include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/sdb/XFormDocumentsSupplier.hpp>

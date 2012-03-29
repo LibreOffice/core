@@ -50,7 +50,6 @@
 #include "TableRowExchange.hxx"
 #include <sot/storage.hxx>
 #include "UITools.hxx"
-#include "FieldDescControl.hxx"
 #include "TableFieldControl.hxx"
 #include "dsntypes.hxx"
 

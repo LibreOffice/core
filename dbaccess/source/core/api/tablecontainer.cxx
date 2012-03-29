@@ -60,7 +60,6 @@
 #include <tools/string.hxx>
 #include <rtl/logfile.hxx>
 #include <tools/diagnose_ex.h>
-#include <tools/diagnose_ex.h>
 
 using namespace dbaccess;
 using namespace dbtools;

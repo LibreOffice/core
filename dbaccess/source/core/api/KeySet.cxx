@@ -56,7 +56,6 @@
 #include "querycomposer.hxx"
 #include "composertools.hxx"
 #include <tools/debug.hxx>
-#include <string.h>
 #include <rtl/logfile.hxx>
 #include "PrivateRow.hxx"
 

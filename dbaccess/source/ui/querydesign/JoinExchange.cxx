@@ -30,7 +30,6 @@
 #include <sot/formats.hxx>
 #include <svx/dbexch.hrc>
 #include <cppuhelper/typeprovider.hxx>
-#include <sot/formats.hxx>
 
 namespace dbaui
 {

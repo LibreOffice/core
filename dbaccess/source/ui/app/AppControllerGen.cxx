@@ -51,7 +51,6 @@
 #include <com/sun/star/sdbcx/XRename.hpp>
 #include <com/sun/star/sdb/ErrorCondition.hpp>
 #include <com/sun/star/sdb/application/DatabaseObject.hpp>
-#include <com/sun/star/sdb/SQLContext.hpp>
 #include <com/sun/star/sdbcx/XTablesSupplier.hpp>
 #include <com/sun/star/sdbcx/XViewsSupplier.hpp>
 #include <com/sun/star/ucb/Command.hpp>
@@ -61,14 +60,12 @@
 #include <com/sun/star/uno/XNamingService.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/util/XRefreshable.hpp>
-#include <com/sun/star/lang/XEventListener.hpp>
 /** === end UNO includes === **/
 
 #include <cppuhelper/exc_hlp.hxx>
 #include <connectivity/dbexception.hxx>
 #include <connectivity/dbtools.hxx>
 #include <connectivity/sqlerror.hxx>
-#include <connectivity/dbexception.hxx>
 #include <sfx2/mailmodelapi.hxx>
 #include <svx/dbaexchange.hxx>
 #include <toolkit/unohlp.hxx>
