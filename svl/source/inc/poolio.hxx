@@ -39,10 +39,10 @@ struct SfxPoolVersion_Impl
 {
     sal_uInt16          _nVer;
     sal_uInt16          _nStart, _nEnd;
-    sal_uInt16*         _pMap;
+    const sal_uInt16*         _pMap;
 
                     SfxPoolVersion_Impl( sal_uInt16 nVer, sal_uInt16 nStart, sal_uInt16 nEnd,
-                                         sal_uInt16 *pMap )
+                                         const sal_uInt16 *pMap )
                     :   _nVer( nVer ),
                         _nStart( nStart ),
                         _nEnd( nEnd ),

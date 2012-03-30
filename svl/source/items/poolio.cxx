@@ -1267,7 +1267,7 @@ void SfxItemPool::SetVersionMap
     sal_uInt16  nVer,               /*  neue Versionsnummer */
     sal_uInt16  nOldStart,          /*  alte erste Which-Id */
     sal_uInt16  nOldEnd,            /*  alte letzte Which-Id */
-    sal_uInt16* pOldWhichIdTab      /*  Array mit genau dem Aufbau der Which-Ids
+    const sal_uInt16* pOldWhichIdTab /*  Array mit genau dem Aufbau der Which-Ids
                                     der vorhergehenden Version, in denen
                                     die jeweils neue Which-Id steht. */
 )
