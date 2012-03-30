@@ -82,7 +82,6 @@ public:
     void                    setChannel( TpAccount* pAccount, TpChannel* pChannel );
     TpChannel*              getChannel() const  { return mpChannel; }
     bool                    offerTube();
-    bool                    setTube( DBusConnection* pTube );
     bool                    acceptTube( const char* pAddress );
     /// got tube accepted on other end as well?
     bool                    isTubeOpen() const { return meTubeChannelState == TP_TUBE_CHANNEL_STATE_OPEN; }
@@ -96,9 +95,12 @@ public:
                                 { return mbTubeChannelStateChangedHandlerInvoked; }
     void                    setTubeChannelState( TpTubeChannelState eState ) { meTubeChannelState = eState; }
 
+    static void             TubeOfferedHandler(TpChannel* pChannel, const gchar* pAddress, const GError* pError,
+                                               gpointer pUserData, GObject*pWeakObject);
     static void             FTReady( EmpathyFTHandler *handler, GError *error, gpointer user_data);
 
 private:
+    bool                    setTube( const char* pTube );
 
     rtl::OString            maSessionId;
     TeleManager*            mpManager;

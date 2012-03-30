@@ -138,15 +138,15 @@ static void TeleConference_ChannelCloseHandler(
 }
 
 
-static void TeleConference_TubeOfferedHandler(
+void TeleConference::TubeOfferedHandler(
         TpChannel*      pChannel,
-        const gchar*    pOutAddress,
+        const gchar*    pAddress,
         const GError*   pError,
         gpointer        pUserData,
         GObject*        /*weak_object*/
         )
 {
-    INFO_LOGGER_F( "TeleConference_TubeOfferedHandler");
+    INFO_LOGGER_F( "TeleConference::TubeOfferedHandler");
 
     TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
     SAL_WARN_IF( !pConference, "tubes", "TeleConference_TubeOfferedHandler: no conference");
@@ -157,29 +157,19 @@ static void TeleConference_TubeOfferedHandler(
 
     // "can't find contact ... presence" means contact is not a contact.
     /* FIXME: detect and handle */
-    SAL_WARN_IF( pError, "tubes", "TeleConference_TubeOfferedHandler: entered with error: " << pError->message);
+    SAL_WARN_IF( pError, "tubes", "TeleConference::TubeOfferedHandler: entered with error: " << pError->message);
     if (pError)
         return;
 
-    SAL_WARN_IF( !pOutAddress, "tubes", "TeleConference_TubeOfferedHandler: no out address");
-    if (!pOutAddress)
+    SAL_WARN_IF( !pAddress, "tubes", "TeleConference::TubeOfferedHandler: no address");
+    if (!pAddress)
         return;
 
-    SAL_WARN_IF( pChannel != pConference->getChannel(), "tubes", "TeleConference_TubeOfferedHandler: not my channel");
+    SAL_WARN_IF( pChannel != pConference->getChannel(), "tubes", "TeleConference::TubeOfferedHandler: not my channel");
     if (pChannel != pConference->getChannel())
         return;
 
-    DBusError aDBusError;
-    dbus_error_init( &aDBusError);
-    DBusConnection* pTube = dbus_connection_open_private( pOutAddress, &aDBusError);
-    if (!pTube)
-    {
-        SAL_WARN( "tubes", "TeleConference_TubeOfferedHandler: no dbus connection: " << aDBusError.message);
-        dbus_error_free( &aDBusError);
-        return;
-    }
-
-    pConference->setTube( pTube);
+    pConference->setTube( pAddress );
 }
 
 
@@ -267,20 +257,7 @@ bool TeleConference::acceptTube( const char* pAddress )
     if (!mpChannel || mpTube)
         return false;
 
-    DBusError aDBusError;
-    dbus_error_init( &aDBusError);
-    mpTube = dbus_connection_open_private( pAddress, &aDBusError);
-    if (!mpTube)
-    {
-        SAL_WARN( "tubes", "TeleConference::acceptTube: no dbus connection: " << aDBusError.message);
-        dbus_error_free( &aDBusError);
-        return false;
-    }
-
-    dbus_connection_setup_with_g_main( mpTube, mpManager->getMainContext());
-    dbus_connection_add_filter( mpTube, TeleConference_DBusMessageHandler, this, NULL);
-
-    return true;
+    return setTube( pAddress );
 }
 
 
@@ -305,7 +282,7 @@ bool TeleConference::offerTube()
             -1,                                     // timeout_ms
             pParams,                                // in_parameters
             TP_SOCKET_ACCESS_CONTROL_CREDENTIALS,   // in_access_control
-            TeleConference_TubeOfferedHandler,      // callback
+            &TeleConference::TubeOfferedHandler,    // callback
             this,                                   // user_data
             NULL,                                   // destroy
             NULL);                                  // weak_object
@@ -342,18 +319,27 @@ bool TeleConference::offerTube()
 }
 
 
-bool TeleConference::setTube( DBusConnection* pTube )
+bool TeleConference::setTube(  const char* pAddress )
 {
     INFO_LOGGER( "TeleConference::setTube");
 
     OSL_ENSURE( !mpTube, "TeleConference::setTube: already tubed");
-    mpTube = pTube;
+
+    DBusError aDBusError;
+    dbus_error_init( &aDBusError);
+
+    mpTube = dbus_connection_open_private( pAddress, &aDBusError);
+    if (!mpTube)
+    {
+        SAL_WARN( "tubes", "TeleConference::setTube: no dbus connection: " << aDBusError.message);
+        dbus_error_free( &aDBusError);
+        return false;
+    }
 
     dbus_connection_setup_with_g_main( mpTube, mpManager->getMainContext());
     dbus_connection_add_filter( mpTube, TeleConference_DBusMessageHandler, this, NULL);
 
     /* TODO: anything else? */
-
     return true;
 }
 
