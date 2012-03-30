@@ -167,7 +167,7 @@ DBG_NAME( EE_EditLine );
 DBG_NAME( EE_ContentNode );
 DBG_NAME( EE_CharAttribList );
 
-SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
+const SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_ATTR_FRAMEDIRECTION, SFX_ITEM_POOLABLE },         // EE_PARA_WRITINGDIR
         { 0, SFX_ITEM_POOLABLE },                               // EE_PARA_XMLATTRIBS
         { SID_ATTR_PARA_HANGPUNCTUATION, SFX_ITEM_POOLABLE },   // EE_PARA_HANGINGPUNCTUATION
@@ -222,23 +222,23 @@ SfxItemInfo aItemInfos[EDITITEMCOUNT] = {
         { SID_FIELD, SFX_ITEM_POOLABLE }
 };
 
-sal_uInt16 aV1Map[] = {
+const sal_uInt16 aV1Map[] = {
     3999, 4001, 4002, 4003, 4004, 4005, 4006,
     4007, 4008, 4009, 4010, 4011, 4012, 4013, 4017, 4018, 4019 // MI: 4019?
 };
 
-sal_uInt16 aV2Map[] = {
+const sal_uInt16 aV2Map[] = {
     3999, 4000, 4001, 4002, 4003, 4004, 4005, 4006, 4007, 4008, 4009,
     4010, 4011, 4012, 4013, 4014, 4015, 4016, 4018, 4019, 4020
 };
 
-sal_uInt16 aV3Map[] = {
+const sal_uInt16 aV3Map[] = {
     3997, 3998, 3999, 4000, 4001, 4002, 4003, 4004, 4005, 4006, 4007,
     4009, 4010, 4011, 4012, 4013, 4014, 4015, 4016, 4017, 4018, 4019,
     4020, 4021
 };
 
-sal_uInt16 aV4Map[] = {
+const sal_uInt16 aV4Map[] = {
     3994, 3995, 3996, 3997, 3998, 3999, 4000, 4001, 4002, 4003,
     4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013,
     4014, 4015, 4016, 4017, 4018,
@@ -246,7 +246,7 @@ sal_uInt16 aV4Map[] = {
     4034, 4035, 4036, 4037
 };
 
-sal_uInt16 aV5Map[] = {
+const sal_uInt16 aV5Map[] = {
     3994, 3995, 3996, 3997, 3998, 3999, 4000, 4001, 4002, 4003,
     4004, 4005, 4006, 4007, 4008, 4009, 4010, 4011, 4012, 4013,
     4014, 4015, 4016, 4017, 4018, 4019, 4020, 4021, 4022, 4023,
