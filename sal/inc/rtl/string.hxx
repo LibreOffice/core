@@ -249,7 +249,7 @@ public:
         rtl_uString2String( &pData, value, length, encoding, convertFlags );
         if (pData == 0) {
 #if defined EXCEPTIONS_OFF
-            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+            abort();
 #else
             throw std::bad_alloc();
 #endif

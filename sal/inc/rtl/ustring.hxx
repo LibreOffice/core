@@ -284,7 +284,7 @@ public:
         rtl_string2UString( &pData, value, length, encoding, convertFlags );
         if (pData == 0) {
 #if defined EXCEPTIONS_OFF
-            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+            abort();
 #else
             throw std::bad_alloc();
 #endif
@@ -1734,7 +1734,7 @@ public:
         rtl_uString_intern( &pNew, pData );
         if (pNew == 0) {
 #if defined EXCEPTIONS_OFF
-            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+            abort();
 #else
             throw std::bad_alloc();
 #endif
@@ -1777,7 +1777,7 @@ public:
                                    convertFlags, pInfo );
         if (pNew == 0) {
 #if defined EXCEPTIONS_OFF
-            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
+            abort();
 #else
             throw std::bad_alloc();
 #endif
