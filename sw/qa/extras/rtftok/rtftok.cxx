@@ -39,6 +39,7 @@
 #include <com/sun/star/text/XTextDocument.hpp>
 #include <com/sun/star/text/XTextGraphicObjectsSupplier.hpp>
 #include <com/sun/star/text/XTextFramesSupplier.hpp>
+#include <com/sun/star/text/XTextTablesSupplier.hpp>
 #include <com/sun/star/text/XTextViewCursorSupplier.hpp>
 
 #include <rtl/oustringostreaminserter.hxx>
@@ -73,6 +74,7 @@ public:
     void testFdo47326();
     void testFdo47036();
     void testFdo46955();
+    void testFdo45394();
 
     CPPUNIT_TEST_SUITE(RtfModelTest);
 #if !defined(MACOSX) && !defined(WNT)
@@ -90,6 +92,7 @@ public:
     CPPUNIT_TEST(testFdo47326);
     CPPUNIT_TEST(testFdo47036);
     CPPUNIT_TEST(testFdo46955);
+    CPPUNIT_TEST(testFdo45394);
 #endif
     CPPUNIT_TEST_SUITE_END();
 
@@ -447,6 +450,25 @@ void RtfModelTest::testFdo46955()
             CPPUNIT_ASSERT_EQUAL(style::CaseMap::UPPERCASE, nValue);
         }
     }
+}
+
+void RtfModelTest::testFdo45394()
+{
+    load(OUString(RTL_CONSTASCII_USTRINGPARAM("fdo45394.rtf")));
+
+    uno::Reference<style::XStyleFamiliesSupplier> xStyleFamiliesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xStyles(xStyleFamiliesSupplier->getStyleFamilies(), uno::UNO_QUERY);
+    uno::Reference<container::XNameAccess> xPageStyles(xStyles->getByName("PageStyles"), uno::UNO_QUERY);
+    uno::Reference<beans::XPropertySet> xPropertySet(xPageStyles->getByName("Default"), uno::UNO_QUERY);
+    uno::Reference<text::XText> xHeaderText(xPropertySet->getPropertyValue("HeaderText"), uno::UNO_QUERY);
+    OUString aActual = xHeaderText->getString();
+    // Encoding in the header was wrong.
+    OUString aExpected("ПК РИК", 11, RTL_TEXTENCODING_UTF8);
+    CPPUNIT_ASSERT_EQUAL(aExpected, aActual);
+
+    uno::Reference<text::XTextTablesSupplier> xTextTablesSupplier(mxComponent, uno::UNO_QUERY);
+    uno::Reference<container::XIndexAccess> xIndexAccess(xTextTablesSupplier->getTextTables(), uno::UNO_QUERY);
+    CPPUNIT_ASSERT_EQUAL(sal_Int32(1), xIndexAccess->getCount());
 }
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RtfModelTest);
