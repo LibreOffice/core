@@ -116,6 +116,7 @@ $(eval $(call gb_Module_add_moduledirs,tail_end,\
     toolkit \
 	tools \
 	touch \
+    tubes \
     twain \
     ucb \
     unixODBC \
