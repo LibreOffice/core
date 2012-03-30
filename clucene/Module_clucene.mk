@@ -28,6 +28,7 @@
 $(eval $(call gb_Module_Module,clucene))
 
 $(eval $(call gb_Module_add_targets,clucene,\
+    CustomTarget_source \
     Library_clucene \
     Package_source \
 ))

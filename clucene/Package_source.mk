@@ -26,25 +26,9 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,clucene_source,$(WORKDIR)/CustomTarget/clucene/source))
+$(eval $(call gb_Package_Package,clucene_source,$(call gb_CustomTarget_get_workdir,clucene/source)))
 
-$(eval $(call gb_Package_add_customtarget,clucene_source,clucene/source))
-
-$(eval $(call gb_CustomTarget_add_dependencies,clucene/source,\
-	clucene/configs/_clucene-config-generic.h \
-	clucene/configs/clucene-config-generic.h \
-))
-
-ifeq ($(OS_FOR_BUILD),WNT)
-FIXED_TARFILE_LOCATION=$(shell cygpath -u $(TARFILE_LOCATION))
-else
-FIXED_TARFILE_LOCATION=$(TARFILE_LOCATION)
-endif
-
-# FIXME: do not hardcode the path here
-$(eval $(call gb_CustomTarget_add_outdir_dependencies,clucene/source,\
-	$(FIXED_TARFILE_LOCATION)/48d647fbd8ef8889e5a7f422c1bfda94-clucene-core-2.3.3.4.tar.gz \
-))
+$(call gb_Package_get_preparation_target,clucene_source) : $(call gb_CustomTarget_get_target,clucene/source)
 
 $(eval $(call gb_Package_add_file,clucene_source,inc/CLucene.h,src/core/CLucene.h))
 $(eval $(call gb_Package_add_file,clucene_source,inc/CLucene/clucene-config.h,src/shared/CLucene/clucene-config.h))

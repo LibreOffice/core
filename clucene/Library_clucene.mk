@@ -48,12 +48,6 @@ $(eval $(call gb_Library_add_defs,clucene,\
     $(LFS_CFLAGS) \
 ))
 
-ifeq ($(SYSTEM_ZLIB),YES)
-$(eval $(call gb_Library_add_defs,clucene,\
-    -DSYSTEM_ZLIB \
-))
-endif
-
 # clucene does not depend on sal nor needs uwinapi here
 $(eval $(call gb_Library_add_linked_libs,clucene,\
     $(filter-out uwinapi,$(gb_STDLIBS)) \
