@@ -106,10 +106,10 @@
 #define STATUS_SAVEAS               2
 #define STATUS_SAVEAS_STANDARDNAME  3
 
-const ::rtl::OUString aFilterNameString(RTL_CONSTASCII_USTRINGPARAM("FilterName"));
-const ::rtl::OUString aFilterOptionsString(RTL_CONSTASCII_USTRINGPARAM("FilterOptions"));
-const ::rtl::OUString aFilterDataString(RTL_CONSTASCII_USTRINGPARAM("FilterData"));
-const ::rtl::OUString aFilterFlagsString(RTL_CONSTASCII_USTRINGPARAM("FilterFlags"));
+const char aFilterNameString[] = "FilterName";
+const char aFilterOptionsString[] = "FilterOptions";
+const char aFilterDataString[] = "FilterData";
+const char aFilterFlagsString[] = "FilterFlags";
 
 using namespace ::com::sun::star;
 
@@ -711,7 +711,7 @@ sal_Int8 ModelData_Impl::CheckStateForSave()
 
     // check that the old filter is acceptable
     ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    aFilterNameString,
+                                                    rtl::OUString(aFilterNameString),
                                                     ::rtl::OUString() );
     sal_Int8 nResult = CheckFilter( aOldFilterName );
 
@@ -914,6 +914,8 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
 
     ::rtl::OUString aAdjustToType;
 
+    const ::rtl::OUString sFilterNameString(aFilterNameString);
+
     if ( ( nStoreMode & EXPORT_REQUESTED ) && !( nStoreMode & WIDEEXPORT_REQUESTED ) )
     {
         // it is export, set the preselected filter
@@ -927,7 +929,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     {
         uno::Sequence< beans::PropertyValue > aOldFilterProps;
         ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                        aFilterNameString,
+                                                        sFilterNameString,
                                                         ::rtl::OUString() );
 
         if ( !aOldFilterName.isEmpty() )
@@ -1019,11 +1021,15 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     // old filter options should be cleared in case different filter is used
 
     ::rtl::OUString aFilterFromMediaDescr = GetMediaDescr().getUnpackedValueOrDefault(
-                                                    aFilterNameString,
+                                                    sFilterNameString,
                                                     ::rtl::OUString() );
     ::rtl::OUString aOldFilterName = GetDocProps().getUnpackedValueOrDefault(
-                                                    aFilterNameString,
+                                                    sFilterNameString,
                                                     ::rtl::OUString() );
+
+    const ::rtl::OUString sFilterOptionsString(aFilterOptionsString);
+    const ::rtl::OUString sFilterDataString(aFilterDataString);
+
     if ( aFilterName.equals( aFilterFromMediaDescr ) )
     {
         // preserv current settings if any
@@ -1033,32 +1039,32 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
         if ( aFilterFromMediaDescr.equals( aOldFilterName ) )
         {
             ::comphelper::SequenceAsHashMap::const_iterator aIter =
-                                        GetDocProps().find( aFilterOptionsString );
+                                        GetDocProps().find( sFilterOptionsString );
             if ( aIter != GetDocProps().end()
-              && GetMediaDescr().find( aFilterOptionsString ) == GetMediaDescr().end() )
+              && GetMediaDescr().find( sFilterOptionsString ) == GetMediaDescr().end() )
                 GetMediaDescr()[aIter->first] = aIter->second;
 
-            aIter = GetDocProps().find( aFilterDataString );
+            aIter = GetDocProps().find( sFilterDataString );
             if ( aIter != GetDocProps().end()
-              && GetMediaDescr().find( aFilterDataString ) == GetMediaDescr().end() )
+              && GetMediaDescr().find( sFilterDataString ) == GetMediaDescr().end() )
                 GetMediaDescr()[aIter->first] = aIter->second;
         }
     }
     else
     {
-        GetMediaDescr().erase( aFilterDataString );
-        GetMediaDescr().erase( aFilterOptionsString );
+        GetMediaDescr().erase( sFilterDataString );
+        GetMediaDescr().erase( sFilterOptionsString );
 
         if ( aFilterName.equals( aOldFilterName ) )
         {
             // merge filter option of the document filter
 
             ::comphelper::SequenceAsHashMap::const_iterator aIter =
-                                GetDocProps().find( aFilterOptionsString );
+                                GetDocProps().find( sFilterOptionsString );
             if ( aIter != GetDocProps().end() )
                 GetMediaDescr()[aIter->first] = aIter->second;
 
-            aIter = GetDocProps().find( aFilterDataString );
+            aIter = GetDocProps().find( sFilterDataString );
             if ( aIter != GetDocProps().end() )
                 GetMediaDescr()[aIter->first] = aIter->second;
         }
@@ -1082,8 +1088,8 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
                 aVal >>= bUseFilterOptions;
                 if ( !bUseFilterOptions )
                     bUseFilterOptions =
-                      ( GetMediaDescr().find( aFilterDataString ) == GetMediaDescr().end()
-                      && GetMediaDescr().find( aFilterOptionsString ) == GetMediaDescr().end() );
+                      ( GetMediaDescr().find( sFilterDataString ) == GetMediaDescr().end()
+                      && GetMediaDescr().find( sFilterOptionsString ) == GetMediaDescr().end() );
             }
             catch( const lang::IllegalArgumentException& )
             {}
@@ -1095,7 +1101,7 @@ sal_Bool ModelData_Impl::OutputFileDialog( sal_Int8 nStoreMode,
     // merge in results of the dialog execution
     GetMediaDescr()[::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL"))] <<=
                                                 ::rtl::OUString( aURL.GetMainURL( INetURLObject::NO_DECODE ));
-    GetMediaDescr()[aFilterNameString] <<= aFilterName;
+    GetMediaDescr()[sFilterNameString] <<= aFilterName;
 
     return bUseFilterOptions;
 }
@@ -1430,23 +1436,29 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
                                                                     ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Name")),
                                                                     ::rtl::OUString() );
 
+    const ::rtl::OUString sFilterNameString(aFilterNameString);
+
     ::rtl::OUString aFilterFromMediaDescr = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
-                                                    aFilterNameString,
+                                                    sFilterNameString,
                                                     ::rtl::OUString() );
     ::rtl::OUString aOldFilterName = aModelData.GetDocProps().getUnpackedValueOrDefault(
-                                                    aFilterNameString,
+                                                    sFilterNameString,
                                                     ::rtl::OUString() );
 
     sal_Bool bUseFilterOptions = sal_False;
     ::comphelper::SequenceAsHashMap::const_iterator aFileNameIter = aModelData.GetMediaDescr().find( ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("URL")) );
 
+    const ::rtl::OUString sFilterOptionsString(aFilterOptionsString);
+    const ::rtl::OUString sFilterDataString(aFilterDataString);
+    const ::rtl::OUString sFilterFlagsString(aFilterFlagsString);
+
     if ( ( nStoreMode & EXPORT_REQUESTED ) && ( nStoreMode & PDFEXPORT_REQUESTED ) && !( nStoreMode & PDFDIRECTEXPORT_REQUESTED ) )
     {
         // this is PDF export, the filter options dialog should be shown before the export
-        aModelData.GetMediaDescr()[aFilterNameString] <<= aFilterName;
-        if ( aModelData.GetMediaDescr().find( aFilterFlagsString ) == aModelData.GetMediaDescr().end()
-          && aModelData.GetMediaDescr().find( aFilterOptionsString ) == aModelData.GetMediaDescr().end()
-          && aModelData.GetMediaDescr().find( aFilterDataString ) == aModelData.GetMediaDescr().end() )
+        aModelData.GetMediaDescr()[sFilterNameString] <<= aFilterName;
+        if ( aModelData.GetMediaDescr().find( sFilterFlagsString ) == aModelData.GetMediaDescr().end()
+          && aModelData.GetMediaDescr().find( sFilterOptionsString ) == aModelData.GetMediaDescr().end()
+          && aModelData.GetMediaDescr().find( sFilterDataString ) == aModelData.GetMediaDescr().end() )
         {
             // execute filter options dialog since no options are set in the media descriptor
             if ( aModelData.ExecuteFilterDialog_Impl( aFilterName ) )
@@ -1506,7 +1518,7 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
             {
                 // in case of saving check filter for possible alien warning
                 ::rtl::OUString aSelFilterName = aModelData.GetMediaDescr().getUnpackedValueOrDefault(
-                                                                                aFilterNameString,
+                                                                                sFilterNameString,
                                                                                 ::rtl::OUString() );
                 sal_Int8 nStatusFilterSave = aModelData.CheckFilter( aSelFilterName );
                 if ( nStatusFilterSave == STATUS_SAVEAS_STANDARDNAME )
@@ -1534,14 +1546,14 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         if ( aFilterFromMediaDescr.equals( aOldFilterName ) )
         {
             ::comphelper::SequenceAsHashMap::const_iterator aIter =
-                                            aModelData.GetDocProps().find( aFilterOptionsString );
+                                            aModelData.GetDocProps().find( sFilterOptionsString );
             if ( aIter != aModelData.GetDocProps().end()
-              && aModelData.GetMediaDescr().find( aFilterOptionsString ) == aModelData.GetMediaDescr().end() )
+              && aModelData.GetMediaDescr().find( sFilterOptionsString ) == aModelData.GetMediaDescr().end() )
                 aModelData.GetMediaDescr()[aIter->first] = aIter->second;
 
-            aIter = aModelData.GetDocProps().find( aFilterDataString );
+            aIter = aModelData.GetDocProps().find( sFilterDataString );
             if ( aIter != aModelData.GetDocProps().end()
-              && aModelData.GetMediaDescr().find( aFilterDataString ) == aModelData.GetMediaDescr().end() )
+              && aModelData.GetMediaDescr().find( sFilterDataString ) == aModelData.GetMediaDescr().end() )
                 aModelData.GetMediaDescr()[aIter->first] = aIter->second;
         }
     }
@@ -1554,12 +1566,12 @@ sal_Bool SfxStoringHelper::GUIStoreModel( const uno::Reference< frame::XModel >&
         DBG_ASSERT( aURL.GetProtocol() != INET_PROT_NOT_VALID, "Illegal URL!" );
 
         ::comphelper::SequenceAsHashMap::const_iterator aIter =
-                                aModelData.GetMediaDescr().find( aFilterNameString );
+                                aModelData.GetMediaDescr().find( sFilterNameString );
 
         if ( aIter != aModelData.GetMediaDescr().end() )
             aIter->second >>= aFilterName;
         else
-            aModelData.GetMediaDescr()[aFilterNameString] <<= aFilterName;
+            aModelData.GetMediaDescr()[sFilterNameString] <<= aFilterName;
 
         DBG_ASSERT( !aFilterName.isEmpty(), "Illegal filter!" );
     }

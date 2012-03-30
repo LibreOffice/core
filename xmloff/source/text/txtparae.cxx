@@ -225,11 +225,7 @@ namespace
             framebound_map_t m_vFrameBoundsOf;
             const Reference<XEnumerationAccess> m_xEnumAccess;
             void Fill(const filter_t& rFilter);
-            static const OUString our_sAnchorType;
-            static const OUString our_sAnchorFrame;
     };
-    const OUString BoundFrames::our_sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"));
-    const OUString BoundFrames::our_sAnchorFrame(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame"));
 
     class FieldParamExporter
     {
@@ -340,6 +336,8 @@ void BoundFrames::Fill(const filter_t& rFilter)
     const Reference< XEnumeration > xEnum = m_xEnumAccess->createEnumeration();
     if(!xEnum.is())
         return;
+    const OUString our_sAnchorType(RTL_CONSTASCII_USTRINGPARAM("AnchorType"));
+    const OUString our_sAnchorFrame(RTL_CONSTASCII_USTRINGPARAM("AnchorFrame"));
     while(xEnum->hasMoreElements())
     {
         Reference<XPropertySet> xPropSet(xEnum->nextElement(), UNO_QUERY);

@@ -141,9 +141,6 @@ void Base64Codec::encodeBase64(rtl::OUStringBuffer& aStrBuffer, const uno::Seque
     }
 }
 
-const rtl::OUString s2equal(RTL_CONSTASCII_USTRINGPARAM("=="));
-const rtl::OUString s1equal(RTL_CONSTASCII_USTRINGPARAM("="));
-
 void FourByteToThreeByte (sal_uInt8* pBuffer, sal_Int32& nLength, const sal_Int32 nStart, const rtl::OUString& sString)
 {
     nLength = 0;
@@ -153,9 +150,9 @@ void FourByteToThreeByte (sal_uInt8* pBuffer, sal_Int32& nLength, const sal_Int3
     if (nLen != 4)
         return;
 
-    if (sString.indexOf(s2equal) == 2)
+    if (sString.indexOfAsciiL(RTL_CONSTASCII_STRINGPARAM("==")) == 2)
         nLength = 1;
-    else if (sString.indexOf(s1equal) == 3)
+    else if (sString.indexOf('=') == 3)
         nLength = 2;
     else
         nLength = 3;

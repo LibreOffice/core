@@ -115,7 +115,7 @@ static char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
 static char const ID_DBG_METHODS[] = "Dbg_Methods";
 
 static ::rtl::OUString aSeqLevelStr( RTL_CONSTASCII_USTRINGPARAM("[]") );
-static ::rtl::OUString defaultNameSpace( RTL_CONSTASCII_USTRINGPARAM("ooo.vba") );
+static char const defaultNameSpace[] = "ooo.vba";
 
 // Gets the default property for an uno object. Note: There is some
 // redirection built in. The property name specifies the name
@@ -3291,7 +3291,7 @@ VBAConstantHelper::init()
     {
         Sequence< TypeClass > types(1);
         types[ 0 ] = TypeClass_CONSTANTS;
-        Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( defaultNameSpace, types, TypeDescriptionSearchDepth_INFINITE  );
+        Reference< XTypeDescriptionEnumeration > xEnum = getTypeDescriptorEnumeration( rtl::OUString(defaultNameSpace), types, TypeDescriptionSearchDepth_INFINITE  );
 
         if ( !xEnum.is() )
             return; //NULL;

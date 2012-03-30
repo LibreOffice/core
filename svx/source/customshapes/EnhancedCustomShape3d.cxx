@@ -64,13 +64,13 @@
 using namespace com::sun::star;
 using namespace com::sun::star::uno;
 
-const rtl::OUString sExtrusion( RTL_CONSTASCII_USTRINGPARAM ( "Extrusion" ) );
+const char aExtrusion[] = "Extrusion";
 
 void GetOrigin( SdrCustomShapeGeometryItem& rItem, double& rOriginX, double& rOriginY )
 {
     ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aOriginParaPair;
      const rtl::OUString    sOrigin( RTL_CONSTASCII_USTRINGPARAM ( "Origin" ) );
-    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sOrigin );
+    Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), sOrigin );
     if ( ! ( pAny && ( *pAny >>= aOriginParaPair ) && ( aOriginParaPair.First.Value >>= rOriginX ) && ( aOriginParaPair.Second.Value >>= rOriginY ) ) )
     {
         rOriginX = 0.50;
@@ -82,7 +82,7 @@ void GetRotateAngle( SdrCustomShapeGeometryItem& rItem, double& rAngleX, double&
 {
     ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aRotateAngleParaPair;
      const rtl::OUString    sRotateAngle( RTL_CONSTASCII_USTRINGPARAM ( "RotateAngle" ) );
-    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sRotateAngle );
+    Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), sRotateAngle );
     if ( ! ( pAny && ( *pAny >>= aRotateAngleParaPair ) && ( aRotateAngleParaPair.First.Value >>= rAngleX ) && ( aRotateAngleParaPair.Second.Value >>= rAngleY ) ) )
     {
         rAngleX = 0.0;
@@ -96,7 +96,7 @@ void GetSkew( SdrCustomShapeGeometryItem& rItem, double& rSkewAmount, double& rS
 {
     ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aSkewParaPair;
      const rtl::OUString    sSkew( RTL_CONSTASCII_USTRINGPARAM ( "Skew" ) );
-    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sSkew );
+    Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), sSkew );
     if ( ! ( pAny && ( *pAny >>= aSkewParaPair ) && ( aSkewParaPair.First.Value >>= rSkewAmount ) && ( aSkewParaPair.Second.Value >>= rSkewAngle ) ) )
     {
         rSkewAmount = 50;
@@ -110,7 +110,7 @@ void GetExtrusionDepth( SdrCustomShapeGeometryItem& rItem, const double* pMap, d
     ::com::sun::star::drawing::EnhancedCustomShapeParameterPair aDepthParaPair;
     double fDepth = 0, fFraction = 0;
     const rtl::OUString sDepth( RTL_CONSTASCII_USTRINGPARAM ( "Depth" ) );
-    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sDepth );
+    Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), sDepth );
     if ( pAny && ( *pAny >>= aDepthParaPair ) && ( aDepthParaPair.First.Value >>= fDepth ) && ( aDepthParaPair.Second.Value >>= fFraction ) )
     {
         rForwardDepth = fDepth * fFraction;
@@ -132,7 +132,7 @@ void GetExtrusionDepth( SdrCustomShapeGeometryItem& rItem, const double* pMap, d
 double GetDouble( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, double fDefault, const double* pMap )
 {
     double fRetValue = fDefault;
-    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, rPropertyName );
+    Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), rPropertyName );
     if ( pAny )
         *pAny >>= fRetValue;
     if ( pMap )
@@ -144,7 +144,7 @@ drawing::ShadeMode GetShadeMode( SdrCustomShapeGeometryItem& rItem, const drawin
 {
     drawing::ShadeMode eRet( eDefault );
     const rtl::OUString sShadeMode( RTL_CONSTASCII_USTRINGPARAM ( "ShadeMode" ) );
-    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, sShadeMode );
+    Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), sShadeMode );
     if ( pAny )
         *pAny >>= eRet;
     return eRet;
@@ -153,7 +153,7 @@ drawing::ShadeMode GetShadeMode( SdrCustomShapeGeometryItem& rItem, const drawin
 sal_Int32 GetInt32( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const sal_Int32 nDefault )
 {
     sal_Int32 nRetValue = nDefault;
-    Any* pAny = rItem.GetPropertyValueByName( sExtrusion, rPropertyName );
+    Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), rPropertyName );
     if ( pAny )
         *pAny >>= nRetValue;
     return nRetValue;
@@ -162,7 +162,7 @@ sal_Int32 GetInt32( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPro
 sal_Bool GetBool( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const sal_Bool bDefault )
 {
     sal_Bool bRetValue = bDefault;
-    const Any* pAny = rItem.GetPropertyValueByName( sExtrusion, rPropertyName );
+    const Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), rPropertyName );
     if ( pAny )
         *pAny >>= bRetValue;
     return bRetValue;
@@ -171,7 +171,7 @@ sal_Bool GetBool( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPrope
 awt::Point GetPoint( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const awt::Point& rDefault )
 {
     awt::Point aRetValue( rDefault );
-    const Any* pAny = rItem.GetPropertyValueByName( sExtrusion, rPropertyName );
+    const Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), rPropertyName );
     if ( pAny )
         *pAny >>= aRetValue;
     return aRetValue;
@@ -181,7 +181,7 @@ drawing::Position3D GetPosition3D( SdrCustomShapeGeometryItem& rItem, const rtl:
                                     const drawing::Position3D& rDefault, const double* pMap )
 {
     drawing::Position3D aRetValue( rDefault );
-    const Any* pAny = rItem.GetPropertyValueByName( sExtrusion, rPropertyName );
+    const Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), rPropertyName );
     if ( pAny )
         *pAny >>= aRetValue;
     if ( pMap )
@@ -196,7 +196,7 @@ drawing::Position3D GetPosition3D( SdrCustomShapeGeometryItem& rItem, const rtl:
 drawing::Direction3D GetDirection3D( SdrCustomShapeGeometryItem& rItem, const rtl::OUString& rPropertyName, const drawing::Direction3D& rDefault )
 {
     drawing::Direction3D aRetValue( rDefault );
-    const Any* pAny = rItem.GetPropertyValueByName( sExtrusion, rPropertyName );
+    const Any* pAny = rItem.GetPropertyValueByName( rtl::OUString(aExtrusion), rPropertyName );
     if ( pAny )
         *pAny >>= aRetValue;
     return aRetValue;
@@ -209,7 +209,7 @@ EnhancedCustomShape3d::Transformation2D::Transformation2D( const SdrObject* pCus
 {
     SdrCustomShapeGeometryItem& rGeometryItem = (SdrCustomShapeGeometryItem&)pCustomShape->GetMergedItem( SDRATTR_CUSTOMSHAPE_GEOMETRY );
     const rtl::OUString sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
-    Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sProjectionMode );
+    Any* pAny = rGeometryItem.GetPropertyValueByName( rtl::OUString(aExtrusion), sProjectionMode );
     if ( pAny )
         *pAny >>= eProjectionMode;
 
@@ -298,7 +298,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
             pMap = &fMap;
         }
     }
-    if ( GetBool( rGeometryItem, sExtrusion, sal_False ) )
+    const rtl::OUString sExtrusion(aExtrusion);
+    if ( GetBool( rGeometryItem, aExtrusion, sal_False ) )
     {
         sal_Bool bIsMirroredX = ((SdrObjCustomShape*)pCustomShape)->IsMirroredX();
         sal_Bool bIsMirroredY = ((SdrObjCustomShape*)pCustomShape)->IsMirroredY();
@@ -340,7 +341,7 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
 
         drawing::ProjectionMode eProjectionMode( drawing::ProjectionMode_PARALLEL );
         const rtl::OUString sProjectionMode( RTL_CONSTASCII_USTRINGPARAM ( "ProjectionMode" ) );
-        Any* pAny = rGeometryItem.GetPropertyValueByName( sExtrusion, sProjectionMode );
+        Any* pAny = rGeometryItem.GetPropertyValueByName( aExtrusion, sProjectionMode );
         if ( pAny )
             *pAny >>= eProjectionMode;
         ProjectionType eProjectionType( eProjectionMode == drawing::ProjectionMode_PARALLEL ? PR_PARALLEL : PR_PERSPECTIVE );
@@ -355,8 +356,8 @@ SdrObject* EnhancedCustomShape3d::Create3DObject( const SdrObject* pShape2d, con
         sal_Bool bUseTwoFillStyles( sal_False );
 
         drawing::ShadeMode eShadeMode( GetShadeMode( rGeometryItem, drawing::ShadeMode_FLAT ) );
-        const rtl::OUString sExtrusionColor( RTL_CONSTASCII_USTRINGPARAM ( "Color" ) );
-        sal_Bool bUseExtrusionColor = GetBool( rGeometryItem, sExtrusionColor, sal_False );
+        const rtl::OUString aExtrusionColor( RTL_CONSTASCII_USTRINGPARAM ( "Color" ) );
+        sal_Bool bUseExtrusionColor = GetBool( rGeometryItem, aExtrusionColor, sal_False );
 
         XFillStyle eFillStyle( ITEMVALUE( aSet, XATTR_FILLSTYLE, XFillStyleItem ) );
         pScene->GetProperties().SetObjectItem( Svx3DShadeModeItem( 0 ) );

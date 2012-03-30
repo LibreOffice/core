@@ -68,8 +68,8 @@ using ::rtl::OUString;
 namespace
 {
 
-const OUString lcl_aLabelPrefix( RTL_CONSTASCII_USTRINGPARAM("label "));
-const OUString lcl_aCategoriesRange( RTL_CONSTASCII_USTRINGPARAM("categories"));
+const char aLabelPrefix[] = "label ";
+const char aCategoriesRange[] = "categories";
 
 typedef ::std::multimap< ::rtl::OUString, ::rtl::OUString >
     lcl_tOriginalRangeToInternalRangeMap;
@@ -115,6 +115,9 @@ void lcl_fillRangeMapping(
 {
     sal_Int32 nRowOffset = ( rTable.bHasHeaderRow ? 1 : 0 );
     sal_Int32 nColOffset = ( rTable.bHasHeaderColumn ? 1 : 0 );
+
+    const OUString lcl_aCategoriesRange(aCategoriesRange);
+    const OUString lcl_aLabelPrefix(aLabelPrefix);
 
     // Fill range mapping
     const size_t nTableRowCount( rTable.aData.size());
@@ -900,6 +903,8 @@ void SchXMLTableHelper::switchRangesFromOuterToInternalIfNecessary(
     lcl_tOriginalRangeToInternalRangeMap aRangeMap;
 
     lcl_fillRangeMapping( rTable, aRangeMap, eDataRowSource );
+
+    const OUString lcl_aCategoriesRange(aCategoriesRange);
 
     bool bCategoriesApplied = false;
     // translate ranges (using the map created before)

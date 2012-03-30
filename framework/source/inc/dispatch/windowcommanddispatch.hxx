@@ -74,20 +74,6 @@ namespace css = ::com::sun::star;
  */
 class WindowCommandDispatch : private ThreadHelpBase
 {
-    //___________________________________________
-    // const
-
-    private:
-
-        /// dispatch URL to trigger our "Tools->Options" dialog
-        static const ::rtl::OUString COMMAND_PREFERENCES;
-
-        /// dispatch URL to trigger our About box
-        static const ::rtl::OUString COMMAND_ABOUTBOX;
-
-    //___________________________________________
-    // member
-
     private:
 
         /// can be used to create own needed services on demand.
