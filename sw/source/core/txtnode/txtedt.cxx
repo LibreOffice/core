@@ -723,6 +723,10 @@ sal_Bool SwScanner::NextWord()
                 pBreakIt->GetLocale( aCurrLang ), nWordType, sal_True );
         OSL_ENSURE( aBound.endPos >= aBound.startPos, "broken aBound result" );
 
+        // we don't want to include preceeding text
+        if (aBound.startPos < nBegin)
+            aBound.startPos = nBegin;
+
         //no word boundaries could be found
         if(aBound.endPos == aBound.startPos)
             return sal_False;

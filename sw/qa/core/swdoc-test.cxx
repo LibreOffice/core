@@ -36,6 +36,8 @@
 #include <tools/urlobj.hxx>
 #include <unotools/tempfile.hxx>
 
+#include <editeng/langitem.hxx>
+
 #include <sfx2/app.hxx>
 #include <sfx2/docfilt.hxx>
 #include <sfx2/docfile.hxx>
@@ -214,7 +216,6 @@ void SwDocTest::testUserPerceivedCharCount()
     CPPUNIT_ASSERT_MESSAGE("Surrogate Pair should be counted as single character", nCount == 1);
 }
 
-//See https://bugs.freedesktop.org/show_bug.cgi?id=40449 for motivation
 void SwDocTest::testSwScanner()
 {
     SwNodeIndex aIdx(m_pDoc->GetNodes().GetEndOfContent(), -1);
@@ -224,25 +225,79 @@ void SwDocTest::testSwScanner()
 
     CPPUNIT_ASSERT_MESSAGE("Has Text Node", pTxtNode);
 
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=40449 for motivation
+    //See https://bugs.freedesktop.org/show_bug.cgi?id=39365 for motivation
     //Use a temporary rtl::OUString as the arg, as that's the trouble behind
     //fdo#40449 and fdo#39365
-    SwScanner aScanner(*pTxtNode,
-        rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hello World")),
-        0, 0, i18n::WordType::DICTIONARY_WORD, 0,
-        RTL_CONSTASCII_LENGTH("Hello World"));
+    {
+        SwScanner aScanner(*pTxtNode,
+            rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Hello World")),
+            0, 0, i18n::WordType::DICTIONARY_WORD, 0,
+            RTL_CONSTASCII_LENGTH("Hello World"));
 
-    bool bFirstOk = aScanner.NextWord();
-    CPPUNIT_ASSERT_MESSAGE("First Token", bFirstOk);
-    const rtl::OUString &rHello = aScanner.GetWord();
-    CPPUNIT_ASSERT_MESSAGE("Should be Hello",
-        rHello.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Hello")));
+        bool bFirstOk = aScanner.NextWord();
+        CPPUNIT_ASSERT_MESSAGE("First Token", bFirstOk);
+        const rtl::OUString &rHello = aScanner.GetWord();
+        CPPUNIT_ASSERT_MESSAGE("Should be Hello",
+            rHello.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("Hello")));
 
-    bool bSecondOk = aScanner.NextWord();
-    CPPUNIT_ASSERT_MESSAGE("Second Token", bSecondOk);
-    const rtl::OUString &rWorld = aScanner.GetWord();
-    CPPUNIT_ASSERT_MESSAGE("Should be World",
-        rWorld.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("World")));
+        bool bSecondOk = aScanner.NextWord();
+        CPPUNIT_ASSERT_MESSAGE("Second Token", bSecondOk);
+        const rtl::OUString &rWorld = aScanner.GetWord();
+        CPPUNIT_ASSERT_MESSAGE("Should be World",
+            rWorld.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("World")));
+    }
+
+    //See https://www.libreoffice.org/bugzilla/show_bug.cgi?id=45271 for motivation
+    {
+        const sal_Unicode IDEOGRAPHICFULLSTOP_D[] = { 0x3002, 'D' };
+
+        m_pDoc->InsertString(aPaM, rtl::OUString(IDEOGRAPHICFULLSTOP_D,
+            SAL_N_ELEMENTS(IDEOGRAPHICFULLSTOP_D)));
+
+        SvxLanguageItem aCJKLangItem( LANGUAGE_CHINESE_SIMPLIFIED, RES_CHRATR_CJK_LANGUAGE );
+        SvxLanguageItem aWestLangItem( LANGUAGE_ENGLISH_US, RES_CHRATR_LANGUAGE );
+        m_pDoc->InsertPoolItem(aPaM, aCJKLangItem, 0 );
+        m_pDoc->InsertPoolItem(aPaM, aWestLangItem, 0 );
+
+        SwDocStat aDocStat;
+        pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(IDEOGRAPHICFULLSTOP_D));
+
+        CPPUNIT_ASSERT_MESSAGE("Should be 2", aDocStat.nChar == 2);
+        CPPUNIT_ASSERT_MESSAGE("Should be 2", aDocStat.nCharExcludingSpaces == 2);
+    }
+
+    //See https://issues.apache.org/ooo/show_bug.cgi?id=89042 for motivation
+    {
+        SwDocStat aDocStat;
+
+        const sal_Unicode aShouldBeThree[] = {
+            0x0053, 0x0068, 0x006F, 0x0075, 0x006C, 0x0064, 0x0020,
+            0x2018, 0x0062, 0x0065, 0x0020, 0x0074, 0x0068, 0x0072,
+            0x0065, 0x0065, 0x2019
+        };
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, rtl::OUString(aShouldBeThree, SAL_N_ELEMENTS(aShouldBeThree)));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeThree));
+        CPPUNIT_ASSERT_MESSAGE("Should be 3", aDocStat.nWord == 3);
+
+        const sal_Unicode aShouldBeFive[] = {
+            0x0046, 0x0072, 0x0065, 0x006E, 0x0063, 0x0068, 0x0020,
+            0x00AB, 0x00A0, 0x0073, 0x0061, 0x0076, 0x006F, 0x0069,
+            0x0072, 0x0020, 0x0063, 0x0061, 0x006C, 0x0063, 0x0075,
+            0x006C, 0x0065, 0x0072, 0x00A0, 0x00BB
+        };
+
+        m_pDoc->AppendTxtNode(*aPaM.GetPoint());
+        m_pDoc->InsertString(aPaM, rtl::OUString(aShouldBeFive, SAL_N_ELEMENTS(aShouldBeFive)));
+        pTxtNode = aPaM.GetNode()->GetTxtNode();
+        pTxtNode->CountWords(aDocStat, 0, SAL_N_ELEMENTS(aShouldBeFive));
+        CPPUNIT_ASSERT_MESSAGE("Should be 5", aDocStat.nWord == 5);
+    }
 }
+
 
 //See https://bugs.freedesktop.org/show_bug.cgi?id=40599 for motivation
 void SwDocTest::testGraphicAnchorDeletion()
