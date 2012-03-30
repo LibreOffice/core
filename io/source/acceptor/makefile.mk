@@ -72,6 +72,8 @@ DEF1NAME=		$(SHL1TARGET)
 
 .ENDIF 		# L10N_framework
 
+.INCLUDE :	target.mk
+
 .IF "$(OS)" != "IOS"
 
 $(MISC)/acceptor.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
@@ -83,5 +85,3 @@ $(MISC)/acceptor.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
 ALLTAR : $(MISC)/acceptor.component
 
 .ENDIF          # IOS
-
-.INCLUDE :	target.mk

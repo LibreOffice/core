@@ -72,6 +72,8 @@ DEF1NAME=		$(SHL1TARGET)
 
 .ENDIF 		# L10N_framework
 
+.INCLUDE :	target.mk
+
 .IF "$(OS)" != "IOS"
 
 ALLTAR : $(MISC)/connector.component
@@ -83,5 +85,3 @@ $(MISC)/connector.component .ERRREMOVE : $(SOLARENV)/bin/createcomponent.xslt \
         $(SOLARENV)/bin/createcomponent.xslt connector.component
 
 .ENDIF          # IOS
-
-.INCLUDE :	target.mk
