@@ -30,6 +30,7 @@
 
 #include <cstring>
 
+#include "cppu/macros.hxx"
 #include "sal/types.h"
 #include "typelib/typeclass.h"
 #include "typelib/typedescription.h"

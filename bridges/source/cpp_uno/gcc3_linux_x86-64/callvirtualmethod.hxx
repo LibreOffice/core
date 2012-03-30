@@ -31,6 +31,7 @@
 
 #include "sal/config.h"
 
+#include "cppu/macros.hxx"
 #include "sal/types.h"
 #include "typelib/typedescription.h"
 
