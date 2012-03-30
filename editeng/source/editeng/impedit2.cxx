@@ -2192,7 +2192,7 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_uInt16 
     {
         // always aOldPositions.Min(), since Remove().
         ParaPortion* pTmpPortion = GetParaPortions().Release(aOldPositions.Min());
-        aEditDoc.Remove( (sal_uInt16)aOldPositions.Min() );
+        aEditDoc.Release( (sal_uInt16)aOldPositions.Min() );
         aTmpPortionList.Append(pTmpPortion);
     }
 
@@ -2237,7 +2237,8 @@ EditSelection ImpEditEngine::ImpMoveParagraphs( Range aOldPositions, sal_uInt16 
     if ( pRecalc4 )
         CalcHeight( pRecalc4 );
 
-    aTmpPortionList.Reset();
+    while( aTmpPortionList.Count() > 0 )
+        aTmpPortionList.Release( aTmpPortionList.Count() - 1 );
 
 #if OSL_DEBUG_LEVEL > 2
     GetParaPortions().DbgCheck(aEditDoc);
@@ -2484,7 +2485,7 @@ void ImpEditEngine::ImpRemoveParagraph( sal_uInt16 nPara )
     aDeletedNodes.Insert( pInf, aDeletedNodes.Count() );
 
     // The node is managed by the undo and possibly destroyed!
-    aEditDoc.Remove( nPara );
+    aEditDoc.Release( nPara );
     GetParaPortions().Remove( nPara );
 
     if ( IsCallParaInsertedOrDeleted() )

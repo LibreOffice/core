@@ -419,6 +419,14 @@ void ContentList::Remove(size_t nPos)
     maContents.erase(maContents.begin() + nPos);
 }
 
+void ContentList::Release(size_t nPos)
+{
+    if (nPos >= maContents.size())
+        return;
+
+    maContents.release(maContents.begin() + nPos).release();
+}
+
 size_t ContentList::Count() const
 {
     return maContents.size();

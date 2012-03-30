@@ -253,6 +253,7 @@ public:
 
     void Remove(const EditCharAttrib* p);
     void Remove(size_t nPos);
+    void Release(const EditCharAttrib* p);
 
 #if OSL_DEBUG_LEVEL > 2
     // Debug:
@@ -315,7 +316,10 @@ public:
     ContentNode* operator[](size_t nPos);
 
     void Insert(size_t nPos, ContentNode* p);
+    /// deletes
     void Remove(size_t nPos);
+    /// does not delete
+    void Release(size_t nPos);
     size_t Count() const;
     void Clear();
 };
