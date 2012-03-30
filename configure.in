@@ -3616,9 +3616,9 @@ AC_MSG_RESULT([no, obsolete])
 dnl ===================================================================
 dnl Search all the common names for sha1sum
 dnl ===================================================================
-AC_PATH_PROGS(SHA1SUM, sha1sum sha1)
+AC_PATH_PROGS(SHA1SUM, sha1sum sha1 shasum)
 if test -z "$SHA1SUM"; then
-    AC_MSG_ERROR([install sha1sum to run this script])
+    AC_MSG_ERROR([install the approproate SHA-1 checksumming program for this OS])
 fi
 
 dnl ===================================================================
