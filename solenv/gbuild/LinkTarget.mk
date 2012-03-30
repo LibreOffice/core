@@ -900,6 +900,17 @@ $(2) :|	$(call gb_LinkTarget_get_external_headers_target,$(1))
 
 endef
 
+define gb_LinkTarget_add_custom_headers
+$(call gb_LinkTarget_get_headers_target,$(1)) \
+$(call gb_LinkTarget_get_target,$(1)) : INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2))
+ifeq ($(gb_FULLDEPS),$(true))
+$(call gb_LinkTarget_get_dep_target,$(1)) : INCLUDE += -I$(call gb_CustomTarget_get_workdir,$(2))
+endif
+$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_CustomTarget_get_target,$(2)))
+$(call gb_LinkTarget_get_clean_target,$(1)) : $(call gb_CustomTarget_get_clean_target,$(2))
+
+endef
+
 define gb_LinkTarget_add_package_headers
 $(foreach package,$(2),$(call gb_LinkTarget__add_internal_headers,$(1),$(call gb_Package_get_target,$(package))))
 $(call gb_LinkTarget_get_clean_target,$(1)) : $(foreach package,$(2),$(call gb_Package_get_clean_target,$(package)))

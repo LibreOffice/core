@@ -185,6 +185,7 @@ $(eval $(foreach method,\
 	add_linked_static_libs \
 	use_external \
 	use_externals \
+	add_custom_headers \
 	add_external_headers \
 	add_package_headers \
 	add_sdi_headers \
