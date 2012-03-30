@@ -25,12 +25,15 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,sdext_pdfimport_keywords,$(WORKDIR)/CustomTarget/sdext/source/pdfimport/wrapper))
+$(eval $(call gb_CustomTarget_CustomTarget,sdext/pdfimport,new_style))
 
-$(eval $(call gb_Package_add_customtarget,sdext_pdfimport_keywords,sdext/source/pdfimport/wrapper))
+SEPI := $(call gb_CustomTarget_get_workdir,sdext/pdfimport)
 
-$(eval $(call gb_CustomTarget_add_dependencies,sdext/source/pdfimport/wrapper,\
-    sdext/source/pdfimport/wrapper/keyword_list \
-))
+$(call gb_CustomTarget_get_target,sdext/pdfimport) : $(SEPI)/hash.cxx
 
-# vim:set shiftwidth=4 softtabstop=4 expandtab:
+$(SEPI)/hash.cxx : $(SRCDIR)/sdext/source/pdfimport/wrapper/keyword_list \
+		| $(SEPI)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),GPF,1)
+	$(GPERF) -C -t -l -L C++ -m 20 -Z PdfKeywordHash -k'4-5,$$' $< > $@
+
+# vim:set shiftwidth=4 tabstop=4 noexpandtab:

@@ -38,13 +38,13 @@ endif
 
 ifeq ($(ENABLE_PDFIMPORT),YES)
 $(eval $(call gb_Module_add_targets,sdext,\
+    CustomTarget_pdfimport \
     Executable_pdf2xml \
     Executable_pdfunzip \
     Executable_xpdfimport \
     Extension_pdfimport \
     Library_pdfimport \
     StaticLibrary_pdfimport_s \
-    Package_pdfimport_keywords \
 ))
 
 $(eval $(call gb_Module_add_check_targets,sdext,\
@@ -55,9 +55,9 @@ endif
 ifeq ($(ENABLE_PRESENTER_SCREEN),YES)
 $(eval $(call gb_Module_add_targets,sdext,\
     Configuration_presenter \
+    CustomTarget_presenter \
     Extension_presenter \
     Library_presenter \
-    Package_presenter_help \
     Zip_presenter \
 ))
 endif

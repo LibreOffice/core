@@ -31,10 +31,6 @@ $(eval $(call gb_Extension_Extension,presenter-screen,sdext/source/presenter))
 
 $(eval $(call gb_Extension_set_platform,presenter-screen,$(sdext_PLATFORM)))
 
-$(eval $(call gb_Extension_add_package_dependencies,presenter-screen,\
-    sdext_presenter_help \
-))
-
 $(eval $(call gb_Extension_add_files,presenter-screen,,\
     $(call gb_Library_get_target,PresenterScreen) \
 ))
@@ -148,9 +144,5 @@ $(eval $(call gb_Extension_add_files,presenter-screen,help/en-US/com.sun.Present
 ))
 
 $(eval $(call gb_Extension_localize_help,presenter-screen,help/lang/com.sun.PresenterScreen-$(sdext_PLATFORM)/presenter.xhp,$(WORKDIR)/CustomTarget/sdext/source/presenter/help/en-US/com.sun.PresenterScreen/presenter.xhp))
-
-# this file is created by a custom target, but we depend on it: ensure
-# make knows about it
-$(WORKDIR)/CustomTarget/sdext/source/presenter/help/en-US/com.sun.PresenterScreen/presenter.xhp :| $(call gb_Package_get_target,sdext_presenter_help)
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

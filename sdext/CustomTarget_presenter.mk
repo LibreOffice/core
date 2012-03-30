@@ -25,13 +25,19 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-gb_PARTIALBUILD := T
+$(eval $(call gb_CustomTarget_CustomTarget,sdext/source/presenter/help/en-US/com.sun.PresenterScreen,new_style))
 
-hash.cxx : $(SRCDIR)/sdext/source/pdfimport/wrapper/keyword_list
-	$(GPERF) -C -t -l -L C++ -m 20 -Z PdfKeywordHash -k'4-5,$$' $< > $@
+SEPR := $(call gb_CustomTarget_get_workdir,sdext/source/presenter/help/en-US/com.sun.PresenterScreen)
 
-.DEFAULT_GOAL := all
-.PHONY : all
-all : hash.cxx
+$(call gb_CustomTarget_get_target,sdext/source/presenter/help/en-US/com.sun.PresenterScreen) : \
+	$(SEPR)/presenter.xhp
+
+include $(SRCDIR)/sdext/platform.mk
+
+$(SEPR)/presenter.xhp : \
+		$(SRCDIR)/sdext/source/presenter/help/en-US/com.sun.PresenterScreen/presenter.xhp \
+		| $(SEPR)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
+	sed "s/PLATFORMID/$(sdext_PLATFORM)/" < $< > $@
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

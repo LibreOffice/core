@@ -33,7 +33,6 @@ $(eval $(call gb_Library_add_api,pdfimport,\
 ))
 
 $(eval $(call gb_Library_set_include,pdfimport,\
-    -I$(WORKDIR)/CustomTarget/sdext/source/pdfimport/wrapper \
     -I$(SRCDIR)/sdext/source/pdfimport/inc \
     $$(INCLUDE) \
 ))

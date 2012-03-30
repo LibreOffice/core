@@ -38,12 +38,9 @@ $(eval $(call gb_StaticLibrary_use_externals,pdfimport_s,\
     zlib \
 ))
 
-$(eval $(call gb_StaticLibrary_add_package_headers,pdfimport_s,\
-    sdext_pdfimport_keywords \
-))
+$(eval $(call gb_StaticLibrary_add_custom_headers,pdfimport_s,sdext/pdfimport))
 
 $(eval $(call gb_StaticLibrary_set_include,pdfimport_s,\
-    -I$(WORKDIR)/CustomTarget/sdext/source/pdfimport/wrapper \
     -I$(SRCDIR)/sdext/source/pdfimport/inc \
     $$(INCLUDE) \
 ))

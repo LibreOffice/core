@@ -31,10 +31,6 @@ $(eval $(call gb_Extension_Extension,pdfimport,sdext/source/pdfimport))
 
 $(eval $(call gb_Extension_set_platform,pdfimport,$(sdext_PLATFORM)))
 
-$(eval $(call gb_Extension_add_package_dependencies,pdfimport,\
-    sdext_pdfimport_keywords \
-))
-
 $(eval $(call gb_Extension_add_files,pdfimport,,\
     $(call gb_Executable_get_target,xpdfimport) \
     $(call gb_Library_get_target,pdfimport) \
