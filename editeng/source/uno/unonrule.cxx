@@ -43,7 +43,6 @@
 #include <editeng/numitem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/unotext.hxx>
-#include <editeng/numitem.hxx>
 #include <editeng/unofdesc.hxx>
 #include <editeng/unonrule.hxx>
 #include <editeng/editids.hrc>

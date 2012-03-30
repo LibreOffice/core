@@ -61,7 +61,6 @@
 #include <tools/stream.hxx>
 #include <tools/debug.hxx>
 #include <tools/shl.hxx>
-#include <vcl/svapp.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 
 #include <boost/bind.hpp>

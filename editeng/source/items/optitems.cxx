@@ -34,8 +34,6 @@
 #include <editeng/optitems.hxx>
 #include <editeng/eerdll.hxx>
 #include <editeng/editrids.hrc>
-#include <editeng/eerdll.hxx>
-#include <editeng/editrids.hrc>
 
 using namespace ::com::sun::star::uno;
 using namespace ::com::sun::star::linguistic2;

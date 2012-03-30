@@ -29,7 +29,6 @@
 #include <vcl/svapp.hxx>
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/text/ControlCharacter.hpp>
-#include <com/sun/star/text/ControlCharacter.hpp>
 #include <com/sun/star/text/XTextField.hdl>
 #include <osl/mutex.hxx>
 #include <svl/itemset.hxx>

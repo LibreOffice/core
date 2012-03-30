@@ -47,7 +47,6 @@
 #include <editeng/scriptspaceitem.hxx>
 #include <svl/itempool.hxx>
 #include <vcl/virdev.hxx>
-#include <vcl/svapp.hxx>
 
 #include <editeng/akrnitem.hxx>
 #include <editeng/cntritem.hxx>
@@ -73,7 +72,6 @@
 #include <editeng/xmlcnitm.hxx>
 #include <editeng/forbiddencharacterstable.hxx>
 #include <editeng/justifyitem.hxx>
-#include <comphelper/processfactory.hxx>
 #include <rtl/instance.hxx>
 
 using namespace ::com::sun::star;

@@ -57,7 +57,6 @@
 #include <editeng/unolingu.hxx>
 #include "vcl/window.hxx"
 #include <helpid.hrc>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/xml/sax/InputSource.hpp>
 #include <com/sun/star/xml/sax/XParser.hpp>
 #include <unotools/streamwrap.hxx>

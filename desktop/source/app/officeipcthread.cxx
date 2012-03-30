@@ -49,7 +49,6 @@
 #include <comphelper/processfactory.hxx>
 #include <osl/file.hxx>
 #include <rtl/process.h>
-#include <rtl/instance.hxx>
 #include "tools/getprocessworkingdir.hxx"
 
 using namespace desktop;

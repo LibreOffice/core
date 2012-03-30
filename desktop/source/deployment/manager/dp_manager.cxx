@@ -64,7 +64,6 @@
 #include "boost/bind.hpp"
 #include "unotools/tempfile.hxx"
 
-#include "osl/file.hxx"
 #include <vector>
 #include <list>
 #include "dp_descriptioninfoset.hxx"

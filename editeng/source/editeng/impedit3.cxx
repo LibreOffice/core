@@ -34,7 +34,6 @@
 #include <vcl/metaact.hxx>
 #include <vcl/gdimtf.hxx>
 
-#include <vcl/wrkwin.hxx>
 #include <editeng/adjitem.hxx>
 #include <editeng/tstpitem.hxx>
 #include <editeng/lspcitem.hxx>
@@ -70,7 +69,6 @@
 
 #include <set>
 #include <math.h>
-#include <vcl/svapp.hxx>
 #include <vcl/metric.hxx>
 #include <com/sun/star/i18n/ScriptType.hpp>
 #include <com/sun/star/text/CharacterCompressionType.hpp>

@@ -48,7 +48,6 @@
 #include <outlundo.hxx>
 #include <editeng/outlobj.hxx>
 #include <editeng/flditem.hxx>
-#include <editeng/flditem.hxx>
 #include <editeng/eeitem.hxx>
 #include <editeng/numitem.hxx>
 #include <vcl/window.hxx>

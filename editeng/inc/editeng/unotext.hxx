@@ -54,7 +54,6 @@
 #include <com/sun/star/style/LineSpacing.hpp>
 #include <com/sun/star/style/TabStop.hpp>
 #include <com/sun/star/lang/XUnoTunnel.hpp>
-#include <com/sun/star/text/XTextRange.hpp>
 #include <cppuhelper/implbase1.hxx>
 #include <cppuhelper/implbase2.hxx>
 #include <cppuhelper/implbase4.hxx>
@@ -491,8 +490,6 @@ public:
 };
 
 // ====================================================================
-
-#include <cppuhelper/implbase1.hxx>
 
 class SvxUnoTextContentEnumeration : public ::cppu::WeakAggImplHelper1< ::com::sun::star::container::XEnumeration >
 {

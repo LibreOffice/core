@@ -56,12 +56,10 @@
 #include <svtools/ctrltool.hxx>
 #include <vcl/settings.hxx>
 #include <vcl/svapp.hxx>
-#include <com/sun/star/style/CaseMap.hpp>
 #include <com/sun/star/awt/SimpleFontMetric.hpp>
 #include <com/sun/star/awt/FontWeight.hpp>
 #include <com/sun/star/awt/FontSlant.hpp>
 #include <com/sun/star/awt/CharSet.hpp>
-#include <com/sun/star/awt/FontDescriptor.hpp>
 #include <com/sun/star/awt/FontWidth.hpp>
 #include <com/sun/star/awt/XFont.hpp>
 #include <com/sun/star/awt/FontType.hpp>
@@ -105,8 +103,6 @@
 #include <editeng/charreliefitem.hxx>
 #include <editeng/itemtype.hxx>
 #include <editeng/eerdll.hxx>
-
-#include <tools/tenccvt.hxx>
 
 #define STORE_UNICODE_MAGIC_MARKER  0xFE331188
 

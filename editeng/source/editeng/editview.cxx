@@ -68,10 +68,7 @@
 #include <com/sun/star/beans/PropertyValues.hdl>
 #include <com/sun/star/lang/Locale.hpp>
 #include <linguistic/lngprops.hxx>
-#include <vcl/svapp.hxx>
 #include <vcl/settings.hxx>
-#include <unotools/lingucfg.hxx>
-#include <sal/macros.h>
 
 #include <com/sun/star/lang/XServiceInfo.hpp>
 

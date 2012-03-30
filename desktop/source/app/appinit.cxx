@@ -56,7 +56,6 @@
 #include <rtl/bootstrap.hxx>
 #include <ucbhelper/configurationkeys.hxx>
 
-#include <cppuhelper/bootstrap.hxx>
 #include <tools/rcid.h>
 
 #include <rtl/logfile.hxx>
