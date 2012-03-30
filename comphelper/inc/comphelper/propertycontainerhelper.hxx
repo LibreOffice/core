@@ -184,13 +184,6 @@ protected:
     */
     void    describeProperties(::com::sun::star::uno::Sequence< ::com::sun::star::beans::Property >& /* [out] */ _rProps) const;
 
-    /** modify the attributes of an already registered property.
-
-        You may want to use this if you're a derived from OPropertyContainer indirectly and want to override
-        some settings your base class did.
-    */
-    void    modifyAttributes(sal_Int32 _nHandle, sal_Int32 _nAddAttrib, sal_Int32 _nRemoveAttrib);
-
     /** retrieves the description for a registered property
         @throw  com::sun::star::beans::UnknownPropertyException
             if no property with the given name is registered

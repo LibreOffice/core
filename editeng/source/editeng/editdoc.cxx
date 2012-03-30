@@ -1520,18 +1520,6 @@ EditPaM EditDoc::RemoveText()
     return aPaM;
 }
 
-void EditDoc::InsertText( EditPaM& rPaM, xub_Unicode c )
-{
-    DBG_ASSERT( c != 0x0A, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
-    DBG_ASSERT( c != 0x0D, "EditDoc::InsertText: Newlines prohibited in paragraph!" );
-    DBG_ASSERT( c != '\t', "EditDoc::InsertText: Newlines prohibited in paragraph!" );
-
-    rPaM.GetNode()->Insert( c, rPaM.GetIndex() );
-    rPaM.GetNode()->ExpandAttribs( rPaM.GetIndex(), 1, GetItemPool() );
-
-    SetModified( sal_True );
-}
-
 EditPaM EditDoc::InsertText( EditPaM aPaM, const XubString& rStr )
 {
     DBG_ASSERT( rStr.Search( 0x0A ) == STRING_NOTFOUND, "EditDoc::InsertText: Newlines prohibited in paragraph!" );

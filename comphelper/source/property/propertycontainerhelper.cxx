@@ -487,22 +487,6 @@ const Property& OPropertyContainerHelper::getProperty( const ::rtl::OUString& _r
 }
 
 //--------------------------------------------------------------------------
-void OPropertyContainerHelper::modifyAttributes(sal_Int32 _nHandle, sal_Int32 _nAddAttrib, sal_Int32 _nRemoveAttrib)
-{
-    // get the property somebody is asking for
-    PropertiesIterator aPos = searchHandle(_nHandle);
-    if (aPos == m_aProperties.end())
-    {
-        OSL_FAIL( "OPropertyContainerHelper::modifyAttributes: unknown handle!" );
-        // should not happen if the derived class has built a correct property set info helper to be used by
-        // our base class OPropertySetHelper
-        return;
-    }
-    aPos->aProperty.Handle |= _nAddAttrib;
-    aPos->aProperty.Handle &= ~_nRemoveAttrib;
-}
-
-//--------------------------------------------------------------------------
 void OPropertyContainerHelper::describeProperties(Sequence< Property >& _rProps) const
 {
     Sequence< Property > aOwnProps(m_aProperties.size());

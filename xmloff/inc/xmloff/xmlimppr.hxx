@@ -89,17 +89,9 @@ public:
     void ChainImportMapper(
         const UniReference< SvXMLImportPropertyMapper>& rMapper );
 
-    /** fills the given itemset with the attributes in the given list */
-    void importXML(
-            ::std::vector< XMLPropertyState >& rProperties,
-            ::com::sun::star::uno::Reference<
-                    ::com::sun::star::xml::sax::XAttributeList > xAttrList,
-            const SvXMLUnitConverter& rUnitConverter,
-            const SvXMLNamespaceMap& rNamespaceMap,
-            sal_uInt32 nPropType    ) const;
-
-    /** like above, except that the mart is only serached within the range
-      *  [nStartIdx, nEndIdx[
+    /** fills the given itemset with the attributes in the given list
+      * the map is only searched within the range
+      * [nStartIdx, nEndIdx[
       */
     void importXML(
             ::std::vector< XMLPropertyState >& rProperties,

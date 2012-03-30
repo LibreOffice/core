@@ -40,7 +40,6 @@ public:
     { nTop = nRight = nBottom = nLeft = 0; }
     SvBorder( const Size & rSz )
     { nTop = nBottom = rSz.Height(); nRight = nLeft = rSz.Width(); }
-    SvBorder( const Rectangle & rOuter, const Rectangle & rInner );
     SvBorder( long nLeftP, long nTopP, long nRightP, long nBottomP )
     { nLeft = nLeftP; nTop = nTopP; nRight = nRightP; nBottom = nBottomP; }
     sal_Bool    operator == ( const SvBorder & rObj ) const

@@ -399,12 +399,10 @@ void OslStream::SetSize( sal_uIntPtr nSize )
 class UCBStream : public SvStream
 {
     Reference< XInputStream >   xIS;
-    Reference< XOutputStream >  xOS;
     Reference< XStream >        xS;
     Reference< XSeekable >      xSeek;
 public:
                     UCBStream( Reference< XInputStream > & xIS );
-                    UCBStream( Reference< XOutputStream > & xOS );
                     UCBStream( Reference< XStream > & xS );
                     ~UCBStream();
     virtual sal_uIntPtr GetData( void* pData, sal_uIntPtr nSize );
@@ -416,12 +414,6 @@ public:
 
 UCBStream::UCBStream( Reference< XInputStream > & rStm )
     : xIS( rStm )
-    , xSeek( rStm, UNO_QUERY )
-{
-}
-
-UCBStream::UCBStream( Reference< XOutputStream > & rStm )
-    : xOS( rStm )
     , xSeek( rStm, UNO_QUERY )
 {
 }
@@ -439,8 +431,6 @@ UCBStream::~UCBStream()
     {
         if( xIS.is() )
             xIS->closeInput();
-        else if( xOS.is() )
-            xOS->closeOutput();
         else if( xS.is() )
         {
             Reference< XInputStream > xIS_ = xS->getInputStream();
@@ -488,13 +478,7 @@ sal_uIntPtr UCBStream::PutData( const void* pData, sal_uIntPtr nSize )
     try
     {
         Reference< XOutputStream > xOSFromS;
-        if( xOS.is() )
-        {
-            Sequence<sal_Int8> aData( (const sal_Int8 *)pData, nSize );
-            xOS->writeBytes( aData );
-            return nSize;
-        }
-        else if( xS.is() && (xOSFromS = xS->getOutputStream()).is() )
+        if( xS.is() && (xOSFromS = xS->getOutputStream()).is() )
         {
             Sequence<sal_Int8> aData( (const sal_Int8 *)pData, nSize );
             xOSFromS->writeBytes( aData );
@@ -537,9 +521,7 @@ void    UCBStream::FlushData()
     try
     {
         Reference< XOutputStream > xOSFromS;
-        if( xOS.is() )
-            xOS->flush();
-        else if( xS.is() && (xOSFromS = xS->getOutputStream()).is() )
+        if( xS.is() && (xOSFromS = xS->getOutputStream()).is() )
             xOSFromS->flush();
         else
             SetError( ERRCODE_IO_GENERAL );

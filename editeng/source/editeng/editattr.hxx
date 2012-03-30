@@ -68,7 +68,7 @@ class SfxVoidItem;
 // -------------------------------------------------------------------------
 // class EditAttrib
 // -------------------------------------------------------------------------
-class EditAttrib : public boost::noncopyable
+class EditAttrib : private boost::noncopyable
 {
 private:
     EditAttrib();
