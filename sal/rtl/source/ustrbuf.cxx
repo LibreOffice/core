@@ -28,20 +28,10 @@
 
 #include <osl/interlck.h>
 
-#ifndef _RTL_STRING_HXX_
 #include <rtl/ustrbuf.hxx>
-#endif
 #include <rtl/memory.h>
+#include <strimp.hxx>
 
-/*
-#include <rtl/alloc.h>
-*/
-
-
-
-/*************************************************************************
- *  rtl_uStringbuffer_newFromStr_WithLength
- */
 void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength( rtl_uString ** newStr,
                                                        const sal_Unicode * value,
                                                        sal_Int32 count)
@@ -55,12 +45,32 @@ void SAL_CALL rtl_uStringbuffer_newFromStr_WithLength( rtl_uString ** newStr,
     rtl_uString_new_WithLength( newStr, count + 16 );
     (*newStr)->length = count;
     rtl_copyMemory( (*newStr)->buffer, value, count * sizeof(sal_Unicode));
+    RTL_LOG_STRING_NEW( *newStr );
     return;
 }
 
-/*************************************************************************
- *  rtl_uStringbuffer_newFromStringBuffer
- */
+rtl_uString * SAL_CALL rtl_uStringBuffer_refReturn( rtl_uString * pThis )
+{
+    RTL_LOG_STRING_NEW( pThis );
+    rtl_uString_acquire( pThis );
+    return pThis;
+}
+
+rtl_uString * SAL_CALL rtl_uStringBuffer_makeStringAndClear( rtl_uString ** ppThis,
+                                                             sal_Int32 *nCapacity )
+{
+    // avoid an un-necessary atomic ref/unref pair
+    rtl_uString *pStr = *ppThis;
+    *ppThis = NULL;
+
+    rtl_uString_new (ppThis);
+    *nCapacity = 0;
+
+    RTL_LOG_STRING_NEW( pStr );
+
+    return pStr;
+}
+
 sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer( rtl_uString ** newStr,
                                                           sal_Int32 capacity,
                                                           rtl_uString * oldStr )
@@ -76,12 +86,10 @@ sal_Int32 SAL_CALL rtl_uStringbuffer_newFromStringBuffer( rtl_uString ** newStr,
         (*newStr)->length = oldStr->length;
         rtl_copyMemory( (*newStr)->buffer, oldStr->buffer, oldStr->length * sizeof(sal_Unicode));
     }
+    RTL_LOG_STRING_NEW( *newStr );
     return newCapacity;
 }
 
-/*************************************************************************
- *  rtl_uStringbuffer_ensureCapacity
- */
 void SAL_CALL rtl_uStringbuffer_ensureCapacity
     (rtl_uString ** This, sal_Int32* capacity, sal_Int32 minimumCapacity)
 {
@@ -99,13 +107,12 @@ void SAL_CALL rtl_uStringbuffer_ensureCapacity
         *This = pNew;
 
         rtl_copyMemory( (*This)->buffer, pTmp->buffer, pTmp->length * sizeof(sal_Unicode) );
+
+        RTL_LOG_STRING_NEW( pTmp ); // with accurate contents
         rtl_uString_release( pTmp );
     }
 }
 
-/*************************************************************************
- *  rtl_uStringbuffer_insert
- */
 void SAL_CALL rtl_uStringbuffer_insert( rtl_uString ** This,
                                         sal_Int32 * capacity,
                                         sal_Int32 offset,
@@ -165,9 +172,6 @@ void rtl_uStringbuffer_insertUtf32(
     rtl_uStringbuffer_insert(pThis, capacity, offset, buf, len);
 }
 
-/*************************************************************************
- *  rtl_uStringbuffer_insert_ascii
- */
 void SAL_CALL rtl_uStringbuffer_insert_ascii(   /*inout*/rtl_uString ** This,
                                                 /*inout*/sal_Int32 * capacity,
                                                 sal_Int32 offset,

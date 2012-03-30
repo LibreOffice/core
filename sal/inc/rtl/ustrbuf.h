@@ -179,6 +179,34 @@ SAL_DLLPUBLIC void SAL_CALL rtl_uStringbuffer_remove(
                                        sal_Int32 start,
                                        sal_Int32 len );
 
+/**
+    Returns an immutable rtl_uString object, while clearing the string buffer.
+
+    This method is primarily used to allow these completed
+    string allocation events to be traced.
+
+    @param  ppThis      The string, on that the operation should take place
+    @param  nCapacity   pointer to the capacity of the string buffer
+
+    @since LibreOffice 3.6
+ */
+SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_uStringBuffer_makeStringAndClear(
+                                        /*inout*/ rtl_uString ** ppThis,
+                                        sal_Int32 *nCapacity );
+
+/**
+    References and returns an immutable rtl_uString object, from a mutable
+    string-buffer object.
+
+    This method is primarily used to allow legacy 'String' class
+    conversions to OUString to be accurately traced.
+
+    @param  pThis      The string, on that the operation should take place
+
+    @since LibreOffice 3.6
+ */
+SAL_DLLPUBLIC rtl_uString * SAL_CALL rtl_uStringBuffer_refReturn( rtl_uString *pThis );
+
 #ifdef __cplusplus
 }
 #endif

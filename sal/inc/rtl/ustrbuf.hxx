@@ -181,10 +181,9 @@ public:
      */
     OUString makeStringAndClear()
     {
-        OUString aRet( pData );
-        rtl_uString_new(&pData);
-        nCapacity = 0;
-        return aRet;
+        return OUString(
+                  rtl_uStringBuffer_makeStringAndClear( &pData, &nCapacity ),
+                  SAL_NO_ACQUIRE );
     }
 
     /**

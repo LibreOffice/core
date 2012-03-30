@@ -33,6 +33,7 @@
 #include <osl/thread.h>
 #include <rtl/textenc.h>
 #include <rtl/textcvt.h>
+#include <rtl/ustrbuf.h>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>
 #include "tools/toolsdllapi.h"
@@ -173,7 +174,8 @@ public:
 
     operator rtl::OUString () const
     {
-        return rtl::OUString (reinterpret_cast<rtl_uString*>(mpData));
+        return rtl::OUString( rtl_uStringBuffer_refReturn(
+                                reinterpret_cast<rtl_uString*>(mpData)), SAL_NO_ACQUIRE );
     }
 
     static UniString    CreateFromAscii( const sal_Char* pAsciiStr );

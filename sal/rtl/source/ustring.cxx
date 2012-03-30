@@ -79,20 +79,6 @@ static rtl_uString const aImplEmpty_rtl_uString =
 #define IMPL_RTL_INTERN
 static void internRelease (rtl_uString *pThis);
 
-#if 0 // string lifetime / logging debug
-#  include <rtl/ustring.hxx>
-#  define RTL_LOG_STRING_NEW(s)                                              \
-      do {                                                                     \
-          fprintf (stderr, "+%s\n",                                            \
-                   rtl::OUStringToOString(s, RTL_TEXTENCODING_UTF8).getStr()); \
-      } while (0)
-#  define RTL_LOG_STRING_DELETE(s)                                           \
-      do {                                                                     \
-          fprintf (stderr, "-%s\n",                                            \
-                   rtl::OUStringToOString(s, RTL_TEXTENCODING_UTF8).getStr()); \
-      } while (0)
-#endif
-
 /* ======================================================================= */
 
 /* Include String/UString template code */
@@ -700,6 +686,7 @@ static void rtl_string2UString_status( rtl_uString** ppThis,
                     if (pInfo != NULL) {
                         *pInfo = 0;
                     }
+                    RTL_LOG_STRING_NEW( *ppThis );
                     return;
                 }
             }

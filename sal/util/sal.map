@@ -623,6 +623,8 @@ LIBO_UDK_3.6 { # symbols available in >= LibO 3.6
         rtl_uString_newReplaceFirst;
         rtl_uString_newReplaceFirstAsciiL;
         rtl_uString_newReplaceFirstAsciiLAsciiL;
+	rtl_uStringBuffer_refReturn;
+	rtl_uStringBuffer_makeStringAndClear;
 } UDK_3.10;
 
 PRIVATE_1.0 {

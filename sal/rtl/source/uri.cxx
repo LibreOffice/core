@@ -656,6 +656,7 @@ void SAL_CALL rtl_uriEncode(rtl_uString * pText, sal_Bool const * pCharClass,
             break;
         }
     }
+    *pResult = rtl_uStringBuffer_makeStringAndClear( pResult, &nCapacity );
 }
 
 void SAL_CALL rtl_uriDecode(rtl_uString * pText,
@@ -702,6 +703,7 @@ void SAL_CALL rtl_uriDecode(rtl_uString * pText,
                     break;
                 }
             }
+            *pResult = rtl_uStringBuffer_makeStringAndClear( pResult, &nCapacity );
         }
         break;
     }

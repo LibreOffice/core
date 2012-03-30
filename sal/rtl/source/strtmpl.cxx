@@ -49,12 +49,6 @@ inline void rtl_str_ImplCopy( IMPL_RTL_STRCODE* pDest,
 }
 */
 
-// for instrumentation / diagnostics
-#ifndef RTL_LOG_STRING_NEW
-#  define RTL_LOG_STRING_NEW(s)
-#  define RTL_LOG_STRING_DELETE(s)
-#endif
-
 #define rtl_str_ImplCopy( _pDest, _pSrc, _nCount )                  \
 {                                                                   \
     IMPL_RTL_STRCODE*       __mm_pDest      = _pDest;               \
@@ -1096,10 +1090,8 @@ void SAL_CALL IMPL_RTL_STRINGNAME( new_WithLength )( IMPL_RTL_STRINGDATA** ppThi
         OSL_ASSERT(*ppThis != NULL);
         (*ppThis)->length   = 0;
 
-        {
         IMPL_RTL_STRCODE* pTempStr = (*ppThis)->buffer;
         memset(pTempStr, 0, nLen*sizeof(IMPL_RTL_STRCODE));
-        }
     }
 }
 

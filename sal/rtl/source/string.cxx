@@ -71,6 +71,11 @@ static rtl_String const aImplEmpty_rtl_String =
 #define IMPL_RTL_STRINGDATA         rtl_String
 #define IMPL_RTL_EMPTYSTRING        aImplEmpty_rtl_String
 
+#undef RTL_LOG_STRING_NEW
+#define RTL_LOG_STRING_NEW(s)
+#undef RTL_LOG_STRING_DELETE
+#define RTL_LOG_STRING_DELETE(s)
+
 /* ======================================================================= */
 
 /* Include String/UString template code */
