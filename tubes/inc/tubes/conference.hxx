@@ -100,6 +100,15 @@ public:
                                                gpointer pUserData, GObject*pWeakObject);
     static void             FTReady( EmpathyFTHandler *handler, GError *error, gpointer user_data);
 
+    static void             methodCallHandler(GDBusConnection*       pConnection,
+                                              const gchar*           pSender,
+                                              const gchar*           pObjectPath,
+                                              const gchar*           pInterfaceName,
+                                              const gchar*           pMethodName,
+                                              GVariant*              pParameters,
+                                              GDBusMethodInvocation* pInvocation,
+                                              void*                  pUserData);
+
 private:
     bool                    tryToOpen();
     bool                    spinUntilTubeEstablished();
@@ -110,7 +119,8 @@ private:
     TpAccount*              mpAccount;
     TpChannel*              mpChannel;
     gchar*                  mpAddress;
-    DBusConnection*         mpTube;
+    GDBusConnection*        mpTube;
+    guint                   maObjectRegistrationId;
     TelePacketQueue         maPacketQueue;
     TpTubeChannelState      meTubeChannelState;
 

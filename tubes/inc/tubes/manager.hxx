@@ -43,7 +43,9 @@
 #include <boost/signals2.hpp>
 
 // For testing purposes, we might need more in future.
+#define LIBO_TUBES_DBUS_INTERFACE "org.libreoffice.calc"
 #define LIBO_TUBES_DBUS_MSG_METHOD "LibOMsg"
+#define LIBO_TUBES_DBUS_PATH "/org/libreoffice/calc"
 
 typedef ::std::vector<TeleConferencePtr> TeleConferenceVector;
 

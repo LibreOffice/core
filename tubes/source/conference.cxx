@@ -57,59 +57,62 @@ struct InfoLogger
 #define INFO_LOGGER(s)
 #endif // SAL_LOG_INFO
 
-
-static DBusHandlerResult TeleConference_DBusMessageHandler(
-        DBusConnection* pConnection,
-        DBusMessage*    pMessage,
-        void*           pUserData
-        )
+void TeleConference::methodCallHandler(
+    GDBusConnection*       /*pConnection*/,
+    const gchar*           pSender,
+    const gchar*           /*pObjectPath*/,
+    const gchar*           pInterfaceName,
+    const gchar*           pMethodName,
+    GVariant*              pParameters,
+    GDBusMethodInvocation* pInvocation,
+    void*                  pUserData)
 {
-    INFO_LOGGER_F( "TeleConference_DBusMessageHandler");
-
-    SAL_WARN_IF( !pConnection || !pMessage, "tubes", "TeleConference_DBusMessageHandler: unhandled");
-    if (!pConnection || !pMessage)
-        return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+    INFO_LOGGER_F( "TeleConference::methodCallHandler");
 
     TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
-    SAL_WARN_IF( !pConference, "tubes", "TeleConference_DBusMessageHandler: no conference");
+    SAL_WARN_IF( !pConference, "tubes", "TeleConference::methodCallHandler: no conference");
     if (!pConference)
-        return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+        return;
 
     TeleManager* pManager = pConference->getManager();
-    SAL_WARN_IF( !pManager, "tubes", "TeleConference_DBusMessageHandler: no manager");
+    SAL_WARN_IF( !pManager, "tubes", "TeleConference::methodCallHandler: no manager");
     if (!pManager)
-        return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+        return;
 
-    if (dbus_message_is_method_call( pMessage, pManager->getFullServiceName().getStr(), LIBO_TUBES_DBUS_MSG_METHOD))
+    if (tp_strdiff (pMethodName, LIBO_TUBES_DBUS_MSG_METHOD))
     {
-        const char* pSender = dbus_message_get_sender( pMessage);
-
-        DBusError aDBusError;
-        dbus_error_init( &aDBusError);
-        const char* pPacketData = 0;
-        int nPacketSize = 0;
-        if (dbus_message_get_args( pMessage, &aDBusError,
-                    DBUS_TYPE_ARRAY, DBUS_TYPE_BYTE, &pPacketData, &nPacketSize,
-                    DBUS_TYPE_INVALID))
-        {
-            SAL_INFO( "tubes", "TeleConference_DBusMessageHandler: received packet from sender "
-                    << (pSender ? pSender : "(null)") << " with size " << nPacketSize);
-            pConference->queue( pSender, pPacketData, nPacketSize);
-            return DBUS_HANDLER_RESULT_HANDLED;
-        }
-        else
-        {
-            SAL_INFO( "tubes", "TeleConference_DBusMessageHandler: unhandled message from sender "
-                    << (pSender ? pSender : "(null)") << " " << aDBusError.message);
-            dbus_error_free( &aDBusError);
-        }
-    }
-    else
-    {
-        SAL_INFO( "tubes", "TeleConference_DBusMessageHandler: unhandled method");
+        g_dbus_method_invocation_return_error ( pInvocation,
+                G_DBUS_ERROR, G_DBUS_ERROR_UNKNOWN_METHOD,
+                "Unknown method '%s' on interface %s",
+                pMethodName, pInterfaceName );
+        return;
     }
 
-    return DBUS_HANDLER_RESULT_NOT_YET_HANDLED;
+    if (!g_variant_is_of_type ( pParameters, G_VARIANT_TYPE ("(ay)")))
+    {
+        g_dbus_method_invocation_return_error ( pInvocation,
+                G_DBUS_ERROR, G_DBUS_ERROR_INVALID_ARGS,
+                "'%s' takes an array of bytes, not %s",
+                pMethodName,
+                g_variant_get_type_string (pParameters));
+        return;
+    }
+
+    GVariant *ay;
+    g_variant_get( pParameters, "(@ay)", &ay);
+    const char* pPacketData = reinterpret_cast<const char*>( g_variant_get_data( ay));
+    gsize nPacketSize = g_variant_get_size( ay);
+
+    SAL_WARN_IF( !pPacketData, "tubes", "TeleConference::methodCallHandler: couldn't get packet data");
+    if (!pPacketData)
+        return;
+
+    SAL_INFO( "tubes", "TeleConference::methodCallHandler: received packet from sender "
+            << (pSender ? pSender : "(null)") << " with size " << nPacketSize);
+    pConference->queue( pSender, pPacketData, nPacketSize);
+    g_dbus_method_invocation_return_value( pInvocation, 0 );
+
+    g_variant_unref( ay);
 }
 
 
@@ -335,21 +338,46 @@ bool TeleConference::setTube(  const char* pAddress )
 
     OSL_ENSURE( !mpTube, "TeleConference::setTube: already tubed");
 
-    DBusError aDBusError;
-    dbus_error_init( &aDBusError);
+    GError *aError = NULL;
 
-    mpTube = dbus_connection_open_private( pAddress, &aDBusError);
+    mpTube = g_dbus_connection_new_for_address_sync( pAddress,
+            G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT,
+            NULL, NULL, &aError);
     if (!mpTube)
     {
-        SAL_WARN( "tubes", "TeleConference::setTube: no dbus connection: " << aDBusError.message);
-        dbus_error_free( &aDBusError);
+        SAL_WARN( "tubes", "TeleConference::setTube: no dbus connection: " << aError->message);
+        g_clear_error( &aError);
         return false;
     }
 
-    dbus_connection_setup_with_g_main( mpTube, mpManager->getMainContext());
-    dbus_connection_add_filter( mpTube, TeleConference_DBusMessageHandler, this, NULL);
+    GDBusNodeInfo *introspection_data;
+    guint registration_id;
+    static const GDBusInterfaceVTable interface_vtable =
+    {
+        &TeleConference::methodCallHandler,
+        NULL,
+        NULL,
+        { NULL },
+    };
+    static const gchar introspection_xml[] =
+        "<node>"
+        "  <interface name='" LIBO_TUBES_DBUS_INTERFACE "'>"
+        "    <method name='" LIBO_TUBES_DBUS_MSG_METHOD "'>"
+        "      <arg type='ay' name='packet' direction='in'/>"
+        "    </method>"
+        "  </interface>"
+        "</node>";
 
-    /* TODO: anything else? */
+    introspection_data = g_dbus_node_info_new_for_xml (introspection_xml, NULL);
+    g_assert (introspection_data != NULL);
+
+    registration_id = g_dbus_connection_register_object( mpTube,
+            LIBO_TUBES_DBUS_PATH, introspection_data->interfaces[0],
+            &interface_vtable, this, NULL, NULL);
+    g_assert (registration_id > 0);
+
+    g_dbus_node_info_unref (introspection_data);
+
     return true;
 }
 
@@ -383,9 +411,9 @@ void TeleConference::finalize()
 
     if (mpTube)
     {
-        dbus_connection_remove_filter( mpTube, TeleConference_DBusMessageHandler, this);
-        dbus_connection_close( mpTube);
-        dbus_connection_unref( mpTube);
+        g_dbus_connection_unregister_object( mpTube, maObjectRegistrationId);
+        g_dbus_connection_close_sync( mpTube, NULL, NULL );
+        g_object_unref( mpTube );
         mpTube = NULL;
     }
 
@@ -411,35 +439,29 @@ bool TeleConference::sendPacket( TelePacket& rPacket )
     if (!(mpManager && mpTube))
         return false;
 
-    DBusMessage* pMessage = dbus_message_new_method_call(
-            mpManager->getFullServiceName().getStr(),
-            mpManager->getFullObjectPath().getStr(),
-            mpManager->getFullServiceName().getStr(),
-            LIBO_TUBES_DBUS_MSG_METHOD);
-    SAL_WARN_IF( !pMessage, "tubes", "TeleConference::sendPacket: no DBusMessage");
-    if (!pMessage)
-        return false;
+    /* FIXME: in GLib 2.32 we can use g_variant_new_fixed_array(). It does
+     * essentially this.
+     */
+    void* pData = g_memdup( rPacket.getData(), rPacket.getSize() );
+    GVariant *pParameters = g_variant_new_from_data( G_VARIANT_TYPE("(ay)"),
+            pData, rPacket.getSize(),
+            FALSE,
+            g_free, pData);
 
-    const char* pPacketData = rPacket.getData();
-    dbus_message_append_args( pMessage,
-            DBUS_TYPE_ARRAY, DBUS_TYPE_BYTE, &pPacketData, rPacket.getSize(),
-            DBUS_TYPE_INVALID);
-
-#if defined SAL_LOG_INFO
-    const char* pSrc = dbus_message_get_sender( pMessage);
-    SAL_INFO_IF( pSrc, "tubes", "TeleConference::sendPacket: from " << pSrc);
-    const char* pDst = dbus_message_get_destination( pMessage);
-    SAL_INFO_IF( pDst, "tubes", "TeleConference::sendPacket:  to  " << pDst);
-#endif
-
-    bool bSent = dbus_connection_send( mpTube, pMessage, NULL);
-    SAL_WARN_IF( !bSent, "tubes", "TeleConference::sendPacket: not sent");
+    g_dbus_connection_call( mpTube,
+            NULL, /* bus name; in multi-user case we'd address this to the master. */
+            LIBO_TUBES_DBUS_PATH,
+            LIBO_TUBES_DBUS_INTERFACE,
+            LIBO_TUBES_DBUS_MSG_METHOD,
+            pParameters, /* consumes the floating reference */
+            NULL,
+            G_DBUS_CALL_FLAGS_NONE,
+            -1, NULL, NULL, NULL);
 
     /* FIXME: need to impose an ordering on packets. */
     queue( rPacket );
 
-    dbus_message_unref( pMessage);
-    return bSent;
+    return true;
 }
 
 
