@@ -30,7 +30,12 @@
 #include <stdio.h>
 #include <string.h>
 #include <dlfcn.h>
+
 #include <cxxabi.h>
+#ifndef _GLIBCXX_CDTOR_CALLABI // new in GCC 4.7 cxxabi.h
+#define _GLIBCXX_CDTOR_CALLABI
+#endif
+
 #include <boost/unordered_map.hpp>
 
 #include <rtl/instance.hxx>
@@ -213,7 +218,8 @@ type_info * RTTI::getRTTI( typelib_CompoundTypeDescription *pTypeDescr ) SAL_THR
 struct RTTISingleton: public rtl::Static< RTTI, RTTISingleton > {};
 
 //--------------------------------------------------------------------------------------------------
-static void deleteException( void * pExc )
+extern "C" {
+static void _GLIBCXX_CDTOR_CALLABI deleteException( void * pExc )
 {
     __cxa_exception const * header = ((__cxa_exception const *)pExc - 1);
     typelib_TypeDescription * pTD = 0;
@@ -225,6 +231,7 @@ static void deleteException( void * pExc )
         ::uno_destructData( pExc, pTD, cpp_release );
         ::typelib_typedescription_release( pTD );
     }
+}
 }
 
 //==================================================================================================
