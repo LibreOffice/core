@@ -442,10 +442,6 @@ xmerge/source/palmtests/qa-wrapper/results/baseline/pdb-base/*.pdb
 # used for automated testing (seem to be certificates)
 main/xmlsecurity/test_docs/CAs/*/*.pem
 
-# Mac-specific data (3), all part of SGA
-# Xml files, adding ALv2 would be possible
-#**/*.plist
-
 # both part of the SGA, allows no header, no creative content
 main/bean/test/applet/oooapplet/bean.policy
 main/stoc/test/security/test_security.policy
@@ -481,11 +477,9 @@ main/embedserv/regentries/*.reg
 
 # (4), part of SGA
 # one of four contains ALv2 header
-#**/*.rtf
-
-# build system specific definition files (symbiol exports?) (26), 
-# e.g. main/configmgr/qa/unoapi/module.sce has ALv2 header, sould be possible to add to others
-#**/*.sce
+main/testautomation/spreadsheet/optional/input/loadsave/preselected_filter/rtf.rtf
+main/testautomation/spreadsheet/optional/input/loadsave/tableimport/HTML_Doc_Numberformats_in_table.rtf
+main/testautomation/writer/optional/input/import/rtf.rtf
 
 # all in SGA
 # binary data (msdev settings file?)
@@ -519,13 +513,15 @@ main/scripting/java/org/openoffice/netbeans/modules/office/resources/*.settings
 # used as c++ code snippets, ALv2 could be added (see .head)
 main/oox/source/token/*.tail
 
-# (10), part of SGA
-# used as various templates, some containing ALv2. Not clear if ALv2 could be added to all of them
-#**/*.template
-
-# (8), part of SGA
-# XML configuration files, ALv2 could be added
-#**/*.tree
+# part of SGA
+# jar manifest templates
+main/ure/source/uretest/javaclient.mf.template
+main/ure/source/uretest/javamain.mf.template
+main/ure/source/uretest/javanative.mf.template
+main/ure/source/uretest/javatest.mf.template
+main/ure/source/uretest/runner.mf.template
+main/ure/source/uretest/tester.mf.template
+main/ure/source/uretest/types.mf.template
 
 # part of SGA
 # filetype ascii tables, no copyright, no license
@@ -541,27 +537,13 @@ main/testautomation/writer/optional/input/export/filter/*.w95
 
 # part of SGA
 # patch files
-main/redland/*.win32
-
-# used as */knownissues.xcl (17), part of SGA
-# associates issue IDs to uno api interface calls, ALv2 could be added
-#**/*.xcl
-
-# (54), part of SGA
-# dialog format desriptions, ALv2 could be added
-#**/*.xdl
-
-# (1000+), part of SGA
-# AOO help files, XML, ALv2 could be added, is probably for most -> remove to check
-#**/*.xhp
+main/redland/raptor/raptor-1.4.18.patch.win32
+main/redland/rasqal/rasqal-0.9.16.patch.win32
+main/redland/redland/redland-1.0.8.patch.win32
 
 # (1000+), part of SGA
 # AOO library files, XML, ALv2 could be added
 **/*.xlb
-
-# (12), part of SGA
-# AOO internal socket definition files, allows comments, ALv2 could be added
-#**/*.xsce
 
 # part of SGA
 # UML defnitions for svx, "Poseidon for UML" needed to read these
