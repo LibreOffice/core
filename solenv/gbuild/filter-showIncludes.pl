@@ -13,6 +13,10 @@
 #
 # Original author: Jan Holesovsky <kendy@suse.cz>
 
+use File::Basename;
+use File::Copy;
+use File::Temp qw/tempfile/;
+
 my $outfile = $ARGV[0];
 my $objfile = $ARGV[1];
 my $srcfile = $ARGV[2];
@@ -25,8 +29,9 @@ if ( !defined( $showincludes_prefix ) || $showincludes_prefix eq "" ) {
     $showincludes_prefix = 'Note: including file:';
 }
 
-open( OUT, "> $outfile" ) or die "Cannot open $outfile for writing.";
-print OUT "$objfile: \\\n $srcfile";
+my ($OUT, $tmp_filename) = tempfile( 'showIncludesXXXXXX', DIR => dirname( $outfile ) ) or die "Cannot create a temp file.";
+
+print $OUT "$objfile: \\\n $srcfile";
 
 my %seen;
 my $first_line = 1;
@@ -45,7 +50,7 @@ while ( <STDIN> ) {
 
         if ( !defined $seen{$_} ) {
             $seen{$_} = 1;
-            print OUT " \\\n  $_";
+            print $OUT " \\\n  $_";
         }
     }
     else {
@@ -56,7 +61,7 @@ while ( <STDIN> ) {
     $first_line = 0;
 }
 
-print OUT "\n";
+print $OUT "\n";
 
 # fdo#40099 if header.h does not exist, it will simply be considered out of
 # date and any targets that use it as a prerequisite will be updated,
@@ -64,9 +69,11 @@ print OUT "\n";
 # as an include
 # see http://www.makelinux.net/make3/make3-CHP-8-SECT-3
 foreach my $key ( keys %seen ) {
-  print OUT "\n$key:\n";
+  print $OUT "\n$key:\n";
 }
 
-close( OUT ) or die "Cannot close $outfile.";
+close( $OUT ) or die "Cannot close $tmp_filename.";
+
+move( $tmp_filename, $outfile ) or die "Cannot move $tmp_filename to $outfile.";
 
 # vim: shiftwidth=4 softtabstop=4 expandtab:
