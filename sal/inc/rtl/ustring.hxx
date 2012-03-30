@@ -192,7 +192,6 @@ public:
 
       @param    literal         the 8-bit ASCII string literal
 
-      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
       @since LibreOffice 3.6
     */
 #ifdef HAVE_SFINAE_ANONYMOUS_BROKEN
@@ -203,13 +202,6 @@ public:
     {
         pData = 0;
         rtl_uString_newFromLiteral( &pData, literal, N - 1 );
-        if (pData == 0) {
-#if defined EXCEPTIONS_OFF
-            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
-#else
-            throw std::bad_alloc();
-#endif
-        }
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
@@ -237,13 +229,6 @@ public:
     {
         pData = 0;
         rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
-        if (pData == 0) {
-#if defined EXCEPTIONS_OFF
-            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
-#else
-            throw std::bad_alloc();
-#endif
-        }
 #ifdef RTL_STRING_UNITTEST
         rtl_string_unittest_const_literal = true;
 #endif
@@ -379,20 +364,12 @@ public:
 
       @param    literal         the 8-bit ASCII string literal
 
-      @exception std::bad_alloc is thrown if an out-of-memory condition occurs
       @since LibreOffice 3.6
     */
     template< typename T >
     typename internal::ConstCharArrayDetector< T, OUString& >::Type operator=( T& literal )
     {
         rtl_uString_newFromLiteral( &pData, literal, internal::ConstCharArrayDetector< T, void >::size - 1 );
-        if (pData == 0) {
-#if defined EXCEPTIONS_OFF
-            SAL_WARN("sal", "std::bad_alloc but EXCEPTIONS_OFF");
-#else
-            throw std::bad_alloc();
-#endif
-        }
         return *this;
     }
 

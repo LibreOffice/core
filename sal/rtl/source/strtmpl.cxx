@@ -1218,7 +1218,7 @@ void SAL_CALL IMPL_RTL_STRINGNAME( newFromLiteral)( IMPL_RTL_STRINGDATA** ppThis
         IMPL_RTL_STRINGNAME( release )( *ppThis );
 
     *ppThis = IMPL_RTL_STRINGNAME( ImplAlloc )( nLen );
-    OSL_ASSERT(*ppThis != NULL);
+    assert( *ppThis != NULL );
     if ( (*ppThis) )
     {
         IMPL_RTL_STRCODE* pBuffer = (*ppThis)->buffer;
