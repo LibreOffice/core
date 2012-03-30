@@ -61,31 +61,6 @@
 using namespace ::ooo::vba;
 using namespace ::com::sun::star;
 
-class ActiveSheet : public ScVbaWorksheet
-{
-protected:
-    virtual uno::Reference< frame::XModel > getModel()
-    {
-        return getCurrentExcelDoc( mxContext );
-    }
-    virtual uno::Reference< sheet::XSpreadsheet > getSheet()
-    {
-        uno::Reference< frame::XModel > xModel = getModel();
-        uno::Reference< sheet::XSpreadsheet > xSheet;
-        if ( xModel.is() )
-        {
-            uno::Reference< sheet::XSpreadsheetView > xSpreadsheet(
-                            xModel->getCurrentController(), uno::UNO_QUERY );
-            if ( xSpreadsheet.is() )
-                xSheet = xSpreadsheet->getActiveSheet();
-        }
-        return xSheet;
-    }
-public:
-    ActiveSheet( const uno::Reference< XHelperInterface >& xParent, const uno::Reference< uno::XComponentContext >& xContext ) : ScVbaWorksheet( xParent, xContext ) {}
-
-};
-
 uno::Sequence< sal_Int32 > ScVbaWorkbook::ColorData;
 
 void ScVbaWorkbook::initColorData( const uno::Sequence< sal_Int32 >& sColors )
