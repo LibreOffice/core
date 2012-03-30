@@ -232,7 +232,7 @@ gb_COMPILERNOOPTFLAGS := -Od
 ifeq ($(gb_FULLDEPS),$(true))
 gb_COMPILERDEPFLAGS := -showIncludes
 define gb_create_deps
-| $(GBUILDDIR)/filter-showIncludes.pl $(2) $(1) $(3); exit $${PIPESTATUS[0]}
+| $(GBUILDDIR)/filter-showIncludes.pl $(1) $(2) $(3); exit $${PIPESTATUS[0]}
 endef
 else
 gb_COMPILERDEPFLAGS :=
@@ -279,6 +279,7 @@ endef
 
 # CObject class
 
+# $(call gb_CObject__command,object,relative-source,source,dep-file)
 define gb_CObject__command
 $(call gb_Output_announce,$(2).c,$(true),C  ,3)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -292,12 +293,13 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		-I$(dir $(3)) \
 		$(INCLUDE) \
 		-c $(3) \
-		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(3))
+		-Fo$(1)) $(call gb_create_deps,$(4),$(1),$(3))
 endef
 
 
 # CxxObject class
 
+# $(call gb_CxxObject__command,object,relative-source,source,dep-file)
 define gb_CxxObject__command
 $(call gb_Output_announce,$(2).cxx,$(true),CXX,3)
 $(call gb_Helper_abbreviate_dirs_native,\
@@ -312,7 +314,7 @@ $(call gb_Helper_abbreviate_dirs_native,\
 		$(INCLUDE_STL) $(INCLUDE) \
 		$(if $(filter YES,$(CXXOBJECT_X64)), -U_X86_ -D_AMD64_,) \
 		-c $(3) \
-		-Fo$(1)) $(call gb_create_deps,$(1),$(4),$(3))
+		-Fo$(1)) $(call gb_create_deps,$(4),$(1),$(3))
 endef
 
 
