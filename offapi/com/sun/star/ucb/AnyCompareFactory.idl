@@ -39,15 +39,7 @@ module com { module sun { module star { module ucb {
 
     @since OOo 1.1.2
 */
-published service AnyCompareFactory
-{
-    //-------------------------------------------------------------------------
-    /** a factory to get implementations of interface
-        <type>XAnyCompare</type>.
-     */
-    interface com::sun::star::ucb::XAnyCompareFactory;
-
-};
+published service AnyCompareFactory : XAnyCompareFactory;
 
 //=============================================================================
 

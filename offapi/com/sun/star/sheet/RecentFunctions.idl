@@ -39,15 +39,7 @@ module com {  module sun {  module star {  module sheet {
 
 /** contains the list of recently used spreadsheet functions.
  */
-published service RecentFunctions
-{
-    //-------------------------------------------------------------------------
-
-    /** provides access to the list of recently used spreadsheet functions.
-     */
-    interface com::sun::star::sheet::XRecentFunctions;
-
-};
+published service RecentFunctions : XRecentFunctions;
 
 //=============================================================================
 

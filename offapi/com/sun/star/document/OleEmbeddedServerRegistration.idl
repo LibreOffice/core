@@ -46,11 +46,7 @@ module com {  module sun {  module star {  module document {
      @since OOo 1.1.2
  */
 published service OleEmbeddedServerRegistration
-{
-
-    interface com::sun::star::uno::XInterface;
-
-};
+    : com::sun::star::uno::XInterface;
 
 //=============================================================================
 

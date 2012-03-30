@@ -43,10 +43,7 @@ module com {  module sun {  module star {  module awt {
        to set an menu bar object.
     </p>
  */
-published service MenuBar
-{
-    interface XMenuBar;
-};
+published service MenuBar : XMenuBar;
 
 //=============================================================================
 

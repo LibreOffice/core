@@ -43,13 +43,7 @@ module com { module sun { module star { module ucb {
     @see com::sun::star::ucb::Content
 */
 published service PropertiesManager
-{
-    //-------------------------------------------------------------------------
-    /** This interface provides access to the meta data of the well known
-        (predefined) UCB properties.
-     */
-    interface com::sun::star::beans::XPropertySetInfo;
-};
+    : com::sun::star::beans::XPropertySetInfo;
 
 //=============================================================================
 

@@ -88,17 +88,7 @@ module com {  module sun {  module star {  module  util {
     @since OOo 1.1.2
 */
 
-published service PathSubstitution
-{
-        //-------------------------------------------------------------------------
-        /** Interface to exchange path variables with defined paths and to resubstitute paths with path variables.
-
-                <p>
-                To resubstitute path variables the caller must provide paths as UCB-compliant URLs.
-                </p>
-        */
-        interface com::sun::star::util::XStringSubstitution;
-};
+published service PathSubstitution : XStringSubstitution;
 
 //=============================================================================
 

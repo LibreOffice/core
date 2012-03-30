@@ -39,10 +39,7 @@
 
 /** This service manages all recognized Netscape plugins.
 */
-published service PluginManager
-{
-    interface com::sun::star::plugin::XPluginManager;
-};
+published service PluginManager : XPluginManager;
 
 //=============================================================================
 

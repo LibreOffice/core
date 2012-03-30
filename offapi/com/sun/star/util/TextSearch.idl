@@ -40,10 +40,7 @@ module com {  module sun {  module star {  module util {
 
     <p>It is possible to search forward or backward in the string.
 */
-published service TextSearch
-{
-    interface com::sun::star::util::XTextSearch;
-};
+published service TextSearch : XTextSearch;
 
 //=============================================================================
 

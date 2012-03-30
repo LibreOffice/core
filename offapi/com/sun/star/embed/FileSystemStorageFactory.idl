@@ -40,65 +40,60 @@
 /** The <type>FileSystemStorageFactory</type> is a service that allows to
     create a <type>FileSystemStorage</type> based on URL. The URL must point
     to a folder.
- */
+
+    <p>
+    In case
+    <method scope="com::sun::star::lang">XSingleServiceFactory::createInstance</method>
+    call is used the result storage will be open in read-write mode based
+    on an arbitrary file system folder.
+    </p>
+
+    <p>
+    In case
+    <method scope="com::sun::star::lang">XSingleServiceFactory::createInstanceWithArguments</method>
+    call is used a sequence of the following parameters can be used:
+    </p>
+
+    <dl>
+        <dt>parameter 1</dt>
+        <dd>
+                  specifies source of the object, it must be a string
+                  containing URL.
+        </dd>
+
+        <dt>parameter 2</dt>
+        <dd>
+                  specifies mode the storage should be open in, can take
+                  values from <type>ElementModes</type> constant set.
+        </dd>
+
+        <dt>parameter 3</dt>
+        <dd>
+                  allows to provide
+                  <type scope="com::sun::star::document">MediaDescryptor</type>
+                  to the storage so some parts can be used for
+                  initialization, it can be for example
+                  <type scope="com::sun::star::task">XInteractionHandler</type>
+                  implementation.
+        </dd>
+    </dl>
+
+    <p>
+    The parameters are optional, that means that sequence can be empty or
+    contain only first parameter, or first and second one. In case
+    no parameters are provided the call works the same way as
+    <member scope="com::sun::star::lang">XSingleServiceFactory::createInstance</member>.
+    In case only first parameter is provided, the storage is opened in
+    readonly mode.
+    </p>
+
+    <p>
+    The opened storages can support read access in addition to
+    specified one.
+    </p>
+*/
 published service FileSystemStorageFactory
-{
-    // ----------------------------------------------------------------------
-    /** A storage can be created through this interface.
-
-        <p>
-        In case
-        <method scope="com::sun::star::lang">XSingleServiceFactory::createInstance</method>
-        call is used the result storage will be open in read-write mode based
-        on an arbitrary file system folder.
-        </p>
-
-        <p>
-        In case
-        <method scope="com::sun::star::lang">XSingleServiceFactory::createInstanceWithArguments</method>
-        call is used a sequence of the following parameters can be used:
-        </p>
-
-        <dl>
-            <dt>parameter 1</dt>
-            <dd>
-                      specifies source of the object, it must be a string
-                      containing URL.
-            </dd>
-
-            <dt>parameter 2</dt>
-            <dd>
-                      specifies mode the storage should be open in, can take
-                      values from <type>ElementModes</type> constant set.
-            </dd>
-
-            <dt>parameter 3</dt>
-            <dd>
-                      allows to provide
-                      <type scope="com::sun::star::document">MediaDescryptor</type>
-                      to the storage so some parts can be used for
-                      initialization, it can be for example
-                      <type scope="com::sun::star::task">XInteractionHandler</type>
-                      implementation.
-            </dd>
-        </dl>
-
-        <p>
-        The parameters are optional, that means that sequence can be empty or
-        contain only first parameter, or first and second one. In case
-        no parameters are provided the call works the same way as
-        <member scope="com::sun::star::lang">XSingleServiceFactory::createInstance</member>.
-        In case only first parameter is provided, the storage is opened in
-        readonly mode.
-        </p>
-
-        <p>
-        The opened storages can support read access in addition to
-        specified one.
-        </p>
-     */
-    interface ::com::sun::star::lang::XSingleServiceFactory;
-};
+    : ::com::sun::star::lang::XSingleServiceFactory;
 
 //============================================================================
 

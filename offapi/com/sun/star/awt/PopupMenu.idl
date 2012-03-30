@@ -42,10 +42,7 @@ module com {  module sun {  module star {  module awt {
        menu. It's also possible to use a pop-up menu to integrate it into
        another menu.</p>
  */
-published service PopupMenu
-{
-    interface XPopupMenu;
-};
+published service PopupMenu : XPopupMenu;
 
 //=============================================================================
 

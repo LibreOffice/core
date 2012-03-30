@@ -44,10 +44,7 @@ module com { module sun { module star { module graphic
 
     @see XGraphicProvider
 */
-published service GraphicProvider
-{
-    interface ::com::sun::star::graphic::XGraphicProvider;
-};
+published service GraphicProvider : XGraphicProvider;
 
 } ; } ; } ; } ;
 

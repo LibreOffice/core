@@ -52,13 +52,7 @@
     @see Frame
     @since OOo 1.1.2
  */
-published service DispatchRecorderSupplier
-{
-    //-------------------------------------------------------------------------
-    /** provides access to a <type>DispatchRecorder</type> and helps on recording
-     */
-    interface com::sun::star::frame::XDispatchRecorderSupplier;
-};
+published service DispatchRecorderSupplier : XDispatchRecorderSupplier;
 
 //=============================================================================
 

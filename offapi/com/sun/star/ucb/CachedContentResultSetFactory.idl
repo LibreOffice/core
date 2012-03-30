@@ -38,14 +38,7 @@ module com { module sun { module star { module ucb {
 //=============================================================================
 /** is a factory for <type>CachedContentResultSet</type> implementations.
 */
-published service CachedContentResultSetFactory
-{
-    //-------------------------------------------------------------------------
-    /** a factory for implementations of service
-        <type>CachedContentResultSet</type>.
-     */
-    interface com::sun::star::ucb::XCachedContentResultSetFactory;
-};
+published service CachedContentResultSetFactory : XCachedContentResultSetFactory;
 
 //=============================================================================
 

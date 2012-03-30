@@ -42,11 +42,7 @@ local file system or on an WebDAV server.
     @author Andreas Bregas
     @version 1.0 07/25/2000
 */
-published service SimpleFileAccess
-{
-    interface com::sun::star::ucb::XSimpleFileAccess2;
-
-};
+published service SimpleFileAccess : XSimpleFileAccess2;
 
 //=============================================================================
 

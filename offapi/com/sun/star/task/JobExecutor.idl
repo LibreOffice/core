@@ -49,13 +49,7 @@ module com { module sun { module star { module task {
     @see Job
     @see AsyncJob
  */
-published service JobExecutor
-{
-    //------------------------------------------------------------------------
-    /** start and regulate execution.
-     */
-    interface com::sun::star::task::XJobExecutor;
-};
+published service JobExecutor : XJobExecutor;
 
 }; }; }; };
 

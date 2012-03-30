@@ -39,11 +39,7 @@
 
 /** specifies a standard tab controller.
  */
-published service TabController
-{
-    interface com::sun::star::awt::XTabController;
-
-};
+published service TabController : XTabController;
 
 //=============================================================================
 

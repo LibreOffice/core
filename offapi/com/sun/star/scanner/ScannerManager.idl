@@ -45,11 +45,7 @@ module com { module sun { module star { module scanner {
     Note that implementations should actually implement
     <type>XScannerManager2</type>.
 */
-published service ScannerManager
-{
-    interface com::sun::star::scanner::XScannerManager;
-
-};
+published service ScannerManager : XScannerManager;
 
 //=============================================================================
 

@@ -39,13 +39,7 @@ module com { module sun { module star { module ucb {
 /** is a factory for <type>CachedDynamicResultSetStub</type> implementations.
 */
 published service CachedDynamicResultSetStubFactory
-{
-    //-------------------------------------------------------------------------
-    /** a factory for implementations of service
-        <type>CachedDynamicResultSetStub</type>.
-     */
-    interface com::sun::star::ucb::XCachedDynamicResultSetStubFactory;
-};
+    : XCachedDynamicResultSetStubFactory;
 
 //=============================================================================
 

@@ -45,19 +45,12 @@ module com {  module sun {  module star {  module frame {
     </p>
 
     @see DispatchProvider
+    @see XDispatchProvider
+    @see XDispatch
 
     @since OOo 1.1.2
  */
-published service DispatchHelper
-{
-    //-------------------------------------------------------------------------
-    /** provides the easy way for dispatch requests.
-
-        @see XDispatchProvider
-        @see XDispatch
-     */
-    interface XDispatchHelper;
-};
+published service DispatchHelper : XDispatchHelper;
 
 //=============================================================================
 

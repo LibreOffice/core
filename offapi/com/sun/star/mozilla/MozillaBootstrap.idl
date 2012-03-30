@@ -41,16 +41,10 @@
 
 /** Allow to discover Mozilla/Thunderbird profiles
     Allow init Mozilla XPCOM using selected profile and switch profiles.
+
+    @see XMozillaBootstrap
  */
-published service MozillaBootstrap
-{
-    //-------------------------------------------------------------------------
-
-    /** @see XMozillaBootstrap
-     */
-    interface XMozillaBootstrap;
-
-};
+published service MozillaBootstrap : XMozillaBootstrap;
 
 //=============================================================================
 
