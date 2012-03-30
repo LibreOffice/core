@@ -25,11 +25,12 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-SRCDIR_FILTER := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
-WORKDIR_FILTER := .
+$(eval $(call gb_CustomTarget_CustomTarget,filter/source/svg,new_style))
 
-gb_PARTIALBUILD:=T
-include $(GBUILDDIR)/gbuild.mk
+FISS := $(call gb_CustomTarget_get_workdir,filter/source/svg)
+
+SRCDIR_FILTER := $(SRCDIR)/filter/source/svg
+WORKDIR_FILTER := $(FISS)
 
 filter_SRC_svg_Tokens := $(SRCDIR_FILTER)/tokens.txt
 filter_SRC_svg_GenToken := $(SRCDIR_FILTER)/gentoken.pl
@@ -42,7 +43,7 @@ filter_GEN_svg_Tokens_cxx := $(WORKDIR_FILTER)/tokens.cxx
 filter_GEN_svg_Script_hxx := $(WORKDIR_FILTER)/svgscript.hxx
 
 $(filter_GEN_svg_Tokens_gperf) : \
-			$(filter_SRC_svg_GenToken) $(filter_SRC_svg_Tokens)
+			$(filter_SRC_svg_GenToken) $(filter_SRC_svg_Tokens) | $(FISS)/.dir
 	$(call gb_Output_announce,$@,build,GPF,3)
 	$(call gb_Helper_abbreviate_dirs, \
 		$(PERL) $(filter_SRC_svg_GenToken) $(filter_SRC_svg_Tokens) \
@@ -59,16 +60,14 @@ $(filter_GEN_svg_Tokens_cxx) : $(filter_GEN_svg_Tokens_gperf)
 			 > $(filter_GEN_svg_Tokens_cxx))
 
 $(filter_GEN_svg_Script_hxx) : \
-			$(filter_SRC_svg_PresentationEngine) $(filter_SRC_svg_Js2Hxx)
+			$(filter_SRC_svg_PresentationEngine) $(filter_SRC_svg_Js2Hxx) | $(FISS)/.dir
 	$(call gb_Output_announce,$@,build,PY ,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
 		$(gb_PYTHON) $(filter_SRC_svg_Js2Hxx) \
 			$(filter_SRC_svg_PresentationEngine) \
 			$(filter_GEN_svg_Script_hxx))
 
-.DEFAULT_GOAL:=all
-.PHONY: all
-all : \
+$(call gb_CustomTarget_get_target,filter/source/svg) : \
 	$(filter_GEN_svg_Tokens_gperf) \
 	$(filter_GEN_svg_Tokens_hxx) \
 	$(filter_GEN_svg_Tokens_cxx) \

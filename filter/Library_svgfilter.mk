@@ -19,7 +19,7 @@
 
 $(eval $(call gb_Library_Library,svgfilter))
 
-$(eval $(call gb_Library_add_package_headers,svgfilter,filter_generated))
+$(eval $(call gb_Library_add_custom_headers,svgfilter,filter/source/svg))
 
 $(eval $(call gb_Library_set_componentfile,svgfilter,filter/source/svg/svgfilter))
 
@@ -30,11 +30,6 @@ $(eval $(call gb_Library_add_defs,svgfilter,\
 $(eval $(call gb_Library_add_api,svgfilter,\
 	udkapi \
 	offapi \
-))
-
-$(eval $(call gb_Library_set_include,svgfilter,\
-	$$(INCLUDE) \
-	-I$(WORKDIR)/CustomTarget/filter/source/svg \
 ))
 
 $(eval $(call gb_Library_add_linked_libs,svgfilter,\

@@ -26,6 +26,7 @@ $(eval $(call gb_Module_add_targets,filter,\
 	AllLangResTarget_t602filter \
 	AllLangResTarget_xsltdlg \
 	Configuration_filter \
+	CustomTarget_svg \
 	Library_PptImporter \
 	Library_egi \
 	Library_eme \
@@ -64,7 +65,6 @@ $(eval $(call gb_Module_add_targets,filter,\
 	Library_xsltfilter \
 	Package_inc \
 	Package_docbook \
-	Package_filter_generated \
 	Package_xslt \
 ))
 
