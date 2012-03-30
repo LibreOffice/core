@@ -112,3 +112,7 @@
 # German (Switzerland) dictionary.
 [ language=de || language=de_CH || language=de_DE ]
     7c9f63dcd9de3e4ec6ddbde160a0d793 http://sourceforge.net/projects/aoo-extensions/files/1699/7/dict-de_CH-frami_2011-06-03.oxt/download "dict-de_CH-frami_2011-06-03.oxt"
+
+# Khmer dictionary.
+[ language=km ]
+    a22266cfa40fb23a79be27a239321a3f http://sourceforge.net/projects/aoo-extensions/files/1009/1/km_spellchecker_OOo30_V_1.0.2.oxt/download "km_spellchecker_OOo30_V_1.0.2.oxt"
