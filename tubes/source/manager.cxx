@@ -92,38 +92,7 @@ public:
 };
 
 
-static void TeleManager_DBusTubeAcceptHandler(
-        TpChannel*      pChannel,
-        const char*     pAddress,
-        const GError*   pError,
-        gpointer        pUserData,
-        GObject*        pWeakObject)
-{
-    INFO_LOGGER_F( "TeleManager_DBusTubeAcceptHandler");
-
-    TpAccount* pAccount = TP_ACCOUNT(pWeakObject);
-
-    SAL_WARN_IF( pError, "tubes", "TeleManager_DBusTubeAcceptHandler: entered with error: " << pError->message);
-    if (pError)
-    {
-        g_object_unref(pAccount);
-        return;
-    }
-
-    TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
-    SAL_WARN_IF( !pManager, "tubes", "TeleManager_DBusTubeAcceptHandler: no manager");
-    if (!pManager)
-    {
-        g_object_unref(pAccount);
-        return;
-    }
-
-    pManager->acceptTube( pAccount, pChannel, pAddress);
-    g_object_unref (pAccount);
-}
-
-
-static void TeleManager_DBusChannelHandler(
+void TeleManager::DBusChannelHandler(
         TpSimpleHandler*            /*handler*/,
         TpAccount*                  pAccount,
         TpConnection*               /*connection*/,
@@ -134,10 +103,10 @@ static void TeleManager_DBusChannelHandler(
         gpointer                    pUserData)
 {
     bool aAccepted = false;
-    INFO_LOGGER_F( "TeleManager_DBusChannelHandler");
+    INFO_LOGGER_F( "TeleManager::DBusChannelHandler");
 
     TeleManager* pManager = reinterpret_cast<TeleManager*>(pUserData);
-    SAL_WARN_IF( !pManager, "tubes", "TeleManager_DBusChannelHandler: no manager");
+    SAL_WARN_IF( !pManager, "tubes", "TeleManager::DBusChannelHandler: no manager");
     if (!pManager)
         return;
 
@@ -147,18 +116,17 @@ static void TeleManager_DBusChannelHandler(
         if (!pChannel)
             continue;
 
-        SAL_INFO( "tubes", "TeleManager_DBusChannelHandler: incoming dbus channel: "
+        SAL_INFO( "tubes", "TeleManager::DBusChannelHandler: incoming dbus channel: "
                 << tp_channel_get_identifier( pChannel));
 
         if (tp_channel_get_channel_type_id( pChannel) == TP_IFACE_QUARK_CHANNEL_TYPE_DBUS_TUBE)
         {
             SAL_INFO( "tubes", "accepting");
             aAccepted = true;
-            g_object_ref( pAccount);
-            tp_cli_channel_type_dbus_tube_call_accept( pChannel, -1,
-                    TP_SOCKET_ACCESS_CONTROL_CREDENTIALS,
-                    TeleManager_DBusTubeAcceptHandler, pUserData, NULL,
-                    G_OBJECT (pAccount));
+
+            TeleConferencePtr pConference( new TeleConference( pManager, pAccount, pChannel, ""));
+            pManager->maConferences.push_back( pConference);
+            pConference->acceptTube();
         }
         else
         {
@@ -456,7 +424,7 @@ bool TeleManager::connect()
             FALSE,                          // requests
             getFullClientName().getStr(),   // name
             FALSE,                          // uniquify
-            TeleManager_DBusChannelHandler, // callback
+            &TeleManager::DBusChannelHandler, // callback
             this,                           // user_data
             NULL                            // destroy
             );
@@ -844,22 +812,6 @@ void TeleManager::disconnect()
         else
             ++i;
     }
-}
-
-
-void TeleManager::acceptTube( TpAccount* pAccount, TpChannel* pChannel, const char* pAddress )
-{
-    INFO_LOGGER( "TeleManager::acceptTube");
-
-    SAL_INFO( "tubes", "TeleManager::acceptTube: address " << pAddress);
-
-    SAL_WARN_IF( !pChannel || !pAddress, "tubes", "TeleManager::acceptTube: no channel or no address");
-    if (!pChannel || !pAddress)
-        return;
-
-    TeleConferencePtr pConference( new TeleConference( this, pAccount, pChannel, ""));
-    maConferences.push_back( pConference);
-    pConference->acceptTube( pAddress);
 }
 
 

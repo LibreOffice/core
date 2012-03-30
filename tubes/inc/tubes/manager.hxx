@@ -131,8 +131,6 @@ public:
 
     void                    disconnect();
 
-    void                    acceptTube( TpAccount* pAccount, TpChannel* pChannel, const char* pAddress );
-
     /** Send data to all registered conferences.
 
         @returns to how many conferences the packet was send
@@ -216,6 +214,16 @@ public:
 
 /* Callbacks; not for use outside this class. */
     static void             TransferDone( EmpathyFTHandler *handler, TpFileTransferChannel *, gpointer user_data);
+
+    static void             DBusChannelHandler(
+        TpSimpleHandler*            /*handler*/,
+        TpAccount*                  pAccount,
+        TpConnection*               /*connection*/,
+        GList*                      pChannels,
+        GList*                      /*requests_satisfied*/,
+        gint64                      /*user_action_time*/,
+        TpHandleChannelsContext*    pContext,
+        gpointer                    pUserData);
 
 private:
     void                    ensureLegacyChannel( TpAccount* pAccount, TpContact* pBuddy );

@@ -82,36 +82,39 @@ public:
     void                    setChannel( TpAccount* pAccount, TpChannel* pChannel );
     TpChannel*              getChannel() const  { return mpChannel; }
     bool                    offerTube();
-    bool                    acceptTube( const char* pAddress );
+    bool                    acceptTube();
     /// got tube accepted on other end as well?
     bool                    isTubeOpen() const { return meTubeChannelState == TP_TUBE_CHANNEL_STATE_OPEN; }
 
     // Only for callbacks.
     void                    setTubeOfferedHandlerInvoked( bool b ) { mbTubeOfferedHandlerInvoked = b; }
     bool                    isTubeOfferedHandlerInvoked() const { return mbTubeOfferedHandlerInvoked; }
-    void                    setTubeChannelStateChangedHandlerInvoked( bool b )
-                                { mbTubeChannelStateChangedHandlerInvoked = b; }
-    bool                    isTubeChannelStateChangedHandlerInvoked() const
-                                { return mbTubeChannelStateChangedHandlerInvoked; }
+    bool                    isTubeChannelStateChangedToOpen() const
+                                { return meTubeChannelState == TP_TUBE_CHANNEL_STATE_OPEN; };
     void                    setTubeChannelState( TpTubeChannelState eState ) { meTubeChannelState = eState; }
 
+    static void             TubeChannelStateChangedHandler(TpChannel*, guint, void*, GObject*);
     static void             TubeOfferedHandler(TpChannel* pChannel, const gchar* pAddress, const GError* pError,
+                                               gpointer pUserData, GObject*pWeakObject);
+    static void             TubeAcceptedHandler(TpChannel* pChannel, const gchar* pAddress, const GError* pError,
                                                gpointer pUserData, GObject*pWeakObject);
     static void             FTReady( EmpathyFTHandler *handler, GError *error, gpointer user_data);
 
 private:
+    bool                    tryToOpen();
+    bool                    spinUntilTubeEstablished();
     bool                    setTube( const char* pTube );
 
     rtl::OString            maSessionId;
     TeleManager*            mpManager;
     TpAccount*              mpAccount;
     TpChannel*              mpChannel;
+    gchar*                  mpAddress;
     DBusConnection*         mpTube;
     TelePacketQueue         maPacketQueue;
     TpTubeChannelState      meTubeChannelState;
 
     bool                    mbTubeOfferedHandlerInvoked : 1;
-    bool                    mbTubeChannelStateChangedHandlerInvoked : 1;
 
     // hide from the public
     using boost::enable_shared_from_this<TeleConference>::shared_from_this;

@@ -169,34 +169,48 @@ void TeleConference::TubeOfferedHandler(
     if (pChannel != pConference->getChannel())
         return;
 
-    pConference->setTube( pAddress );
+    pConference->mpAddress = g_strdup( pAddress );
+    pConference->tryToOpen();
 }
 
 
-static void TeleConference_TubeChannelStateChangedHandler(
+bool TeleConference::tryToOpen()
+{
+    if (mpTube)
+        return true;
+
+    if (!isTubeOpen())
+        return false;
+
+    if (!mpAddress)
+        return false;
+
+    return setTube( mpAddress);
+}
+
+void TeleConference::TubeChannelStateChangedHandler(
         TpChannel*  pChannel,
         guint       nState,
         gpointer    pUserData,
         GObject*    /*weak_object*/
         )
 {
-    INFO_LOGGER_F( "TeleConference_TubeChannelStateChangedHandler");
+    INFO_LOGGER_F( "TeleConference::TubeChannelStateChangedHandler");
 
-    SAL_INFO( "tubes", "TeleConference_TubeChannelStateChangedHandler: state: " << static_cast<sal_uInt32>(nState));
+    SAL_INFO( "tubes", "TeleConference::TubeChannelStateChangedHandler: state: " << static_cast<sal_uInt32>(nState));
 
     TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
     SAL_WARN_IF( !pConference, "tubes", "TeleConference_DBusMessageHandler: no conference");
     if (!pConference)
         return;
 
-    pConference->setTubeChannelStateChangedHandlerInvoked( true);
-
     SAL_WARN_IF( pChannel != pConference->getChannel(), "tubes",
-            "TeleConference_TubeChannelStateChangedHandler: not my channel");
+            "TeleConference::TubeChannelStateChangedHandler: not my channel");
     if (pChannel != pConference->getChannel())
         return;
 
     pConference->setTubeChannelState( static_cast<TpTubeChannelState>(nState));
+    pConference->tryToOpen();
 }
 
 
@@ -204,18 +218,14 @@ TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpCh
     :
         maSessionId( rSessionId ),
         mpManager( pManager),
-        mpAccount( pAccount),
-        mpChannel( pChannel),
+        mpAccount( NULL),
+        mpChannel( NULL),
+        mpAddress( NULL),
         mpTube( NULL),
         meTubeChannelState( TP_TUBE_CHANNEL_STATE_NOT_OFFERED),
-        mbTubeOfferedHandlerInvoked( false),
-        mbTubeChannelStateChangedHandlerInvoked( false)
+        mbTubeOfferedHandlerInvoked( false)
 {
-    if (mpAccount)
-        g_object_ref( mpAccount);
-
-    if (mpChannel)
-        g_object_ref( mpChannel);
+    setChannel( pAccount, pChannel );
 }
 
 
@@ -234,8 +244,27 @@ void TeleConference::setChannel( TpAccount *pAccount, TpChannel* pChannel )
         g_object_unref( mpAccount);
 
     mpChannel = pChannel;
-    if (mpChannel)
+    if (mpChannel) {
         g_object_ref( mpChannel);
+
+        /* TODO: remember the TpProxySignalConnection and disconnect in finalize */
+        GError* pError = NULL;
+        TpProxySignalConnection* pProxySignalConnection =
+            tp_cli_channel_interface_tube_connect_to_tube_channel_state_changed(
+                    mpChannel,
+                    &TeleConference::TubeChannelStateChangedHandler,
+                    this,
+                    NULL,
+                    NULL,
+                    &pError);
+
+        if (!pProxySignalConnection || pError)
+        {
+            SAL_WARN_IF( pError, "tubes",
+                "TeleConference::setChannel: channel state changed error: " << pError->message);
+            g_error_free( pError);
+        }
+    }
 
     mpAccount = pAccount;
     if (mpAccount)
@@ -243,21 +272,31 @@ void TeleConference::setChannel( TpAccount *pAccount, TpChannel* pChannel )
 }
 
 
-bool TeleConference::acceptTube( const char* pAddress )
+bool TeleConference::spinUntilTubeEstablished()
+{
+    mpManager->iterateLoop( this, &TeleConference::isTubeOfferedHandlerInvoked);
+    mpManager->iterateLoop( this, &TeleConference::isTubeChannelStateChangedToOpen);
+
+    bool bOpen = isTubeOpen();
+    SAL_INFO( "tubes", "TeleConference::spinUntilTubeEstablished: tube open: " << bOpen);
+    return bOpen;
+}
+
+
+bool TeleConference::acceptTube()
 {
     INFO_LOGGER( "TeleConference::acceptTube");
-
-    SAL_WARN_IF( !pAddress, "tubes", "TeleConference::acceptTube: no address");
-    if (!pAddress)
-        return false;
-    SAL_INFO( "tubes", "TeleConference::acceptTube: address: " << pAddress);
 
     SAL_WARN_IF( !mpChannel, "tubes", "TeleConference::acceptTube: no channel setup");
     SAL_WARN_IF( mpTube, "tubes", "TeleConference::acceptTube: already tubed");
     if (!mpChannel || mpTube)
         return false;
 
-    return setTube( pAddress );
+    tp_cli_channel_type_dbus_tube_call_accept( mpChannel, -1,
+            TP_SOCKET_ACCESS_CONTROL_CREDENTIALS,
+            &TeleConference::TubeOfferedHandler,
+            this, NULL, NULL);
+    return spinUntilTubeEstablished();
 }
 
 
@@ -268,8 +307,6 @@ bool TeleConference::offerTube()
     OSL_ENSURE( mpChannel, "TeleConference::offerTube: no channel");
     if (!mpChannel)
         return false;
-
-    setTubeOfferedHandlerInvoked( false);
 
     // We must pass a hash table, it could be empty though.
     /* TODO: anything meaningful to go in here? */
@@ -287,35 +324,8 @@ bool TeleConference::offerTube()
             NULL,                                   // destroy
             NULL);                                  // weak_object
 
-    mpManager->iterateLoop( this, &TeleConference::isTubeOfferedHandlerInvoked);
-
     g_hash_table_unref( pParams);
-
-    setTubeChannelStateChangedHandlerInvoked( false);
-
-    /* TODO: remember the TpProxySignalConnection for further use? */
-    GError* pError = NULL;
-    TpProxySignalConnection* pProxySignalConnection =
-        tp_cli_channel_interface_tube_connect_to_tube_channel_state_changed(
-                mpChannel,
-                TeleConference_TubeChannelStateChangedHandler,
-                this,
-                NULL,
-                NULL,
-                &pError);
-
-    if (!pProxySignalConnection || pError)
-    {
-        SAL_WARN_IF( pError, "tubes", "TeleConference::offerTube: channel state changed error: " << pError->message);
-        g_error_free( pError);
-        return false;
-    }
-
-    mpManager->iterateLoop( this, &TeleConference::isTubeChannelStateChangedHandlerInvoked);
-
-    bool bOpen = isTubeOpen();
-    SAL_INFO( "tubes", "TeleConference::offerTube: tube open: " << bOpen);
-    return bOpen;
+    return spinUntilTubeEstablished();
 }
 
 
@@ -377,6 +387,12 @@ void TeleConference::finalize()
         dbus_connection_close( mpTube);
         dbus_connection_unref( mpTube);
         mpTube = NULL;
+    }
+
+    if (mpAddress)
+    {
+        g_free( mpAddress);
+        mpAddress = NULL;
     }
 
     TeleConferencePtr pThis( shared_from_this());
