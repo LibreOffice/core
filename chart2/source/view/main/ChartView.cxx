@@ -3044,12 +3044,12 @@ int closeCallback(void* )
 
 void dumpPositionAsAttribute(const awt::Point& rPoint, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("position"), "%li,%li", rPoint.X, rPoint.Y);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("position"), "%" SAL_PRIdINT32 ",%" SAL_PRIdINT32, rPoint.X, rPoint.Y);
 }
 
 void dumpSizeAsAttribute(const awt::Size& rSize, xmlTextWriterPtr xmlWriter)
 {
-    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("size"), "%lix%li", rSize.Width, rSize.Height);
+    xmlTextWriterWriteFormatAttribute(xmlWriter, BAD_CAST("size"), "%" SAL_PRIdINT32 "x%" SAL_PRIdINT32, rSize.Width, rSize.Height);
 }
 
 void dumpShapeDescriptorAsAttribute( uno::Reference< drawing::XShapeDescriptor > xDescr, xmlTextWriterPtr xmlWriter )
