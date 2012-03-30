@@ -68,7 +68,7 @@ class SfxVoidItem;
 // -------------------------------------------------------------------------
 // class EditAttrib
 // -------------------------------------------------------------------------
-class EditAttrib
+class EditAttrib : public boost::noncopyable
 {
 private:
     EditAttrib();
@@ -77,7 +77,6 @@ protected:
     const SfxPoolItem*  pItem;
 
     EditAttrib( const SfxPoolItem& rAttr );
-    EditAttrib(const EditAttrib& r);
     virtual ~EditAttrib();
 
 public:
@@ -104,7 +103,6 @@ protected:
 
 public:
     EditCharAttrib( const SfxPoolItem& rAttr, sal_uInt16 nStart, sal_uInt16 nEnd );
-    EditCharAttrib(const EditCharAttrib& r);
 
     sal_uInt16&         GetStart()                  { return nStart; }
     sal_uInt16&         GetEnd()                    { return nEnd; }

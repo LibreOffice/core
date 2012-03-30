@@ -2005,7 +2005,7 @@ void CharAttribList::InsertAttrib( EditCharAttrib* pAttrib )
 
 void CharAttribList::ResortAttribs()
 {
-    std::sort(aAttribs.begin(), aAttribs.end(), LessByStart());
+    aAttribs.sort(LessByStart());
 }
 
 void CharAttribList::OptimizeRanges( SfxItemPool& rItemPool )
