@@ -623,13 +623,6 @@ void StringHelper::appendToken( OUStringBuffer& rStr, sal_Int64 nToken, sal_Unic
     appendToken( rStr, aToken.makeStringAndClear(), cSep );
 }
 
-void StringHelper::prependToken( OUStringBuffer& rStr, const OUString& rToken, sal_Unicode cSep )
-{
-    if( rStr.getLength() > 0 && !rToken.isEmpty() )
-        rStr.insert( 0, cSep );
-    rStr.insert( 0, rToken );
-}
-
 void StringHelper::appendIndex( OUStringBuffer& rStr, const OUString& rIdx )
 {
     rStr.append( sal_Unicode( '[' ) ).append( rIdx ).append( sal_Unicode( ']' ) );
@@ -640,18 +633,6 @@ void StringHelper::appendIndex( OUStringBuffer& rStr, sal_Int64 nIdx )
     OUStringBuffer aToken;
     appendDec( aToken, nIdx );
     appendIndex( rStr, aToken.makeStringAndClear() );
-}
-
-void StringHelper::appendIndexedText( OUStringBuffer& rStr, const OUString& rData, const OUString& rIdx )
-{
-    rStr.append( rData );
-    appendIndex( rStr, rIdx );
-}
-
-void StringHelper::appendIndexedText( OUStringBuffer& rStr, const OUString& rData, sal_Int64 nIdx )
-{
-    rStr.append( rData );
-    appendIndex( rStr, nIdx );
 }
 
 OUString StringHelper::getToken( const OUString& rData, sal_Int32& rnPos, sal_Unicode cSep )
@@ -2225,26 +2206,6 @@ void OutputObjectBase::writeArrayItem( const String& rName, const sal_uInt8* pnD
 {
     ItemGuard aItem( mxOut, rName );
     mxOut->writeArray( pnData, nSize, cSep );
-}
-
-double OutputObjectBase::writeRkItem( const String& rName, sal_Int32 nRk )
-{
-    MultiItemsGuard aMultiGuard( mxOut );
-    writeHexItem( rName, static_cast< sal_uInt32 >( nRk ), "RK-FLAGS" );
-#if FIXME
-    double fValue = ::oox::xls::BiffHelper::calcDoubleFromRk( nRk );
-#else
-    double fValue = 0.0;
-#endif
-    writeDecItem( "decoded", fValue );
-    return fValue;
-}
-
-void OutputObjectBase::writeColorABGRItem( const String& rName, sal_Int32 nColor )
-{
-    ItemGuard aItem( mxOut, rName );
-    writeHexItem( rName, nColor );
-    mxOut->writeColorABGR( nColor );
 }
 
 void OutputObjectBase::writeDateTimeItem( const String& rName, const DateTime& rDateTime )

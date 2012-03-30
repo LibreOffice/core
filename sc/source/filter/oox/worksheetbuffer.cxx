@@ -78,14 +78,6 @@ WorksheetBuffer::WorksheetBuffer( const WorkbookHelper& rHelper ) :
     return rUrl.copy( nFileNamePos, nExtPos - nFileNamePos );
 }
 
-void WorksheetBuffer::initializeSingleSheet()
-{
-    OSL_ENSURE( maSheetInfos.empty(), "WorksheetBuffer::initializeSingleSheet - invalid call" );
-    SheetInfoModel aModel;
-    aModel.maName = getBaseFileName( getBaseFilter().getFileUrl() );
-    insertSheet( aModel );
-}
-
 void WorksheetBuffer::importSheet( const AttributeList& rAttribs )
 {
     SheetInfoModel aModel;
@@ -106,24 +98,6 @@ void WorksheetBuffer::importSheet( SequenceInputStream& rStrm )
     insertSheet( aModel );
 }
 
-void WorksheetBuffer::importSheet( BiffInputStream& rStrm )
-{
-    SheetInfoModel aModel;
-    if( getBiff() >= BIFF5 )
-    {
-        rStrm.enableDecoder( false );
-        aModel.mnBiffHandle = rStrm.readuInt32();
-        rStrm.enableDecoder( true );
-        sal_uInt16 nState = rStrm.readuInt16();
-        static const sal_Int32 spnStates[] = { XML_visible, XML_hidden, XML_veryHidden };
-        aModel.mnState = STATIC_ARRAY_SELECT( spnStates, nState, XML_visible );
-    }
-    aModel.maName = (getBiff() == BIFF8) ?
-        rStrm.readUniStringBody( rStrm.readuInt8() ) :
-        rStrm.readByteStringUC( false, getTextEncoding() );
-    insertSheet( aModel );
-}
-
 sal_Int16 WorksheetBuffer::insertEmptySheet( const OUString& rPreferredName, bool bVisible )
 {
     return createSheet( rPreferredName, SAL_MAX_INT32, bVisible ).first;
@@ -138,12 +112,6 @@ OUString WorksheetBuffer::getWorksheetRelId( sal_Int32 nWorksheet ) const
 {
     const SheetInfo* pSheetInfo = maSheetInfos.get( nWorksheet ).get();
     return pSheetInfo ? pSheetInfo->maRelId : OUString();
-}
-
-sal_Int64 WorksheetBuffer::getBiffRecordHandle( sal_Int32 nWorksheet ) const
-{
-    const SheetInfo* pSheetInfo = maSheetInfos.get( nWorksheet ).get();
-    return pSheetInfo ? pSheetInfo->mnBiffHandle : -1;
 }
 
 sal_Int16 WorksheetBuffer::getCalcSheetIndex( sal_Int32 nWorksheet ) const

@@ -674,50 +674,6 @@ void ViewSettings::importOleSize( SequenceInputStream& rStrm )
     mbValidOleSize = getAddressConverter().convertToCellRange( maOleSize, aBinRange, 0, true, false );
 }
 
-void ViewSettings::importWindow1( BiffInputStream& rStrm )
-{
-    sal_uInt16 nWinX, nWinY, nWinWidth, nWinHeight;
-    rStrm >> nWinX >> nWinY >> nWinWidth >> nWinHeight;
-
-    // WINDOW1 record occures in every sheet in BIFF4W
-    OSL_ENSURE( maBookViews.empty() || ((getBiff() == BIFF4) && isWorkbookFile()),
-        "ViewSettings::importWindow1 - multiple WINDOW1 records" );
-    WorkbookViewModel& rModel = createWorkbookView();
-    rModel.mnWinX = nWinX;
-    rModel.mnWinY = nWinY;
-    rModel.mnWinWidth = nWinWidth;
-    rModel.mnWinHeight = nWinHeight;
-
-    if( getBiff() <= BIFF4 )
-    {
-        sal_uInt8 nHidden;
-        rStrm >> nHidden;
-        rModel.mnVisibility = (nHidden == 0) ? XML_visible : XML_hidden;
-    }
-    else
-    {
-        sal_uInt16 nFlags, nActiveTab, nFirstVisTab, nSelectCnt, nTabBarWidth;
-        rStrm >> nFlags >> nActiveTab >> nFirstVisTab >> nSelectCnt >> nTabBarWidth;
-
-        rModel.mnActiveSheet = nActiveTab;
-        rModel.mnFirstVisSheet = nFirstVisTab;
-        rModel.mnTabBarWidth = nTabBarWidth;
-        rModel.mnVisibility = getFlagValue( nFlags, BIFF_WINDOW1_HIDDEN, XML_hidden, XML_visible );
-        rModel.mbMinimized = getFlag( nFlags, BIFF_WINDOW1_MINIMIZED );
-        rModel.mbShowHorScroll = getFlag( nFlags, BIFF_WINDOW1_SHOWHORSCROLL );
-        rModel.mbShowVerScroll = getFlag( nFlags, BIFF_WINDOW1_SHOWVERSCROLL );
-        rModel.mbShowTabBar = getFlag( nFlags, BIFF_WINDOW1_SHOWTABBAR );
-    }
-}
-
-void ViewSettings::importOleSize( BiffInputStream& rStrm )
-{
-    rStrm.skip( 2 );
-    BinRange aBinRange;
-    aBinRange.read( rStrm, false );
-    mbValidOleSize = getAddressConverter().convertToCellRange( maOleSize, aBinRange, 0, true, false );
-}
-
 void ViewSettings::setSheetViewSettings( sal_Int16 nSheet, const SheetViewModelRef& rxSheetView, const Any& rProperties )
 {
     maSheetViews[ nSheet ] = rxSheetView;

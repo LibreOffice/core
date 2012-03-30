@@ -167,16 +167,6 @@ protected:
     /** Returns the BIFF input stream of this fragment. */
     inline BiffInputStream& getInputStream() { return *mxBiffStrm; }
 
-    /** Starts a new fragment in a workbbok stream and returns the fragment type.
-
-        The passed stream must point before a BOF record. The function will
-        try to start the next record and read the contents of the BOF record,
-        if extant.
-
-        @return  Fragment type according to the imported BOF record.
-     */
-    BiffFragmentType    startFragment( BiffType eBiff );
-
     /** Skips the current fragment up to its trailing EOF record.
 
         Skips all records until next EOF record. When this function returns,
@@ -226,23 +216,6 @@ protected:
                             const WorksheetHelper& rHelper,
                             const BiffWorkbookFragmentBase& rParent );
 };
-
-// ----------------------------------------------------------------------------
-
-/** Special fragment handler for worksheets that have to be skipped.
- */
-class BiffSkipWorksheetFragment : public BiffWorksheetFragmentBase
-{
-public:
-    explicit            BiffSkipWorksheetFragment(
-                            const WorksheetHelper& rHelper,
-                            const BiffWorkbookFragmentBase& rParent );
-
-    virtual bool        importFragment();
-};
-
-// ============================================================================
-// ============================================================================
 
 } // namespace xls
 } // namespace oox

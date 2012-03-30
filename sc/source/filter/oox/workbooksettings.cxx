@@ -195,12 +195,6 @@ void WorkbookSettings::setSaveExtLinkValues( bool bSaveExtLinks )
     maBookSettings.mbSaveExtLinkValues = bSaveExtLinks;
 }
 
-void WorkbookSettings::importBookBool( BiffInputStream& rStrm )
-{
-    // value of 0 means save external values, value of 1 means strip external values
-    maBookSettings.mbSaveExtLinkValues = rStrm.readuInt16() == 0;
-}
-
 void WorkbookSettings::importCalcCount( BiffInputStream& rStrm )
 {
     maCalcSettings.mnIterateCount = rStrm.readuInt16();
@@ -213,51 +207,14 @@ void WorkbookSettings::importCalcMode( BiffInputStream& rStrm )
     maCalcSettings.mnCalcMode = STATIC_ARRAY_SELECT( spnCalcModes, nCalcMode, XML_auto );
 }
 
-void WorkbookSettings::importCodeName( BiffInputStream& rStrm )
-{
-    maBookSettings.maCodeName = rStrm.readUniString();
-}
-
-void WorkbookSettings::importDateMode( BiffInputStream& rStrm )
-{
-    setDateMode( rStrm.readuInt16() != 0 );
-}
-
 void WorkbookSettings::importDelta( BiffInputStream& rStrm )
 {
     rStrm >> maCalcSettings.mfIterateDelta;
 }
 
-void WorkbookSettings::importFileSharing( BiffInputStream& rStrm )
-{
-    maFileSharing.mbRecommendReadOnly = rStrm.readuInt16() != 0;
-    rStrm >> maFileSharing.mnPasswordHash;
-    if( getBiff() == BIFF8 )
-    {
-        sal_uInt16 nStrLen = rStrm.readuInt16();
-        // there is no string flags field if string is empty
-        if( nStrLen > 0 )
-            maFileSharing.maUserName = rStrm.readUniStringBody( nStrLen );
-    }
-    else
-    {
-        maFileSharing.maUserName = rStrm.readByteStringUC( false, getTextEncoding() );
-    }
-}
-
-void WorkbookSettings::importHideObj( BiffInputStream& rStrm )
-{
-    maBookSettings.setBiffObjectMode( rStrm.readuInt16() );
-}
-
 void WorkbookSettings::importIteration( BiffInputStream& rStrm )
 {
     maCalcSettings.mbIterate = rStrm.readuInt16() != 0;
-}
-
-void WorkbookSettings::importPrecision( BiffInputStream& rStrm )
-{
-    maCalcSettings.mbFullPrecision = rStrm.readuInt16() != 0;
 }
 
 void WorkbookSettings::importRefMode( BiffInputStream& rStrm )
@@ -274,11 +231,6 @@ void WorkbookSettings::importUncalced( BiffInputStream& )
 {
     // existence of this record indicates incomplete recalc
     maCalcSettings.mbCalcCompleted = false;
-}
-
-void WorkbookSettings::importUsesElfs( BiffInputStream& rStrm )
-{
-    maCalcSettings.mbUseNlr = rStrm.readuInt16() != 0;
 }
 
 void WorkbookSettings::finalizeImport()

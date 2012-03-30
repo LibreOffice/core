@@ -171,17 +171,6 @@ void DffStreamObject::implDumpClientAnchor()
 {
 }
 
-void DffStreamObject::constructDffObj()
-{
-    mnInstVer = 0;
-    mnRealSize = 0;
-    if( SequenceRecordObjectBase::implIsValid() )
-    {
-        maSimpleProps.insertFormats( cfg().getNameList( "DFFOPT-SIMPLE-PROPERTIES" ) );
-        maComplexProps.insertFormats( cfg().getNameList( "DFFOPT-COMPLEX-PROPERTIES" ) );
-    }
-}
-
 sal_uInt32 DffStreamObject::dumpDffSimpleColor( const String& rName )
 {
     return dumpHex< sal_uInt32 >( rName, "DFF-SIMPLE-COLOR" );

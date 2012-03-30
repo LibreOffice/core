@@ -111,24 +111,6 @@ Reference< XInterface > ScfApiHelper::CreateInstance( const OUString& rServiceNa
     return CreateInstance( ::comphelper::getProcessServiceFactory(), rServiceName );
 }
 
-Reference< XInterface > ScfApiHelper::CreateInstanceWithArgs(
-        Reference< XMultiServiceFactory > xFactory, const OUString& rServiceName, const Sequence< Any >& rArgs )
-{
-    Reference< XInterface > xInt;
-    if( xFactory.is() )
-    {
-        try
-        {
-            xInt = xFactory->createInstanceWithArguments( rServiceName, rArgs );
-        }
-        catch( Exception& )
-        {
-            OSL_FAIL( "ScfApiHelper::CreateInstanceWithArgs - cannot create instance" );
-        }
-    }
-    return xInt;
-}
-
 uno::Sequence< beans::NamedValue > ScfApiHelper::QueryEncryptionDataForMedium( SfxMedium& rMedium,
         ::comphelper::IDocPasswordVerifier& rVerifier, const ::std::vector< OUString >* pDefaultPasswords )
 {

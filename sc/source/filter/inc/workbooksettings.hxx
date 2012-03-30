@@ -111,34 +111,20 @@ public:
 
     /** Sets the save external linked values flag, e.g. from the WSBOOL record. */
     void                setSaveExtLinkValues( bool bSaveExtLinks );
-    /** Imports the BOOKBOOL record. */
-    void                importBookBool( BiffInputStream& rStrm );
     /** Imports the CALCCOUNT record. */
     void                importCalcCount( BiffInputStream& rStrm );
     /** Imports the CALCMODE record. */
     void                importCalcMode( BiffInputStream& rStrm );
-    /** Imports the CODENAME record. */
-    void                importCodeName( BiffInputStream& rStrm );
-    /** Imports the DATEMODE record. */
-    void                importDateMode( BiffInputStream& rStrm );
     /** Imports the DELTA record. */
     void                importDelta( BiffInputStream& rStrm );
-    /** Imports the FILESHARING record. */
-    void                importFileSharing( BiffInputStream& rStrm );
-    /** Imports the HIDEOBJ record. */
-    void                importHideObj( BiffInputStream& rStrm );
     /** Imports the ITERATION record. */
     void                importIteration( BiffInputStream& rStrm );
-    /** Imports the PRECISION record. */
-    void                importPrecision( BiffInputStream& rStrm );
     /** Imports the REFMODE record. */
     void                importRefMode( BiffInputStream& rStrm );
     /** Imports the SAVERECALC record. */
     void                importSaveRecalc( BiffInputStream& rStrm );
     /** Imports the UNCALCED record. */
     void                importUncalced( BiffInputStream& rStrm );
-    /** Imports the USESELFS record. */
-    void                importUsesElfs( BiffInputStream& rStrm );
 
     /** Converts the imported workbook settings. */
     void                finalizeImport();

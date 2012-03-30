@@ -29,10 +29,7 @@
 #include "excelfilter.hxx"
 
 #include <com/sun/star/sheet/XSpreadsheetDocument.hpp>
-//#include "oox/dump/biffdumper.hxx"
-//#include "oox/dump/xlsbdumper.hxx"
 #include "oox/helper/binaryinputstream.hxx"
-#include "biffdetector.hxx"
 #include "biffinputstream.hxx"
 #include "excelchartconverter.hxx"
 #include "excelvbaproject.hxx"

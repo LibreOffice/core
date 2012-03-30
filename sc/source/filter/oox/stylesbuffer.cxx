@@ -3260,7 +3260,7 @@ void CellStyle::createCellStyle()
     // #i1624# #i1768# ignore unnamed user styles
     if( !mbCreated )
         mbCreated = maFinalName.isEmpty();
-#if AVOID_UNO
+
     ::ScDocument& rDoc = getScDocument();
     if( !mbCreated && !mpStyleSheet )
     {
@@ -3290,42 +3290,6 @@ void CellStyle::createCellStyle()
         if( bCreatePattern && mpStyleSheet && pXF )
             mpStyleSheet->GetItemSet().Put( pXF->createPattern( bDefStyle ).GetItemSet() );
     }
-#else
-    /*  #i103281# do not create another style of the same name, if it exists
-        already. This is needed to prevent that styles pasted from clipboard
-        get duplicated over and over. */
-    if( !mbCreated ) try
-    {
-        Reference< XNameAccess > xCellStylesNA( getStyleFamily( false ), UNO_QUERY_THROW );
-        mbCreated = xCellStylesNA->hasByName( maFinalName );
-    }
-    catch( Exception& )
-    {
-    }
-
-    // create the style object in the document
-    if( !mbCreated ) try
-    {
-        mbCreated = true;
-        Reference< XStyle > xStyle( createStyleObject( maFinalName, false ), UNO_SET_THROW );
-        // write style formatting properties
-        PropertySet aPropSet( xStyle );
-        getStyles().writeStyleXfToPropertySet( aPropSet, maModel.mnXfId );
-        if( !maModel.isDefaultStyle() )
-            xStyle->setParentStyle( getStyles().getDefaultStyleName() );
-    }
-    catch( Exception& )
-    {
-    }
-#endif
-}
-
-ScStyleSheet*
-CellStyle::createStyleSheet()
-{
-    if ( !mpStyleSheet )
-        createCellStyle();
-    return mpStyleSheet;
 }
 
 void CellStyle::finalizeImport( const OUString& rFinalName )
@@ -3615,58 +3579,6 @@ void StylesBuffer::importCellStyle( SequenceInputStream& rStrm )
     maCellStyles.importCellStyle( rStrm );
 }
 
-void StylesBuffer::importPalette( BiffInputStream& rStrm )
-{
-    maPalette.importPalette( rStrm );
-}
-
-void StylesBuffer::importFont( BiffInputStream& rStrm )
-{
-    /* Font with index 4 is not stored in BIFF. This means effectively, first
-        font in the BIFF file has index 0, fourth font has index 3, and fifth
-        font has index 5. Insert a dummy font to correctly map passed font
-        identifiers. */
-    if( maFonts.size() == 4 )
-        maFonts.push_back( maFonts.front() );
-
-    FontRef xFont = createFont();
-    xFont->importFont( rStrm );
-
-    /*  #i71033# Set stream text encoding from application font, if CODEPAGE
-        record is missing. Must be done now (not while finalizeImport() runs),
-        to be able to read all following byte strings correctly (e.g. cell
-        style names). */
-    if( maFonts.size() == 1 )
-        setAppFontEncoding( xFont->getFontEncoding() );
-}
-
-void StylesBuffer::importFontColor( BiffInputStream& rStrm )
-{
-    if( !maFonts.empty() )
-        maFonts.back()->importFontColor( rStrm );
-}
-
-void StylesBuffer::importFormat( BiffInputStream& rStrm )
-{
-    maNumFmts.importFormat( rStrm );
-}
-
-void StylesBuffer::importXf( BiffInputStream& rStrm )
-{
-    XfRef xXf( new Xf( *this ) );
-    xXf->importXf( rStrm );
-
-    XfRef xCellXf, xStyleXf;
-    (xXf->isCellXf() ? xCellXf : xStyleXf) = xXf;
-    maCellXfs.push_back( xCellXf );
-    maStyleXfs.push_back( xStyleXf );
-}
-
-void StylesBuffer::importStyle( BiffInputStream& rStrm )
-{
-    maCellStyles.importStyle( rStrm );
-}
-
 void StylesBuffer::finalizeImport()
 {
     // fonts first, are needed to finalize unit converter and XFs below
@@ -3904,12 +3816,6 @@ bool operator==( const Xf& rXf1, const Xf& rXf2 )
         return true;
     }
     return false;
-}
-
-void StylesBuffer::writeCellXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const
-{
-    if( Xf* pXf = maCellXfs.get( nXfId ).get() )
-        pXf->writeToPropertyMap( rPropMap );
 }
 
 void StylesBuffer::writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const

@@ -31,7 +31,6 @@
 
 #include "oox/core/binaryfilterbase.hxx"
 #include "oox/core/xmlfilterbase.hxx"
-#include "oox/ole/vbaprojectfilter.hxx"
 
 namespace oox {
 namespace xls {

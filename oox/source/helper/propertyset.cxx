@@ -154,15 +154,6 @@ bool PropertySet::implSetPropertyValue( const OUString& rPropName, const Any& rV
     return false;
 }
 
-#ifdef DBG_UTIL
-void PropertySet::dump()
-{
-    PropertyMap::dump( Reference< XPropertySet >( getXPropertySet(), UNO_QUERY ) );
-}
-#endif
-
-// ============================================================================
-
 } // namespace oox
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

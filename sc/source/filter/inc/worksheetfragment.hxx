@@ -126,65 +126,6 @@ private:
     void                importEmbeddedOleData( StreamDataSequence& orEmbeddedData, const ::rtl::OUString& rRelId );
 };
 
-// ============================================================================
-
-class BiffWorksheetFragment : public BiffWorksheetFragmentBase
-{
-public:
-    explicit            BiffWorksheetFragment(
-                            const WorksheetHelper& rHelper,
-                            const BiffWorkbookFragmentBase& rParent );
-    virtual             ~BiffWorksheetFragment();
-
-    /** Imports the entire worksheet fragment, returns true, if EOF record has been reached. */
-    virtual bool        importFragment();
-
-private:
-    /** Imports the AUTOFILTER and following records with auto filter settings. */
-    void                importAutoFilter( BiffInputStream& rStrm );
-    /** Imports the COLINFO record and sets column properties and formatting. */
-    void                importColInfo( BiffInputStream& rStrm );
-    /** Imports the BIFF2 COLUMNDEFAULT record and sets column default formatting. */
-    void                importColumnDefault( BiffInputStream& rStrm );
-    /** Imports the BIFF2 COLWIDTH record and sets column width. */
-    void                importColWidth( BiffInputStream& rStrm );
-    /** Imports the DATAVALIDATION record containing cell ranges with data validation settings. */
-    void                importDataValidation( BiffInputStream& rStrm );
-    /** Imports the DATAVALIDATIONS record containing global data validation settings. */
-    void                importDataValidations( BiffInputStream& rStrm );
-    /** Imports the DEFCOLWIDTH record and sets default column width. */
-    void                importDefColWidth( BiffInputStream& rStrm );
-    /** Imports the DEFROWHEIGHT record and sets default row height and properties. */
-    void                importDefRowHeight( BiffInputStream& rStrm );
-    /** Imports the DIMENSION record containing the used area of the sheet. */
-    void                importDimension( BiffInputStream& rStrm );
-    /** Imports the HYPERLINK record and sets a cell hyperlink. */
-    void                importHyperlink( BiffInputStream& rStrm );
-    /** Imports the LABELRANGES record and sets the imported label ranges. */
-    void                importLabelRanges( BiffInputStream& rStrm );
-    /** Imports the MEREDCELLS record and merges all cells in the document. */
-    void                importMergedCells( BiffInputStream& rStrm );
-    /** Imports the NOTE record containing a cell note. */
-    void                importNote( BiffInputStream& rStrm );
-    /** Imports the HORPAGEBREAKS or VERPAGEBREAKS record and inserts page breaks. */
-    void                importPageBreaks( BiffInputStream& rStrm, bool bRowBreak );
-    /** Imports a pivot table. */
-    void                importPTDefinition( BiffInputStream& rStrm );
-    /** Imports the QUERYTABLE and following records and inserts a web query. */
-    void                importQueryTable( BiffInputStream& rStrm );
-    /** Imports the SCENARIOS record and the following scenarios. */
-    void                importScenarios( BiffInputStream& rStrm );
-    /** Imports the SHAREDFEATHEAD record. */
-    void                importSharedFeatHead( BiffInputStream& rStrm );
-    /** Imports the STANDARDWIDTH record and sets standard column width. */
-    void                importStandardWidth( BiffInputStream& rStrm );
-
-private:
-    ::boost::shared_ptr< BiffWorksheetContextBase > mxContext;
-};
-
-// ============================================================================
-
 } // namespace xls
 } // namespace oox
 

@@ -1506,25 +1506,6 @@ void PivotCacheBuffer::registerPivotCacheFragment( sal_Int32 nCacheId, const OUS
         maFragmentPaths[ nCacheId ] = rFragmentPath;
 }
 
-void PivotCacheBuffer::importPivotCacheRef( BiffInputStream& rStrm )
-{
-    // read the PIVOTCACHE record that contains the stream ID
-    sal_Int32 nCacheId = rStrm.readuInt16();
-    OSL_ENSURE( maFragmentPaths.count( nCacheId ) == 0, "PivotCacheBuffer::importPivotCacheRef - cache stream exists already" );
-    OUStringBuffer aStrmName;
-    static const sal_Unicode spcHexChars[] = { '0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F' };
-    for( sal_uInt8 nBit = 0; nBit < 16; nBit += 4 )
-        aStrmName.insert( 0, spcHexChars[ extractValue< size_t >( nCacheId, nBit, 4 ) ] );
-    aStrmName.insert( 0, (getBiff() == BIFF8) ? CREATE_OUSTRING( "_SX_DB_CUR/" ) : CREATE_OUSTRING( "_SX_DB/" ) );
-    maFragmentPaths[ nCacheId ] = aStrmName.makeStringAndClear();
-
-    // try to read PCDSOURCE record (will read following data location records too)
-    sal_uInt16 nNextRecId = rStrm.getNextRecId();
-    OSL_ENSURE( nNextRecId == BIFF_ID_PCDSOURCE, "PivotCacheBuffer::importPivotCacheRef - PCDSOURCE record expected" );
-    if( (nNextRecId == BIFF_ID_PCDSOURCE) && rStrm.startNextRecord() )
-        createPivotCache( nCacheId ).importPCDSource( rStrm );
-}
-
 PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
 {
     switch( getFilterType() )
@@ -1557,8 +1538,7 @@ PivotCache* PivotCacheBuffer::importPivotCacheFragment( sal_Int32 nCacheId )
             workbook stream). First, this index has to be resolved to the cache
             identifier that is used to manage the cache stream names (the
             maFragmentPaths member). The cache object itself exists already
-            before the first call for the cache source index (see
-            PivotCacheBuffer::importPivotCacheRef() above), because source data
+            before the first call for the cache source index, because source data
             link is part of workbook data, not of the cache stream. To detect
             subsequent calls with an already initialized cache, the entry in
             maFragmentPaths will be removed after reading the cache stream. */

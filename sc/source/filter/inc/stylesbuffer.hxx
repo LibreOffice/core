@@ -921,7 +921,6 @@ public:
     inline const CellStyleModel& getModel() const { return maModel; }
     /** Returns the final style name used in the document. */
     inline const ::rtl::OUString& getFinalStyleName() const { return maFinalName; }
-    ::ScStyleSheet*       createStyleSheet();
 
 private:
     CellStyleModel      maModel;
@@ -1030,19 +1029,6 @@ public:
     /** Imports the CELLSTYLE record from the passed stream. */
     void                importCellStyle( SequenceInputStream& rStrm );
 
-    /** Imports the PALETTE record from the passed stream. */
-    void                importPalette( BiffInputStream& rStrm );
-    /** Imports the FONT record from the passed stream. */
-    void                importFont( BiffInputStream& rStrm );
-    /** Imports the FONTCOLOR record from the passed stream. */
-    void                importFontColor( BiffInputStream& rStrm );
-    /** Imports the FORMAT record from the passed stream. */
-    void                importFormat( BiffInputStream& rStrm );
-    /** Imports the XF record from the passed stream. */
-    void                importXf( BiffInputStream& rStrm );
-    /** Imports the STYLE record from the passed stream. */
-    void                importStyle( BiffInputStream& rStrm );
-
     /** Final processing after import of all style settings. */
     void                finalizeImport();
 
@@ -1089,8 +1075,6 @@ public:
     void                writeFillToItemSet( SfxItemSet& rItemSet, sal_Int32 nFillId, bool bSkipPoolDefs = false ) const;
     void                writeFillToPropertyMap( PropertyMap& rPropMap, sal_Int32 nFillId ) const;
     void                writeCellXfToMarkData( ::ScMarkData& rMark, sal_Int32 nXfId, sal_Int32 nNumFmtId );
-    /** Writes the cell formatting attributes of the specified XF to the passed property map. */
-    void                writeCellXfToPropertyMap( PropertyMap& rPropMap, sal_Int32 nXfId ) const;
 
     /** Writes the cell formatting attributes of the specified XF to the passed property set. */
     void                writeCellXfToPropertySet( PropertySet& rPropSet, sal_Int32 nXfId ) const;

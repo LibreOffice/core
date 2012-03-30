@@ -264,14 +264,9 @@ private:
         @param nNumFmtId  If set, overrides number format of the cell XF. */
     void                setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtId = -1 );
 
-    /** Writes all cell formatting attributes to the passed row range. */
-    void                writeXfIdRowRangeProperties( const XfIdRowRange& rXfIdRowRange ) const;
-
     /** Writes all cell formatting attributes to the passed cell range list. (depreciates writeXfIdRangeProperties) */
     void                writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 nNumFmtId, const ApiCellRangeList& rRanges ) const;
     void                applyCellMerging( const ::com::sun::star::table::CellRangeAddress& rRange );
-    /** Merges the passed merged range and updates right/bottom cell borders. */
-    void                finalizeMergedRange( const ::com::sun::star::table::CellRangeAddress& rRange );
 
 private:
     /** Stores cell range address and formula token array of an array formula. */

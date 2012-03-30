@@ -962,24 +962,9 @@ rtl_TextEncoding WorkbookHelper::getTextEncoding() const
     return mrBookGlob.getTextEncoding();
 }
 
-void WorkbookHelper::setCodePage( sal_uInt16 nCodePage )
-{
-    mrBookGlob.setCodePage( nCodePage );
-}
-
 void WorkbookHelper::setAppFontEncoding( rtl_TextEncoding eAppFontEnc )
 {
     mrBookGlob.setAppFontEncoding( eAppFontEnc );
-}
-
-void WorkbookHelper::setIsWorkbookFile()
-{
-    mrBookGlob.setIsWorkbookFile();
-}
-
-void WorkbookHelper::createBuffersPerSheet( sal_Int16 nSheet )
-{
-    mrBookGlob.createBuffersPerSheet( nSheet );
 }
 
 BiffCodecHelper& WorkbookHelper::getCodecHelper() const

@@ -71,15 +71,10 @@ public:
     /** Returns the base file name without path and file extension. */
     static ::rtl::OUString getBaseFileName( const ::rtl::OUString& rUrl );
 
-    /** Initializes the buffer for single sheet files (BIFF2-BIFF4). */
-    void                initializeSingleSheet();
-
     /** Imports the attributes of a sheet element. */
     void                importSheet( const AttributeList& rAttribs );
     /** Imports the SHEET record from the passed BIFF12 stream. */
     void                importSheet( SequenceInputStream& rStrm );
-    /** Imports the SHEET record from the passed BIFF stream. */
-    void                importSheet( BiffInputStream& rStrm );
     /** Inserts a new empty sheet into the document. Looks for an unused name.
          @return  Index of the new sheet in the Calc document. */
     sal_Int16           insertEmptySheet( const ::rtl::OUString& rPreferredName, bool bVisible );
@@ -88,8 +83,6 @@ public:
     sal_Int32           getWorksheetCount() const;
     /** Returns the OOXML relation identifier of the specified worksheet. */
     ::rtl::OUString     getWorksheetRelId( sal_Int32 nWorksheet ) const;
-    /** Returns the BIFF record handle of the associated sheet substream. */
-    sal_Int64           getBiffRecordHandle( sal_Int32 nWorksheet ) const;
 
     /** Returns the Calc index of the specified worksheet. */
     sal_Int16           getCalcSheetIndex( sal_Int32 nWorksheet ) const;

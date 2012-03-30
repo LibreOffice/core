@@ -357,17 +357,6 @@ BiffCodecHelper::BiffCodecHelper( const WorkbookHelper& rHelper ) :
     return xDecoder;
 }
 
-bool BiffCodecHelper::importFilePass( BiffInputStream& rStrm )
-{
-    OSL_ENSURE( !mxDecoder, "BiffCodecHelper::importFilePass - multiple FILEPASS records" );
-    mxDecoder = implReadFilePass( rStrm, getBiff() );
-    // request and verify a password (decoder implements IDocPasswordVerifier)
-    if( mxDecoder.get() )
-        getBaseFilter().requestEncryptionData( *mxDecoder );
-    // correct password is indicated by isValid() function of decoder
-    return mxDecoder.get() && mxDecoder->isValid();
-}
-
 void BiffCodecHelper::cloneDecoder( BiffInputStream& rStrm )
 {
     if( mxDecoder.get() )

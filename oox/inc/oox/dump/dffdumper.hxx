@@ -56,8 +56,6 @@ protected:
     virtual void        implDumpClientAnchor();
 
 private:
-    void                constructDffObj();
-
     sal_uInt32          dumpDffSimpleColor( const String& rName );
 
     void                dumpDffOpt();

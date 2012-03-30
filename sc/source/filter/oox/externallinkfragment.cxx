@@ -496,7 +496,7 @@ void BiffExternalSheetDataContext::importCrn( BiffInputStream& rStrm )
                 rStrm.skip( 7 );
             break;
             default:
-                OSL_FAIL( "BiffExternalLinkFragment::importCrn - unknown data type" );
+                OSL_FAIL( "BiffExternalSheetDataContext::importCrn - unknown data type" );
                 bLoop = false;
         }
     }
@@ -519,31 +519,6 @@ void BiffExternalSheetDataContext::setCellValue( const BinAddress& rBinAddr, con
     {
     }
 }
-
-// ============================================================================
-
-BiffExternalLinkFragment::BiffExternalLinkFragment( const BiffWorkbookFragmentBase& rParent ) :
-    BiffWorkbookFragmentBase( rParent )
-{
-}
-
-bool BiffExternalLinkFragment::importFragment()
-{
-    // process all record in this sheet fragment
-    BiffExternalSheetDataContext aSheetContext( *this, false );
-    BiffInputStream& rStrm = getInputStream();
-    while( rStrm.startNextRecord() && (rStrm.getRecId() != BIFF_ID_EOF) )
-    {
-        if( BiffHelper::isBofRecord( rStrm ) )
-            skipFragment();  // skip unknown embedded fragments
-        else
-            aSheetContext.importRecord( rStrm );
-    }
-    return !rStrm.isEof() && (rStrm.getRecId() == BIFF_ID_EOF);
-}
-
-// ============================================================================
-// ============================================================================
 
 } // namespace xls
 } // namespace oox

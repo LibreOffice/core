@@ -60,21 +60,6 @@ private:
     void                importDrawing( SequenceInputStream& rStrm );
 };
 
-// ============================================================================
-
-class BiffChartsheetFragment : public BiffWorksheetFragmentBase
-{
-public:
-    explicit            BiffChartsheetFragment(
-                            const WorksheetHelper& rHelper,
-                            const BiffWorkbookFragmentBase& rParent );
-
-    /** Imports the entire sheet fragment, returns true, if EOF record has been reached. */
-    virtual bool        importFragment();
-};
-
-// ============================================================================
-
 } // namespace xls
 } // namespace oox
 

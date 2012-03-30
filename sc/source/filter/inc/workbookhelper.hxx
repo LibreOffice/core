@@ -34,9 +34,6 @@
 #include "oox/helper/storagebase.hxx"
 #include "biffhelper.hxx"
 
-// use AVOID_UNO = 1 to prefer core calls over uno
-#define AVOID_UNO 1
-
 namespace com { namespace sun { namespace star {
     namespace container { class XNameAccess; }
     namespace container { class XNameContainer; }
@@ -283,15 +280,8 @@ public:
 
     /** Returns the text encoding used to import/export byte strings. */
     rtl_TextEncoding    getTextEncoding() const;
-    /** Sets code page read from a CODEPAGE record for byte string import. */
-    void                setCodePage( sal_uInt16 nCodePage );
     /** Sets text encoding from the default application font, if CODEPAGE record is missing. */
     void                setAppFontEncoding( rtl_TextEncoding eAppFontEnc );
-
-    /** Enables workbook file mode, used for BIFF4 workspace files. */
-    void                setIsWorkbookFile();
-    /** Recreates global buffers that are used per sheet in specific BIFF versions. */
-    void                createBuffersPerSheet( sal_Int16 nSheet );
 
     /** Returns the codec helper that stores the encoder/decoder object. */
     BiffCodecHelper&    getCodecHelper() const;

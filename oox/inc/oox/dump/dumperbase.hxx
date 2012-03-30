@@ -396,12 +396,9 @@ public:
 
     static void         appendToken( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
     static void         appendToken( ::rtl::OUStringBuffer& rStr, sal_Int64 nToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
-    static void         prependToken( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rToken, sal_Unicode cSep = OOX_DUMP_LISTSEP );
 
     static void         appendIndex( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rIdx );
     static void         appendIndex( ::rtl::OUStringBuffer& rStr, sal_Int64 nIdx );
-    static void         appendIndexedText( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rData, const ::rtl::OUString& rIdx );
-    static void         appendIndexedText( ::rtl::OUStringBuffer& rStr, const ::rtl::OUString& rData, sal_Int64 nIdx );
 
     static ::rtl::OUString getToken( const ::rtl::OUString& rData, sal_Int32& rnPos, sal_Unicode cSep = OOX_DUMP_LISTSEP );
 
@@ -1350,8 +1347,6 @@ protected:
     void                writeCharItem( const String& rName, sal_Unicode cData );
     void                writeStringItem( const String& rName, const ::rtl::OUString& rData );
     void                writeArrayItem( const String& rName, const sal_uInt8* pnData, sal_Size nSize, sal_Unicode cSep = OOX_DUMP_LISTSEP );
-    double              writeRkItem( const String& rName, sal_Int32 nRk );
-    void                writeColorABGRItem( const String& rName, sal_Int32 nColor );
     void                writeDateTimeItem( const String& rName, const ::com::sun::star::util::DateTime& rDateTime );
     void                writeGuidItem( const String& rName, const ::rtl::OUString& rGuid );
     void                writeColIndexItem( const String& rName, sal_Int32 nCol );

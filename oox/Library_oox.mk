@@ -240,7 +240,6 @@ $(eval $(call gb_Library_add_exception_objects,oox,\
     oox/source/ole/vbainputstream \
     oox/source/ole/vbamodule \
     oox/source/ole/vbaproject \
-    oox/source/ole/vbaprojectfilter \
     oox/source/ppt/animationspersist \
     oox/source/ppt/animationtypes \
     oox/source/ppt/animvariantcontext \

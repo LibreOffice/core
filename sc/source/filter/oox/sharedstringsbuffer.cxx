@@ -52,23 +52,6 @@ RichStringRef SharedStringsBuffer::createRichString()
     return xString;
 }
 
-void SharedStringsBuffer::importSst( BiffInputStream& rStrm )
-{
-    rStrm.skip( 4 );
-    sal_Int32 nStringCount = rStrm.readInt32();
-    if( nStringCount > 0 )
-    {
-        maStrings.clear();
-        maStrings.reserve( static_cast< size_t >( nStringCount ) );
-        for( ; !rStrm.isEof() && (nStringCount > 0); --nStringCount )
-        {
-            RichStringRef xString( new RichString( *this ) );
-            maStrings.push_back( xString );
-            xString->importUniString( rStrm );
-        }
-    }
-}
-
 void SharedStringsBuffer::finalizeImport()
 {
     maStrings.forEachMem( &RichString::finalizeImport );

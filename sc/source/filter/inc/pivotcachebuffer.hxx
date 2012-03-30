@@ -501,8 +501,6 @@ public:
 
     /** Registers a pivot cache definition fragment. The fragment will be loaded on demand (OOXML/BIFF12 only). */
     void                registerPivotCacheFragment( sal_Int32 nCacheId, const ::rtl::OUString& rFragmentPath );
-    /** Reads the reference to a pivot cache stream. The stream will be loaded on demand (BIFF2-BIFF8 only). */
-    void                importPivotCacheRef( BiffInputStream& rStrm );
 
     /** Imports and stores a pivot cache definition fragment on first call,
         returns the imported cache on subsequent calls with the same identifier. */

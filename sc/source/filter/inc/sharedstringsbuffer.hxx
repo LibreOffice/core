@@ -44,8 +44,6 @@ public:
 
     /** Creates and returns a new string entry. */
     RichStringRef       createRichString();
-    /** Imports the complete shared string table from a BIFF file. */
-    void                importSst( BiffInputStream& rStrm );
 
     /** Final processing after import of all strings. */
     void                finalizeImport();

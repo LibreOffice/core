@@ -92,7 +92,6 @@ $(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/olehelper.hxx,oox/ole/oleh
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/oleobjecthelper.hxx,oox/ole/oleobjecthelper.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/olestorage.hxx,oox/ole/olestorage.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/vbaproject.hxx,oox/ole/vbaproject.hxx))
-$(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/vbaprojectfilter.hxx,oox/ole/vbaprojectfilter.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/axcontrol.hxx,oox/ole/axcontrol.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/axbinaryreader.hxx,oox/ole/axbinaryreader.hxx))
 $(eval $(call gb_Package_add_file,oox_inc,inc/oox/ole/axfontdata.hxx,oox/ole/axfontdata.hxx))

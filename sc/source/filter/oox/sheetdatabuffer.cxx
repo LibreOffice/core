@@ -487,7 +487,6 @@ void SheetDataBuffer::finalizeImport()
             CellRangeAddress aRange( getSheetIndex(), 0, rangeIter->mnFirst, rAddrConv.getMaxApiAddress().Column, rangeIter->mnLast );
             rangeList.push_back( aRange );
         }
-#if AVOID_UNO
         ScRangeList aList;
         for ( ApiCellRangeList::const_iterator itRange = rangeList.begin(), itRange_end = rangeList.end(); itRange!=itRange_end; ++itRange )
         {
@@ -499,10 +498,6 @@ void SheetDataBuffer::finalizeImport()
         aMark.MarkFromRangeList( aList, false );
 
         getStyles().writeCellXfToMarkData( aMark, it->first, -1 );
-#else
-        PropertySet aPropSet( getCellRangeList( rangeList ) );
-        getStyles().writeCellXfToPropertySet( aPropSet, it->first );
-#endif
     }
     std::map< std::pair< sal_Int32, sal_Int32 >, ApiCellRangeList > rangeStyleListMap;
     // gather all ranges that have the same style and apply them in bulk
@@ -512,17 +507,9 @@ void SheetDataBuffer::finalizeImport()
         writeXfIdRangeListProperties( it->first.first, it->first.second, it->second );
     // merge all cached merged ranges and update right/bottom cell borders
     for( MergedRangeList::iterator aIt = maMergedRanges.begin(), aEnd = maMergedRanges.end(); aIt != aEnd; ++aIt )
-#if AVOID_UNO
         applyCellMerging( aIt->maRange );
-#else
-        finalizeMergedRange( aIt->maRange );
-#endif
     for( MergedRangeList::iterator aIt = maCenterFillRanges.begin(), aEnd = maCenterFillRanges.end(); aIt != aEnd; ++aIt )
-#if AVOID_UNO
         applyCellMerging( aIt->maRange );
-#else
-        finalizeMergedRange( aIt->maRange );
-#endif
 }
 
 // private --------------------------------------------------------------------
@@ -770,24 +757,9 @@ void SheetDataBuffer::setCellFormat( const CellModel& rModel, sal_Int32 nNumFmtI
     }
 }
 
-void SheetDataBuffer::writeXfIdRowRangeProperties( const XfIdRowRange& rXfIdRowRange ) const
-{
-    if( (rXfIdRowRange.maRowRange.mnLast >= 0) && (rXfIdRowRange.mnXfId >= 0) )
-    {
-        AddressConverter& rAddrConv = getAddressConverter();
-        CellRangeAddress aRange( getSheetIndex(), 0, rXfIdRowRange.maRowRange.mnFirst, rAddrConv.getMaxApiAddress().Column, rXfIdRowRange.maRowRange.mnLast );
-        if( rAddrConv.validateCellRange( aRange, true, false ) )
-        {
-            PropertySet aPropSet( getCellRange( aRange ) );
-            getStyles().writeCellXfToPropertySet( aPropSet, rXfIdRowRange.mnXfId );
-        }
-    }
-}
-
 void SheetDataBuffer::writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 nNumFmtId, const ApiCellRangeList& rRanges ) const
 {
     StylesBuffer& rStyles = getStyles();
-#if AVOID_UNO
     ScRangeList aList;
     for ( ApiCellRangeList::const_iterator it = rRanges.begin(), it_end = rRanges.end(); it!=it_end; ++it )
     {
@@ -798,15 +770,6 @@ void SheetDataBuffer::writeXfIdRangeListProperties( sal_Int32 nXfId, sal_Int32 n
     ScMarkData aMark;
     aMark.MarkFromRangeList( aList, false );
     rStyles.writeCellXfToMarkData( aMark, nXfId, nNumFmtId );
-#else
-    PropertyMap aPropMap;
-    if( nXfId >= 0 )
-        rStyles.writeCellXfToPropertyMap( aPropMap, nXfId );
-    if( nNumFmtId >= 0 )
-        rStyles.writeNumFmtToPropertyMap( aPropMap, nNumFmtId );
-    PropertySet aPropSet( getCellRangeList( rRanges ) );
-    aPropSet.setProperties( aPropMap );
-#endif
 }
 
 void lcl_SetBorderLine( ScDocument& rDoc, ScRange& rRange, SCTAB nScTab, sal_uInt16 nLine )
@@ -856,59 +819,6 @@ void SheetDataBuffer::applyCellMerging( const CellRangeAddress& rRange )
         }
     }
 }
-
-void SheetDataBuffer::finalizeMergedRange( const CellRangeAddress& rRange )
-{
-    bool bMultiCol = rRange.StartColumn < rRange.EndColumn;
-    bool bMultiRow = rRange.StartRow < rRange.EndRow;
-
-    if( bMultiCol || bMultiRow ) try
-    {
-        // merge the cell range
-        Reference< XMergeable > xMerge( getCellRange( rRange ), UNO_QUERY_THROW );
-
-        xMerge->merge( sal_True );
-        // if merging this range worked (no overlapping merged ranges), update cell borders
-        Reference< XCell > xTopLeft( getCell( CellAddress( getSheetIndex(), rRange.StartColumn, rRange.StartRow ) ), UNO_SET_THROW );
-        PropertySet aTopLeftProp( xTopLeft );
-
-        // copy right border of top-right cell to right border of top-left cell
-        if( bMultiCol )
-        {
-            PropertySet aTopRightProp( getCell( CellAddress( getSheetIndex(), rRange.EndColumn, rRange.StartRow ) ) );
-            BorderLine aLine;
-            if( aTopRightProp.getProperty( aLine, PROP_RightBorder ) )
-                aTopLeftProp.setProperty( PROP_RightBorder, aLine );
-        }
-
-        // copy bottom border of bottom-left cell to bottom border of top-left cell
-        if( bMultiRow )
-        {
-            PropertySet aBottomLeftProp( getCell( CellAddress( getSheetIndex(), rRange.StartColumn, rRange.EndRow ) ) );
-            BorderLine aLine;
-            if( aBottomLeftProp.getProperty( aLine, PROP_BottomBorder ) )
-                aTopLeftProp.setProperty( PROP_BottomBorder, aLine );
-        }
-
-        // #i93609# merged range in a single row: test if manual row height is needed
-        if( !bMultiRow )
-        {
-            bool bTextWrap = aTopLeftProp.getBoolProperty( PROP_IsTextWrapped );
-            if( !bTextWrap && (xTopLeft->getType() == CellContentType_TEXT) )
-            {
-                Reference< XText > xText( xTopLeft, UNO_QUERY );
-                bTextWrap = xText.is() && (xText->getString().indexOf( '\x0A' ) >= 0);
-            }
-            if( bTextWrap )
-                setManualRowHeight( rRange.StartRow );
-        }
-    }
-    catch( Exception& )
-    {
-    }
-}
-
-// ============================================================================
 
 } // namespace xls
 } // namespace oox

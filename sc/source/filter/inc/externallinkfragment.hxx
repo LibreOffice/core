@@ -142,20 +142,6 @@ private:
     bool                mbImportDefNames;
 };
 
-// ============================================================================
-
-class BiffExternalLinkFragment : public BiffWorkbookFragmentBase
-{
-public:
-    explicit            BiffExternalLinkFragment( const BiffWorkbookFragmentBase& rParent );
-
-    /** Imports all records related to external links. */
-    virtual bool        importFragment();
-};
-
-// ============================================================================
-// ============================================================================
-
 } // namespace xls
 } // namespace oox
 

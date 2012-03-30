@@ -188,10 +188,6 @@ public:
     void                importWorkbookView( SequenceInputStream& rStrm );
     /** Imports the OLESIZE record containing the visible size of the workbook. */
     void                importOleSize( SequenceInputStream& rStrm );
-    /** Imports the WINDOW1 record containing workbook view settings. */
-    void                importWindow1( BiffInputStream& rStrm );
-    /** Imports the OLESIZE record containing the visible size of the workbook. */
-    void                importOleSize( BiffInputStream& rStrm );
 
     /** Stores converted view settings for a specific worksheet. */
     void                setSheetViewSettings( sal_Int16 nSheet,

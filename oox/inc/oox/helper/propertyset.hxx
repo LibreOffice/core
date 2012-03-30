@@ -125,10 +125,6 @@ public:
         @param rPropertyMap  The property map. */
     void                setProperties( const PropertyMap& rPropertyMap );
 
-#if OSL_DEBUG_LEVEL > 0
-    void dump();
-#endif
-
     // ------------------------------------------------------------------------
 private:
     /** Gets the specified property from the property set.
