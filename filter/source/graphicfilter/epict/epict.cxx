@@ -34,9 +34,7 @@
 
 #include <math.h>
 #include <vcl/bmpacc.hxx>
-#include <vcl/metaact.hxx>
 #include <vcl/graph.hxx>
-#include <vcl/bmpacc.hxx>
 #include <vcl/gradient.hxx>
 #include <vcl/hatch.hxx>
 #include <vcl/metric.hxx>

@@ -47,7 +47,6 @@
 #include <com/sun/star/i18n/LocaleDataItem.hpp>
 #include <com/sun/star/i18n/UnicodeScript.hpp>
 #include <com/sun/star/uno/RuntimeException.hpp>
-#include <com/sun/star/uno/Reference.h>
 #include <com/sun/star/uno/XInterface.hpp>
 #include <rtl/ustring.hxx>
 #include <vector>

@@ -33,7 +33,6 @@
 #include <vcl/timer.hxx>
 
 #include <svtools/xtextedt.hxx>
-#include <vcl/timer.hxx>
 #include <vcl/wrkwin.hxx>
 #include <vcl/ctrl.hxx>
 #include <vcl/button.hxx>

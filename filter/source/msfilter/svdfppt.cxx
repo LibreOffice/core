@@ -124,7 +124,6 @@
 #include <vcl/virdev.hxx>
 #include <algorithm>
 #include <set>
-#include <unotools/streamwrap.hxx>
 #include <rtl/strbuf.hxx>
 
 // PPT ColorScheme Slots

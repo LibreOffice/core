@@ -27,7 +27,6 @@
  ************************************************************************/
 
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 #include <toolkit/awt/vclxwindow.hxx>
 
 #include <osl/thread.h>
@@ -43,7 +42,6 @@
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/ui/dialogs/XExecutableDialog.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
-#include <toolkit/awt/vclxwindow.hxx>
 #include <tools/resmgr.hxx>
 #include <vcl/svapp.hxx>
 #include <rtl/instance.hxx>

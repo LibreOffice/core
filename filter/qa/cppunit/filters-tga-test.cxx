@@ -31,7 +31,6 @@
 #include <test/bootstrapfixture.hxx>
 #include <svtools/FilterConfigItem.hxx>
 #include <tools/stream.hxx>
-#include <tools/stream.hxx>
 #include <vcl/graph.hxx>
 
 #include <osl/file.hxx>
