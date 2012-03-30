@@ -720,11 +720,7 @@ void TextSearch::RESrchPrepare( const ::com::sun::star::util::SearchOptions& rOp
         nIcuSearchFlags |= UREGEX_CASE_INSENSITIVE;
     UErrorCode nIcuErr = U_ZERO_ERROR;
     // assumption: transliteration didn't mangle regexp control chars
-#ifdef OS2
     IcuUniString aIcuSearchPatStr( (const UChar*)rPatternStr.getStr(), rPatternStr.getLength());
-#else
-    IcuUniString aIcuSearchPatStr( rPatternStr.getStr(), rPatternStr.getLength());
-#endif
 #ifndef DISABLE_WORDBOUND_EMULATION
     // for conveniance specific syntax elements of the old regex engine are emulated
     // by using regular word boundary matching \b to replace \< and \>
@@ -756,11 +752,7 @@ SearchResult TextSearch::RESrchFrwrd( const OUString& searchStr,
 
     // use the ICU RegexMatcher to find the matches
     UErrorCode nIcuErr = U_ZERO_ERROR;
-#ifdef OS2
     const IcuUniString aSearchTargetStr( (const UChar*)searchStr.getStr(), endPos);
-#else
-    const IcuUniString aSearchTargetStr( searchStr.getStr(), endPos);
-#endif
     pRegexMatcher->reset( aSearchTargetStr);
     // search until there is a valid match
     for(;;)
@@ -810,11 +802,7 @@ SearchResult TextSearch::RESrchBkwrd( const OUString& searchStr,
     // TODO: use ICU's backward searching once it becomes available
     //       as its replacement using forward search is not as good as the real thing
     UErrorCode nIcuErr = U_ZERO_ERROR;
-#ifdef OS2
     const IcuUniString aSearchTargetStr( (const UChar*)searchStr.getStr(), startPos);
-#else
-    const IcuUniString aSearchTargetStr( searchStr.getStr(), startPos);
-#endif
     pRegexMatcher->reset( aSearchTargetStr);
     if( !pRegexMatcher->find( endPos, nIcuErr))
         return aRet;
