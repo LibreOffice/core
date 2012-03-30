@@ -2100,7 +2100,7 @@ void RtfAttributeOutput::CharFontCJK( const SvxFontItem& rFont )
 {
     SAL_INFO("sw.rtf", OSL_THIS_FUNC);
 
-    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_HICH);
+    m_aStyles.append(OOO_STRING_SVTOOLS_RTF_DBCH);
     m_aStyles.append(OOO_STRING_SVTOOLS_RTF_AF);
     m_aStyles.append((sal_Int32)m_rExport.maFontHelper.GetId(rFont));
 }
