@@ -25,15 +25,18 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-soffice.sh : $(SRCDIR)/desktop/scripts/soffice.sh
+$(eval $(call gb_CustomTarget_CustomTarget,desktop/soffice,new_style))
+
+DESO := $(call gb_CustomTarget_get_workdir,desktop/soffice)
+
+$(call gb_CustomTarget_get_target,desktop/soffice) : $(DESO)/soffice.sh
+
+$(DESO)/soffice.sh : $(SRCDIR)/desktop/scripts/soffice.sh | $(DESO)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),SED,1)
 ifneq ($(JITC_PROCESSOR_TYPE),)
 	sed -e "s/^#@JITC_PROCESSOR_TYPE_EXPORT@/export JITC_PROCESSOR_TYPE=$(JITC_PROCESSOR_TYPE)/" $< > $@
 else
 	cp $< $@
 endif
-
-.DEFAULT_GOAL := all
-.PHONY : all
-all : soffice.sh
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

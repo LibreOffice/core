@@ -25,14 +25,8 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,desktop_soffice_sh,$(WORKDIR)/CustomTarget/desktop/scripts))
+$(eval $(call gb_Package_Package,desktop_soffice_sh,$(call gb_CustomTarget_get_workdir,desktop/soffice)))
 
 $(eval $(call gb_Package_add_file,desktop_soffice_sh,bin/soffice,soffice.sh))
-
-$(eval $(call gb_Package_add_customtarget,desktop_soffice_sh,desktop/scripts))
-
-$(eval $(call gb_CustomTarget_add_dependencies,desktop/scripts,\
-    desktop/scripts/soffice.sh \
-))
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

@@ -60,6 +60,7 @@ $(eval $(call gb_Module_add_targets,desktop,\
 ifneq ($(OS),MACOSX)
 ifneq ($(OS),WNT)
 $(eval $(call gb_Module_add_targets,desktop,\
+    CustomTarget_soffice \
     Package_soffice_sh \
 ))
 endif
