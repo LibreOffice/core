@@ -25,14 +25,16 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-include $(GBUILDDIR)/gbuild.mk
+$(eval $(call gb_CustomTarget_CustomTarget,jvmfwk/jreproperties,new_style))
 
-JREProperties.class : $(SRCDIR)/jvmfwk/plugins/sunmajor/pluginlib/JREProperties.java
+JFJP := $(call gb_CustomTarget_get_workdir,jvmfwk/jreproperties)
+
+$(call gb_CustomTarget_get_target,jvmfwk/jreproperties) : $(JFJP)/JREProperties.class
+
+$(JFJP)/JREProperties.class : $(SRCDIR)/jvmfwk/plugins/sunmajor/pluginlib/JREProperties.java \
+		| $(JFJP)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),JCS,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
-	$(gb_JavaClassSet_JAVACCOMMAND) $(gb_JavaClassSet_JAVACDEBUG) -d $(dir $@) $^)
-
-.DEFAULT_GOAL := all
-.PHONY : all
-all : JREProperties.class
+	cd $(dir $@) && $(gb_JavaClassSet_JAVACCOMMAND) $(gb_JavaClassSet_JAVACDEBUG) -d $(dir $@) $^)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

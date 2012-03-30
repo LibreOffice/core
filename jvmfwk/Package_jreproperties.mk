@@ -25,13 +25,7 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-$(eval $(call gb_Package_Package,jvmfwk_jreproperties,$(WORKDIR)/CustomTarget/jvmfwk/plugins/sunmajor/pluginlib))
-
-$(eval $(call gb_Package_add_customtarget,jvmfwk_jreproperties,jvmfwk/plugins/sunmajor/pluginlib))
-
-$(eval $(call gb_CustomTarget_add_dependencies,jvmfwk/plugins/sunmajor/pluginlib,\
-    jvmfwk/plugins/sunmajor/pluginlib/JREProperties.java \
-))
+$(eval $(call gb_Package_Package,jvmfwk_jreproperties,$(call gb_CustomTarget_get_workdir,jvmfwk/jreproperties)))
 
 $(eval $(call gb_Package_add_file,jvmfwk_jreproperties,bin/JREProperties.class,JREProperties.class))
 $(eval $(call gb_Package_add_file,jvmfwk_jreproperties,lib/JREProperties.class,JREProperties.class))

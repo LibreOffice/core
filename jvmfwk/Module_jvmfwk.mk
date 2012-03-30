@@ -36,6 +36,7 @@ $(eval $(call gb_Module_add_targets,jvmfwk,\
 ifneq ($(SOLAR_JAVA),)
 
 $(eval $(call gb_Module_add_targets,jvmfwk,\
+    CustomTarget_jreproperties \
     Library_sunjavaplugin \
     Package_jreproperties \
 ))
