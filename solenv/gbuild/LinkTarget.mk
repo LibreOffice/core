@@ -123,8 +123,6 @@ $(call gb_CObject_get_dep_target,%) : $(call gb_CObject_get_target,%)
 
 endif
 
-gb_CObject_CObject =
-
 
 # CxxObject class
 
@@ -141,8 +139,6 @@ $(call gb_CxxObject_get_dep_target,%) : $(call gb_CxxObject_get_target,%)
 	  $(call gb_Object__command_dep,$@,$(call gb_CxxObject_get_target,$*)))
 
 endif
-
-gb_CxxObject_CxxObject =
 
 
 # GenCObject class
@@ -162,8 +158,6 @@ $(call gb_GenCObject_get_dep_target,%) : $(call gb_GenCObject_get_target,%)
 
 endif
 
-gb_GenCObject_GenCObject =
-
 
 # GenCxxObject class
 
@@ -182,7 +176,6 @@ $(call gb_GenCxxObject_get_dep_target,%) : $(call gb_GenCxxObject_get_target,%)
 
 endif
 
-gb_GenCxxObject_GenCxxObject =
 
 # YaccTarget class
 
@@ -192,6 +185,8 @@ gb_GenCxxObject_GenCxxObject =
 # tries to use it.
 
 gb_YaccTarget_get_source = $(1)/$(2).y
+# defined by platform
+#  gb_YaccTarget__command(grammar-file, stem-for-message, source-target, include-target)
 
 .PHONY : $(call gb_YaccTarget_get_clean_target,%)
 $(call gb_YaccTarget_get_clean_target,%) :
@@ -210,9 +205,6 @@ endef
 
 gb_YACC := bison
 
-# YaccTarget class
-# defined by platform
-# gb_YaccTarget__command(grammar-file, stem-for-message, source-target, include-target)
 
 # ObjCxxObject class
 #
@@ -231,7 +223,6 @@ $(call gb_ObjCxxObject_get_dep_target,%) : $(call gb_ObjCxxObject_get_target,%)
 
 endif
 
-gb_ObjCxxObject_ObjCxxObject =
 
 # ObjCObject class
 #
@@ -240,29 +231,14 @@ gb_ObjCObject_get_source = $(1)/$(2).m
 # defined by platform
 #  gb_ObjCObject__command
 
-# this rule generates an "always rebuild" dep file, to have something to include.
-# the dep file will be overridden on the fly, when the object is compiled
-ifeq ($(gb_FULLDEPS),$(true))
-define gb_ObjCObject__command_dep
-mkdir -p $(dir $(1)) && \
-	echo '$(call gb_ObjCObject_get_target,$(2)) : $$(gb_Helper_PHONY)' > $(1)
-
-endef
-else
-gb_ObjCObject__command_dep =
-endif
-
 $(call gb_ObjCObject_get_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
-	$(call gb_ObjCObject__command,$@,$*,$<,$(DEFS),$(OBJCFLAGS),$(INCLUDE_STL) $(INCLUDE))
+	$(call gb_ObjCObject__command,$@,$*,$<)
 
 ifeq ($(gb_FULLDEPS),$(true))
-$(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_source,$(SRCDIR),%)
-	$(call gb_ObjCObject__command_dep,$@,$*,$<,$(DEFS),$(OBJCFLAGS),$(INCLUDE_STL) $(INCLUDE))
+$(call gb_ObjCObject_get_dep_target,%) : $(call gb_ObjCObject_get_target,%)
+	$(call gb_Object__command_dep,$@,$(call gb_ObjCObject_get_target,$*))
 
 endif
-
-gb_ObjCObject_ObjCObject =
-
 
 
 # AsmObject class
@@ -280,8 +256,6 @@ $(call gb_AsmObject_get_dep_target,%) : $(call gb_AsmObject_get_target,%)
 	  $(call gb_Object__command_dep,$@,$(call gb_AsmObject_get_target,$*)))
 
 endif
-
-gb_AsmObject_AsmObject =
 
 
 # LinkTarget class
