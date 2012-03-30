@@ -870,7 +870,7 @@ void SdrTextObj::ImpSetCharStretching(SdrOutliner& rOutliner, const Size& rTextS
     {
         // check whether CharStretching is possible at all
         GDIMetaFile* pMtf = pOut->GetConnectMetaFile();
-        UniString aTestString(sal_Unicode('J'));
+        rtl::OUString aTestString(static_cast<sal_Unicode>('J'));
 
         if(pMtf && (!pMtf->IsRecord() || pMtf->IsPause()))
             pMtf = NULL;

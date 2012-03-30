@@ -95,9 +95,8 @@ executeLoginDialog(
             nFlags |= LF_NO_USESYSCREDS;
 
         boost::scoped_ptr< ResMgr > xManager(ResMgr::CreateResMgr("uui"));
-        UniString aRealm(rRealm);
         boost::scoped_ptr< LoginDialog > xDialog(
-                new LoginDialog( pParent, nFlags, rInfo.GetServer(), &aRealm, xManager.get()));
+                new LoginDialog( pParent, nFlags, rInfo.GetServer(), rRealm, xManager.get()));
         if (rInfo.GetErrorText().Len() != 0)
             xDialog->SetErrorText(rInfo.GetErrorText());
         xDialog->SetName(rInfo.GetUserName());

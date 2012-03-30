@@ -250,8 +250,8 @@ LoginDialog::LoginDialog
 (
     Window* pParent,
     sal_uInt16 nFlags,
-    const String& rServer,
-    const String* pRealm,
+    const rtl::OUString& rServer,
+    const rtl::OUString& rRealm,
     ResMgr* pResMgr
 ) :
 
@@ -280,10 +280,10 @@ LoginDialog::LoginDialog
 
 {
     UniString aRequest;
-    if ((nFlags & LF_NO_ACCOUNT) != 0 && pRealm && pRealm->Len() != 0)
+    if ((nFlags & LF_NO_ACCOUNT) != 0 && !rRealm.isEmpty())
     {
-        aRequest = ResId(STR_LOGIN_REALM, *pResMgr);
-        aRequest.SearchAndReplaceAscii("%2", *pRealm);
+        aRequest = ResId::toString(ResId(STR_LOGIN_REALM, *pResMgr));
+        aRequest.SearchAndReplaceAscii("%2", rRealm);
     }
     else
         aRequest = aRequestInfo.GetText();

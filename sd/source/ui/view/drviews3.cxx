@@ -422,7 +422,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
 
                 if (pBookmark)
                 {
-                    UniString sBookmark( INetURLObject::decode( pBookmark->GetValue(), '%', INetURLObject::DECODE_WITH_CHARSET ) );
+                    rtl::OUString sBookmark(INetURLObject::decode(pBookmark->GetValue(), '%', INetURLObject::DECODE_WITH_CHARSET));
 
                     rtl::Reference< sd::SlideShow > xSlideshow( SlideShow::GetSlideShow( GetViewShellBase() ) );
                     if(xSlideshow.is() && xSlideshow->isRunning())
@@ -431,7 +431,7 @@ void  DrawViewShell::ExecCtrl(SfxRequest& rReq)
                     }
                     else
                     {
-                        GotoBookmark( sBookmark );
+                        GotoBookmark(sBookmark);
                     }
                 }
             }

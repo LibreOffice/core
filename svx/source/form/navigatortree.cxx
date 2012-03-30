@@ -1480,12 +1480,11 @@ namespace svxform
 
         //////////////////////////////////////////////////////////////////////
         // BasisNamen erzeugen
-        UniString aBaseName;
+        rtl::OUString aBaseName;
         if( pEntryData->ISA(FmFormData) )
-            aBaseName = SVX_RES( RID_STR_STDFORMNAME );
-
+            aBaseName = SVX_RESSTR( RID_STR_STDFORMNAME );
         else if( pEntryData->ISA(FmControlData) )
-            aBaseName = SVX_RES( RID_STR_CONTROL );
+            aBaseName = SVX_RESSTR( RID_STR_CONTROL );
 
         //////////////////////////////////////////////////////////////////////
         // Neuen Namen erstellen

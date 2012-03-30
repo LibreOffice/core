@@ -82,7 +82,7 @@ class LoginDialog : public ModalDialog
 
 public:
     LoginDialog( Window* pParent, sal_uInt16 nFlags,
-                 const String& rServer, const String* pRealm,
+                 const rtl::OUString& rServer, const rtl::OUString &rRealm,
                  ResMgr * pResMgr );
     virtual ~LoginDialog();
 
