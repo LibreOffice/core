@@ -47,6 +47,7 @@
 #include <com/sun/star/ui/XUIConfigurationManagerSupplier.hpp>
 #include <com/sun/star/ui/XUIConfigurationManager.hpp>
 #include <map>
+#include <cctype>
 
 using namespace ::com::sun::star;
 
