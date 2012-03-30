@@ -108,12 +108,13 @@ uno::Sequence < OUString > SfxContentHelper::GetResultSet( const String& rURL )
         }
         catch( const ucb::CommandAbortedException& )
         {
-            SAL_WARN( "sfx2.bastyp", "createCursor: CommandAbortedException" );
+            SAL_WARN( "sfx2.bastyp", "GetResultSet: CommandAbortedException" );
         }
         catch( const uno::Exception& )
         {
-            SAL_WARN( "sfx2.bastyp", "createCursor: Any other exception" );
+            SAL_WARN( "sfx2.bastyp", "GetResultSet: Any other exception" );
         }
+
 
         if ( xResultSet.is() )
         {
