@@ -10069,7 +10069,7 @@ SYSTEM_CAIRO=""
 
 AC_MSG_CHECKING([whether to use the system cairo])
 
-if test "$enable_cairo_canvas" = "yes" -a "$with_system_cairo" = "yes"; then
+if test "$with_system_cairo" = "yes"; then
     SYSTEM_CAIRO=YES
     AC_MSG_RESULT([yes])
 
