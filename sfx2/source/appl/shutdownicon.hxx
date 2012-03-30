@@ -11,7 +11,6 @@
 #include <com/sun/star/lang/XEventListener.hpp>
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/lang/XInitialization.hpp>
-#include <com/sun/star/lang/XInitialization.hpp>
 #include <com/sun/star/beans/XFastPropertySet.hpp>
 #include <rtl/string.hxx>
 #include <rtl/ustring.hxx>

@@ -78,7 +78,6 @@
 #include <svtools/sfxecode.hxx>
 #include <unotools/securityoptions.hxx>
 #include <cppuhelper/weak.hxx>
-#include <comphelper/processfactory.hxx>
 #include <unotools/streamwrap.hxx>
 
 #include <unotools/saveopt.hxx>

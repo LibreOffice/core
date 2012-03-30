@@ -59,7 +59,6 @@
 #include <com/sun/star/script/provider/XScriptProvider.hpp>
 #include <com/sun/star/ui/XUIConfigurationStorage.hpp>
 #include <com/sun/star/ui/XUIConfigurationPersistence.hpp>
-#include <com/sun/star/lang/WrappedTargetRuntimeException.hpp>
 #include <com/sun/star/embed/ElementModes.hpp>
 #include <com/sun/star/embed/Aspects.hpp>
 #include <com/sun/star/document/XDocumentProperties.hpp>
@@ -122,7 +121,6 @@
 #include <sfx2/evntconf.hxx>
 #include <sfx2/sfx.hrc>
 #include <sfx2/app.hxx>
-#include <sfx2/viewfrm.hxx>
 #include "appdata.hxx"
 #include <sfx2/docfac.hxx>
 #include <sfx2/fcontnr.hxx>

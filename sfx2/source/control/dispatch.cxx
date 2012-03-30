@@ -41,8 +41,6 @@
 #include <stdlib.h>  // due to bsearch
 
 #include <svtools/helpopt.hxx>
-#include <com/sun/star/frame/XLayoutManager.hpp>
-#include <com/sun/star/beans/XPropertySet.hpp>
 
 // due to nAutoPageID
 #include "appdata.hxx"
@@ -64,7 +62,6 @@
 #include <sfx2/docfac.hxx>
 #include <sfx2/msgpool.hxx>
 #include <sfx2/module.hxx>
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/docfile.hxx>
 #include <sfx2/mnumgr.hxx>

@@ -55,14 +55,12 @@
 #include <com/sun/star/frame/FrameSearchFlag.hpp>
 #include <com/sun/star/frame/XFrame.hpp>
 #include <com/sun/star/frame/XFrames.hpp>
-#include <com/sun/star/frame/XFramesSupplier.hpp>
 #include <com/sun/star/awt/XWindow.hpp>
 #include <com/sun/star/frame/XController.hpp>
 #include <com/sun/star/frame/XModel2.hpp>
 #include <com/sun/star/util/XURLTransformer.hpp>
 #include <com/sun/star/util/XCloseable.hpp>
 #include <com/sun/star/frame/XDispatchRecorderSupplier.hpp>
-#include <com/sun/star/document/MacroExecMode.hpp>
 #include <com/sun/star/document/UpdateDocMode.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/uri/XUriReferenceFactory.hpp>
@@ -134,7 +132,6 @@ namespace css = ::com::sun::star;
 #include <sfx2/docfile.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/msgpool.hxx>
-#include <sfx2/viewfrm.hxx>
 #include "viewimp.hxx"
 #include <sfx2/sfxbasecontroller.hxx>
 #include <sfx2/sfx.hrc>

@@ -88,7 +88,6 @@
 #include <svl/intitem.hxx>
 #include <svtools/svparser.hxx> // SvKeyValue
 #include <cppuhelper/weakref.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <svl/svstdarr.hxx>
 
 #include <unotools/streamwrap.hxx>
@@ -106,7 +105,6 @@ using namespace ::com::sun::star::io;
 #include <comphelper/mediadescriptor.hxx>
 #include <comphelper/configurationhelper.hxx>
 #include <comphelper/docpasswordhelper.hxx>
-#include <tools/urlobj.hxx>
 #include <tools/inetmime.hxx>
 #include <unotools/ucblockbytes.hxx>
 #include <unotools/pathoptions.hxx>

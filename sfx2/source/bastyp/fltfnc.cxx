@@ -77,12 +77,10 @@
 #include <com/sun/star/loader/XImplementationLoader.hpp>
 #include <com/sun/star/loader/CannotActivateFactoryException.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/beans/PropertyValue.hpp>
 
 #include <sal/types.h>
 #include <com/sun/star/uno/Reference.hxx>
 #include <com/sun/star/ucb/XContent.hpp>
-#include <rtl/ustring.hxx>
 #include <unotools/pathoptions.hxx>
 #include <unotools/moduleoptions.hxx>
 #include <comphelper/mediadescriptor.hxx>
@@ -118,7 +116,6 @@ using namespace ::com::sun::star::beans;
 #include <sfx2/request.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/appuno.hxx>
-#include <sfx2/viewfrm.hxx>
 
 #include <boost/ptr_container/ptr_vector.hpp>
 #include <functional>

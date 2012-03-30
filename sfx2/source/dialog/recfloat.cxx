@@ -32,7 +32,6 @@
 #include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/container/XNameAccess.hpp>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <svl/eitem.hxx>
 #include <svtools/generictoolboxcontroller.hxx>

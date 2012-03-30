@@ -81,7 +81,6 @@
 #include <unotools/bootstrap.hxx>
 #include <rtl/bootstrap.hxx>
 #include <cppuhelper/exc_hlp.hxx>
-#include <rtl/ustrbuf.hxx>
 
 #include <com/sun/star/script/provider/XScriptProviderFactory.hpp>
 #include <com/sun/star/frame/XModuleManager.hpp>
@@ -113,7 +112,6 @@
 #include "app.hrc"
 #include <sfx2/passwd.hxx>
 #include "sfx2/sfxresid.hxx"
-#include "arrdecl.hxx"
 #include <sfx2/childwin.hxx>
 #include "appdata.hxx"
 #include "sfx2/minfitem.hxx"

@@ -101,7 +101,6 @@
 #include <sfx2/event.hxx>
 #include "imestatuswindow.hxx"
 #include "workwin.hxx"
-#include <sfx2/module.hxx>
 #include <sfx2/tbxctrl.hxx>
 #include <sfx2/sfxdlg.hxx>
 #include "sfx2/stbitem.hxx"
@@ -110,7 +109,6 @@
 #include <tools/svlibrary.hxx>
 
 #ifdef DBG_UTIL
-#include <sfx2/tbxctrl.hxx>
 #include <sfx2/mnuitem.hxx>
 #endif
 

@@ -97,11 +97,7 @@
 #include "workwin.hxx"
 #include "sfx2/imgmgr.hxx"
 #include "virtmenu.hxx"
-#include <sfx2/viewfrm.hxx>
-#include <sfx2/module.hxx>
 #include "sfx2/imagemgr.hxx"
-
-#include <com/sun/star/frame/XModuleManager.hpp>
 
 using namespace ::com::sun::star::beans;
 using namespace ::com::sun::star::frame;

@@ -36,7 +36,6 @@
 #include "workwin.hxx"
 #include <sfx2/viewfrm.hxx>
 #include "arrdecl.hxx"
-#include <sfx2/viewfrm.hxx>
 #include <sfx2/module.hxx>
 #include <sfx2/dispatch.hxx>
 #include <sfx2/dockwin.hxx>
@@ -44,7 +43,6 @@
 #include "splitwin.hxx"
 #include <sfx2/msgpool.hxx>
 #include "sfx2/sfxresid.hxx"
-#include <sfx2/objsh.hxx>
 #include <sfx2/request.hxx>      // SFX_ITEMSET_SET
 #include <vcl/taskpanelist.hxx>
 #include <vcl/toolbox.hxx>

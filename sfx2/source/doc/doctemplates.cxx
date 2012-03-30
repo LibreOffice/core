@@ -162,7 +162,6 @@ typedef vector< GroupData_Impl* > GroupList_Impl;
 //=============================================================================
 #include <com/sun/star/task/XInteractionHandler.hpp>
 #include <com/sun/star/ucb/XProgressHandler.hpp>
-#include <com/sun/star/ucb/XCommandEnvironment.hpp>
 
 class TplTaskEnvironment : public ::cppu::WeakImplHelper1< ucb::XCommandEnvironment >
 {

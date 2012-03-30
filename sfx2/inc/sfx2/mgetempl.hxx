@@ -37,7 +37,6 @@
 #include <sfx2/tabdlg.hxx>
 
 #include <svtools/svmedit2.hxx>
-#include <svtools/svmedit.hxx>
 
 /* expected:
     SID_TEMPLATE_NAME   :   In: StringItem, Name of Template

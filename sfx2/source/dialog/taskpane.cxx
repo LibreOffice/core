@@ -42,7 +42,6 @@
 #include <com/sun/star/ui/XUIElementFactory.hpp>
 #include <com/sun/star/awt/XWindowPeer.hpp>
 #include <com/sun/star/awt/PosSize.hpp>
-#include <com/sun/star/frame/XModuleManager.hpp>
 #include <com/sun/star/graphic/XGraphicProvider.hpp>
 #include <com/sun/star/accessibility/XAccessible.hpp>
 #include <com/sun/star/awt/XControl.hpp>

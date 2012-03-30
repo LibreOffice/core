@@ -40,7 +40,6 @@
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <comphelper/processfactory.hxx>
 #include <com/sun/star/util/XURLTransformer.hpp>
-#include <comphelper/processfactory.hxx>
 #include <tools/urlobj.hxx>
 #include <svl/eitem.hxx>
 #include <svl/stritem.hxx>

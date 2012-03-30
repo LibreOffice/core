@@ -44,7 +44,6 @@
 #include <com/sun/star/frame/XDispatchResultListener.hpp>
 #include <com/sun/star/frame/DispatchDescriptor.hpp>
 #include <com/sun/star/frame/XDispatchInformationProvider.hpp>
-#include <com/sun/star/lang/XMultiServiceFactory.hpp>
 
 #include <com/sun/star/uno/Any.h>
 #include <com/sun/star/uno/Reference.h>

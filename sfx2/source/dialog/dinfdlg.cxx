@@ -41,10 +41,8 @@
 #include <memory>
 
 #include <comphelper/string.hxx>
-#include <comphelper/processfactory.hxx>
 #include <com/sun/star/security/DocumentSignatureInformation.hpp>
 #include <com/sun/star/security/XDocumentDigitalSignatures.hpp>
-#include <unotools/localedatawrapper.hxx>
 #include <unotools/syslocale.hxx>
 #include <rtl/math.hxx>
 #include <com/sun/star/ui/dialogs/TemplateDescription.hpp>

@@ -46,7 +46,6 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/objsh.hxx>
 #include <sfx2/viewsh.hxx>
-#include <sfx2/dispatch.hxx>
 #include "sfxtypes.hxx"
 #include <sfx2/request.hxx>
 #include <sfx2/mnumgr.hxx>

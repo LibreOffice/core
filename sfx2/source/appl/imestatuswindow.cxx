@@ -49,7 +49,6 @@
 #include "rtl/ustring.hxx"
 #include "sal/types.h"
 #include "vcl/svapp.hxx"
-#include "osl/mutex.hxx"
 
 //TO-Do, merge into framework/inc/helpers/mischelpers.hxx and deliver
 class WeakPropertyChangeListener : public ::cppu::WeakImplHelper1<com::sun::star::beans::XPropertyChangeListener>

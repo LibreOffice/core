@@ -73,7 +73,6 @@
 #include <sfx2/dispatch.hxx>
 #include "arrdecl.hxx"
 #include <sfx2/docfac.hxx>
-#include "view.hrc"
 #include "sfxlocal.hrc"
 #include <sfx2/sfxbasecontroller.hxx>
 #include "sfx2/mailmodelapi.hxx"
@@ -85,8 +84,6 @@
 #include <sfx2/objface.hxx>
 #include <sfx2/docfilt.hxx>
 #include "openuriexternally.hxx"
-
-#include <comphelper/processfactory.hxx>
 
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;

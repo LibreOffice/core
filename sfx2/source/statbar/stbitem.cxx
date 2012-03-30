@@ -52,7 +52,6 @@
 
 #include <comphelper/processfactory.hxx>
 #include <svl/eitem.hxx>
-#include <svl/stritem.hxx>
 #include <svl/intitem.hxx>
 #include <toolkit/unohlp.hxx>
 #include <toolkit/helper/convert.hxx>

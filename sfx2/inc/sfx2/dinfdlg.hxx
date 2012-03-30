@@ -38,7 +38,6 @@
 #include <svl/stritem.hxx>
 #include <svtools/svmedit.hxx>
 
-#include <vcl/edit.hxx>
 #include <vcl/lstbox.hxx>
 #include <vcl/scrbar.hxx>
 #include <svtools/headbar.hxx>

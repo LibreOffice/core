@@ -65,7 +65,6 @@
 #include <sfx2/fcontnr.hxx>
 #include "impframe.hxx"
 #include <sfx2/appuno.hxx>
-#include <sfx2/viewfrm.hxx>
 #include "workwin.hxx"
 #include <sfx2/sfxuno.hxx>
 #include <sfx2/msgpool.hxx>

@@ -67,7 +67,6 @@
 #include "docvor.hrc"
 #include <sfx2/docfilt.hxx>
 #include <sfx2/filedlghelper.hxx>
-#include <sfx2/docfilt.hxx>
 #include <sfx2/fcontnr.hxx>
 #include <svtools/localresaccess.hxx>
 #include <svtools/addresstemplate.hxx>

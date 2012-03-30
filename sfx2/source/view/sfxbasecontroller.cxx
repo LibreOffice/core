@@ -60,7 +60,6 @@
 #include <com/sun/star/container/XIndexAccess.hpp>
 #include <cppuhelper/interfacecontainer.hxx>
 #include <cppuhelper/typeprovider.hxx>
-#include <cppuhelper/implbase1.hxx>
 #include <basic/sbstar.hxx>
 #include <uno/mapping.hxx>
 #include <sfx2/viewsh.hxx>
@@ -80,14 +79,12 @@
 #include <sfx2/objface.hxx>
 
 #include <osl/mutex.hxx>
-#include <osl/mutex.hxx>
 #include <tools/diagnose_ex.h>
 #include <comphelper/sequence.hxx>
 #include <rtl/ustrbuf.hxx>
 #include <toolkit/helper/convert.hxx>
 #include <framework/titlehelper.hxx>
 #include <comphelper/processfactory.hxx>
-#include <tools/diagnose_ex.h>
 
 #include <boost/unordered_map.hpp>
 

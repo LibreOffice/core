@@ -81,7 +81,6 @@
 #include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/registry/RegistryValueType.hpp>
 #include <comphelper/processfactory.hxx>
-#include <com/sun/star/awt/PosSize.hpp>
 #include <com/sun/star/awt/XButton.hpp>
 #include <com/sun/star/frame/DispatchResultEvent.hpp>
 #include <com/sun/star/frame/DispatchResultState.hpp>
