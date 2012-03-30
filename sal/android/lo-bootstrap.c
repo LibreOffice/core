@@ -1502,8 +1502,8 @@ extract_files(const char *prefix)
 
 __attribute__ ((visibility("default")))
 void
-Java_org_libreoffice_android_Bootstrap_patch_libgnustl_shared(JNIEnv* env,
-                                                              jobject clazz)
+Java_org_libreoffice_android_Bootstrap_patch_1libgnustl_1shared(JNIEnv* env,
+                                                                jobject clazz)
 {
     (void) env;
     (void) clazz;
