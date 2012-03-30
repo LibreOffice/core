@@ -16,339 +16,6 @@ ext_sources/
 
 extras/
 
-##############################################################################
-#
-# small files with no creative content
-#
-
-#**/*.add (1)
-main/sal/qa/rtl/random/makefile.add
-
-#**/*.all (1)
-main/testautomation/writer/optional/input/export/filter/act_1.all
-
-#**/*.am (1)
-main/icc/source/create_sRGB_profile/Makefile.am
-
-#**/*.applications (1)
-main/sysui/desktop/mimetypes/openoffice.applications
-
-#**/*.btm (6)
-main/binfilter/bf_sfx2/util/make_tco.btm
-main/framework/test/threadtest/test.btm
-main/framework/test/typecfg/build.btm
-main/l10ntools/workbench/gsicheckcheck.btm
-main/scp2/source/mkopenwith.btm
-main/sfx2/util/make_tco.btm
-
-#**/*.chd (1)
-main/chart2/qa/data.chd
-
-#**/*.dir (1)
-main/extras/unx/source/fonts/fonts.dir
-
-#**/*.directory (1)
-main/extras/unx/source/kde/applnk/.directory
-
-##############################################################################
-#
-# all files of these pattern have ALv2, thus can be removed
-#
-
-#**/*.cl
-#**/*.cls
-#**/*.head
-#**/*.ll
-# used in main/xmerge/source/palmtests/qa/comparator/dtd/* (13), XML files with ALv2 header
-# used in main/xmerge/source/palmtests/qa-wrapper/results/baseline/xml-base/* (13), XML files with ALv2 header
-# used in main/xmloff/dtd/* (14), XML files with ALv2 header
-# -> all with ALv2 header, can be deactivated
-#**/*.mod
-#**/*.sample (2)
-
-# used in main/scp2/source/* (100), part of SGA
-# install set building definition files, all have ALv2 header -> can be removed
-#**/*.scp
-
-# used in main/scp2/source/templates/* (10), all part of SGA
-# packaging information (used to build install sets)
-# all have ALv2 header -> can be removed
-#**/*.sct
-
-# used in main/testautomation/tools/analyze/app.srs(1), part of SGA
-# contains ALv2 -> can be removed
-#**/*.srs
-
-# (37), part of SGA
-# all have ALv2 header -> can be removed
-#**/*.tab
-
-# used in main/idlc/test/parser/* (10), part of SGA
-# all containing AVv2 -> can be removed
-#**/*.tests
-
-# used in main/officecfg/registry/data/org/openoffice/Langpack.xcu.tmpl (1), part of SGA
-# XML with ALv2 -> can be removed
-#**/*.tmpl
-
-# used in main/ucb/source/inc/regexpmap.tpt (1), part of SGA
-# ALv2 included -> can be rmoved
-#**/*.tpt
-
-# used in main/configmgr/qa/unit/data.xcd (1), part of SGA
-# xml file, contains ALv2 header -> can be removed
-#**/*.xcd
-
-##############################################################################
-#
-# no files of this type, can be removed
-#
-
-#**/*.cmn
-#**/*.file
-#**/*.header
-#**/*.legal
-#**/*.nbattrs
-#**/*.nbs
-#**/*.orig
-#**/*.Regex_Experimental
-#**/*.db
-#**/*.hdb
-
-##############################################################################
-#
-# Single files to exclude
-#
-
-# used in main/migrationanalysis/src/wizard/Wizard.Dsr (1), part of SGA
-# Visual Basic Active Designer File, glue code, ascii, comments supported, ALv2 could be added
-#**/*.Dsr
-main/migrationanalysis/src/wizard/Wizard.Dsr
-
-# Used in main/writerfilter/source/ooxml/README.efforts (1), part of the SGA
-# descriptive file
-#**/*.efforts
-main/writerfilter/source/ooxml/README.efforts
-
-# Used in writerfilter/source/doctok/xmigen.el (1), part of the SGA
-# XEmacs List (config file), comments possible (using ';' at each line start), ALv2 could be added
-#**/*.el
-main/writerfilter/source/doctok/xmigen.el
-
-# Used in main/extras/source/misc_config/autotbl.fmt (1), part of SGA
-# Excel format file
-#**/*.fmt
-main/extras/source/misc_config/autotbl.fmt
-
-# Used in main/migrationanalysis/src/wizard/Wizard.FRX (1), part of SGA
-# binary information for a Visual Basic form (?)
-#**/*.FRX
-main/migrationanalysis/src/wizard/Wizard.FRX
-
-# Used in main/testautomation/writer/optional/input/import/hangul.hwp (1), part of SGA
-# binary? AOO specific? Hangul Word Processor file
-#**/*.hwp
-main/testautomation/writer/optional/input/import/hangul.hwp
-
-# main/scripting/java/org/openoffice/netbeans/editor/OOo.jcb (1), part of SGA
-# binary, file type not clear
-#**/*.jcb
-main/scripting/java/org/openoffice/netbeans/editor/OOo.jcb
-
-# main/scripting/java/org/openoffice/netbeans/editor/OOo.jcs (1), part of SGA
-# binary, file type not clear
-#**/*.jcs
-main/scripting/java/org/openoffice/netbeans/editor/OOo.jcs
-
-# main/writerfilter/qa/cppunittests/doctok/doctok.job (1), part of SGA
-# ascii, one line, support of comments not clear
-#**/*.job
-main/writerfilter/qa/cppunittests/doctok/doctok.job
-
-# used in main/setup_native/source/mac/Info.plist.langpack (1), part of SGA
-# XML file, ALv2 header might be added
-#**/*.langpack
-main/setup_native/source/mac/Info.plist.langpack
-
-# used in main/officecfg/registry/schema/oo-common-ad.ldf (1), part of SGA
-# LDIF Script for extending Active Directory Schema, ascii, ALv2 header might be added using '#'
-#**/*.ldf
-main/officecfg/registry/schema/oo-common-ad.ldf
-
-# used in main/officecfg/registry/schema/oo-common.ldif (1), part of SGA
-# ascii, included in makefiles, ALv2 might be added
-#**/*.ldif
-main/officecfg/registry/schema/oo-common.ldif
-
-# used in main/wizards/util/soffice.lnk (1), part of SGA
-# Linking of Modules to SBLs (?)
-#**/*.lnk
-main/wizards/util/soffice.lnk
-
-# used in main/sw/source/ui/lingu/cvdata.mac (1), part of SGA
-# some scriptfile, no creative content
-#**/*.mac
-main/sw/source/ui/lingu/cvdata.mac
-
-# used in main/vos/util/libvos1C50.so.mapfile (1), part of SGA
-# AOO build specific mapping file, no creative content
-#**/*.mapfile
-main/vos/util/libvos1C50.so.mapfile
-
-# used in main/sysui/desktop/mimetypes/openoffice.mime (1), part of SGA
-# no creative content
-#**/*.mime
-main/sysui/desktop/mimetypes/openoffice.mime
-
-# used in main/odk/examples/java/NotesAccess/Stocks.nsf (1), part of SGA
-# seems binary (384kb) ?
-#**/*.nsf
-main/odk/examples/java/NotesAccess/Stocks.nsf
-
-# used in main/setup_native/source/win32/nsis/downloadtemplate.nsi (1), part of SGA
-# packaging infos, no creative content
-#**/*.nsi
-main/setup_native/source/win32/nsis/downloadtemplate.nsi
-
-# used in main/sysui/desktop/debian/openoffice.org-debian-menus (1), part of SGA
-# debian desktop configuration stuff, no creative content
-#**/*.org-debian-menus
-main/sysui/desktop/debian/openoffice.org-debian-menus
-
-# used in main/ure/source/uretest/Makefile.pln (1), part of SGA
-# used for build system, no creative content
-#**/*.pln
-main/ure/source/uretest/Makefile.pln
-
-# used in main/testautomation/writer/optional/input/import/pocketword.psw (1), part of SGA
-# PocketWord document, used for testing
-#**/*.psw
-main/testautomation/writer/optional/input/import/pocketword.psw
-
-# used in main/odk/examples/OLE/delphi/InsertTables/Project1.res (1), part of SGA
-# empty file
-#**/*.res
-main/odk/examples/OLE/delphi/InsertTables/Project1.res
-
-# used in main/writerfilter/source/odiapi/qname/resource/rtf.rtfs (1), part of SGA
-# xml file, header could be added
-#**/*.rtfs
-main/writerfilter/source/odiapi/qname/resource/rtf.rtfs
-
-# used in main/testautomation/writer/optional/input/import/amipro3.sam (1), part of SGA
-# sinlge Ami Pro 3.0 test file for automated testing
-#**/*.sam
-main/testautomation/writer/optional/input/import/amipro3.sam
-
-# used in main/setup_native/scripts/mac_install.script (1), part of SGA
-# File has the #!/bin/sh header, thus adding ALv2 should be possible
-#**/*.script
-main/setup_native/scripts/mac_install.script
-
-# used in main/extras/source/truetype/symbol/OpenSymbol.sfd (1), part of SGA
-# AOO specific OpenSymbol source file, (S)ource(F)orge(D)ata, recently called (S)pline(F)ont(D)ata
-#**/*.sfd
-main/extras/source/truetype/symbol/OpenSymbol.sfd
-
-# used in main/writerfilter/source/rtftok/RTFScanner.skl (1), part of SGA 
-# binary file (?)
-#**/*.skl
-main/writerfilter/source/rtftok/RTFScanner.skl
-
-# used in main/testautomation/spreadsheet/optional/input/loadsave/microsoft/sylk.slk (1), part of SGA 
-# SYLK spreadsheet, ascii. Comments possible (see in file), ALv2 may be added here
-#**/*.slk
-main/testautomation/spreadsheet/optional/input/loadsave/microsoft/sylk.slk
-
-# used in main/cli_ure/source/cliuno.snk (1), part of SGA
-# Strong Name Key File (Microsoft Corporation), binary
-#**/*.snk
-main/cli_ure/source/cliuno.snk
-
-# used in main/extras/source/palettes/standard.sob (1), part of SGA
-# AOO fill pattern (see http://www.openoffice.org/dev_docs/source/file_extensions.html)
-#**/*.sob
-main/extras/source/palettes/standard.sob
-
-# main/extras/source/truetype/symbol/opens___.ttf (1), part of SGA
-# TrueType OpenSmbol font
-#**/*.ttf
-main/extras/source/truetype/symbol/opens___.ttf
-
-# used in main/scripting/java/org/openoffice/netbeans/modules/office/resources/office-scripting.url (1), part of SGA
-# contains a single ascii URL line
-#**/*.url
-main/scripting/java/org/openoffice/netbeans/modules/office/resources/office-scripting.url
-
-# used in main/readlicense_oo/docs/readme/readme.xrm (1), part of SGA
-# XML readme file, ALv2 could be added
-#**/*.xrm
-main/readlicense_oo/docs/readme/readme.xrm
-
-# used in main/extensions/test/ole/VisualBasic/Project1.vbproj (1), part of SGA
-# Visual Basic Project (xml)
-#**/*.vbproj
-main/extensions/test/ole/VisualBasic/Project1.vbproj
-
-# used in main/testautomation/spreadsheet/optional/input/loadsave/corel/qpro6.wb2 (1), part of SGA
-# QuattroPro files
-#**/*.wb2
-main/testautomation/spreadsheet/optional/input/loadsave/corel/qpro6.wb2
-
-# used in main/testautomation/spreadsheet/optional/input/loadsave/lotus/lotuswk1.wk1 (1), part of SGA
-# worksheets from Older Lotus 123
-#**/*.wk1
-main/testautomation/spreadsheet/optional/input/loadsave/lotus/lotuswk1.wk1
-
-# used in main/testautomation/spreadsheet/optional/input/loadsave/lotus/lotuswks.wks (1), part of SGA
-# Lotus spreadsheet
-#**/*.wks
-main/testautomation/spreadsheet/optional/input/loadsave/lotus/lotuswks.wks
-
-# used in main/extensions/test/ole/DCOM/scriptComponents/WriterDemo.wsc (1), part of SGA
-# Microsoft Windows scripting component file
-#**/*.wsc
-main/extensions/test/ole/DCOM/scriptComponents/WriterDemo.wsc
-
-# used in main/migrationanalysis/src/driver_docs/CreateDriverDocs.wsf (1), part of SGA
-# Windows Script File
-#**/*.wsf
-main/migrationanalysis/src/driver_docs/CreateDriverDocs.wsf
-
-# used in main/testautomation/spreadsheet/optional/input/loadsave/microsoft/ms_excel_2007_xml_template_macroenabled.xltm (1), part of SGA
-# Microsoft Excel 2007/2010 template documents with macros
-#**/*.xltm
-main/testautomation/spreadsheet/optional/input/loadsave/microsoft/ms_excel_2007_xml_template_macroenabled.xltm
-
-# used in main/testautomation/spreadsheet/optional/input/loadsave/microsoft/ms_excel_2007_xml_template.xltx (1), part of SGA
-# Excel Template (Microsoft Corporation)
-#**/*.xltx
-main/testautomation/spreadsheet/optional/input/loadsave/microsoft/ms_excel_2007_xml_template.xltx
-
-# used in main/writerfilter/source/doctok/resources.xmi (1), part of SGA
-# XML Metadata Interchange File, xml file, ALv2 could be added
-#**/*.xmi
-main/writerfilter/source/doctok/resources.xmi
-
-# used in main/migrationanalysis/src/wizard/Wizard.DCA (1), part of SGA
-# Document Content Architecture, Textdatei IBM DisplayWrite
-#**/*.DCA
-main/migrationanalysis/src/wizard/Wizard.DCA
-
-# used in main/odk/examples/OLE/delphi/InsertTables/SampleUI.dfm (1), part of SGA
-# Delphi Form
-#**/*.dfm
-main/odk/examples/OLE/delphi/InsertTables/SampleUI.dfm
-
-# used  in main/wizards/source/gimmicks/readdirs.dlg (1), part of SGA
-# Dialog Creation Template (for Excel) (?)
-#**/*.dlg
-main/wizards/source/gimmicks/readdirs.dlg
-
-# used in main/odk/examples/OLE/delphi/InsertTables/Project1.dpr (1), part of SGA
-# Pascal/Delphi file
-#**/*.dpr
-main/odk/examples/OLE/delphi/InsertTables/Project1.dpr
 
 ##############################################################################
 #
@@ -418,6 +85,181 @@ main/writerperfect/source/wpdimp/WordPerfectCollector.hxx
 main/writerperfect/source/wpdimp/WordPerfectImportFilter.cxx
 main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 
+
+##############################################################################
+#
+# small files with no creative content
+#
+main/sal/qa/rtl/random/makefile.add
+main/testautomation/writer/optional/input/export/filter/act_1.all
+main/icc/source/create_sRGB_profile/Makefile.am
+main/sysui/desktop/mimetypes/openoffice.applications
+main/binfilter/bf_sfx2/util/make_tco.btm
+main/framework/test/threadtest/test.btm
+main/framework/test/typecfg/build.btm
+main/l10ntools/workbench/gsicheckcheck.btm
+main/scp2/source/mkopenwith.btm
+main/sfx2/util/make_tco.btm
+main/chart2/qa/data.chd
+main/extras/unx/source/fonts/fonts.dir
+main/extras/unx/source/kde/applnk/.directory
+
+##############################################################################
+#
+# Single files to exclude
+#
+
+
+# Used in writerfilter/source/doctok/xmigen.el (1), part of the SGA
+# XEmacs List (config file), comments possible (using ';' at each line start), ALv2 could be added
+main/writerfilter/source/doctok/xmigen.el
+
+# Used in main/extras/source/misc_config/autotbl.fmt (1), part of SGA
+# Excel format file
+main/extras/source/misc_config/autotbl.fmt
+
+# Used in main/migrationanalysis/src/wizard/Wizard.FRX (1), part of SGA
+# binary information for a Visual Basic form (?)
+main/migrationanalysis/src/wizard/Wizard.FRX
+
+# Used in main/testautomation/writer/optional/input/import/hangul.hwp (1), part of SGA
+# binary? AOO specific? Hangul Word Processor file
+main/testautomation/writer/optional/input/import/hangul.hwp
+
+# main/scripting/java/org/openoffice/netbeans/editor/OOo.jcb (1), part of SGA
+# binary, file type not clear
+main/scripting/java/org/openoffice/netbeans/editor/OOo.jcb
+
+# main/scripting/java/org/openoffice/netbeans/editor/OOo.jcs (1), part of SGA
+# binary, file type not clear
+main/scripting/java/org/openoffice/netbeans/editor/OOo.jcs
+
+# main/writerfilter/qa/cppunittests/doctok/doctok.job (1), part of SGA
+# ascii, one line, support of comments not clear
+main/writerfilter/qa/cppunittests/doctok/doctok.job
+
+# used in main/officecfg/registry/schema/oo-common.ldif (1), part of SGA
+# ascii, included in makefiles, ALv2 might be added
+main/officecfg/registry/schema/oo-common.ldif
+
+# used in main/wizards/util/soffice.lnk (1), part of SGA
+# Linking of Modules to SBLs (?)
+main/wizards/util/soffice.lnk
+
+# used in main/sw/source/ui/lingu/cvdata.mac (1), part of SGA
+# some scriptfile, no creative content
+main/sw/source/ui/lingu/cvdata.mac
+
+# used in main/vos/util/libvos1C50.so.mapfile (1), part of SGA
+# AOO build specific mapping file, no creative content
+main/vos/util/libvos1C50.so.mapfile
+
+# used in main/sysui/desktop/mimetypes/openoffice.mime (1), part of SGA
+# no creative content
+main/sysui/desktop/mimetypes/openoffice.mime
+
+# used in main/odk/examples/java/NotesAccess/Stocks.nsf (1), part of SGA
+# seems binary (384kb) ?
+main/odk/examples/java/NotesAccess/Stocks.nsf
+
+# used in main/setup_native/source/win32/nsis/downloadtemplate.nsi (1), part of SGA
+# packaging infos, no creative content
+main/setup_native/source/win32/nsis/downloadtemplate.nsi
+
+# used in main/sysui/desktop/debian/openoffice.org-debian-menus (1), part of SGA
+# debian desktop configuration stuff, no creative content
+main/sysui/desktop/debian/openoffice.org-debian-menus
+
+# used in main/ure/source/uretest/Makefile.pln (1), part of SGA
+# used for build system, no creative content
+main/ure/source/uretest/Makefile.pln
+
+# used in main/testautomation/writer/optional/input/import/pocketword.psw (1), part of SGA
+# PocketWord document, used for testing
+main/testautomation/writer/optional/input/import/pocketword.psw
+
+
+# used in main/testautomation/writer/optional/input/import/amipro3.sam (1), part of SGA
+# sinlge Ami Pro 3.0 test file for automated testing
+main/testautomation/writer/optional/input/import/amipro3.sam
+
+# used in main/extras/source/truetype/symbol/OpenSymbol.sfd (1), part of SGA
+# AOO specific OpenSymbol source file, (S)ource(F)orge(D)ata, recently called (S)pline(F)ont(D)ata
+main/extras/source/truetype/symbol/OpenSymbol.sfd
+
+# used in main/writerfilter/source/rtftok/RTFScanner.skl (1), part of SGA 
+# binary file (?)
+main/writerfilter/source/rtftok/RTFScanner.skl
+
+# used in main/testautomation/spreadsheet/optional/input/loadsave/microsoft/sylk.slk (1), part of SGA 
+# SYLK spreadsheet, ascii. Comments possible (see in file), ALv2 may be added here
+main/testautomation/spreadsheet/optional/input/loadsave/microsoft/sylk.slk
+
+# used in main/cli_ure/source/cliuno.snk (1), part of SGA
+# Strong Name Key File (Microsoft Corporation), binary
+main/cli_ure/source/cliuno.snk
+
+# used in main/extras/source/palettes/standard.sob (1), part of SGA
+# AOO fill pattern (see http://www.openoffice.org/dev_docs/source/file_extensions.html)
+main/extras/source/palettes/standard.sob
+
+# main/extras/source/truetype/symbol/opens___.ttf (1), part of SGA
+# TrueType OpenSmbol font
+main/extras/source/truetype/symbol/opens___.ttf
+
+# used in main/scripting/java/org/openoffice/netbeans/modules/office/resources/office-scripting.url (1), part of SGA
+# contains a single ascii URL line
+main/scripting/java/org/openoffice/netbeans/modules/office/resources/office-scripting.url
+
+# used in main/extensions/test/ole/VisualBasic/Project1.vbproj (1), part of SGA
+# Visual Basic Project (xml)
+main/extensions/test/ole/VisualBasic/Project1.vbproj
+
+# used in main/testautomation/spreadsheet/optional/input/loadsave/corel/qpro6.wb2 (1), part of SGA
+# QuattroPro files
+main/testautomation/spreadsheet/optional/input/loadsave/corel/qpro6.wb2
+
+# used in main/testautomation/spreadsheet/optional/input/loadsave/lotus/lotuswk1.wk1 (1), part of SGA
+# worksheets from Older Lotus 123
+main/testautomation/spreadsheet/optional/input/loadsave/lotus/lotuswk1.wk1
+
+# used in main/testautomation/spreadsheet/optional/input/loadsave/lotus/lotuswks.wks (1), part of SGA
+# Lotus spreadsheet
+main/testautomation/spreadsheet/optional/input/loadsave/lotus/lotuswks.wks
+
+# used in main/extensions/test/ole/DCOM/scriptComponents/WriterDemo.wsc (1), part of SGA
+# Microsoft Windows scripting component file
+main/extensions/test/ole/DCOM/scriptComponents/WriterDemo.wsc
+
+# used in main/migrationanalysis/src/driver_docs/CreateDriverDocs.wsf (1), part of SGA
+# Windows Script File
+main/migrationanalysis/src/driver_docs/CreateDriverDocs.wsf
+
+# used in main/testautomation/spreadsheet/optional/input/loadsave/microsoft/ms_excel_2007_xml_template_macroenabled.xltm (1), part of SGA
+# Microsoft Excel 2007/2010 template documents with macros
+main/testautomation/spreadsheet/optional/input/loadsave/microsoft/ms_excel_2007_xml_template_macroenabled.xltm
+
+# used in main/testautomation/spreadsheet/optional/input/loadsave/microsoft/ms_excel_2007_xml_template.xltx (1), part of SGA
+# Excel Template (Microsoft Corporation)
+main/testautomation/spreadsheet/optional/input/loadsave/microsoft/ms_excel_2007_xml_template.xltx
+
+# used in main/migrationanalysis/src/wizard/Wizard.DCA (1), part of SGA
+# Document Content Architecture, Textdatei IBM DisplayWrite
+main/migrationanalysis/src/wizard/Wizard.DCA
+
+# used in main/odk/examples/OLE/delphi/InsertTables/SampleUI.dfm (1), part of SGA
+# Delphi Form
+main/odk/examples/OLE/delphi/InsertTables/SampleUI.dfm
+
+# used  in main/wizards/source/gimmicks/readdirs.dlg (1), part of SGA
+# Dialog Creation Template (for Excel) (?)
+main/wizards/source/gimmicks/readdirs.dlg
+
+# used in main/odk/examples/OLE/delphi/InsertTables/Project1.dpr (1), part of SGA
+# Pascal/Delphi file
+main/odk/examples/OLE/delphi/InsertTables/Project1.dpr
+
+
 ##############################################################################
 #
 # file patterns with no creative content to exclude
@@ -457,20 +299,21 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 
 # used in main/automation/source/miniapp/test.win (1), part of SGA, ascii config file
 # used in main/testautomation/global/win/* (30), part of SGA, automatoc test config, scripting files
-**/*.win
+main/automation/source/miniapp/test.win
+main/testautomation/global/win/*.win
 
-# one usage in main/automation/source/miniapp/test.sid (1), part of SGA 
-# used in main/testautomation/global/sid/* (5), part of SGA
+# part of SGA 
 # ascii, ALv2 may be added here
-**/*.sid
+main/automation/source/miniapp/test.sid
+main/testautomation/global/sid/*.sid
 
 # (158), part of SGA
 # AOO internal uno api definition files, XML, should all contain ALv2
-**/*.component
+#**/*.component
 
 # (2), part of SGA
 # MSDEV solution file, binary
-**/*.dsw
+#**/*.dsw
 
 # Used in main/scripting/java/build.env, main/xmerge/source/palmtests/qa-wrapper/env/master.env (2), part of the SGA
 # shell script files, comments possible (using '#'), ALv2 could be added
@@ -478,24 +321,24 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 
 # */export.exp (6), part of the SGA
 # qa self-defined symbol export files, all have the same single symbol content
-**/*.exp
+#**/*.exp
 
 # (3), part of SGA
 # XML Form files, ALv2 could be added
-**/*.form
+#**/*.form
 
 # used in main/migrationanalysis/src/wizard/* (4), part of SGA
 # WordPerfect file (?)
-**/*.frm
+#**/*.frm
 
 # All in main/officecfg/util (4), part of SGA
 # three have SGA header, one (main/officecfg/util/template.gen) has no ALv2 Header
 # perl file, ALv2 could be added to the last one
-**/*.gen
+#**/*.gen
 
 # HitID holders, AOO specific type (2), part of SGA
 # ALv2 could be added (as C++ comment?)
-**/*.hid
+#**/*.hid
 
 #  (>50), part of SGA
 # InterFaceDefinitionTables (?), ascii, not sure about comment support
@@ -503,19 +346,19 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 
 # Scripting and makefile stuff (8), part of SGA
 # shell scripts allow comments, ALv2 could be added
-**/*.in
+#**/*.in
 
 # used in main/xmerge/source/palmtests/qa-wrapper/testcases (>30), part of SGA
 # comments supported using '#', ALv2 could be added
-**/*.infile
+#**/*.infile
 
 # Extension info description (3), part of SGA
 # comments supported using '#', ALv2 could be added
-**/*.info
+#**/*.info
 
 # used in main/extras/unx/source/kde (13), part of SGA
 # KDE config file, ascii, ALv2 could be added
-**/*.kdelnk
+#**/*.kdelnk
 
 # used in main/sysui/desktop/mimetypes (40), part of SGA
 # ascii, support of comments not clear
@@ -523,11 +366,12 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 
 # lexer for parsing (4), part of SGA
 # one with ALv2 header, could be added to others, C++ style comments
-**/*.l
+#**/*.l
 
-# used in main/sal/util/salalloc.list, main/xmerge/source/palmtests/qa-wrapper/lists/master.list (2), part of SGA
+# part of SGA
 # ascii, no info about comment support
-**/*.list
+main/sal/util/salalloc.list
+main/xmerge/source/palmtests/qa-wrapper/lists/master.list
 
 # used in main/libtextcat/data/new_fingerprints/lm (74), not in SGA
 # some language mapping files, created using libtextcat
@@ -544,10 +388,10 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 
 # One usage in main/apple_remote (1), files under MIT
 # One usage in main/extensions/source/macosx/spotlight (14), ALv2
-**/*.m
+#**/*.m
 
 # (143) export mapping files, build system specific. Some with ALv2 header (could be added to the rest)
-**/*.map
+#**/*.map
 
 # used as MANIFEST.MF (28), part of SGA
 # used with other names (6), but also as definition file
@@ -558,83 +402,74 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 # no creative content
 **/*.mingw
 
-# used in main/vcl/aqua/source/res/* (3), all in SGA
+# all in SGA
 # aqua-specific definitions, no creative content
-**/*.nib
+main/vcl/aqua/source/res/*.nib
 
-# (2) used in main/extras/source/templates/layout/lang/* and main/extras/source/templates/presnt/lang/*
 # binary presentation template files, part of SGA
-**/*.otp
+main/extras/source/templates/layout/lang/*.otp
+main/extras/source/templates/presnt/lang/*.otp
 
-# (>50) used in main/extras/source/templates/wizard/styles/lang/*
-# (1) one usage in main/testautomation/spreadsheet/optional/input/loadsave/sun/so8tmpl.ots
 # binary calc template files, part of SGA
-**/*.ots
+main/extras/source/templates/wizard/styles/lang/*.ots
+main/testautomation/spreadsheet/optional/input/loadsave/sun/so8tmpl.ots
 
-# (>100) used in main/extras/source/templates/wizard/report/lang/* and some single others
 # binary writer template files, part of SGA
-**/*.ott
+main/extras/source/templates/wizard/report/lang/*.ott
 
-# used in main/desktop/test/deployment/*
-# used in main/solenv/bin/*
-# used in main/testautomation/*
 # binary AOO extension, part of SGA
-**/*.oxt
+main/desktop/test/deployment/*.oxt
+main/solenv/bin/*.oxt
+main/testautomation/*.oxt
 
-# used in main/testautomation/framework/optional/input/security/autotest.p12 (1)
-# used in main/xmlsecurity/test_docs/certs/p12/* (54)
 # All part of the SGA, documents used for testing
-**/*.p12
+main/testautomation/framework/optional/input/security/autotest.p12
+main/xmlsecurity/test_docs/certs/p12/*.p12
 
 # (133) Diverse patches used to allow building extarnal libraries with the contained
 # needed changes
 **/*.patch
 
-# used in main/setup_native/source/packinfo* (3), all part of SGA
+# all part of SGA
 # packaging information (used to build install sets)
-**/*.pcp
+main/setup_native/source/packinfo*.pcp
 
-# (>100) used in xmerge/source/palmtests/qa-wrapper/results/baseline/pdb-base/*, all part of SGA
+# all part of SGA
 # used for automated testing
-**/*.pdb
+xmerge/source/palmtests/qa-wrapper/results/baseline/pdb-base/*.pdb
 
-# used in main/xmlsecurity/test_docs/CAs*, all part of SGA
+# all part of SGA
 # used for automated testing (seem to be certificates)
-**/*.pem
+main/xmlsecurity/test_docs/CAs/*/*.pem
 
 # Mac-specific data (3), all part of SGA
 # Xml files, adding ALv2 would be possible
-**/*.plist
+#**/*.plist
 
-# used for build system, mainly makefile.pmk (77), all part of SGA
-# All have ALv2 headers, one exception:
-# main/helpcontent2/settings.pmk -> part of the SGA, header should be added
-**/*.pmk
-
-# used in main/bean/test/applet/oooapplet/bean.policy and main/stoc/test/security/test_security.policy (2)
 # both part of the SGA, allows no header, no creative content
-**/*.policy
+main/bean/test/applet/oooapplet/bean.policy
+main/stoc/test/security/test_security.policy
 
-# Postscript files, used for configuration (in main/psprint_config/configuration/ppds/*)
-# and in graphical tests (main/testgraphical/references/*)
-# One usage as template (main/vcl/unx/generic/printergfx/psheader.ps), has ALv2 header
-**/*.PS
+# Postscript files, used for configuration 
+main/psprint_config/configuration/ppds/**/*.PS
+main/testgraphical/references/**/*.PS
 
-# used in vcl/os2/source/src/* (74), part of the SGA
+# part of the SGA
 # os2 specific mouse pointer definitions
-**/*.ptr
+main/vcl/os2/source/src/*.ptr
 
-# used in main/offapi/type_reference/types.rdb and main/qadevOOo/testdocs/XSimpleRegistry.rdb, both in the SGA
+# both in the SGA
 # binary AOO specific UNO API component files, probably generated
-**/*.rdb
+main/offapi/type_reference/types.rdb
+main/qadevOOo/testdocs/XSimpleRegistry.rdb
 
-# used in main/testautomation/framework/optional/input/options/* (4), part of the SGA
+# part of the SGA
 # ascii definition files, unknown if header possible, no creative content
-**/*.ref
+main/testautomation/framework/optional/input/options/*.ref
 
-# used in embedserv/regentries/* (5), part of the SGA
+# part of the SGA
 # Windows specific registry files, unknown if header possible, no creative content
-**/*.reg
+main/embedserv/regentries/*.reg
 
 # (12), part of the SGA
 # Windows specific ascii registry files, unknown if header possible, no creative content
@@ -642,19 +477,19 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 
 # (3), part of the SGA
 # xml schema files, one of three with ALv2 header
-**/*.rng
+#**/*.rng
 
 # (4), part of SGA
 # one of four contains ALv2 header
-**/*.rtf
+#**/*.rtf
 
 # build system specific definition files (symbiol exports?) (26), 
 # e.g. main/configmgr/qa/unoapi/module.sce has ALv2 header, sould be possible to add to others
-**/*.sce
+#**/*.sce
 
-# used in main/scripting/java/org/openoffice/netbeans/modules/office/resources/* (3), all in SGA
+# all in SGA
 # binary data (msdev settings file?)
-**/*.settings
+main/scripting/java/org/openoffice/netbeans/modules/office/resources/*.settings
 
 # VisualStudio solution (6), part of SGA
 # binary file
@@ -668,9 +503,9 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 # AOO line styles (see http://www.openoffice.org/dev_docs/source/file_extensions.html)
 **/*.sod
 
-**/*.soe
 # (26), part of SGA
 # AOO arrow styles (see http://www.openoffice.org/dev_docs/source/file_extensions.html)
+**/*.soe
 
 # (51), part of SGA
 # AOO gradients (see http://www.openoffice.org/dev_docs/source/file_extensions.html)
@@ -680,54 +515,41 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 # AOO hatches (see http://www.openoffice.org/dev_docs/source/file_extensions.html)
 **/*.soh
 
-# (5), part of SGA
-# main/setup_native/scripts/fake-db.spec: contains LGPL hint, should be changed
-# main/sysui/desktop/freedesktop/freedesktop-menus.spec: ALv2 header could be added
-# main/sysui/desktop/mandriva/mandriva-menus.spec: ALv2 header could be added
-# main/sysui/desktop/redhat/redhat-menus.spec: ALv2 header could be added
-# main/sysui/desktop/suse/suse-menus.spec: ALv2 header could be added
-**/*.spec
-
-# used in main/oox/source/token/* (3), part of SGA
+# part of SGA
 # used as c++ code snippets, ALv2 could be added (see .head)
-**/*.tail
+main/oox/source/token/*.tail
 
 # (10), part of SGA
 # used as various templates, some containing ALv2. Not clear if ALv2 could be added to all of them
-**/*.template
+#**/*.template
 
 # (8), part of SGA
 # XML configuration files, ALv2 could be added
-**/*.tree
+#**/*.tree
 
-# (2), part of SGA
-# main/solenv/inc/mime.types: ascii table, no copyright, no license, ALv2 may be added
-# main/sysui/desktop/solaris/mime.types: Ascii script, no copyright, no license, ALv2 may be added
-**/*.types
-
-# (11), part of SGA
-# main/testautomation/writer/optional/input/export/filter/* (12): filetype ascii tables, no copyright, no license
-**/*.unx
+# part of SGA
+# filetype ascii tables, no copyright, no license
+main/testautomation/writer/optional/input/export/filter/*.unx
 
 # (5), part of SGA
 # VisualBasic Workspace (?)
 **/*.vbw
 
-# used in main/testautomation/writer/optional/input/export/filter/* (15), part of SGA
+# part of SGA
 # filetype ascii tables, no copyright, no license, not clear if comments allowed
-**/*.w95
+main/testautomation/writer/optional/input/export/filter/*.w95
 
-# used in main/redland/* (3), part of SGA
+# part of SGA
 # patch files
-**/*.win32
+main/redland/*.win32
 
 # used as */knownissues.xcl (17), part of SGA
 # associates issue IDs to uno api interface calls, ALv2 could be added
-**/*.xcl
+#**/*.xcl
 
 # (54), part of SGA
 # dialog format desriptions, ALv2 could be added
-**/*.xdl
+#**/*.xdl
 
 # (1000+), part of SGA
 # AOO help files, XML, ALv2 could be added, is probably for most -> remove to check
@@ -739,11 +561,14 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 
 # (12), part of SGA
 # AOO internal socket definition files, allows comments, ALv2 could be added
-**/*.xsce
+#**/*.xsce
 
-# used in main/svx/doc/UML/edit_engine_UNO_implementation.zuml and main/svx/doc/UML/grid_control_implementation.zuml (2), part of SGA
+# part of SGA
 # UML defnitions for svx, "Poseidon for UML" needed to read these
-**/*.zuml
+main/svx/doc/UML/edit_engine_UNO_implementation.zuml
+main/svx/doc/UML/grid_control_implementation.zuml
+
+
 
 ##############################################################################
 #
@@ -824,10 +649,10 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 **/*.xlsm
 **/*.xlsx
 
-# used in main/testautomation/framework/optional/input/alldocs/ffortpf.smf (1), part of SGA
-# used in main/testautomation/xml/optional/input/math/so_binary* (28), part of SGA
+# part of SGA
 # AOO formula (own format)
-**/*.smf
+main/testautomation/framework/optional/input/alldocs/ffortpf.smf
+main/testautomation/xml/optional/input/math/so_binary/*.smf
 
 # (90), part of SGA
 # AOO Text Document Template
@@ -872,11 +697,9 @@ main/writerperfect/source/wpdimp/WordPerfectImportFilter.hxx
 # visual basic project (5)
 **/*.vbp
 
-# main/migrationanalysis/src/driver_docs/DocAnalysisRunMacro.vbs: contains ALv2
 # main/odk/examples/OLE/vbscript/WriterDemo.vbs: BSD without advertising
-# main/testautomation/tools/run_tests/run_tests.vbs: contains ALv2
 # VisualBasic Script (?)
-**/*.vbs
+main/odk/examples/OLE/vbscript/WriterDemo.vbs
 
 # used in main/extensions/test/ole/* (5), part of SGA
 # Visual Studio project (xml file)
@@ -1369,8 +1192,9 @@ main/xmlsecurity/tools/examples/eval_import.txt
 # empty files
 #
 
-main/testautomation/framework/required/input/basic_ide/Dialog5_ar_DZ.default
+main/odk/examples/OLE/delphi/InsertTables/Project1.res
 main/odk/pack/unzip_udk/deltree.txt
+main/testautomation/framework/required/input/basic_ide/Dialog5_ar_DZ.default
 main/instsetoo_native/inc_ure/windows/msi_templates/components.txt
 main/migrationanalysis/src/wizard/rcfooter.txt
 main/instsetoo_native/inc_sdkoo/windows/msi_templates/components.txt
