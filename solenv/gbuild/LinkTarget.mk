@@ -745,7 +745,7 @@ $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCObject_get_target,$(2))
-$(call gb_GenCObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_GenCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCObject_get_target,$(2)) : T_CFLAGS += $(3)
 $(call gb_GenCObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
@@ -762,7 +762,7 @@ $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
-$(call gb_GenCxxObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_GenCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_GenCxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
