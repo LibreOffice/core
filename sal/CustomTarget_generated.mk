@@ -33,7 +33,12 @@ $(call gb_CustomTarget_get_target,sal/generated) : \
 	$(SAUT)/rtlbootstrap.mk $(SAUT)/sal/udkversion.h \
 	$(if $(filter-out $(COM),MSC),$(SAUT)/sal/typesizes.h)
 
-$(SAUT)/rtlbootstrap.mk : $(if $(filter-out $(COM),MSC),$(SAUT)/sal/typesizes.h) | $(SAUT)/.dir
+# FIXME: rtlbootstrap.mk is empty on cygwin
+ifeq ($(COM),MSC)
+$(SAUT)/rtlbootstrap.mk :| $(SAUT)/.dir
+	touch $@
+else
+$(SAUT)/rtlbootstrap.mk : $(SAUT)/sal/typesizes.h | $(SAUT)/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),CXX,1)
 	$(call gb_Helper_abbreviate_dirs_native, \
 	(echo '#include "macro.hxx"'; echo RTL_OS:=THIS_OS; echo RTL_ARCH:=THIS_ARCH) > $(SAUT)/bootstrap.cxx && \
@@ -41,6 +46,7 @@ $(SAUT)/rtlbootstrap.mk : $(if $(filter-out $(COM),MSC),$(SAUT)/sal/typesizes.h)
 		-I$(SRCDIR)/sal/inc $(SAUT)/bootstrap.cxx > $@.tmp && \
 	cat $@.tmp | grep '^RTL_' | sed -e 's/"//g' > $@ && \
 	rm $(SAUT)/bootstrap.cxx $@.tmp)
+endif
 
 $(SAUT)/sal/typesizes.h :| $(SAUT)/sal/.dir
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),ECH,1)
