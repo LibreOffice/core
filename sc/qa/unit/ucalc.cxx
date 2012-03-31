@@ -43,6 +43,7 @@
 #include "clipparam.hxx"
 #include "refundo.hxx"
 #include "undoblk.hxx"
+#include "undotab.hxx"
 #include "queryentry.hxx"
 #include "postit.hxx"
 #include "attrib.hxx"
@@ -204,6 +205,8 @@ public:
      */
     void testJumpToPrecedentsDependents();
 
+    void testSetBackgroundColor();
+
     CPPUNIT_TEST_SUITE(Test);
     CPPUNIT_TEST(testCollator);
     CPPUNIT_TEST(testInput);
@@ -240,6 +243,7 @@ public:
     CPPUNIT_TEST(testMergedCells);
     CPPUNIT_TEST(testUpdateReference);
     CPPUNIT_TEST(testJumpToPrecedentsDependents);
+    CPPUNIT_TEST(testSetBackgroundColor);
     CPPUNIT_TEST_SUITE_END();
 
 private:
@@ -3906,6 +3910,34 @@ void Test::testMergedCells()
     //CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
     m_pDoc->DeleteTab(0);
 }
+
+void Test::testSetBackgroundColor()
+{
+    //test set background color
+    //TODO: set color1 and set color2 and do an undo to check if color1 is set now.
+
+    m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet1")));
+    Color aColor;
+
+     //test yellow
+    aColor=Color(COL_YELLOW);
+    m_xDocShRef->GetDocFunc().SetTabBgColor(0,aColor,false, true);
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set", m_pDoc->GetTabBgColor(0)!= aColor.GetColor());
+
+
+    Color aOldTabBgColor=m_pDoc->GetTabBgColor(0);
+    aColor.SetColor(COL_BLUE);//set BLUE
+    m_xDocShRef->GetDocFunc().SetTabBgColor(0,aColor,false, true);
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set the second time", m_pDoc->GetTabBgColor(0)!= aColor.GetColor());
+
+    //now check for undo
+    SfxUndoAction* pUndo = new ScUndoTabColor(m_xDocShRef,0, aOldTabBgColor, aColor);
+    pUndo->Undo();
+    //CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)!= aOldTabBgColor.GetColor());
+    m_pDoc->DeleteTab(0);
+}
+
+
 
 void Test::testUpdateReference()
 {
