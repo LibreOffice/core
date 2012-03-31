@@ -70,32 +70,32 @@ namespace sw { namespace mark
         return *static_cast<SwPosition*>(NULL);
     }
 
+    const char CrossRefHeadingBookmark_NamePrefix[] = "__RefHeading__";
+
     CrossRefHeadingBookmark::CrossRefHeadingBookmark(const SwPaM& rPaM,
         const KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, our_sNamePrefix)
+        : CrossRefBookmark(rPaM, rCode, rName, rShortName, rtl::OUString(CrossRefHeadingBookmark_NamePrefix))
     { }
-
-    const ::rtl::OUString CrossRefHeadingBookmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__RefHeading__"));
 
     bool CrossRefHeadingBookmark::IsLegalName(const ::rtl::OUString& rName)
     {
-        return rName.match(our_sNamePrefix);
+        return rName.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(CrossRefHeadingBookmark_NamePrefix));
     }
+
+    const char CrossRefNumItemBookmark_NamePrefix[] = "__RefNumPara__";
 
     CrossRefNumItemBookmark::CrossRefNumItemBookmark(const SwPaM& rPaM,
         const KeyCode& rCode,
         const OUString& rName,
         const OUString& rShortName)
-        : CrossRefBookmark(rPaM, rCode, rName, rShortName, our_sNamePrefix)
+        : CrossRefBookmark(rPaM, rCode, rName, rShortName, rtl::OUString(CrossRefNumItemBookmark_NamePrefix))
     { }
-
-    const ::rtl::OUString CrossRefNumItemBookmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__RefNumPara__"));
 
     bool CrossRefNumItemBookmark::IsLegalName(const ::rtl::OUString& rName)
     {
-        return rName.match(our_sNamePrefix);
+        return rName.matchAsciiL(RTL_CONSTASCII_STRINGPARAM(CrossRefNumItemBookmark_NamePrefix));
     }
 }}
 

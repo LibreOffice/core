@@ -28,7 +28,6 @@
 
 #include "fastserializer.hxx"
 #include <rtl/ustrbuf.hxx>
-#include <rtl/byteseq.hxx>
 
 #include <comphelper/sequenceasvector.hxx>
 
@@ -62,28 +61,32 @@ using ::com::sun::star::io::NotConnectedException;
 using ::com::sun::star::io::IOException;
 using ::com::sun::star::io::BufferSizeExceededException;
 
-static rtl::ByteSequence aClosingBracket((const sal_Int8 *)">", 1);
-static rtl::ByteSequence aSlashAndClosingBracket((const sal_Int8 *)"/>", 2);
-static rtl::ByteSequence aColon((const sal_Int8 *)":", 1);
-static rtl::ByteSequence aOpeningBracket((const sal_Int8 *)"<", 1);
-static rtl::ByteSequence aOpeningBracketAndSlash((const sal_Int8 *)"</", 2);
-static rtl::ByteSequence aQuote((const sal_Int8 *)"\"", 1);
-static rtl::ByteSequence aEqualSignAndQuote((const sal_Int8 *)"=\"", 2);
-static rtl::ByteSequence aSpace((const sal_Int8 *)" ", 1);
-static rtl::ByteSequence aXmlHeader((const sal_Int8*) "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n", 56);
-
 #define HAS_NAMESPACE(x) ((x & 0xffff0000) != 0)
 #define NAMESPACE(x) (x >> 16)
 #define TOKEN(x) (x & 0xffff)
 
 namespace sax_fastparser {
-    FastSaxSerializer::FastSaxSerializer( ) : mxOutputStream(), mxFastTokenHandler(), maMarkStack() {}
+    FastSaxSerializer::FastSaxSerializer( )
+        : mxOutputStream()
+        , mxFastTokenHandler()
+        , maMarkStack()
+        , maClosingBracket((const sal_Int8 *)">", 1)
+        , maSlashAndClosingBracket((const sal_Int8 *)"/>", 2)
+        , maColon((const sal_Int8 *)":", 1)
+        , maOpeningBracket((const sal_Int8 *)"<", 1)
+        , maOpeningBracketAndSlash((const sal_Int8 *)"</", 2)
+        , maQuote((const sal_Int8 *)"\"", 1)
+        , maEqualSignAndQuote((const sal_Int8 *)"=\"", 2)
+        , maSpace((const sal_Int8 *)" ", 1)
+    {
+    }
     FastSaxSerializer::~FastSaxSerializer() {}
 
     void SAL_CALL FastSaxSerializer::startDocument(  ) throw (SAXException, RuntimeException)
     {
         if (!mxOutputStream.is())
             return;
+        rtl::ByteSequence aXmlHeader((const sal_Int8*) "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n", 56);
         writeBytes(toUnoSequence(aXmlHeader));
     }
 
@@ -126,7 +129,7 @@ namespace sax_fastparser {
     {
         if( HAS_NAMESPACE( nElement ) ) {
             writeBytes(mxFastTokenHandler->getUTF8Identifier(NAMESPACE(nElement)));
-            writeBytes(toUnoSequence(aColon));
+            writeBytes(toUnoSequence(maColon));
             writeBytes(mxFastTokenHandler->getUTF8Identifier(TOKEN(nElement)));
         } else
             writeBytes(mxFastTokenHandler->getUTF8Identifier(nElement));
@@ -141,12 +144,12 @@ namespace sax_fastparser {
         if ( !maMarkStack.empty() )
             maMarkStack.top()->setCurrentElement( Element );
 
-        writeBytes(toUnoSequence(aOpeningBracket));
+        writeBytes(toUnoSequence(maOpeningBracket));
 
         writeId(Element);
         writeFastAttributeList(Attribs);
 
-        writeBytes(toUnoSequence(aClosingBracket));
+        writeBytes(toUnoSequence(maClosingBracket));
     }
 
     void SAL_CALL FastSaxSerializer::startUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs )
@@ -155,19 +158,19 @@ namespace sax_fastparser {
         if (!mxOutputStream.is())
             return;
 
-        writeBytes(toUnoSequence(aOpeningBracket));
+        writeBytes(toUnoSequence(maOpeningBracket));
 
         if (!Namespace.isEmpty())
         {
             write(Namespace);
-            writeBytes(toUnoSequence(aColon));
+            writeBytes(toUnoSequence(maColon));
         }
 
         write(Name);
 
         writeFastAttributeList(Attribs);
 
-        writeBytes(toUnoSequence(aClosingBracket));
+        writeBytes(toUnoSequence(maClosingBracket));
     }
 
     void SAL_CALL FastSaxSerializer::endFastElement( ::sal_Int32 Element )
@@ -176,11 +179,11 @@ namespace sax_fastparser {
         if (!mxOutputStream.is())
             return;
 
-        writeBytes(toUnoSequence(aOpeningBracketAndSlash));
+        writeBytes(toUnoSequence(maOpeningBracketAndSlash));
 
         writeId(Element);
 
-        writeBytes(toUnoSequence(aClosingBracket));
+        writeBytes(toUnoSequence(maClosingBracket));
     }
 
     void SAL_CALL FastSaxSerializer::endUnknownElement( const OUString& Namespace, const OUString& Name )
@@ -189,17 +192,17 @@ namespace sax_fastparser {
         if (!mxOutputStream.is())
             return;
 
-        writeBytes(toUnoSequence(aOpeningBracketAndSlash));
+        writeBytes(toUnoSequence(maOpeningBracketAndSlash));
 
         if (!Namespace.isEmpty())
         {
             write(Namespace);
-            writeBytes(toUnoSequence(aColon));
+            writeBytes(toUnoSequence(maColon));
         }
 
         write(Name);
 
-        writeBytes(toUnoSequence(aClosingBracket));
+        writeBytes(toUnoSequence(maClosingBracket));
     }
 
     void SAL_CALL FastSaxSerializer::singleFastElement( ::sal_Int32 Element, const Reference< XFastAttributeList >& Attribs )
@@ -211,12 +214,12 @@ namespace sax_fastparser {
         if ( !maMarkStack.empty() )
             maMarkStack.top()->setCurrentElement( Element );
 
-        writeBytes(toUnoSequence(aOpeningBracket));
+        writeBytes(toUnoSequence(maOpeningBracket));
 
         writeId(Element);
         writeFastAttributeList(Attribs);
 
-        writeBytes(toUnoSequence(aSlashAndClosingBracket));
+        writeBytes(toUnoSequence(maSlashAndClosingBracket));
     }
 
     void SAL_CALL FastSaxSerializer::singleUnknownElement( const OUString& Namespace, const OUString& Name, const Reference< XFastAttributeList >& Attribs )
@@ -225,19 +228,19 @@ namespace sax_fastparser {
         if (!mxOutputStream.is())
             return;
 
-        writeBytes(toUnoSequence(aOpeningBracket));
+        writeBytes(toUnoSequence(maOpeningBracket));
 
         if (!Namespace.isEmpty())
         {
             write(Namespace);
-            writeBytes(toUnoSequence(aColon));
+            writeBytes(toUnoSequence(maColon));
         }
 
         write(Name);
 
         writeFastAttributeList(Attribs);
 
-        writeBytes(toUnoSequence(aSlashAndClosingBracket));
+        writeBytes(toUnoSequence(maSlashAndClosingBracket));
     }
 
     void SAL_CALL FastSaxSerializer::characters( const OUString& aChars )
@@ -267,12 +270,12 @@ namespace sax_fastparser {
         sal_Int32 nAttrLength = aAttrSeq.getLength();
         for (sal_Int32 i = 0; i < nAttrLength; i++)
         {
-            writeBytes(toUnoSequence(aSpace));
+            writeBytes(toUnoSequence(maSpace));
 
             write(pAttr[i].Name);
-            writeBytes(toUnoSequence(aEqualSignAndQuote));
+            writeBytes(toUnoSequence(maEqualSignAndQuote));
             write(escapeXml(pAttr[i].Value));
-            writeBytes(toUnoSequence(aQuote));
+            writeBytes(toUnoSequence(maQuote));
         }
 
         Sequence< FastAttribute > aFastAttrSeq = Attribs->getFastAttributes();
@@ -280,16 +283,16 @@ namespace sax_fastparser {
         sal_Int32 nFastAttrLength = aFastAttrSeq.getLength();
         for (sal_Int32 j = 0; j < nFastAttrLength; j++)
         {
-            writeBytes(toUnoSequence(aSpace));
+            writeBytes(toUnoSequence(maSpace));
 
             sal_Int32 nToken = pFastAttr[j].Token;
             writeId(nToken);
 
-            writeBytes(toUnoSequence(aEqualSignAndQuote));
+            writeBytes(toUnoSequence(maEqualSignAndQuote));
 
             write(escapeXml(Attribs->getValue(pFastAttr[j].Token)));
 
-            writeBytes(toUnoSequence(aQuote));
+            writeBytes(toUnoSequence(maQuote));
         }
     }
 

@@ -400,9 +400,8 @@ SfxLibraryContainer* SfxDialogLibraryContainer::createInstanceImpl( void )
     return new SfxDialogLibraryContainer();
 }
 
-
-static OUString aResourceFileNameBase(RTL_CONSTASCII_USTRINGPARAM("DialogStrings"));
-static OUString aResourceFileCommentBase(RTL_CONSTASCII_USTRINGPARAM("# Strings for Dialog Library "));
+const char aResourceFileNameBase[] = "DialogStrings";
+const char aResourceFileCommentBase[] = "# Strings for Dialog Library ";
 
 // Resource handling
 Reference< ::com::sun::star::resource::XStringResourcePersistence >
@@ -415,7 +414,7 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
     // get ui locale
     ::com::sun  ::star::lang::Locale aLocale = Application::GetSettings().GetUILocale();
 
-    OUString aComment = aResourceFileCommentBase;
+    OUString aComment(aResourceFileCommentBase);
     aComment += aLibName;
 
     sal_Bool bStorage = mxStorage.is();
@@ -424,7 +423,7 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
         Sequence<Any> aArgs( 5 );
         aArgs[1] <<= bReadOnly;
         aArgs[2] <<= aLocale;
-        aArgs[3] <<= aResourceFileNameBase;
+        aArgs[3] <<= rtl::OUString(aResourceFileNameBase);
         aArgs[4] <<= aComment;
 
         // TODO: Ctor
@@ -468,7 +467,7 @@ Reference< ::com::sun::star::resource::XStringResourcePersistence >
         aArgs[0] <<= aLocation;
         aArgs[1] <<= bReadOnly;
         aArgs[2] <<= aLocale;
-        aArgs[3] <<= aResourceFileNameBase;
+        aArgs[3] <<= rtl::OUString(aResourceFileNameBase);
         aArgs[4] <<= aComment;
 
         // TODO: Real handler?
@@ -632,7 +631,7 @@ void SfxDialogLibrary::storeResources( void )
 void SfxDialogLibrary::storeResourcesAsURL
     ( const ::rtl::OUString& URL, const ::rtl::OUString& NewName )
 {
-    OUString aComment = aResourceFileCommentBase;
+    OUString aComment(aResourceFileCommentBase);
     m_aName = NewName;
     aComment += m_aName;
 
@@ -650,26 +649,26 @@ void SfxDialogLibrary::storeResourcesAsURL
 void SfxDialogLibrary::storeResourcesToURL( const OUString& URL,
     const Reference< task::XInteractionHandler >& xHandler )
 {
-    OUString aComment = aResourceFileCommentBase;
+    OUString aComment(aResourceFileCommentBase);
     aComment += m_aName;
 
     if( m_xStringResourcePersistence.is() )
     {
         m_xStringResourcePersistence->storeToURL
-            ( URL, aResourceFileNameBase, aComment, xHandler );
+            ( URL, rtl::OUString(aResourceFileNameBase), aComment, xHandler );
     }
 }
 
 void SfxDialogLibrary::storeResourcesToStorage( const ::com::sun::star::uno::Reference
     < ::com::sun::star::embed::XStorage >& xStorage )
 {
-    OUString aComment = aResourceFileCommentBase;
+    OUString aComment(aResourceFileCommentBase);
     aComment += m_aName;
 
     if( m_xStringResourcePersistence.is() )
     {
         m_xStringResourcePersistence->storeToStorage
-            ( xStorage, aResourceFileNameBase, aComment );
+            ( xStorage, rtl::OUString(aResourceFileNameBase), aComment );
     }
 }
 
@@ -698,6 +697,5 @@ bool SAL_CALL SfxDialogLibrary::isLibraryElementValid( ::com::sun::star::uno::An
 }
 
 }
-//============================================================================
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */

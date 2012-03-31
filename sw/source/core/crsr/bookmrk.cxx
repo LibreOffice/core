@@ -177,21 +177,16 @@ namespace sw { namespace mark
         }
     }
 
-
     NavigatorReminder::NavigatorReminder(const SwPaM& rPaM)
-        : MarkBase(rPaM, our_sNamePrefix)
+        : MarkBase(rPaM, rtl::OUString("__NavigatorReminder__"))    //<-- everything else uses MarkBase::GenerateNewName ?
     { }
-
-    const ::rtl::OUString NavigatorReminder::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__NavigatorReminder__"));
 
     UnoMark::UnoMark(const SwPaM& aPaM)
-        : MarkBase(aPaM, MarkBase::GenerateNewName(our_sNamePrefix))
+        : MarkBase(aPaM, MarkBase::GenerateNewName(rtl::OUString("__UnoMark__")))
     { }
 
-    const ::rtl::OUString UnoMark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__UnoMark__"));
-
     DdeBookmark::DdeBookmark(const SwPaM& aPaM)
-        : MarkBase(aPaM, MarkBase::GenerateNewName(our_sNamePrefix))
+        : MarkBase(aPaM, MarkBase::GenerateNewName(rtl::OUString("__DdeLink__")))
         , m_aRefObj(NULL)
     { }
 
@@ -199,8 +194,6 @@ namespace sw { namespace mark
     {
         m_aRefObj = pObj;
     }
-
-    const ::rtl::OUString DdeBookmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__DdeLink__"));
 
     void DdeBookmark::DeregisterFromDoc(SwDoc* const pDoc)
     {
@@ -282,7 +275,7 @@ namespace sw { namespace mark
 
 
     Fieldmark::Fieldmark(const SwPaM& rPaM)
-        : MarkBase(rPaM, MarkBase::GenerateNewName(our_sNamePrefix))
+        : MarkBase(rPaM, MarkBase::GenerateNewName(rtl::OUString("__Fieldmark__")))
     {
         if(!IsExpanded())
             SetOtherMarkPos(GetMarkPos());
@@ -314,8 +307,6 @@ namespace sw { namespace mark
         SwPaM aPaM( this->GetMarkPos(), this->GetOtherMarkPos() );
         aPaM.InvalidatePaM();
     }
-
-    const ::rtl::OUString Fieldmark::our_sNamePrefix(RTL_CONSTASCII_USTRINGPARAM("__Fieldmark__"));
 
     TextFieldmark::TextFieldmark(const SwPaM& rPaM)
         : Fieldmark(rPaM)

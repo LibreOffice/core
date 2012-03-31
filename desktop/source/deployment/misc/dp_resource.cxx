@@ -63,21 +63,21 @@ struct DeploymentResMgr : public rtl::StaticWithInit<
     }
 };
 
-osl::Mutex s_mutex;
+class theResourceMutex : public rtl::Static<osl::Mutex, theResourceMutex> {};
 
 } // anon namespace
 
 //==============================================================================
 ResId getResId( sal_uInt16 id )
 {
-    const osl::MutexGuard guard( s_mutex );
+    const osl::MutexGuard guard( theResourceMutex::get() );
     return ResId( id, *DeploymentResMgr::get() );
 }
 
 //==============================================================================
 String getResourceString( sal_uInt16 id )
 {
-    const osl::MutexGuard guard( s_mutex );
+    const osl::MutexGuard guard( theResourceMutex::get() );
     String ret( ResId( id, *DeploymentResMgr::get() ) );
     ret.SearchAndReplaceAllAscii(
         "%PRODUCTNAME", utl::ConfigManager::getProductName() );

@@ -132,8 +132,6 @@ namespace sw { namespace mark
     {
         public:
             NavigatorReminder(const SwPaM& rPaM);
-        private:
-            static const ::rtl::OUString our_sNamePrefix;
     };
 
     class UnoMark
@@ -141,8 +139,6 @@ namespace sw { namespace mark
     {
         public:
             UnoMark(const SwPaM& rPaM);
-        private:
-            static const ::rtl::OUString our_sNamePrefix;
     };
 
     class DdeBookmark
@@ -167,7 +163,6 @@ namespace sw { namespace mark
             virtual ~DdeBookmark();
         private:
             SwServerObjectRef m_aRefObj;
-            static const ::rtl::OUString our_sNamePrefix;
     };
 
     class Bookmark
@@ -235,8 +230,6 @@ namespace sw { namespace mark
             ::rtl::OUString m_aFieldname;
             ::rtl::OUString m_aFieldHelptext;
             IFieldmark::parameter_map_t m_vParams;
-
-            static const ::rtl::OUString our_sNamePrefix;
     };
 
     class TextFieldmark

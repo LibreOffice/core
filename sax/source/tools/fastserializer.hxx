@@ -34,6 +34,7 @@
 #include <com/sun/star/lang/XServiceInfo.hpp>
 #include <com/sun/star/io/XOutputStream.hpp>
 #include <cppuhelper/implbase2.hxx>
+#include <rtl/byteseq.hxx>
 
 #include <stack>
 #include <map>
@@ -188,6 +189,15 @@ private:
     void write( const ::rtl::OUString& s );
 
 protected:
+    rtl::ByteSequence maClosingBracket;
+    rtl::ByteSequence maSlashAndClosingBracket;
+    rtl::ByteSequence maColon;
+    rtl::ByteSequence maOpeningBracket;
+    rtl::ByteSequence maOpeningBracketAndSlash;
+    rtl::ByteSequence maQuote;
+    rtl::ByteSequence maEqualSignAndQuote;
+    rtl::ByteSequence maSpace;
+
     /** Forward the call to the output stream, or write to the stack.
 
         The latter in the case that we are inside a mark().

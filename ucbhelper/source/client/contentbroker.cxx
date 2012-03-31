@@ -34,6 +34,7 @@
  *************************************************************************/
 #include <osl/diagnose.h>
 #include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 #include <com/sun/star/lang/XMultiServiceFactory.hpp>
 #include <com/sun/star/lang/XComponent.hpp>
 #include <com/sun/star/ucb/XContentIdentifierFactory.hpp>
@@ -56,9 +57,7 @@ using ::rtl::OUString;
 
 namespace
 {
-    osl::Mutex globalContentBrokerMutex;
-    osl::Mutex & getGlobalContentBrokerMutex() { return globalContentBrokerMutex; }
-
+    struct theContentBrokerMutex : public rtl::Static< osl::Mutex, theContentBrokerMutex > {};
 } // namespace
 
 namespace ucbhelper
@@ -184,7 +183,7 @@ sal_Bool ContentBroker::initialize(
 
     if ( !m_pTheBroker )
     {
-        osl::Guard< osl::Mutex > aGuard( getGlobalContentBrokerMutex() );
+        osl::Guard< osl::Mutex > aGuard( theContentBrokerMutex::get() );
 
         if ( !m_pTheBroker )
         {
@@ -237,7 +236,7 @@ InitUCBHelper()
 // static
 void ContentBroker::deinitialize()
 {
-    osl::MutexGuard aGuard( getGlobalContentBrokerMutex() );
+    osl::MutexGuard aGuard( theContentBrokerMutex::get() );
 
     delete m_pTheBroker;
     m_pTheBroker = 0;
