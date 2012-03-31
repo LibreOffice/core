@@ -85,7 +85,6 @@ const long FRAMESEL_GEOM_ADD_CLICK_INNER = 2;
 // ----------------------------------------------------------------------------
 
 static const frame::Style   OBJ_FRAMESTYLE_DONTCARE( 3, 0, 0, SOLID );
-static const FrameBorder    OBJ_FRAMEBORDER_NONE( FRAMEBORDER_NONE );
 
 // ----------------------------------------------------------------------------
 
