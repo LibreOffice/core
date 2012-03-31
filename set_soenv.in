@@ -1,3 +1,5 @@
+#!@PERL@ -w
+#
 ###############################################################
 #  
 #  Licensed to the Apache Software Foundation (ASF) under one
@@ -18,7 +20,6 @@
 #  under the License.
 #  
 ###############################################################
-#!@PERL@ -w
 #
 # Program:     set_soenv.in
 # Version:     $Revision: 1.201 $
