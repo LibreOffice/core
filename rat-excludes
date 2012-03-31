@@ -416,7 +416,7 @@ main/setup_native/source/packinfo*.pcp
 
 # all part of SGA
 # used for automated testing
-xmerge/source/palmtests/qa-wrapper/results/baseline/pdb-base/*.pdb
+main/xmerge/source/palmtests/qa-wrapper/results/baseline/pdb-base/*.pdb
 
 # all part of SGA
 # used for automated testing (seem to be certificates)
