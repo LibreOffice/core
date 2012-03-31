@@ -27,6 +27,7 @@
  ************************************************************************/
 
 #include <svtools/toolboxcontroller.hxx>
+#include <com/sun/star/beans/PropertyAttribute.hpp>
 #include <com/sun/star/beans/PropertyValue.hpp>
 #include <com/sun/star/beans/XPropertySet.hpp>
 #include <com/sun/star/frame/XDispatchProvider.hpp>
@@ -38,11 +39,9 @@
 #include <svtools/miscopt.hxx>
 #include <toolkit/unohlp.hxx>
 #include <vcl/toolbox.hxx>
-//shizhobo
-#include <com/sun/star/beans/PropertyAttribute.hpp>
+
 const int TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE  = 1;
-const rtl::OUString TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE( RTL_CONSTASCII_USTRINGPARAM( "SupportsVisible" ));
-//end
+const char TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE[] = "SupportsVisible";
 
 using ::rtl::OUString;
 
@@ -97,8 +96,7 @@ ToolboxController::ToolboxController(
     ,   m_aCommandURL( aCommandURL )
     ,   m_aListenerContainer( m_aMutex )
 {
-    //registger Propertyh by shizhoubo
-    registerProperty(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE, TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+    registerProperty(rtl::OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE), TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
         &m_bSupportVisible, getCppuType(&m_bSupportVisible));
 
     m_pImpl = new ToolboxController_Impl;
@@ -122,8 +120,7 @@ ToolboxController::ToolboxController() :
     ,   m_bDisposed( sal_False )
     ,   m_aListenerContainer( m_aMutex )
 {
-    //registger Propertyh by shizhoubo
-    registerProperty(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE, TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
+    registerProperty(rtl::OUString(TOOLBARCONTROLLER_PROPNAME_SUPPORTSVISIBLE), TOOLBARCONTROLLER_PROPHANDLE_SUPPORTSVISIBLE, com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY,
         &m_bSupportVisible, getCppuType(&m_bSupportVisible));
 
     m_pImpl = new ToolboxController_Impl;

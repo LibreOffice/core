@@ -75,8 +75,6 @@ $(eval $(call gb_Library_add_exception_objects,fwk,\
     framework/source/classes/menumanager \
     framework/source/classes/taskcreator \
     framework/source/constant/containerquery \
-    framework/source/constant/contenthandler \
-    framework/source/constant/frameloader \
     framework/source/dispatch/closedispatcher \
     framework/source/dispatch/dispatchinformationprovider \
     framework/source/dispatch/dispatchprovider \

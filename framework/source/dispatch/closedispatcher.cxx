@@ -66,12 +66,9 @@ namespace framework{
 #endif
 namespace fpf = ::framework::pattern::frame;
 
-//_______________________________________________
-// non exported const
-
-static ::rtl::OUString URL_CLOSEDOC    = DECLARE_ASCII(".uno:CloseDoc"  );
-static ::rtl::OUString URL_CLOSEWIN    = DECLARE_ASCII(".uno:CloseWin"  );
-static ::rtl::OUString URL_CLOSEFRAME  = DECLARE_ASCII(".uno:CloseFrame");
+const char URL_CLOSEDOC[] = ".uno:CloseDoc";
+const char URL_CLOSEWIN[] = ".uno:CloseWin";
+const char URL_CLOSEFRAME[] = ".uno:CloseFrame";
 
 //_______________________________________________
 // declarations
@@ -136,15 +133,14 @@ css::uno::Sequence< css::frame::DispatchInformation > SAL_CALL CloseDispatcher::
                       a configurable feature ... and further it does not have
                       a valid UIName entry inside the GenericCommands.xcu ... */
         css::uno::Sequence< css::frame::DispatchInformation > lViewInfos(1);
-        lViewInfos[0].Command = URL_CLOSEWIN;
+        lViewInfos[0].Command = rtl::OUString(URL_CLOSEWIN);
         lViewInfos[0].GroupId = css::frame::CommandGroup::VIEW;
         return lViewInfos;
     }
-    else
-    if (nCommandGroup == css::frame::CommandGroup::DOCUMENT)
+    else if (nCommandGroup == css::frame::CommandGroup::DOCUMENT)
     {
         css::uno::Sequence< css::frame::DispatchInformation > lDocInfos(1);
-        lDocInfos[0].Command = URL_CLOSEDOC;
+        lDocInfos[0].Command = rtl::OUString(URL_CLOSEDOC);
         lDocInfos[0].GroupId = css::frame::CommandGroup::DOCUMENT;
         return lDocInfos;
     }
@@ -197,13 +193,11 @@ void SAL_CALL CloseDispatcher::dispatchWithNotification(const css::util::URL&   
     // If not - we have to break this operation. But an optional listener must be informed.
     // BTW: We save the information about the requested operation. Because
     // we need it later.
-    if (aURL.Complete.equals(URL_CLOSEDOC))
+    if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URL_CLOSEDOC)))
         m_eOperation = E_CLOSE_DOC;
-    else
-    if (aURL.Complete.equals(URL_CLOSEWIN))
+    else if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URL_CLOSEWIN)))
         m_eOperation = E_CLOSE_WIN;
-    else
-    if (aURL.Complete.equals(URL_CLOSEFRAME))
+    else if (aURL.Complete.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(URL_CLOSEFRAME)))
         m_eOperation = E_CLOSE_FRAME;
     else
     {

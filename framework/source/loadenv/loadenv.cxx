@@ -33,10 +33,6 @@
 #include <loadenv/targethelper.hxx>
 #include <framework/framelistanalyzer.hxx>
 
-#include <constant/frameloader.hxx>
-
-#include <constant/contenthandler.hxx>
-
 #include <constant/containerquery.hxx>
 #include <interaction/quietinteraction.hxx>
 #include <threadhelp/writeguard.hxx>
@@ -96,7 +92,9 @@
 #include <rtl/ustrbuf.hxx>
 #include <vcl/svapp.hxx>
 
-//_______________________________________________
+const char PROP_TYPES[] = "Types";
+const char PROP_NAME[] = "Name";
+
 // namespace
 
 namespace framework{
@@ -736,8 +734,10 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     //      Because there exist some types, which are referenced by
     //      other objects ... but not by filters nor frame loaders!
 
+    rtl::OUString sPROP_TYPES(PROP_TYPES);
+
     lTypesReg[0]      = sType;
-    lQuery[0].Name    = ::framework::constant::FrameLoader::PROP_TYPES;
+    lQuery[0].Name    = sPROP_TYPES;
     lQuery[0].Value <<= lTypesReg;
 
     xContainer = css::uno::Reference< css::container::XContainerQuery >(xSMGR->createInstance(SERVICENAME_FRAMELOADERFACTORY), css::uno::UNO_QUERY);
@@ -752,7 +752,7 @@ LoadEnv::EContentType LoadEnv::classifyContent(const ::rtl::OUString&           
     //      Such contents can be handled ... but not loaded.
 
     lTypesReg[0]      = sType;
-    lQuery[0].Name    = ::framework::constant::ContentHandler::PROP_TYPES;
+    lQuery[0].Name    = sPROP_TYPES;
     lQuery[0].Value <<= lTypesReg;
 
     xContainer = css::uno::Reference< css::container::XContainerQuery >(xSMGR->createInstance(SERVICENAME_CONTENTHANDLERFACTORY), css::uno::UNO_QUERY);
@@ -912,14 +912,16 @@ sal_Bool LoadEnv::impl_handleContent()
     lTypeReg[0] = sType;
 
     css::uno::Sequence< css::beans::NamedValue > lQuery(1);
-    lQuery[0].Name    = ::framework::constant::ContentHandler::PROP_TYPES;
+    lQuery[0].Name    = rtl::OUString(PROP_TYPES);
     lQuery[0].Value <<= lTypeReg;
+
+    ::rtl::OUString sPROP_NAME(PROP_NAME);
 
     css::uno::Reference< css::container::XEnumeration > xSet = xQuery->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
     {
         ::comphelper::SequenceAsHashMap lProps   (xSet->nextElement());
-        ::rtl::OUString                 sHandler = lProps.getUnpackedValueOrDefault(::framework::constant::ContentHandler::PROP_NAME, ::rtl::OUString());
+        ::rtl::OUString                 sHandler = lProps.getUnpackedValueOrDefault(sPROP_NAME, ::rtl::OUString());
 
         css::uno::Reference< css::frame::XNotifyingDispatch > xHandler;
         try
@@ -1210,8 +1212,10 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
     lTypesReg[0] = sType;
 
     css::uno::Sequence< css::beans::NamedValue > lQuery(1);
-    lQuery[0].Name    = ::framework::constant::FrameLoader::PROP_TYPES;
+    lQuery[0].Name    = rtl::OUString(PROP_TYPES);
     lQuery[0].Value <<= lTypesReg;
+
+    ::rtl::OUString sPROP_NAME(PROP_NAME);
 
     css::uno::Reference< css::container::XEnumeration > xSet = xQuery->createSubSetEnumerationByProperties(lQuery);
     while(xSet->hasMoreElements())
@@ -1219,7 +1223,7 @@ css::uno::Reference< css::uno::XInterface > LoadEnv::impl_searchLoader()
         // try everyone ...
         // Ignore any loader, which makes trouble :-)
         ::comphelper::SequenceAsHashMap             lLoaderProps(xSet->nextElement());
-        ::rtl::OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(::framework::constant::FrameLoader::PROP_NAME, ::rtl::OUString());
+        ::rtl::OUString                             sLoader     = lLoaderProps.getUnpackedValueOrDefault(sPROP_NAME, ::rtl::OUString());
         css::uno::Reference< css::uno::XInterface > xLoader     ;
         try
         {

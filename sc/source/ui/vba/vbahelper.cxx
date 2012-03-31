@@ -107,7 +107,9 @@ nViewNo && !pView->GetObjectShell()->IsInPlaceActive() )
     }
     return false;
 }
-const ::rtl::OUString REPLACE_CELLS_WARNING(  RTL_CONSTASCII_USTRINGPARAM( "ReplaceCellsWarning"));
+
+const char REPLACE_CELLS_WARNING[] = "ReplaceCellsWarning";
+
 const uno::Any&
 aNULL()
 {
@@ -132,13 +134,13 @@ private:
     bool getReplaceCellsWarning() throw ( uno::RuntimeException )
     {
         sal_Bool res = false;
-        getGlobalSheetSettings()->getPropertyValue( REPLACE_CELLS_WARNING ) >>= res;
+        getGlobalSheetSettings()->getPropertyValue( rtl::OUString(REPLACE_CELLS_WARNING) ) >>= res;
         return ( res == sal_True );
     }
 
     void setReplaceCellsWarning( bool bState ) throw ( uno::RuntimeException )
     {
-        getGlobalSheetSettings()->setPropertyValue( REPLACE_CELLS_WARNING, uno::makeAny( bState ) );
+        getGlobalSheetSettings()->setPropertyValue( rtl::OUString(REPLACE_CELLS_WARNING), uno::makeAny( bState ) );
     }
 public:
     PasteCellsWarningReseter() throw ( uno::RuntimeException )

@@ -50,7 +50,7 @@ const char WRONG_TYPE_EXCEPTION[] = "Type must be com::sun::star::uno::Sequence<
 
 const int PROPHANDLE_UINAME     = 1;
 const int PROPCOUNT             = 1;
-const rtl::OUString PROPNAME_UINAME( RTL_CONSTASCII_USTRINGPARAM( "UIName" ));
+const char PROPNAME_UINAME[]    = "UIName";
 
 namespace framework
 {
@@ -397,7 +397,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > RootItemC
 
     const com::sun::star::beans::Property pProperties[] =
     {
-        com::sun::star::beans::Property( PROPNAME_UINAME, PROPHANDLE_UINAME ,
+        com::sun::star::beans::Property( rtl::OUString(PROPNAME_UINAME), PROPHANDLE_UINAME ,
                                          ::getCppuType((const rtl::OUString*)NULL),
                                          com::sun::star::beans::PropertyAttribute::TRANSIENT )
     };

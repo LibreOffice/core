@@ -35,7 +35,7 @@ using namespace ::com::sun::star;
 using namespace ::xmloff::token;
 using namespace ::rtl;
 
-static OUString sBlockList ( RTL_CONSTASCII_USTRINGPARAM ( "_block-list" ) );
+const char aBlockList[] =  "_block-list";
 
 SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     const uno::Reference< lang::XMultiServiceFactory > xServiceFactory,
@@ -48,7 +48,7 @@ SvXMLAutoCorrectImport::SvXMLAutoCorrectImport(
     xStorage ( rNewStorage )
 {
     GetNamespaceMap().Add(
-            sBlockList,
+            rtl::OUString(aBlockList),
             GetXMLToken ( XML_N_BLOCK_LIST),
             XML_NAMESPACE_BLOCKLIST );
 }
@@ -162,7 +162,7 @@ SvXMLExceptionListImport::SvXMLExceptionListImport(
     rList (rNewList)
 {
     GetNamespaceMap().Add(
-            sBlockList,
+            rtl::OUString(aBlockList),
             GetXMLToken ( XML_N_BLOCK_LIST),
             XML_NAMESPACE_BLOCKLIST );
 }

@@ -44,9 +44,6 @@
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
-const ::rtl::OUString aXMLAttributeNamespace( RTL_CONSTASCII_USTRINGPARAM( "xmlns" ));
-const ::rtl::OUString aXMLAttributeType( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ));
-
 namespace framework{
 
 
@@ -54,7 +51,9 @@ SaxNamespaceFilter::SaxNamespaceFilter( Reference< XDocumentHandler >& rSax1Docu
     ThreadHelpBase( &Application::GetSolarMutex() ),
      m_xLocator( 0 ),
      xDocumentHandler( rSax1DocumentHandler ),
-     m_nDepth( 0 )
+     m_nDepth( 0 ),
+     m_aXMLAttributeNamespace( RTL_CONSTASCII_USTRINGPARAM( "xmlns" )),
+     m_aXMLAttributeType( RTL_CONSTASCII_USTRINGPARAM( "CDATA" ))
 {
 }
 
@@ -89,7 +88,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
         for ( sal_Int16 i=0; i< xAttribs->getLength(); i++ )
         {
             ::rtl::OUString aName = xAttribs->getNameByIndex( i );
-            if ( aName.compareTo( aXMLAttributeNamespace, aXMLAttributeNamespace.getLength() ) == 0 )
+            if ( aName.compareTo( m_aXMLAttributeNamespace, m_aXMLAttributeNamespace.getLength() ) == 0 )
                 aXMLNamespaces.addNamespace( aName, xAttribs->getValueByIndex( i ));
             else
                 aAttributeIndexes.push_back( i );
@@ -109,7 +108,7 @@ void SAL_CALL SaxNamespaceFilter::startElement(
             ::rtl::OUString aAttributeName           = xAttribs->getNameByIndex( *i );
             ::rtl::OUString aValue                   = xAttribs->getValueByIndex( *i );
             ::rtl::OUString aNamespaceAttributeName = aXMLNamespaces.applyNSToAttributeName( aAttributeName );
-            pNewList->AddAttribute( aNamespaceAttributeName, aXMLAttributeType, aValue );
+            pNewList->AddAttribute( aNamespaceAttributeName, m_aXMLAttributeType, aValue );
         }
     }
     catch ( SAXException& e )

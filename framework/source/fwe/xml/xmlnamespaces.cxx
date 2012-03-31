@@ -32,12 +32,11 @@
 using namespace ::com::sun::star::xml::sax;
 using namespace ::com::sun::star::uno;
 
-const ::rtl::OUString aXMLAttributeNamespace( RTL_CONSTASCII_USTRINGPARAM( "xmlns" ));
-
 namespace framework
 {
 
 XMLNamespaces::XMLNamespaces()
+    : m_aXMLAttributeNamespace( RTL_CONSTASCII_USTRINGPARAM( "xmlns" ))
 {
 }
 
@@ -55,10 +54,10 @@ void XMLNamespaces::addNamespace( const ::rtl::OUString& aName, const ::rtl::OUS
 {
     NamespaceMap::iterator p;
     ::rtl::OUString aNamespaceName( aName );
-    sal_Int32 nXMLNamespaceLength = aXMLAttributeNamespace.getLength();
+    sal_Int32 nXMLNamespaceLength = m_aXMLAttributeNamespace.getLength();
 
     // delete preceding "xmlns"
-    if ( aNamespaceName.compareTo( aXMLAttributeNamespace, nXMLNamespaceLength ) == 0 )
+    if ( aNamespaceName.compareTo( m_aXMLAttributeNamespace, nXMLNamespaceLength ) == 0 )
     {
         if ( aNamespaceName.getLength() == nXMLNamespaceLength )
         {

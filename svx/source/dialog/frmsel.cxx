@@ -84,10 +84,6 @@ const long FRAMESEL_GEOM_ADD_CLICK_INNER = 2;
 
 // ----------------------------------------------------------------------------
 
-static const frame::Style   OBJ_FRAMESTYLE_DONTCARE( 3, 0, 0, SOLID );
-
-// ----------------------------------------------------------------------------
-
 /** Returns the corresponding flag for a frame border. */
 FrameSelFlags lclGetFlagFromType( FrameBorderType eBorder )
 {
@@ -164,7 +160,7 @@ void FrameBorder::SetState( FrameBorderState eState )
         break;
         case FRAMESTATE_DONTCARE:
             maCoreStyle = SvxBorderLine();
-            maUIStyle = OBJ_FRAMESTYLE_DONTCARE;
+            maUIStyle = frame::Style(3, 0, 0, SOLID); //OBJ_FRAMESTYLE_DONTCARE
         break;
     }
 }

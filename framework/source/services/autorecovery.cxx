@@ -131,73 +131,69 @@ namespace framework
 
 //-----------------------------------------------
 // recovery.xcu
-static const ::rtl::OUString CFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Office.Recovery/"));
-static const ::rtl::OUString CFG_ENTRY_RECOVERYLIST(RTL_CONSTASCII_USTRINGPARAM("RecoveryList"));
-static const ::rtl::OUString CFG_PATH_RECOVERYINFO(RTL_CONSTASCII_USTRINGPARAM("RecoveryInfo"));
-static const ::rtl::OUString CFG_ENTRY_ENABLED(RTL_CONSTASCII_USTRINGPARAM("Enabled"));
-static const ::rtl::OUString CFG_ENTRY_CRASHED(RTL_CONSTASCII_USTRINGPARAM("Crashed"));
-static const ::rtl::OUString CFG_ENTRY_SESSIONDATA(RTL_CONSTASCII_USTRINGPARAM("SessionData"));
+static const char CFG_PACKAGE_RECOVERY[] = "org.openoffice.Office.Recovery/";
+static const char CFG_ENTRY_RECOVERYLIST[] = "RecoveryList";
+static const char CFG_PATH_RECOVERYINFO[] = "RecoveryInfo";
+static const char CFG_ENTRY_CRASHED[] = "Crashed";
+static const char CFG_ENTRY_SESSIONDATA[] = "SessionData";
 
-static const ::rtl::OUString CFG_ENTRY_AUTOSAVE_ENABLED(RTL_CONSTASCII_USTRINGPARAM("AutoSave/Enabled"));
-static const ::rtl::OUString CFG_ENTRY_AUTOSAVE_TIMEINTERVALL(RTL_CONSTASCII_USTRINGPARAM("AutoSave/TimeIntervall"));
+static const char CFG_ENTRY_AUTOSAVE_ENABLED[] = "AutoSave/Enabled";
+static const char CFG_ENTRY_AUTOSAVE_TIMEINTERVALL[] = "AutoSave/TimeIntervall"; //sic!
 
-static const ::rtl::OUString CFG_PATH_AUTOSAVE(RTL_CONSTASCII_USTRINGPARAM("AutoSave"));
-static const ::rtl::OUString CFG_ENTRY_MINSPACE_DOCSAVE(RTL_CONSTASCII_USTRINGPARAM("MinSpaceDocSave"));
-static const ::rtl::OUString CFG_ENTRY_MINSPACE_CONFIGSAVE(RTL_CONSTASCII_USTRINGPARAM("MinSpaceConfigSave"));
+static const char CFG_PATH_AUTOSAVE[] = "AutoSave";
+static const char CFG_ENTRY_MINSPACE_DOCSAVE[] = "MinSpaceDocSave";
+static const char CFG_ENTRY_MINSPACE_CONFIGSAVE[] = "MinSpaceConfigSave";
 
-static const ::rtl::OUString CFG_PACKAGE_MODULES(RTL_CONSTASCII_USTRINGPARAM("org.openoffice.Setup/Office/Factories"));
-static const ::rtl::OUString CFG_ENTRY_REALDEFAULTFILTER(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryActualFilter"));
+static const char CFG_PACKAGE_MODULES[] = "org.openoffice.Setup/Office/Factories";
+static const char CFG_ENTRY_REALDEFAULTFILTER[] = "ooSetupFactoryActualFilter";
 
-static const ::rtl::OUString CFG_ENTRY_PROP_TEMPURL(RTL_CONSTASCII_USTRINGPARAM("TempURL"));
-static const ::rtl::OUString CFG_ENTRY_PROP_ORIGINALURL(RTL_CONSTASCII_USTRINGPARAM("OriginalURL"));
-static const ::rtl::OUString CFG_ENTRY_PROP_TEMPLATEURL(RTL_CONSTASCII_USTRINGPARAM("TemplateURL"));
-static const ::rtl::OUString CFG_ENTRY_PROP_FACTORYURL(RTL_CONSTASCII_USTRINGPARAM("FactoryURL"));
-static const ::rtl::OUString CFG_ENTRY_PROP_MODULE(RTL_CONSTASCII_USTRINGPARAM("Module"));
-static const ::rtl::OUString CFG_ENTRY_PROP_DOCUMENTSTATE(RTL_CONSTASCII_USTRINGPARAM("DocumentState"));
-static const ::rtl::OUString CFG_ENTRY_PROP_FILTER(RTL_CONSTASCII_USTRINGPARAM("Filter"));
-static const ::rtl::OUString CFG_ENTRY_PROP_TITLE(RTL_CONSTASCII_USTRINGPARAM("Title"));
-static const ::rtl::OUString CFG_ENTRY_PROP_ID(RTL_CONSTASCII_USTRINGPARAM("ID"));
-static const ::rtl::OUString CFG_ENTRY_PROP_VIEWNAMES(RTL_CONSTASCII_USTRINGPARAM("ViewNames"));
+static const char CFG_ENTRY_PROP_TEMPURL[] = "TempURL";
+static const char CFG_ENTRY_PROP_ORIGINALURL[] = "OriginalURL";
+static const char CFG_ENTRY_PROP_TEMPLATEURL[] = "TemplateURL";
+static const char CFG_ENTRY_PROP_FACTORYURL[] = "FactoryURL";
+static const char CFG_ENTRY_PROP_MODULE[] = "Module";
+static const char CFG_ENTRY_PROP_DOCUMENTSTATE[] = "DocumentState";
+static const char CFG_ENTRY_PROP_FILTER[] = "Filter";
+static const char CFG_ENTRY_PROP_TITLE[] = "Title";
+static const char CFG_ENTRY_PROP_ID[] = "ID";
+static const char CFG_ENTRY_PROP_VIEWNAMES[] = "ViewNames";
 
-static const ::rtl::OUString FILTER_PROP_TYPE(RTL_CONSTASCII_USTRINGPARAM("Type"));
-static const ::rtl::OUString FILTER_PROP_NAME(RTL_CONSTASCII_USTRINGPARAM("Name"));
-static const ::rtl::OUString TYPE_PROP_EXTENSIONS(RTL_CONSTASCII_USTRINGPARAM("Extensions"));
-static const ::rtl::OUString DOCINFO_PROP_TEMPLATE(RTL_CONSTASCII_USTRINGPARAM("TemplateFileName"));
+static const char FILTER_PROP_TYPE[] = "Type";
+static const char TYPE_PROP_EXTENSIONS[] = "Extensions";
 
 // setup.xcu
-static const ::rtl::OUString CFG_ENTRY_PROP_EMPTYDOCUMENTURL(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryEmptyDocumentURL"));
-static const ::rtl::OUString CFG_ENTRY_PROP_DEFAULTFILTER(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryDefaultFilter"));
-static const ::rtl::OUString CFG_ENTRY_PROP_FACTORYSERVICE(RTL_CONSTASCII_USTRINGPARAM("ooSetupFactoryDocumentService"));
+static const char CFG_ENTRY_PROP_EMPTYDOCUMENTURL[] = "ooSetupFactoryEmptyDocumentURL";
+static const char CFG_ENTRY_PROP_FACTORYSERVICE[] = "ooSetupFactoryDocumentService";
 
-static const ::rtl::OUString EVENT_ON_NEW(RTL_CONSTASCII_USTRINGPARAM("OnNew"));
-static const ::rtl::OUString EVENT_ON_LOAD(RTL_CONSTASCII_USTRINGPARAM("OnLoad"));
-static const ::rtl::OUString EVENT_ON_UNLOAD(RTL_CONSTASCII_USTRINGPARAM("OnUnload"));
-static const ::rtl::OUString EVENT_ON_MODIFYCHANGED(RTL_CONSTASCII_USTRINGPARAM("OnModifyChanged"));
-static const ::rtl::OUString EVENT_ON_SAVE(RTL_CONSTASCII_USTRINGPARAM("OnSave"));
-static const ::rtl::OUString EVENT_ON_SAVEAS(RTL_CONSTASCII_USTRINGPARAM("OnSaveAs"));
-static const ::rtl::OUString EVENT_ON_SAVETO(RTL_CONSTASCII_USTRINGPARAM("OnCopyTo"));
-static const ::rtl::OUString EVENT_ON_SAVEDONE(RTL_CONSTASCII_USTRINGPARAM("OnSaveDone"));
-static const ::rtl::OUString EVENT_ON_SAVEASDONE(RTL_CONSTASCII_USTRINGPARAM("OnSaveAsDone"));
-static const ::rtl::OUString EVENT_ON_SAVETODONE(RTL_CONSTASCII_USTRINGPARAM("OnCopyToDone"));
-static const ::rtl::OUString EVENT_ON_SAVEFAILED(RTL_CONSTASCII_USTRINGPARAM("OnSaveFailed"));
-static const ::rtl::OUString EVENT_ON_SAVEASFAILED(RTL_CONSTASCII_USTRINGPARAM("OnSaveAsFailed"));
-static const ::rtl::OUString EVENT_ON_SAVETOFAILED(RTL_CONSTASCII_USTRINGPARAM("OnCopyToFailed"));
+static const char EVENT_ON_NEW[] = "OnNew";
+static const char EVENT_ON_LOAD[] = "OnLoad";
+static const char EVENT_ON_UNLOAD[] = "OnUnload";
+static const char EVENT_ON_MODIFYCHANGED[] = "OnModifyChanged";
+static const char EVENT_ON_SAVE[] = "OnSave";
+static const char EVENT_ON_SAVEAS[] = "OnSaveAs";
+static const char EVENT_ON_SAVETO[] = "OnCopyTo";
+static const char EVENT_ON_SAVEDONE[] = "OnSaveDone";
+static const char EVENT_ON_SAVEASDONE[] = "OnSaveAsDone";
+static const char EVENT_ON_SAVETODONE[] = "OnCopyToDone";
+static const char EVENT_ON_SAVEFAILED[] = "OnSaveFailed";
+static const char EVENT_ON_SAVEASFAILED[] = "OnSaveAsFailed";
+static const char EVENT_ON_SAVETOFAILED[] = "OnCopyToFailed";
 
-static const ::rtl::OUString RECOVERY_ITEM_BASE_IDENTIFIER(RTL_CONSTASCII_USTRINGPARAM("recovery_item_"));
+static const char RECOVERY_ITEM_BASE_IDENTIFIER[] = "recovery_item_";
 
-static const ::rtl::OUString CMD_PROTOCOL(RTL_CONSTASCII_USTRINGPARAM("vnd.sun.star.autorecovery:"));
+static const char CMD_PROTOCOL[] = "vnd.sun.star.autorecovery:";
 
-static const ::rtl::OUString CMD_DO_AUTO_SAVE(RTL_CONSTASCII_USTRINGPARAM("/doAutoSave"));    // force AutoSave ignoring the AutoSave timer
-static const ::rtl::OUString CMD_DO_PREPARE_EMERGENCY_SAVE(RTL_CONSTASCII_USTRINGPARAM("/doPrepareEmergencySave"));    // prepare the office for the following EmergencySave step (hide windows etcpp.)
-static const ::rtl::OUString CMD_DO_EMERGENCY_SAVE(RTL_CONSTASCII_USTRINGPARAM("/doEmergencySave"));    // do EmergencySave on crash
-static const ::rtl::OUString CMD_DO_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("/doAutoRecovery"));    // recover all crashed documents
-static const ::rtl::OUString CMD_DO_ENTRY_BACKUP(RTL_CONSTASCII_USTRINGPARAM("/doEntryBackup"));    // try to store a temp or original file to a user defined location
-static const ::rtl::OUString CMD_DO_ENTRY_CLEANUP(RTL_CONSTASCII_USTRINGPARAM("/doEntryCleanUp"));    // remove the specified entry from the recovery cache
-static const ::rtl::OUString CMD_DO_SESSION_SAVE(RTL_CONSTASCII_USTRINGPARAM("/doSessionSave"));    // save all open documents if e.g. a window manager closes an user session
-static const ::rtl::OUString CMD_DO_SESSION_QUIET_QUIT(RTL_CONSTASCII_USTRINGPARAM("/doSessionQuietQuit"));    // let the current session be quietly closed ( the saving should be done using doSessionSave previously ) if e.g. a window manager closes an user session
-static const ::rtl::OUString CMD_DO_SESSION_RESTORE(RTL_CONSTASCII_USTRINGPARAM("/doSessionRestore"));    // restore a saved user session from disc
-static const ::rtl::OUString CMD_DO_DISABLE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM("/disableRecovery"));    // disable recovery and auto save (!) temp. for this office session
-static const ::rtl::OUString CMD_DO_SET_AUTOSAVE_STATE(RTL_CONSTASCII_USTRINGPARAM("/setAutoSaveState"));    // disable/enable auto save (not crash save) for this office session
+static const char CMD_DO_AUTO_SAVE[] = "/doAutoSave";    // force AutoSave ignoring the AutoSave timer
+static const char CMD_DO_PREPARE_EMERGENCY_SAVE[] = "/doPrepareEmergencySave";    // prepare the office for the following EmergencySave step (hide windows etcpp.)
+static const char CMD_DO_EMERGENCY_SAVE[] = "/doEmergencySave";    // do EmergencySave on crash
+static const char CMD_DO_RECOVERY[] = "/doAutoRecovery";    // recover all crashed documents
+static const char CMD_DO_ENTRY_BACKUP[] = "/doEntryBackup";    // try to store a temp or original file to a user defined location
+static const char CMD_DO_ENTRY_CLEANUP[] = "/doEntryCleanUp";    // remove the specified entry from the recovery cache
+static const char CMD_DO_SESSION_SAVE[] = "/doSessionSave";    // save all open documents if e.g. a window manager closes an user session
+static const char CMD_DO_SESSION_QUIET_QUIT[] = "/doSessionQuietQuit";    // let the current session be quietly closed ( the saving should be done using doSessionSave previously ) if e.g. a window manager closes an user session
+static const char CMD_DO_SESSION_RESTORE[] = "/doSessionRestore";    // restore a saved user session from disc
+static const char CMD_DO_DISABLE_RECOVERY[] = "/disableRecovery";    // disable recovery and auto save (!) temp. for this office session
+static const char CMD_DO_SET_AUTOSAVE_STATE[] = "/setAutoSaveState";    // disable/enable auto save (not crash save) for this office session
 
 static const char REFERRER_USER[] = "private:user";
 
@@ -773,15 +769,14 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
 
     // new document => put it into the internal list
     if (
-        (aEvent.EventName.equals(EVENT_ON_NEW )) ||
-        (aEvent.EventName.equals(EVENT_ON_LOAD))
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_NEW))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_LOAD)))
        )
     {
         implts_registerDocument(xDocument);
     }
     // document modified => set its modify state new (means modified against the original file!)
-    else
-    if (aEvent.EventName.equals(EVENT_ON_MODIFYCHANGED))
+    else if (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_MODIFYCHANGED)))
     {
         implts_updateModifiedState(xDocument);
     }
@@ -790,20 +785,18 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
        at the same time. So we have to supress our AutoSave feature
        for the moment, till this other save requests will be finished.
      */
-    else
-    if (
-        (aEvent.EventName.equals(EVENT_ON_SAVE  )) ||
-        (aEvent.EventName.equals(EVENT_ON_SAVEAS)) ||
-        (aEvent.EventName.equals(EVENT_ON_SAVETO))
+    else if (
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_SAVE))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_SAVEAS))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_SAVETO)))
        )
     {
         implts_updateDocumentUsedForSavingState(xDocument, SAVE_IN_PROGRESS);
     }
     // document saved => remove tmp. files - but hold config entries alive!
-    else
-    if (
-        (aEvent.EventName.equals(EVENT_ON_SAVEDONE  )) ||
-        (aEvent.EventName.equals(EVENT_ON_SAVEASDONE))
+    else if (
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_SAVEDONE))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_SAVEASDONE)))
        )
     {
         implts_markDocumentAsSaved(xDocument);
@@ -814,8 +807,7 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
        Dont remove temp. files or change the modified state of the document!
        It was not realy saved to the original file ...
     */
-    else
-    if (aEvent.EventName.equals(EVENT_ON_SAVETODONE))
+    else if (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_SAVETODONE)))
     {
         implts_updateDocumentUsedForSavingState(xDocument, SAVE_FINISHED);
     }
@@ -823,18 +815,16 @@ void SAL_CALL AutoRecovery::notifyEvent(const css::document::EventObject& aEvent
     // by ourself next time AutoSave or EmergencySave is triggered.
     // But we can reset the state "used for other save requests". Otherwhise
     // these documents will never be saved!
-    else
-    if (
-        (aEvent.EventName.equals(EVENT_ON_SAVEFAILED  )) ||
-        (aEvent.EventName.equals(EVENT_ON_SAVEASFAILED)) ||
-        (aEvent.EventName.equals(EVENT_ON_SAVETOFAILED))
+    else if (
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_SAVEFAILED))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_SAVEASFAILED))) ||
+        (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_SAVETOFAILED)))
        )
     {
         implts_updateDocumentUsedForSavingState(xDocument, SAVE_FINISHED);
     }
     // document closed => remove temp. files and configuration entries
-    else
-    if (aEvent.EventName.equals(EVENT_ON_UNLOAD))
+    else if (aEvent.EventName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(EVENT_ON_UNLOAD)))
     {
         implts_deregisterDocument(xDocument, sal_True); // sal_True => stop listening for disposing() !
     }
@@ -864,7 +854,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
         ::rtl::OUString sPath;
         pChanges[i].Accessor >>= sPath;
 
-        if (sPath.equals(CFG_ENTRY_AUTOSAVE_ENABLED))
+        if (sPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_AUTOSAVE_ENABLED)))
         {
             sal_Bool bEnabled = sal_False;
             if (pChanges[i].Element >>= bEnabled)
@@ -882,7 +872,7 @@ void SAL_CALL AutoRecovery::changesOccurred(const css::util::ChangesEvent& aEven
             }
         }
         else
-        if (sPath.equals(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL))
+        if (sPath.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL)))
             pChanges[i].Element >>= m_nAutoSaveTimeIntervall;
     }
 
@@ -951,9 +941,10 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
     aWriteLock.unlock();
     // <- SAFE ----------------------------------
 
+    rtl::OUString sCFG_PACKAGE_RECOVERY(RTL_CONSTASCII_USTRINGPARAM(CFG_PACKAGE_RECOVERY));
     // throws a RuntimeException if an error occure!
     css::uno::Reference< css::container::XNameAccess > xCFG(
-        ::comphelper::ConfigurationHelper::openConfig(xSMGR, CFG_PACKAGE_RECOVERY, ::comphelper::ConfigurationHelper::E_STANDARD),
+        ::comphelper::ConfigurationHelper::openConfig(xSMGR, sCFG_PACKAGE_RECOVERY, ::comphelper::ConfigurationHelper::E_STANDARD),
         css::uno::UNO_QUERY);
 
     sal_Int32 nMinSpaceDocSave    = MIN_DISCSPACE_DOCSAVE;
@@ -961,16 +952,17 @@ css::uno::Reference< css::container::XNameAccess > AutoRecovery::implts_openConf
 
     try
     {
+        rtl::OUString sCFG_PATH_AUTOSAVE(CFG_PATH_AUTOSAVE);
         ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
-                                                         CFG_PACKAGE_RECOVERY,
-                                                         CFG_PATH_AUTOSAVE,
-                                                         CFG_ENTRY_MINSPACE_DOCSAVE,
+                                                         sCFG_PACKAGE_RECOVERY,
+                                                         sCFG_PATH_AUTOSAVE,
+                                                         rtl::OUString(CFG_ENTRY_MINSPACE_DOCSAVE),
                                                          ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceDocSave;
 
         ::comphelper::ConfigurationHelper::readDirectKey(xSMGR,
-                                                         CFG_PACKAGE_RECOVERY,
-                                                         CFG_PATH_AUTOSAVE,
-                                                         CFG_ENTRY_MINSPACE_CONFIGSAVE,
+                                                         sCFG_PACKAGE_RECOVERY,
+                                                         sCFG_PATH_AUTOSAVE,
+                                                         rtl::OUString(CFG_ENTRY_MINSPACE_CONFIGSAVE),
                                                          ::comphelper::ConfigurationHelper::E_STANDARD) >>= nMinSpaceConfigSave;
     }
     catch(const css::uno::Exception&)
@@ -999,7 +991,7 @@ void AutoRecovery::implts_readAutoSaveConfig()
 
     // AutoSave [bool]
     sal_Bool bEnabled = sal_False;
-    xCommonRegistry->getByHierarchicalName(CFG_ENTRY_AUTOSAVE_ENABLED) >>= bEnabled;
+    xCommonRegistry->getByHierarchicalName(rtl::OUString(CFG_ENTRY_AUTOSAVE_ENABLED)) >>= bEnabled;
 
     // SAFE -> ------------------------------
     WriteGuard aWriteLock(m_aLock);
@@ -1018,7 +1010,7 @@ void AutoRecovery::implts_readAutoSaveConfig()
 
     // AutoSaveTimeIntervall [int] in min
     sal_Int32 nTimeIntervall = 15;
-    xCommonRegistry->getByHierarchicalName(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL) >>= nTimeIntervall;
+    xCommonRegistry->getByHierarchicalName(rtl::OUString(CFG_ENTRY_AUTOSAVE_TIMEINTERVALL)) >>= nTimeIntervall;
 
     // SAFE -> ----------------------------------
     aWriteLock.lock();
@@ -1051,11 +1043,12 @@ void AutoRecovery::implts_readConfig()
     css::uno::Any aValue;
 
     // RecoveryList [set]
-    aValue = xCommonRegistry->getByHierarchicalName(CFG_ENTRY_RECOVERYLIST);
+    aValue = xCommonRegistry->getByHierarchicalName(rtl::OUString(CFG_ENTRY_RECOVERYLIST));
     css::uno::Reference< css::container::XNameAccess > xList;
     aValue >>= xList;
     if (xList.is())
     {
+        const rtl::OUString sRECOVERY_ITEM_BASE_IDENTIFIER(RECOVERY_ITEM_BASE_IDENTIFIER);
         const css::uno::Sequence< ::rtl::OUString > lItems = xList->getElementNames();
         const ::rtl::OUString*                      pItems = lItems.getConstArray();
               sal_Int32                             c      = lItems.getLength();
@@ -1074,20 +1067,20 @@ void AutoRecovery::implts_readConfig()
             AutoRecovery::TDocumentInfo aInfo;
             aInfo.NewTempURL = ::rtl::OUString();
             aInfo.Document   = css::uno::Reference< css::frame::XModel >();
-            xItem->getPropertyValue(CFG_ENTRY_PROP_ORIGINALURL  ) >>= aInfo.OrgURL       ;
-            xItem->getPropertyValue(CFG_ENTRY_PROP_TEMPURL      ) >>= aInfo.OldTempURL   ;
-            xItem->getPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL  ) >>= aInfo.TemplateURL  ;
-            xItem->getPropertyValue(CFG_ENTRY_PROP_FILTER       ) >>= aInfo.RealFilter   ;
-            xItem->getPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE) >>= aInfo.DocumentState;
-            xItem->getPropertyValue(CFG_ENTRY_PROP_MODULE       ) >>= aInfo.AppModule    ;
-            xItem->getPropertyValue(CFG_ENTRY_PROP_TITLE        ) >>= aInfo.Title        ;
-            xItem->getPropertyValue(CFG_ENTRY_PROP_VIEWNAMES    ) >>= aInfo.ViewNames    ;
+            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_ORIGINALURL)) >>= aInfo.OrgURL       ;
+            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TEMPURL)) >>= aInfo.OldTempURL   ;
+            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TEMPLATEURL)) >>= aInfo.TemplateURL  ;
+            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_FILTER)) >>= aInfo.RealFilter   ;
+            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_DOCUMENTSTATE)) >>= aInfo.DocumentState;
+            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_MODULE)) >>= aInfo.AppModule;
+            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TITLE)) >>= aInfo.Title;
+            xItem->getPropertyValue(rtl::OUString(CFG_ENTRY_PROP_VIEWNAMES)) >>= aInfo.ViewNames;
             implts_specifyAppModuleAndFactory(aInfo);
             implts_specifyDefaultFilterAndExtension(aInfo);
 
-            if (pItems[i].indexOf(RECOVERY_ITEM_BASE_IDENTIFIER)==0)
+            if (pItems[i].indexOf(sRECOVERY_ITEM_BASE_IDENTIFIER)==0)
             {
-                ::rtl::OUString sID = pItems[i].copy(RECOVERY_ITEM_BASE_IDENTIFIER.getLength());
+                ::rtl::OUString sID = pItems[i].copy(sRECOVERY_ITEM_BASE_IDENTIFIER.getLength());
                 aInfo.ID = sID.toInt32();
                 // SAFE -> ----------------------
                 aWriteLock.lock();
@@ -1141,7 +1134,8 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
         {
             // open module config on demand and cache the update access
             xCFG = css::uno::Reference< css::container::XNameAccess >(
-                ::comphelper::ConfigurationHelper::openConfig(xSMGR, CFG_PACKAGE_MODULES, ::comphelper::ConfigurationHelper::E_STANDARD),
+                ::comphelper::ConfigurationHelper::openConfig(xSMGR, rtl::OUString(CFG_PACKAGE_MODULES),
+                ::comphelper::ConfigurationHelper::E_STANDARD),
                 css::uno::UNO_QUERY_THROW);
 
             // SAFE -> ----------------------------------
@@ -1155,15 +1149,15 @@ void AutoRecovery::implts_specifyDefaultFilterAndExtension(AutoRecovery::TDocume
             xCFG->getByName(rInfo.AppModule),
             css::uno::UNO_QUERY_THROW);
 
-        xModuleProps->getByName(CFG_ENTRY_REALDEFAULTFILTER) >>= rInfo.DefaultFilter;
+        xModuleProps->getByName(rtl::OUString(CFG_ENTRY_REALDEFAULTFILTER)) >>= rInfo.DefaultFilter;
 
         css::uno::Reference< css::container::XNameAccess > xFilterCFG(xSMGR->createInstance(SERVICENAME_FILTERFACTORY), css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::container::XNameAccess > xTypeCFG  (xSMGR->createInstance(SERVICENAME_TYPEDETECTION), css::uno::UNO_QUERY_THROW);
 
         ::comphelper::SequenceAsHashMap       lFilterProps        (xFilterCFG->getByName(rInfo.DefaultFilter));
-        ::rtl::OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(FILTER_PROP_TYPE, ::rtl::OUString());
+        ::rtl::OUString                       sTypeRegistration   = lFilterProps.getUnpackedValueOrDefault(rtl::OUString(FILTER_PROP_TYPE), ::rtl::OUString());
         ::comphelper::SequenceAsHashMap       lTypeProps          (xTypeCFG->getByName(sTypeRegistration));
-        css::uno::Sequence< ::rtl::OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(TYPE_PROP_EXTENSIONS, css::uno::Sequence< ::rtl::OUString >());
+        css::uno::Sequence< ::rtl::OUString > lExtensions         = lTypeProps.getUnpackedValueOrDefault(rtl::OUString(TYPE_PROP_EXTENSIONS), css::uno::Sequence< ::rtl::OUString >());
         if (lExtensions.getLength())
         {
             rInfo.Extension  = ::rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("."));
@@ -1200,8 +1194,8 @@ void AutoRecovery::implts_specifyAppModuleAndFactory(AutoRecovery::TDocumentInfo
         rInfo.AppModule = xManager->identify(rInfo.Document);
 
     ::comphelper::SequenceAsHashMap lModuleDescription(xModuleConfig->getByName(rInfo.AppModule));
-    lModuleDescription[CFG_ENTRY_PROP_EMPTYDOCUMENTURL] >>= rInfo.FactoryURL;
-    lModuleDescription[CFG_ENTRY_PROP_FACTORYSERVICE] >>= rInfo.FactoryService;
+    lModuleDescription[rtl::OUString(CFG_ENTRY_PROP_EMPTYDOCUMENTURL)] >>= rInfo.FactoryURL;
+    lModuleDescription[rtl::OUString(CFG_ENTRY_PROP_FACTORYSERVICE)] >>= rInfo.FactoryService;
 }
 
 //-----------------------------------------------
@@ -1272,13 +1266,13 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
         xCFG = css::uno::Reference< css::container::XHierarchicalNameAccess >(implts_openConfig(), css::uno::UNO_QUERY_THROW);
 
         css::uno::Reference< css::container::XNameAccess > xCheck;
-        xCFG->getByHierarchicalName(CFG_ENTRY_RECOVERYLIST) >>= xCheck;
+        xCFG->getByHierarchicalName(rtl::OUString(CFG_ENTRY_RECOVERYLIST)) >>= xCheck;
 
         css::uno::Reference< css::container::XNameContainer >   xModify(xCheck, css::uno::UNO_QUERY_THROW);
         css::uno::Reference< css::lang::XSingleServiceFactory > xCreate(xCheck, css::uno::UNO_QUERY_THROW);
 
         ::rtl::OUStringBuffer sIDBuf;
-        sIDBuf.append(RECOVERY_ITEM_BASE_IDENTIFIER);
+        sIDBuf.appendAscii(RTL_CONSTASCII_STRINGPARAM(RECOVERY_ITEM_BASE_IDENTIFIER));
         sIDBuf.append((sal_Int32)rInfo.ID);
         ::rtl::OUString sID = sIDBuf.makeStringAndClear();
 
@@ -1307,14 +1301,14 @@ void AutoRecovery::implts_flushConfigItem(const AutoRecovery::TDocumentInfo& rIn
             else
                 xCheck->getByName(sID) >>= xSet;
 
-            xSet->setPropertyValue(CFG_ENTRY_PROP_ORIGINALURL  , css::uno::makeAny(rInfo.OrgURL       ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPURL      , css::uno::makeAny(rInfo.OldTempURL   ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_TEMPLATEURL  , css::uno::makeAny(rInfo.TemplateURL  ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_FILTER       , css::uno::makeAny(rInfo.RealFilter   ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_DOCUMENTSTATE, css::uno::makeAny(rInfo.DocumentState));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_MODULE       , css::uno::makeAny(rInfo.AppModule    ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_TITLE        , css::uno::makeAny(rInfo.Title        ));
-            xSet->setPropertyValue(CFG_ENTRY_PROP_VIEWNAMES    , css::uno::makeAny(rInfo.ViewNames    ));
+            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_ORIGINALURL), css::uno::makeAny(rInfo.OrgURL       ));
+            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TEMPURL), css::uno::makeAny(rInfo.OldTempURL   ));
+            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TEMPLATEURL), css::uno::makeAny(rInfo.TemplateURL  ));
+            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_FILTER), css::uno::makeAny(rInfo.RealFilter));
+            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_DOCUMENTSTATE), css::uno::makeAny(rInfo.DocumentState));
+            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_MODULE), css::uno::makeAny(rInfo.AppModule));
+            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_TITLE), css::uno::makeAny(rInfo.Title));
+            xSet->setPropertyValue(rtl::OUString(CFG_ENTRY_PROP_VIEWNAMES), css::uno::makeAny(rInfo.ViewNames));
 
             if (bNew)
                 xModify->insertByName(sID, css::uno::makeAny(xSet));
@@ -2839,7 +2833,7 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
 {
     // describe the current running operation
     ::rtl::OUStringBuffer sFeature(256);
-    sFeature.append(CMD_PROTOCOL);
+    sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL));
 
     // Attention: Because "eJob" is used as a flag field the order of checking these
     // flags is importent. We must preferr job with higher priorities!
@@ -2848,31 +2842,31 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
     // e.g. PrepareEmergencySave must be done before EmergencySave is started of course.
 
     if ((eJob & AutoRecovery::E_PREPARE_EMERGENCY_SAVE) == AutoRecovery::E_PREPARE_EMERGENCY_SAVE)
-        sFeature.append(CMD_DO_PREPARE_EMERGENCY_SAVE);
+        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_PREPARE_EMERGENCY_SAVE));
     else
     if ((eJob & AutoRecovery::E_EMERGENCY_SAVE) == AutoRecovery::E_EMERGENCY_SAVE)
-        sFeature.append(CMD_DO_EMERGENCY_SAVE);
+        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_EMERGENCY_SAVE));
     else
     if ((eJob & AutoRecovery::E_RECOVERY) == AutoRecovery::E_RECOVERY)
-        sFeature.append(CMD_DO_RECOVERY);
+        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_RECOVERY));
     else
     if ((eJob & AutoRecovery::E_SESSION_SAVE) == AutoRecovery::E_SESSION_SAVE)
-        sFeature.append(CMD_DO_SESSION_SAVE);
+        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_SAVE));
     else
     if ((eJob & AutoRecovery::E_SESSION_QUIET_QUIT) == AutoRecovery::E_SESSION_QUIET_QUIT)
-        sFeature.append(CMD_DO_SESSION_QUIET_QUIT);
+        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_QUIET_QUIT));
     else
     if ((eJob & AutoRecovery::E_SESSION_RESTORE) == AutoRecovery::E_SESSION_RESTORE)
-        sFeature.append(CMD_DO_SESSION_RESTORE);
+        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_RESTORE));
     else
     if ((eJob & AutoRecovery::E_ENTRY_BACKUP) == AutoRecovery::E_ENTRY_BACKUP)
-        sFeature.append(CMD_DO_ENTRY_BACKUP);
+        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_ENTRY_BACKUP));
     else
     if ((eJob & AutoRecovery::E_ENTRY_CLEANUP) == AutoRecovery::E_ENTRY_CLEANUP)
-        sFeature.append(CMD_DO_ENTRY_CLEANUP);
+        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_ENTRY_CLEANUP));
     else
     if ((eJob & AutoRecovery::E_AUTO_SAVE) == AutoRecovery::E_AUTO_SAVE)
-        sFeature.append(CMD_DO_AUTO_SAVE);
+        sFeature.appendAscii(RTL_CONSTASCII_STRINGPARAM(CMD_DO_AUTO_SAVE));
     #ifdef ENABLE_WARNINGS
     else if ( eJob != AutoRecovery::E_NO_JOB )
         LOG_WARNING("AutoRecovery::implst_getJobDescription()", "Invalid job identifier detected.")
@@ -2884,36 +2878,27 @@ void AutoRecovery::implts_informListener(      sal_Int32                      eJ
 //-----------------------------------------------
 sal_Int32 AutoRecovery::implst_classifyJob(const css::util::URL& aURL)
 {
-    if (aURL.Protocol.equals(CMD_PROTOCOL))
+    if (aURL.Protocol.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_PROTOCOL)))
     {
-        if (aURL.Path.equals(CMD_DO_PREPARE_EMERGENCY_SAVE))
+        if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_PREPARE_EMERGENCY_SAVE)))
             return AutoRecovery::E_PREPARE_EMERGENCY_SAVE;
-        else
-        if (aURL.Path.equals(CMD_DO_EMERGENCY_SAVE))
+        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_EMERGENCY_SAVE)))
             return AutoRecovery::E_EMERGENCY_SAVE;
-        else
-        if (aURL.Path.equals(CMD_DO_RECOVERY))
+        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_RECOVERY)))
             return AutoRecovery::E_RECOVERY;
-        else
-        if (aURL.Path.equals(CMD_DO_ENTRY_BACKUP))
+        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_ENTRY_BACKUP)))
             return AutoRecovery::E_ENTRY_BACKUP;
-        else
-        if (aURL.Path.equals(CMD_DO_ENTRY_CLEANUP))
+        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_ENTRY_CLEANUP)))
             return AutoRecovery::E_ENTRY_CLEANUP;
-        else
-        if (aURL.Path.equals(CMD_DO_SESSION_SAVE))
+        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_SAVE)))
             return AutoRecovery::E_SESSION_SAVE;
-        else
-        if (aURL.Path.equals(CMD_DO_SESSION_QUIET_QUIT))
+        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_QUIET_QUIT)))
             return AutoRecovery::E_SESSION_QUIET_QUIT;
-        else
-        if (aURL.Path.equals(CMD_DO_SESSION_RESTORE))
+        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SESSION_RESTORE)))
             return AutoRecovery::E_SESSION_RESTORE;
-        else
-        if (aURL.Path.equals(CMD_DO_DISABLE_RECOVERY))
+        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_DISABLE_RECOVERY)))
             return AutoRecovery::E_DISABLE_AUTORECOVERY;
-        else
-        if (aURL.Path.equals(CMD_DO_SET_AUTOSAVE_STATE))
+        else if (aURL.Path.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(CMD_DO_SET_AUTOSAVE_STATE)))
             return AutoRecovery::E_SET_AUTOSAVE_STATE;
     }
 
@@ -2934,15 +2919,15 @@ css::frame::FeatureStateEvent AutoRecovery::implst_createFeatureStateEvent(     
     {
         // pack rInfo for transport via UNO
         ::comphelper::NamedValueCollection aInfo;
-        aInfo.put( CFG_ENTRY_PROP_ID, pInfo->ID );
-        aInfo.put( CFG_ENTRY_PROP_ORIGINALURL,      pInfo->OrgURL           );
-        aInfo.put( CFG_ENTRY_PROP_FACTORYURL,       pInfo->FactoryURL       );
-        aInfo.put( CFG_ENTRY_PROP_TEMPLATEURL,      pInfo->TemplateURL      );
-        aInfo.put( CFG_ENTRY_PROP_TEMPURL,          pInfo->OldTempURL.isEmpty() ? pInfo->NewTempURL : pInfo->OldTempURL );
-        aInfo.put( CFG_ENTRY_PROP_MODULE,           pInfo->AppModule        );
-        aInfo.put( CFG_ENTRY_PROP_TITLE,            pInfo->Title            );
-        aInfo.put( CFG_ENTRY_PROP_VIEWNAMES,        pInfo->ViewNames        );
-        aInfo.put( CFG_ENTRY_PROP_DOCUMENTSTATE,    pInfo->DocumentState    );
+        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_ID), pInfo->ID );
+        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_ORIGINALURL), pInfo->OrgURL );
+        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_FACTORYURL), pInfo->FactoryURL );
+        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_TEMPLATEURL), pInfo->TemplateURL );
+        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_TEMPURL), pInfo->OldTempURL.isEmpty() ? pInfo->NewTempURL : pInfo->OldTempURL );
+        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_MODULE), pInfo->AppModule) ;
+        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_TITLE), pInfo->Title);
+        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_VIEWNAMES), pInfo->ViewNames);
+        aInfo.put( rtl::OUString(CFG_ENTRY_PROP_DOCUMENTSTATE), pInfo->DocumentState);
 
         aEvent.State <<= aInfo.getPropertyValues();
     }
@@ -2996,9 +2981,9 @@ void AutoRecovery::implts_doEmergencySave(const DispatchParams& aParams)
     // documents exists and was saved.
     ::comphelper::ConfigurationHelper::writeDirectKey(
         m_xSMGR,
-        CFG_PACKAGE_RECOVERY,
-        CFG_PATH_RECOVERYINFO,
-        CFG_ENTRY_CRASHED,
+        rtl::OUString(CFG_PACKAGE_RECOVERY),
+        rtl::OUString(CFG_PATH_RECOVERYINFO),
+        rtl::OUString(CFG_ENTRY_CRASHED),
         css::uno::makeAny(sal_True),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
@@ -3057,9 +3042,9 @@ void AutoRecovery::implts_doRecovery(const DispatchParams& aParams)
     // Reset the configuration hint "we was crashed"!
     ::comphelper::ConfigurationHelper::writeDirectKey(
         m_xSMGR,
-        CFG_PACKAGE_RECOVERY,
-        CFG_PATH_RECOVERYINFO,
-        CFG_ENTRY_CRASHED,
+        rtl::OUString(CFG_PACKAGE_RECOVERY),
+        rtl::OUString(CFG_PATH_RECOVERYINFO),
+        rtl::OUString(CFG_ENTRY_CRASHED),
         css::uno::makeAny(sal_False),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 }
@@ -3124,9 +3109,9 @@ void AutoRecovery::implts_doSessionQuietQuit(const DispatchParams& /*aParams*/)
     // the on next startup we know what's happen last time
     ::comphelper::ConfigurationHelper::writeDirectKey(
         m_xSMGR,
-        CFG_PACKAGE_RECOVERY,
-        CFG_PATH_RECOVERYINFO,
-        CFG_ENTRY_SESSIONDATA,
+        rtl::OUString(CFG_PACKAGE_RECOVERY),
+        rtl::OUString(CFG_PATH_RECOVERYINFO),
+        rtl::OUString(CFG_ENTRY_SESSIONDATA),
         css::uno::makeAny(sal_True),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
@@ -3161,9 +3146,9 @@ void AutoRecovery::implts_doSessionRestore(const DispatchParams& aParams)
     LOG_RECOVERY("... reset config key 'SessionData'")
     ::comphelper::ConfigurationHelper::writeDirectKey(
         m_xSMGR,
-        CFG_PACKAGE_RECOVERY,
-        CFG_PATH_RECOVERYINFO,
-        CFG_ENTRY_SESSIONDATA,
+        rtl::OUString(CFG_PACKAGE_RECOVERY),
+        rtl::OUString(CFG_PATH_RECOVERYINFO),
+        rtl::OUString(CFG_ENTRY_SESSIONDATA),
         css::uno::makeAny(sal_False),
         ::comphelper::ConfigurationHelper::E_STANDARD);
 
@@ -3300,9 +3285,9 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
                     sal_Bool bSessionData  = sal_False;
                     ::comphelper::ConfigurationHelper::readDirectKey(
                                                     m_xSMGR,
-                                                    CFG_PACKAGE_RECOVERY,
-                                                    CFG_PATH_RECOVERYINFO,
-                                                    CFG_ENTRY_SESSIONDATA,
+                                                    rtl::OUString(CFG_PACKAGE_RECOVERY),
+                                                    rtl::OUString(CFG_PATH_RECOVERYINFO),
+                                                    rtl::OUString(CFG_ENTRY_SESSIONDATA),
                                                     ::comphelper::ConfigurationHelper::E_READONLY) >>= bSessionData;
 
                     sal_Bool bRecoveryData = ((sal_Bool)(m_lDocCache.size()>0));
@@ -3319,18 +3304,18 @@ void SAL_CALL AutoRecovery::getFastPropertyValue(css::uno::Any& aValue ,
         case AUTORECOVERY_PROPHANDLE_CRASHED :
                 aValue = ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xSMGR,
-                            CFG_PACKAGE_RECOVERY,
-                            CFG_PATH_RECOVERYINFO,
-                            CFG_ENTRY_CRASHED,
+                            rtl::OUString(CFG_PACKAGE_RECOVERY),
+                            rtl::OUString(CFG_PATH_RECOVERYINFO),
+                            rtl::OUString(CFG_ENTRY_CRASHED),
                             ::comphelper::ConfigurationHelper::E_READONLY);
                 break;
 
         case AUTORECOVERY_PROPHANDLE_EXISTS_SESSIONDATA :
                 aValue = ::comphelper::ConfigurationHelper::readDirectKey(
                             m_xSMGR,
-                            CFG_PACKAGE_RECOVERY,
-                            CFG_PATH_RECOVERYINFO,
-                            CFG_ENTRY_SESSIONDATA,
+                            rtl::OUString(CFG_PACKAGE_RECOVERY),
+                            rtl::OUString(CFG_PATH_RECOVERYINFO),
+                            rtl::OUString(CFG_ENTRY_SESSIONDATA),
                             ::comphelper::ConfigurationHelper::E_READONLY);
                 break;
     }

@@ -35,15 +35,15 @@
 using namespace com::sun::star;
 using namespace ooo::vba;
 
-rtl::OUString sApplication( RTL_CONSTASCII_USTRINGPARAM("Application") );
-
 // special key to return the Application
-rtl::OUString sAppService( RTL_CONSTASCII_USTRINGPARAM("ooo.vba.Application") );
+const char sAppService[] = "ooo.vba.Application";
 
 VbaGlobalsBase::VbaGlobalsBase(
 const uno::Reference< ov::XHelperInterface >& xParent,
 const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& sDocCtxName )
-:  Globals_BASE( xParent, xContext ), msDocCtxName( sDocCtxName )
+    : Globals_BASE( xParent, xContext )
+    , msDocCtxName( sDocCtxName )
+    , msApplication( RTL_CONSTASCII_USTRINGPARAM("Application") )
 {
     // overwrite context with custom one ( that contains the application )
     // wrap the service manager as we don't want the disposing context to tear down the 'normal' ServiceManager ( or at least thats what the code appears like it wants to do )
@@ -55,7 +55,7 @@ const uno::Reference< uno::XComponentContext >& xContext, const rtl::OUString& s
 
     ::cppu::ContextEntry_Init aHandlerContextInfo[] =
     {
-        ::cppu::ContextEntry_Init( sApplication, uno::Any() ),
+        ::cppu::ContextEntry_Init( msApplication, uno::Any() ),
         ::cppu::ContextEntry_Init( sDocCtxName, uno::Any() ),
         ::cppu::ContextEntry_Init( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM("/singletons/com.sun.star.lang.theServiceManager" ) ), aSrvMgr )
     };
@@ -74,7 +74,7 @@ VbaGlobalsBase::~VbaGlobalsBase()
             // release document reference ( we don't wan't the component context trying to dispose that )
             xNameContainer->removeByName( msDocCtxName );
             // release application reference, as it is holding onto the context
-            xNameContainer->removeByName( sApplication );
+            xNameContainer->removeByName( msApplication );
         }
     }
     catch ( const uno::Exception& )
@@ -89,9 +89,9 @@ VbaGlobalsBase::init(  const uno::Sequence< beans::PropertyValue >& aInitArgs )
     for ( sal_Int32 nIndex = 0; nIndex < nLen; ++nIndex )
     {
         uno::Reference< container::XNameContainer > xNameContainer( mxContext, uno::UNO_QUERY_THROW );
-        if ( aInitArgs[ nIndex ].Name.equals( sApplication ) )
+        if ( aInitArgs[ nIndex ].Name.equals( msApplication ) )
         {
-            xNameContainer->replaceByName( sApplication, aInitArgs[ nIndex ].Value );
+            xNameContainer->replaceByName( msApplication, aInitArgs[ nIndex ].Value );
             uno::Reference< XHelperInterface > xParent( aInitArgs[ nIndex ].Value, uno::UNO_QUERY );
             mxParent = xParent;
         }
@@ -104,11 +104,11 @@ uno::Reference< uno::XInterface > SAL_CALL
 VbaGlobalsBase::createInstance( const ::rtl::OUString& aServiceSpecifier ) throw (uno::Exception, uno::RuntimeException)
 {
     uno::Reference< uno::XInterface > xReturn;
-    if ( aServiceSpecifier.equals( sAppService ) )
+    if ( aServiceSpecifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sAppService)) )
     {
         // try to extract the Application from the context
         uno::Reference< container::XNameContainer > xNameContainer( mxContext, uno::UNO_QUERY );
-        xNameContainer->getByName( sApplication ) >>= xReturn;
+        xNameContainer->getByName( msApplication ) >>= xReturn;
     }
     else if ( hasServiceName( aServiceSpecifier ) )
         xReturn = mxContext->getServiceManager()->createInstanceWithContext( aServiceSpecifier, mxContext );
@@ -120,11 +120,11 @@ VbaGlobalsBase::createInstanceWithArguments( const ::rtl::OUString& aServiceSpec
 {
 
     uno::Reference< uno::XInterface > xReturn;
-    if ( aServiceSpecifier.equals( sAppService ) )
+    if ( aServiceSpecifier.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(sAppService)) )
     {
         // try to extract the Application from the context
         uno::Reference< container::XNameContainer > xNameContainer( mxContext, uno::UNO_QUERY );
-        xNameContainer->getByName( sApplication ) >>= xReturn;
+        xNameContainer->getByName( msApplication ) >>= xReturn;
     }
     else if ( hasServiceName( aServiceSpecifier ) )
         xReturn = mxContext->getServiceManager()->createInstanceWithArgumentsAndContext( aServiceSpecifier, Arguments, mxContext );

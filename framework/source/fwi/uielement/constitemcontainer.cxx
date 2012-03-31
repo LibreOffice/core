@@ -46,7 +46,7 @@ const char WRONG_TYPE_EXCEPTION[] = "Type must be com::sun::star::uno::Sequence<
 
 const int PROPHANDLE_UINAME     = 1;
 const int PROPCOUNT             = 1;
-const rtl::OUString PROPNAME_UINAME( RTL_CONSTASCII_USTRINGPARAM( "UIName" ));
+const char PROPNAME_UINAME[]    = "UIName";
 
 namespace framework
 {
@@ -350,7 +350,7 @@ throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::bean
 Any SAL_CALL ConstItemContainer::getPropertyValue( const ::rtl::OUString& PropertyName )
 throw (::com::sun::star::beans::UnknownPropertyException, ::com::sun::star::lang::WrappedTargetException, ::com::sun::star::uno::RuntimeException)
 {
-    if ( PropertyName.equals( PROPNAME_UINAME ))
+    if (PropertyName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(PROPNAME_UINAME)))
         return makeAny( m_aUIName );
 
     throw UnknownPropertyException();
@@ -431,7 +431,7 @@ const com::sun::star::uno::Sequence< com::sun::star::beans::Property > ConstItem
 
     const com::sun::star::beans::Property pProperties[] =
     {
-        com::sun::star::beans::Property( PROPNAME_UINAME, PROPHANDLE_UINAME ,
+        com::sun::star::beans::Property( rtl::OUString(PROPNAME_UINAME), PROPHANDLE_UINAME ,
                                          ::getCppuType((const rtl::OUString*)NULL),
                                          com::sun::star::beans::PropertyAttribute::TRANSIENT | com::sun::star::beans::PropertyAttribute::READONLY  )
     };

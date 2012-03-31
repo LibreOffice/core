@@ -114,7 +114,7 @@ static char const ID_DBG_SUPPORTEDINTERFACES[] = "Dbg_SupportedInterfaces";
 static char const ID_DBG_PROPERTIES[] = "Dbg_Properties";
 static char const ID_DBG_METHODS[] = "Dbg_Methods";
 
-static ::rtl::OUString aSeqLevelStr( RTL_CONSTASCII_USTRINGPARAM("[]") );
+static char const aSeqLevelStr[] = "[]";
 static char const defaultNameSpace[] = "ooo.vba";
 
 // Gets the default property for an uno object. Note: There is some
@@ -1000,9 +1000,10 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                     }
                 }
 
-                ::rtl::OUString aSeqTypeName( aSeqLevelStr );
-                aSeqTypeName += aElementType.getTypeName();
-                aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName );
+                ::rtl::OUStringBuffer aSeqTypeName;
+                aSeqTypeName.appendAscii(RTL_CONSTASCII_STRINGPARAM(aSeqLevelStr))
+                            .append(aElementType.getTypeName());
+                aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName.makeStringAndClear() );
             }
             // #i33795 Map also multi dimensional arrays to corresponding sequences
             else if( nDims > 1 )
@@ -1038,11 +1039,11 @@ Type getUnoTypeForSbxValue( SbxValue* pVal )
                     }
                 }
 
-                ::rtl::OUString aSeqTypeName;
+                ::rtl::OUStringBuffer aSeqTypeName;
                 for( short iDim = 0 ; iDim < nDims ; iDim++ )
-                    aSeqTypeName += aSeqLevelStr;
-                aSeqTypeName += aElementType.getTypeName();
-                aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName );
+                    aSeqTypeName.appendAscii(RTL_CONSTASCII_STRINGPARAM(aSeqLevelStr));
+                aSeqTypeName.append(aElementType.getTypeName());
+                aRetType = Type( TypeClass_SEQUENCE, aSeqTypeName.makeStringAndClear() );
             }
         }
         // No array, but ...
@@ -1176,13 +1177,12 @@ static Any implRekMultiDimArrayToSequence( SbxDimArray* pArray,
     sal_Int32* pActualIndices, sal_Int32* pLowerBounds, sal_Int32* pUpperBounds )
 {
     sal_Int32 nSeqLevel = nMaxDimIndex - nActualDim + 1;
-    ::rtl::OUString aSeqTypeName;
+    ::rtl::OUStringBuffer aSeqTypeName;
     sal_Int32 i;
     for( i = 0 ; i < nSeqLevel ; i++ )
-        aSeqTypeName += aSeqLevelStr;
-
-    aSeqTypeName += aElemType.getTypeName();
-    Type aSeqType( TypeClass_SEQUENCE, aSeqTypeName );
+        aSeqTypeName.appendAscii(RTL_CONSTASCII_STRINGPARAM(aSeqLevelStr));
+    aSeqTypeName.append(aElemType.getTypeName());
+    Type aSeqType( TypeClass_SEQUENCE, aSeqTypeName.makeStringAndClear() );
 
     // Create Sequence instance
     Any aRetVal;

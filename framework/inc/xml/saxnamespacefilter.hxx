@@ -99,6 +99,10 @@ class FWE_DLLPUBLIC SaxNamespaceFilter : public ThreadHelpBase, // Struct for ri
         ::com::sun::star::uno::Reference< ::com::sun::star::xml::sax::XDocumentHandler> xDocumentHandler;
         NamespaceStack  m_aNamespaceStack;
         sal_Int32       m_nDepth;
+
+        rtl::OUString m_aXMLAttributeNamespace;
+        rtl::OUString m_aXMLAttributeType;
+
 };
 
 }

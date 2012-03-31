@@ -43,6 +43,7 @@
 #include <comphelper/processfactory.hxx>
 #include <comphelper/types.hxx>
 #include <com/sun/star/sdb/CommandType.hpp>
+#include <rtl/instance.hxx>
 #include <unotools/configitem.hxx>
 #include <mailmergehelper.hxx>
 #include <swunohelper.hxx>
@@ -736,9 +737,13 @@ void SwMailMergeConfigItem_Impl::SetCurrentGreeting(
         SetModified();
 }
 
-static SwMailMergeConfigItem_Impl* pOptions = NULL;
-static sal_Int32            nRefCount = 0;
-static ::osl::Mutex aMutex;
+namespace
+{
+    static SwMailMergeConfigItem_Impl* pOptions = NULL;
+    static sal_Int32            nRefCount = 0;
+
+    class theMailMergeConfigMutex : public rtl::Static<osl::Mutex, theMailMergeConfigMutex> {};
+}
 
 SwMailMergeConfigItem::SwMailMergeConfigItem() :
     m_bAddressInserted(false),
@@ -751,7 +756,7 @@ SwMailMergeConfigItem::SwMailMergeConfigItem() :
     m_pTargetView(0)
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aMutex );
+    ::osl::MutexGuard aGuard( theMailMergeConfigMutex::get() );
     if ( !pOptions )
         pOptions = new SwMailMergeConfigItem_Impl;
     ++nRefCount;
@@ -761,7 +766,7 @@ SwMailMergeConfigItem::SwMailMergeConfigItem() :
 SwMailMergeConfigItem::~SwMailMergeConfigItem()
 {
     // Global access, must be guarded (multithreading)
-    ::osl::MutexGuard aGuard( aMutex );
+    ::osl::MutexGuard aGuard( theMailMergeConfigMutex::get() );
     if ( !--nRefCount )
     {
         DELETEZ( pOptions );

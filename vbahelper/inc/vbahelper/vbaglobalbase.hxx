@@ -36,6 +36,7 @@ class VBAHELPER_DLLPUBLIC VbaGlobalsBase : public Globals_BASE
 {
 protected:
     rtl::OUString msDocCtxName;
+    rtl::OUString msApplication;
 
     bool hasServiceName( const rtl::OUString& serviceName );
     void init(  const css::uno::Sequence< css::beans::PropertyValue >& aInitArgs );

@@ -59,6 +59,7 @@ class FWE_DLLPUBLIC XMLNamespaces
             throw( ::com::sun::star::xml::sax::SAXException );
 
         ::rtl::OUString m_aDefaultNamespace;
+        ::rtl::OUString m_aXMLAttributeNamespace;
         NamespaceMap    m_aNamespaceMap;
 };
 

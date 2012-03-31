@@ -130,7 +130,7 @@ namespace framework
 #define aSpecialFileCommand "PickList"
 #define aSpecialWindowCommand "WindowList"
 
-const ::rtl::OUString UNO_COMMAND( RTL_CONSTASCII_USTRINGPARAM( ".uno:" ));
+const char UNO_COMMAND[] = ".uno:";
 
 MenuManager::MenuManager(
     const ::com::sun::star::uno::Reference< ::com::sun::star::lang::XMultiServiceFactory >& xServiceFactory,
@@ -785,10 +785,10 @@ IMPL_LINK( MenuManager, Activate, Menu *, pMenu )
         m_bActive = sal_True;
 
         ::rtl::OUString aCommand( m_aMenuItemCommand );
-        if ( m_aMenuItemCommand.matchIgnoreAsciiCase( UNO_COMMAND, 0 ))
+        if (m_aMenuItemCommand.matchIgnoreAsciiCaseAsciiL(RTL_CONSTASCII_STRINGPARAM(UNO_COMMAND)))
         {
             // Remove protocol part from command so we can use an easier comparision method
-            aCommand = aCommand.copy( UNO_COMMAND.getLength() );
+            aCommand = aCommand.copy(RTL_CONSTASCII_LENGTH(UNO_COMMAND));
         }
 
         if ( m_aMenuItemCommand.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aSpecialFileMenu)) ||
