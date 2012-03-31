@@ -103,6 +103,7 @@ main/sfx2/util/make_tco.btm
 main/chart2/qa/data.chd
 main/extras/unx/source/fonts/fonts.dir
 main/extras/unx/source/kde/applnk/.directory
+main/sfx2/qa/complex/sfx2/testdocuments/empty.rdf
 
 ##############################################################################
 #
@@ -319,54 +320,20 @@ main/testautomation/global/sid/*.sid
 # shell script files, comments possible (using '#'), ALv2 could be added
 **/*.env
 
-# */export.exp (6), part of the SGA
-# qa self-defined symbol export files, all have the same single symbol content
-#**/*.exp
-
-# (3), part of SGA
-# XML Form files, ALv2 could be added
-#**/*.form
-
 # used in main/migrationanalysis/src/wizard/* (4), part of SGA
 # WordPerfect file (?)
-#**/*.frm
-
-# All in main/officecfg/util (4), part of SGA
-# three have SGA header, one (main/officecfg/util/template.gen) has no ALv2 Header
-# perl file, ALv2 could be added to the last one
-#**/*.gen
-
-# HitID holders, AOO specific type (2), part of SGA
-# ALv2 could be added (as C++ comment?)
-#**/*.hid
+main/migrationanalysis/src/wizard/ScanFolders.frm
+main/migrationanalysis/src/wizard/SearchDocs.frm
+main/migrationanalysis/src/wizard/Terminate.frm
+main/migrationanalysis/src/wizard/Wizard.frm
 
 #  (>50), part of SGA
 # InterFaceDefinitionTables (?), ascii, not sure about comment support
 **/*.idt
 
-# Scripting and makefile stuff (8), part of SGA
-# shell scripts allow comments, ALv2 could be added
-#**/*.in
-
-# used in main/xmerge/source/palmtests/qa-wrapper/testcases (>30), part of SGA
-# comments supported using '#', ALv2 could be added
-#**/*.infile
-
-# Extension info description (3), part of SGA
-# comments supported using '#', ALv2 could be added
-#**/*.info
-
-# used in main/extras/unx/source/kde (13), part of SGA
-# KDE config file, ascii, ALv2 could be added
-#**/*.kdelnk
-
 # used in main/sysui/desktop/mimetypes (40), part of SGA
 # ascii, support of comments not clear
 **/*.keys
-
-# lexer for parsing (4), part of SGA
-# one with ALv2 header, could be added to others, C++ style comments
-#**/*.l
 
 # part of SGA
 # ascii, no info about comment support
@@ -387,11 +354,21 @@ main/xmerge/source/palmtests/qa-wrapper/lists/master.list
 **/*.lst
 
 # One usage in main/apple_remote (1), files under MIT
-# One usage in main/extensions/source/macosx/spotlight (14), ALv2
-#**/*.m
+main/apple_remote/AppleRemote.m
+main/apple_remote/GlobalKeyboardDevice.m
+main/apple_remote/HIDRemoteControlDevice.m
+main/apple_remote/KeyspanFrontRowControl.m
+main/apple_remote/MultiClickRemoteBehavior.m
+main/apple_remote/RemoteControl.m
+main/apple_remote/RemoteControlContainer.m
+main/apple_remote/RemoteMainController.m
 
-# (143) export mapping files, build system specific. Some with ALv2 header (could be added to the rest)
-#**/*.map
+# different than other map files
+main/connectivity/source/drivers/adabas/adabas.mxp.map
+main/connectivity/source/drivers/dbase/dbase.mxp.map
+main/connectivity/source/drivers/flat/flat.mxp.map
+main/connectivity/source/drivers/jdbc/jdbc.mxp.map
+main/connectivity/source/manager/sdbc.mxp.map
 
 # used as MANIFEST.MF (28), part of SGA
 # used with other names (6), but also as definition file
@@ -404,7 +381,9 @@ main/xmerge/source/palmtests/qa-wrapper/lists/master.list
 
 # all in SGA
 # aqua-specific definitions, no creative content
-main/vcl/aqua/source/res/*.nib
+main/vcl/aqua/source/res/MainMenu.nib/classes.nib
+main/vcl/aqua/source/res/MainMenu.nib/info.nib
+
 
 # binary presentation template files, part of SGA
 main/extras/source/templates/layout/lang/*.otp
@@ -421,6 +400,7 @@ main/extras/source/templates/wizard/report/lang/*.ott
 main/desktop/test/deployment/*.oxt
 main/solenv/bin/*.oxt
 main/testautomation/*.oxt
+main/desktop/test/deployment/update/defect/update/fail4.oxt
 
 # All part of the SGA, documents used for testing
 main/testautomation/framework/optional/input/security/autotest.p12
@@ -1183,6 +1163,12 @@ main/instsetoo_native/inc_sdkoo/windows/msi_templates/components.txt
 main/instsetoo_native/inc_openoffice/windows/msi_templates/components.txt
 main/instsetoo_native/inc_ooolangpack/windows/msi_templates/components.txt
 main/testautomation/writer/optional/input/filter/wf____49.all
+main/scripting/java/org/openoffice/netbeans/modules/office/Bundle.properties
+main/scripting/java/org/openoffice/netbeans/modules/office/Bundle_en_US.properties
+main/scripting/java/org/openoffice/netbeans/modules/office/filesystem/Bundle_en_US.properties
+main/scripting/java/org/openoffice/netbeans/modules/office/wizard/Bundle_en_US.properties
+main/testautomation/extensions/optional/input/extension_sources/TaskPaneComponent/nbproject/private/config.properties
+main/testgraphical/ui/java/ConvwatchGUIProject/nbproject/private/config.properties
 
 # used in main/extensions/source/macosx/spotlight/mdimporter/en.lproj/schema.strings (1), part of SGA
 #**/*.strings
