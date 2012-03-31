@@ -3,7 +3,7 @@
  *                      - Presentation Engine -                            *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * /
 
- /**
+/**
  *  WARNING: any comment that should not be striped out by the script
  *  generating the C++ header file must start with a '/' and exactly 5 '*'
  *  not striped examples: '/*****', '/***** *'
@@ -515,14 +515,14 @@ PriorityQueue.prototype.implAdjustHeap = function( nFirst, nHoleIndex, nLength, 
 
     while( nSecondChild < Math.floor( ( nLength - 1 ) / 2 ) )
     {
-        nSecondChild = 2 * ( nSecondChild + 1 );
-        if( this.aCompareFunc( this.aSequence[ nFirst + nSecondChild ],
-            this.aSequence[ nFirst + nSecondChild - 1] ) )
-        {
-            --nSecondChild;
-        }
-        this.aSequence[ nFirst + nHoleIndex ] = this.aSequence[ nFirst + nSecondChild ];
-        nHoleIndex = nSecondChild;
+         nSecondChild = 2 * ( nSecondChild + 1 );
+         if( this.aCompareFunc( this.aSequence[ nFirst + nSecondChild ],
+                                this.aSequence[ nFirst + nSecondChild - 1] ) )
+         {
+             --nSecondChild;
+         }
+         this.aSequence[ nFirst + nHoleIndex ] = this.aSequence[ nFirst + nSecondChild ];
+         nHoleIndex = nSecondChild;
     }
 
     if( ( ( nLength & 1 ) === 0 ) && ( nSecondChild === Math.floor( ( nLength - 2 ) / 2 ) ) )
@@ -540,7 +540,7 @@ PriorityQueue.prototype.implPushHeap = function( nFirst, nHoleIndex, nTopIndex, 
     var nParent = Math.floor( ( nHoleIndex - 1 ) / 2 );
 
     while( ( nHoleIndex > nTopIndex ) &&
-        this.aCompareFunc( this.aSequence[ nFirst + nParent ], aValue ) )
+           this.aCompareFunc( this.aSequence[ nFirst + nParent ], aValue ) )
     {
         this.aSequence[ nFirst + nHoleIndex ] = this.aSequence[ nFirst + nParent ];
         nHoleIndex = nParent;
@@ -991,7 +991,7 @@ function MetaDocument( aMetaDocElem )
 {
     this.nNumberOfSlides = parseInt( aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrNumberOfSlides ) );
     assert( typeof this.nNumberOfSlides == 'number' && this.nNumberOfSlides > 0,
-        'MetaDocument: number of slides is zero or undefined.' );
+            'MetaDocument: number of slides is zero or undefined.' );
     this.startSlideNumber = 0;
     this.sPageNumberingType = aMetaDocElem.getAttributeNS( NSS['ooo'], aOOOAttrNumberingType ) || 'arabic';
     this.aMetaSlideSet = new Array();
@@ -1009,7 +1009,7 @@ function MetaDocument( aMetaDocElem )
         this.aMetaSlideSet.push( new MetaSlide( sMetaSlideId, this ) );
     }
     assert( this.aMetaSlideSet.length == this.nNumberOfSlides,
-        'MetaDocument: aMetaSlideSet.length != nNumberOfSlides.' );
+            'MetaDocument: aMetaSlideSet.length != nNumberOfSlides.' );
     //this.aMetaSlideSet[ this.startSlideNumber ].show();
 }
 
@@ -1308,7 +1308,7 @@ PlaceholderShape.prototype.setTextContent = function( sText )
     if( !this.textElement )
     {
         log( 'error: PlaceholderShape.setTextContent: text element is not valid in placeholder of type '
-            + this.className + ' that belongs to master slide ' + this.masterPage.id );
+                + this.className + ' that belongs to master slide ' + this.masterPage.id );
         return;
     }
     this.textElement.textContent = sText;
@@ -1537,7 +1537,7 @@ function SlideIndexPage()
     // scaleFactor = ( WIDTH - ( columns + 1 ) * xSpacing ) / ( columns * ( WIDTH + borderWidth ) )
     // indeed we can divide everything by WIDTH:
     this.scaleFactor = ( 1 - ( this.indexColumns + 1 ) * this.xSpacingFactor ) /
-        ( this.indexColumns * ( 1 + 2 * this.halfBorderWidthFactor ) );
+                            ( this.indexColumns * ( 1 + 2 * this.halfBorderWidthFactor ) );
 
     // We create a Thumbnail Border and Thumbnail MouseArea rectangle template that will be
     // used by every Thumbnail. The Mouse Area rectangle is used in order to trigger the
@@ -1706,7 +1706,7 @@ SlideIndexPage.prototype.setNumberOfColumns  = function( nNumberOfColumns )
     this.borderWidth = 2 * this.halfBorderWidth;
     // scaleFactor = ( WIDTH - ( columns + 1 ) * xSpacing ) / ( columns * ( WIDTH + borderWidth ) )
     this.scaleFactor = ( 1 - ( this.indexColumns + 1 ) * this.xSpacingFactor ) /
-        ( this.indexColumns * ( 1 + 2 * this.halfBorderWidthFactor ) );
+                            ( this.indexColumns * ( 1 + 2 * this.halfBorderWidthFactor ) );
 
     // update the thumbnail border size
     var aRectElement = this.thumbnailBorderTemplateElement;
@@ -2115,7 +2115,7 @@ function abandonIndexMode()
  *********************************************************************************************
  *********************************************************************************************
 
- ***** ANIMATION ENGINE *****
+                                  ***** ANIMATION ENGINE *****
 
  *********************************************************************************************
  *********************************************************************************************
@@ -2152,9 +2152,9 @@ function mem_fn( sMethodName )
 function bind( aObject, aMethod )
 {
     return  function()
-    {
-        return aMethod.call( aObject, arguments[0] );
-    };
+            {
+                return aMethod.call( aObject, arguments[0] );
+            };
 }
 
 function getCurrentSystemTime()
@@ -2232,7 +2232,7 @@ function makeMatrixString( a, b, c, d, e, f )
 function matrixToString( aSVGMatrix )
 {
     return makeMatrixString( aSVGMatrix.a, aSVGMatrix.b, aSVGMatrix.c,
-        aSVGMatrix.d, aSVGMatrix.e, aSVGMatrix.f );
+                             aSVGMatrix.d, aSVGMatrix.e, aSVGMatrix.f );
 }
 
 
@@ -2286,20 +2286,20 @@ function colorParser( sValue )
     var sHexDigitPattern = '[0-9A-Fa-f]';
 
     var sHexColorPattern = '#(' + sHexDigitPattern + '{2})('
-        + sHexDigitPattern + '{2})('
-        + sHexDigitPattern + '{2})';
+                                + sHexDigitPattern + '{2})('
+                                + sHexDigitPattern + '{2})';
 
     var sRGBIntegerPattern = 'rgb[(] *' + sIntegerPattern + sCommaPattern
-        + sIntegerPattern + sCommaPattern
-        + sIntegerPattern + ' *[)]';
+                                        + sIntegerPattern + sCommaPattern
+                                        + sIntegerPattern + ' *[)]';
 
     var sRGBPercentPattern = 'rgb[(] *' + sIntegerPattern + '%' + sCommaPattern
-        + sIntegerPattern + '%' + sCommaPattern
-        + sIntegerPattern + '%' + ' *[)]';
+                                        + sIntegerPattern + '%' + sCommaPattern
+                                        + sIntegerPattern + '%' + ' *[)]';
 
     var sHSLPercentPattern = 'hsl[(] *' + sIntegerPattern + sCommaPattern
-        + sIntegerPattern + '%' + sCommaPattern
-        + sIntegerPattern + '%' + ' *[)]';
+                                        + sIntegerPattern + '%' + sCommaPattern
+                                        + sIntegerPattern + '%' + ' *[)]';
 
     var reHexColor = new RegExp( sHexColorPattern );
     var reRGBInteger = new RegExp( sRGBIntegerPattern );
@@ -2401,8 +2401,8 @@ RGBColor.prototype.convertToHSL = function()
     if( nDelta !== 0 )
     {
         nSaturation = ( nLuminance > 0.5 ) ?
-            ( nDelta / ( 2.0 - nMax - nMin) ) :
-            ( nDelta / ( nMax + nMin ) );
+                            ( nDelta / ( 2.0 - nMax - nMin) ) :
+                            ( nDelta / ( nMax + nMin ) );
 
         if( nRed == nMax )
             nHue = ( nGreen - nBlue ) / nDelta;
@@ -2509,8 +2509,8 @@ HSLColor.prototype.normalizeHue = function()
 HSLColor.prototype.toString = function()
 {
     return 'hsl(' + this.nHue.toFixed( 3 ) + ','
-        + this.nSaturation.toFixed( 3 ) + ','
-        + this.nLuminance.toFixed( 3 ) + ')';
+                  + this.nSaturation.toFixed( 3 ) + ','
+                  + this.nLuminance.toFixed( 3 ) + ')';
 };
 
 HSLColor.prototype.convertToRGB = function()
@@ -2528,8 +2528,8 @@ HSLColor.prototype.convertToRGB = function()
     }
 
     var nVal1 = ( nLuminance <= 0.5 ) ?
-        ( nLuminance * (1.0 + nSaturation) ) :
-        ( nLuminance + nSaturation - nLuminance * nSaturation );
+                        ( nLuminance * (1.0 + nSaturation) ) :
+                        ( nLuminance + nSaturation - nLuminance * nSaturation );
 
     var nVal2 = 2.0 * nLuminance - nVal1;
 
@@ -2698,7 +2698,7 @@ aImpressNodeTypeInMap = {
 };
 
 aImpressNodeTypeOutMap = [ 'default', 'on-click', 'with-previous', 'after-previous',
-    'main-sequence', 'timing-root', 'interactive-sequence' ];
+                            'main-sequence', 'timing-root', 'interactive-sequence' ];
 
 
 // Preset Classes
@@ -2819,57 +2819,57 @@ aValueTypeOutMap = [ 'unknown', 'number', 'enum', 'color', 'string', 'boolean' ]
 // Attribute Map
 var aAttributeMap =
 {
-    'height':           {   'type':         NUMBER_PROPERTY,
-        'get':          'getHeight',
-        'set':          'setHeight',
-        'getmod':       'makeScaler( 1/nHeight )',
-        'setmod':       'makeScaler( nHeight)'          },
+        'height':           {   'type':         NUMBER_PROPERTY,
+                                'get':          'getHeight',
+                                'set':          'setHeight',
+                                'getmod':       'makeScaler( 1/nHeight )',
+                                'setmod':       'makeScaler( nHeight)'          },
 
-    'opacity':          {   'type':         NUMBER_PROPERTY,
-        'get':          'getOpacity',
-        'set':          'setOpacity'                    },
+        'opacity':          {   'type':         NUMBER_PROPERTY,
+                                'get':          'getOpacity',
+                                'set':          'setOpacity'                    },
 
-    'width':            {   'type':         NUMBER_PROPERTY,
-        'get':          'getWidth',
-        'set':          'setWidth',
-        'getmod':       'makeScaler( 1/nWidth )',
-        'setmod':       'makeScaler( nWidth)'           },
+        'width':            {   'type':         NUMBER_PROPERTY,
+                                'get':          'getWidth',
+                                'set':          'setWidth',
+                                'getmod':       'makeScaler( 1/nWidth )',
+                                'setmod':       'makeScaler( nWidth)'           },
 
-    'x':                {   'type':         NUMBER_PROPERTY,
-        'get':          'getX',
-        'set':          'setX',
-        'getmod':       'makeScaler( 1/nWidth )',
-        'setmod':       'makeScaler( nWidth)'           },
+        'x':                {   'type':         NUMBER_PROPERTY,
+                                'get':          'getX',
+                                'set':          'setX',
+                                'getmod':       'makeScaler( 1/nWidth )',
+                                'setmod':       'makeScaler( nWidth)'           },
 
-    'y':                {   'type':         NUMBER_PROPERTY,
-        'get':          'getY',
-        'set':          'setY',
-        'getmod':       'makeScaler( 1/nHeight )',
-        'setmod':       'makeScaler( nHeight)'          },
+        'y':                {   'type':         NUMBER_PROPERTY,
+                                'get':          'getY',
+                                'set':          'setY',
+                                'getmod':       'makeScaler( 1/nHeight )',
+                                'setmod':       'makeScaler( nHeight)'          },
 
-    'fill':             {   'type':         ENUM_PROPERTY,
-        'get':          'getFillStyle',
-        'set':          'setFillStyle'                  },
+        'fill':             {   'type':         ENUM_PROPERTY,
+                                'get':          'getFillStyle',
+                                'set':          'setFillStyle'                  },
 
-    'stroke':           {   'type':         ENUM_PROPERTY,
-        'get':          'getStrokeStyle',
-        'set':          'setStrokeStyle'                },
+        'stroke':           {   'type':         ENUM_PROPERTY,
+                                'get':          'getStrokeStyle',
+                                'set':          'setStrokeStyle'                },
 
-    'visibility':       {   'type':         ENUM_PROPERTY,
-        'get':          'getVisibility',
-        'set':          'setVisibility'                 },
+        'visibility':       {   'type':         ENUM_PROPERTY,
+                                'get':          'getVisibility',
+                                'set':          'setVisibility'                 },
 
-    'fill-color':       {   'type':         COLOR_PROPERTY,
-        'get':          'getFillColor',
-        'set':          'setFillColor'                  },
+        'fill-color':       {   'type':         COLOR_PROPERTY,
+                                'get':          'getFillColor',
+                                'set':          'setFillColor'                  },
 
-    'stroke-color':     {   'type':         COLOR_PROPERTY,
-        'get':          'getStrokeColor',
-        'set':          'setStrokeColor'                },
+        'stroke-color':     {   'type':         COLOR_PROPERTY,
+                                'get':          'getStrokeColor',
+                                'set':          'setStrokeColor'                },
 
-    'color':            {   'type':         COLOR_PROPERTY,
-        'get':          'getFontColor',
-        'set':          'setFontColor'                  }
+        'color':            {   'type':         COLOR_PROPERTY,
+                                'get':          'getFontColor',
+                                'set':          'setFontColor'                  }
 
 };
 
@@ -2914,38 +2914,38 @@ aTransitionModeOutMap = [ 'out', 'in' ];
 
 // transition table for restart=NEVER, fill=FREEZE
 var aStateTransitionTable_Never_Freeze =
-    [
-        INVALID_NODE,
-        RESOLVED_NODE | ENDED_NODE,         // active successors for UNRESOLVED
-        ACTIVE_NODE | ENDED_NODE,           // active successors for RESOLVED
-        INVALID_NODE,
-        FROZEN_NODE | ENDED_NODE,           // active successors for ACTIVE: freeze object
-        INVALID_NODE,
-        INVALID_NODE,
-        INVALID_NODE,
-        ENDED_NODE,                         // active successors for FROZEN: end
-        INVALID_NODE,
-        INVALID_NODE,
-        INVALID_NODE,
-        INVALID_NODE,
-        INVALID_NODE,
-        INVALID_NODE,
-        INVALID_NODE,
-        ENDED_NODE                          // active successors for ENDED:
-        // this state is a sink here (cannot restart)
-    ];
+[
+    INVALID_NODE,
+    RESOLVED_NODE | ENDED_NODE,         // active successors for UNRESOLVED
+    ACTIVE_NODE | ENDED_NODE,           // active successors for RESOLVED
+    INVALID_NODE,
+    FROZEN_NODE | ENDED_NODE,           // active successors for ACTIVE: freeze object
+    INVALID_NODE,
+    INVALID_NODE,
+    INVALID_NODE,
+    ENDED_NODE,                         // active successors for FROZEN: end
+    INVALID_NODE,
+    INVALID_NODE,
+    INVALID_NODE,
+    INVALID_NODE,
+    INVALID_NODE,
+    INVALID_NODE,
+    INVALID_NODE,
+    ENDED_NODE                          // active successors for ENDED:
+    // this state is a sink here (cannot restart)
+];
 
 
 // Table guide
 var aTableGuide =
-    [
-        null,
-        null,
-        null,
-        aStateTransitionTable_Never_Freeze,
-        null,
-        null
-    ];
+[
+     null,
+     null,
+     null,
+     aStateTransitionTable_Never_Freeze,
+     null,
+     null
+];
 
 
 
@@ -2978,7 +2978,7 @@ var EVENT_TRIGGER_ON_PREV_EFFECT        = 10;
 var EVENT_TRIGGER_REPEAT                = 11;
 
 aEventTriggerOutMap = [ 'unknown', 'slideBegin', 'slideEnd', 'begin', 'end', 'click',
-    'doubleClick', 'mouseEnter', 'mouseLeave', 'next', 'previous', 'repeat' ];
+                        'doubleClick', 'mouseEnter', 'mouseLeave', 'next', 'previous', 'repeat' ];
 
 
 function getEventTriggerType( sEventTrigger )
@@ -3071,13 +3071,13 @@ Timing.prototype.parse = function()
         var nFirstCharCode = this.sTimingDescription.charCodeAt(0);
         var bPositiveOffset = !( nFirstCharCode == CHARCODE_MINUS );
         if ( ( nFirstCharCode == CHARCODE_PLUS ) ||
-            ( nFirstCharCode == CHARCODE_MINUS ) ||
-            ( ( nFirstCharCode >= CHARCODE_0 ) && ( nFirstCharCode <= CHARCODE_9 ) ) )
+             ( nFirstCharCode == CHARCODE_MINUS ) ||
+             ( ( nFirstCharCode >= CHARCODE_0 ) && ( nFirstCharCode <= CHARCODE_9 ) ) )
         {
             var sClockValue
                 = ( ( nFirstCharCode == CHARCODE_PLUS ) || ( nFirstCharCode == CHARCODE_MINUS ) )
-                ? this.sTimingDescription.substr( 1 )
-                : this.sTimingDescription;
+                    ? this.sTimingDescription.substr( 1 )
+                    : this.sTimingDescription;
 
             var TimeInSec = Timing.parseClockValue( sClockValue );
             if( TimeInSec != undefined )
@@ -3575,10 +3575,10 @@ BaseNode.prototype.parseElement = function()
     if( this.eFillMode ==  FILL_MODE_AUTO ) // see SMIL recommendation document
     {
         this.eFillMode = ( this.aEnd ||
-            ( this.nReapeatCount != 1) ||
-            this.aDuration )
-            ? FILL_MODE_REMOVE
-            : FILL_MODE_FREEZE;
+                           ( this.nReapeatCount != 1) ||
+                           this.aDuration )
+                              ? FILL_MODE_REMOVE
+                              : FILL_MODE_FREEZE;
     }
 
     // resolve restart value
@@ -3586,8 +3586,8 @@ BaseNode.prototype.parseElement = function()
         if( this.getParentNode() )
             this.eRestartMode = this.getParentNode().getRestartMode();
         else
-        // SMIL recommendation document says to set it to 'always'
-        // but we follow the slideshow engine C++ implementation
+            // SMIL recommendation document says to set it to 'always'
+            // but we follow the slideshow engine C++ implementation
             this.eRestartMode = RESTART_MODE_NEVER;
 
     // resolve accelerate and decelerate attributes
@@ -3777,7 +3777,7 @@ BaseNode.prototype.registerDeactivatingListener = function( aNotifiee )
 BaseNode.prototype.notifyDeactivating = function( aNotifier )
 {
     assert( ( aNotifier.getState() == FROZEN_NODE ) || ( aNotifier.getState() == ENDED_NODE ),
-        'BaseNode.notifyDeactivating: Notifier node is neither in FROZEN nor in ENDED state' );
+            'BaseNode.notifyDeactivating: Notifier node is neither in FROZEN nor in ENDED state' );
 };
 
 BaseNode.prototype.isMainSequenceRootNode = function()
@@ -3974,9 +3974,9 @@ BaseNode.prototype.info = function( bVerbose )
 BaseNode.prototype.callInfo = function( sMethodName )
 {
     var sInfo = this.sClassName +
-        '( ' + this.getId() +
-        ', ' + getNodeStateName( this.getState() ) +
-        ' ).' + sMethodName;
+                '( ' + this.getId() +
+                ', ' + getNodeStateName( this.getState() ) +
+                ' ).' + sMethodName;
     return sInfo;
 };
 
@@ -4032,8 +4032,8 @@ AnimationBaseNode.prototype.parseElement = function()
 
     // set up min frame count value;
     this.nMinFrameCount = ( this.getDuration().isValue() )
-        ? ( this.getDuration().getValue() * MINIMUM_FRAMES_PER_SECONDS )
-        : MINIMUM_FRAMES_PER_SECONDS;
+            ? ( this.getDuration().getValue() * MINIMUM_FRAMES_PER_SECONDS )
+            : MINIMUM_FRAMES_PER_SECONDS;
     if( this.nMinFrameCount < 1.0 )
         this.nMinFrameCount = 1;
     else if( this.nMinFrameCount > MINIMUM_FRAMES_PER_SECONDS )
@@ -4053,7 +4053,7 @@ AnimationBaseNode.prototype.parseElement = function()
         if( !this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ] )
         {
             this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ]
-                = new AnimatedElement( this.aTargetElement );
+                    = new AnimatedElement( this.aTargetElement );
         }
         this.aAnimatedElement = this.aNodeContext.aAnimatedElementMap[ sTargetElementAttr ];
 
@@ -4449,8 +4449,8 @@ BaseContainerNode.prototype.parseElement= function()
 
     // resolve duration
     this.bDurationIndefinite
-        = ( !this.getDuration() || this.getDuration().isIndefinite()  ) &&
-        ( !this.getEnd() || ( this.getEnd().getType() != OFFSET_TIMING ) );
+            = ( !this.getDuration() || this.getDuration().isIndefinite()  ) &&
+              ( !this.getEnd() || ( this.getEnd().getType() != OFFSET_TIMING ) );
 
     return bRet;
 };
@@ -4533,10 +4533,10 @@ BaseContainerNode.prototype.isChildNode = function( aAnimationNode )
 BaseContainerNode.prototype.notifyDeactivatedChild = function( aChildNode )
 {
     assert( ( aChildNode.getState() == FROZEN_NODE ) || ( aChildNode.getState() == ENDED_NODE ),
-        'BaseContainerNode.notifyDeactivatedChild: passed child node is neither in FROZEN nor in ENDED state' );
+            'BaseContainerNode.notifyDeactivatedChild: passed child node is neither in FROZEN nor in ENDED state' );
 
     assert( this.getState() != INVALID_NODE,
-        'BaseContainerNode.notifyDeactivatedChild: this node is invalid' );
+            'BaseContainerNode.notifyDeactivatedChild: this node is invalid' );
 
     if( !this.isChildNode( aChildNode ) )
     {
@@ -4547,7 +4547,7 @@ BaseContainerNode.prototype.notifyDeactivatedChild = function( aChildNode )
     var nChildrenCount = this.aChildrenArray.length;
 
     assert( ( this.nFinishedChildren < nChildrenCount ),
-        'BaseContainerNode.notifyDeactivatedChild: assert(this.nFinishedChildren < nChildrenCount) failed' );
+            'BaseContainerNode.notifyDeactivatedChild: assert(this.nFinishedChildren < nChildrenCount) failed' );
 
     ++this.nFinishedChildren;
     var bFinished = ( this.nFinishedChildren >= nChildrenCount );
@@ -4695,12 +4695,12 @@ SequentialTimeContainer.prototype.notifyDeactivating = function( aNotifier )
         return;
 
     assert( this.nFinishedChildren < this.aChildrenArray.length,
-        'SequentialTimeContainer.notifyDeactivating: assertion (this.nFinishedChildren < this.aChildrenArray.length) failed' );
+            'SequentialTimeContainer.notifyDeactivating: assertion (this.nFinishedChildren < this.aChildrenArray.length) failed' );
 
     var aNextChild = this.aChildrenArray[ this.nFinishedChildren ];
 
     assert( aNextChild.getState() == UNRESOLVED_NODE,
-        'SequentialTimeContainer.notifyDeactivating: assertion (aNextChild.getState == UNRESOLVED_NODE) failed' );
+            'SequentialTimeContainer.notifyDeactivating: assertion (aNextChild.getState == UNRESOLVED_NODE) failed' );
 
     if( !this.resolveChild( aNextChild ) )
     {
@@ -4750,83 +4750,83 @@ PropertyAnimationNode.prototype.createActivity = function()
 {
 
     /*
-     var aActivityParamSet = this.fillActivityParams();
-     var aAnimation = createPropertyAnimation( 'opacity',
-     this.getAnimatedElement(),
-     this.aNodeContext.aSlideWidth,
-     this.aNodeContext.aSlideHeight );
+    var aActivityParamSet = this.fillActivityParams();
+    var aAnimation = createPropertyAnimation( 'opacity',
+                                              this.getAnimatedElement(),
+                                              this.aNodeContext.aSlideWidth,
+                                              this.aNodeContext.aSlideHeight );
 
-     return new SimpleActivity( aActivityParamSet, aAnimation, FORWARD );
-     */
+    return new SimpleActivity( aActivityParamSet, aAnimation, FORWARD );
+    */
 
 
     /*
-     if( true && this.getAttributeName() === 'x' )
-     {
-     var sAttributeName = 'x';
+        if( true && this.getAttributeName() === 'x' )
+        {
+            var sAttributeName = 'x';
 
-     this.aDuration = new Duration( '2s' );
-     this.sAttributeName = sAttributeName;
-     this.aKeyTimes = [ 0.0, 0.25, 0.50, 0.75, 1.0 ];
-     //this.aKeyTimes = [ 0.0, 1.0 ];
-     var aM = 5000 / this.aNodeContext.aSlideWidth;
-     this.aValues = [ 'x', 'x - ' + aM, 'x', 'x + ' + aM, 'x' ];
-     //this.aValues = [ '0', 'width' ];
+            this.aDuration = new Duration( '2s' );
+            this.sAttributeName = sAttributeName;
+            this.aKeyTimes = [ 0.0, 0.25, 0.50, 0.75, 1.0 ];
+            //this.aKeyTimes = [ 0.0, 1.0 ];
+            var aM = 5000 / this.aNodeContext.aSlideWidth;
+            this.aValues = [ 'x', 'x - ' + aM, 'x', 'x + ' + aM, 'x' ];
+            //this.aValues = [ '0', 'width' ];
 
-     //this.aFromValue = '';
-     //this.aToValue = '0 + ' + aTranslationValue;
-     //this.aByValue = aTranslationValue;
-     //this.nRepeatCount = 3;
+            //this.aFromValue = '';
+            //this.aToValue = '0 + ' + aTranslationValue;
+            //this.aByValue = aTranslationValue;
+            //this.nRepeatCount = 3;
 
-     var aActivityParamSet = this.fillActivityParams();
+            var aActivityParamSet = this.fillActivityParams();
 
-     var aAnimation = createPropertyAnimation( this.getAttributeName(),
-     this.getAnimatedElement(),
-     this.aNodeContext.aSlideWidth,
-     this.aNodeContext.aSlideHeight );
+            var aAnimation = createPropertyAnimation( this.getAttributeName(),
+                                                      this.getAnimatedElement(),
+                                                      this.aNodeContext.aSlideWidth,
+                                                      this.aNodeContext.aSlideHeight );
 
-     var aInterpolator = null;
-     return createActivity( aActivityParamSet, this, aAnimation, aInterpolator );
-     }
+            var aInterpolator = null;
+            return createActivity( aActivityParamSet, this, aAnimation, aInterpolator );
+        }
 
-     if( true && this.getAttributeName() === 'y' )
-     {
-     var sAttributeName = 'height';
-     this.aDuration = new Duration( '2s' );
-     this.sAttributeName = sAttributeName;
-     this.aKeyTimes = [ 0.0, 0.25, 0.50, 0.75, 1.0 ];
-     //this.aKeyTimes = [ 0.0, 1.0 ];
-     var aM = 5000 / this.aNodeContext.aSlideHeight;
-     this.aValues = new Array();
-     //this.aValues = [ 'y', 'y', 'y - ' + aM, 'y - ' + aM, 'y' ];
-     this.aValues = [ 'height', '0', 'height', '2*height', 'height' ];
-     //this.aValues = [ '0', 'height' ];
+        if( true && this.getAttributeName() === 'y' )
+        {
+            var sAttributeName = 'height';
+            this.aDuration = new Duration( '2s' );
+            this.sAttributeName = sAttributeName;
+            this.aKeyTimes = [ 0.0, 0.25, 0.50, 0.75, 1.0 ];
+            //this.aKeyTimes = [ 0.0, 1.0 ];
+            var aM = 5000 / this.aNodeContext.aSlideHeight;
+            this.aValues = new Array();
+            //this.aValues = [ 'y', 'y', 'y - ' + aM, 'y - ' + aM, 'y' ];
+            this.aValues = [ 'height', '0', 'height', '2*height', 'height' ];
+            //this.aValues = [ '0', 'height' ];
 
-     //this.aFromValue = '2 * height';
-     //this.aToValue = 'width';
-     //this.aByValue = 'width';//aTranslationValue;
+            //this.aFromValue = '2 * height';
+            //this.aToValue = 'width';
+            //this.aByValue = 'width';//aTranslationValue;
 
 
-     var aActivityParamSet = this.fillActivityParams();
+            var aActivityParamSet = this.fillActivityParams();
 
-     var aAnimation = createPropertyAnimation( this.getAttributeName(),
-     this.getAnimatedElement(),
-     this.aNodeContext.aSlideWidth,
-     this.aNodeContext.aSlideHeight );
+            var aAnimation = createPropertyAnimation( this.getAttributeName(),
+                                                      this.getAnimatedElement(),
+                                                      this.aNodeContext.aSlideWidth,
+                                                      this.aNodeContext.aSlideHeight );
 
-     var aInterpolator = null;
-     return createActivity( aActivityParamSet, this, aAnimation, aInterpolator );
-     }
-     */
+            var aInterpolator = null;
+            return createActivity( aActivityParamSet, this, aAnimation, aInterpolator );
+        }
+        */
 
 
 
     var aActivityParamSet = this.fillActivityParams();
 
     var aAnimation = createPropertyAnimation( this.getAttributeName(),
-        this.getAnimatedElement(),
-        this.aNodeContext.aSlideWidth,
-        this.aNodeContext.aSlideHeight );
+                                              this.getAnimatedElement(),
+                                              this.aNodeContext.aSlideWidth,
+                                              this.aNodeContext.aSlideHeight );
 
     var aInterpolator = null;  // createActivity will compute it;
     return createActivity( aActivityParamSet, this, aAnimation, aInterpolator );
@@ -4848,9 +4848,9 @@ extend( AnimationSetNode, AnimationBaseNode2 );
 AnimationSetNode.prototype.createActivity = function()
 {
     var aAnimation = createPropertyAnimation( this.getAttributeName(),
-        this.getAnimatedElement(),
-        this.aNodeContext.aSlideWidth,
-        this.aNodeContext.aSlideHeight );
+                                              this.getAnimatedElement(),
+                                              this.aNodeContext.aSlideWidth,
+                                              this.aNodeContext.aSlideHeight );
 
     var aActivityParamSet = this.fillActivityParams();
 
@@ -4896,72 +4896,72 @@ AnimationColorNode.prototype.parseElement = function()
 AnimationColorNode.prototype.createActivity = function()
 {
     /*
-     var aActivityParamSet = this.fillActivityParams();
+    var aActivityParamSet = this.fillActivityParams();
 
-     var aAnimation = createPropertyAnimation( 'opacity',
-     this.getAnimatedElement(),
-     this.aNodeContext.aSlideWidth,
-     this.aNodeContext.aSlideHeight );
+    var aAnimation = createPropertyAnimation( 'opacity',
+    this.getAnimatedElement(),
+    this.aNodeContext.aSlideWidth,
+    this.aNodeContext.aSlideHeight );
 
-     return new SimpleActivity( aActivityParamSet, aAnimation, FORWARD );
-     */
+    return new SimpleActivity( aActivityParamSet, aAnimation, FORWARD );
+    */
 
     /*
-     if( false && this.getAttributeName() === 'fill-color' )
-     {
-     var sAttributeName = 'stroke-color';
+    if( false && this.getAttributeName() === 'fill-color' )
+    {
+        var sAttributeName = 'stroke-color';
 
-     this.aDuration = new Duration( '2s' );
-     this.nAccelerate = 0.0;
-     this.nDecelerate = 0.0;
-     this.eColorInterpolation = COLOR_SPACE_RGB;
-     this.eColorInterpolationDirection = COUNTERCLOCKWISE;
+        this.aDuration = new Duration( '2s' );
+        this.nAccelerate = 0.0;
+        this.nDecelerate = 0.0;
+        this.eColorInterpolation = COLOR_SPACE_RGB;
+        this.eColorInterpolationDirection = COUNTERCLOCKWISE;
 
-     this.sAttributeName = sAttributeName;
+        this.sAttributeName = sAttributeName;
 
-     this.aFromValue = 'rgb( 0%, 0%, 0% )';
-     this.aToValue = 'rgb( 0%, 0%, 100% )';
-     //this.aByValue = 'hsl( 0, -12%, -25% )';
+        this.aFromValue = 'rgb( 0%, 0%, 0% )';
+        this.aToValue = 'rgb( 0%, 0%, 100% )';
+        //this.aByValue = 'hsl( 0, -12%, -25% )';
 
 
 
-     var aActivityParamSet = this.fillActivityParams();
+        var aActivityParamSet = this.fillActivityParams();
 
-     var aAnimation = createPropertyAnimation( this.getAttributeName(),
-     this.getAnimatedElement(),
-     this.aNodeContext.aSlideWidth,
-     this.aNodeContext.aSlideHeight );
-     var aColorAnimation;
-     var aInterpolator;
-     if( this.getColorInterpolation() === COLOR_SPACE_HSL )
-     {
-     ANIMDBG.print( 'AnimationColorNode.createActivity: color space hsl'  );
-     aColorAnimation = new HSLAnimationWrapper( aAnimation );
-     var aInterpolatorMaker = aInterpolatorHandler.getInterpolator( this.getCalcMode(),
-     COLOR_PROPERTY,
-     COLOR_SPACE_HSL );
-     aInterpolator = aInterpolatorMaker( this.getColorInterpolationDirection() );
-     }
-     else
-     {
-     ANIMDBG.print( 'AnimationColorNode.createActivity: color space rgb'  );
-     aColorAnimation = aAnimation;
-     aInterpolator = aInterpolatorHandler.getInterpolator( this.getCalcMode(),
-     COLOR_PROPERTY,
-     COLOR_SPACE_RGB );
-     }
+        var aAnimation = createPropertyAnimation( this.getAttributeName(),
+                                                  this.getAnimatedElement(),
+                                                  this.aNodeContext.aSlideWidth,
+                                                  this.aNodeContext.aSlideHeight );
+        var aColorAnimation;
+        var aInterpolator;
+        if( this.getColorInterpolation() === COLOR_SPACE_HSL )
+        {
+            ANIMDBG.print( 'AnimationColorNode.createActivity: color space hsl'  );
+            aColorAnimation = new HSLAnimationWrapper( aAnimation );
+            var aInterpolatorMaker = aInterpolatorHandler.getInterpolator( this.getCalcMode(),
+                                                                           COLOR_PROPERTY,
+                                                                           COLOR_SPACE_HSL );
+            aInterpolator = aInterpolatorMaker( this.getColorInterpolationDirection() );
+        }
+        else
+        {
+            ANIMDBG.print( 'AnimationColorNode.createActivity: color space rgb'  );
+            aColorAnimation = aAnimation;
+            aInterpolator = aInterpolatorHandler.getInterpolator( this.getCalcMode(),
+                                                                  COLOR_PROPERTY,
+                                                                  COLOR_SPACE_RGB );
+        }
 
-     return createActivity( aActivityParamSet, this, aColorAnimation, aInterpolator );
-     }
+        return createActivity( aActivityParamSet, this, aColorAnimation, aInterpolator );
+    }
      */
 
 
     var aActivityParamSet = this.fillActivityParams();
 
     var aAnimation = createPropertyAnimation( this.getAttributeName(),
-        this.getAnimatedElement(),
-        this.aNodeContext.aSlideWidth,
-        this.aNodeContext.aSlideHeight );
+                                              this.getAnimatedElement(),
+                                              this.aNodeContext.aSlideWidth,
+                                              this.aNodeContext.aSlideHeight );
 
     var aColorAnimation;
     var aInterpolator;
@@ -4970,8 +4970,8 @@ AnimationColorNode.prototype.createActivity = function()
         ANIMDBG.print( 'AnimationColorNode.createActivity: color space hsl'  );
         aColorAnimation = new HSLAnimationWrapper( aAnimation );
         var aInterpolatorMaker = aInterpolatorHandler.getInterpolator( this.getCalcMode(),
-            COLOR_PROPERTY,
-            COLOR_SPACE_HSL );
+                                                                       COLOR_PROPERTY,
+                                                                       COLOR_SPACE_HSL );
         aInterpolator = aInterpolatorMaker( this.getColorInterpolationDirection() );
     }
     else
@@ -4979,8 +4979,8 @@ AnimationColorNode.prototype.createActivity = function()
         ANIMDBG.print( 'AnimationColorNode.createActivity: color space rgb'  );
         aColorAnimation = aAnimation;
         aInterpolator = aInterpolatorHandler.getInterpolator( this.getCalcMode(),
-            COLOR_PROPERTY,
-            COLOR_SPACE_RGB );
+                                                              COLOR_PROPERTY,
+                                                              COLOR_SPACE_RGB );
     }
 
     return createActivity( aActivityParamSet, this, aColorAnimation, aInterpolator );
@@ -5035,9 +5035,9 @@ AnimationTransitionFilterNode.prototype.createActivity = function()
     var aActivityParamSet = this.fillActivityParams();
 
     var aAnimation = createPropertyAnimation( 'opacity',
-        this.getAnimatedElement(),
-        this.aNodeContext.aSlideWidth,
-        this.aNodeContext.aSlideHeight );
+                                              this.getAnimatedElement(),
+                                              this.aNodeContext.aSlideWidth,
+                                              this.aNodeContext.aSlideHeight );
 
     var eDirection = this.getTransitionMode() ? FORWARD : BACKWARD;
 
@@ -5266,9 +5266,9 @@ function makeScaler( nScale )
     }
 
     return  function( nValue )
-    {
-        return ( nScale * nValue );
-    };
+            {
+                return ( nScale * nValue );
+            };
 }
 
 
@@ -5299,9 +5299,9 @@ function createPropertyAnimation( sAttrName, aAnimatedElement, nWidth, nHeight )
 
 
     return new GenericAnimation( bind( aAnimatedElement, aAnimatedElement[ sGetValueMethod ] ),
-        bind( aAnimatedElement, aAnimatedElement[ sSetValueMethod ] ),
-        aGetModifier,
-        aSetModifier);
+                                 bind( aAnimatedElement, aAnimatedElement[ sSetValueMethod ] ),
+                                 aGetModifier,
+                                 aSetModifier);
 }
 
 
@@ -5310,7 +5310,7 @@ function createPropertyAnimation( sAttrName, aAnimatedElement, nWidth, nHeight )
 function GenericAnimation( aGetValueFunc, aSetValueFunc, aGetModifier, aSetModifier )
 {
     assert( aGetValueFunc && aSetValueFunc,
-        'GenericAnimation constructor: get value functor and/or set value functor are not valid' );
+            'GenericAnimation constructor: get value functor and/or set value functor are not valid' );
 
     this.aGetValueFunc = aGetValueFunc;
     this.aSetValueFunc = aSetValueFunc;
@@ -5360,7 +5360,7 @@ GenericAnimation.prototype.getUnderlyingValue = function()
 function HSLAnimationWrapper( aColorAnimation )
 {
     assert( aColorAnimation,
-        'HSLAnimationWrapper constructor: invalid color animation delegate' );
+            'HSLAnimationWrapper constructor: invalid color animation delegate' );
 
     this.aAnimation = aColorAnimation;
 }
@@ -5482,7 +5482,7 @@ AnimatedElement.prototype.notifyAnimationEnd = function()
 AnimatedElement.prototype.notifyNextEffectStart = function( nEffectIndex )
 {
     assert( this.nCurrentState === nEffectIndex,
-        'AnimatedElement(' + this.getId() + ').notifyNextEffectStart: assertion (current state == effect index) failed' );
+            'AnimatedElement(' + this.getId() + ').notifyNextEffectStart: assertion (current state == effect index) failed' );
 
     if( this.isUpdated() )
     {
@@ -5748,7 +5748,7 @@ AnimatedElement.prototype.getFillColor = function()
 AnimatedElement.prototype.setFillColor = function( aRGBValue )
 {
     assert( aRGBValue instanceof RGBColor,
-        'AnimatedElement.setFillColor: value argument is not an instance of RGBColor' );
+            'AnimatedElement.setFillColor: value argument is not an instance of RGBColor' );
 
     var sValue = aRGBValue.toString( true /* clamped values */ );
     var aChildSet = getElementChildren( this.aActiveElement );
@@ -5781,7 +5781,7 @@ AnimatedElement.prototype.getStrokeColor = function()
 AnimatedElement.prototype.setStrokeColor = function( aRGBValue )
 {
     assert( aRGBValue instanceof RGBColor,
-        'AnimatedElement.setFillColor: value argument is not an instance of RGBColor' );
+            'AnimatedElement.setFillColor: value argument is not an instance of RGBColor' );
 
     var sValue = aRGBValue.toString( true /* clamped values */ );
     var aChildSet = getElementChildren( this.aActiveElement );
@@ -6270,7 +6270,7 @@ aInterpolatorHandler.getInterpolator = function( eCalcMode, eValueType, eValueSu
     else
     {
         log( 'aInterpolatorHandler.getInterpolator: not found any valid interpolator for calc mode '
-            + aCalcModeOutMap[eCalcMode]  + 'and value type ' + aValueTypeOutMap[eValueType]  );
+             + aCalcModeOutMap[eCalcMode]  + 'and value type ' + aValueTypeOutMap[eValueType]  );
         return null;
     }
 };
@@ -6302,9 +6302,9 @@ aInterpolatorHandler.aLerpFunctorMap[ CALC_MODE_LINEAR ][ COLOR_PROPERTY ][ COLO
     function ( bCCW  )
     {
         return  function ( nFrom, nTo, nT )
-        {
-            return HSLColor.interpolate( nFrom, nTo, nT, bCCW );
-        };
+                {
+                    return HSLColor.interpolate( nFrom, nTo, nT, bCCW );
+                };
     };
 
 
@@ -6391,7 +6391,7 @@ KeyStopLerp.prototype.lerp_ported = function( nAlpha )
     }
 
     var nRawLerp = ( nAlpha - this.aKeyStopList[ this.nLastIndex ] ) /
-        ( this.aKeyStopList[ this.nLastIndex+1 ] - this.aKeyStopList[ this.nLastIndex ] );
+                       ( this.aKeyStopList[ this.nLastIndex+1 ] - this.aKeyStopList[ this.nLastIndex ] );
 
     nRawLerp = clamp( nRawLerp, 0.0, 1.0 );
 
@@ -6793,7 +6793,6 @@ SimpleContinuousActivityBase.prototype.startAnimation = function()
     // init timer. We measure animation time only when we're
     // actually started.
     this.aTimer.reset();
-
 };
 
 SimpleContinuousActivityBase.prototype.calcTimeLag = function()
@@ -6981,13 +6980,13 @@ function ContinuousKeyTimeActivityBase( aCommonParamSet )
 {
     var nSize = aCommonParamSet.aDiscreteTimes.length;
     assert( nSize > 1,
-        'ContinuousKeyTimeActivityBase constructor: assertion (aDiscreteTimes.length > 1) failed' );
+            'ContinuousKeyTimeActivityBase constructor: assertion (aDiscreteTimes.length > 1) failed' );
 
     assert( aCommonParamSet.aDiscreteTimes[0] == 0.0,
-        'ContinuousKeyTimeActivityBase constructor: assertion (aDiscreteTimes.front() == 0.0) failed' );
+            'ContinuousKeyTimeActivityBase constructor: assertion (aDiscreteTimes.front() == 0.0) failed' );
 
     assert( aCommonParamSet.aDiscreteTimes[ nSize - 1 ] <= 1.0,
-        'ContinuousKeyTimeActivityBase constructor: assertion (aDiscreteTimes.back() <= 1.0) failed' );
+            'ContinuousKeyTimeActivityBase constructor: assertion (aDiscreteTimes.back() <= 1.0) failed' );
 
     ContinuousKeyTimeActivityBase.superclass.constructor.call( this, aCommonParamSet );
 
@@ -7044,7 +7043,7 @@ ContinuousActivityBase.prototype.simplePerform = function( nSimpleTime, nRepeatC
 function SimpleActivity( aCommonParamSet, aNumberAnimation, eDirection )
 {
     assert( ( eDirection == BACKWARD ) || ( eDirection == FORWARD ),
-        'SimpleActivity constructor: animation direction is not valid' );
+            'SimpleActivity constructor: animation direction is not valid' );
 
     assert( aNumberAnimation, 'SimpleActivity constructor: animation object is not valid' );
 
@@ -7108,7 +7107,7 @@ function FromToByActivityTemplate( BaseType ) // template parameter
     {
         assert( aAnimation, 'FromToByActivity constructor: invalid animation object' );
         assert( ( aToValue != undefined ) || ( aByValue != undefined ),
-            'FromToByActivity constructor: one of aToValue or aByValue must be valid' );
+                'FromToByActivity constructor: one of aToValue or aByValue must be valid' );
 
         FromToByActivity.superclass.constructor.call( this, aActivityParamSet );
 
@@ -7220,7 +7219,7 @@ function FromToByActivityTemplate( BaseType ) // template parameter
         }
 
         var aValue = this.bDynamicStartValue ? this.aAnimation.getUnderlyingValue()
-            : this.aStartValue;
+                                             : this.aStartValue;
 
         aValue = this.aInterpolator( aValue, this.aEndValue, nModifiedTime );
 
@@ -7333,13 +7332,13 @@ function  ValueListActivityTemplate( BaseType ) // template parameter
         }
 
         assert( ( nIndex + 1 ) < this.aValueList.length,
-            'ValueListActivity.performHook: assertion (nIndex + 1 < this.aValueList.length) failed' );
+                'ValueListActivity.performHook: assertion (nIndex + 1 < this.aValueList.length) failed' );
 
         // interpolate between nIndex and nIndex+1 values
 
         var aValue = this.aInterpolator( this.aValueList[ nIndex ],
-            this.aValueList[ nIndex+1 ],
-            nFractionalIndex );
+                                         this.aValueList[ nIndex+1 ],
+                                         nFractionalIndex );
 
         if( this.bCumulative )
         {
@@ -7391,15 +7390,15 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
     if( ! aInterpolator )
     {
         aInterpolator = aInterpolatorHandler.getInterpolator( eCalcMode,
-            eValueType,
-            eValueSubtype );
+                                                              eValueType,
+                                                              eValueSubtype );
     }
 
     // is it cumulative ?
     var bAccumulate = ( aAnimationNode.getAccumulate() === ACCUMULATE_MODE_SUM )
-        && !( eValueType === BOOL_PROPERTY ||
-        eValueType === STRING_PROPERTY ||
-        eValueType === ENUM_PROPERTY );
+                            && !( eValueType === BOOL_PROPERTY ||
+                                  eValueType === STRING_PROPERTY ||
+                                  eValueType === ENUM_PROPERTY );
 
 
 
@@ -7427,19 +7426,19 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
 
             default:
                 log( 'createActivity: unexpected calculation mode: ' + eCalcMode );
-            // FALLTHROUGH intended
+                // FALLTHROUGH intended
             case CALC_MODE_PACED :
-            // FALLTHROUGH intended
+                // FALLTHROUGH intended
             case CALC_MODE_SPLINE :
-            // FALLTHROUGH intended
+                // FALLTHROUGH intended
             case CALC_MODE_LINEAR:
                 return createValueListActivity( aActivityParamSet,
-                    aAnimationNode,
-                    aAnimation,
-                    aInterpolator,
-                    LinearValueListActivity,
-                    bAccumulate,
-                    eValueType );
+                                                aAnimationNode,
+                                                aAnimation,
+                                                aInterpolator,
+                                                LinearValueListActivity,
+                                                bAccumulate,
+                                                eValueType );
         }
     }
     else
@@ -7453,19 +7452,19 @@ function createActivity( aActivityParamSet, aAnimationNode, aAnimation, aInterpo
 
             default:
                 log( 'createActivity: unexpected calculation mode: ' + eCalcMode );
-            // FALLTHROUGH intended
+                // FALLTHROUGH intended
             case CALC_MODE_PACED :
-            // FALLTHROUGH intended
+                // FALLTHROUGH intended
             case CALC_MODE_SPLINE :
-            // FALLTHROUGH intended
+                // FALLTHROUGH intended
             case CALC_MODE_LINEAR:
                 return createFromToByActivity(  aActivityParamSet,
-                    aAnimationNode,
-                    aAnimation,
-                    aInterpolator,
-                    LinearFromToByActivity,
-                    bAccumulate,
-                    eValueType );
+                                                aAnimationNode,
+                                                aAnimation,
+                                                aInterpolator,
+                                                LinearFromToByActivity,
+                                                bAccumulate,
+                                                eValueType );
         }
     }
 }
@@ -7485,11 +7484,11 @@ function createValueListActivity( aActivityParamSet, aAnimationNode, aAnimation,
     var aValueList = new Array();
 
     extractAttributeValues( eValueType,
-        aValueList,
-        aValueSet,
-        aAnimatedElement.getBaseBBox(),
-        aActivityParamSet.nSlideWidth,
-        aActivityParamSet.nSlideHeight );
+                            aValueList,
+                            aValueSet,
+                            aAnimatedElement.getBaseBBox(),
+                            aActivityParamSet.nSlideWidth,
+                            aActivityParamSet.nSlideHeight );
 
     for( var i = 0; i < aValueList.length; ++i )
     {
@@ -7497,7 +7496,7 @@ function createValueListActivity( aActivityParamSet, aAnimationNode, aAnimation,
     }
 
     return new ClassTemplateInstance( aValueList, aActivityParamSet, aAnimation,
-        aInterpolator, aOperatorSet, bAccumulate );
+                                      aInterpolator, aOperatorSet, bAccumulate );
 }
 
 
@@ -7517,27 +7516,27 @@ function createFromToByActivity( aActivityParamSet, aAnimationNode, aAnimation,
     aValueSet[2] = aAnimationNode.getByValue();
 
     ANIMDBG.print( 'createFromToByActivity: value type: ' + aValueTypeOutMap[eValueType] +
-        ', aFrom = ' + aValueSet[0] +
-        ', aTo = ' + aValueSet[1] +
-        ', aBy = ' + aValueSet[2] );
+                    ', aFrom = ' + aValueSet[0] +
+                    ', aTo = ' + aValueSet[1] +
+                    ', aBy = ' + aValueSet[2] );
 
     var aValueList = new Array();
 
     extractAttributeValues( eValueType,
-        aValueList,
-        aValueSet,
-        aAnimatedElement.getBaseBBox(),
-        aActivityParamSet.nSlideWidth,
-        aActivityParamSet.nSlideHeight );
+                            aValueList,
+                            aValueSet,
+                            aAnimatedElement.getBaseBBox(),
+                            aActivityParamSet.nSlideWidth,
+                            aActivityParamSet.nSlideHeight );
 
     ANIMDBG.print( 'createFromToByActivity: ' +
-        ', aFrom = ' + aValueList[0] +
-        ', aTo = ' + aValueList[1] +
-        ', aBy = ' + aValueList[2] );
+                    ', aFrom = ' + aValueList[0] +
+                    ', aTo = ' + aValueList[1] +
+                    ', aBy = ' + aValueList[2] );
 
     return new ClassTemplateInstance( aValueList[0], aValueList[1], aValueList[2],
-        aActivityParamSet, aAnimation,
-        aInterpolator, aOperatorSet, bAccumulate );
+                                      aActivityParamSet, aAnimation,
+                                      aInterpolator, aOperatorSet, bAccumulate );
 }
 
 
@@ -7628,7 +7627,7 @@ function SlideShow()
     this.aEventMultiplexer = null;
 
     this.aContext = new SlideShowContext( this.aTimerEventQueue, this.aEventMultiplexer,
-        this.aNextEffectEventArray, this.aActivityQueue );
+                                          this.aNextEffectEventArray, this.aActivityQueue );
     this.nCurrentEffect = 0;
     this.eDirection = FORWARD;
     this.bIsIdle = true;
@@ -7776,40 +7775,40 @@ SlideShow.prototype.displaySlide = function( nNewSlide, bSkipSlideTransition )
 
 
     /*
-     var nOldSlide = nCurSlide;
-     nCurSlide = nNewSlide;
+    var nOldSlide = nCurSlide;
+    nCurSlide = nNewSlide;
 
-     var oldMetaSlide = aMetaDoc.aMetaSlideSet[nOldSlide];
-     var newMetaSlide = aMetaDoc.aMetaSlideSet[nNewSlide];
+    var oldMetaSlide = aMetaDoc.aMetaSlideSet[nOldSlide];
+    var newMetaSlide = aMetaDoc.aMetaSlideSet[nNewSlide];
 
-     if( !this.isEnabled() )
-     {
-     oldMetaSlide.hide();
-     newMetaSlide.show();
-     return;
-     }
+    if( !this.isEnabled() )
+    {
+        oldMetaSlide.hide();
+        newMetaSlide.show();
+        return;
+    }
 
-     // force end animations and hide current slide
-     oldMetaSlide.hide();
-     oldMetaSlide.aSlideAnimationsHandler.end( bSkipSlideTransition );
+    // force end animations and hide current slide
+    oldMetaSlide.hide();
+    oldMetaSlide.aSlideAnimationsHandler.end( bSkipSlideTransition );
 
-     // clear all queues
-     this.dispose();
+    // clear all queues
+    this.dispose();
 
-     // prepare to show a new slide
-     this.notifySlideStart();
+    // prepare to show a new slide
+    this.notifySlideStart();
 
-     if( !bSkipSlideTransition )
-     {
-     // create slide transition and add to activity queue
-     // to be implemented
-     }
+    if( !bSkipSlideTransition )
+    {
+        // create slide transition and add to activity queue
+        // to be implemented
+    }
 
-     // show next slide and start animations
-     newMetaSlide.show();
-     newMetaSlide.aSlideAnimationsHandler.start();
-     this.update();
-     */
+    // show next slide and start animations
+    newMetaSlide.show();
+    newMetaSlide.aSlideAnimationsHandler.start();
+    this.update();
+    */
 };
 
 SlideShow.prototype.update = function()
@@ -8162,7 +8161,7 @@ ActivityQueue.prototype.processDequeued = function()
 ActivityQueue.prototype.isEmpty = function()
 {
     return ( ( this.aCurrentActivityWaitingSet.length == 0 ) &&
-        ( this.aCurrentActivityReinsertSet.length == 0 ) );
+             ( this.aCurrentActivityReinsertSet.length == 0 ) );
 };
 
 ActivityQueue.prototype.clear = function()
@@ -8188,8 +8187,8 @@ ActivityQueue.prototype.getTimer = function()
 ActivityQueue.prototype.size = function()
 {
     return ( this.aCurrentActivityWaitingSet.length +
-        this.aCurrentActivityReinsertSet.length +
-        this.aDequeuedActivitySet.length );
+             this.aCurrentActivityReinsertSet.length +
+             this.aDequeuedActivitySet.length );
 };
 
 
@@ -8299,7 +8298,7 @@ ElapsedTime.prototype.getCurrentTime = function()
     }
 
     assert( ( typeof( nCurrentTime ) === typeof( 0 ) ) && isFinite( nCurrentTime ),
-        'ElapsedTime.getCurrentTime: assertion failed: nCurrentTime == ' + nCurrentTime );
+            'ElapsedTime.getCurrentTime: assertion failed: nCurrentTime == ' + nCurrentTime );
 
 
     return nCurrentTime;
