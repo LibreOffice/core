@@ -27,12 +27,11 @@
 
 $(eval $(call gb_Library_Library,resourcemodel))
 
-$(eval $(call gb_Library_add_package_headers,resourcemodel,writerfilter_generated))
+$(eval $(call gb_Library_add_custom_headers,resourcemodel,writerfilter/source))
 
 $(eval $(call gb_Library_set_include,resourcemodel,\
     $$(INCLUDE) \
     -I$(SRCDIR)/writerfilter/inc \
-    -I$(WORKDIR)/CustomTarget/writerfilter/source \
 ))
 
 include $(SRCDIR)/writerfilter/debug_setup.mk

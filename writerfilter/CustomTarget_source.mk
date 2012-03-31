@@ -1,3 +1,4 @@
+# -*- Mode: makefile-gmake; tab-width: 4; indent-tabs-mode: t -*-
 #*************************************************************************
 #
 # DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
@@ -25,17 +26,15 @@
 #
 #*************************************************************************
 
-WFDIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
 
+$(eval $(call gb_CustomTarget_CustomTarget,writerfilter/source,new_style))
 
-gb_PARTIALBUILD:=T
+WFSG := $(call gb_CustomTarget_get_workdir,writerfilter/source)
+WFDIR := $(SRCDIR)/writerfilter/source/
+
 include $(WFDIR)generated.mk
-include $(GBUILDDIR)/gbuild_simple.mk
 
 # doctok
-
-doctok :
-	mkdir doctok
 
 wf_SRC_doctok_Model=$(WFDIR)doctok/resources.xmi
 wf_SRC_doctok_Resources_xsl=$(WFDIR)doctok/resources.xsl
@@ -44,31 +43,28 @@ wf_SRC_doctok_ResourceIds_xsl=$(WFDIR)doctok/resourceids.xsl
 wf_SRC_doctok_SprmIds_xsl=$(WFDIR)doctok/sprmids.xsl
 wf_SRC_doctok_ResourceTools_xsl=$(WFDIR)doctok/resourcetools.xsl
 
-wf_GEN_doctok_SprmIds_hxx=doctok/sprmids.hxx
-wf_GEN_doctok_ResourceIds_hxx=doctok/resourceids.hxx
-wf_GEN_doctok_Resources_hxx=doctok/resources.hxx
-wf_GEN_doctok_Resources_cxx=resources.cxx
+wf_GEN_doctok_SprmIds_hxx := $(WFSG)/doctok/sprmids.hxx
+wf_GEN_doctok_ResourceIds_hxx := $(WFSG)/doctok/resourceids.hxx
+wf_GEN_doctok_Resources_hxx := $(WFSG)/doctok/resources.hxx
+wf_GEN_doctok_Resources_cxx := $(WFSG)/resources.cxx
 
-$(wf_GEN_doctok_SprmIds_hxx) : doctok $(wf_SRC_doctok_SprmIds_xsl) $(wf_SRC_doctok_Model)
+$(wf_GEN_doctok_SprmIds_hxx) : $(wf_SRC_doctok_SprmIds_xsl) $(wf_SRC_doctok_Model) | $(WFSG)/doctok/.dir
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_doctok_SprmIds_xsl) $(wf_SRC_doctok_Model)) > $@
 
-$(wf_GEN_doctok_ResourceIds_hxx) : doctok $(wf_SRC_doctok_ResourceIds_xsl) $(wf_SRC_doctok_Model)
+$(wf_GEN_doctok_ResourceIds_hxx) : $(wf_SRC_doctok_ResourceIds_xsl) $(wf_SRC_doctok_Model) | $(WFSG)/doctok/.dir
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_doctok_ResourceIds_xsl) $(wf_SRC_doctok_Model)) > $@
 
-$(wf_GEN_doctok_Resources_hxx) : doctok $(wf_SRC_doctok_Resources_xsl) $(wf_SRC_doctok_Model)
+$(wf_GEN_doctok_Resources_hxx) : $(wf_SRC_doctok_Resources_xsl) $(wf_SRC_doctok_Model) | $(WFSG)/doctok/.dir
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_doctok_Resources_xsl) $(wf_SRC_doctok_Model)) > $@
 
-$(wf_GEN_doctok_Resources_cxx) : doctok $(wf_SRC_doctok_ResourcesImpl_xsl) $(wf_SRC_doctok_Model) $(wf_SRC_doctok_ResourceTools_xsl)
+$(wf_GEN_doctok_Resources_cxx) : $(wf_SRC_doctok_ResourcesImpl_xsl) $(wf_SRC_doctok_Model) $(wf_SRC_doctok_ResourceTools_xsl) | $(WFSG)/doctok/.dir
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_doctok_ResourcesImpl_xsl) $(wf_SRC_doctok_Model)) > $@
 
 # ooxml
-
-ooxml :
-	mkdir ooxml
 
 wf_SRC_ooxml_Model=$(WFDIR)ooxml/model.xml
 wf_SRC_ooxml_Preprocess_xsl=$(WFDIR)ooxml/modelpreprocess.xsl
@@ -80,20 +76,20 @@ wf_SRC_ooxml_FactoryValuesImpl_xsl=$(WFDIR)ooxml/factoryimpl_values.xsl
 wf_SRC_ooxml_ResourceIds_xsl=$(WFDIR)ooxml/resourceids.xsl
 wf_SRC_ooxml_GperfFastTokenHandler_xsl=$(WFDIR)ooxml/gperffasttokenhandler.xsl
 wf_SRC_ooxml_Analyze_model_xsl=$(WFDIR)ooxml/analyzemodel.xsl
-wf_GEN_ooxml_ResourceIds_hxx=ooxml/resourceids.hxx
+wf_GEN_ooxml_ResourceIds_hxx=$(WFSG)/ooxml/resourceids.hxx
 
-wf_GEN_ooxml_token_xml=token.xml
-wf_GEN_ooxml_token_tmp=token.tmp
+wf_GEN_ooxml_token_xml=$(WFSG)/token.xml
+wf_GEN_ooxml_token_tmp=$(WFSG)/token.tmp
 
-wf_GEN_ooxml_Factory_hxx=OOXMLFactory_generated.hxx
-wf_GEN_ooxml_Factory_cxx=OOXMLFactory_generated.cxx
-wf_GEN_ooxml_FastTokens_hxx=ooxml/OOXMLFastTokens.hxx
-wf_GEN_ooxml_NamespaceIds_hxx=ooxml/OOXMLnamespaceids.hxx
-wf_GEN_ooxml_FactoryValues_hxx=OOXMLFactory_values.hxx
-wf_GEN_ooxml_FactoryValues_cxx=OOXMLFactory_values.cxx
-wf_GEN_ooxml_GperfFastToken_hxx=gperffasttoken.hxx
-wf_GEN_ooxml_Model_processed=model_preprocessed.xml
-wf_GEN_ooxml_Model_analyzed=ooxml/model_analyzed.xml
+wf_GEN_ooxml_Factory_hxx=$(WFSG)/OOXMLFactory_generated.hxx
+wf_GEN_ooxml_Factory_cxx=$(WFSG)/OOXMLFactory_generated.cxx
+wf_GEN_ooxml_FastTokens_hxx=$(WFSG)/ooxml/OOXMLFastTokens.hxx
+wf_GEN_ooxml_NamespaceIds_hxx=$(WFSG)/ooxml/OOXMLnamespaceids.hxx
+wf_GEN_ooxml_FactoryValues_hxx=$(WFSG)/OOXMLFactory_values.hxx
+wf_GEN_ooxml_FactoryValues_cxx=$(WFSG)/OOXMLFactory_values.cxx
+wf_GEN_ooxml_GperfFastToken_hxx=$(WFSG)/gperffasttoken.hxx
+wf_GEN_ooxml_Model_processed=$(WFSG)/model_preprocessed.xml
+wf_GEN_ooxml_Model_analyzed=$(WFSG)/ooxml/model_analyzed.xml
 
 $(wf_GEN_ooxml_token_tmp) : $(OUTDIR)/inc/oox/tokens.txt
 	$(call gb_Output_announce,$@,build,CAT,1)
@@ -116,11 +112,11 @@ $(wf_GEN_ooxml_Factory_cxx) : $(WFDIR)ooxml/factoryimpl.xsl $(wf_GEN_ooxml_Model
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $< $(wf_GEN_ooxml_Model_processed)) > $@
 
-OOXMLFactory%.cxx : $(WFDIR)ooxml/factoryimpl_ns.xsl $(wf_GEN_ooxml_Model_processed)
+$(WFSG)/OOXMLFactory%.cxx : $(WFDIR)ooxml/factoryimpl_ns.xsl $(wf_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) --stringparam file $@ $< $(wf_GEN_ooxml_Model_processed)) > $@
 
-OOXMLFactory%.hxx : $(WFDIR)ooxml/factory_ns.xsl $(wf_GEN_ooxml_Model_processed)
+$(WFSG)/OOXMLFactory%.hxx : $(WFDIR)ooxml/factory_ns.xsl $(wf_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) --stringparam file $@ $< $(wf_GEN_ooxml_Model_processed)) > $@
 
@@ -132,7 +128,7 @@ $(wf_GEN_ooxml_FactoryValues_cxx) : $(wf_SRC_ooxml_FactoryValuesImpl_xsl) $(wf_G
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_ooxml_FactoryValuesImpl_xsl) $(wf_GEN_ooxml_Model_processed)) > $@
 
-$(wf_GEN_ooxml_ResourceIds_hxx) : ooxml $(wf_SRC_ooxml_ResourceIds_xsl) $(wf_GEN_ooxml_Model_processed)
+$(wf_GEN_ooxml_ResourceIds_hxx) : $(wf_SRC_ooxml_ResourceIds_xsl) $(wf_GEN_ooxml_Model_processed) | $(WFSG)/ooxml/.dir
 	$(call gb_Output_announce,$@,build,XSL,1)
 	$(call gb_Helper_abbreviate_dirs_native, $(gb_XSLTPROC) $(wf_SRC_ooxml_ResourceIds_xsl) $(wf_GEN_ooxml_Model_processed)) > $@
 
@@ -154,7 +150,7 @@ $(wf_GEN_ooxml_Model_analyzed): $(wf_SRC_ooxml_Analyze_model_xsl) $(wf_SRC_ooxml
 wf_SRC_rtftok_scanner_lex=$(WFDIR)rtftok/RTFScanner.lex
 wf_SRC_rtftok_scanner_skl=$(WFDIR)rtftok/RTFScanner.skl
 
-wf_GEN_rtftok_scanner_cxx=RTFScanner.cxx
+wf_GEN_rtftok_scanner_cxx=$(WFSG)/RTFScanner.cxx
 
 # does not build, currently unused
 #$(wf_GEN_rtftok_scanner_cxx) : $(wf_SRC_rtftok_scanner_lex) $(wf_SRC_rtftok_scanner_skl)
@@ -162,18 +158,18 @@ wf_GEN_rtftok_scanner_cxx=RTFScanner.cxx
 
 # resourcemodel
 
-wf_GEN_model_QNameToStr_cxx=qnametostr.cxx
-wf_GEN_ooxml_QNameToStr_tmp=OOXMLqnameToStr.tmp
-wf_GEN_model_SprmCodeToStr_cxx=sprmcodetostr.cxx
-wf_GEN_model_SprmCodeToStr_tmp=sprmcodetostr.tmp
-wf_GEN_doctok_QnameToStr_tmp=DOCTOKqnameToStr.tmp
+wf_GEN_model_QNameToStr_cxx=$(WFSG)/qnametostr.cxx
+wf_GEN_ooxml_QNameToStr_tmp=$(WFSG)/OOXMLqnameToStr.tmp
+wf_GEN_model_SprmCodeToStr_cxx=$(WFSG)/sprmcodetostr.cxx
+wf_GEN_model_SprmCodeToStr_tmp=$(WFSG)/sprmcodetostr.tmp
+wf_GEN_doctok_QnameToStr_tmp=$(WFSG)/DOCTOKqnameToStr.tmp
 wf_SRC_doctok_SprmCodeToStr_xsl=$(WFDIR)doctok/sprmcodetostr.xsl
 wf_SRC_doctok_QNameToStr_xsl=$(WFDIR)doctok/qnametostr.xsl
 wf_SRC_ooxml_QNameToStr_xsl=$(WFDIR)ooxml/qnametostr.xsl
 wf_SRC_model_NamespacePreprocess=$(WFDIR)resourcemodel/namespace_preprocess.pl
-wf_GEN_ooxml_Namespacesmap_xsl=namespacesmap.xsl
-wf_DEP_ooxml_namespaces_txt=$(OUTDIR)/inc$(UPDMINOREXT)/oox/namespaces.txt
-wf_GEN_ooxml_preprocess_xsl=modelpreprocess.xsl
+wf_GEN_ooxml_Namespacesmap_xsl=$(WFSG)/namespacesmap.xsl
+wf_DEP_ooxml_namespaces_txt=$(OUTDIR)/inc/oox/namespaces.txt
+wf_GEN_ooxml_preprocess_xsl=$(WFSG)/modelpreprocess.xsl
 
 $(wf_GEN_ooxml_QNameToStr_tmp): $(wf_SRC_ooxml_QNameToStr_xsl) $(wf_GEN_ooxml_Model_processed)
 	$(call gb_Output_announce,$@,build,XSL,1)
@@ -209,9 +205,7 @@ $(wf_GEN_ooxml_Model_processed) : $(wf_GEN_ooxml_Namespacesmap_xsl) $(wf_GEN_oox
 
 # all
 
-.DEFAULT_GOAL:=all
-.PHONY: all
-all : \
+wf_all := \
 	$(wf_GEN_doctok_SprmIds_hxx) \
 	$(wf_GEN_doctok_ResourceIds_hxx) \
 	$(wf_GEN_doctok_Resources_hxx) \
@@ -226,6 +220,11 @@ all : \
 	$(wf_GEN_ooxml_NamespaceIds_hxx) \
 	$(wf_GEN_model_QNameToStr_cxx) \
 	$(wf_GEN_model_SprmCodeToStr_cxx) \
-	$(patsubst %,OOXMLFactory_%.hxx,$(WRITERFILTER_OOXMLNAMESPACES)) \
-	$(patsubst %,OOXMLFactory_%.cxx,$(WRITERFILTER_OOXMLNAMESPACES)) \
+	$(patsubst %,$(WFSG)/OOXMLFactory_%.hxx,$(WRITERFILTER_OOXMLNAMESPACES)) \
+	$(patsubst %,$(WFSG)/OOXMLFactory_%.cxx,$(WRITERFILTER_OOXMLNAMESPACES)) \
 
+$(call gb_CustomTarget_get_target,writerfilter/source) : $(wf_all)
+
+$(wf_all) :| $(gb_XSLTPROCTARGET) $(WFSG)/.dir
+
+# vim: set noet sw=4 ts=4:

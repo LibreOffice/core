@@ -28,13 +28,14 @@
 $(eval $(call gb_Module_Module,writerfilter))
 
 $(eval $(call gb_Module_add_targets,writerfilter,\
+    CustomTarget_source \
     Library_doctok \
     Library_ooxml \
     Library_resourcemodel \
     Library_rtftok \
     Library_writerfilter \
     Library_writerfilter_uno \
-    Package_writerfilter_generated \
+    Package_sprmids \
 ))
 
 $(eval $(call gb_Module_add_check_targets,writerfilter,\

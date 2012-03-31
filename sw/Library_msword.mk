@@ -30,6 +30,8 @@ $(eval $(call gb_Library_Library,msword))
 
 $(eval $(call gb_Library_set_componentfile,msword,sw/util/msword))
 
+$(eval $(call gb_Library_add_external_headers,msword,writerfilter_sprmids))
+
 $(eval $(call gb_Library_set_include,msword,\
     -I$(SRCDIR)/sw/source/core/inc \
     -I$(SRCDIR)/sw/source/ui/inc \
@@ -118,12 +120,5 @@ $(eval $(call gb_Library_add_exception_objects,msword,\
     sw/source/filter/ww8/ww8scan \
     sw/source/filter/ww8/ww8toolbar \
 ))
-
-# TODO: This should be really fixed in writerfilter so the header is
-# delivered before compilation starts.
-$(call gb_CxxObject_get_target,sw/source/filter/ww8/wrtw8nds) \
-$(call gb_CxxObject_get_target,sw/source/filter/ww8/wrtww8gr) \
-$(call gb_CxxObject_get_target,sw/source/filter/ww8/ww8atr) \
-	: $(OUTDIR)/inc/writerfilter/doctok/sprmids.hxx
 
 # vim: set noet sw=4 ts=4:
