@@ -58,7 +58,7 @@ endif
 $(CLSO)/done : $(cl_FIXED_TARFILE_LOCATION) \
 		$(_CLUCENE_CONFIG_H) $(CLUCENE_CONFIG_H)
 	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),TAR,1)
-	$(call gb_Helper_abbreviate_dirs_native, \
+	$(call gb_Helper_abbreviate_dirs, \
 	mkdir -p $(dir $@) && cd $(dir $@) && \
 	$(GNUTAR) -x -z $(STRIP_COMPONENTS)=1 -f $< && \
 	$(GNUPATCH) -p0 < $(SRCDIR)/clucene/patches/clucene-internal-zlib.patch && \
