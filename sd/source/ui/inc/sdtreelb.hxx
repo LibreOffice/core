@@ -206,7 +206,6 @@ public:
     sal_Bool                    HasSelectedChildren( const String& rName );
     sal_Bool                    SelectEntry( const String& rName );
     String                  GetSelectEntry();
-    List*                   GetSelectEntryList( sal_uInt16 nDepth );
 
     /*************************************************************************
     |*

@@ -139,7 +139,6 @@ class AbstractSdInsertPagesObjsDlg : public VclAbstractDialog  //add for SdInser
 {
 public:
     virtual ::Window*   GetWindow() = 0;  //this method is added for return a ::Window type pointer
-    virtual List*       GetList( sal_uInt16 nType ) = 0;
     virtual void GetList ( const sal_uInt16 nType, std::vector<rtl::OUString> &rEntries ) = 0;
     virtual sal_Bool        IsLink() = 0;
     virtual sal_Bool        IsRemoveUnnessesaryMasterPages() const = 0;

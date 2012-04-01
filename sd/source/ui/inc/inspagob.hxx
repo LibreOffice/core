@@ -61,8 +61,6 @@ public:
                                 const String& rFileName );
                 ~SdInsertPagesObjsDlg();
 
-    List*       GetList( sal_uInt16 nType );
-
     /*************************************************************************
     |*
     |*  Liefert die Liste zurueck

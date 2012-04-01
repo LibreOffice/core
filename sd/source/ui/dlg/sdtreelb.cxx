@@ -663,36 +663,6 @@ String SdPageObjsTLB::GetSelectEntry()
     return( GetEntryText( GetCurEntry() ) );
 }
 
-/*************************************************************************
-|*
-|* Selektierte Eintrage zurueckgeben
-|* nDepth == 0 -> Seiten
-|* nDepth == 1 -> Objekte
-|*
-\************************************************************************/
-
-List* SdPageObjsTLB::GetSelectEntryList( sal_uInt16 nDepth )
-{
-    List*        pList  = NULL;
-    SvLBoxEntry* pEntry = FirstSelected();
-
-    while( pEntry )
-    {
-        sal_uInt16 nListDepth = GetModel()->GetDepth( pEntry );
-        if( nListDepth == nDepth )
-        {
-            if( !pList )
-                pList = new List();
-
-            const String aEntryText( GetEntryText( pEntry ) );
-            pList->Insert( new String( aEntryText ), LIST_APPEND );
-        }
-        pEntry = NextSelected( pEntry );
-    }
-
-    return( pList );
-}
-
 void SdPageObjsTLB::GetSelectEntryList( sal_uInt16 nDepth, std::vector<rtl::OUString> &rEntries ) const
 {
     SvLBoxEntry* pEntry = FirstSelected();
