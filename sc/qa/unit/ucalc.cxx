@@ -3922,20 +3922,20 @@ void Test::testSetBackgroundColor()
      //test yellow
     aColor=Color(COL_YELLOW);
     m_xDocShRef->GetDocFunc().SetTabBgColor(0,aColor,false, true);
-    CPPUNIT_ASSERT_MESSAGE("the correct color is not set", m_pDoc->GetTabBgColor(0)!= aColor.GetColor());
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set", m_pDoc->GetTabBgColor(0)!= aColor);
 
 
     Color aOldTabBgColor=m_pDoc->GetTabBgColor(0);
     aColor.SetColor(COL_BLUE);//set BLUE
     m_xDocShRef->GetDocFunc().SetTabBgColor(0,aColor,false, true);
-    CPPUNIT_ASSERT_MESSAGE("the correct color is not set the second time", m_pDoc->GetTabBgColor(0)!= aColor.GetColor());
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set the second time", m_pDoc->GetTabBgColor(0)!= aColor);
 
     //now check for undo
     SfxUndoAction* pUndo = new ScUndoTabColor(m_xDocShRef,0, aOldTabBgColor, aColor);
     pUndo->Undo();
-    CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)== aOldTabBgColor.GetColor());
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)== aOldTabBgColor);
     pUndo->Redo();
-    CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)== aColor.GetColor());
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)== aColor);
     m_pDoc->DeleteTab(0);
 }
 
