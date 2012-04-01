@@ -26,6 +26,9 @@
  *
  ************************************************************************/
 
+#ifndef _OOX_EXPORT_VMLEXPORT_HXX_
+#define _OOX_EXPORT_VMLEXPORT_HXX_
+
 #include <oox/dllapi.h>
 #include <sax/fshelper.hxx>
 #include <filter/msfilter/escherex.hxx>
@@ -117,5 +120,7 @@ private:
 } // namespace vml
 
 } // namespace oox
+
+#endif
 
 /* vim:set shiftwidth=4 softtabstop=4 expandtab: */
