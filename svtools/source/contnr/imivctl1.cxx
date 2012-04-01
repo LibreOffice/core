@@ -3558,25 +3558,13 @@ void SvxIconChoiceCtrl_Impl::SetPositionMode( SvxIconChoiceCtrlPositionMode eMod
 
     if( ePositionMode == IcnViewPositionModeAutoArrange )
     {
-        List aMovedEntries;
         for( size_t nCur = 0; nCur < nCount; nCur++ )
         {
             SvxIconChoiceCtrlEntry* pEntry = aEntries[ nCur ];
             if( pEntry->GetFlags() & (ICNVIEW_FLAG_POS_LOCKED | ICNVIEW_FLAG_POS_MOVED))
-            {
-                SvxIconChoiceCtrlEntry_Impl* pE = new SvxIconChoiceCtrlEntry_Impl(
-                        pEntry, GetEntryBoundRect( pEntry ));
-                aMovedEntries.Insert( pE, LIST_APPEND );
-            }
+                SetEntryPos(pEntry, GetEntryBoundRect( pEntry ).TopLeft());
         }
-        nCount = aMovedEntries.Count();
-        for( size_t nCur = 0; nCur < nCount; nCur++ )
-        {
-            SvxIconChoiceCtrlEntry_Impl* pE = (SvxIconChoiceCtrlEntry_Impl*)aMovedEntries.GetObject(nCur);
-            SetEntryPos( pE->_pEntry, pE->_aPos );
-        }
-        for( size_t nCur = 0; nCur < nCount; nCur++ )
-            delete (SvxIconChoiceCtrlEntry_Impl*)aMovedEntries.GetObject( nCur );
+
         if( aEntries.size() )
             aAutoArrangeTimer.Start();
     }
