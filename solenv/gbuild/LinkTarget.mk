@@ -745,8 +745,11 @@ define gb_LinkTarget_add_generated_c_object
 $(call gb_LinkTarget_get_target,$(1)) : GENCOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCOBJECTS += $(2)
 
+# Make just needs to know gb_GenCObject_get_source is a real target.
+# Then it can use implicit rule for gb_GenCObject_get_target.
+$(call gb_GenCObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCObject_get_target,$(2))
-$(call gb_GenCObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_GenCObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCObject_get_target,$(2)) : T_CFLAGS += $(3)
 $(call gb_GenCObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
@@ -762,8 +765,11 @@ define gb_LinkTarget_add_generated_cxx_object
 $(call gb_LinkTarget_get_target,$(1)) : GENCXXOBJECTS += $(2)
 $(call gb_LinkTarget_get_clean_target,$(1)) : GENCXXOBJECTS += $(2)
 
+# Make just needs to know gb_GenCxxObject_get_source is a real target.
+# Then it can use implicit rule for gb_GenCxxObject_get_target.
+$(call gb_GenCxxObject_get_source,$(2)) : | $(gb_Helper_MISCDUMMY)
 $(call gb_LinkTarget_get_target,$(1)) : $(call gb_GenCxxObject_get_target,$(2))
-$(call gb_GenCxxObject_get_source,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
+$(call gb_GenCxxObject_get_target,$(2)) : | $(call gb_LinkTarget_get_headers_target,$(1))
 $(call gb_GenCxxObject_get_target,$(2)) : T_CXXFLAGS += $(3)
 $(call gb_GenCxxObject_get_target,$(2)) : \
 	OBJECTOWNER := $(call gb_Object__owner,$(2),$(1))
