@@ -3933,7 +3933,9 @@ void Test::testSetBackgroundColor()
     //now check for undo
     SfxUndoAction* pUndo = new ScUndoTabColor(m_xDocShRef,0, aOldTabBgColor, aColor);
     pUndo->Undo();
-    //CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)!= aOldTabBgColor.GetColor());
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)== aOldTabBgColor.GetColor());
+    pUndo->Redo();
+    CPPUNIT_ASSERT_MESSAGE("the correct color is not set after undo", m_pDoc->GetTabBgColor(0)== aColor.GetColor());
     m_pDoc->DeleteTab(0);
 }
 
