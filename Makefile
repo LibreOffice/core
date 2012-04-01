@@ -65,6 +65,7 @@ hwpfilter\
 i18npool\
 i18nutil\
 idl\
+io\
 javaunohelper\
 jurt\
 jvmaccess\
@@ -103,6 +104,7 @@ slideshow\
 smoketest\
 sot\
 starmath\
+stoc\
 svl\
 svtools\
 svx\
@@ -174,7 +176,6 @@ icc\
 icu\
 idlc\
 instsetoo_native\
-io\
 jfreereport\
 jpeg\
 l10ntools\
@@ -227,7 +228,6 @@ solenv\
 soltools\
 stax\
 stlport\
-stoc\
 store\
 sysui\
 testtools\
