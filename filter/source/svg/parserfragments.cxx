@@ -93,16 +93,16 @@ void calcRotation(std::vector<geometry::AffineMatrix2D>& rTransforms,
 void calcSkewX(std::vector<geometry::AffineMatrix2D>& rTransforms,
                double                                 fSkewAngle)
 {
-    geometry::AffineMatrix2D aMat(1.0,0.0,0.0,
-                                  tan(fSkewAngle*M_PI/180),1.0,0.0);
+    geometry::AffineMatrix2D aMat(1.0,tan(fSkewAngle*M_PI/180),0.0,
+                                  0.0,1.0,0.0);
     rTransforms.push_back(aMat);
 }
 
 void calcSkewY(std::vector<geometry::AffineMatrix2D>& rTransforms,
                double                                 fSkewAngle)
 {
-    geometry::AffineMatrix2D aMat(1.0,tan(fSkewAngle*M_PI/180),0.0,
-                                  0.0,1.0,0.0);
+    geometry::AffineMatrix2D aMat(1.0,0.0,0.0,
+                                  tan(fSkewAngle*M_PI/180),1.0,0.0);
     rTransforms.push_back(aMat);
 }
 
