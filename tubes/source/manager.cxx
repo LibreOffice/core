@@ -119,12 +119,12 @@ void TeleManager::DBusChannelHandler(
         SAL_INFO( "tubes", "TeleManager::DBusChannelHandler: incoming dbus channel: "
                 << tp_channel_get_identifier( pChannel));
 
-        if (tp_channel_get_channel_type_id( pChannel) == TP_IFACE_QUARK_CHANNEL_TYPE_DBUS_TUBE)
+        if (TP_IS_DBUS_TUBE_CHANNEL( pChannel))
         {
             SAL_INFO( "tubes", "accepting");
             aAccepted = true;
 
-            TeleConferencePtr pConference( new TeleConference( pManager, pAccount, pChannel, ""));
+            TeleConferencePtr pConference( new TeleConference( pManager, pAccount, TP_DBUS_TUBE_CHANNEL( pChannel), ""));
             pManager->maConferences.push_back( pConference);
             pConference->acceptTube();
         }
@@ -283,7 +283,7 @@ static void TeleManager_ChannelReadyHandler(
     }
 
     pConference->setChannel( tp_account_channel_request_get_account( pChannelRequest),
-            pChannel);
+            TP_DBUS_TUBE_CHANNEL (pChannel));
     pConference->offerTube();
 }
 

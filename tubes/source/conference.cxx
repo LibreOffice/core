@@ -142,7 +142,7 @@ static void TeleConference_ChannelCloseHandler(
 
 
 void TeleConference::TubeOfferedHandler(
-        TpChannel*      pChannel,
+        TpChannel*      pBaseChannel,
         const gchar*    pAddress,
         const GError*   pError,
         gpointer        pUserData,
@@ -168,8 +168,9 @@ void TeleConference::TubeOfferedHandler(
     if (!pAddress)
         return;
 
+    TpDBusTubeChannel* pChannel = TP_DBUS_TUBE_CHANNEL( pBaseChannel);
     SAL_WARN_IF( pChannel != pConference->getChannel(), "tubes", "TeleConference::TubeOfferedHandler: not my channel");
-    if (pChannel != pConference->getChannel())
+    if ((pChannel) != pConference->getChannel())
         return;
 
     pConference->mpAddress = g_strdup( pAddress );
@@ -192,7 +193,7 @@ bool TeleConference::tryToOpen()
 }
 
 void TeleConference::TubeChannelStateChangedHandler(
-        TpChannel*  pChannel,
+        TpChannel*  pBaseChannel,
         guint       nState,
         gpointer    pUserData,
         GObject*    /*weak_object*/
@@ -207,6 +208,7 @@ void TeleConference::TubeChannelStateChangedHandler(
     if (!pConference)
         return;
 
+    TpDBusTubeChannel* pChannel = TP_DBUS_TUBE_CHANNEL( pBaseChannel);
     SAL_WARN_IF( pChannel != pConference->getChannel(), "tubes",
             "TeleConference::TubeChannelStateChangedHandler: not my channel");
     if (pChannel != pConference->getChannel())
@@ -217,7 +219,7 @@ void TeleConference::TubeChannelStateChangedHandler(
 }
 
 
-TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpChannel* pChannel, const rtl::OString& rSessionId )
+TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpDBusTubeChannel* pChannel, const rtl::OString& rSessionId )
     :
         maSessionId( rSessionId ),
         mpManager( pManager),
@@ -238,7 +240,7 @@ TeleConference::~TeleConference()
 }
 
 
-void TeleConference::setChannel( TpAccount *pAccount, TpChannel* pChannel )
+void TeleConference::setChannel( TpAccount *pAccount, TpDBusTubeChannel* pChannel )
 {
     OSL_ENSURE( !mpChannel, "TeleConference::setChannel: already have channel");
     if (mpChannel)
@@ -254,7 +256,7 @@ void TeleConference::setChannel( TpAccount *pAccount, TpChannel* pChannel )
         GError* pError = NULL;
         TpProxySignalConnection* pProxySignalConnection =
             tp_cli_channel_interface_tube_connect_to_tube_channel_state_changed(
-                    mpChannel,
+                    TP_CHANNEL( mpChannel),
                     &TeleConference::TubeChannelStateChangedHandler,
                     this,
                     NULL,
@@ -295,7 +297,7 @@ bool TeleConference::acceptTube()
     if (!mpChannel || mpTube)
         return false;
 
-    tp_cli_channel_type_dbus_tube_call_accept( mpChannel, -1,
+    tp_cli_channel_type_dbus_tube_call_accept( TP_CHANNEL( mpChannel), -1,
             TP_SOCKET_ACCESS_CONTROL_CREDENTIALS,
             &TeleConference::TubeOfferedHandler,
             this, NULL, NULL);
@@ -318,7 +320,7 @@ bool TeleConference::offerTube()
             NULL);
 
     tp_cli_channel_type_dbus_tube_call_offer(
-            mpChannel,                              // proxy
+            TP_CHANNEL( mpChannel),                 // proxy
             -1,                                     // timeout_ms
             pParams,                                // in_parameters
             TP_SOCKET_ACCESS_CONTROL_CREDENTIALS,   // in_access_control
@@ -387,7 +389,7 @@ void TeleConference::close()
     INFO_LOGGER( "TeleConference::close");
 
     if (mpChannel)
-        tp_cli_channel_call_close( mpChannel, 5000, TeleConference_ChannelCloseHandler, this, NULL, NULL);
+        tp_cli_channel_call_close( TP_CHANNEL( mpChannel), 5000, TeleConference_ChannelCloseHandler, this, NULL, NULL);
     else
         finalize();
 }
@@ -552,7 +554,7 @@ void TeleConference::sendFile( rtl::OUString &localUri, FileSentCallback pCallba
     SendFileRequest *pReq = new SendFileRequest( this, pCallback, pUserData);
 
     empathy_ft_handler_new_outgoing( mpAccount,
-        tp_channel_get_target_contact( mpChannel),
+        tp_channel_get_target_contact( TP_CHANNEL( mpChannel)),
         pSource,
         0,
         &TeleConference::FTReady, pReq);
