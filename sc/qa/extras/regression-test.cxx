@@ -61,8 +61,6 @@
 using namespace ::com::sun::star;
 using namespace ::com::sun::star::uno;
 
-/* Implementation of Macros test */
-
 class ScChartRegressionTest : public test::BootstrapFixture, public unotest::MacrosTest
 {
 public:
@@ -135,7 +133,7 @@ void ScChartRegressionTest::test()
 }
 
 ScChartRegressionTest::ScChartRegressionTest()
-      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/sc/qa/unit/data"))
+      : m_aBaseString(RTL_CONSTASCII_USTRINGPARAM("/chart2/qa/unit/data"))
 {
 }
 
