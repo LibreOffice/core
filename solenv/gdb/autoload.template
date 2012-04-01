@@ -39,4 +39,10 @@ if gdb.current_objfile():
 from %MODULE% import register_pretty_printers
 register_pretty_printers(gdb.current_objfile())
 
+try:
+    import boost
+    boost.register_pretty_printers(gdb)
+except:
+    pass
+
 # vim:set filetype=python shiftwidth=4 softtabstop=4 expandtab:
