@@ -3903,11 +3903,11 @@ void Test::testMergedCells()
     ScRange aRange(0,2,0,MAXCOL,2,0);
     ScMarkData aMark;
     aMark.SetMarkArea(aRange);
+    m_pDoc->SetInTest();
     aDocFunc.InsertCells(aRange, &aMark, INS_INSROWS, true, true);
     m_pDoc->ExtendMerge( 1, 1, nEndCol, nEndRow, 0, false);
     cout << nEndRow << nEndCol;
-    //ScEditableTester won't work without an SfxMedium/XStorage
-    //CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
+    CPPUNIT_ASSERT_MESSAGE("did not increase merge area", nEndCol == 3 && nEndRow == 4);
     m_pDoc->DeleteTab(0);
 }
 
