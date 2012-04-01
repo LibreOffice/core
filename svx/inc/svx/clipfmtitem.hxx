@@ -28,13 +28,10 @@
 #ifndef _SVX_CLIPFMTITEM_HXX
 #define _SVX_CLIPFMTITEM_HXX
 
-// include ---------------------------------------------------------------
-
-#include <tools/gen.hxx>
+#include <rtl/ustring.hxx>
 #include <svl/poolitem.hxx>
 #include "svx/svxdllapi.h"
 
-// class SvxClipboardFmtItem ----------------------------------------------
 struct SvxClipboardFmtItem_Impl;
 
 class SVX_DLLPUBLIC SvxClipboardFmtItem : public SfxPoolItem
@@ -55,12 +52,12 @@ public:
     virtual bool PutValue( const com::sun::star::uno::Any& rVal, sal_uInt8 nMemberId );
 
     void AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos = USHRT_MAX );
-    void AddClipbrdFormat( sal_uIntPtr nId, const String& rName,
+    void AddClipbrdFormat( sal_uIntPtr nId, const rtl::OUString& rName,
                             sal_uInt16 nPos = USHRT_MAX );
     sal_uInt16 Count() const;
 
     sal_uIntPtr GetClipbrdFormatId( sal_uInt16 nPos ) const;
-    const String& GetClipbrdFormatName( sal_uInt16 nPos ) const;
+    const rtl::OUString GetClipbrdFormatName( sal_uInt16 nPos ) const;
 };
 
 

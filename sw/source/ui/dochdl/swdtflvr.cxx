@@ -2831,7 +2831,7 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
 
         if( nResId )
             rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_EMBED_SOURCE,
-                                        SW_RES( nResId ) );
+                                        SW_RESSTR( nResId ) );
     }
     else
     {
@@ -2856,7 +2856,7 @@ void SwTransferable::FillClipFmtItem( const SwWrtShell& rSh,
     }
 
     if( SwTransferable::_TestAllowedFormat( rData, SOT_FORMATSTR_ID_LINK, nDest ))
-        rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_LINK, SW_RES(STR_DDEFORMAT) );
+        rToFill.AddClipbrdFormat( SOT_FORMATSTR_ID_LINK, SW_RESSTR(STR_DDEFORMAT) );
 
     for( sal_uInt16* pIds = aPasteSpecialIds; *pIds; ++pIds )
         if( SwTransferable::_TestAllowedFormat( rData, *pIds, nDest ))

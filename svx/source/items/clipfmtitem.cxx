@@ -34,15 +34,12 @@
 
 struct SvxClipboardFmtItem_Impl
 {
-    boost::ptr_vector< boost::nullable<String> > aFmtNms;
+    boost::ptr_vector< boost::nullable<rtl::OUString> > aFmtNms;
     std::vector<sal_uIntPtr> aFmtIds;
-    static String sEmptyStr;
 
     SvxClipboardFmtItem_Impl() {}
     SvxClipboardFmtItem_Impl( const SvxClipboardFmtItem_Impl& );
 };
-
-String SvxClipboardFmtItem_Impl::sEmptyStr;
 
 TYPEINIT1_FACTORY( SvxClipboardFmtItem, SfxPoolItem , new  SvxClipboardFmtItem(0));
 
@@ -96,7 +93,7 @@ bool SvxClipboardFmtItem::PutValue( const ::com::sun::star::uno::Any& rVal, sal_
 
         pImpl->aFmtIds.clear();
         pImpl->aFmtNms.clear();
-        for ( sal_uInt16 n=0; n < nCount; n++ )
+        for ( sal_uInt16 n=0; n < nCount; ++n )
             AddClipbrdFormat( sal_uIntPtr( aClipFormats.Identifiers[n] ), aClipFormats.Names[n], n );
 
         return true;
@@ -140,13 +137,13 @@ void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, sal_uInt16 nPos )
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
-void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, const String& rName,
+void SvxClipboardFmtItem::AddClipbrdFormat( sal_uIntPtr nId, const rtl::OUString& rName,
                             sal_uInt16 nPos )
 {
     if( nPos > pImpl->aFmtNms.size() )
         nPos = pImpl->aFmtNms.size();
 
-    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, new String(rName));
+    pImpl->aFmtNms.insert(pImpl->aFmtNms.begin() + nPos, new rtl::OUString(rName));
     pImpl->aFmtIds.insert( pImpl->aFmtIds.begin()+nPos, nId );
 }
 
@@ -160,9 +157,9 @@ sal_uIntPtr SvxClipboardFmtItem::GetClipbrdFormatId( sal_uInt16 nPos ) const
     return pImpl->aFmtIds[ nPos ];
 }
 
-const String& SvxClipboardFmtItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
+const rtl::OUString SvxClipboardFmtItem::GetClipbrdFormatName( sal_uInt16 nPos ) const
 {
-    return pImpl->aFmtNms.is_null(nPos) ? SvxClipboardFmtItem_Impl::sEmptyStr : pImpl->aFmtNms[nPos];
+    return pImpl->aFmtNms.is_null(nPos) ? rtl::OUString() : pImpl->aFmtNms[nPos];
 }
 
 
