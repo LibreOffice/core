@@ -142,80 +142,62 @@ static void TeleConference_ChannelCloseHandler(
 
 
 void TeleConference::TubeOfferedHandler(
-        TpChannel*      pBaseChannel,
-        const gchar*    pAddress,
-        const GError*   pError,
-        gpointer        pUserData,
-        GObject*        /*weak_object*/
-        )
+        GObject*      pSource,
+        GAsyncResult* pResult,
+        gpointer      pUserData)
 {
     INFO_LOGGER_F( "TeleConference::TubeOfferedHandler");
 
     TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
-    SAL_WARN_IF( !pConference, "tubes", "TeleConference_TubeOfferedHandler: no conference");
+    SAL_WARN_IF( !pConference, "tubes", "TeleConference::TubeOfferedHandler: no conference");
     if (!pConference)
         return;
 
     pConference->setTubeOfferedHandlerInvoked( true);
 
+    TpDBusTubeChannel* pChannel = TP_DBUS_TUBE_CHANNEL( pSource);
+    GError* pError = NULL;
+    GDBusConnection* pTube = tp_dbus_tube_channel_offer_finish(
+            pChannel, pResult, &pError);
+
     // "can't find contact ... presence" means contact is not a contact.
     /* FIXME: detect and handle */
-    SAL_WARN_IF( pError, "tubes", "TeleConference::TubeOfferedHandler: entered with error: " << pError->message);
-    if (pError)
+    SAL_WARN_IF( !pTube, "tubes", "TeleConference::TubeOfferedHandler: entered with error: " << pError->message);
+    if (pError) {
+        g_error_free( pError);
         return;
+    }
 
-    SAL_WARN_IF( !pAddress, "tubes", "TeleConference::TubeOfferedHandler: no address");
-    if (!pAddress)
-        return;
-
-    TpDBusTubeChannel* pChannel = TP_DBUS_TUBE_CHANNEL( pBaseChannel);
-    SAL_WARN_IF( pChannel != pConference->getChannel(), "tubes", "TeleConference::TubeOfferedHandler: not my channel");
-    if ((pChannel) != pConference->getChannel())
-        return;
-
-    pConference->mpAddress = g_strdup( pAddress );
-    pConference->tryToOpen();
+    pConference->setTube( pTube);
 }
 
 
-bool TeleConference::tryToOpen()
+void TeleConference::TubeAcceptedHandler(
+        GObject*      pSource,
+        GAsyncResult* pResult,
+        gpointer      pUserData)
 {
-    if (mpTube)
-        return true;
-
-    if (!isTubeOpen())
-        return false;
-
-    if (!mpAddress)
-        return false;
-
-    return setTube( mpAddress);
-}
-
-void TeleConference::TubeChannelStateChangedHandler(
-        TpChannel*  pBaseChannel,
-        guint       nState,
-        gpointer    pUserData,
-        GObject*    /*weak_object*/
-        )
-{
-    INFO_LOGGER_F( "TeleConference::TubeChannelStateChangedHandler");
-
-    SAL_INFO( "tubes", "TeleConference::TubeChannelStateChangedHandler: state: " << static_cast<sal_uInt32>(nState));
+    INFO_LOGGER_F( "TeleConference::TubeAcceptedHandler");
 
     TeleConference* pConference = reinterpret_cast<TeleConference*>(pUserData);
-    SAL_WARN_IF( !pConference, "tubes", "TeleConference_DBusMessageHandler: no conference");
+    SAL_WARN_IF( !pConference, "tubes", "TeleConference::TubeAcceptedHandler: no conference");
     if (!pConference)
         return;
 
-    TpDBusTubeChannel* pChannel = TP_DBUS_TUBE_CHANNEL( pBaseChannel);
-    SAL_WARN_IF( pChannel != pConference->getChannel(), "tubes",
-            "TeleConference::TubeChannelStateChangedHandler: not my channel");
-    if (pChannel != pConference->getChannel())
-        return;
+    pConference->setTubeOfferedHandlerInvoked( true);
 
-    pConference->setTubeChannelState( static_cast<TpTubeChannelState>(nState));
-    pConference->tryToOpen();
+    TpDBusTubeChannel* pChannel = TP_DBUS_TUBE_CHANNEL( pSource);
+    GError* pError = NULL;
+    GDBusConnection* pTube = tp_dbus_tube_channel_accept_finish(
+            pChannel, pResult, &pError);
+
+    SAL_WARN_IF( !pTube, "tubes", "TeleConference::TubeAcceptedHandler: entered with error: " << pError->message);
+    if (pError) {
+        g_error_free( pError);
+        return;
+    }
+
+    pConference->setTube( pTube);
 }
 
 
@@ -227,7 +209,6 @@ TeleConference::TeleConference( TeleManager* pManager, TpAccount* pAccount, TpDB
         mpChannel( NULL),
         mpAddress( NULL),
         mpTube( NULL),
-        meTubeChannelState( TP_TUBE_CHANNEL_STATE_NOT_OFFERED),
         mbTubeOfferedHandlerInvoked( false)
 {
     setChannel( pAccount, pChannel );
@@ -249,27 +230,8 @@ void TeleConference::setChannel( TpAccount *pAccount, TpDBusTubeChannel* pChanne
         g_object_unref( mpAccount);
 
     mpChannel = pChannel;
-    if (mpChannel) {
+    if (mpChannel)
         g_object_ref( mpChannel);
-
-        /* TODO: remember the TpProxySignalConnection and disconnect in finalize */
-        GError* pError = NULL;
-        TpProxySignalConnection* pProxySignalConnection =
-            tp_cli_channel_interface_tube_connect_to_tube_channel_state_changed(
-                    TP_CHANNEL( mpChannel),
-                    &TeleConference::TubeChannelStateChangedHandler,
-                    this,
-                    NULL,
-                    NULL,
-                    &pError);
-
-        if (!pProxySignalConnection || pError)
-        {
-            SAL_WARN_IF( pError, "tubes",
-                "TeleConference::setChannel: channel state changed error: " << pError->message);
-            g_error_free( pError);
-        }
-    }
 
     mpAccount = pAccount;
     if (mpAccount)
@@ -280,7 +242,6 @@ void TeleConference::setChannel( TpAccount *pAccount, TpDBusTubeChannel* pChanne
 bool TeleConference::spinUntilTubeEstablished()
 {
     mpManager->iterateLoop( this, &TeleConference::isTubeOfferedHandlerInvoked);
-    mpManager->iterateLoop( this, &TeleConference::isTubeChannelStateChangedToOpen);
 
     bool bOpen = isTubeOpen();
     SAL_INFO( "tubes", "TeleConference::spinUntilTubeEstablished: tube open: " << bOpen);
@@ -297,10 +258,9 @@ bool TeleConference::acceptTube()
     if (!mpChannel || mpTube)
         return false;
 
-    tp_cli_channel_type_dbus_tube_call_accept( TP_CHANNEL( mpChannel), -1,
-            TP_SOCKET_ACCESS_CONTROL_CREDENTIALS,
-            &TeleConference::TubeOfferedHandler,
-            this, NULL, NULL);
+    tp_dbus_tube_channel_accept_async( mpChannel,
+            &TeleConference::TubeAcceptedHandler,
+            this);
     return spinUntilTubeEstablished();
 }
 
@@ -313,44 +273,23 @@ bool TeleConference::offerTube()
     if (!mpChannel)
         return false;
 
-    // We must pass a hash table, it could be empty though.
-    /* TODO: anything meaningful to go in here? */
-    GHashTable* pParams = tp_asv_new(
-            "LibreOffice", G_TYPE_STRING, "Collaboration",
-            NULL);
+    tp_dbus_tube_channel_offer_async(
+            mpChannel,
+            NULL, // no parameters for now
+            &TeleConference::TubeOfferedHandler,
+            this);
 
-    tp_cli_channel_type_dbus_tube_call_offer(
-            TP_CHANNEL( mpChannel),                 // proxy
-            -1,                                     // timeout_ms
-            pParams,                                // in_parameters
-            TP_SOCKET_ACCESS_CONTROL_CREDENTIALS,   // in_access_control
-            &TeleConference::TubeOfferedHandler,    // callback
-            this,                                   // user_data
-            NULL,                                   // destroy
-            NULL);                                  // weak_object
-
-    g_hash_table_unref( pParams);
     return spinUntilTubeEstablished();
 }
 
 
-bool TeleConference::setTube(  const char* pAddress )
+bool TeleConference::setTube( GDBusConnection* pTube)
 {
     INFO_LOGGER( "TeleConference::setTube");
 
     OSL_ENSURE( !mpTube, "TeleConference::setTube: already tubed");
 
-    GError *aError = NULL;
-
-    mpTube = g_dbus_connection_new_for_address_sync( pAddress,
-            G_DBUS_CONNECTION_FLAGS_AUTHENTICATION_CLIENT,
-            NULL, NULL, &aError);
-    if (!mpTube)
-    {
-        SAL_WARN( "tubes", "TeleConference::setTube: no dbus connection: " << aError->message);
-        g_clear_error( &aError);
-        return false;
-    }
+    mpTube = pTube;
 
     GDBusNodeInfo *introspection_data;
     guint registration_id;
