@@ -45,6 +45,7 @@ configmgr\
 cppcanvas\
 cppu\
 cppuhelper\
+cpputools\
 cui\
 dbaccess\
 desktop\
@@ -155,7 +156,6 @@ codemaker\
 connectivity\
 cosv\
 cppunit\
-cpputools\
 crashrep\
 ct2n\
 curl\

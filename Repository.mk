@@ -41,10 +41,12 @@ $(eval $(call gb_Helper_register_executables,NONE, \
     pdf2xml \
     pdfunzip \
     rdbmaker \
+    regsingleton \
     rsc \
     rscdep \
     saxparser \
     so_checksum \
+    sp2bv \
     svidl \
     typesconfig \
     xml2cmp \
@@ -122,6 +124,15 @@ $(eval $(call gb_Helper_register_executables,OOO,\
     i18npool_cppunittester_all \
     sax_cppunittester_all \
 	tools_cppunittester_all \
+))
+
+endif
+
+ifneq ($(OS),IOS)
+
+$(eval $(call gb_Helper_register_executables,UREBIN,\
+	regcomp \
+	uno \
 ))
 
 endif
@@ -547,6 +558,9 @@ $(eval $(call gb_Helper_register_static_libraries,PLAINLIBS, \
     ulingu \
     vclmain \
     writerperfect \
+    $(if $(filter $(OS),IOS), \
+        uno \
+    ) \
     $(if $(filter $(OS),WNT), \
         odma_lib \
     ) \
