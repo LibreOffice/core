@@ -41,6 +41,7 @@
 
 #include <editeng/brshitem.hxx>
 #include <editeng/justifyitem.hxx>
+#include <editeng/borderline.hxx>
 #include <dbdata.hxx>
 
 #define CALC_DEBUG_OUTPUT 0
@@ -102,6 +103,7 @@ public:
     void testFormatsXLSX();
     void testMatrixODS();
     void testMatrixXLS();
+    void testBorderODS();
     void testBugFixesODS();
     void testBugFixesXLS();
     void testBugFixesXLSX();
@@ -121,6 +123,7 @@ public:
     CPPUNIT_TEST(testFormatsXLSX);
     CPPUNIT_TEST(testMatrixODS);
     CPPUNIT_TEST(testMatrixXLS);
+    CPPUNIT_TEST(testBorderODS);
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
@@ -466,6 +469,29 @@ void ScFiltersTest::testMatrixXLS()
     rtl::OUString aCSVFileName;
     createCSVPath(rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("matrix.")), aCSVFileName);
     testFile(aCSVFileName, pDoc, 0);
+
+    xDocSh->DoClose();
+}
+
+void ScFiltersTest::testBorderODS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("border."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, 0);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load border.*", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    const editeng::SvxBorderLine* pLeft = NULL;
+    const editeng::SvxBorderLine* pTop = NULL;
+    const editeng::SvxBorderLine* pRight = NULL;
+    const editeng::SvxBorderLine* pBottom = NULL;
+
+    pDoc->GetBorderLines( 0, 1, 0, &pLeft, &pTop, &pRight, &pBottom );
+    CPPUNIT_ASSERT(!pLeft);
+    CPPUNIT_ASSERT(!pTop);
+    CPPUNIT_ASSERT(!pBottom);
+    CPPUNIT_ASSERT(pRight);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetStyle(),editeng::SOLID);
 
     xDocSh->DoClose();
 }

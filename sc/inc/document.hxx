@@ -865,7 +865,7 @@ public:
                                  SCCOL nCol2, SCROW nRow2, SCTAB nTab2, sal_uInt16 nMask ) const;
     SC_DLLPUBLIC bool HasAttrib( const ScRange& rRange, sal_uInt16 nMask ) const;
 
-    void            GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
+    SC_DLLPUBLIC void GetBorderLines( SCCOL nCol, SCROW nRow, SCTAB nTab,
                                     const ::editeng::SvxBorderLine** ppLeft,
                                     const ::editeng::SvxBorderLine** ppTop,
                                     const ::editeng::SvxBorderLine** ppRight,
