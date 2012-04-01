@@ -861,8 +861,7 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
     if( pPageObjsTransferable && aDataHelper.GetINetBookmark( SOT_FORMATSTR_ID_NETSCAPE_BOOKMARK, aINetBookmark ) )
     {
         Point   aPos;
-        List    aBookmarkList;
-        String  aBookmark;
+        rtl::OUString  aBookmark;
         SdPage* pPage = (SdPage*) GetSdrPageView()->GetPage();
         sal_uInt16  nPgPos = 0xFFFF;
 
@@ -873,7 +872,9 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
         sal_Int32 nIndex = aURL.indexOf( (sal_Unicode)'#' );
         if( nIndex != -1 )
             aBookmark = aURL.copy( nIndex+1 );
-        aBookmarkList.Insert( &aBookmark );
+
+        std::vector<rtl::OUString> aExchangeList;
+        std::vector<rtl::OUString> aBookmarkList(1,aBookmark);
 
         if( !pPage->IsMasterPage() )
         {
@@ -886,9 +887,8 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
         // Um zu gewaehrleisten, dass alle Seitennamen eindeutig sind, werden
         // die einzufuegenden geprueft und gegebenenfalls in einer Ersatzliste
         // aufgenommen (bNameOK == sal_False -> Benutzer hat abgebrochen)
-        List*   pExchangeList = NULL;
         sal_Bool    bLink = ( NAVIGATOR_DRAGTYPE_LINK == pPageObjsTransferable->GetDragType()  ? sal_True : sal_False );
-        sal_Bool    bNameOK = GetExchangeList( pExchangeList, &aBookmarkList, 2 );
+        sal_Bool    bNameOK = GetExchangeList( aExchangeList, aBookmarkList, 2 );
         sal_Bool    bReplace = sal_False;
 
         // Da man hier nicht weiss, ob es sich um eine Seite oder ein Objekt handelt,
@@ -896,19 +896,10 @@ IMPL_LINK( View, ExecuteNavigatorDrop, SdNavigatorDropEvent*, pSdNavigatorDropEv
         // Sollten Seitennamen und Objektnamen identisch sein gibt es hier natuerlich Probleme !!!
         if( bNameOK )
         {
-            mrDoc.InsertBookmark( &aBookmarkList, pExchangeList,
+            mrDoc.InsertBookmark( aBookmarkList, aExchangeList,
                                   bLink, bReplace, nPgPos, sal_False,
                                   &pPageObjsTransferable->GetDocShell(),
                                   sal_True, &aPos );
-        }
-
-        // Delete the ExchangeList
-        if( pExchangeList )
-        {
-            for( void* p = pExchangeList->First(); p; p = pExchangeList->Next() )
-                delete (String*) p;
-
-            delete pExchangeList;
         }
     }
 
