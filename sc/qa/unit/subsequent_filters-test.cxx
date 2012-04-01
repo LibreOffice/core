@@ -104,6 +104,7 @@ public:
     void testMatrixODS();
     void testMatrixXLS();
     void testBorderODS();
+    void testBorderXLS();
     void testBugFixesODS();
     void testBugFixesXLS();
     void testBugFixesXLSX();
@@ -124,6 +125,7 @@ public:
     CPPUNIT_TEST(testMatrixODS);
     CPPUNIT_TEST(testMatrixXLS);
     CPPUNIT_TEST(testBorderODS);
+    CPPUNIT_TEST(testBorderXLS);
     CPPUNIT_TEST(testBugFixesODS);
     CPPUNIT_TEST(testBugFixesXLS);
     CPPUNIT_TEST(testBugFixesXLSX);
@@ -513,6 +515,35 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(pRight->GetColor() == Color(COL_BLUE));
 
     xDocSh->DoClose();
+}
+
+void ScFiltersTest::testBorderXLS()
+{
+    const rtl::OUString aFileNameBase(RTL_CONSTASCII_USTRINGPARAM("border."));
+    ScDocShellRef xDocSh = loadDoc( aFileNameBase, 1);
+
+    CPPUNIT_ASSERT_MESSAGE("Failed to load border.xls", xDocSh.Is());
+    ScDocument* pDoc = xDocSh->GetDocument();
+
+    const editeng::SvxBorderLine* pLeft = NULL;
+    const editeng::SvxBorderLine* pTop = NULL;
+    const editeng::SvxBorderLine* pRight = NULL;
+    const editeng::SvxBorderLine* pBottom = NULL;
+
+    pDoc->GetBorderLines( 2, 3, 0, &pLeft, &pTop, &pRight, &pBottom );
+    CPPUNIT_ASSERT(pRight);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),6L);
+
+    pDoc->GetBorderLines( 3, 5, 0, &pLeft, &pTop, &pRight, &pBottom );
+    CPPUNIT_ASSERT(pRight);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),18L);
+
+    pDoc->GetBorderLines( 5, 7, 0, &pLeft, &pTop, &pRight, &pBottom );
+    CPPUNIT_ASSERT(pRight);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),24L);
 }
 
 void ScFiltersTest::testBugFixesODS()
