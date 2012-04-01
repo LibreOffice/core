@@ -105,6 +105,7 @@ class SmFontDialog : public ModalDialog
     CheckBox        aBoldCheckBox;
     CheckBox        aItalicCheckBox;
     OKButton        aOKButton1;
+    HelpButton      aHelpButton1;
     CancelButton    aCancelButton1;
     SmShowFont      aShowFont;
     FixedText       aFixedText2;
@@ -114,6 +115,7 @@ class SmFontDialog : public ModalDialog
     DECL_LINK(FontSelectHdl, ComboBox *);
     DECL_LINK(FontModifyHdl, ComboBox *);
     DECL_LINK(AttrChangeHdl, CheckBox *);
+    DECL_LINK(HelpButtonClickHdl, Button *);
 
     void            InitColor_Impl();
 
@@ -144,10 +146,12 @@ class SmFontSizeDialog : public ModalDialog
     MetricField     aBorderSize;
     FixedLine       aFixedLine1;
     OKButton        aOKButton1;
+    HelpButton      aHelpButton1;
     CancelButton    aCancelButton1;
     PushButton      aDefaultButton;
 
     DECL_LINK(DefaultButtonClickHdl, Button *);
+    DECL_LINK(HelpButtonClickHdl, Button *);
 
 public:
     SmFontSizeDialog(Window *pParent, bool bFreeRes = true);
@@ -177,6 +181,7 @@ class SmFontTypeDialog : public ModalDialog
     FixedLine           aFixedLine1;
     FixedLine           aFixedLine2;
     OKButton            aOKButton1;
+    HelpButton          aHelpButton1;
     CancelButton        aCancelButton1;
     MenuButton          aMenuButton;
     PushButton          aDefaultButton;
@@ -185,6 +190,7 @@ class SmFontTypeDialog : public ModalDialog
 
     DECL_LINK(MenuSelectHdl, Menu *);
     DECL_LINK(DefaultButtonClickHdl, Button *);
+    DECL_LINK(HelpButtonClickHdl, Button *);
 
 public:
     SmFontTypeDialog(Window *pParent, OutputDevice *pFntListDevice, bool bFreeRes = true);
@@ -236,6 +242,7 @@ class SmDistanceDialog : public ModalDialog
     FixedText       aFixedText4;
     MetricField     aMetricField4;
     OKButton        aOKButton1;
+    HelpButton      aHelpButton1;
     CancelButton    aCancelButton1;
     MenuButton      aMenuButton;
     PushButton      aDefaultButton;
@@ -249,6 +256,7 @@ class SmDistanceDialog : public ModalDialog
     DECL_LINK(GetFocusHdl, Control *);
     DECL_LINK(MenuSelectHdl, Menu *);
     DECL_LINK(DefaultButtonClickHdl, Button *);
+    DECL_LINK(HelpButtonClickHdl, Button *);
     DECL_LINK(CheckBoxClickHdl, CheckBox *);
 
     using   Window::SetHelpId;
@@ -277,10 +285,12 @@ class SmAlignDialog : public ModalDialog
     RadioButton  aRight;
     FixedLine    aFixedLine1;
     OKButton     aOKButton1;
+    HelpButton   aHelpButton1;
     CancelButton aCancelButton1;
     PushButton   aDefaultButton;
 
     DECL_LINK(DefaultButtonClickHdl, Button *);
+    DECL_LINK(HelpButtonClickHdl, Button *);
 
 public:
     SmAlignDialog(Window *pParent, bool bFreeRes = true);
@@ -348,6 +358,7 @@ class SmSymbolDialog : public ModalDialog
     SmShowSymbolSet aSymbolSetDisplay;
     FixedText       aSymbolName;
     SmShowSymbol    aSymbolDisplay;
+    HelpButton      aHelpBtn;
     PushButton      aGetBtn;
     PushButton      aCloseBtn;
     PushButton      aEditBtn;
@@ -366,6 +377,7 @@ class SmSymbolDialog : public ModalDialog
     DECL_LINK(CloseClickHdl, Button *);
     DECL_LINK(EditClickHdl, Button *);
     DECL_LINK(GetClickHdl, Button *);
+    DECL_LINK(HelpButtonClickHdl, Button *);
 
     void            FillSymbolSets(bool bDeleteText = true);
     void            SetSymbolSetManager(SmSymbolManager &rMgr);
@@ -426,6 +438,7 @@ class SmSymDefineDialog : public ModalDialog
     SmShowChar      aSymbolDisplay;
     FixedText       aSymbolSetName;
     OKButton        aOkBtn;
+    HelpButton      aHelpBtn;
     CancelButton    aCancelBtn;
     PushButton      aAddBtn;
     PushButton      aChangeBtn;
@@ -450,6 +463,7 @@ class SmSymDefineDialog : public ModalDialog
     DECL_LINK(AddClickHdl, Button *);
     DECL_LINK(ChangeClickHdl, Button *);
     DECL_LINK(DeleteClickHdl, Button *);
+    DECL_LINK(HelpButtonClickHdl, Button *);
 
     void    FillSymbols(ComboBox &rComboBox, bool bDeleteText = true);
     void    FillSymbolSets(ComboBox &rComboBox, bool bDeleteText = true);

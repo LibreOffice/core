@@ -39,6 +39,7 @@
 #include <svtools/ctrltool.hxx>
 #include <sfx2/printer.hxx>
 #include <vcl/sound.hxx>
+#include <vcl/help.hxx>
 #include <vcl/sndstyle.hxx>
 #include <vcl/waitobj.hxx>
 #include <vcl/settings.hxx>
@@ -327,6 +328,16 @@ void SmFontDialog::SetFont(const Font &rFont)
     aShowFont.SetFont(Face);
 }
 
+IMPL_LINK( SmFontDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+{
+    // start help system
+    Help* pHelp = Application::GetHelp();
+    if( pHelp )
+    {
+        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_FONTDIALOG" ) ), &aHelpButton1 );
+    }
+    return 0;
+}
 
 SmFontDialog::SmFontDialog(Window * pParent,
         OutputDevice *pFntListDevice, bool bHideCheckboxes, bool bFreeRes)
@@ -336,12 +347,14 @@ SmFontDialog::SmFontDialog(Window * pParent,
     aBoldCheckBox   (this, SmResId(1)),
     aItalicCheckBox (this, SmResId(2)),
     aOKButton1      (this, SmResId(1)),
+    aHelpButton1    (this, SmResId(1)),
     aCancelButton1  (this, SmResId(1)),
     aShowFont       (this, SmResId(1)),
     aFixedText2     (this, SmResId(2))
 {
     if (bFreeRes)
         FreeResource();
+    aHelpButton1.SetClickHdl(LINK(this, SmFontDialog, HelpButtonClickHdl));
 
     {
         WaitObject( this );
@@ -410,7 +423,6 @@ void SmFontDialog::InitColor_Impl()
     aShowFont.SetTextColor( aTxtColor );
 }
 
-
 void SmFontDialog::DataChanged( const DataChangedEvent& rDCEvt )
 {
     if ( rDCEvt.GetType() == DATACHANGED_SETTINGS  &&
@@ -439,6 +451,16 @@ IMPL_LINK( SmFontSizeDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton
     return 0;
 }
 
+IMPL_LINK( SmFontSizeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+{
+    // start help system
+    Help* pHelp = Application::GetHelp();
+    if( pHelp )
+    {
+        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_FONTSIZEDIALOG" ) ), &aHelpButton1 );
+    }
+    return 0;
+}
 
 SmFontSizeDialog::SmFontSizeDialog(Window * pParent, bool bFreeRes)
     : ModalDialog(pParent, SmResId(RID_FONTSIZEDIALOG)),
@@ -456,6 +478,7 @@ SmFontSizeDialog::SmFontSizeDialog(Window * pParent, bool bFreeRes)
     aBorderSize(this, SmResId(8)),
     aFixedLine1(this, SmResId(1)),
     aOKButton1(this, SmResId(1)),
+    aHelpButton1(this, SmResId(1)),
     aCancelButton1(this, SmResId(1)),
     aDefaultButton(this, SmResId(1))
 {
@@ -463,6 +486,7 @@ SmFontSizeDialog::SmFontSizeDialog(Window * pParent, bool bFreeRes)
         FreeResource();
 
     aDefaultButton.SetClickHdl(LINK(this, SmFontSizeDialog, DefaultButtonClickHdl));
+    aHelpButton1.SetClickHdl(LINK(this, SmFontSizeDialog, HelpButtonClickHdl));
 }
 
 
@@ -547,6 +571,16 @@ IMPL_LINK_INLINE_START( SmFontTypeDialog, DefaultButtonClickHdl, Button *, EMPTY
 }
 IMPL_LINK_INLINE_END( SmFontTypeDialog, DefaultButtonClickHdl, Button *, pButton )
 
+IMPL_LINK( SmFontTypeDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+{
+    // start help system
+    Help* pHelp = Application::GetHelp();
+    if( pHelp )
+    {
+        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_FONTTYPEDIALOG" ) ), &aHelpButton1 );
+    }
+    return 0;
+}
 
 SmFontTypeDialog::SmFontTypeDialog(Window * pParent, OutputDevice *pFntListDevice, bool bFreeRes)
     : ModalDialog(pParent, SmResId(RID_FONTTYPEDIALOG)),
@@ -567,6 +601,7 @@ SmFontTypeDialog::SmFontTypeDialog(Window * pParent, OutputDevice *pFntListDevic
     aFixedLine1    (this, SmResId(1)),
     aFixedLine2    (this, SmResId(2)),
     aOKButton1     (this, SmResId(1)),
+    aHelpButton1   (this, SmResId(1)),
     aCancelButton1 (this, SmResId(1)),
     aMenuButton    (this, SmResId(1)),
     aDefaultButton (this, SmResId(2)),
@@ -576,6 +611,7 @@ SmFontTypeDialog::SmFontTypeDialog(Window * pParent, OutputDevice *pFntListDevic
         FreeResource();
 
     aDefaultButton.SetClickHdl(LINK(this, SmFontTypeDialog, DefaultButtonClickHdl));
+    aHelpButton1.SetClickHdl(LINK(this, SmFontTypeDialog, HelpButtonClickHdl));
 
     aMenuButton.GetPopupMenu()->SetSelectHdl(LINK(this, SmFontTypeDialog, MenuSelectHdl));
 }
@@ -745,6 +781,17 @@ IMPL_LINK( SmDistanceDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton
         pp->GetConfig()->SetStandardFormat( aFmt );
     }
     delete pQueryBox;
+    return 0;
+}
+
+IMPL_LINK( SmDistanceDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+{
+    // start help system
+    Help* pHelp = Application::GetHelp();
+    if( pHelp )
+    {
+        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_DISTANCEDIALOG" ) ), &aHelpButton1 );
+    }
     return 0;
 }
 
@@ -925,6 +972,7 @@ SmDistanceDialog::SmDistanceDialog(Window *pParent, bool bFreeRes)
     aFixedText4    (this, SmResId(4)),
     aMetricField4  (this, SmResId(4)),
     aOKButton1     (this, SmResId(1)),
+    aHelpButton1   (this, SmResId(1)),
     aCancelButton1 (this, SmResId(1)),
     aMenuButton    (this, SmResId(1)),
     aDefaultButton (this, SmResId(1)),
@@ -951,6 +999,7 @@ SmDistanceDialog::SmDistanceDialog(Window *pParent, bool bFreeRes)
     aMenuButton.GetPopupMenu()->SetSelectHdl(LINK(this, SmDistanceDialog, MenuSelectHdl));
 
     aDefaultButton.SetClickHdl(LINK(this, SmDistanceDialog, DefaultButtonClickHdl));
+    aHelpButton1.SetClickHdl(LINK(this, SmDistanceDialog, HelpButtonClickHdl));
 }
 
 
@@ -1058,6 +1107,17 @@ IMPL_LINK( SmAlignDialog, DefaultButtonClickHdl, Button *, EMPTYARG /*pButton*/ 
 }
 
 
+IMPL_LINK( SmAlignDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+{
+    // start help system
+    Help* pHelp = Application::GetHelp();
+    if( pHelp )
+    {
+        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_ALIGNDIALOG" ) ), &aHelpButton1 );
+    }
+    return 0;
+}
+
 SmAlignDialog::SmAlignDialog(Window * pParent, bool bFreeRes)
     : ModalDialog(pParent, SmResId(RID_ALIGNDIALOG)),
     aLeft          (this, SmResId(1)),
@@ -1065,6 +1125,7 @@ SmAlignDialog::SmAlignDialog(Window * pParent, bool bFreeRes)
     aRight         (this, SmResId(3)),
     aFixedLine1    (this, SmResId(1)),
     aOKButton1     (this, SmResId(1)),
+    aHelpButton1   (this, SmResId(1)),
     aCancelButton1 (this, SmResId(1)),
     aDefaultButton (this, SmResId(1))
 {
@@ -1072,6 +1133,7 @@ SmAlignDialog::SmAlignDialog(Window * pParent, bool bFreeRes)
         FreeResource();
 
     aDefaultButton.SetClickHdl(LINK(this, SmAlignDialog, DefaultButtonClickHdl));
+    aHelpButton1.SetClickHdl(LINK(this, SmAlignDialog, HelpButtonClickHdl));
 }
 
 
@@ -1491,6 +1553,16 @@ IMPL_LINK_INLINE_START( SmSymbolDialog, CloseClickHdl, Button *, EMPTYARG pButto
 }
 IMPL_LINK_INLINE_END( SmSymbolDialog, CloseClickHdl, Button *, pButton )
 
+IMPL_LINK( SmSymbolDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+{
+    // start help system
+    Help* pHelp = Application::GetHelp();
+    if( pHelp )
+    {
+        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_SYMBOLDIALOG" ) ), &aHelpBtn );
+    }
+    return 0;
+}
 
 SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
         SmSymbolManager &rMgr, SmViewShell &rViewShell, bool bFreeRes) :
@@ -1500,6 +1572,7 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
     aSymbolSetDisplay   (this, SmResId(1)),
     aSymbolName         (this, SmResId(2)),
     aSymbolDisplay      (this, SmResId(2)),
+    aHelpBtn            (this, SmResId(1)),
     aGetBtn             (this, SmResId(2)),
     aCloseBtn           (this, SmResId(3)),
     aEditBtn            (this, SmResId(1)),
@@ -1510,6 +1583,7 @@ SmSymbolDialog::SmSymbolDialog(Window *pParent, OutputDevice *pFntListDevice,
     if (bFreeRes)
         FreeResource();
 
+    aHelpBtn.SetClickHdl(LINK(this, SmSymbolDialog, HelpButtonClickHdl));
     aSymbolSetName = rtl::OUString();
     aSymbolSet.clear();
     FillSymbolSets();
@@ -2016,6 +2090,16 @@ void SmSymDefineDialog::UpdateButtons()
     aDeleteBtn.Enable(bDelete);
 }
 
+IMPL_LINK( SmSymDefineDialog, HelpButtonClickHdl, Button *, EMPTYARG /*pButton*/ )
+{
+    // start help system
+    Help* pHelp = Application::GetHelp();
+    if( pHelp )
+    {
+        pHelp->Start( rtl::OUString( RTL_CONSTASCII_USTRINGPARAM( "HID_SMA_SYMDEFINEDIALOG" ) ), &aHelpBtn );
+    }
+    return 0;
+}
 
 SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
         OutputDevice *pFntListDevice, SmSymbolManager &rMgr, bool bFreeRes) :
@@ -2042,6 +2126,7 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
     aSymbolDisplay      (this, SmResId(2)),
     aSymbolSetName      (this, SmResId(6)),
     aOkBtn              (this, SmResId(1)),
+    aHelpBtn            (this, SmResId(1)),
     aCancelBtn          (this, SmResId(1)),
     aAddBtn             (this, SmResId(1)),
     aChangeBtn          (this, SmResId(2)),
@@ -2054,6 +2139,8 @@ SmSymDefineDialog::SmSymDefineDialog(Window * pParent,
 {
     if (bFreeRes)
         FreeResource();
+
+    aHelpBtn.SetClickHdl(LINK(this, SmSymDefineDialog, HelpButtonClickHdl));
 
     pFontList = new FontList( pFntListDevice );
 

@@ -79,6 +79,14 @@ ModalDialog RID_FONTDIALOG
         Size = MAP_APPFONT ( 33 , 10 ) ;
         Text [ en-US ] = "~Italic" ;
     };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 126 , 42 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+	HelpID = "starmath:HelpButton:RID_FONTDIALOG:1";
+	Text [ en-US ] = "~Help" ;
+    };
     OKButton 1
     {
         Pos = MAP_APPFONT ( 126 , 6 ) ;
@@ -265,11 +273,19 @@ ModalDialog RID_FONTSIZEDIALOG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 114 , 46 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+	HelpID = "starmath:PushButton:RID_FONTSIZEDIALOG:1";
+	Text [ en-US ] = "~Help" ;
+    };
     PushButton 1
     {
         HelpID = "starmath:PushButton:RID_FONTSIZEDIALOG:1";
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 114 , 45 ) ;
+        Pos = MAP_APPFONT ( 114 , 64 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Default" ;
     };
@@ -429,11 +445,19 @@ ModalDialog RID_FONTTYPEDIALOG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Modify" ;
     };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 225 , 66 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+	HelpID = "starmath:HelpButton:RID_FONTYPEDIALOG:1";
+	Text [ en-US ] = "~Help" ;
+    };
     PushButton 2
     {
         HelpID = "starmath:PushButton:RID_FONTTYPEDIALOG:2";
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 225 , 66 ) ;
+        Pos = MAP_APPFONT ( 225 , 84 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Default" ;
     };
@@ -445,7 +469,7 @@ ModalDialog RID_DISTANCEDIALOG
     OutputSize = TRUE ;
     SVLook = TRUE ;
     HelpId = CMD_SID_DISTANCE ;
-    Size = MAP_APPFONT ( 240 , 90 ) ;
+    Size = MAP_APPFONT ( 250 , 120 ) ;
     Text [ en-US ] = "Spacing" ;
     FixedText 1
     {
@@ -549,6 +573,14 @@ ModalDialog RID_DISTANCEDIALOG
         Pos = MAP_APPFONT ( 184 , 24 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 184 , 87 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+	HelpID = "starmath:HelpButton:RID_DISTANCEDIALOG:1";
+	Text [ en-US ] = "~Help" ;
     };
     PushButton 1
     {
@@ -895,11 +927,19 @@ ModalDialog RID_ALIGNDIALOG
         Size = MAP_APPFONT ( 50 , 14 ) ;
         TabStop = TRUE ;
     };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 83 , 46 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+	HelpID = "starmath:HelpButton:RID_ALIGNDIALOG:1";
+	Text [ en-US ] = "~Help" ;
+    };
     PushButton 1
     {
         HelpID = "starmath:PushButton:RID_ALIGNDIALOG:1";
         TabStop = TRUE ;
-        Pos = MAP_APPFONT ( 83 , 46 ) ;
+        Pos = MAP_APPFONT ( 83 , 69 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Default" ;
     };
@@ -1082,6 +1122,14 @@ ModalDialog RID_SYMBOLDIALOG
         Pos = MAP_APPFONT ( 177 , 42 ) ;
         Size = MAP_APPFONT ( 56 , 14 ) ;
         Text [ en-US ] = "~Edit..." ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 177 , 60 ) ;
+        Size = MAP_APPFONT ( 56 , 14 ) ;
+        TabStop = TRUE ;
+	HelpID = "starmath:HelpButton:RID_SYMBOLDIALOG:1";
+	Text [ en-US ] = "~Help" ;
     };
 };
 
@@ -1292,6 +1340,14 @@ ModalDialog RID_SYMDEFINEDIALOG
         Pos = MAP_APPFONT ( 185 , 195 ) ;
         Size = MAP_APPFONT ( 50 , 14 ) ;
         Text [ en-US ] = "~Delete" ;
+    };
+    HelpButton 1
+    {
+        Pos = MAP_APPFONT ( 310 , 42 ) ;
+        Size = MAP_APPFONT ( 50 , 14 ) ;
+        TabStop = TRUE ;
+	HelpID = "starmath:HelpButton:RID_SYMDEFINEDIALOG:1";
+	Text [ en-US ] = "~Help" ;
     };
     OKButton 1
     {
