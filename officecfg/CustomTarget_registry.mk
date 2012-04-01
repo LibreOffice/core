@@ -26,35 +26,37 @@
 ## instead of those above.
 ##
 
-WFDIR := $(dir $(realpath $(firstword $(MAKEFILE_LIST))))
-gb_PARTIALBUILD := T
-include $(GBUILDDIR)/gbuild_simple.mk
-include $(WFDIR)/files.mk
+OCDIR := $(SRCDIR)/officecfg/registry
+include $(OCDIR)/files.mk
 
-.DEFAULT_GOAL := all
-.PHONY: all
-all: $(foreach i,$(officecfg_FILES),$(i).hxx)
+$(eval $(call gb_CustomTarget_CustomTarget,officecfg/registry,new_style))
 
-define my_target
-$(if $(1),$(1)/$(if $(2),$(2)/))%.hxx: \
-            $(WFDIR)/schema/org/openoffice/$(if $(1),$(1)/$(if $(2),$(2)/))%.xcs \
-            $(WFDIR)/cppheader.xsl
-	$$(call gb_Helper_abbreviate_dirs_native,mkdir -p $$(dir $$@))
+OCRG := $(call gb_CustomTarget_get_workdir,officecfg/registry)
+
+$(call gb_CustomTarget_get_target,officecfg/registry) : \
+	$(foreach i,$(officecfg_FILES),$(OCRG)/$(i).hxx)
+
+define oc_target
+$(OCRG)/$(if $(1),$(1)/$(if $(2),$(2)/))%.hxx: \
+            $(OCDIR)/schema/org/openoffice/$(if $(1),$(1)/$(if $(2),$(2)/))%.xcs \
+            $(OCDIR)/cppheader.xsl | $(gb_XSLTPROCTARGET)
+	$$(call gb_Output_announce,$$(subst $(WORKDIR)/,,$$@),$(true),XSL,1)
 	$$(call gb_Helper_abbreviate_dirs_native, \
-            $$(gb_XSLTPROC) --nonet --stringparam ns1 \
+        mkdir -p $$(dir $$@) && \
+        $$(gb_XSLTPROC) --nonet --stringparam ns1 \
             $(if $(1), \
                 $(1) --stringparam ns2 $(if $(2),$(2) --stringparam ns3)) $$* \
-            -o $$@ $$(WFDIR)/cppheader.xsl $$<)
+            -o $$@ $(OCDIR)/cppheader.xsl $$<)
 
 endef
 
 # Sort longer paths before their prefixes, as at least GNU Make 3.81 on Mac OS X
 # appears to let % span sub-directories, so that the above rule would produce
 # unexpected results; sorting this way seems to avoid the problem:
-$(eval $(call my_target,Office,DataAccess))
-$(eval $(call my_target,Office,OOoImprovement))
-$(eval $(call my_target,Office,UI))
-$(eval $(call my_target,Office))
-$(eval $(call my_target,TypeDetection))
-$(eval $(call my_target,ucb))
-$(eval $(call my_target))
+$(eval $(call oc_target,Office,DataAccess))
+$(eval $(call oc_target,Office,OOoImprovement))
+$(eval $(call oc_target,Office,UI))
+$(eval $(call oc_target,Office))
+$(eval $(call oc_target,TypeDetection))
+$(eval $(call oc_target,ucb))
+$(eval $(call oc_target))

@@ -30,16 +30,5 @@ include $(SRCDIR)/officecfg/registry/files.mk
 
 $(eval $(call gb_Package_Package,officecfg_cppheader,$(WORKDIR)/CustomTarget/officecfg/registry))
 
-$(eval $(call \
-    gb_Package_add_customtarget,officecfg_cppheader,officecfg/registry))
-
-$(eval $(call gb_CustomTarget_add_outdir_dependencies,officecfg/registry, \
-    $(gb_XSLTPROCTARGET) \
-))
-
-$(eval $(call gb_CustomTarget_add_dependencies,officecfg/registry, \
-    officecfg/registry/cppheader.xsl \
-    $(foreach i,$(officecfg_FILES),officecfg/registry/schema/org/openoffice/$(i).xcs)))
-
 $(eval $(foreach i,$(officecfg_FILES),$(call \
     gb_Package_add_file,officecfg_cppheader,inc/officecfg/$(i).hxx,$(i).hxx)))

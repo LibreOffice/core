@@ -20,6 +20,7 @@
 $(eval $(call gb_Module_Module,officecfg))
 
 $(eval $(call gb_Module_add_targets,officecfg,\
+    CustomTarget_registry \
     Package_cppheader \
     Package_misc \
     Package_tools \
