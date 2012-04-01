@@ -493,6 +493,25 @@ void ScFiltersTest::testBorderODS()
     CPPUNIT_ASSERT(pRight);
     CPPUNIT_ASSERT_EQUAL(pRight->GetStyle(),editeng::SOLID);
 
+    pDoc->GetBorderLines( 2, 1, 0, &pLeft, &pTop, &pRight, &pBottom );
+    CPPUNIT_ASSERT(!pLeft);
+    CPPUNIT_ASSERT(!pTop);
+    CPPUNIT_ASSERT(!pBottom);
+
+    CPPUNIT_ASSERT(pRight);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),20L);
+
+    pDoc->GetBorderLines( 2, 8, 0, &pLeft, &pTop, &pRight, &pBottom );
+
+    CPPUNIT_ASSERT(pLeft);
+    CPPUNIT_ASSERT(pTop);
+    CPPUNIT_ASSERT(pBottom);
+    CPPUNIT_ASSERT(pRight);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetStyle(),editeng::SOLID);
+    CPPUNIT_ASSERT_EQUAL(pRight->GetWidth(),5L);
+    CPPUNIT_ASSERT(pRight->GetColor() == Color(COL_BLUE));
+
     xDocSh->DoClose();
 }
 
