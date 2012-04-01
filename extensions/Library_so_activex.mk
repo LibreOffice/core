@@ -30,13 +30,10 @@
 
 $(eval $(call gb_Library_Library,so_activex))
 
-$(eval $(call gb_Library_add_package_headers,so_activex,\
-    extensions_so_activex_idl \
-))
+$(eval $(call gb_Library_add_custom_headers,so_activex,extensions/source/activex/idl))
 
 $(eval $(call gb_Library_set_include,so_activex,\
 	$$(INCLUDE) \
-	-I$(WORKDIR)/CustomTarget/extensions/source/activex/idl \
 	$(foreach i,$(ATL_INCLUDE), -I$(i)) \
 ))
 

@@ -25,17 +25,19 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-% : $(SRCDIR)/extensions/source/activex/%
-	cp $< $@
+$(eval $(call gb_CustomTarget_CustomTarget,extensions/source/activex,new_style))
 
-.DEFAULT_GOAL := all
-.PHONY : all
-all : \
-	SOActionsApproval.cxx \
-	SOActiveX.cxx \
-	SOComWindowPeer.cxx \
-	SODispatchInterceptor.cxx \
-	StdAfx2.cxx \
-	so_activex.cxx \
+EXSA := $(call gb_CustomTarget_get_workdir,extensions/source/activex)
+
+$(call gb_CustomTarget_get_target,extensions/source/activex) : \
+	$(EXSA)/SOActionsApproval.cxx \
+	$(EXSA)/SOActiveX.cxx \
+	$(EXSA)/SOComWindowPeer.cxx \
+	$(EXSA)/SODispatchInterceptor.cxx \
+	$(EXSA)/StdAfx2.cxx \
+	$(EXSA)/so_activex.cxx \
+
+$(EXSA)/% : $(SRCDIR)/extensions/source/activex/%
+	cp $< $@
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:

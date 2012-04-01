@@ -46,6 +46,6 @@ $(eval $(call gb_WinResTarget_set_defs,activex_res,\
 
 # I suppose this dep is not really necessary, because it should always
 # be fulfilled anyway. But it cannot hurt to have it...
-$(call gb_WinResTarget_get_target,activex_res) : $(call gb_Package_get_target,extensions_so_activex_idl)
+$(call gb_WinResTarget_get_target,activex_res) : $(WORKDIR)/CustomTarget/extensions/source/activex/idl
 
 # vim:set shiftwidth=4 softtabstop=4 expandtab:

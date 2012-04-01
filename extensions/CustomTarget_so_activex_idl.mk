@@ -25,15 +25,20 @@
 # in which case the provisions of the GPLv3+ or the LGPLv3+ are applicable
 # instead of those above.
 
-include $(GBUILDDIR)/gbuild_simple.mk
+$(eval $(call gb_CustomTarget_CustomTarget,extensions/source/activex/idl,new_style))
+
+EXAI := $(call gb_CustomTarget_get_workdir,extensions/source/activex/idl)
+
+$(call gb_CustomTarget_get_target,extensions/source/activex/idl) : \
+	$(EXAI)/so_activex.tlb
 
 # XXX: I presume that the "$(COM)"=="GCC" case in the original
 # extensions/source/activex/msidl/makefile.mk was for the
 # use-mingw-on-windows case and thus is not interesting for us.
-ifeq ($(OS_FOR_BUILD),WNT)
-override SRCDIR := $(shell cygpath -m $(SRCDIR))
-endif
-so_activex.tlb :
+$(EXAI)/so_activex.tlb : \
+		$(SRCDIR)/extensions/source/activex/so_activex.idl | $(EXAI)/.dir
+	$(call gb_Output_announce,$(subst $(WORKDIR)/,,$@),$(true),IDL,1)
+	$(call gb_Helper_abbreviate_dirs_native, \
 	midl.exe \
 		-tlb $@ \
 		-h so_activex.h \
@@ -42,10 +47,6 @@ so_activex.tlb :
 		-proxy so_activex_p.c \
 		-Oicf \
 		$(INCLUDE) \
-		$(SRCDIR)/extensions/source/activex/so_activex.idl
-
-.DEFAULT_GOAL := all
-.PHONY : all
-all : so_activex.tlb
+		$<)
 
 # vim:set shiftwidth=4 tabstop=4 noexpandtab:
