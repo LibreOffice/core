@@ -76,8 +76,6 @@ using namespace ::com::sun::star;
 
 /************************************************************************/
 
-XubString aNameOrIndexEmptyString;
-
 TYPEINIT1_AUTOFACTORY(NameOrIndex, SfxStringItem);
 
 /*************************************************************************
@@ -109,7 +107,7 @@ long ScaleMetricValue( long nVal, long nMul, long nDiv )
 *************************************************************************/
 
 NameOrIndex::NameOrIndex(sal_uInt16 _nWhich, sal_Int32 nIndex) :
-    SfxStringItem(_nWhich, aNameOrIndexEmptyString),
+    SfxStringItem(_nWhich, rtl::OUString()),
     nPalIndex(nIndex)
 {
 }
