@@ -611,11 +611,8 @@ void SvxStdParagraphTabPage::Reset( const SfxItemSet& rSet )
             aRightIndent.Disable();
             aTopDist.Disable();  //HTML3.2 und NS 3.0
             aBottomDist.Disable();
-            if(!(nHtmlMode & HTMLMODE_FIRSTLINE)) //NS 3.0
-            {
-                aFLineIndent.Disable();
-                aFLineLabel.Disable();
-            }
+            aFLineIndent.Disable();
+            aFLineLabel.Disable();
         }
     }
 
@@ -1282,7 +1279,7 @@ void SvxParaAlignTabPage::Reset( const SfxItemSet& rSet )
         aLastLineLB.Hide();
         aLastLineFT.Hide();
         aExpandCB.Hide();
-        if(!(nHtmlMode & (HTMLMODE_FULL_STYLES|HTMLMODE_FIRSTLINE)) )
+        if(!(nHtmlMode & HTMLMODE_FULL_STYLES) )
             aJustify.Disable();
         aSnapToGridCB.Show(sal_False);
     }

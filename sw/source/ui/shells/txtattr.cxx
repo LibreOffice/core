@@ -605,7 +605,7 @@ void SwTextShell::GetAttrState(SfxItemSet &rSet)
                 {
                     bFlag = SVX_ADJUST_BLOCK == eAdjust;
                     sal_uInt16 nHtmlMode = GetHtmlMode(rSh.GetView().GetDocShell());
-                    if((nHtmlMode & HTMLMODE_ON) && !(nHtmlMode & (HTMLMODE_FULL_STYLES|HTMLMODE_FIRSTLINE) ))
+                    if((nHtmlMode & HTMLMODE_ON) && !(nHtmlMode & HTMLMODE_FULL_STYLES ))
                     {
                         rSet.DisableItem( nSlot );
                         nSlot = 0;

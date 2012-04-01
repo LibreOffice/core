@@ -120,30 +120,6 @@ HTMLOutEvent aAnchorEventTable[] =
 
 static Writer& OutHTML_SvxAdjust( Writer& rWrt, const SfxPoolItem& rHt );
 
-static Writer& OutHTML_HoriSpacer( Writer& rWrt, sal_Int16 nSize )
-{
-    OSL_ENSURE( nSize>0, "horizontaler SPACER mit negativem Wert?" );
-    if( nSize <= 0 )
-        return rWrt;
-
-    if( Application::GetDefaultDevice() )
-    {
-        nSize = (sal_Int16)Application::GetDefaultDevice()
-            ->LogicToPixel( Size(nSize,0), MapMode(MAP_TWIP) ).Width();
-    }
-
-    rtl::OStringBuffer sOut;
-    sOut.append('<').append(OOO_STRING_SVTOOLS_HTML_spacer).append(' ').
-         append(OOO_STRING_SVTOOLS_HTML_O_type).append('=').
-         append(OOO_STRING_SVTOOLS_HTML_SPTYPE_horizontal).append(' ').
-         append(OOO_STRING_SVTOOLS_HTML_O_size).append('=').
-         append(static_cast<sal_Int32>(nSize)).append('>');
-
-    rWrt.Strm() << sOut.getStr();
-
-    return rWrt;
-}
-
 sal_uInt16 SwHTMLWriter::GetDefListLvl( const String& rNm, sal_uInt16 nPoolId )
 {
     if( nPoolId == RES_POOLCOLL_HTML_DD )
@@ -1075,18 +1051,6 @@ void OutHTML_SwFmt( Writer& rWrt, const SwFmt& rFmt,
         // wenn kein End-Tag geschrieben werden soll, es loeschen
         if( bNoEndTag )
             rInfo.aToken = rtl::OString();
-    }
-
-    // ??? Warum nicht ueber den Hint-Mechanismus ???
-    if( rHWrt.IsHTMLMode(HTMLMODE_FIRSTLINE) )
-    {
-        const SvxLRSpaceItem& rLRSpaceTmp =
-            pNodeItemSet ? ((const SvxLRSpaceItem &)pNodeItemSet->Get(RES_LR_SPACE))
-                         : rFmt.GetLRSpace();
-        if( rLRSpaceTmp.GetTxtFirstLineOfst() > 0 )
-        {
-            OutHTML_HoriSpacer( rWrt, rLRSpaceTmp.GetTxtFirstLineOfst() );
-        }
     }
 
     if( nBulletGrfLvl != 255 )
@@ -2527,24 +2491,7 @@ Writer& OutHTML_SwTxtNode( Writer& rWrt, const SwCntntNode& rNode )
                 do {
                     if ( pHt->GetEnd() && !pHt->HasDummyChar() )
                     {
-                        if( RES_CHRATR_KERNING == pHt->Which() &&
-                            rHTMLWrt.IsHTMLMode(HTMLMODE_FIRSTLINE) &&
-                            *pHt->GetEnd() - nStrPos == 1 &&
-                            ' ' == rStr.GetChar(nStrPos) &&
-                            ((const SvxKerningItem&)pHt->GetAttr()).GetValue() > 0 )
-                        {
-                            // Wenn erlaubt, wird das Ding als Spacer exportiert
-
-                            bOutChar = sal_False;   // Space nicht ausgeben
-                            bWriteBreak = sal_False;    // der Absatz ist aber auch nicht leer
-                            HTMLOutFuncs::FlushToAscii( rWrt.Strm(), aContext );
-                            OutHTML_HoriSpacer( rWrt,
-                                ((const SvxKerningItem&)pHt->GetAttr()).GetValue() );
-
-                            // Der Hint braucht nun doch nicht weiter
-                            // beruecksichtigt werden.
-                        }
-                        else if( *pHt->GetEnd() != nStrPos )
+                        if( *pHt->GetEnd() != nStrPos )
                         {
                             // Hints mit Ende einsortieren, wenn sie keinen
                             // leeren Bereich aufspannen (Hints, die keinen
