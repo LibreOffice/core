@@ -32,6 +32,7 @@
 #include <com/sun/star/sdb/SQLContext.hpp>
 #include "svx/dbtoolsclient.hxx"
 #include <osl/diagnose.h>
+#include <rtl/instance.hxx>
 #include <connectivity/formattedcolumnvalue.hxx>
 
 //........................................................................
@@ -51,7 +52,12 @@ namespace svxform
     //====================================================================
     //= ODbtoolsClient
     //====================================================================
-    ::osl::Mutex    ODbtoolsClient::s_aMutex;
+
+    namespace
+    {
+        struct theODbtoolsClientMutex : public rtl::Static< osl::Mutex, theODbtoolsClientMutex> {};
+    }
+
     sal_Int32       ODbtoolsClient::s_nClients = 0;
     oslModule       ODbtoolsClient::s_hDbtoolsModule = NULL;
     createDataAccessToolsFactoryFunction
@@ -103,7 +109,7 @@ namespace svxform
 
     void ODbtoolsClient::registerClient()
     {
-        ::osl::MutexGuard aGuard(s_aMutex);
+        ::osl::MutexGuard aGuard(theODbtoolsClientMutex::get());
         if (1 == ++s_nClients)
         {
             OSL_ENSURE(NULL == s_hDbtoolsModule, "ODbtoolsClient::registerClient: inconsistence: already have a module!");
@@ -138,7 +144,7 @@ namespace svxform
     //--------------------------------------------------------------------
     void ODbtoolsClient::revokeClient()
     {
-        ::osl::MutexGuard aGuard(s_aMutex);
+        ::osl::MutexGuard aGuard(theODbtoolsClientMutex::get());
         if (0 == --s_nClients)
         {
             s_pFactoryCreationFunc = NULL;

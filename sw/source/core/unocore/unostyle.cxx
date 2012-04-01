@@ -1753,7 +1753,7 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                         {
                             SwNumFmt aFmt(*pFmt);
                             if(
-                                pCharStyleNames[i] != SwXNumberingRules::GetInvalidStyle() &&
+                                !SwXNumberingRules::isInvalidStyle(pCharStyleNames[i]) &&
                                 ((pCharStyleNames[i].Len() && !pFmt->GetCharFmt()) ||
                                 (pCharStyleNames[i].Len() &&
                                             pFmt->GetCharFmt()->GetName() != pCharStyleNames[i]) ))
@@ -1786,7 +1786,7 @@ void lcl_SetStyleProperty(const SfxItemPropertySimpleEntry& rEntry,
                                 }
                             }
                             //jetzt nochmal fuer Fonts
-                            if(pBulletFontNames[i] != SwXNumberingRules::GetInvalidStyle() &&
+                            if (!SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
                                 ((pBulletFontNames[i].Len() && !pFmt->GetBulletFont()) ||
                                 (pBulletFontNames[i].Len() &&
                                         pFmt->GetBulletFont()->GetName() != pBulletFontNames[i]) ))

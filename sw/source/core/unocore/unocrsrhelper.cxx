@@ -599,7 +599,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                 {
                     SwNumFmt aFmt(aRule.Get( i ));
                     if( pNewCharStyles[i].Len() &&
-                        pNewCharStyles[i] != SwXNumberingRules::GetInvalidStyle() &&
+                        !SwXNumberingRules::isInvalidStyle(pNewCharStyles[i]) &&
                         (!aFmt.GetCharFmt() || pNewCharStyles[i] != aFmt.GetCharFmt()->GetName()))
                     {
                         if(!pNewCharStyles[i].Len())
@@ -636,7 +636,7 @@ void setNumberingProperty(const Any& rValue, SwPaM& rPam)
                     }
                     //Now again for fonts
                     if(
-                       pBulletFontNames[i] != SwXNumberingRules::GetInvalidStyle() &&
+                       !SwXNumberingRules::isInvalidStyle(pBulletFontNames[i]) &&
                        (
                         (pBulletFontNames[i].Len() && !aFmt.GetBulletFont()) ||
                         (pBulletFontNames[i].Len() &&

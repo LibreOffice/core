@@ -52,7 +52,6 @@ namespace svxform
     class SVX_DLLPUBLIC ODbtoolsClient
     {
     private:
-        static  ::osl::Mutex    s_aMutex;
         static  sal_Int32       s_nClients;
         static oslModule        s_hDbtoolsModule;
         static ::connectivity::simple::createDataAccessToolsFactoryFunction

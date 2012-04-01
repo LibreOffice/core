@@ -1124,11 +1124,11 @@ OSL_FAIL("not implemented");
 /******************************************************************
  * SwXNumberingRules
  ******************************************************************/
-String  SwXNumberingRules::sInvalidStyle(String::CreateFromAscii("__XXX___invalid"));
+const char aInvalidStyle[] = "__XXX___invalid";
 
-const String&   SwXNumberingRules::GetInvalidStyle()
+bool SwXNumberingRules::isInvalidStyle(const rtl::OUString &rName)
 {
-    return sInvalidStyle;
+    return rName.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM(aInvalidStyle));
 }
 
 namespace
@@ -1196,8 +1196,8 @@ SwXNumberingRules::SwXNumberingRules(const SwNumRule& rRule) :
         pDoc->GetPageDescFromPool(RES_POOLPAGE_STANDARD)->Add(this);
     for(i = 0; i < MAXLEVEL; i++)
     {
-        sNewCharStyleNames[i] = SwXNumberingRules::GetInvalidStyle();
-        sNewBulletFontNames[i] = SwXNumberingRules::GetInvalidStyle();
+        sNewCharStyleNames[i] = rtl::OUString(aInvalidStyle);
+        sNewBulletFontNames[i] = rtl::OUString(aInvalidStyle);
     }
 }
 
@@ -1399,7 +1399,7 @@ uno::Sequence<beans::PropertyValue> SwXNumberingRules::GetNumberingRuleByIndex(
         CharStyleName = pCharFmt->GetName();
     //egal ob ein Style vorhanden ist oder nicht ueberschreibt der Array-Eintrag diesen String
     if(sNewCharStyleNames[(sal_uInt16)nIndex].Len() &&
-        SwXNumberingRules::sInvalidStyle != sNewCharStyleNames[(sal_uInt16)nIndex])
+        !SwXNumberingRules::isInvalidStyle(sNewCharStyleNames[(sal_uInt16)nIndex]))
         CharStyleName = sNewCharStyleNames[(sal_uInt16)nIndex];
 
     String aString;
@@ -1752,7 +1752,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
                     SwStyleNameMapper::FillUIName( uTmp, sCharFmtName, nsSwGetPoolIdFromName::GET_POOLID_CHRFMT, sal_True );
                     if(sCharFmtName.EqualsAscii(SW_PROP_NAME_STR(UNO_NAME_CHARACTER_FORMAT_NONE)))
                     {
-                        sNewCharStyleNames[(sal_uInt16)nIndex] = SwXNumberingRules::GetInvalidStyle();
+                        sNewCharStyleNames[(sal_uInt16)nIndex] = rtl::OUString(aInvalidStyle);
                         aFmt.SetCharFmt(0);
                     }
                     else if(pDocShell || pDoc)
@@ -2095,7 +2095,7 @@ void SwXNumberingRules::SetNumberingRuleByIndex(
         }
         if((!bCharStyleNameSet || !sNewCharStyleNames[(sal_uInt16)nIndex].Len()) &&
                 aFmt.GetNumberingType() == NumberingType::BITMAP && !aFmt.GetCharFmt()
-                    && SwXNumberingRules::GetInvalidStyle() != sNewCharStyleNames[(sal_uInt16)nIndex])
+                    && !SwXNumberingRules::isInvalidStyle(sNewCharStyleNames[(sal_uInt16)nIndex]))
         {
             SwStyleNameMapper::FillProgName ( RES_POOLCHR_BUL_LEVEL, sNewCharStyleNames[(sal_uInt16)nIndex] );
         }

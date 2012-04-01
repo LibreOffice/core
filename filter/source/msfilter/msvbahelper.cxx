@@ -53,21 +53,26 @@ using namespace ::com::sun::star;
 namespace ooo {
 namespace vba {
 
-const static rtl::OUString sUrlPart0( RTL_CONSTASCII_USTRINGPARAM( "vnd.sun.star.script:" ));
-const static rtl::OUString sUrlPart1( RTL_CONSTASCII_USTRINGPARAM( "?language=Basic&location=document" ));
+const char sUrlPart0[] = "vnd.sun.star.script:";
+const char sUrlPart1[] = "?language=Basic&location=document";
 
 String makeMacroURL( const String& sMacroName )
 {
-    return sUrlPart0.concat( sMacroName ).concat( sUrlPart1 ) ;
+    return rtl::OUStringBuffer().
+        appendAscii(RTL_CONSTASCII_STRINGPARAM(sUrlPart0)).
+        append(sMacroName).
+        appendAscii(RTL_CONSTASCII_STRINGPARAM(sUrlPart1)).
+        makeStringAndClear();
 }
 
 ::rtl::OUString extractMacroName( const ::rtl::OUString& rMacroUrl )
 {
-    if( (rMacroUrl.getLength() > sUrlPart0.getLength() + sUrlPart1.getLength()) &&
-        rMacroUrl.match( sUrlPart0 ) &&
-        rMacroUrl.match( sUrlPart1, rMacroUrl.getLength() - sUrlPart1.getLength() ) )
+    if( (rMacroUrl.getLength() > RTL_CONSTASCII_LENGTH(sUrlPart0) + RTL_CONSTASCII_LENGTH(sUrlPart1)) &&
+        rMacroUrl.matchAsciiL( RTL_CONSTASCII_STRINGPARAM(sUrlPart0) ) &&
+        rMacroUrl.matchAsciiL( RTL_CONSTASCII_STRINGPARAM(sUrlPart1), rMacroUrl.getLength() - RTL_CONSTASCII_LENGTH(sUrlPart1) ) )
     {
-        return rMacroUrl.copy( sUrlPart0.getLength(), rMacroUrl.getLength() - sUrlPart0.getLength() - sUrlPart1.getLength() );
+        return rMacroUrl.copy( RTL_CONSTASCII_LENGTH(sUrlPart0),
+            rMacroUrl.getLength() - RTL_CONSTASCII_LENGTH(sUrlPart0) - RTL_CONSTASCII_LENGTH(sUrlPart1) );
     }
     return ::rtl::OUString();
 }

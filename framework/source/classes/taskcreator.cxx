@@ -143,23 +143,23 @@ css::uno::Reference< css::frame::XFrame > TaskCreator::createTask( const ::rtl::
     css::uno::Sequence< css::uno::Any > lArgs(5);
     css::beans::NamedValue              aArg    ;
 
-    aArg.Name    = TaskCreatorService::ARGUMENT_PARENTFRAME;
+    aArg.Name    = rtl::OUString(ARGUMENT_PARENTFRAME);
     aArg.Value <<= css::uno::Reference< css::frame::XFrame >(xSMGR->createInstance(SERVICENAME_DESKTOP), css::uno::UNO_QUERY_THROW);
     lArgs[0]   <<= aArg;
 
-    aArg.Name    = TaskCreatorService::ARGUMENT_CREATETOPWINDOW;
+    aArg.Name    = rtl::OUString(ARGUMENT_CREATETOPWINDOW);
     aArg.Value <<= sal_True;
     lArgs[1]   <<= aArg;
 
-    aArg.Name    = TaskCreatorService::ARGUMENT_MAKEVISIBLE;
+    aArg.Name    = rtl::OUString(ARGUMENT_MAKEVISIBLE);
     aArg.Value <<= bVisible;
     lArgs[2]   <<= aArg;
 
-    aArg.Name    = TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE;
+    aArg.Name    = rtl::OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE);
     aArg.Value <<= sal_True;
     lArgs[3]   <<= aArg;
 
-    aArg.Name    = TaskCreatorService::ARGUMENT_FRAMENAME;
+    aArg.Name    = rtl::OUString(ARGUMENT_FRAMENAME);
     aArg.Value <<= sName;
     lArgs[4]   <<= aArg;
 

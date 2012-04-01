@@ -62,17 +62,6 @@
 
 namespace framework
 {
-
-//-----------------------------------------------
-const ::rtl::OUString TaskCreatorService::ARGUMENT_PARENTFRAME(RTL_CONSTASCII_USTRINGPARAM("ParentFrame")); // XFrame
-const ::rtl::OUString TaskCreatorService::ARGUMENT_FRAMENAME(RTL_CONSTASCII_USTRINGPARAM("FrameName")); // OUString
-const ::rtl::OUString TaskCreatorService::ARGUMENT_MAKEVISIBLE(RTL_CONSTASCII_USTRINGPARAM("MakeVisible")); // sal_Bool
-const ::rtl::OUString TaskCreatorService::ARGUMENT_CREATETOPWINDOW(RTL_CONSTASCII_USTRINGPARAM("CreateTopWindow")); // sal_Bool
-const ::rtl::OUString TaskCreatorService::ARGUMENT_POSSIZE(RTL_CONSTASCII_USTRINGPARAM("PosSize")); // Rectangle
-const ::rtl::OUString TaskCreatorService::ARGUMENT_CONTAINERWINDOW(RTL_CONSTASCII_USTRINGPARAM("ContainerWindow")); // XWindow
-const ::rtl::OUString TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE(RTL_CONSTASCII_USTRINGPARAM("SupportPersistentWindowState")); // sal_Bool
-const ::rtl::OUString TaskCreatorService::ARGUMENT_ENABLE_TITLEBARUPDATE(RTL_CONSTASCII_USTRINGPARAM("EnableTitleBarUpdate")); // sal_Bool
-
 //-----------------------------------------------
 DEFINE_XINTERFACE_3(TaskCreatorService                                ,
                     OWeakObject                                       ,
@@ -139,14 +128,14 @@ css::uno::Reference< css::uno::XInterface > SAL_CALL TaskCreatorService::createI
 
     ::comphelper::SequenceAsHashMap lArgs(lArguments);
 
-    css::uno::Reference< css::frame::XFrame > xParentFrame                  = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_PARENTFRAME                  , css::uno::Reference< css::frame::XFrame >());
-    ::rtl::OUString                           sFrameName                    = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_FRAMENAME                    , DEFAULTVAL_FRAMENAME                       );
-    sal_Bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_MAKEVISIBLE                  , DEFAULTVAL_MAKEVISIBLE                     );
-    sal_Bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_CREATETOPWINDOW              , DEFAULTVAL_CREATETOPWINDOW                 );
-    css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_POSSIZE                      , DEFAULTVAL_POSSIZE                         );
-    css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_CONTAINERWINDOW              , css::uno::Reference< css::awt::XWindow >() );
-    sal_Bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE , DEFAULTVAL_SUPPORTPERSSISTENTWINDOWSTATE   );
-    sal_Bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(TaskCreatorService::ARGUMENT_ENABLE_TITLEBARUPDATE        , DEFAULTVAL_ENABLE_TITLEBARUPDATE           );
+    css::uno::Reference< css::frame::XFrame > xParentFrame                  = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_PARENTFRAME)                  , css::uno::Reference< css::frame::XFrame >());
+    ::rtl::OUString                           sFrameName                    = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_FRAMENAME)                    , DEFAULTVAL_FRAMENAME                       );
+    sal_Bool                                  bVisible                      = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_MAKEVISIBLE)                  , DEFAULTVAL_MAKEVISIBLE                     );
+    sal_Bool                                  bCreateTopWindow              = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_CREATETOPWINDOW)              , DEFAULTVAL_CREATETOPWINDOW                 );
+    css::awt::Rectangle                       aPosSize                      = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_POSSIZE)                      , DEFAULTVAL_POSSIZE                         );
+    css::uno::Reference< css::awt::XWindow >  xContainerWindow              = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_CONTAINERWINDOW)              , css::uno::Reference< css::awt::XWindow >() );
+    sal_Bool                                  bSupportPersistentWindowState = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_SUPPORTPERSISTENTWINDOWSTATE) , DEFAULTVAL_SUPPORTPERSSISTENTWINDOWSTATE   );
+    sal_Bool                                  bEnableTitleBarUpdate         = lArgs.getUnpackedValueOrDefault(rtl::OUString(ARGUMENT_ENABLE_TITLEBARUPDATE)        , DEFAULTVAL_ENABLE_TITLEBARUPDATE           );
 
     /* SAFE { */
     ReadGuard aReadLock( m_aLock );

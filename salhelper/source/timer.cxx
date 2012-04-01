@@ -32,6 +32,7 @@
 #include <osl/thread.hxx>
 #include <osl/conditn.hxx>
 #include <osl/mutex.hxx>
+#include <rtl/instance.hxx>
 
 using namespace salhelper;
 
@@ -76,9 +77,6 @@ protected:
     osl::Mutex                  m_Lock;
     // Signal the insertion of a timer
     osl::Condition              m_notEmpty;
-
-    // Synchronize access to TimerManager
-    static osl::Mutex           m_Access;
 
     // "Singleton Pattern"
     static salhelper::TimerManager* m_pManager;
@@ -251,13 +249,17 @@ TTimeValue Timer::getRemainingTime() const
 //
 // Timer manager
 //
+namespace
+{
+    // Synchronize access to TimerManager
+    struct theTimerManagerMutex : public rtl::Static< osl::Mutex, theTimerManagerMutex> {};
+}
 
-osl::Mutex salhelper::TimerManager::m_Access;
 TimerManager* salhelper::TimerManager::m_pManager = NULL;
 
 TimerManager::TimerManager()
 {
-    osl::MutexGuard Guard(&m_Access);
+    osl::MutexGuard Guard(theTimerManagerMutex::get());
 
     OSL_ASSERT(m_pManager == 0);
 
@@ -273,7 +275,7 @@ TimerManager::TimerManager()
 
 TimerManager::~TimerManager()
 {
-    osl::MutexGuard Guard(&m_Access);
+    osl::MutexGuard Guard(theTimerManagerMutex::get());
 
     if ( m_pManager == this )
         m_pManager = 0;
@@ -286,12 +288,12 @@ void TimerManager::onTerminated()
 
 TimerManager* TimerManager::getTimerManager()
 {
-    osl::MutexGuard Guard(&m_Access);
+    osl::MutexGuard Guard(theTimerManagerMutex::get());
 
     if (! m_pManager)
         new TimerManager;
 
-    return (m_pManager);
+    return m_pManager;
 }
 
 sal_Bool TimerManager::registerTimer(Timer* pTimer)
@@ -303,7 +305,7 @@ sal_Bool TimerManager::registerTimer(Timer* pTimer)
         return sal_False;
     }
 
-    osl::MutexGuard Guard(&m_Lock);
+    osl::MutexGuard Guard(m_Lock);
 
     // try to find one with equal or lower remaining time.
     Timer** ppIter = &m_pHead;
@@ -345,7 +347,7 @@ sal_Bool TimerManager::unregisterTimer(Timer* pTimer)
     }
 
     // lock access
-    osl::MutexGuard Guard(&m_Lock);
+    osl::MutexGuard Guard(m_Lock);
 
     Timer** ppIter = &m_pHead;
 
@@ -373,7 +375,7 @@ sal_Bool TimerManager::lookupTimer(const Timer* pTimer)
     }
 
     // lock access
-    osl::MutexGuard Guard(&m_Lock);
+    osl::MutexGuard Guard(m_Lock);
 
     // check the list
     for (Timer* pIter = m_pHead; pIter != 0; pIter= pIter->m_pNext)

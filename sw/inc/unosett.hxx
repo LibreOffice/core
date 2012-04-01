@@ -159,7 +159,6 @@ class SwXNumberingRules : public cppu::WeakAggImplHelper5
     SwNumRule*                  pNumRule;
     const SfxItemPropertySet*   m_pPropertySet;
     sal_Bool                    bOwnNumRuleCreated;
-    static String               sInvalidStyle;
 protected:
     virtual ~SwXNumberingRules();
 
@@ -217,7 +216,7 @@ public:
     const String*           GetBulletFontNames() const {return sNewBulletFontNames;}
     const SwNumRule*        GetNumRule() {return pNumRule;}
 
-    static const String&    GetInvalidStyle();
+    static bool             isInvalidStyle(const rtl::OUString &rName);
     void    Invalidate()    {pDocShell = 0;}
     const String&           GetCreatedNumRuleName() const{return sCreatedNumRuleName; }
 };
