@@ -2092,8 +2092,8 @@ void Test::testPivotTableDuplicateDataFields()
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount(), static_cast<size_t>(1));
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -2139,13 +2139,13 @@ void Test::testPivotTableDuplicateDataFields()
 
     ScPivotParam aParam;
     pDPObj->FillLabelData(aParam);
-    CPPUNIT_ASSERT_MESSAGE("There should be exactly 4 labels (2 original, 1 data layout, and 1 duplicate dimensions).",
-                           aParam.maLabelArray.size() == 4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be exactly 4 labels (2 original, 1 data layout, and 1 duplicate dimensions).",
+                           aParam.maLabelArray.size(), static_cast<size_t>(4));
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2185,8 +2185,8 @@ void Test::testPivotTableNormalGrouping()
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount(), static_cast<size_t>(1));
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScRange aOutRange = refresh(pDPObj);
@@ -2294,9 +2294,9 @@ void Test::testPivotTableNormalGrouping()
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2347,8 +2347,8 @@ void Test::testPivotTableNumberGrouping()
     bool bSuccess = pDPs->InsertNewTable(pDPObj);
 
     CPPUNIT_ASSERT_MESSAGE("failed to insert a new pivot table object into document.", bSuccess);
-    CPPUNIT_ASSERT_MESSAGE("there should be only one data pilot table.",
-                           pDPs->GetCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("there should be only one data pilot table.",
+                           pDPs->GetCount(), static_cast<size_t>(1));
     pDPObj->SetName(pDPs->CreateNewName());
 
     ScDPSaveData* pSaveData = pDPObj->GetSaveData();
@@ -2389,9 +2389,9 @@ void Test::testPivotTableNumberGrouping()
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2534,9 +2534,9 @@ void Test::testPivotTableDateGrouping()
     }
 
     pDPs->FreeTable(pDPObj);
-    CPPUNIT_ASSERT_MESSAGE("There should be no more tables.", pDPs->GetCount() == 0);
-    CPPUNIT_ASSERT_MESSAGE("There shouldn't be any more cache stored.",
-                           pDPs->GetSheetCaches().size() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be no more tables.", pDPs->GetCount(), static_cast<size_t>(0));
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There shouldn't be any more cache stored.",
+                           pDPs->GetSheetCaches().size(), static_cast<size_t>(0));
 
     m_pDoc->DeleteTab(1);
     m_pDoc->DeleteTab(0);
@@ -2583,20 +2583,20 @@ void Test::testSheetMove()
 {
     OUString aTabName(RTL_CONSTASCII_USTRINGPARAM("TestTab1"));
     m_pDoc->InsertTab(0, aTabName);
-    CPPUNIT_ASSERT_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have one sheet to begin with.", m_pDoc->GetTableCount(), static_cast<SCTAB>(1));
     SCROW nRow1, nRow2;
     bool bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
 
     //test if inserting before another sheet works
     m_pDoc->InsertTab(0, OUString(RTL_CONSTASCII_USTRINGPARAM("TestTab2")));
-    CPPUNIT_ASSERT_MESSAGE("document should have two sheets", m_pDoc->GetTableCount() == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("document should have two sheets", m_pDoc->GetTableCount(), static_cast<SCTAB>(2));
     bHidden = m_pDoc->RowHidden(0, 0, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("new sheet should have all rows visible", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
 
     // Move and test the result.
     m_pDoc->MoveTab(0, 1);
-    CPPUNIT_ASSERT_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount() == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount(), static_cast<SCTAB>(2));
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("copied sheet should also have all rows visible as the original.", !bHidden && nRow1 == 0 && nRow2 == MAXROW);
     rtl::OUString aName;
@@ -2613,7 +2613,7 @@ void Test::testSheetMove()
 
     // Move the sheet once again.
     m_pDoc->MoveTab(1, 0);
-    CPPUNIT_ASSERT_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount() == 2);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("document now should have two sheets.", m_pDoc->GetTableCount(), static_cast<SCTAB>(2));
     bHidden = m_pDoc->RowHidden(0, 1, &nRow1, &nRow2);
     CPPUNIT_ASSERT_MESSAGE("rows 0 - 4 should be visible", !bHidden && nRow1 == 0 && nRow2 == 4);
     bHidden = m_pDoc->RowHidden(5, 1, &nRow1, &nRow2);
@@ -2982,7 +2982,7 @@ void Test::testStreamValid()
     m_pDoc->InsertTab(1, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet2")));
     m_pDoc->InsertTab(2, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet3")));
     m_pDoc->InsertTab(3, OUString(RTL_CONSTASCII_USTRINGPARAM("Sheet4")));
-    CPPUNIT_ASSERT_MESSAGE("We should have 4 sheet instances.", m_pDoc->GetTableCount() == 4);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("We should have 4 sheet instances.", m_pDoc->GetTableCount(), static_cast<SCTAB>(4));
 
     OUString a1(RTL_CONSTASCII_USTRINGPARAM("A1"));
     OUString a2(RTL_CONSTASCII_USTRINGPARAM("A2"));
@@ -3525,7 +3525,7 @@ void Test::testGraphicsOnSheetMove()
     pPage->InsertObject(pObj);
     ScDrawLayer::SetCellAnchoredFromPosition(*pObj, *m_pDoc, 0);
 
-    CPPUNIT_ASSERT_MESSAGE("There should be one object on the 1st sheet.", pPage->GetObjCount() == 1);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be one object on the 1st sheet.", pPage->GetObjCount(), static_cast<sal_uIntPtr>(1));
 
     const ScDrawObjData* pData = ScDrawLayer::GetObjData(pObj);
     CPPUNIT_ASSERT_MESSAGE("Object meta-data doesn't exist.", pData);
@@ -3533,12 +3533,12 @@ void Test::testGraphicsOnSheetMove()
 
     pPage = pDrawLayer->GetPage(1);
     CPPUNIT_ASSERT_MESSAGE("No page instance for the 2nd sheet.", pPage);
-    CPPUNIT_ASSERT_MESSAGE("2nd sheet shouldn't have any object.", pPage->GetObjCount() == 0);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("2nd sheet shouldn't have any object.", pPage->GetObjCount(), static_cast<sal_uIntPtr>(0));
 
     // Insert a new sheet at left-end, and make sure the object has moved to
     // the 2nd page.
     m_pDoc->InsertTab(0, rtl::OUString(RTL_CONSTASCII_USTRINGPARAM("NewTab")));
-    CPPUNIT_ASSERT_MESSAGE("There should be 3 sheets.", m_pDoc->GetTableCount() == 3);
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("There should be 3 sheets.", m_pDoc->GetTableCount(), static_cast<SCTAB>(3));
     pPage = pDrawLayer->GetPage(0);
     CPPUNIT_ASSERT_MESSAGE("1st sheet should have no object.", pPage && pPage->GetObjCount() == 0);
     pPage = pDrawLayer->GetPage(1);
@@ -3827,7 +3827,7 @@ void Test::testCopyPaste()
     double aValue = 0;
     m_pDoc->GetValue(1, 0, 0, aValue);
     std::cout << "Value: " << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("formula should return 8", aValue == 8);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 8", aValue, 8, 0.00000001);
 
     //copy Sheet1.A1:C1 to Sheet2.A2:C2
     ScRange aRange(0,0,0,2,0,0);
@@ -3852,7 +3852,7 @@ void Test::testCopyPaste()
     rtl::OUString aString;
     m_pDoc->GetValue(1,1,1, aValue);
     m_pDoc->GetFormula(1,1,1, aString);
-    CPPUNIT_ASSERT_MESSAGE("copied formula should return 2", aValue == 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("copied formula should return 2", aValue, 2, 0.00000001);
     CPPUNIT_ASSERT_MESSAGE("formula string was not copied correctly", aString == aFormulaString);
     m_pDoc->GetValue(0,1,1, aValue);
     CPPUNIT_ASSERT_MESSAGE("copied value should be 1", aValue == 1);
@@ -3870,13 +3870,13 @@ void Test::testCopyPaste()
     //check undo and redo
     pUndo->Undo();
     m_pDoc->GetValue(1,1,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after undo formula should return nothing", aValue == 0);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after undo formula should return nothing", aValue, 0, 0.00000001);
     m_pDoc->GetString(2,1,1, aString);
     CPPUNIT_ASSERT_MESSAGE("after undo string should be removed", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("")));
 
     pUndo->Redo();
     m_pDoc->GetValue(1,1,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("formula should return 2 after redo", aValue == 2);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula should return 2 after redo", aValue, 2, 0.00000001);
     m_pDoc->GetString(2,1,1, aString);
     CPPUNIT_ASSERT_MESSAGE("Cell Sheet2.C2 should contain: test", aString.equalsAsciiL(RTL_CONSTASCII_STRINGPARAM("test")));
     m_pDoc->GetFormula(1,1,1, aString);
@@ -3962,42 +3962,42 @@ void Test::testUpdateReference()
 
     double aValue;
     m_pDoc->GetValue(2,0,2, aValue);
-    CPPUNIT_ASSERT_MESSAGE("formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2,1,2, aValue);
     CPPUNIT_ASSERT_MESSAGE("formula does not return correct result", aValue == 5);
 
     //test deleting both sheets: one is not directly before the sheet, the other one is
     m_pDoc->DeleteTab(0);
     m_pDoc->GetValue(2,0,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting first sheet formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2,1,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting first sheet formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting first sheet formula does not return correct result", aValue, 5, 0.00000001);
 
     m_pDoc->DeleteTab(0);
     m_pDoc->GetValue(2,0,0, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting second sheet formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2,1,0, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting second sheet formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting second sheet formula does not return correct result", aValue, 5, 0.00000001);
 
     //test adding two sheets
     m_pDoc->InsertTab(0, aSheet2);
     m_pDoc->GetValue(2,0,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after inserting first sheet formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2,1,1, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after inserting first sheet formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting first sheet formula does not return correct result", aValue, 5, 0.00000001);
 
     m_pDoc->InsertTab(0, aSheet1);
     m_pDoc->GetValue(2,0,2, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after inserting second sheet formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2,1,2, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after inserting second sheet formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting second sheet formula does not return correct result", aValue, 5, 0.00000001);
 
     //test new DeleteTabs/InsertTabs methods
     m_pDoc->DeleteTabs(0, 2);
     m_pDoc->GetValue(2, 0, 0, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting sheets formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2, 1, 0, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after deleting sheets formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after deleting sheets formula does not return correct result", aValue, 5, 0.00000001);
 
     std::vector<rtl::OUString> aSheets;
     aSheets.push_back(aSheet1);
@@ -4008,9 +4008,9 @@ void Test::testUpdateReference()
     m_pDoc->GetFormula(2,0,2, aFormula);
     std::cout << "formel: " << rtl::OUStringToOString(aFormula, RTL_TEXTENCODING_UTF8).getStr() << std::endl;
     std::cout << std::endl << aValue << std::endl;
-    CPPUNIT_ASSERT_MESSAGE("after inserting sheets formula does not return correct result", aValue == 3);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 3, 0.00000001);
     m_pDoc->GetValue(2, 1, 2, aValue);
-    CPPUNIT_ASSERT_MESSAGE("after inserting sheets formula does not return correct result", aValue == 5);
+    CPPUNIT_ASSERT_DOUBLES_EQUAL_MESSAGE("after inserting sheets formula does not return correct result", aValue, 5, 0.00000001);
 
     m_pDoc->DeleteTab(3);
     m_pDoc->DeleteTab(2);
@@ -4086,8 +4086,8 @@ void Test::testJumpToPrecedentsDependents()
         // C2's precedent should be A1 only.
         ScRangeList aRange(ScRange(2, 1, 0));
         rDocFunc.DetectiveCollectAllPreds(aRange, aRefTokens);
-        CPPUNIT_ASSERT_MESSAGE("there should only be one reference token.",
-                               aRefTokens.size() == 1);
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("there should only be one reference token.",
+                               aRefTokens.size(), static_cast<size_t>(1));
         CPPUNIT_ASSERT_MESSAGE("A1 should be a precedent of C1.",
                                hasRange(aRefTokens, ScRange(0, 0, 0)));
     }
