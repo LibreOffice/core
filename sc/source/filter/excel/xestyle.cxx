@@ -1547,15 +1547,15 @@ void lclGetBorderLine(
         sal_uInt16 nDistance = pLine->GetDistance();
         if( nDistance > 0 )
             rnXclLine = EXC_LINE_DOUBLE;
-        else if( nOuterWidth > DEF_LINE_WIDTH_2 )
+        else if( nOuterWidth >= EXC_BORDER_THICK )
             rnXclLine = EXC_LINE_THICK;
-        else if( nOuterWidth > DEF_LINE_WIDTH_1 )
+        else if( nOuterWidth >= EXC_BORDER_MEDIUM )
         {
             rnXclLine = EXC_LINE_MEDIUM;
             if ( pLine->GetStyle( ) == ::editeng::DASHED )
                 rnXclLine = EXC_LINE_MEDIUMDASHED;
         }
-        else if( nOuterWidth > DEF_LINE_WIDTH_0 )
+        else if( nOuterWidth >= EXC_BORDER_THIN )
         {
             rnXclLine = EXC_LINE_THIN;
             switch ( pLine->GetStyle( ) )
@@ -1570,7 +1570,7 @@ void lclGetBorderLine(
                     break;
             }
         }
-        else if( nOuterWidth > 0 )
+        else if( nOuterWidth >= EXC_BORDER_HAIR )
             rnXclLine = EXC_LINE_HAIR;
         else
             rnXclLine = EXC_LINE_NONE;
