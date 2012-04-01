@@ -259,6 +259,16 @@ const sal_uInt16 EXC_FUTUREREC_EMPTYFLAGS   = 0x0000;
 const sal_uInt16 EXC_FUTUREREC_HASREF       = 0x0001;
 const sal_uInt16 EXC_FUTUREREC_ALERT        = 0x0002;
 
+// Border import/export
+
+// TODO: These values are approximate; we should probably tweak these values
+// further to better match Excel's border thickness.
+
+const sal_uInt16 EXC_BORDER_THICK = 24;
+const sal_uInt16 EXC_BORDER_MEDIUM = 18;
+const sal_uInt16 EXC_BORDER_THIN = 6;
+const sal_uInt16 EXC_BORDER_HAIR = 1;
+
 // ============================================================================
 
 #endif

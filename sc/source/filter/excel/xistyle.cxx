@@ -890,33 +890,26 @@ bool XclImpCellBorder::HasAnyOuterBorder() const
 
 namespace {
 
-// TODO: These values are approximate; we should probably tweak these values
-// further to better match Excel's border thickness.
-#define XLS_LINE_WIDTH_HAIR    1
-#define XLS_LINE_WIDTH_THIN    6
-#define XLS_LINE_WIDTH_MEDIUM 18
-#define XLS_LINE_WIDTH_THICK  24
-
 /** Converts the passed line style to a ::editeng::SvxBorderLine, or returns false, if style is "no line". */
 bool lclConvertBorderLine( ::editeng::SvxBorderLine& rLine, const XclImpPalette& rPalette, sal_uInt8 nXclLine, sal_uInt16 nXclColor )
 {
     static const sal_uInt16 ppnLineParam[][ 4 ] =
     {
-        //  outer width,           type
-        {   0,                     ::editeng::SOLID },                // 0 = none
-        {   XLS_LINE_WIDTH_THIN,   ::editeng::SOLID },                // 1 = thin
-        {   XLS_LINE_WIDTH_MEDIUM, ::editeng::SOLID },                // 2 = medium
-        {   XLS_LINE_WIDTH_THIN,   ::editeng::DASHED },               // 3 = dashed
-        {   XLS_LINE_WIDTH_THIN,   ::editeng::DOTTED },               // 4 = dotted
-        {   XLS_LINE_WIDTH_THICK,  ::editeng::SOLID },                // 5 = thick
-        {   XLS_LINE_WIDTH_THIN,   ::editeng::DOUBLE },                 // 6 = double
-        {   XLS_LINE_WIDTH_HAIR,   ::editeng::SOLID },                // 7 = hair
-        {   XLS_LINE_WIDTH_MEDIUM, ::editeng::DASHED },               // 8 = med dash
-        {   XLS_LINE_WIDTH_THIN,   ::editeng::SOLID },                // 9 = thin dashdot
-        {   XLS_LINE_WIDTH_MEDIUM, ::editeng::SOLID },                // A = med dashdot
-        {   XLS_LINE_WIDTH_THIN,   ::editeng::SOLID },                // B = thin dashdotdot
-        {   XLS_LINE_WIDTH_MEDIUM, ::editeng::SOLID },                // C = med dashdotdot
-        {   XLS_LINE_WIDTH_MEDIUM, ::editeng::SOLID }                 // D = med slant dashdot
+        //  outer width,        type
+        {   0,                  ::editeng::SOLID },                // 0 = none
+        {   EXC_BORDER_THIN,    ::editeng::SOLID },                // 1 = thin
+        {   EXC_BORDER_MEDIUM,  ::editeng::SOLID },                // 2 = medium
+        {   EXC_BORDER_THIN,    ::editeng::DASHED },               // 3 = dashed
+        {   EXC_BORDER_THIN,    ::editeng::DOTTED },               // 4 = dotted
+        {   EXC_BORDER_THICK,   ::editeng::SOLID },                // 5 = thick
+        {   EXC_BORDER_THIN,    ::editeng::DOUBLE },                 // 6 = double
+        {   EXC_BORDER_HAIR,    ::editeng::SOLID },                // 7 = hair
+        {   EXC_BORDER_MEDIUM,  ::editeng::DASHED },               // 8 = med dash
+        {   EXC_BORDER_THIN,    ::editeng::SOLID },                // 9 = thin dashdot
+        {   EXC_BORDER_MEDIUM,  ::editeng::SOLID },                // A = med dashdot
+        {   EXC_BORDER_THIN,    ::editeng::SOLID },                // B = thin dashdotdot
+        {   EXC_BORDER_MEDIUM,  ::editeng::SOLID },                // C = med dashdotdot
+        {   EXC_BORDER_MEDIUM,  ::editeng::SOLID }                 // D = med slant dashdot
     };
 
     if( nXclLine == EXC_LINE_NONE )
